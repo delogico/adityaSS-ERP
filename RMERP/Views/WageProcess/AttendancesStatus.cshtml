@@ -1,0 +1,52 @@
+﻿@model RMERP.DAL.ViewModel.ClientsViewModel
+@{
+    ViewData["Title"] = "Attendance status";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+<div>
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <h4 class="page-title">@ViewData["Title"]</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <table class="table table-striped custom-table m-b-0">
+                        <thead>
+                            <tr>
+                                <th>Client Name</th>
+                                <th>Status</th>
+                                <th>Total Employee</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Listclients)
+                            {
+                            <tr>
+                                <td><b>@item.CliName</b></td>
+                                <td><b>-</b></td>
+                                <td><b>-</b></td>                               
+                                <td class="text-right">
+                                    <div class="dropdown">
+                                        <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li><a href='@Url.Action("UploadPage","WageProcess",new { wagId=Model.WageID,CliId=item.CliId})' title="Upload"><i class="fa fa-trash m-r-5"></i> Upload</a></li>
+                                            <li><a href='@Url.Action("ViewPage","WageProcess",new { wagId=Model.WageID})' title="View"><i class="fa fa-trash m-r-5"></i> View</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

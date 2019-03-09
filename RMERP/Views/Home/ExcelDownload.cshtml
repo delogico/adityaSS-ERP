@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "ExcelDownload";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+<h2>ExcelDownload</h2>
+
+@{Html.BeginForm("CreateDocument1", "Home", FormMethod.Get);
+    {
+        <div>
+            <input type="submit" value="Create Document" style="width:150px;height:27px" />
+        </div>
+    }
+    Html.EndForm();
+}

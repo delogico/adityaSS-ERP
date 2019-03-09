@@ -1,0 +1,110 @@
+﻿@model RMERP.DAL.ViewModel.ClientsViewModel
+@{ 
+    ViewData["Title"] = "Clients Form";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+@section scripts{
+    @if (TempData["message"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+            alert('@TempData["message"]');
+        });
+        </script>
+    };
+   
+    <script type="text/javascript">
+        $(document).ready(function () {
+            debugger;
+            $("#clientsModel_CliName").bind("keyup", function () {
+                searchClientList();
+            });
+        });
+        $(".IsActive").click(function () {
+            debugger;
+            var active = $(".active").find("input").attr("value") == 1 ? false : true;
+            var Url = siteUrl + "Clients/GetClientList?IsActive=" + active;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                success: function (data) {
+                    $('#divClientList').html(data);
+                    if (active == false) {
+                        $(".ClientProfile").addClass("InActiveProfile");
+                    }
+                }
+            })
+        });
+        function searchClientList() {
+            debugger;
+            var client = $("#clientsModel_CliName").val();
+            var Url = siteUrl + "Clients/GetClientList?Client=" + client;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                success: function (data) {                                     
+                   $('#divClientList').html(data);
+                }
+            })
+        }
+    </script>
+
+    }
+
+    <div>
+        <div class="content container-fluid">
+            <div class="row">
+                <div class="col-sm-4 col-xs-3">
+                    <h4 class="page-title">Clients</h4>
+                </div>
+                <div class="col-sm-8 col-xs-9 text-right m-b-20">
+                    <a href="@Url.Action("AddEditClients","Clients")" class="btn btn-primary rounded pull-right"><i class="fa fa-plus"></i> Add Client</a>
+                </div>
+            </div>
+            <div class="row filter-row">
+                <div class="col-sm-3 col-xs-6">
+                    <div class="form-group form-focus">
+                        <label class="control-label">Client Name</label>
+                        @Html.TextBoxFor(m => m.clientsModel.CliName, new {@class="form-control floating",@onclick= "searchClientList(this)"})
+                    </div>
+                </div>
+                @*<div class="col-sm-3 col-xs-6">
+                    <div class="form-group form-focus select-focus">
+                        <label class="control-label">Active Clients</label>                     
+                        
+                        @Html.DropDownListFor(m => m.clientsModel.CliId, new SelectList(ViewBag.List, "CliId", "CliName"), "Select Client", new { @class = "select floating",@onchange= "searchClientList(this)" })
+                    </div>
+                </div>*@
+                @*<div class="col-sm-3 col-xs-6">
+                    <a href="#" class="btn btn-success btn-block"> Search </a>
+                </div>*@
+                <div class="col-sm-3 col-xs-6">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-5">
+
+                                <div class="btn-group m-b-20" id="status" data-toggle="buttons">
+                                    <label class="btn btn-default btn-on btn-sm control-label active IsActive">
+                                        <input type="radio" value="1" checked="checked" name="rdoActive">Acive
+                                    </label>
+                                    <label class="btn btn-default btn-off btn-sm IsActive">
+                                        <input type="radio" value="0" name="rdoActive">InActive
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="divClientList">
+                @{Html.RenderPartial("_ClientList", Model.Listclients);}
+            </div>
+        </div>
+
+    </div>
+
+
+

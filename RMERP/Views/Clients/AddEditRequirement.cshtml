@@ -1,0 +1,201 @@
+﻿@model RMERP.DAL.ViewModel.ClientRequirementsModel
+@using static RMERP.DAL.App_Code.ProjectUtils;
+
+@{
+    ViewData["Title"] = "Add-Edit Requirement";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+@section scripts{
+    <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <script>
+        $(document).ready(function () {
+            debugger;
+            var id = $("#CriId").val();
+            if (id > 0) {
+                //$("#DesId").prop("disabled", true);
+                $('#DesId').attr("disabled", true); 
+            }
+            var tab = $("#tabName").val();
+            if (tab == "History" || tab =="ViewRequirement") {
+                $('select', 'form').attr('disabled', true).attr('readonly', true);
+                $('input', 'form').attr('disabled', true).attr('readonly', true);
+                $('button', 'form').attr('disabled', true).attr('readonly', true);
+            }
+        });
+    </script>
+    @if (TempData["message"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+            alert('@TempData["message"]');
+        });
+    </script>
+};
+
+
+}
+@*<div id="add_contact" class="modal custom-modal fade" role="dialog">*@
+<div class="modal-dialog">
+    <div class="modal-content modal-lg">
+        <div class="modal-header">
+            <h4 class="modal-title"> @ViewData["Title"]</h4>
+        </div>
+        <div class="modal-body">
+            <div class="m-b-30">
+                @using (Html.BeginForm("AddEditRequirement", "Clients", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.CriId)
+                    if (Model.CriId > 0)
+                    {
+                        @Html.HiddenFor(m => m.DesId, new { @id = "designationID" })
+                    }
+                    @Html.HiddenFor(m => m.CriActive)
+                    @Html.HiddenFor(m => m.CliId)
+                    @Html.HiddenFor(m => m.tabName)
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.DesId, new { @class = "control-label" })
+                                @Html.DropDownListFor(m => m.DesId, new SelectList(ViewBag.Designation, "DesId", "DesTitle"), "Select Designation", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.DesId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CliName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CliName, new { @readonly = "readonly", @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CliName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriBasic, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CriBasic, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CriBasic, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriDa, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CriDa, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CriDa, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriBasicDa, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CriBasicDa, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CriBasicDa, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriHraFixed, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CriHraFixed, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CriHraFixed, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriHraPercentage, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CriHraPercentage, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CriHraPercentage, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriAllowanceUpKeep, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CriAllowanceUpKeep, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CriAllowanceUpKeep, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriAllowanceGrade, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CriAllowanceGrade, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CriAllowanceGrade, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriAllowanceConveyance, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CriAllowanceConveyance, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CriAllowanceConveyance, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriAllowanceAttention, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CriAllowanceAttention, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CriAllowanceAttention, "", new { @class = "text-danger" })
+                            </div>
+                        </div> <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriPfPercentage, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CriPfPercentage, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CriPfPercentage, "", new { @class = "text-danger" })
+                            </div>
+                        </div> <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriEsicPercentage, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CriEsicPercentage, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CriEsicPercentage, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriEsicArea, new { @class = "control-label" })
+                                <label class="radio-inline form-control ">
+                                    @foreach (var ESIC_AREA in Enum.GetValues(typeof(ESIC_AREA)))
+                                    {
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(s => s.CriEsicArea, (int)ESIC_AREA, (int)ESIC_AREA == 1 ? (object)new { @checked = true, @id = (int)ESIC_AREA } : new { @id = (int)ESIC_AREA })@ESIC_AREA
+                                        </label>
+                                    }
+                                </label>
+                                @Html.ValidationMessageFor(x => x.CriEsicArea, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriOtRate, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CriOtRate, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CriOtRate, "", new { @class = "text-danger" })
+                            </div>
+                        </div> <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriOtMultipleTimes, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.CriOtMultipleTimes, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.CriOtMultipleTimes, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.CriWageCalculationOnWeeklyOffPlus, new { @class = "control-label" })
+                                <label class="radio-inline form-control ">
+                                    <label class="radio-inline">
+                                        @Html.RadioButtonFor(m => m.CriWageCalculationOnWeeklyOffPlus, true, new { @checked = "checked" }) Yes
+                                    </label>
+                                    <label class="radio-inline">
+                                        @Html.RadioButtonFor(m => m.CriWageCalculationOnWeeklyOffPlus, false) No
+                                    </label>
+
+                                </label>
+                                @Html.ValidationMessageFor(x => x.CriWageCalculationOnWeeklyOffPlus, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-t-20 text-center">
+                        <button class="btn btn-primary">Submit</button>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+

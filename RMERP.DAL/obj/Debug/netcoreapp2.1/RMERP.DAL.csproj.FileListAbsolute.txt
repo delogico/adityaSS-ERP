@@ -1,0 +1,14 @@
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Debug\netcoreapp2.1\RMERP.DAL.deps.json
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Debug\netcoreapp2.1\RMERP.DAL.runtimeconfig.json
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Debug\netcoreapp2.1\RMERP.DAL.runtimeconfig.dev.json
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Debug\netcoreapp2.1\RMERP.DAL.dll
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Debug\netcoreapp2.1\RMERP.DAL.pdb
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Http.Features.dll
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Debug\netcoreapp2.1\Microsoft.AspNetCore.Http.Features.xml
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\obj\Debug\netcoreapp2.1\RMERP.DAL.csprojAssemblyReference.cache
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\obj\Debug\netcoreapp2.1\RMERP.DAL.csproj.CoreCompileInputs.cache
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\obj\Debug\netcoreapp2.1\RMERP.DAL.AssemblyInfoInputs.cache
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\obj\Debug\netcoreapp2.1\RMERP.DAL.AssemblyInfo.cs
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\obj\Debug\netcoreapp2.1\RMERP.DAL.csproj.CopyComplete
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\obj\Debug\netcoreapp2.1\RMERP.DAL.dll
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\obj\Debug\netcoreapp2.1\RMERP.DAL.pdb

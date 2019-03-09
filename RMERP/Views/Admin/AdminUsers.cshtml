@@ -1,0 +1,99 @@
+﻿@model IEnumerable<RMERP.DAL.Models.AdminUsers>
+
+@{
+    ViewData["Title"] = "AdminUsers";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+@section scripts{
+    <script type="text/javascript" src="@Url.Content("~/assets/Scripts/Admin.js")"></script>
+}
+
+
+<div id="divAddEdit">
+
+</div>
+
+<div class="content container-fluid">
+    <div class="row">
+        <div class="col-xs-4">
+            <h4 class="page-title">Users</h4>
+        </div>
+        <div class="col-xs-8 text-right m-b-30">
+            @*<a href="#" class="btn btn-primary rounded" data-toggle="modal" data-target="#add_user"><i class="fa fa-plus"></i> Add User</a>*@
+            <a href="#" class="btn btn-primary rounded" onclick="onAddClick(0)"><i class="fa fa-plus"></i> Add User</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="divAdminUsersList">
+                @*@{Html.RenderPartial("_listAdminUsers", Model);}*@
+
+                <div class="table-responsive">
+                    <table class="table table-striped custom-table datatable">
+                        <thead>
+                            <tr>
+                                <th style="width:30%;">First Name</th>
+                                <th>Middle Name</th>
+                                <th>Last Name</th>
+                                <th>Email Address</th>
+                                <th>Mobile No.</th>
+                                <th>Firm</th>
+                                <th class="text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <a class="avatar">D</a>
+                                        <h2><a>@item.AdmFirstName @*<span>Admin</span>*@</a></h2>
+                                    </td>
+                                    <td>@item.AdmMiddleName</td>
+                                    <td>@item.AdmLastName</td>
+                                    <td>@item.AdmEmailId</td>
+                                    <td>@item.AdmMobile</td>
+                                    <td>@item.Frm.FrmName</td>
+                                    @*<td>
+                                <span class="label label-danger-border">Admin</span>
+                            </td>*@
+                                    <td class="text-right">
+                                        <div class="dropdown">
+                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                            <ul class="dropdown-menu pull-right">
+                                                <li><a data-toggle="modal" onclick="onDeleteShow(@item.AdmId)"> Delete</a></li>
+                                                <li><a onclick="onAddClick(@item.AdmId)" data-toggle="modal"> Edit</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <div id="delete_user" class="modal custom-modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content modal-md">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Delete Admin User</h4>
+                            </div>
+                            <form>
+                                <div class="modal-body card-box">
+                                    <p>Are you sure want to delete this?</p>
+
+                                    <div class="m-t-20">
+                                        <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+                                        <button type="submit" id="dltAdminBtn" class="btn btn-danger">Delete</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

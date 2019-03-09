@@ -1,0 +1,102 @@
+﻿@model RMERP.DAL.ViewModel.AdminUsersModel
+@using static RMERP.DAL.App_Code.ProjectUtils;
+
+@{
+    ViewData["Title"] = "Add-Edit AdminUsers";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+@section scripts{
+    <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    
+    @if (TempData["message"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+            alert('@TempData["message"]');
+        });
+        </script>
+    };
+
+}
+<div class="modal-dialog modelLeftSide">
+    <div class="modal-content modal-lg">
+        <div class="modal-header">
+            <h4 class="modal-title"> @ViewData["Title"]</h4>
+        </div>
+        <div class="modal-body">
+            <div class="m-b-30">
+                @using (Html.BeginForm("AddEditAdminUsers", "AdminUsers", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(m => m.AdmId)
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.FrmId, new { @class = "control-label" })
+                                @Html.DropDownListFor(m => m.FrmId, new SelectList(ViewBag.FrmList, "FrmId", "FrmName"), "Select Firm", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.FrmId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.AdmFirstName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.AdmFirstName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.AdmFirstName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.AdmMiddleName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.AdmMiddleName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.AdmMiddleName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.AdmLastName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.AdmLastName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.AdmLastName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.AdmEmailId, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.AdmEmailId, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.AdmEmailId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.AdmPassword, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.AdmPassword, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.AdmPassword, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.AdmMobile, new { @class = "control-label" })
+                                @Html.EditorFor(m => m.AdmMobile, new { htmlAttributes = new { @class = "form-control" } })                                
+                                @Html.ValidationMessageFor(m => m.AdmMobile, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-t-20 text-center">
+                        <input type="submit" name="Submit Admin User" id="btnSubmit" class="btn btn-primary" />
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+

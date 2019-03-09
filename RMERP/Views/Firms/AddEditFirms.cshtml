@@ -1,0 +1,47 @@
+﻿@model RMERP.DAL.ViewModel.FirmsViewModel
+@{
+    ViewData["Title"] = "Add-Edit Firms";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+
+
+@section scripts{
+
+    @if (TempData["message"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+            alert('@TempData["message"]');
+        });
+        </script>
+    };
+
+
+    <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+}
+
+<div class="modal-dialog">
+    <div class="modal-content modal-md">
+        <div class="modal-header">
+            <h4 class="modal-title"> @ViewData["Title"]</h4>
+        </div>
+        <div class="modal-body">
+            @using (Html.BeginForm("AddEditFirms", "Firms", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.HiddenFor(m => m.FrmId)
+                    @Html.LabelFor(m => m.FrmName)
+                    @Html.TextBoxFor(m => m.FrmName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.FrmName, "", new { @class = "text-danger" })
+                </div>
+                <div class="m-t-20 text-center">
+                    <input type="submit" name="Submit Firm" id="btnSubmit" class="btn btn-primary" />
+                </div>
+            }
+        </div>
+    </div>
+</div>

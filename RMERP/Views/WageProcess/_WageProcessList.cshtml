@@ -1,0 +1,36 @@
+﻿@model IEnumerable<RMERP.DAL.Models.WageProcess>
+@using System.Globalization;
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            @if (Model.Count() > 0)
+            {
+                <table class="table table-striped custom-table m-b-0">
+                    <thead>
+                        <tr>
+                            <th>Wag Month</th>
+                            <th>Attendance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><b>@item.WagMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")) - @item.WagMonth.Year.ToString()</b></td>
+                                <td>@Html.ActionLink("Attendance", "AttendancesStatus", "WageProcess",new { wagId =item.WagId})</td>                             
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No Wage Process To Display</p>
+            }
+        </div>
+    </div>
+</div>

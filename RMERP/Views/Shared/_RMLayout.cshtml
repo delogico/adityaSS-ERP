@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/img/favicon.png">
+    <title>Dashboard - RM-ERP Admin Portal</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="~/assets/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="~/assets/css/line-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="~/assets/plugins/morris/morris.css">
+        <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
+
+    <link rel="stylesheet" type="text/css" href="~/assets/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap-datetimepicker.min.css">
+
+    <link rel="stylesheet" href="~/assets/Scripts/Custom.css"/>
+    @*<link href="~/assets/bundle.min.css" rel="stylesheet" />*@
+
+
+    <!--[if lt IE 9]>
+        <script src="~/assets/js/html5shiv.min.js"></script>
+        <script src="~/assets/js/respond.min.js"></script>
+    <![endif]-->
+
+<script>var siteUrl= '@Url.Content("~/")';</script>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="header">
+            <div class="header-left">
+                <a href="#" class="logo">
+                    <img src="~/assets/img/logo.png" width="40" height="40" alt="">
+                </a>
+            </div>
+            <a id="toggle_btn" href="javascript:void(0);"><i class="la la-bars"></i></a>
+            <div class="page-title-box pull-left">
+                <h3>RM-ERP</h3>
+            </div>
+            <a id="mobile_btn" class="mobile_btn pull-left" href="#sidebar"><i class="fa fa-bars" aria-hidden="true"></i></a>
+            <ul class="nav navbar-nav navbar-right user-menu pull-right">
+
+                <li class="dropdown">
+                    <a href="profile.html" class="dropdown-toggle user-link" data-toggle="dropdown" title="Admin">
+                        <span class="user-img">
+                            <img class="img-circle" src="~/assets/img/user.jpg" width="40" alt="Admin">
+                            <span class="status online"></span>
+                        </span>
+                        <span>Admin</span>
+                        <i class="caret"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        @*<li><a href="profile.html">My Profile</a></li>
+                        <li><a href="edit-profile.html">Edit Profile</a></li>
+                        <li><a href="settings.html">Settings</a></li>*@
+                        <li>
+                            <a asp-action="Logout" asp-controller="AdminUsers">
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+           
+        </div>
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-inner slimscroll">
+                <div id="sidebar-menu" class="sidebar-menu">
+                    <ul>
+                        <li class="active">
+                            <a asp-action="DashBoard" asp-controller="AdminUsers">
+                                <i class="la la-dashboard"></i> <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Clients">
+                                <i class="la la-user"></i> <span>Clients</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Employees">
+                                <i class="la la-user"></i> <span>Employees</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="WageProcess">
+                                <i class="la la-user"></i> <span>Wage Process</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="AdminUsers">
+                                <i class="la la-user-plus"></i> <span>Admin Users</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Firms">
+                                <i class="la la-share-alt"></i> <span>Firms</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="page-wrapper">
+            <div class="content container-fluid">
+
+                <div class="row">
+                    @RenderBody()
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="sidebar-overlay" data-reff="#sidebar"></div>
+    <script type="text/javascript" src="~/assets/js/jquery-3.2.1.min.js"></script>
+
+    <script type="text/javascript" src="~/assets/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="~/assets/lib/jquery-validation/dist/additional-methods.min.js"></script>
+    <script type="text/javascript" src="~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script type="text/javascript" src="~/assets/lib/jquery-validation/jquery.validate-vsdoc.js"></script>
+
+    <script type="text/javascript" src="~/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/jquery.slimscroll.js"></script>
+    <script type="text/javascript" src="~/assets/plugins/morris/morris.min.js"></script>
+    <script type="text/javascript" src="~/assets/plugins/raphael/raphael-min.js"></script>
+    <script type="text/javascript" src="~/assets/js/chart.js"></script>
+    <script type="text/javascript" src="~/assets/js/app.js"></script>
+
+    <script type="text/javascript" src="~/assets/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/select2.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/moment.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript" src="~/assets/js/bootbox.min.js"></script>
+
+    @*<script src="~/assets/bundle.min.js"></script>*@
+
+    @*<script type="text/javascript" src="~/assets/plugins/morris/morris.min.js"></script>
+        <script type="text/javascript" src="~/assets/plugins/raphael/raphael-min.js"></script*@
+    <script type="text/javascript" asp-src-include="~/assets/plugins/**/*.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>

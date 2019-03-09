@@ -1,0 +1,103 @@
+﻿@model RMERP.DAL.ViewModel.ClientContactModel
+@{
+    ViewData["Title"] = "Add-Edit Contacts";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+    ViewBag.ButtonTitle = Model.ConId > 0 ? "Update Contact" : "Create Contact";
+}
+@section scripts{
+    <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+    @if (TempData["message"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+            alert('@TempData["message"]');
+        });
+        </script>
+    };
+
+}
+@*<div id="add_contact" class="modal custom-modal fade" role="dialog">*@
+<div class="modal-dialog">
+    <div class="modal-content modal-md">
+        <div class="modal-header">
+            <h4 class="modal-title"> @ViewData["Title"]</h4>
+        </div>
+        <div class="modal-body">
+            <div class="m-b-30">
+                @using (Html.BeginForm("AddEditContacts", "Clients", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.ConId)
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ClientName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.ClientName, new { @readonly = "readonly", @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.ClientName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ConFirstName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.ConFirstName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.ConFirstName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ConSurName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.ConSurName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.ConSurName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ConDesignation, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.ConDesignation, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.ConDesignation, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ConMobile, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.ConMobile, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.ConMobile, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ConEmail, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.ConEmail, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.ConEmail, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ConIsPrimary, new { @class = "control-label" })
+                                <label class="radio-inline form-control ">
+                                    <label class="radio-inline">
+                                        @Html.RadioButtonFor(m => m.ConIsPrimary, true, new { @checked = "checked" }) Yes
+                                    </label>
+                                    <label class="radio-inline">
+                                        @Html.RadioButtonFor(m => m.ConIsPrimary, false) No
+                                    </label>
+
+                                </label>
+                                @Html.ValidationMessageFor(x => x.ConIsPrimary, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="m-t-20 text-center">
+                        <button class="btn btn-primary">@ViewBag.ButtonTitle</button>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+

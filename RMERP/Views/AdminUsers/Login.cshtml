@@ -1,0 +1,93 @@
+﻿@model RMERP.DAL.MetaClasses.AdminUsers
+
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/img/favicon.png">
+    <title>Login - HRMS admin template</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
+    <script type="text/javascript" src="~/assets/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/app.js"></script>
+    <script type="text/javascript" src="~/assets/lib/jquery-validation/jquery.validate-vsdoc.js"></script>
+    <script type="text/javascript" src="~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="account-page">
+            <div class="container">
+                <h3 class="account-title">RMERP Management Login</h3>
+                <div class="account-box">
+                    <div class="account-wrapper">
+                        <div class="account-logo">
+                            <a href="index-2.html"><img src="~/assets/img/logo2.png" alt="Focus Technologies"></a>
+                        </div>
+
+                        @*<form asp-controller="AdminUsers" asp-action="Login">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group form-focus">
+                <label asp-for="AdmEmailId" class="control-label"></label>
+                <input asp-for="AdmEmailId" class="form-control floating" /><br/>
+                <span asp-validation-for="AdmEmailId" class="text-danger"></span>
+            </div>
+            <div class="form-group form-focus">
+                <label asp-for="AdmPassword" class="control-label"></label>
+                <input asp-for="AdmPassword" class="form-control floating" /><br />
+                <span asp-validation-for="AdmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-block account-btn" type="submit">Login</button>
+            </div>
+        </form>*@
+
+                        <form asp-controller="AdminUsers" asp-action="Login">                            
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })                  
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="AdmEmailId" class="control-label"></label>
+                                        <input asp-for="AdmEmailId" class="form-control floating" />
+                                        <span asp-validation-for="AdmEmailId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="AdmPassword" class="control-label"></label>
+                                        <input asp-for="AdmPassword" class="form-control floating" /><br />
+                                        <span asp-validation-for="AdmPassword" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-block account-btn" type="submit">Login</button>
+                            </div>
+                        </form>
+
+                            <div class="text-center">
+                                <a href="forgot-password.html">Forgot your password?</a>
+                            </div>
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar-overlay" data-reff="#sidebar"></div>
+   
+</body>
+</html>

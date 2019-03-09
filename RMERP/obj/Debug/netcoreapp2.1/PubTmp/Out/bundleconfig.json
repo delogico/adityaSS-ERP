@@ -1,0 +1,57 @@
+[
+  {
+    "outputFileName": "wwwroot/assets/css/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/bootstrap.min.css",
+      "wwwroot/css/bootstrap-datetimepicker.min.css",
+      "wwwroot/css/dataTables.bootstrap.min.css",
+      "wwwroot/css/font-awesome.min.css",
+      "wwwroot/css/fullcalendar.min.css",
+      "wwwroot/css/line-awesome.min.css",
+      "wwwroot/css/select2.min.css",
+      "wwwroot/css/style.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/js/site.min.js",
+    "inputFiles": [
+      "wwwroot/js/app.js",
+      "wwwroot/js/bootstrap.min.js",
+      "wwwroot/js/bootstrap-datetimepicker.min.js",
+      "wwwroot/js/chart.js",
+      "wwwroot/js/dataTables.bootstrap.min.js",
+      "wwwroot/js/dropfiles.js",
+      "wwwroot/js/fullcalendar.min.js",
+      "wwwroot/js/jquery.dataTables.min.js",
+      "wwwroot/js/jquery.fullcalendar.js",
+      "wwwroot/js/jquery.slimscroll.js",
+      "wwwroot/js/jquery-3.2.1.min.js",
+      "wwwroot/js/moment.min.js",
+      "wwwroot/js/select2.min.js",
+      "wwwroot/js/task.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/assets/bundle.css",
+    "inputFiles": [
+      "wwwroot/assets/css/bootstrap.min.css",
+      "wwwroot/assets/css/font-awesome.min.css",
+      "wwwroot/assets/css/line-awesome.min.css",
+      "wwwroot/assets/css/style.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/assets/bundle.js",
+    "inputFiles": [
+      "wwwroot/assets/js/jquery-3.2.1.min.js",
+      "wwwroot/assets/js/bootstrap.min.js",
+      "wwwroot/assets/js/jquery.slimscroll.js",
+      "wwwroot/assets/js/chart.js",
+      "wwwroot/assets/js/app.js"
+    ]
+  }
+]

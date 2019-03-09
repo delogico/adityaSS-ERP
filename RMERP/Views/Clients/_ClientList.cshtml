@@ -1,0 +1,32 @@
+﻿@model IEnumerable<RMERP.DAL.Models.Clients>
+
+<div class="row staff-grid-row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 col-sm-4 col-xs-6 col-lg-3">
+            <div class="profile-widget ClientProfile">
+                <div class="profile-img">
+                    <a class="avatar">@item.CliName[0].ToString()</a>
+                </div>
+                
+                <h4 class="user-name m-t-10 m-b-0 text-ellipsis"><a>@item.CliName</a></h4>
+                @if (item.ClientContacts.Where(m => m.ConIsPrimary.Equals(true)).Count() > 0)
+                {
+                    <div class="small text-muted">
+                        @item.ClientContacts.Where(m => m.ConIsPrimary.Equals(true)).FirstOrDefault().ConFirstName
+                        @item.ClientContacts.Where(m => m.ConIsPrimary.Equals(true)).FirstOrDefault().ConSurName
+                    </div>
+                }
+                else
+                {
+                    <div class="small text-muted"> No Primary Contact Person</div>
+                }
+                @*<h5 class="user-name m-t-10 m-b-0 text-ellipsis"><a>Barry Cuda</a></h5>
+                    <div class="small text-muted">CEO</div>*@
+                <a href="@Url.Action("AddEditClients","Clients",new { @id=item.CliId})" class="btn btn-default btn-sm m-t-10">Edit</a>
+                @*<a href="client-profile.html" class="btn btn-default btn-sm m-t-10">View Profile</a>*@
+            </div>
+        </div>
+    }
+
+</div>
