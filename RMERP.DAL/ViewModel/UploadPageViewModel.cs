@@ -13,5 +13,12 @@ namespace RMERP.DAL.ViewModel
         public int ClientId { get; set; }
         public IFormFile TemplateFile { get; set; }
         public string TemplateName { get; set; }
+       // public IEnumerable<DisplayExcel> listDisplayExcel { get; set; }
     }
+    public class DisplayExcel
+    {
+        public string EmpName { get; set; }
+        public string DesName { get; set; }
+    }
+        
 }

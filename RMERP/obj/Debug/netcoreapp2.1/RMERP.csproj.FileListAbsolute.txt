@@ -38,6 +38,7 @@ C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Firms\AddEdit
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Firms\Index.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Home\About.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Home\Contact.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Home\ExcelDownload.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Home\Index.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Home\Privacy.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Shared\Error.g.cshtml.cs
@@ -45,6 +46,12 @@ C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_Cooki
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_Layout.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_RMLayout.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_ValidationScriptsPartial.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\AttendancesStatus.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\DisplayWageProcessData.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\DisplayWageProcessData1.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\Index.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\UploadPage.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\_WageProcessList.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\_ViewImports.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\_ViewStart.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.RazorTargetAssemblyInfo.cache
@@ -53,8 +60,4 @@ C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.Views.pdb
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.csproj.CopyComplete
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.dll
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.pdb
-C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Home\ExcelDownload.g.cshtml.cs
-C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\Index.g.cshtml.cs
-C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\_WageProcessList.g.cshtml.cs
-C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\AttendancesStatus.g.cshtml.cs
-C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\UploadPage.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\ViewAttendance.g.cshtml.cs

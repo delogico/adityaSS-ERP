@@ -441,5 +441,27 @@ namespace RMERP.DAL.ManagerClasses
 
             return ClientList.ToList();
         }
+        public IEnumerable<Clients> listClientsForAttandance(int? FirmId, bool IsActive, string Client = "")
+        {
+            IQueryable<Clients> ClientList = null;
+            return ClientList;
+        }
+        //public IEnumerable<Clients> listClientsFotAttandance(int? FirmId, bool IsActive, string Client = "")
+        //{
+        //    string query = "";
+        //    query += " select Clients.*,ISNULL(totEmployee,'-') as totEmployee from (";
+        //    query += " select count(distinct(EMP_Id)) as totEmployee,Clients.CLI_Name as Cname,Clients.CLI_Id from Attendance";
+        //    query += " inner join Clients on Clients.CLI_Id=Attendance.CLI_Id";
+        //    query += " group by Clients.CLI_Name,Clients.CLI_Id ) tmp";
+        //    query += " right join Clients on  tmp.CLI_Id=Clients.CLI_Id";
+
+        //    var Clients = _contaxt.Clients.FromSql(query).ToList();
+        //    return Clients;
+        //}
+        public Tuple<int, int> GetDateByClientID(int cliID)
+        {
+            return new Tuple<int, int>(0, 0);
+        }
+
     }
 }

@@ -19,6 +19,7 @@ namespace RMERP.DAL.ViewModel
         public ClientsEmployeesViewModel ClientsEmployeesViewModel { get; set; }
         public IEnumerable<ClientsEmployees> ClientsEmployeesList { get; set; }
         public int WageID { get; set; }
+      
     }
     public class ClientsModel
     {
@@ -71,7 +72,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Logo")]
         public IFormFile CliLogo { get; set; }
         public string CliLogoImage { get; set; }
-
+        public int totalEmployee { get; set; }
     }
 
     public class ParametersClientsModel
@@ -139,5 +140,12 @@ namespace RMERP.DAL.ViewModel
 
 
     }
+
+    public class AttStatus
+    {
+        public string ClientName { get; set; }
+        public int totEmployee { get; set; }
+    }
+  
 
 }

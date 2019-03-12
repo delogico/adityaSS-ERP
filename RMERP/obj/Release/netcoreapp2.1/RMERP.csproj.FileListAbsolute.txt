@@ -56,3 +56,7 @@ C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\Clients\Cli
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\Home\ExcelDownload.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\WageProcess\Index.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\WageProcess\_WageProcessList.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\WageProcess\AttendancesStatus.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\WageProcess\DisplayWageProcessData.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\WageProcess\DisplayWageProcessData1.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\WageProcess\UploadPage.g.cshtml.cs

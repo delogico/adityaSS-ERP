@@ -188,7 +188,7 @@ WriteAttributeValue("", 1638, item.AdmId, 1638, 11, false);
             ");
             EndContext();
             BeginContext(2167, 431, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "67d6c8f204dc458c88a712c4e45a4bbd", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "01acfd7c118d4545b9aa639858ad9cb5", async() => {
                 BeginContext(2173, 418, true);
                 WriteLiteral(@"
                 <div class=""modal-body card-box"">
@@ -219,7 +219,7 @@ WriteAttributeValue("", 1638, item.AdmId, 1638, 11, false);
             WriteLiteral("\r\n        </div>\r\n    </div>\r\n</div>\r\n");
             EndContext();
             BeginContext(2636, 65, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("script", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "7391450ecea14e5fb6b36e604095a1ba", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("script", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d7934e65c8ac4c2ba10cd7d90041c6d6", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();

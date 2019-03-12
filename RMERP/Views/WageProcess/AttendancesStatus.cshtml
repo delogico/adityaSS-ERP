@@ -20,7 +20,8 @@
                                 <th>Client Name</th>
                                 <th>Status</th>
                                 <th>Total Employee</th>
-                                <th>Action</th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -28,17 +29,11 @@
                             {
                             <tr>
                                 <td><b>@item.CliName</b></td>
-                                <td><b>-</b></td>
-                                <td><b>-</b></td>                               
-                                <td class="text-right">
-                                    <div class="dropdown">
-                                        <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                        <ul class="dropdown-menu pull-right">
-                                            <li><a href='@Url.Action("UploadPage","WageProcess",new { wagId=Model.WageID,CliId=item.CliId})' title="Upload"><i class="fa fa-trash m-r-5"></i> Upload</a></li>
-                                            <li><a href='@Url.Action("ViewPage","WageProcess",new { wagId=Model.WageID})' title="View"><i class="fa fa-trash m-r-5"></i> View</a></li>
-                                        </ul>
-                                    </div>
-                                </td>
+                                <td><b>Not Done</b></td>
+                                <td><b></b></td>
+                                <td><a href='@Url.Action("UploadPage","WageProcess",new { wagId=Model.WageID,CliId=item.CliId})' title="Upload"><i class="fa fa-upload m-r-5"></i> Upload</a></td>
+                                <td><a href='@Url.Action("ViewAttendance","WageProcess",new { wagId=Model.WageID,CliId=item.CliId})' title="View"><i class="fa fa-eye m-r-5"></i> View</a></td>
+                               
                             </tr>
                             }
 

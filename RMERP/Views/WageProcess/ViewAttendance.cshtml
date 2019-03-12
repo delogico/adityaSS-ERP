@@ -1,0 +1,129 @@
+﻿@model IEnumerable<RMERP.DAL.Models.Attendance>
+@using RMERP.DAL.Models;
+@{
+    ViewData["Title"] = "View Attendance";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+<div class="content container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <h4 class="page-title">@ViewData["Title"]</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+          <h5>  Client: 
+          @ViewBag.ClientName</h5>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                   
+                    <table class="table table-striped custom-table m-b-0">
+                       <thead>
+                           <tr>
+                               <th>Name</th>
+                               <th>Designation</th>
+                               @{
+                                   int counter = 0;
+                                   DateTime tmpDate = ViewBag.startDate;
+
+                                   while (ViewBag.endDate >= tmpDate)
+                                   {
+                                       counter = counter + 1;
+                                       <th> @tmpDate.Day</th>
+                                       tmpDate = tmpDate.AddDays(1);
+                                   }
+                               }
+                               <th>Total Working Days</th>
+                               <th>Total Extra Working Hours</th>
+                           </tr>
+                       </thead>
+                        <tbody>
+                            @{ 
+                                List<Employees> employees = Model.Select(m => m.Emp).Distinct().ToList();
+                            }
+
+
+                            @foreach(var item in employees)
+                            {
+                            <tr>
+                                <td>@item.EmpFirstName</td>
+                                <td></td>
+                                @{
+                                    int counter1 = 0;
+                                    DateTime tmpDate1 = ViewBag.startDate;
+                                    int totWorkingDays = 0;
+                                    double totExtraWorkingHours = 0;
+                                    while (ViewBag.endDate >= tmpDate1)
+                                    {
+                                        counter1 = counter1 + 1;
+                                        Attendance att = Model.Where(m => m.EmpId == item.EmpId && m.AttDate.Equals(tmpDate1)).FirstOrDefault();
+
+                                        if (att != null)
+                                        {
+                                            <td>
+                                                @{ 
+                                                    String str = "";
+                                                    if (att.AttIsWeeklyOff)
+                                                    {
+                                                        str = "<span style='color:red;'>W/O</span>";
+                                                    }
+                                                    else
+                                                    {
+                                                        if (att.AttIsPresent)
+                                                        {
+                                                            str = "P";
+                                                        }
+                                                        else
+                                                        {
+                                                            str = "A";
+                                                        }
+                                                    }
+                                                }
+                                                <b>@Html.Raw(str)</b>
+                                                <br />
+                                                @{
+                                                    if (att.AttExtraHoursWorked == 0)
+                                                    {
+                                                        @:&nbsp;
+                                                    }
+                                                    else
+                                                    {
+                                                        @att.AttExtraHoursWorked.ToString("#.#")
+                                                    }
+                                                }
+                                            </td>
+                                            if (att.AttIsPresent == true)
+                                            {
+                                                totWorkingDays++;
+                                            }
+                                            if (att.AttExtraHoursWorked>0)
+                                            {
+                                                totExtraWorkingHours += att.AttExtraHoursWorked;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <th>-</th>
+                                        }
+
+                                        tmpDate1 = tmpDate1.AddDays(1);
+                                    }
+                                }
+
+                                <td>@totWorkingDays Days</td>
+                                <td>@totExtraWorkingHours Hours</td>
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+

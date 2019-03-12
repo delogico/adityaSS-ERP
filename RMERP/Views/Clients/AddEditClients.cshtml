@@ -116,35 +116,7 @@
                                         @Html.TextBoxFor(m => m.clientsModel.CliEmail2, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(x => x.clientsModel.CliEmail2, "", new { @class = "text-danger" })
                                     </div>
-                                </div>
-                                            @*<div class="col-md-6">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.clientsModel.CliGstNumber, new { @class = "control-label" })
-                                    @Html.TextBoxFor(m => m.clientsModel.CliGstNumber, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(x => x.clientsModel.CliGstNumber, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.clientsModel.CliGstRate, new { @class = "control-label" })
-                                    @Html.TextBoxFor(m => m.clientsModel.CliGstRate, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(x => x.clientsModel.CliGstRate, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.clientsModel.CliHsnCode, new { @class = "control-label" })
-                                    @Html.TextBoxFor(m => m.clientsModel.CliHsnCode, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(x => x.clientsModel.CliHsnCode, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.clientsModel.CliTdsRate, new { @class = "control-label" })
-                                    @Html.TextBoxFor(m => m.clientsModel.CliTdsRate, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(x => x.clientsModel.CliTdsRate, "", new { @class = "text-danger" })
-                                </div>
-                            </div>*@
+                                </div>                                           
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div class="col-md-8">
@@ -392,24 +364,8 @@
     </div>
     <div id="ClientEmployee" class="tab-pane fade">
         <div class="content container-fluid">
-            <div class="row">  
-                <div class="col-sm-8">
-                    <h4 class="page-title"></h4>
-                </div>
-                <div class="col-sm-4 text-right m-b-30">
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle btn btn-success rounded" data-toggle="dropdown" aria-expanded="false">Get Excel</a>
-                        <ul class="dropdown-menu pull-right">
-                            @foreach (var excel in Enum.GetValues(typeof(Execl_BasicShifts)))
-                            {
-                               
-                                <li><a href='@Url.Action( @excel.ToString(),"Clients")' title="BASIC_WithoutShifts"><i class="fa fa-file-excel-o m-r-5"></i>  @excel.ToString()</a></li>
-                            }
-                            @*<li><a href='@Url.Action("BASIC_WithoutShifts","Clients")' title="BASIC_WithoutShifts"><i class="fa fa-file-excel-o m-r-5"></i> BASIC_WithoutShifts</a></li>
-                            <li><a href='@Url.Action("BASIC_WithShifts","Clients")' title="BASIC_WithShifts"><i class="fa fa-file-excel-o m-r-5"></i> BASIC_WithShifts</a></li>
-                            <li><a href='@Url.Action("COMPLEX_WithoutShift","Clients")' title="BASIC_WithoutShifts"><i class="fa fa-file-excel-o m-r-5"></i> COMPLEX_WithoutShift</a></li>*@
-                        </ul>
-                    </div>
+            <div class="row">             
+                <div class="col-sm-12 text-right m-b-30">                    
                     <a class="btn btn-primary rounded" href="@Url.Action("ClientEmployee","Clients")"><i class="fa fa-plus"></i> Assign Employee</a>
                 </div>
             </div>
@@ -423,28 +379,28 @@
                                     <tr>
                                         <th>Designation</th>
                                         <th>EmployeeName</th>
-                                        <th>Assign On</th>                                       
+                                        <th>Assign On</th>
                                         <th class="text-right">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model.ClientsEmployeesList)
                                     {
-                                    <tr>
-                                        <td>@item.Des.DesTitle</td>
-                                        <td>@item.Emp.EmpFirstName @item.Emp.EmpMiddleName @item.Emp.EmpSurName</td>
-                                        <td>@item.CleRegisteredOn</td>
-                                        
-                                        <td class="text-right">
-                                            <div class="dropdown">
-                                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                                <ul class="dropdown-menu pull-right">
-                                                    @*<li><a href='@Url.Action("ClientEmployee","Clients",new { CleId=item.CleId})' title="Edit ClientEmployee"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>*@
-                                                    <li><a href='@Url.Action("DeleteClientEmployee","Clients",new { CleId=item.CleId})' title="Delete"><i class="fa fa-trash m-r-5"></i> Delete</a></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td>@item.Des.DesTitle</td>
+                                            <td>@item.Emp.EmpFirstName @item.Emp.EmpMiddleName @item.Emp.EmpSurName</td>
+                                            <td>@item.CleRegisteredOn</td>
+
+                                            <td class="text-right">
+                                                <div class="dropdown">
+                                                    <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                    <ul class="dropdown-menu pull-right">
+                                                        @*<li><a href='@Url.Action("ClientEmployee","Clients",new { CleId=item.CleId})' title="Edit ClientEmployee"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>*@
+                                                        <li><a href='@Url.Action("DeleteClientEmployee","Clients",new { CleId=item.CleId})' title="Delete"><i class="fa fa-trash m-r-5"></i> Delete</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     }
 
                                 </tbody>
@@ -459,180 +415,196 @@
                 </div>
             </div>
         </div>
-       
-    </div>
-    <div id="ClientDelete" class="tab-pane fade">
-        <div class="modal-dialog">
-            <div class="modal-content modal-md">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="activeTitle"></h4>
+        <div class="row">
+            <br />
+            <div class="col-sm-12 text-right m-b-30">
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle btn btn-success rounded" data-toggle="dropdown" aria-expanded="false">Get Excel</a>
+                    <ul class="dropdown-menu pull-right">
+                        @foreach (var excel in Enum.GetValues(typeof(Execl_BasicShifts)))
+                        {
+                            <li><a href='@Url.Action( @excel.ToString(),"Clients")' title="BASIC_WithoutShifts"><i class="fa fa-file-excel-o m-r-5"></i>  @excel.ToString()</a></li>
+                        }
+                    </ul>
                 </div>
-                <form>
-                    <div class="modal-body card-box">
-                        <p id="activeBody">
 
-                        </p>
-                        <div class="m-t-20">
-                            <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
-                            <button id="btnSubmit" type="submit" class="btn btn-danger"></button>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
+
     </div>
-</div>
 
-@section scripts{
-    <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+            <div id="ClientDelete" class="tab-pane fade">
+                <div class="modal-dialog">
+                    <div class="modal-content modal-md">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="activeTitle"></h4>
+                        </div>
+                        <form>
+                            <div class="modal-body card-box">
+                                <p id="activeBody">
 
-    @if (TempData["message"] != null)
-    {
-        <script>
+                                </p>
+                                <div class="m-t-20">
+                                    <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+                                    <button id="btnSubmit" type="submit" class="btn btn-danger"></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @section scripts{
+            <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
+            <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+            @if (TempData["message"] != null)
+            {
+                <script>
             $(document).ready(function () {
             alert('@TempData["message"]');
         });
-        </script>
-    };
-    <script type="text/javascript">
-        var ClientID;
-        var CliIsActive;
-        $(document).ready(function () {
-            debugger;
-            radioShow();
-            var CliId = $("#clientsModel_FrmId").val();
-            if (CliId > 0) {
-                $("#clientsModel_FrmId").attr("disabled", true);
-            }
-            $("input[type='radio']").click(function () {
-                debugger;                           
-                radioShow();
-            });
-            function radioShow() {
-                debugger; 
-                var radioValue = $("input[name='ParametersClientsModel.CliAttMonthReal']:checked").attr("id");
-                if (radioValue == "custom") {
-                    $("#divSelectdate").show();
-                } else if (radioValue == "Default") {
-                    $("#divSelectdate").hide();
-                }
-            }
-            
-            $("#ClientHistory").hide();
-            $("#activeTitle").html("InActive Client");
-            $("#activeBody").html("Are you sure want to InActive this Client?");
-            $("#btnSubmit").html("InActive");
-            ClientID = $('#clientsModel_CliId').val();
-            CliIsActive = $('#clientsModel_CliIsActive').val();
+                </script>
+            };
+            <script type="text/javascript">
+                var ClientID;
+                var CliIsActive;
+                $(document).ready(function () {
+                    debugger;
+                    radioShow();
+                    var CliId = $("#clientsModel_FrmId").val();
+                    if (CliId > 0) {
+                        $("#clientsModel_FrmId").attr("disabled", true);
+                    }
+                    $("input[type='radio']").click(function () {
+                        debugger;
+                        radioShow();
+                    });
+                    function radioShow() {
+                        debugger;
+                        var radioValue = $("input[name='ParametersClientsModel.CliAttMonthReal']:checked").attr("id");
+                        if (radioValue == "custom") {
+                            $("#divSelectdate").show();
+                        } else if (radioValue == "Default") {
+                            $("#divSelectdate").hide();
+                        }
+                    }
 
-            if (CliIsActive.toLowerCase() == "false") {
-
-                var CurrentActive = $('.nav li.active').find("a").attr("href");
-                var NextActive = $('.nav li.active').next('li').next('li').find("a").attr("href");
-                $('.nav li.active').next('li').next('li').next('li').next('li').addClass("active");
-                $('.nav li.active').prev('li').prev('li').prev('li').prev('li').removeClass("active");
-                $(CurrentActive).removeClass("in active");
-                $("#ClientDelete").addClass("in active");
-                $('.nav li').not('.active').addClass('disabled');
-                $('.nav li').not('.active').find('a').removeAttr("data-toggle");
-
-                $("#activeTitle").html("Activate Client");
-                $("#activeBody").html("Are you sure want to Active this Client?");
-                $("#btnSubmit").html("Active");
-            }
-            if (CliIsActive.toLowerCase() == "true") {
-                var CurrentActive = $('.nav li.active').find("a").attr("href");
-
-                if (CurrentActive == "#ClientDelete") {
-                    var prevActive = $('.nav li.active').prev('li').prev('li').find("a").attr("href");
-                    $('.nav li.active').prev('li').prev('li').AddClass("active");
-                    $('.nav li.active').prev('li').AddClass("active");
-                    $('.nav li.active').removeClass("active");
-
-                    $(CurrentActive).removeClass("in active");
-                    $(prevActive).addClass("in active");
-
-                    $('.nav li').not('.active').addClass('disabled');
-
+                    $("#ClientHistory").hide();
                     $("#activeTitle").html("InActive Client");
                     $("#activeBody").html("Are you sure want to InActive this Client?");
                     $("#btnSubmit").html("InActive");
-                }
+                    ClientID = $('#clientsModel_CliId').val();
+                    CliIsActive = $('#clientsModel_CliIsActive').val();
 
-            }
-            var tab = GetParameterValues('tab');
-            if (tab == "ContactInfo") {
-                $('.nav li.active').next('li').addClass("active").find('a');
-                var CurrentActive = $('.nav li.active').find("a").attr("href");
-                var PrevActive = $('.nav li.active').next('li').find("a").attr("href");
-                $('.nav li.active').prev('li').removeClass("active");
-                $(CurrentActive).removeClass("in active");
-                $(PrevActive).addClass("in active");
-            }
-            else if (tab == "ClientRequirement") {
-                $('.nav li.active').next('li').next('li').next('li').addClass("active").find('a');
-                var CurrentActive = $('.nav li.active').find("a").attr("href");
-                var PrevActive = $('.nav li.active').next('li').next('li').next('li').find("a").attr("href");
-                $('.nav li.active').prev('li').prev('li').prev('li').removeClass("active");
-                $(CurrentActive).removeClass("in active");
-                $(PrevActive).addClass("in active");
-            }
-            else if (tab == "ClientEmployee") {
-                debugger;
-                $('.nav li.active').next('li').next('li').next('li').next('li').addClass("active").find('a');
-                var CurrentActive = $('.nav li.active').find("a").attr("href");
-                var PrevActive = $('.nav li.active').next('li').next('li').next('li').next('li').find("a").attr("href");
-                $('.nav li.active').prev('li').prev('li').prev('li').prev('li').removeClass("active");
-                $(CurrentActive).removeClass("in active");
-                $(PrevActive).addClass("in active");
-            }
-            if (ClientID == 0) {
-                $('.nav li').not('.active').addClass('disabled');
-                $('.nav li').not('.active').find('a').removeAttr("data-toggle");
-            } else {
-                $('.nav li').not('.active').removeClass('disabled');
-            }
+                    if (CliIsActive.toLowerCase() == "false") {
 
-        });
-        function ShowImagePreviewMain(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#ClientImage').prop('src', e.target.result)
-                        .width(80)
-                        .height(80);
+                        var CurrentActive = $('.nav li.active').find("a").attr("href");
+                        var NextActive = $('.nav li.active').next('li').next('li').find("a").attr("href");
+                        $('.nav li.active').next('li').next('li').next('li').next('li').addClass("active");
+                        $('.nav li.active').prev('li').prev('li').prev('li').prev('li').removeClass("active");
+                        $(CurrentActive).removeClass("in active");
+                        $("#ClientDelete").addClass("in active");
+                        $('.nav li').not('.active').addClass('disabled');
+                        $('.nav li').not('.active').find('a').removeAttr("data-toggle");
+
+                        $("#activeTitle").html("Activate Client");
+                        $("#activeBody").html("Are you sure want to Active this Client?");
+                        $("#btnSubmit").html("Active");
+                    }
+                    if (CliIsActive.toLowerCase() == "true") {
+                        var CurrentActive = $('.nav li.active').find("a").attr("href");
+
+                        if (CurrentActive == "#ClientDelete") {
+                            var prevActive = $('.nav li.active').prev('li').prev('li').find("a").attr("href");
+                            $('.nav li.active').prev('li').prev('li').AddClass("active");
+                            $('.nav li.active').prev('li').AddClass("active");
+                            $('.nav li.active').removeClass("active");
+
+                            $(CurrentActive).removeClass("in active");
+                            $(prevActive).addClass("in active");
+
+                            $('.nav li').not('.active').addClass('disabled');
+
+                            $("#activeTitle").html("InActive Client");
+                            $("#activeBody").html("Are you sure want to InActive this Client?");
+                            $("#btnSubmit").html("InActive");
+                        }
+
+                    }
+                    var tab = GetParameterValues('tab');
+                    if (tab == "ContactInfo") {
+                        $('.nav li.active').next('li').addClass("active").find('a');
+                        var CurrentActive = $('.nav li.active').find("a").attr("href");
+                        var PrevActive = $('.nav li.active').next('li').find("a").attr("href");
+                        $('.nav li.active').prev('li').removeClass("active");
+                        $(CurrentActive).removeClass("in active");
+                        $(PrevActive).addClass("in active");
+                    }
+                    else if (tab == "ClientRequirement") {
+                        $('.nav li.active').next('li').next('li').next('li').addClass("active").find('a');
+                        var CurrentActive = $('.nav li.active').find("a").attr("href");
+                        var PrevActive = $('.nav li.active').next('li').next('li').next('li').find("a").attr("href");
+                        $('.nav li.active').prev('li').prev('li').prev('li').removeClass("active");
+                        $(CurrentActive).removeClass("in active");
+                        $(PrevActive).addClass("in active");
+                    }
+                    else if (tab == "ClientEmployee") {
+                        debugger;
+                        $('.nav li.active').next('li').next('li').next('li').next('li').addClass("active").find('a');
+                        var CurrentActive = $('.nav li.active').find("a").attr("href");
+                        var PrevActive = $('.nav li.active').next('li').next('li').next('li').next('li').find("a").attr("href");
+                        $('.nav li.active').prev('li').prev('li').prev('li').prev('li').removeClass("active");
+                        $(CurrentActive).removeClass("in active");
+                        $(PrevActive).addClass("in active");
+                    }
+                    if (ClientID == 0) {
+                        $('.nav li').not('.active').addClass('disabled');
+                        $('.nav li').not('.active').find('a').removeAttr("data-toggle");
+                    } else {
+                        $('.nav li').not('.active').removeClass('disabled');
+                    }
+
+                });
+                function ShowImagePreviewMain(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('#ClientImage').prop('src', e.target.result)
+                                .width(80)
+                                .height(80);
+                        };
+                        reader.readAsDataURL(input.files[0]);
+                    }
                 };
-                reader.readAsDataURL(input.files[0]);
-            }
-        };
 
-        $("#btnSubmit").click(
-            function () {
-                debugger;
-                var Url = siteUrl + "Clients/InActiveClient?ClientID=" + ClientID + "&Active=" + CliIsActive;
-                $.ajax({
-                    type: "POST",
-                    url: Url,
-                    success: function (data) {
-                        if (data.d == null) {
-                            window.location.replace(siteUrl + "Clients/Index");
+                $("#btnSubmit").click(
+                    function () {
+                        debugger;
+                        var Url = siteUrl + "Clients/InActiveClient?ClientID=" + ClientID + "&Active=" + CliIsActive;
+                        $.ajax({
+                            type: "POST",
+                            url: Url,
+                            success: function (data) {
+                                if (data.d == null) {
+                                    window.location.replace(siteUrl + "Clients/Index");
+                                }
+                            }
+                        })
+
+                    });
+                function GetParameterValues(param) {
+                    var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                    for (var i = 0; i < url.length; i++) {
+                        var urlparam = url[i].split('=');
+                        if (urlparam[0] == param) {
+                            return urlparam[1];
                         }
                     }
-                })
-
-            });
-        function GetParameterValues(param) {
-            var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-            for (var i = 0; i < url.length; i++) {
-                var urlparam = url[i].split('=');
-                if (urlparam[0] == param) {
-                    return urlparam[1];
-                }
-            }
-        };                           
-    </script>
-}
+                };
+            </script>
+        }
 
 
 

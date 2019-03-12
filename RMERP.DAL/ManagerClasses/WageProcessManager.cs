@@ -67,7 +67,8 @@ namespace RMERP.DAL.ManagerClasses
             string res = string.Empty;
             try
             {
-                res = _context.WageProcess.Find(WagId).WagMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
+                var monthYear = _context.WageProcess.Find(WagId);
+                res = monthYear.WagMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"))+"-"+ monthYear.WagMonth.Year.ToString();
             }
             catch (Exception ex)
             {
@@ -76,6 +77,15 @@ namespace RMERP.DAL.ManagerClasses
            
             return res;
         }
-        
+        public IEnumerable<Attendance> GetAttendanceList(int wagId, int CliId)
+        {
+            IEnumerable<Attendance> list = null;
+            list = _context.Attendance.Include(m=>m.Emp).Include(m=>m.Cli).Where(m=>m.WagId.Equals(wagId) && m.CliId.Equals(CliId)).OrderBy(m=>m.Emp.EmpFirstName).ToList();
+
+           // var AttendanceList = (from P in _context.Attendance select  P ).Distinct();
+            //var v = AttendanceList.Distinct();
+           
+            return list;
+        }
     }
 }
