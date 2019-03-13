@@ -1,0 +1,74 @@
+﻿@model RMERP.DAL.ViewModel.ExcelViewModel
+@using RMERP.Helpers;
+@{
+    ViewData["Title"] = "Verify Excel File";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+@if (Model == null)
+{
+    <h4>No data to display</h4>
+}
+else
+{
+<div class="modal-dialog modelLeftSide">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <div class="modal-content modal-lg">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-md-7">
+                    <h4 class="modal-title">Summary of Attendance Going to import</h4>
+                    <h6 class="modal-title">Total Employee Found: @Model.totalEmployees</h6>
+                    <h6 class="modal-title">Total Public Holidays: @Model.totalPublicHolidays</h6>
+                </div>
+                <div class="col-md-5">
+                    <h6 class="modal-title">Starting Date: @DateHelper.getDateWithFormat(Model.startDate)</h6>
+                    <h6 class="modal-title">Ending Date: @DateHelper.getDateWithFormat(Model.endDate)</h6>
+                </div>
+            </div>
+            
+        </div>
+        <div class="modal-body">
+            <div>
+                <div class="content container-fluid">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div>
+                                <table class="table table-hover custom-table m-b-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Employee Id</th>
+                                            <th>Employee Name</th>
+                                            <th>Designation</th>
+                                            <th>Total Presence</th>
+                                            <th>Total Extra Hours</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.excelRows)
+                                        {
+                                        <tr>
+                                            <td>@item.EMP_Id</td>
+                                            <td>@item.EMP_Name</td>
+                                            <td>@item.Designation</td>
+                                            <td>@item.TotalPresenceDays</td>
+                                            <td>@item.TotalExtraHours</td>
+                                        </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="m-t-20 text-center">
+                                <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
