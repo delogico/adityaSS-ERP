@@ -80,12 +80,34 @@ namespace RMERP.DAL.ManagerClasses
         public IEnumerable<Attendance> GetAttendanceList(int wagId, int CliId)
         {
             IEnumerable<Attendance> list = null;
-            list = _context.Attendance.Include(m=>m.Emp).Include(m=>m.Cli).Where(m=>m.WagId.Equals(wagId) && m.CliId.Equals(CliId)).OrderBy(m=>m.Emp.EmpFirstName).ToList();
-
-           // var AttendanceList = (from P in _context.Attendance select  P ).Distinct();
-            //var v = AttendanceList.Distinct();
-           
+            list = _context.Attendance.Include(m=>m.Emp).Include(m=>m.Cli).Where(m=>m.WagId.Equals(wagId) && m.CliId.Equals(CliId)).OrderBy(m=>m.Emp.EmpFirstName).ToList();           
             return list;
+        }
+        public List<Attendance> GetAttendanceList(int wagId, int CliId,int empId)
+        {
+            List<Attendance> list = null;
+            list = _context.Attendance.Include(m => m.Emp).Include(m => m.Cli).Where(m => m.WagId.Equals(wagId) && m.CliId.Equals(CliId) &&m.EmpId.Equals(empId)).ToList();
+            return list;
+        }
+        public string UpdateAttendance(Attendance attendance)
+        {
+            string res = string.Empty;
+            try
+            {      
+               _context.Attendance.Update(attendance);                   
+               _context.SaveChanges();                              
+            }
+            catch (Exception ex)
+            {
+                res = ex.Message;
+            }
+            return res;
+        }
+        public Attendance GetAttendanceById(int attId)
+        {
+            Attendance attendance = new Attendance();
+            attendance = _context.Attendance.Find(attId);
+            return attendance;
         }
     }
 }

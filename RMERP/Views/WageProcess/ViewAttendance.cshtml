@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<RMERP.DAL.Models.Attendance>
 @using RMERP.DAL.Models;
+@using static RMERP.DAL.App_Code.ProjectUtils;
 @{
     ViewData["Title"] = "View Attendance";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
@@ -13,45 +14,49 @@
     </div>
     <div class="row">
         <div class="col-sm-12">
-          <h5>  Client: 
-          @ViewBag.ClientName</h5>
+            <h5>
+                Client:
+                @ViewBag.ClientName
+            </h5>
         </div>
     </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div>
-                   
-                    <table class="table table-striped custom-table m-b-0">
-                       <thead>
-                           <tr>
-                               <th>Name</th>
-                               <th>Designation</th>
-                               @{
-                                   int counter = 0;
-                                   DateTime tmpDate = ViewBag.startDate;
+    <div class="row">
+        <div class="col-md-12">
+            <div>
 
-                                   while (ViewBag.endDate >= tmpDate)
-                                   {
-                                       counter = counter + 1;
-                                       <th> @tmpDate.Day</th>
-                                       tmpDate = tmpDate.AddDays(1);
-                                   }
-                               }
-                               <th>Total Working Days</th>
-                               <th>Total Extra Working Hours</th>
-                           </tr>
-                       </thead>
-                        <tbody>
-                            @{ 
-                                List<Employees> employees = Model.Select(m => m.Emp).Distinct().ToList();
+                <table class="table table-striped custom-table m-b-0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Designation</th>
+                            @{
+                                int counter = 0;
+                                DateTime tmpDate = ViewBag.startDate;
+
+                                while (ViewBag.endDate >= tmpDate)
+                                {
+                                    counter = counter + 1;
+                                    <th> @tmpDate.Day</th>
+                                    tmpDate = tmpDate.AddDays(1);
+                                }
                             }
+                            <th>Total Working Days</th>
+                            <th>Total Extra Working Hours</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            List<Employees> employees = Model.Select(m => m.Emp).Distinct().ToList();
+                        }
 
 
-                            @foreach(var item in employees)
-                            {
+                        @foreach (var item in employees)
+                        {
+
                             <tr>
                                 <td>@item.EmpFirstName</td>
-                                <td></td>
+                                <td>@item.EmpDesignation</td>
                                 @{
                                     int counter1 = 0;
                                     DateTime tmpDate1 = ViewBag.startDate;
@@ -64,66 +69,102 @@
 
                                         if (att != null)
                                         {
+
                                             <td>
-                                                @{ 
-                                                    String str = "";
-                                                    if (att.AttIsWeeklyOff)
-                                                    {
-                                                        str = "<span style='color:red;'>W/O</span>";
-                                                    }
-                                                    else
-                                                    {
-                                                        if (att.AttIsPresent)
+                                                <div class="row">
+                                                    @{
+                                                        String str = "";
+                                                        if (att.AttIsWeeklyOff)
                                                         {
-                                                            str = "P";
+                                                            str = "<span style='color:red;'>W/O</span>";
                                                         }
                                                         else
                                                         {
-                                                            str = "A";
+                                                            if (att.AttIsPresent)
+                                                            {
+                                                                str = "P";
+                                                            }
+                                                            else
+                                                            {
+                                                                str = "A";
+                                                            }
                                                         }
                                                     }
-                                                }
-                                                <b>@Html.Raw(str)</b>
-                                                <br />
-                                                @{
-                                                    if (att.AttExtraHoursWorked == 0)
-                                                    {
-                                                        @:&nbsp;
-                                                    }
-                                                    else
-                                                    {
-                                                        @att.AttExtraHoursWorked.ToString("#.#")
-                                                    }
-                                                }
+                                                    <div class="col-md-12">@Html.Raw(str)</div>
+                                                    <div class="col-md-12">
+                                                        @{
+                                                            @Html.Raw("Extra Hrs: ");
+                                                            if (att.AttExtraHoursWorked == 0)
+                                                            {
+                                                                // @:&nbsp;
+                                                                @Html.Raw("-");
+                                                            }
+                                                            else
+                                                            {
+                                                                @att.AttExtraHoursWorked.ToString("#.#")
+                                                            }
+                                                        }
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        @{
+                                                            if (att.AttShift == null)
+                                                            {
+                                                                @:&nbsp;
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.Raw("[ ");
+                                                                @att.AttShift.ToString()                                                        
+                                                            
+                                                            @Html.Raw(" ]");
+                                                        }
+                                                        }
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <a href='@Url.Action("EditAttendanceRecord","WageProcess",new { attId=att.AttId})' title="Edit"><i class="fa fa-pencil m-r-5"></i></a>
+                                                    </div>
+
                                             </td>
                                             if (att.AttIsPresent == true)
                                             {
                                                 totWorkingDays++;
                                             }
-                                            if (att.AttExtraHoursWorked>0)
+                                            if (att.AttExtraHoursWorked > 0)
                                             {
                                                 totExtraWorkingHours += att.AttExtraHoursWorked;
                                             }
+
                                         }
                                         else
                                         {
-                                            <th>-</th>
+                                            <th>
+                                                -
+                                            </th>
                                         }
 
                                         tmpDate1 = tmpDate1.AddDays(1);
                                     }
+
                                 }
 
                                 <td>@totWorkingDays Days</td>
                                 <td>@totExtraWorkingHours Hours</td>
+                                @*<td class="text-right">
+                                        <div class="dropdown">
+                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                            <ul class="dropdown-menu pull-right">
+                                                <li><a href='@Url.Action("EditAttendance","WageProcess",new { empId=item.EmpId})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>*@
                             </tr>
-                            }
+                        }
 
-                        </tbody>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 
 

@@ -49,8 +49,11 @@ C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_Valid
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\AttendancesStatus.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\DisplayWageProcessData.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\DisplayWageProcessData1.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\EditAttendance.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\EditAttendanceRecord.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\Index.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\UploadPage.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\ViewAttendance.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\_WageProcessList.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\_ViewImports.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\_ViewStart.g.cshtml.cs
@@ -60,4 +63,3 @@ C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.Views.pdb
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.csproj.CopyComplete
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.dll
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.pdb
-C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\ViewAttendance.g.cshtml.cs

@@ -12,3 +12,5 @@ C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Release\netcoreapp2.1\Microsoft.AspNetCor
 C:\inetpub\wwwroot\RMERP\RMERP.DAL\obj\Release\netcoreapp2.1\RMERP.DAL.csproj.CopyComplete
 C:\inetpub\wwwroot\RMERP\RMERP.DAL\obj\Release\netcoreapp2.1\RMERP.DAL.dll
 C:\inetpub\wwwroot\RMERP\RMERP.DAL\obj\Release\netcoreapp2.1\RMERP.DAL.pdb
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Release\netcoreapp2.1\Microsoft.AspNetCore.Mvc.Core.dll
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Release\netcoreapp2.1\Microsoft.AspNetCore.Mvc.Core.xml

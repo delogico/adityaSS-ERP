@@ -1,0 +1,91 @@
+﻿@model RMERP.DAL.ViewModel.AttendanceListViewModel
+
+@using RMERP.DAL.Models;
+@using RMERP.DAL.ViewModel;
+@{
+    ViewData["Title"] = "EditAttendance";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+<h2>Edit Attendance</h2>
+
+<div class="modal-dialog">
+    <div class="modal-content modal-md">
+        <div class="modal-header">
+            <h4 class="modal-title"> @ViewData["Title"]</h4>
+        </div>
+        <div class="modal-body">
+            @using (Html.BeginForm("EditAttendance", "WageProcess", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.HiddenFor(m=>m.EmpID)
+                    @Html.LabelFor(m => m.EmpName)
+                    @Html.TextBoxFor(m => m.EmpName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.EmpName, "", new { @class = "text-danger" })
+                </div>
+
+
+                @for (int i = 0; i < Model.attendancesList.Count(); i++)
+                {
+
+                    @Html.HiddenFor(m => m.attendancesList[i].AttId)
+                    @Html.HiddenFor(m => m.attendancesList[i].WagId)
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Raw("Days")
+                            @Html.TextBoxFor(m => m.attendancesList[i].AttDate.Date, new { @readonly = "readonly" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Raw("Extra Hours")
+                            @Html.TextBoxFor(m => m.attendancesList[i].AttExtraHoursWorked, new { style = "width:50px" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Raw("Is Present?")
+                            <label class="switch">
+                                @Html.TextBoxFor(m => m.attendancesList[i].AttIsPresent, (Model.attendancesList[i].AttIsPresent == true ? (object)new { type = "checkbox", @checked = (Model.attendancesList[i].AttIsPresent == true ? "checked" : "") } : new { type = "checkbox" }))
+                                <span class="slider round"></span>
+                            </label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.Raw("Weekly Off?")
+                            <label class="switch">
+                                @Html.TextBoxFor(m => m.attendancesList[i].AttIsWeeklyOff, (Model.attendancesList[i].AttIsWeeklyOff == true ? (object)new { type = "checkbox", @checked = (Model.attendancesList[i].AttIsWeeklyOff == true ? "checked" : "") } : new { type = "checkbox" }))
+                                <span class="slider round"></span>
+                            </label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                           <hr/>
+                        </div>
+                    </div>
+                </div>
+               
+                    }
+
+                    <div class="m-t-20 text-center">
+                        <input type="submit" name="Submit Firm" id="btnSubmit" class="btn btn-primary" />
+                    </div>
+                    }
+                </div>
+
+                </div>
+</div>
+
+
+

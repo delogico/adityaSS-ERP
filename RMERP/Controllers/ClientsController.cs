@@ -634,7 +634,7 @@ namespace RMERP.Controllers
             Clients client = clientsManager.GetClientById(ClientId);
             int totalEmployee = clientsManager.listClientsEmployees(ClientId).Count();
             string sWebRootFolder = _hostingEnvironment.WebRootPath;
-            string fileName = DateTime.Now.ToString("ddMMyyyyHHmm") + "_ClientId" + ClientId + ".xlsx";
+            string fileName = DateTime.Now.ToString("ddMMyyyyHHmm") + "_ClientId_" + ClientId + ".xlsx";
             string sFileName = fileName;
             string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
             FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));

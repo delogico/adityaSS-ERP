@@ -72,6 +72,8 @@ namespace RMERP
             });
 
             services.AddSingleton<IConfiguration>(Configuration);
+            
+
             //services.AddDbContext<RMERP.DAL.Models.RMERPContext>();
             services.AddDbContext<RMERP.DAL.Models.RMERPContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("RMERP")));

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RMERP.DAL.ViewModel
 {
-    public class EmployeeViewNodel
+    public class EmployeeViewModel
     {
         public EmployeeModel EmployeeModel { get; set; }
         public IEnumerable<EmployeeModel> ListEmployeeModels { get; set; }
@@ -93,6 +93,13 @@ namespace RMERP.DAL.ViewModel
         [DataType(DataType.Date)]
         public DateTime? EmpInactivatedOn { get; set; }
         public int? AdmIdInactivatedBy { get; set; }
+
+        public string EmpFullName {
+            get
+            {
+                return string.Concat(EmpFirstName + "" + EmpMiddleName + "" + EmpSurName);
+            }
+        }
 
     }
 }

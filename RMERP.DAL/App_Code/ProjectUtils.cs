@@ -33,7 +33,13 @@ namespace RMERP.DAL.App_Code
             BASIC_WithShifts = 1,
             COMPLEX_WithoutShift=2
         }
-
+        public enum AttendanceShift
+        {
+            //O=0,
+            I=1,
+            II=2,
+            III=3
+        }
         public static DateTime DateNow()
         {
             DateTime utcTime = DateTime.UtcNow;

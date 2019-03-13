@@ -60,3 +60,6 @@ C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\WageProcess
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\WageProcess\DisplayWageProcessData.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\WageProcess\DisplayWageProcessData1.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\WageProcess\UploadPage.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\WageProcess\EditAttendance.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\WageProcess\ViewAttendance.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Release\netcoreapp2.1\Razor\Views\WageProcess\EditAttendanceRecord.g.cshtml.cs

@@ -12,7 +12,8 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "2.1.4",
           "Microsoft.EntityFrameworkCore.SqlServer.Design": "1.1.6",
           "Microsoft.EntityFrameworkCore.Tools": "2.1.4",
-          "Microsoft.AspNetCore.Http.Features": "2.1.1.0"
+          "Microsoft.AspNetCore.Http.Features": "2.1.1.0",
+          "Microsoft.AspNetCore.Mvc.Core": "2.1.1.0"
         },
         "runtime": {
           "RMERP.DAL.dll": {}
@@ -558,6 +559,14 @@
             "fileVersion": "2.1.1.18157"
           }
         }
+      },
+      "Microsoft.AspNetCore.Mvc.Core/2.1.1.0": {
+        "runtime": {
+          "Microsoft.AspNetCore.Mvc.Core.dll": {
+            "assemblyVersion": "2.1.1.0",
+            "fileVersion": "2.1.1.18157"
+          }
+        }
       }
     }
   },
@@ -974,6 +983,11 @@
       "hashPath": "system.threading.tasks.4.0.11.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Http.Features/2.1.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.AspNetCore.Mvc.Core/2.1.1.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

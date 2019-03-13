@@ -1,0 +1,180 @@
+﻿@model RMERP.DAL.ViewModel.AttendanceListViewModel
+@using static RMERP.DAL.App_Code.ProjectUtils;
+@{
+    ViewData["Title"] = "Edit AttendanceRecord";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+<div class="modal-dialog">
+    <div class="modal-content modal-md">
+        <div class="modal-header">
+            <h4 class="modal-title"> @ViewData["Title"]</h4>
+        </div>
+        <div class="modal-body">
+            <div class="m-b-30">
+                @using (Html.BeginForm("EditAttendanceRecord", "WageProcess", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(m => m.attendanceViewModel.AttId)
+                    @Html.HiddenFor(m => m.attendanceViewModel.EmpId)
+                    @Html.HiddenFor(m => m.attendanceViewModel.CriId)
+                    @Html.HiddenFor(m => m.attendanceViewModel.WagId)
+                    @Html.HiddenFor(m => m.attendanceViewModel.CliId)
+                    @Html.HiddenFor(m => m.attendanceViewModel.AttDate)
+                    @Html.HiddenFor(m => m.attendanceViewModel.AttImportedOn)
+                    
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.attendanceViewModel.AttDate, new { @class = "control-label" })
+                            @*@Html.DisplayFor(m => m.attendanceViewModel.AttDate, new { @class = "form-control" })*@
+                            @Convert.ToString(string.Format("{0:dd-MMM-yyyy}", Model.attendanceViewModel.AttDate))
+                            @Html.ValidationMessageFor(m => m.attendanceViewModel.AttDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.attendanceViewModel.AttIsEarnLeave, new { @class = "control-label" })
+                            <label class="switch">
+                                @Html.CheckBoxFor(m => m.attendanceViewModel.AttIsEarnLeave, (Model.attendanceViewModel.AttIsEarnLeave == true ? (object)new { type = "checkbox", @checked = (Model.attendanceViewModel.AttIsEarnLeave == true ? "checked" : "") } : new { type = "checkbox" }))
+                                <span class="slider round"></span>
+                            </label>
+                            @Html.ValidationMessageFor(m => m.attendanceViewModel.AttIsEarnLeave, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.attendanceViewModel.AttIsPaidHoliday, new { @class = "control-label" })
+                            <label class="switch">
+                                @Html.CheckBoxFor(m => m.attendanceViewModel.AttIsPaidHoliday, (Model.attendanceViewModel.AttIsPaidHoliday == true ? (object)new { type = "checkbox", @checked = (Model.attendanceViewModel.AttIsPaidHoliday == true ? "checked" : "") } : new { type = "checkbox" }))
+                                <span class="slider round"></span>
+                            </label>
+                            @Html.ValidationMessageFor(m => m.attendanceViewModel.AttIsPaidHoliday, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.attendanceViewModel.AttIsPresent, new { @class = "control-label" })
+                            <label class="switch">
+                                @Html.CheckBoxFor(m => m.attendanceViewModel.AttIsPresent, (Model.attendanceViewModel.AttIsPresent == true ? (object)new { type = "checkbox", @checked = (Model.attendanceViewModel.AttIsPresent == true ? "checked" : "") } : new { type = "checkbox" }))
+                                <span class="slider round"></span>
+                            </label>
+                            @Html.ValidationMessageFor(m => m.attendanceViewModel.AttIsPresent, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.attendanceViewModel.AttIsWeeklyOff, new { @class = "control-label" })
+
+                            <label class="switch">
+                                @Html.CheckBoxFor(m => m.attendanceViewModel.AttIsWeeklyOff, (Model.attendanceViewModel.AttIsWeeklyOff == true ? (object)new { type = "checkbox", @checked = (Model.attendanceViewModel.AttIsWeeklyOff == true ? "checked" : "") } : new { type = "checkbox" }))
+                                <span class="slider round"></span>
+                            </label>
+                            @Html.ValidationMessageFor(m => m.attendanceViewModel.AttIsWeeklyOff, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.attendanceViewModel.AttShift, new { @class = "control-label" })
+                            @*@Html.TextBoxFor(m => m.attendanceViewModel.AttShift, new { @class = "form-control" })*@
+                            Choose Template :
+                            <label class="radio-inline form-control">
+                                @foreach (var AttendanceShift in Enum.GetValues(typeof(AttendanceShift)))
+                                {
+                                    <label class="radio-inline">
+                                        <b>@Html.RadioButtonFor(s => s.attendanceViewModel.AttShift, (int)AttendanceShift, (int)AttendanceShift == 1 ? (object)new { @checked = true, @id = (int)AttendanceShift } : new { @id = (int)AttendanceShift })@AttendanceShift</b>
+                                    </label>
+                                }
+                            </label>
+                            @Html.ValidationMessageFor(m => m.attendanceViewModel.AttShift, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.attendanceViewModel.AttExtraHoursWorked, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.attendanceViewModel.AttExtraHoursWorked, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.attendanceViewModel.AttExtraHoursWorked, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                  
+
+                 
+                </div>
+
+                    <div class="m-t-20 text-center">
+                        <input type="submit" name="Update" id="btnSubmit" class="btn btn-primary" />
+                    </div>
+                    }
+
+                </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 22px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 15px;
+            width: 15px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>

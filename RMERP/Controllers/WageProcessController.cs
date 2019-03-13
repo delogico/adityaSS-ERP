@@ -28,6 +28,7 @@ namespace RMERP.Controllers
         public IConfiguration Configuration;
         WageProcessManager wpm;
         private IHostingEnvironment _hostingEnvironment;
+        private static int clientID,WagID;
 
         public WageProcessController(RMERPContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
@@ -155,6 +156,8 @@ namespace RMERP.Controllers
         [HttpGet]
         public ActionResult ViewAttendance(int wagId,int CliId)
         {
+            clientID = CliId;
+            WagID = wagId;
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);            
             IEnumerable <Attendance> list = wpm.GetAttendanceList(wagId, CliId);
 
@@ -193,6 +196,35 @@ namespace RMERP.Controllers
             //    listModel.Add(vm);
             //}
             return View(list);
+        }
+        [HttpGet]
+        public ActionResult EditAttendance(int empId)
+        {
+            AttendanceListViewModel alvm = new AttendanceListViewModel();
+            alvm.attendanceViewModel = new AttendanceViewModel();        
+
+            List<Attendance> list = wpm.GetAttendanceList(WagID, clientID, empId);          
+            alvm.attendancesList = list;
+            alvm.EmpID = empId;
+            alvm.EmpName = list.FirstOrDefault().Emp.EmpFirstName;
+            alvm.EmpDesignation = list.FirstOrDefault().Emp.EmpDesignation;
+            return View(alvm);
+        }
+        [HttpPost]
+        public ActionResult EditAttendance(AttendanceListViewModel alvm)
+        {
+            string res = string.Empty;
+            foreach(var item in alvm.attendancesList)
+            {
+                Attendance attendance = new Attendance();
+                attendance.AttId = item.AttId;
+                attendance.AttIsPresent = item.AttIsPresent;
+                attendance.AttIsWeeklyOff = item.AttIsWeeklyOff;
+                attendance.AttExtraHoursWorked = item.AttExtraHoursWorked;
+                res=wpm.UpdateAttendance(attendance);
+            }
+
+            return RedirectToAction("ViewAttendance", new { wagId = WagID , CliId = clientID });
         }
         public ActionResult ImportWageProcessData(UploadPageViewModel uvm)
         {
@@ -251,6 +283,62 @@ namespace RMERP.Controllers
                 }
             }
             return this.Content(sb.ToString());
+        }
+
+        public ActionResult EditAttendanceRecord(int attID)
+        {
+            AttendanceListViewModel alvm = new AttendanceListViewModel();
+            alvm.attendanceViewModel = new AttendanceViewModel();
+           
+            Attendance att = new Attendance();
+            if (attID > 0)
+            {
+                att = wpm.GetAttendanceById(attID);
+                alvm.attendanceViewModel.AttId = attID;
+                alvm.attendanceViewModel.CriId = att.CriId;
+                alvm.attendanceViewModel.CliId = att.CliId;
+                alvm.attendanceViewModel.EmpId = att.EmpId;
+                alvm.attendanceViewModel.WagId = att.WagId;
+                alvm.attendanceViewModel.AttImportedOn = att.AttImportedOn;
+                alvm.attendanceViewModel.AttIsEarnLeave = att.AttIsEarnLeave;
+                alvm.attendanceViewModel.AttIsPaidHoliday = att.AttIsPaidHoliday;
+                alvm.attendanceViewModel.AttIsPresent = att.AttIsPresent;
+                alvm.attendanceViewModel.AttIsWeeklyOff = att.AttIsWeeklyOff;
+                alvm.attendanceViewModel.AttShift = att.AttShift;
+                alvm.attendanceViewModel.AttDate = att.AttDate;        
+                alvm.attendanceViewModel.AdmIdImportedBy = att.AdmIdImportedBy;
+                alvm.attendanceViewModel.AttExtraHoursWorked = att.AttExtraHoursWorked;
+            }
+            return View(alvm);
+        }
+        [HttpPost]
+        public ActionResult EditAttendanceRecord(AttendanceListViewModel alvm)
+        {
+            string res = string.Empty;
+            Attendance atta = new Attendance();
+
+            if (ModelState.IsValid)
+            {
+                atta.AttId = alvm.attendanceViewModel.AttId;
+                atta.AttImportedOn = alvm.attendanceViewModel.AttImportedOn;
+                atta.AttIsEarnLeave = alvm.attendanceViewModel.AttIsEarnLeave;
+                atta.AttIsPaidHoliday = alvm.attendanceViewModel.AttIsPaidHoliday;
+                atta.AttIsPresent = alvm.attendanceViewModel.AttIsPresent;
+                atta.AttIsWeeklyOff = alvm.attendanceViewModel.AttIsWeeklyOff;
+                atta.AttDate = alvm.attendanceViewModel.AttDate;
+                atta.AdmIdImportedBy = alvm.attendanceViewModel.AdmIdImportedBy;
+                atta.AttShift = alvm.attendanceViewModel.AttShift;
+                atta.CliId = alvm.attendanceViewModel.CliId;
+                atta.EmpId = alvm.attendanceViewModel.EmpId;
+                atta.CriId = alvm.attendanceViewModel.CriId;
+                atta.WagId = alvm.attendanceViewModel.WagId;
+                atta.AttExtraHoursWorked = alvm.attendanceViewModel.AttExtraHoursWorked;
+
+                res = wpm.UpdateAttendance(atta);
+            }
+            
+
+            return RedirectToAction("ViewAttendance", new { wagId = WagID, CliId = clientID });
         }
     }
 }
