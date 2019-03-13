@@ -1,0 +1,67 @@
+﻿@model RMERP.DAL.ViewModel.UploadExcelViewModel
+
+@{
+    ViewData["Title"] = "Upload Excel";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+
+<div class="modal-dialog">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <div class="modal-content modal-lg">
+        <div class="modal-header">
+            <h4 class="modal-title">Upload Attendance</h4>
+        </div>
+        <div class="modal-body">
+            @using (Html.BeginForm("VerifyTemplate", "Attendance", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(m => m.wageProcessVM.WagId)
+                @Html.HiddenFor(m => m.client.CliId)
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <div class="col-md-3">Wage Process for:</div>
+                        <div class="col-md-9">
+                            <b> @Model.wageProcessVM.WAG_Month()</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <div class="col-md-3">For Client:</div>
+                        <div class="col-md-9">
+                            <b>@Model.client.CliName</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <div class="col-md-3">Choose Template:</div>
+                        <div class="col-md-9">
+                            <div class="radio-inline">
+                                @foreach (var template in ViewBag.templateList)
+                                {
+                                    @Html.RadioButtonFor(s => s.Template, (int)template, (int)template == 0 ? (object)new { @checked = true, @id = (int)template } : new { @id = (int)template })@template
+                                    <br />
+                                }
+                            </div>
+                            @Html.ValidationMessageFor(x => x.Template, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <div class="col-md-3">Select File:</div>
+                        <div class="col-md-9">@Html.TextBoxFor(m => m.ExcelFile, new { @type = "file" })</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 m-t-20 text-center">
+                        <input class="btn btn-primary" type="submit" value="Verify Excel File" />
+                    </div>
+                </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+

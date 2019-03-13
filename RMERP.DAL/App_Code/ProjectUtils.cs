@@ -34,6 +34,13 @@ namespace RMERP.DAL.App_Code
             COMPLEX_WithoutShift=2
         }
 
+        public enum ATTENDANCE_EXCEL_TEMPLATE
+        {
+            BASIC_WithoutShifts = 0,
+            BASIC_WithShifts = 1,
+            COMPLEX_WithoutShift = 2
+        }
+
         public static DateTime DateNow()
         {
             DateTime utcTime = DateTime.UtcNow;

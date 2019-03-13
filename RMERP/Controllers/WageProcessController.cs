@@ -85,73 +85,8 @@ namespace RMERP.Controllers
             cvm.WageID = wagId;
             return View(cvm);
         }
-        public ActionResult UploadPage(int wagId, int CliId)
-        {
-            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            UploadPageViewModel upvm = new UploadPageViewModel();
-            upvm.WageMonth = wpm.GetMonthFromID(wagId);
-            upvm.ClientName = clientsManager.GetClientById(CliId).CliName;
-            upvm.WageId = wagId;
-            upvm.ClientId = CliId;
-            return View(upvm);
-        }
-     
-        [HttpPost]
-        public ActionResult DisplayWageProcessData(UploadPageViewModel uvm)
-        {
-            IFormFile file = uvm.TemplateFile;           
-            List<DisplayExcel> list = new List<DisplayExcel>();
-            int TotEmp = 0;
-            string folderName = "RMERP_Data";
-            string webRootPath = _hostingEnvironment.WebRootPath;
-            string newPath = Path.Combine(webRootPath, folderName);
-            StringBuilder sb = new StringBuilder();
-            if (!Directory.Exists(newPath))
-            {
-                Directory.CreateDirectory(newPath);
-            }
-            if (file != null)
-            {
-                if (file.Length > 0)
-                {
-                    string sFileExtension = Path.GetExtension(file.FileName).ToLower();
-                    ISheet sheet;
-                    string fullPath = Path.Combine(newPath, file.FileName);
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                        stream.Position = 0;
-                        if (sFileExtension == ".xls")
-                        {
-                            HSSFWorkbook hssfwb = new HSSFWorkbook(stream); //This will read the Excel 97-2000 formats  
-                            sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook  
-                        }
-                        else
-                        {
-                            XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
-                            sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook   
-                        }
-                        IRow headerRow = sheet.GetRow(0); //Get Header Row
-                        int cellCount = headerRow.LastCellNum;
-                        #region rinku
-                        for (int i = (sheet.FirstRowNum + 2); i <= sheet.LastRowNum; i++)
-                        {
-                            DisplayExcel displayExcel = new DisplayExcel();
-                            IRow row = sheet.GetRow(i);
-                            if (row == null) continue;
-                            if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
-                            displayExcel.EmpName = row.GetCell(2).ToString();
-                            displayExcel.DesName = row.GetCell(3).ToString();
-                            TotEmp++;
-                            list.Add(displayExcel);
-                        }
-                        #endregion
-                    }
-                }
-            }
-            ViewBag.totEmp = TotEmp;
-            return View(list);
-        }
+       
+        
         [HttpGet]
         public ActionResult ViewAttendance(int wagId,int CliId)
         {
@@ -194,9 +129,9 @@ namespace RMERP.Controllers
             //}
             return View(list);
         }
-        public ActionResult ImportWageProcessData(UploadPageViewModel uvm)
+        public ActionResult ImportWageProcessData(UploadExcelViewModel uvm)
         {
-            IFormFile file = uvm.TemplateFile;
+            IFormFile file = uvm.ExcelFile;
             string folderName = "RMERP_Data";
             string webRootPath = _hostingEnvironment.WebRootPath;
             string newPath = Path.Combine(webRootPath, folderName);

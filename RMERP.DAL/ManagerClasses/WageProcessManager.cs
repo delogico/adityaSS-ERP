@@ -21,7 +21,12 @@ namespace RMERP.DAL.ManagerClasses
             IEnumerable<WageProcess> list = _context.WageProcess.Where(m => m.AdmIdRegisteredBy.Equals(AdminId)).Include(m => m.Attendance).OrderByDescending(m=>m.WagRegisteredOn).ToList();
             return list;
         }
-        
+        public WageProcess getWageProcessById(int WAG_Id)
+        {
+            WageProcess wageProcess = _context.WageProcess.Where(m => m.WagId == WAG_Id).FirstOrDefault();
+            return wageProcess;
+        }
+
         public string CreateNextMonthWage(int AdminId)
         {
             string res = string.Empty;
