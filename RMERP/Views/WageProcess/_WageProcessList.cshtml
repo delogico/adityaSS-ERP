@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RMERP.DAL.Models.WageProcess>
+﻿@model IEnumerable<RMERP.DAL.Models.Wage_Process>
 @using System.Globalization;
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,8 +19,8 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td><b>@item.WagMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")) - @item.WagMonth.Year.ToString()</b></td>
-                                <td>@Html.ActionLink("Attendance", "AttendancesStatus", "WageProcess",new { wagId =item.WagId})</td>                             
+                                <td><b>@item.WAG_Month.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")) - @item.WAG_Month.Year.ToString()</b></td>
+                                <td>@Html.ActionLink("Attendance", "AttendancesStatus", "WageProcess",new { wagId =item.WAG_Id})</td>                             
                             </tr>
                         }
 

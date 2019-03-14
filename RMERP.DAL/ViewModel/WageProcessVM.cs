@@ -7,13 +7,13 @@ namespace RMERP.DAL.ViewModel
 {
     public class WageProcessVM
     {
-        public int WagId { get; set; }
-        public DateTime WagMonth { get; set; }
+        public int WAG_Id { get; set; }
+        public DateTime WAG_Month { get; set; }
         public List<Attendance> Attendance { get; set; }
 
-        public string WAG_Month()
+        public string WAG_Full_Month()
         {
-            return WagMonth.ToString("MMMM") + "-" + WagMonth.ToString("yyyy");
+            return WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
         }
     }
 }

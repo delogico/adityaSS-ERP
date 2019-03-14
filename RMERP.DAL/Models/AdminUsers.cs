@@ -5,15 +5,15 @@ namespace RMERP.DAL.Models
 {
     public partial class AdminUsers
     {
-        public int AdmId { get; set; }
-        public string AdmFirstName { get; set; }
-        public string AdmMiddleName { get; set; }
-        public string AdmLastName { get; set; }
-        public string AdmEmailId { get; set; }
-        public string AdmPassword { get; set; }
-        public string AdmMobile { get; set; }
-        public int? FrmId { get; set; }
+        public int ADM_Id { get; set; }
+        public string ADM_FirstName { get; set; }
+        public string ADM_MiddleName { get; set; }
+        public string ADM_LastName { get; set; }
+        public string ADM_EmailId { get; set; }
+        public string ADM_Password { get; set; }
+        public string ADM_Mobile { get; set; }
+        public int? FRM_Id { get; set; }
 
-        public Firms Frm { get; set; }
+        public Firms FRM_ { get; set; }
     }
 }

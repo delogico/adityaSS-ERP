@@ -8,41 +8,41 @@ namespace RMERP.DAL.Models
         public Clients()
         {
             Attendance = new HashSet<Attendance>();
-            ClientContacts = new HashSet<ClientContacts>();
-            ClientRequirements = new HashSet<ClientRequirements>();
-            ClientsEmployees = new HashSet<ClientsEmployees>();
+            Client_Contacts = new HashSet<Client_Contacts>();
+            Client_Requirements = new HashSet<Client_Requirements>();
+            Clients_Employees = new HashSet<Clients_Employees>();
         }
 
-        public int CliId { get; set; }
-        public int FrmId { get; set; }
-        public string CliName { get; set; }
-        public byte CliInternationalDomestic { get; set; }
-        public string CliAddress { get; set; }
-        public int CityId { get; set; }
-        public string CliPincode { get; set; }
-        public string CliPhone { get; set; }
-        public string CliFax { get; set; }
-        public string CliEmail { get; set; }
-        public string CliEmail2 { get; set; }
-        public string CliGstNumber { get; set; }
-        public int CliGstRate { get; set; }
-        public string CliHsnCode { get; set; }
-        public int CliTdsRate { get; set; }
-        public int AdmIdRegisterBy { get; set; }
-        public DateTime CliRegisteredOn { get; set; }
-        public string CliLogo { get; set; }
-        public bool? CliIsActive { get; set; }
-        public DateTime? CliInActivatedOn { get; set; }
-        public int? AdmIdInactivatedBy { get; set; }
-        public bool? CliAttMonthReal { get; set; }
-        public int? CliAttMonthStart { get; set; }
-        public int? CliAttMonthEnd { get; set; }
+        public int CLI_Id { get; set; }
+        public int FRM_Id { get; set; }
+        public string CLI_Name { get; set; }
+        public byte CLI_International_Domestic { get; set; }
+        public string CLI_Address { get; set; }
+        public int CITY_Id { get; set; }
+        public string CLI_Pincode { get; set; }
+        public string CLI_Phone { get; set; }
+        public string CLI_Fax { get; set; }
+        public string CLI_Email { get; set; }
+        public string CLI_Email_2 { get; set; }
+        public string CLI_GST_Number { get; set; }
+        public int CLI_GST_Rate { get; set; }
+        public string CLI_HSN_Code { get; set; }
+        public int CLI_TDS_Rate { get; set; }
+        public int ADM_Id_RegisterBy { get; set; }
+        public DateTime CLI_RegisteredOn { get; set; }
+        public string CLI_Logo { get; set; }
+        public bool? CLI_IsActive { get; set; }
+        public DateTime? CLI_InActivatedOn { get; set; }
+        public int? ADM_Id_InactivatedBy { get; set; }
+        public bool? CLI_Att_MonthReal { get; set; }
+        public int? CLI_Att_Month_Start { get; set; }
+        public int? CLI_Att_Month_End { get; set; }
 
-        public Cities City { get; set; }
-        public Firms Frm { get; set; }
+        public Cities CITY_ { get; set; }
+        public Firms FRM_ { get; set; }
         public ICollection<Attendance> Attendance { get; set; }
-        public ICollection<ClientContacts> ClientContacts { get; set; }
-        public ICollection<ClientRequirements> ClientRequirements { get; set; }
-        public ICollection<ClientsEmployees> ClientsEmployees { get; set; }
+        public ICollection<Client_Contacts> Client_Contacts { get; set; }
+        public ICollection<Client_Requirements> Client_Requirements { get; set; }
+        public ICollection<Clients_Employees> Clients_Employees { get; set; }
     }
 }

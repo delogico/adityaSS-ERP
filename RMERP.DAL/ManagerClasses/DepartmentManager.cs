@@ -15,7 +15,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public IEnumerable<Departments> getDepartmentList()
         {
-            IEnumerable<Departments> listDept = _context.Departments.OrderBy(m=>m.DeptTitle).ToList();
+            IEnumerable<Departments> listDept = _context.Departments.OrderBy(m=>m.DEPT_Title).ToList();
             return listDept;
         }
     }

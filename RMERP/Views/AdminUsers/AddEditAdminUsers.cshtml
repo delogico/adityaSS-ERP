@@ -37,55 +37,55 @@
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.HiddenFor(m => m.AdmId)
+                    @Html.HiddenFor(m => m.ADM_Id)
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.FrmId, new { @class = "control-label" })
-                                @Html.DropDownListFor(m => m.FrmId, new SelectList(ViewBag.FrmList, "FrmId", "FrmName"), "Select Firm", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.FrmId, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.FRM_Id, new { @class = "control-label" })
+                                @Html.DropDownListFor(m => m.FRM_Id, new SelectList(ViewBag.FrmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.FRM_Id, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.AdmFirstName, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.AdmFirstName, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.AdmFirstName, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.ADM_FirstName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.ADM_FirstName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.ADM_FirstName, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.AdmMiddleName, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.AdmMiddleName, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.AdmMiddleName, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.ADM_MiddleName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.ADM_MiddleName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.ADM_MiddleName, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.AdmLastName, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.AdmLastName, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.AdmLastName, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.ADM_LastName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.ADM_LastName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.ADM_LastName, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.AdmEmailId, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.AdmEmailId, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.AdmEmailId, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.ADM_EmailId, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.ADM_EmailId, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.ADM_EmailId, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.AdmPassword, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.AdmPassword, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.AdmPassword, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.ADM_Password, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.ADM_Password, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.ADM_Password, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.AdmMobile, new { @class = "control-label" })
-                                @Html.EditorFor(m => m.AdmMobile, new { htmlAttributes = new { @class = "form-control" } })                                
-                                @Html.ValidationMessageFor(m => m.AdmMobile, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.ADM_Mobile, new { @class = "control-label" })
+                                @Html.EditorFor(m => m.ADM_Mobile, new { htmlAttributes = new { @class = "form-control" } })                                
+                                @Html.ValidationMessageFor(m => m.ADM_Mobile, "", new { @class = "text-danger" })
                             </div>
                         </div>
                     </div>

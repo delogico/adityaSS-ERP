@@ -11,8 +11,8 @@ namespace RMERP.DAL.Models
             Clients = new HashSet<Clients>();
         }
 
-        public int FrmId { get; set; }
-        public string FrmName { get; set; }
+        public int FRM_Id { get; set; }
+        public string FRM_Name { get; set; }
 
         public ICollection<AdminUsers> AdminUsers { get; set; }
         public ICollection<Clients> Clients { get; set; }

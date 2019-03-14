@@ -4,8 +4,8 @@
 @{
     ViewData["Title"] = "Add-Edit Clients";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
-    ViewBag.ButtonTitle = Model.clientsModel.CliId > 0 ? "Update Client" : "Create Client";
-    ViewBag.ClientName = Model.clientsModel.CliId > 0 ? Model.clientsModel.CliName : "Create-Edit Client";
+    ViewBag.ButtonTitle = Model.clientsModel.CLI_Id > 0 ? "Update Client" : "Create Client";
+    ViewBag.ClientName = Model.clientsModel.CLI_Id > 0 ? Model.clientsModel.CLI_Name : "Create-Edit Client";
 
 }
 <div class="col-sm-12">
@@ -32,97 +32,97 @@
                     <div class="m-b-30">
                         @using (Html.BeginForm("AddEditClients", "Clients", FormMethod.Post, new { enctype = "multipart/form-data" }))
                         {
-                            @Html.HiddenFor(m => m.clientsModel.CliId)
-                            @Html.HiddenFor(m => m.clientsModel.CliIsActive)
-                            if (Model.clientsModel.CliId > 0)
+                            @Html.HiddenFor(m => m.clientsModel.CLI_Id)
+                            @Html.HiddenFor(m => m.clientsModel.CLI_IsActive)
+                            if (Model.clientsModel.CLI_Id > 0)
                             {
-                                @Html.HiddenFor(m => m.clientsModel.FrmId)
+                                @Html.HiddenFor(m => m.clientsModel.FRM_Id)
                             }
 
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.FrmId, new { @class = "control-label" })
-                                        @Html.DropDownListFor(x => x.clientsModel.FrmId, new SelectList(ViewBag.firmList, "FrmId", "FrmName"), "Select Firm", new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.FrmId, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.clientsModel.FRM_Id, new { @class = "control-label" })
+                                        @Html.DropDownListFor(x => x.clientsModel.FRM_Id, new SelectList(ViewBag.firmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.clientsModel.FRM_Id, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CliInternationalDomestic, new { @class = "control-label" })
+                                        @Html.LabelFor(m => m.clientsModel.CLI_International_Domestic, new { @class = "control-label" })
                                         <label class="radio-inline form-control ">
                                             @foreach (var CountryRegion in Enum.GetValues(typeof(CountryRegion)))
                                             {
                                                 <label class="radio-inline">
-                                                    @Html.RadioButtonFor(s => s.clientsModel.CliInternationalDomestic, (int)CountryRegion, (int)CountryRegion == 1 ? (object)new { @checked = true, @id = (int)CountryRegion } : new { @id = (int)CountryRegion })@CountryRegion
+                                                    @Html.RadioButtonFor(s => s.clientsModel.CLI_International_Domestic, (int)CountryRegion, (int)CountryRegion == 1 ? (object)new { @checked = true, @id = (int)CountryRegion } : new { @id = (int)CountryRegion })@CountryRegion
                                                 </label>
                                             }
                                         </label>
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CliInternationalDomestic, "", new { @class = "text-danger" })
+                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_International_Domestic, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CliName, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.clientsModel.CliName, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CliName, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.clientsModel.CLI_Name, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.clientsModel.CLI_Name, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Name, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CliAddress, new { @class = "control-label" })
-                                        @Html.TextAreaFor(m => m.clientsModel.CliAddress, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CliAddress, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.clientsModel.CLI_Address, new { @class = "control-label" })
+                                        @Html.TextAreaFor(m => m.clientsModel.CLI_Address, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Address, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CityId, new { @class = "control-label" })
-                                        @Html.DropDownListFor(x => x.clientsModel.CityId, new SelectList(ViewBag.cityList, "CityId", "CityName"), "Select City", new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CityId, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.clientsModel.CITY_Id, new { @class = "control-label" })
+                                        @Html.DropDownListFor(x => x.clientsModel.CITY_Id, new SelectList(ViewBag.cityList, "CITY_Id", "CITY_Name"), "Select City", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.clientsModel.CITY_Id, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CliPincode, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.clientsModel.CliPincode, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CliPincode, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.clientsModel.CLI_Pincode, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.clientsModel.CLI_Pincode, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Pincode, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CliPhone, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.clientsModel.CliPhone, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CliPhone, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.clientsModel.CLI_Phone, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.clientsModel.CLI_Phone, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Phone, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CliFax, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.clientsModel.CliFax, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CliFax, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.clientsModel.CLI_Fax, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.clientsModel.CLI_Fax, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Fax, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CliEmail, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.clientsModel.CliEmail, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CliEmail, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.clientsModel.CLI_Email, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.clientsModel.CLI_Email, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Email, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CliEmail2, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.clientsModel.CliEmail2, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CliEmail2, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.clientsModel.CLI_Email_2, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.clientsModel.CLI_Email_2, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Email_2, "", new { @class = "text-danger" })
                                     </div>
                                 </div>                                           
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div class="col-md-8">
-                                            @Html.LabelFor(m => m.clientsModel.CliLogo, new { @class = "control-label" })
-                                            @Html.TextBoxFor(m => m.clientsModel.CliLogo, new { @type = "file", @class = "form-control", @onchange = "ShowImagePreviewMain(this);" })
-                                            @Html.ValidationMessageFor(x => x.clientsModel.CliLogo, "", new { @class = "text-danger" })
+                                            @Html.LabelFor(m => m.clientsModel.CLI_Logo, new { @class = "control-label" })
+                                            @Html.TextBoxFor(m => m.clientsModel.CLI_Logo, new { @type = "file", @class = "form-control", @onchange = "ShowImagePreviewMain(this);" })
+                                            @Html.ValidationMessageFor(x => x.clientsModel.CLI_Logo, "", new { @class = "text-danger" })
                                         </div>
                                         <div class="col-md-4">
                                             @*<input type="file" name="file" onchange="ShowImagePreviewMain(this);" class="form-control" />*@
@@ -171,22 +171,22 @@
 
                                     @foreach (var item in Model.ListClientContact)
                                     {
-                                        var style = item.ConIsPrimary == true ? "background-color:#3bb73b4a" : null;
+                                        var style = item.CON_isPrimary == true ? "background-color:#3bb73b4a" : null;
                                         <tr style="@style">
                                             <td>
-                                                @item.ConFirstName &nbsp;@item.ConSurName
-                                                <br><b>@item.ConDesignation</b>
+                                                @item.CON_FirstName &nbsp;@item.CON_SurName
+                                                <br><b>@item.CON_Designation</b>
                                             </td>
-                                            <td>@item.ConMobile</td>
-                                            <td>@item.ConEmail</td>
-                                            @*<td>@item.ConIsPrimary</td>*@
+                                            <td>@item.CON_Mobile</td>
+                                            <td>@item.CON_Email</td>
+                                            @*<td>@item.CON_isPrimary</td>*@
                                             <td class="text-right">
                                                 <div class="dropdown">
                                                     <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                     <ul class="dropdown-menu pull-right">
-                                                        <li><a href='@Url.Action("AddEditContacts","Clients",new { id=item.ConId})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
+                                                        <li><a href='@Url.Action("AddEditContacts","Clients",new { id=item.CON_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
 
-                                                        <li><a href='@Url.Action("DeleteContact","Clients",new { id=item.ConId})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Delete</a></li>
+                                                        <li><a href='@Url.Action("DeleteContact","Clients",new { id=item.CON_Id})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Delete</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -235,17 +235,17 @@
                                     @foreach (var item in Model.ListClientRequirements)
                                     {
                                         <tr>
-                                            @*<td>@item.Cli.CliName</td>*@
-                                            <td><b>@item.Des.DesTitle</b></td>
-                                            <td>@(Convert.ToDecimal(item.CriBasic) == (0.0m) ? item.CriBasicDa : (item.CriBasic + Convert.ToDecimal(item.CriDa)))</td>
-                                            <td>@item.CriRegisteredOn</td>
+                                            @*<td>@item.Cli.CLI_Name</td>*@
+                                            <td><b>@item.DES_.DES_Title</b></td>
+                                            <td>@(Convert.ToDecimal(item.CRI_Basic) == (0.0m) ? item.CRI_BasicDA : (item.CRI_Basic + Convert.ToDecimal(item.CRI_DA)))</td>
+                                            <td>@item.CRI_RegisteredOn</td>
                                             <td class="text-right">
                                                 <div class="dropdown">
                                                     <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                     <ul class="dropdown-menu pull-right">
-                                                        <li><a href='@Url.Action("AddEditRequirement","Clients",new { criId=item.CriId})' title="ChangeRequirement"><i class="fa fa-pencil m-r-5"></i> Change On This</a></li>
-                                                        <li><a href='@Url.Action("AddEditRequirement","Clients",new { criId=item.CriId,tab="ViewRequirement"})' title="ViewRequirement"><i class="fa fa-pencil m-r-5"></i> View</a></li>
-                                                        <li><a href='@Url.Action("HistoryRequirement","Clients",new { desId=item.DesId,cliId=item.CliId})' title="History"><i class="fa fa-trash m-r-5"></i> History</a></li>
+                                                        <li><a href='@Url.Action("AddEditRequirement","Clients",new { criId=item.CRI_Id})' title="ChangeRequirement"><i class="fa fa-pencil m-r-5"></i> Change On This</a></li>
+                                                        <li><a href='@Url.Action("AddEditRequirement","Clients",new { criId=item.CRI_Id,tab="ViewRequirement"})' title="ViewRequirement"><i class="fa fa-pencil m-r-5"></i> View</a></li>
+                                                        <li><a href='@Url.Action("HistoryRequirement","Clients",new { desId=item.DES_Id,cliId=item.CLI_Id})' title="History"><i class="fa fa-trash m-r-5"></i> History</a></li>
                                                         @*<li><a onclick="HistoryList(@item.CriId)" title="History"><i class="fa fa-trash m-r-5"></i> History</a></li>*@
                                                     </ul>
                                                 </div>
@@ -279,14 +279,14 @@
                                 <div class="form-group">
                                     <label class="form-group col-sm-12 " style="font-size: 15px;font-weight: normal;">
                                         @*<input id="Default" name="AttendenceParameters" type="radio" checked> Month Start With 1st of month till last date of that Month*@
-                                        @Html.HiddenFor(m => m.clientsModel.CliId)
-                                        @Html.RadioButtonFor(m => m.ParametersClientsModel.CliAttMonthReal, true, htmlAttributes: new { @id = "Default", @checked = "checked" })
+                                        @Html.HiddenFor(m => m.clientsModel.CLI_Id)
+                                        @Html.RadioButtonFor(m => m.ParametersClientsModel.CLI_Att_MonthReal, true, htmlAttributes: new { @id = "Default", @checked = "checked" })
                                         Month Start With 1st of month till last date of that Month
                                     </label>
                                     <label class="form-group col-sm-12 RadioAttPara" style="font-size: 15px;font-weight: normal;">
                                         @*<input id="custom" name="AttendenceParameters" type="radio"> Customize Dates For Month*@
-                                        @Html.RadioButtonFor(m => m.ParametersClientsModel.CliAttMonthReal, false, new { @id = "custom" })
-                                        @*@Html.TextBoxFor(m => m.clientsModel.CliAttMonthReal, new { @id = "custom", type = "radio" })*@
+                                        @Html.RadioButtonFor(m => m.ParametersClientsModel.CLI_Att_MonthReal, false, new { @id = "custom" })
+                                        @*@Html.TextBoxFor(m => m.clientsModel.CLI_Att_MonthReal, new { @id = "custom", type = "radio" })*@
                                         Customize Dates For Month
                                     </label>
 
@@ -296,7 +296,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Start On</label>
-                                                    @Html.DropDownListFor(m => m.ParametersClientsModel.CliAttMonthStart, Enumerable.Range(1, 30).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }), new { @class = "form-control" })
+                                                    @Html.DropDownListFor(m => m.ParametersClientsModel.CLI_Att_Month_Start, Enumerable.Range(1, 30).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }), new { @class = "form-control" })
                                                 </div>
                                             </div>
                                             <div class="col-md-6"> </div>
@@ -305,7 +305,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Ends On</label>
-                                                    @Html.DropDownListFor(m => m.ParametersClientsModel.CliAttMonthEnd, Enumerable.Range(1, 30).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }), new { @class = "form-control" })
+                                                    @Html.DropDownListFor(m => m.ParametersClientsModel.CLI_Att_Month_End, Enumerable.Range(1, 30).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }), new { @class = "form-control" })
                                                 </div>
                                             </div>
                                             <div class="col-md-6"> </div>
@@ -328,28 +328,28 @@
                                 <h4 class="page-title">Invoicing Parameters</h4>
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        @Html.LabelFor(m => m.ParametersClientsModel.CliGstNumber)
-                                        @Html.TextBoxFor(m => m.ParametersClientsModel.CliGstNumber, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.CliGstNumber, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number)
+                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group col-sm-6">
-                                        @Html.LabelFor(m => m.ParametersClientsModel.CliGstRate)
-                                        @Html.TextBoxFor(m => m.ParametersClientsModel.CliGstRate, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.CliGstRate, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Rate)
+                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Rate, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Rate, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-sm-6">
                                         @*<label>Date <span class="text-danger">*</span></label>*@
-                                        @Html.LabelFor(m => m.ParametersClientsModel.CliHsnCode)
-                                        @Html.TextBoxFor(m => m.ParametersClientsModel.CliHsnCode, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.CliHsnCode, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_HSN_Code)
+                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_HSN_Code, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_HSN_Code, "", new { @class = "text-danger" })
                                         @*<input class="form-control" type="text" value="9">*@
                                     </div>
                                     <div class="form-group col-sm-6">
-                                        @Html.LabelFor(m => m.ParametersClientsModel.CliTdsRate)
-                                        @Html.TextBoxFor(m => m.ParametersClientsModel.CliTdsRate, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.CliTdsRate, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_TDS_Rate)
+                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_TDS_Rate, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_TDS_Rate, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="m-t-20 text-center">
@@ -387,16 +387,16 @@
                                     @foreach (var item in Model.ClientsEmployeesList)
                                     {
                                         <tr>
-                                            <td>@item.Des.DesTitle</td>
-                                            <td>@item.Emp.EmpFirstName @item.Emp.EmpMiddleName @item.Emp.EmpSurName</td>
-                                            <td>@item.CleRegisteredOn</td>
+                                            <td>@item.DES_.DES_Title</td>
+                                            <td>@item.EMP_.EMP_FirstName @item.EMP_.EMP_MiddleName @item.EMP_.EMP_SurName</td>
+                                            <td>@item.CLE_RegisteredOn</td>
 
                                             <td class="text-right">
                                                 <div class="dropdown">
                                                     <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                     <ul class="dropdown-menu pull-right">
                                                         @*<li><a href='@Url.Action("ClientEmployee","Clients",new { CleId=item.CleId})' title="Edit ClientEmployee"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>*@
-                                                        <li><a href='@Url.Action("DeleteClientEmployee","Clients",new { CleId=item.CleId})' title="Delete"><i class="fa fa-trash m-r-5"></i> Delete</a></li>
+                                                        <li><a href='@Url.Action("DeleteClientEmployee","Clients",new { CleId=item.CLE_Id})' title="Delete"><i class="fa fa-trash m-r-5"></i> Delete</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -468,13 +468,13 @@
             };
             <script type="text/javascript">
                 var ClientID;
-                var CliIsActive;
+                var CLI_IsActive;
                 $(document).ready(function () {
                     debugger;
                     radioShow();
-                    var CliId = $("#clientsModel_FrmId").val();
-                    if (CliId > 0) {
-                        $("#clientsModel_FrmId").attr("disabled", true);
+                    var CLI_Id = $("#clientsModel_FRM_Id").val();
+                    if (CLI_Id > 0) {
+                        $("#clientsModel_FRM_Id").attr("disabled", true);
                     }
                     $("input[type='radio']").click(function () {
                         debugger;
@@ -482,7 +482,7 @@
                     });
                     function radioShow() {
                         debugger;
-                        var radioValue = $("input[name='ParametersClientsModel.CliAttMonthReal']:checked").attr("id");
+                        var radioValue = $("input[name='ParametersClientsModel.CLI_Att_MonthReal']:checked").attr("id");
                         if (radioValue == "custom") {
                             $("#divSelectdate").show();
                         } else if (radioValue == "Default") {
@@ -494,10 +494,10 @@
                     $("#activeTitle").html("InActive Client");
                     $("#activeBody").html("Are you sure want to InActive this Client?");
                     $("#btnSubmit").html("InActive");
-                    ClientID = $('#clientsModel_CliId').val();
-                    CliIsActive = $('#clientsModel_CliIsActive').val();
+                    ClientID = $('#clientsModel_CLI_Id').val();
+                    CLI_IsActive = $('#clientsModel_CLI_IsActive').val();
 
-                    if (CliIsActive.toLowerCase() == "false") {
+                    if (CLI_IsActive.toLowerCase() == "false") {
 
                         var CurrentActive = $('.nav li.active').find("a").attr("href");
                         var NextActive = $('.nav li.active').next('li').next('li').find("a").attr("href");
@@ -512,7 +512,7 @@
                         $("#activeBody").html("Are you sure want to Active this Client?");
                         $("#btnSubmit").html("Active");
                     }
-                    if (CliIsActive.toLowerCase() == "true") {
+                    if (CLI_IsActive.toLowerCase() == "true") {
                         var CurrentActive = $('.nav li.active').find("a").attr("href");
 
                         if (CurrentActive == "#ClientDelete") {
@@ -581,7 +581,7 @@
                 $("#btnSubmit").click(
                     function () {
                         debugger;
-                        var Url = siteUrl + "Clients/InActiveClient?ClientID=" + ClientID + "&Active=" + CliIsActive;
+                        var Url = siteUrl + "Clients/InActiveClient?ClientID=" + ClientID + "&Active=" + CLI_IsActive;
                         $.ajax({
                             type: "POST",
                             url: Url,

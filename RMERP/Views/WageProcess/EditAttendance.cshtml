@@ -31,20 +31,20 @@
                 @for (int i = 0; i < Model.attendancesList.Count(); i++)
                 {
 
-                    @Html.HiddenFor(m => m.attendancesList[i].AttId)
-                    @Html.HiddenFor(m => m.attendancesList[i].WagId)
+                    @Html.HiddenFor(m => m.attendancesList[i].ATT_Id)
+                    @Html.HiddenFor(m => m.attendancesList[i].WAG_Id)
                 <div class="col-md-12">
                     <div class="col-md-6">
                         <div class="form-group">
                             @Html.Raw("Days")
-                            @Html.TextBoxFor(m => m.attendancesList[i].AttDate.Date, new { @readonly = "readonly" })
+                            @Html.TextBoxFor(m => m.attendancesList[i].ATT_Date.Date, new { @readonly = "readonly" })
 
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             @Html.Raw("Extra Hours")
-                            @Html.TextBoxFor(m => m.attendancesList[i].AttExtraHoursWorked, new { style = "width:50px" })
+                            @Html.TextBoxFor(m => m.attendancesList[i].ATT_ExtraHoursWorked, new { style = "width:50px" })
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                         <div class="form-group">
                             @Html.Raw("Is Present?")
                             <label class="switch">
-                                @Html.TextBoxFor(m => m.attendancesList[i].AttIsPresent, (Model.attendancesList[i].AttIsPresent == true ? (object)new { type = "checkbox", @checked = (Model.attendancesList[i].AttIsPresent == true ? "checked" : "") } : new { type = "checkbox" }))
+                                @Html.TextBoxFor(m => m.attendancesList[i].ATT_IsPresent, (Model.attendancesList[i].ATT_IsPresent == true ? (object)new { type = "checkbox", @checked = (Model.attendancesList[i].ATT_IsPresent == true ? "checked" : "") } : new { type = "checkbox" }))
                                 <span class="slider round"></span>
                             </label>
 
@@ -63,7 +63,7 @@
                         <div class="form-group">
                             @Html.Raw("Weekly Off?")
                             <label class="switch">
-                                @Html.TextBoxFor(m => m.attendancesList[i].AttIsWeeklyOff, (Model.attendancesList[i].AttIsWeeklyOff == true ? (object)new { type = "checkbox", @checked = (Model.attendancesList[i].AttIsWeeklyOff == true ? "checked" : "") } : new { type = "checkbox" }))
+                                @Html.TextBoxFor(m => m.attendancesList[i].ATT_IsWeeklyOff, (Model.attendancesList[i].ATT_IsWeeklyOff == true ? (object)new { type = "checkbox", @checked = (Model.attendancesList[i].ATT_IsWeeklyOff == true ? "checked" : "") } : new { type = "checkbox" }))
                                 <span class="slider round"></span>
                             </label>
 

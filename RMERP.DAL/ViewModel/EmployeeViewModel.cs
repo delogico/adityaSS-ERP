@@ -13,93 +13,94 @@ namespace RMERP.DAL.ViewModel
     public class EmployeeModel
     {
         [Key]
-        public int EmpId { get; set; }
+        public int EMP_Id { get; set; }
 
         [Display(Name ="Name")]
         [Required(AllowEmptyStrings =false, ErrorMessage ="first name is required")]
-        public string EmpFirstName { get; set; }
+        public string EMP_FirstName { get; set; }
 
         [Display(Name = "Middle name")]
-        public string EmpMiddleName { get; set; }
+        public string EMP_MiddleName { get; set; }
 
         [Display(Name = "Last name")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Last name is required")]
-        public string EmpSurName { get; set; }
+        public string EMP_SurName { get; set; }
 
         [Display(Name = "Name as per aadhar card")]
-        public string EmpAadharName { get; set; }
+        public string EMP_Aadhar_Name { get; set; }
 
         [Display(Name = "Aadhar card number")]
-        public string EmpAadharNumber { get; set; }
+        public string EMP_Aadhar_Number { get; set; }
 
         [Display(Name = "Date of birth")]
         [Required(ErrorMessage = "Date of birth is required")]
         [DataType(DataType.Date)]
-        public DateTime EmpDob { get; set; }
+        public DateTime EMP_DOB { get; set; }
 
         [Display(Name = "Marital status")]
         [Required(ErrorMessage = "Marital status is required")]
-        public byte EmpMarried { get; set; }
+        public byte EMP_Married { get; set; }
 
         [Display(Name = "Date of joining")]
         [Required(ErrorMessage = "Date of joining is required")]
         [DataType(DataType.Date)]
-        public DateTime EmpDateOfJoining { get; set; }
+        public DateTime EMP_DateOfJoining { get; set; }
 
         [Display(Name = "Gender")]
         [Required(ErrorMessage = "Gender is required")]
-        public bool EmpGender { get; set; }
+        public bool EMP_Gender { get; set; }
 
         [Display(Name = "Primary contact number")]
-        public string EmpContactPrimary { get; set; }
+        public string EMP_Contact_Primary { get; set; }
 
         [Display(Name = "Secondry contact number")]
-        public string EmpContactSecondry { get; set; }
+        public string EMP_Contact_Secondry { get; set; }
 
         [Display(Name = "Address")]
-        public string EmpAddress { get; set; }
+        public string EMP_Address { get; set; }
 
         [Display(Name = "Designation")]
-        public string EmpDesignation { get; set; }
+        public string EMP_Designation { get; set; }
 
         [Display(Name = "PanCard number")]
-        public string EmpPanNumber { get; set; }
+        public string EMP_Pan_Number { get; set; }
 
         [Display(Name = "ESIC account number")]
-        public string EmpEsicNumber { get; set; }
+        public string EMP_ESIC_Number { get; set; }
 
         [Display(Name = "UAN number")]
-        public string EmpUanNumber { get; set; }
+        public string EMP_UAN_Number { get; set; }
 
         [Display(Name = "Department")]
         [Required(ErrorMessage = "Department is required")]
-        public int DeptId { get; set; }
+        public int DEPT_Id { get; set; }
 
         [Display(Name = "Employee Number")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Employee number is required")]
-        public int EmpEmployeeNumberOffice { get; set; }
+        public int EMP_EmployeeNumber_Office { get; set; }
 
         [Display(Name ="TPC Employee ID")]
-        public string EmpTpcEmployeeId { get; set; }
+        public string EMP_TPC_EmployeeId { get; set; }
 
         [Required]
-        public DateTime EmpRegisteredOn { get; set; }
+        public DateTime EMP_RegisteredOn { get; set; }
 
         [Required]
-        public int AdmIdRegisteredBy { get; set; }
+        public int ADM_Id_RegisteredBy { get; set; }
 
         [Required]
-        public bool EmpIsActive { get; set; }
+        public bool EMP_IsActive { get; set; }
         [DataType(DataType.Date)]
-        public DateTime? EmpInactivatedOn { get; set; }
-        public int? AdmIdInactivatedBy { get; set; }
+        public DateTime? EMP_InactivatedOn { get; set; }
+        public int? ADM_Id_InactivatedBy { get; set; }
 
         public string EmpFullName {
             get
             {
-                return string.Concat(EmpFirstName + "" + EmpMiddleName + "" + EmpSurName);
+                return string.Concat(EMP_FirstName + "" + EMP_MiddleName + "" + EMP_SurName);
             }
         }
 
     }
 }
+

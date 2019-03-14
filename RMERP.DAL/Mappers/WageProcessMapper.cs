@@ -7,11 +7,11 @@ namespace RMERP.DAL.Mappers
 {
     public class WageProcessMapper
     {
-        public static WageProcessVM mapMe(WageProcess wageProcess)
+        public static WageProcessVM mapMe(Wage_Process wageProcess)
         {
             WageProcessVM wageProcessVM = new WageProcessVM();
-            wageProcessVM.WagId = wageProcess.WagId;
-            wageProcessVM.WagMonth = wageProcess.WagMonth;
+            wageProcessVM.WAG_Id = wageProcess.WAG_Id;
+            wageProcessVM.WAG_Month = wageProcess.WAG_Month;
             return wageProcessVM;
         }
     }

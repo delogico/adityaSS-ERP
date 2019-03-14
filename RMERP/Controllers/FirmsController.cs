@@ -32,8 +32,8 @@ namespace RMERP.Controllers
             {
                 Firms firms = new Firms();
                 firms = firmsManager.GetFirms(id);
-                vm.FrmId = firms.FrmId;
-                vm.FrmName = firms.FrmName;
+                vm.FRM_Id = firms.FRM_Id;
+                vm.FRM_Name = firms.FRM_Name;
             }            
             return View(vm);
         }
@@ -43,8 +43,8 @@ namespace RMERP.Controllers
         {
             FirmsManager firmsManager = new FirmsManager(_context);
             Firms firms = new Firms();
-            firms.FrmId = firmsViewModel.FrmId;
-            firms.FrmName = firmsViewModel.FrmName;
+            firms.FRM_Id = firmsViewModel.FRM_Id;
+            firms.FRM_Name = firmsViewModel.FRM_Name;
             if (ModelState.IsValid)
             {
                 string res = firmsManager.saveEditFirm(firms);

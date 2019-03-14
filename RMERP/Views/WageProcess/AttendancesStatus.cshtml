@@ -28,11 +28,11 @@
                             @foreach (var item in Model.Listclients)
                             {
                             <tr>
-                                <td><b>@item.CliName</b></td>
+                                <td><b>@item.CLI_Name</b></td>
                                 <td><b>Not Done</b></td>
                                 <td><b></b></td>
-                                <td><a href='@Url.Action("UploadExcel","Attendance",new { WAG_Id=Model.WageID,CLI_Id=item.CliId})' title="Upload"><i class="fa fa-upload m-r-5"></i> Upload</a></td>
-                                <td><a href='@Url.Action("ViewAttendance","WageProcess",new { wagId=Model.WageID,CliId=item.CliId})' title="View"><i class="fa fa-eye m-r-5"></i> View</a></td>
+                                <td><a href='@Url.Action("UploadExcel","Attendance",new { WAG_Id=Model.WageID,CLI_Id=item.CLI_Id})' title="Upload"><i class="fa fa-upload m-r-5"></i> Upload</a></td>
+                                <td><a href='@Url.Action("ViewAttendance","WageProcess",new { wagId=Model.WageID,CliId=item.CLI_Id})' title="View"><i class="fa fa-eye m-r-5"></i> View</a></td>
                                
                             </tr>
                             }

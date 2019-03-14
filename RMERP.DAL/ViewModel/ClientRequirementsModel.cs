@@ -8,60 +8,60 @@ namespace RMERP.DAL.ViewModel
 {
     public class ClientRequirementsViewModel
     {
-        public IEnumerable<ClientRequirements> ClientRequirementsList { get; set; }
+        public IEnumerable<Client_Requirements> ClientRequirementsList { get; set; }
         public ClientRequirementsModel ClientRequirementsModel { get; set; }
     }
     public class ClientRequirementsModel
     { 
         [Key]
-        public int CriId { get; set; }
+        public int CRI_Id { get; set; }
 
         public string CliName { get; set; }
 
 
         [Display(Name = "Client")]
         [Required(ErrorMessage = "Please select client")]
-        public int CliId { get; set; }
+        public int CLI_Id { get; set; }
         [Display(Name = "Designation")]
         [Required(ErrorMessage = "Please insert designation")]
-        public int DesId { get; set; }
+        public int DES_Id { get; set; }
         [Display(Name = "Basic")]
-        public decimal? CriBasic { get; set; }
+        public decimal? CRI_Basic { get; set; }
         [Display(Name = "DA")]
-        public double? CriDa { get; set; }
+        public double? CRI_DA { get; set; }
         [Display(Name = "Basic DA")]
-        public decimal? CriBasicDa { get; set; }
+        public decimal? CRI_BasicDA { get; set; }
         [Display(Name = "HRA Fixed")]
-        public decimal? CriHraFixed { get; set; }
+        public decimal? CRI_HRA_Fixed { get; set; }
         [Display(Name = "HRA Percentage (%)")]
-        public double? CriHraPercentage { get; set; }
+        public double? CRI_HRA_Percentage { get; set; }
         [Display(Name = "Allowance Up-Keep")]
-        public decimal? CriAllowanceUpKeep { get; set; }
+        public decimal? CRI_Allowance_UpKeep { get; set; }
         [Display(Name = "Allowance Grade")]
-        public decimal? CriAllowanceGrade { get; set; }
+        public decimal? CRI_Allowance_Grade { get; set; }
         [Display(Name = "Allowance Conveyance")]
-        public decimal? CriAllowanceConveyance { get; set; }
+        public decimal? CRI_Allowance_Conveyance { get; set; }
         [Display(Name = "Allowance Attention")]
-        public decimal? CriAllowanceAttention { get; set; }
+        public decimal? CRI_Allowance_Attention { get; set; }
         [Display(Name = "PF Percentage (%)")]
-        public double? CriPfPercentage { get; set; }
+        public double? CRI_PF_Percentage { get; set; }
         [Display(Name = "ESIC Percentage (%)")]
-        public double? CriEsicPercentage { get; set; }
+        public double? CRI_ESIC_Percentage { get; set; }
         [Display(Name = "ESIC Area")]
-        public string CriEsicArea { get; set; }
+        public string CRI_ESIC_Area { get; set; }
         [Display(Name = "OT Rate")]
-        public decimal? CriOtRate { get; set; }
+        public decimal? CRI_OT_Rate { get; set; }
         [Display(Name = "OT Times")]
-        public double? CriOtMultipleTimes { get; set; }
+        public double? CRI_OT_MultipleTimes { get; set; }
         [Display(Name = "Wage calculation on weekly off")]
         [Required(ErrorMessage = "Please select")]
-        public bool CriWageCalculationOnWeeklyOffPlus { get; set; }
+        public bool CRI_WageCalculationOnWeeklyOffPlus { get; set; }
         [Required]
-        public DateTime CriRegisteredOn { get; set; }
+        public DateTime CRI_RegisteredOn { get; set; }
         [Required]
-        public bool? CriActive { get; set; }
-        public DateTime? CriInactivatedOn { get; set; }
-        public int? AdmIdInactivatedBy { get; set; }
+        public bool? CRI_Active { get; set; }
+        public DateTime? CRI_InactivatedOn { get; set; }
+        public int? ADM_Id_InactivatedBy { get; set; }
 
         public string tabName { get; set; }
         public string DesTitle { get; set; }

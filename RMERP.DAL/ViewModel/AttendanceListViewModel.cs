@@ -31,33 +31,34 @@ namespace RMERP.DAL.ViewModel
     public class AttendanceViewModel
     {
         [Key]
-        public int AttId { get; set; }
+        public int ATT_Id { get; set; }
         [Required]
-        public int WagId { get; set; }
+        public int WAG_Id { get; set; }
         [Required]
-        public int EmpId { get; set; }
-        public int CriId { get; set; }
+        public int EMP_Id { get; set; }
+        public int CRI_Id { get; set; }
         [Required]
-        public int CliId { get; set; }
+        public int CLI_Id { get; set; }
         [Required]
         [Display(Name ="Date")]
-        public DateTime AttDate { get; set; }
+        public DateTime ATT_Date { get; set; }
         [Display(Name = "Present")]
-        public bool AttIsPresent { get; set; }
+        public bool ATT_IsPresent { get; set; }
         [Display(Name = "Paid Holiday")]
-        public bool AttIsPaidHoliday { get; set; }
+        public bool ATT_IsPaidHoliday { get; set; }
         [Display(Name = "Shift")]
-        public string AttShift { get; set; }
+        public string ATT_Shift { get; set; }
         [Display(Name = "Weekly Off")]
-        public bool AttIsWeeklyOff { get; set; }
+        public bool ATT_IsWeeklyOff { get; set; }
         [Display(Name = "Earn Leave")]
-        public bool AttIsEarnLeave { get; set; }
+        public bool ATT_IsEarnLeave { get; set; }
         [Display(Name = "Extra Working Hours")]
-        public double AttExtraHoursWorked { get; set; }
+        public double ATT_ExtraHoursWorked { get; set; }
         [Display(Name = "Imported On")]
-        public DateTime AttImportedOn { get; set; }
-        public int AdmIdImportedBy { get; set; }
+        public DateTime ATT_ImportedOn { get; set; }
+        public int ADM_Id_ImportedBy { get; set; }
 
     }
 
 }
+

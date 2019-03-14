@@ -26,7 +26,7 @@ namespace RMERP.Helpers
             try
             {
                 // Setting  
-                claims.Add(new Claim(ClaimTypes.Name, user.AdmEmailId));
+                claims.Add(new Claim(ClaimTypes.Name, user.ADM_EmailId));
                 var claimIdenties = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimPrincipal = new ClaimsPrincipal(claimIdenties);
                 var authenticationManager =request.HttpContext;
@@ -36,10 +36,10 @@ namespace RMERP.Helpers
 
                 CookieOptions options = new CookieOptions();
                 options.Expires = DateTime.Now.AddDays(1);
-                response.Cookies.Append("AdminID", Convert.ToString(user.AdmId), options);
-                response.Cookies.Append("AdminFirstName", Convert.ToString(user.AdmFirstName), options);
-                response.Cookies.Append("FirmID", Convert.ToString(user.FrmId), options);
-                string fullName = user.AdmFirstName + " " + user.AdmMiddleName + " " + user.AdmLastName;
+                response.Cookies.Append("AdminID", Convert.ToString(user.ADM_Id), options);
+                response.Cookies.Append("AdminFirstName", Convert.ToString(user.ADM_FirstName), options);
+                response.Cookies.Append("FirmID", Convert.ToString(user.FRM_Id), options);
+                string fullName = user.ADM_FirstName + " " + user.ADM_MiddleName + " " + user.ADM_LastName;
                 response.Cookies.Append("AdminFullName", Convert.ToString(fullName), options);
             }
             catch (Exception ex)

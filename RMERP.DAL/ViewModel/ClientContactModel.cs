@@ -8,28 +8,28 @@ namespace RMERP.DAL.ViewModel
     public class ClientContactModel
     {
         [Key]
-        public int ConId { get; set; }
-        public int CliId { get; set; }
+        public int CON_Id { get; set; }
+        public int CLI_Id { get; set; }
         public string ClientName { get; set; }
         [Display(Name = "First Name")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please insert first name")]
-        public string ConFirstName { get; set; }
+        public string CON_FirstName { get; set; }
         [Display(Name = "Last Name")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please insert last name")]
-        public string ConSurName { get; set; }
+        public string CON_SurName { get; set; }
         [Required(ErrorMessage = "Please insert designation")]
         [Display(Name = "Designation")]
-        public string ConDesignation { get; set; }
+        public string CON_Designation { get; set; }
         [Display(Name = "Mobile")]
         [Required(ErrorMessage = "Please insert mobile")]
-        public string ConMobile { get; set; }
+        public string CON_Mobile { get; set; }
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Please insert Email")]
-        public string ConEmail { get; set; }
-        public int AdmIdRegisteredBy { get; set; }
-        public DateTime ConRegisteredOn { get; set; }
+        public string CON_Email { get; set; }
+        public int ADM_Id_RegisteredBy { get; set; }
+        public DateTime CON_RegisteredOn { get; set; }
         [Display(Name = "Set as primary contact ?")]
         [Required(ErrorMessage = "Please select if you wants to make contact as primary")]
-        public bool ConIsPrimary { get; set; }
-    }
+        public bool CON_isPrimary { get; set; }
+    }    
 }

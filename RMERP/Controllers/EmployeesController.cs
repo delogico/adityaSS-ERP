@@ -32,32 +32,32 @@ namespace RMERP.Controllers
             DepartmentManager departmentManager = new DepartmentManager(_context);
             ViewBag.deptList = departmentManager.getDepartmentList();
             EmployeeModel employeeModel = new EmployeeModel();
-            employeeModel.EmpIsActive = true;
+            employeeModel.EMP_IsActive = true;
             if (EmpID > 0)
             {
                 Employees emp = new Employees();
                 emp = employeeManager.GetEmployeesById(EmpID);
-                employeeModel.EmpId = emp.EmpId;
-                employeeModel.EmpFirstName = emp.EmpFirstName;
-                employeeModel.EmpMiddleName = emp.EmpMiddleName;
-                employeeModel.EmpSurName = emp.EmpSurName;
-                employeeModel.EmpAadharName = emp.EmpAadharName;
-                employeeModel.EmpAadharNumber = emp.EmpAadharNumber;
-                employeeModel.EmpDob = emp.EmpDob;
-                employeeModel.EmpMarried = emp.EmpMarried;
-                employeeModel.EmpDateOfJoining = emp.EmpDateOfJoining;
-                employeeModel.EmpGender = emp.EmpGender;
-                employeeModel.EmpContactPrimary = emp.EmpContactPrimary;
-                employeeModel.EmpContactSecondry = emp.EmpContactSecondry;
-                employeeModel.EmpAddress = emp.EmpAddress;
-                employeeModel.EmpDesignation = emp.EmpDesignation;
-                employeeModel.EmpPanNumber = emp.EmpPanNumber;
-                employeeModel.EmpEsicNumber = emp.EmpEsicNumber;
-                employeeModel.EmpUanNumber = emp.EmpUanNumber;
-                employeeModel.DeptId = emp.DeptId;
-                employeeModel.EmpEmployeeNumberOffice = emp.EmpEmployeeNumberOffice;
-                employeeModel.EmpTpcEmployeeId = emp.EmpTpcEmployeeId;
-                employeeModel.EmpIsActive =Convert.ToBoolean(emp.EmpIsActive);
+                employeeModel.EMP_Id = emp.EMP_Id;
+                employeeModel.EMP_FirstName = emp.EMP_FirstName;
+                employeeModel.EMP_MiddleName = emp.EMP_MiddleName;
+                employeeModel.EMP_SurName = emp.EMP_SurName;
+                employeeModel.EMP_Aadhar_Name = emp.EMP_Aadhar_Name;
+                employeeModel.EMP_Aadhar_Number = emp.EMP_Aadhar_Number;
+                employeeModel.EMP_DOB = emp.EMP_DOB;
+                employeeModel.EMP_Married = emp.EMP_Married;
+                employeeModel.EMP_DateOfJoining = emp.EMP_DateOfJoining;
+                employeeModel.EMP_Gender = emp.EMP_Gender;
+                employeeModel.EMP_Contact_Primary = emp.EMP_Contact_Primary;
+                employeeModel.EMP_Contact_Secondry = emp.EMP_Contact_Secondry;
+                employeeModel.EMP_Address = emp.EMP_Address;
+                employeeModel.EMP_Designation = emp.EMP_Designation;
+                employeeModel.EMP_Pan_Number = emp.EMP_Pan_Number;
+                employeeModel.EMP_ESIC_Number = emp.EMP_ESIC_Number;
+                employeeModel.EMP_UAN_Number = emp.EMP_UAN_Number;
+                employeeModel.DEPT_Id = emp.DEPT_Id;
+                employeeModel.EMP_EmployeeNumber_Office = emp.EMP_EmployeeNumber_Office;
+                employeeModel.EMP_TPC_EmployeeId = emp.EMP_TPC_EmployeeId;
+                employeeModel.EMP_IsActive =Convert.ToBoolean(emp.EMP_IsActive);
             }
            
             return View(employeeModel);
@@ -70,29 +70,29 @@ namespace RMERP.Controllers
             if (ModelState.IsValid)
             {
                 Employees employees = new Employees();
-                employees.EmpId = employeeModel.EmpId;
-                employees.EmpFirstName = employeeModel.EmpFirstName;
-                employees.EmpMiddleName = employeeModel.EmpMiddleName;
-                employees.EmpSurName = employeeModel.EmpSurName;
-                employees.EmpAadharName = employeeModel.EmpAadharName;
-                employees.EmpAadharNumber = employeeModel.EmpAadharNumber;
-                employees.EmpDob = employeeModel.EmpDob;
-                employees.EmpMarried = employeeModel.EmpMarried;
-                employees.EmpDateOfJoining = employeeModel.EmpDateOfJoining;
-                employees.EmpGender = employeeModel.EmpGender;
-                employees.EmpContactPrimary = employeeModel.EmpContactPrimary;
-                employees.EmpContactSecondry = employeeModel.EmpContactSecondry;
-                employees.EmpAddress = employeeModel.EmpAddress;
-                employees.EmpDesignation = employeeModel.EmpDesignation;
-                employees.EmpPanNumber = employeeModel.EmpPanNumber;
-                employees.EmpEsicNumber = employeeModel.EmpEsicNumber;
-                employees.EmpUanNumber = employeeModel.EmpUanNumber;
-                employees.DeptId = employeeModel.DeptId;
-                employees.EmpEmployeeNumberOffice = employeeModel.EmpEmployeeNumberOffice;
-                employees.EmpTpcEmployeeId = employeeModel.EmpTpcEmployeeId;
+                employees.EMP_Id = employeeModel.EMP_Id;
+                employees.EMP_FirstName = employeeModel.EMP_FirstName;
+                employees.EMP_MiddleName = employeeModel.EMP_MiddleName;
+                employees.EMP_SurName = employeeModel.EMP_SurName;
+                employees.EMP_Aadhar_Name = employeeModel.EMP_Aadhar_Name;
+                employees.EMP_Aadhar_Number = employeeModel.EMP_Aadhar_Number;
+                employees.EMP_DOB = employeeModel.EMP_DOB;
+                employees.EMP_Married = employeeModel.EMP_Married;
+                employees.EMP_DateOfJoining = employeeModel.EMP_DateOfJoining;
+                employees.EMP_Gender = employeeModel.EMP_Gender;
+                employees.EMP_Contact_Primary = employeeModel.EMP_Contact_Primary;
+                employees.EMP_Contact_Secondry = employeeModel.EMP_Contact_Secondry;
+                employees.EMP_Address = employeeModel.EMP_Address;
+                employees.EMP_Designation = employeeModel.EMP_Designation;
+                employees.EMP_Pan_Number = employeeModel.EMP_Pan_Number;
+                employees.EMP_ESIC_Number = employeeModel.EMP_ESIC_Number;
+                employees.EMP_UAN_Number = employeeModel.EMP_UAN_Number;
+                employees.DEPT_Id = employeeModel.DEPT_Id;
+                employees.EMP_EmployeeNumber_Office = employeeModel.EMP_EmployeeNumber_Office;
+                employees.EMP_TPC_EmployeeId = employeeModel.EMP_TPC_EmployeeId;
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
-                employees.AdmIdRegisteredBy = sessionUtils.GetLoggedAdminID();
-                employees.EmpIsActive = employeeModel.EmpIsActive;
+                employees.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
+                employees.EMP_IsActive = employeeModel.EMP_IsActive;
 
                 res = employeeManager.AddEditEmployee(employees);
             }            

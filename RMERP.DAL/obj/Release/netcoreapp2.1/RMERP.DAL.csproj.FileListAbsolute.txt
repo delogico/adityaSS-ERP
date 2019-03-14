@@ -7,10 +7,10 @@ C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Release\netcoreapp2.1\RMERP.DAL.runtimeco
 C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Release\netcoreapp2.1\RMERP.DAL.runtimeconfig.dev.json
 C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Release\netcoreapp2.1\RMERP.DAL.dll
 C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Release\netcoreapp2.1\RMERP.DAL.pdb
-C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Release\netcoreapp2.1\Microsoft.AspNetCore.Http.Features.dll
-C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Release\netcoreapp2.1\Microsoft.AspNetCore.Http.Features.xml
 C:\inetpub\wwwroot\RMERP\RMERP.DAL\obj\Release\netcoreapp2.1\RMERP.DAL.csproj.CopyComplete
 C:\inetpub\wwwroot\RMERP\RMERP.DAL\obj\Release\netcoreapp2.1\RMERP.DAL.dll
 C:\inetpub\wwwroot\RMERP\RMERP.DAL\obj\Release\netcoreapp2.1\RMERP.DAL.pdb
 C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Release\netcoreapp2.1\Microsoft.AspNetCore.Mvc.Core.dll
 C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Release\netcoreapp2.1\Microsoft.AspNetCore.Mvc.Core.xml
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Release\netcoreapp2.1\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\inetpub\wwwroot\RMERP\RMERP.DAL\bin\Release\netcoreapp2.1\Microsoft.Extensions.Hosting.Abstractions.xml

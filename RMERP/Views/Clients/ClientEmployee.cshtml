@@ -21,22 +21,22 @@
                 <div class="m-b-30">
                     @using (Html.BeginForm("ClientEmployee", "Clients", FormMethod.Post))
                     {
-                        @Html.HiddenFor(m => m.CleId)
-                        @Html.HiddenFor(m => m.CliId)
+                        @Html.HiddenFor(m => m.CLE_Id)
+                        @Html.HiddenFor(m => m.CLI_Id)
 
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    @Html.LabelFor(m => m.EmpId, new { @class = "control-label" })
-                                    @Html.DropDownListFor(x => x.EmpId, new SelectList(ViewBag.EmployeeList, "EmpId", "EmpFirstName"), "Select Employee", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(x => x.EmpId, "", new { @class = "text-danger" })
+                                    @Html.LabelFor(m => m.EMP_Id, new { @class = "control-label" })
+                                    @Html.DropDownListFor(x => x.EMP_Id, new SelectList(ViewBag.EmployeeList, "EMP_Id", "EMP_FirstName"), "Select Employee", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.EMP_Id, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    @Html.LabelFor(m => m.DesId, new { @class = "control-label" })
-                                    @Html.DropDownListFor(x => x.DesId, new SelectList(ViewBag.designationList, "DesId", "DesTitle"), "Select Designation", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(x => x.DesId, "", new { @class = "text-danger" })
+                                    @Html.LabelFor(m => m.DES_Id, new { @class = "control-label" })
+                                    @Html.DropDownListFor(x => x.DES_Id, new SelectList(ViewBag.designationList, "DES_Id", "DES_Title"), "Select Designation", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.DES_Id, "", new { @class = "text-danger" })
                                 </div>
                             </div>
 

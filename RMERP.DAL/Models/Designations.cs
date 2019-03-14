@@ -7,14 +7,14 @@ namespace RMERP.DAL.Models
     {
         public Designations()
         {
-            ClientRequirements = new HashSet<ClientRequirements>();
-            ClientsEmployees = new HashSet<ClientsEmployees>();
+            Client_Requirements = new HashSet<Client_Requirements>();
+            Clients_Employees = new HashSet<Clients_Employees>();
         }
 
-        public int DesId { get; set; }
-        public string DesTitle { get; set; }
+        public int DES_Id { get; set; }
+        public string DES_Title { get; set; }
 
-        public ICollection<ClientRequirements> ClientRequirements { get; set; }
-        public ICollection<ClientsEmployees> ClientsEmployees { get; set; }
+        public ICollection<Client_Requirements> Client_Requirements { get; set; }
+        public ICollection<Clients_Employees> Clients_Employees { get; set; }
     }
 }

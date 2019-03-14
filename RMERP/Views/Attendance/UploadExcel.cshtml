@@ -15,13 +15,13 @@
         <div class="modal-body">
             @using (Html.BeginForm("VerifyTemplate", "Attendance", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
-                @Html.HiddenFor(m => m.wageProcessVM.WagId)
-                @Html.HiddenFor(m => m.client.CliId)
+                @Html.HiddenFor(m => m.wageProcessVM.WAG_Id)
+                @Html.HiddenFor(m => m.client.CLI_Id)
                 <div class="row">
                     <div class="col-md-12 form-group">
                         <div class="col-md-3">Wage Process for:</div>
                         <div class="col-md-9">
-                            <b> @Model.wageProcessVM.WAG_Month()</b>
+                            <b> @Model.wageProcessVM.WAG_Full_Month()</b>
                         </div>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
                     <div class="col-md-12 form-group">
                         <div class="col-md-3">For Client:</div>
                         <div class="col-md-9">
-                            <b>@Model.client.CliName</b>
+                            <b>@Model.client.CLI_Name</b>
                         </div>
                     </div>
                 </div>

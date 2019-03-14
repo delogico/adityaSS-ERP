@@ -71,164 +71,164 @@
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.HiddenFor(m => m.EmpId)
+                    @Html.HiddenFor(m => m.EMP_Id)
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.DeptId, new { @class = "control-label" })
-                                @Html.DropDownListFor(m => m.DeptId, new SelectList(ViewBag.deptList, "DeptId", "DeptTitle"), "Select Department", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.DeptId, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.DEPT_Id, new { @class = "control-label" })
+                                @Html.DropDownListFor(m => m.DEPT_Id, new SelectList(ViewBag.deptList, "DEPT_Id", "DEPT_Title"), "Select Department", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.DEPT_Id, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpFirstName, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpFirstName, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpFirstName, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_FirstName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_FirstName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_FirstName, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpMiddleName, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpMiddleName, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpMiddleName, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_MiddleName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_MiddleName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_MiddleName, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpSurName, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpSurName, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpSurName, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_SurName, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_SurName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_SurName, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpAadharName, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpAadharName, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpAadharName, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_Aadhar_Name, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_Aadhar_Name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_Aadhar_Name, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpAadharNumber, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpAadharNumber, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpAadharNumber, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_Aadhar_Number, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_Aadhar_Number, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_Aadhar_Number, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpDob, new { @class = "control-label" })
-                                @Html.EditorFor(m => m.EmpDob, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.LabelFor(m => m.EMP_DOB, new { @class = "control-label" })
+                                @Html.EditorFor(m => m.EMP_DOB, new { htmlAttributes = new { @class = "form-control" } })
                                 @*@Html.TextBoxFor(x => x.EmpDob, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", @value = System.DateTime.Now.ToShortDateString() })*@
-                                @Html.ValidationMessageFor(m => m.EmpDob, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.EMP_DOB, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpMarried, new { @class = "control-label" })
+                                @Html.LabelFor(m => m.EMP_Married, new { @class = "control-label" })
                                 <label class="radio-inline form-control ">
                                     @foreach (var MaritalStatus in Enum.GetValues(typeof(MaritalStatus)))
                                     {
                                         <label class="radio-inline">
-                                            @Html.RadioButtonFor(s => s.EmpMarried, (int)MaritalStatus, (int)MaritalStatus == 0 ? (object)new { @checked = true, @id = (int)MaritalStatus } : new { @id = (int)MaritalStatus })@MaritalStatus
+                                            @Html.RadioButtonFor(s => s.EMP_Married, (int)MaritalStatus, (int)MaritalStatus == 0 ? (object)new { @checked = true, @id = (int)MaritalStatus } : new { @id = (int)MaritalStatus })@MaritalStatus
                                         </label>
                                     }
                                 </label>
-                                @Html.ValidationMessageFor(x => x.EmpMarried, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(x => x.EMP_Married, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpDateOfJoining, new { @class = "control-label" })
-                                @Html.EditorFor(m => m.EmpDateOfJoining, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.LabelFor(m => m.EMP_DateOfJoining, new { @class = "control-label" })
+                                @Html.EditorFor(m => m.EMP_DateOfJoining, new { htmlAttributes = new { @class = "form-control" } })
                                 @*@Html.TextBoxFor(x => x.EmpDateOfJoining, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", @value = System.DateTime.Now })*@
-                                @Html.ValidationMessageFor(m => m.EmpDateOfJoining, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.EMP_DateOfJoining, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpGender, new { @class = "control-label" })
+                                @Html.LabelFor(m => m.EMP_Gender, new { @class = "control-label" })
                                 <label class="radio-inline form-control ">
                                     <label class="radio-inline">
-                                        @Html.RadioButtonFor(m => m.EmpGender, true, new { @checked = "checked" }) Male
+                                        @Html.RadioButtonFor(m => m.EMP_Gender, true, new { @checked = "checked" }) Male
                                     </label>
                                     <label class="radio-inline">
-                                        @Html.RadioButtonFor(m => m.EmpGender, false) Female
+                                        @Html.RadioButtonFor(m => m.EMP_Gender, false) Female
                                     </label>
 
                                 </label>
-                                @Html.ValidationMessageFor(x => x.EmpGender, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(x => x.EMP_Gender, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpContactPrimary, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpContactPrimary, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpContactPrimary, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_Contact_Primary, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_Contact_Primary, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_Contact_Primary, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpContactSecondry, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpContactSecondry, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpContactSecondry, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_Contact_Secondry, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_Contact_Secondry, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_Contact_Secondry, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpAddress, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpAddress, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpAddress, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_Address, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_Address, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_Address, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpDesignation, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpDesignation, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpDesignation, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_Designation, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_Designation, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_Designation, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpPanNumber, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpPanNumber, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpPanNumber, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_Pan_Number, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_Pan_Number, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_Pan_Number, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpEsicNumber, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpEsicNumber, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpEsicNumber, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_ESIC_Number, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_ESIC_Number, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_ESIC_Number, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpUanNumber, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpUanNumber, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpUanNumber, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_UAN_Number, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_UAN_Number, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_UAN_Number, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpEmployeeNumberOffice, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpEmployeeNumberOffice, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpEmployeeNumberOffice, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_EmployeeNumber_Office, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_EmployeeNumber_Office, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_EmployeeNumber_Office, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpTpcEmployeeId, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.EmpTpcEmployeeId, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.EmpTpcEmployeeId, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_TPC_EmployeeId, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.EMP_TPC_EmployeeId, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EMP_TPC_EmployeeId, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.EmpIsActive, new { @class = "control-label" })
-                                @Html.CheckBoxFor(m => m.EmpIsActive,new { @checked = "checked", @class = "control-label"})
-                                @Html.ValidationMessageFor(x => x.EmpIsActive, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.EMP_IsActive, new { @class = "control-label" })
+                                @Html.CheckBoxFor(m => m.EMP_IsActive,new { @checked = "checked", @class = "control-label"})
+                                @Html.ValidationMessageFor(x => x.EMP_IsActive, "", new { @class = "text-danger" })
                             </div>
                         </div>
                     </div>

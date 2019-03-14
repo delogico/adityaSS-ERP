@@ -44,7 +44,7 @@ namespace RMERP.Controllers
         {
             ClientsManager clientManager = new ClientsManager(_context, _configuration);
             WageProcessManager wageManager = new WageProcessManager(_context);
-            WageProcess wageProcess = wageManager.getWageProcessById(WAG_Id);
+            Wage_Process wageProcess = wageManager.getWageProcessById(WAG_Id);
             UploadExcelViewModel upvm = new UploadExcelViewModel();
             upvm.wageProcessVM = WageProcessMapper.mapMe(wageProcess);
             upvm.client = clientManager.GetClientById(CLI_Id);
@@ -56,7 +56,7 @@ namespace RMERP.Controllers
         public ActionResult VerifyTemplate(UploadExcelViewModel uvm)
         {
             WageProcessManager wageManager = new WageProcessManager(_context);
-            WageProcess wageProcess = wageManager.getWageProcessById(uvm.wageProcessVM.WagId);
+            Wage_Process wageProcess = wageManager.getWageProcessById(uvm.wageProcessVM.WAG_Id);
             IFormFile file = uvm.ExcelFile;
             ExcelViewModel excelViewModel = new ExcelViewModel();
             List<ExcelRowViewModel> rows = new List<ExcelRowViewModel>();
@@ -91,14 +91,14 @@ namespace RMERP.Controllers
                         int totalPublicHolidays = 0;
                         DateTime startDate = DateTime.Now, endDate = DateTime.Now;
                         if (intStartDate > 1) {
-                            DateTime lastMonth = wageProcess.WagMonth.AddMonths(-1);
+                            DateTime lastMonth = wageProcess.WAG_Month.AddMonths(-1);
                             startDate = new DateTime(lastMonth.Year, lastMonth.Month, intStartDate);
                         }
                         else
                         {
-                            startDate = new DateTime(wageProcess.WagMonth.Year, wageProcess.WagMonth.Month, intStartDate);
+                            startDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, intStartDate);
                         }
-                        endDate = new DateTime(wageProcess.WagMonth.Year, wageProcess.WagMonth.Month, Convert.ToInt16(secondRow.GetCell(cellCount-5).ToString()));
+                        endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, Convert.ToInt16(secondRow.GetCell(cellCount-5).ToString()));
 
                         for (int j = (secondRow.FirstCellNum + 4); j <= secondRow.LastCellNum - 4; j++)
                         {

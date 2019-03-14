@@ -65,45 +65,47 @@ namespace RMERP.Controllers
             FirmsManager firmsManager = new FirmsManager(_context);
             ClientsViewModel cv = new ClientsViewModel();
             cv.clientsModel = new ClientsModel();
+
             cv.ParametersClientsModel = new ParametersClientsModel();
+            cv.ParametersClientsModel.clientsModel = new ClientsModel();
             if (id > 0)
             {
                 Clients clients = new Clients();
                 clients=clientsManager.GetClientById(id);
                 ClientId = id;
-                cv.clientsModel.CliId= clients.CliId;
-                cv.clientsModel.CliIsActive = clients.CliIsActive;
-                cv.clientsModel.FrmId = clients.FrmId;
-                cv.clientsModel.CliName = clients.CliName;
-                cv.clientsModel.CliInternationalDomestic = clients.CliInternationalDomestic;
-                cv.clientsModel.CliAddress = clients.CliAddress;
-                cv.clientsModel.CityId = clients.CityId;
-                cv.clientsModel.CliPincode = clients.CliPincode;
-                cv.clientsModel.CliPhone = clients.CliPhone;
-                cv.clientsModel.CliFax = clients.CliFax;
-                cv.clientsModel.CliEmail = clients.CliEmail;
-                cv.clientsModel.CliEmail2 = clients.CliEmail2;
+                cv.clientsModel.CLI_Id= clients.CLI_Id;
+                cv.clientsModel.CLI_IsActive = clients.CLI_IsActive;
+                cv.clientsModel.FRM_Id = clients.FRM_Id;
+                cv.clientsModel.CLI_Name = clients.CLI_Name;
+                cv.clientsModel.CLI_International_Domestic = clients.CLI_International_Domestic;
+                cv.clientsModel.CLI_Address = clients.CLI_Address;
+                cv.clientsModel.CITY_Id = clients.CITY_Id;
+                cv.clientsModel.CLI_Pincode = clients.CLI_Pincode;
+                cv.clientsModel.CLI_Phone = clients.CLI_Phone;
+                cv.clientsModel.CLI_Fax = clients.CLI_Fax;
+                cv.clientsModel.CLI_Email = clients.CLI_Email;
+                cv.clientsModel.CLI_Email_2 = clients.CLI_Email_2;
 
-                cv.ParametersClientsModel.CliGstNumber = clients.CliGstNumber;
-                cv.ParametersClientsModel.CliGstRate = clients.CliGstRate;
-                cv.ParametersClientsModel.CliHsnCode = clients.CliHsnCode;
-                cv.ParametersClientsModel.CliTdsRate = clients.CliTdsRate;
-                cv.ParametersClientsModel.CliAttMonthStart = clients.CliAttMonthStart;
-                cv.ParametersClientsModel.CliAttMonthEnd = clients.CliAttMonthEnd;
-                cv.ParametersClientsModel.CliAttMonthReal = clients.CliAttMonthReal;
+                cv.ParametersClientsModel.clientsModel.CLI_GST_Number = clients.CLI_GST_Number;
+                cv.ParametersClientsModel.clientsModel.CLI_GST_Rate = clients.CLI_GST_Rate;
+                cv.ParametersClientsModel.clientsModel.CLI_HSN_Code = clients.CLI_HSN_Code;
+                cv.ParametersClientsModel.clientsModel.CLI_TDS_Rate = clients.CLI_TDS_Rate;
+                cv.ParametersClientsModel.CLI_Att_Month_Start = clients.CLI_Att_Month_Start;
+                cv.ParametersClientsModel.CLI_Att_Month_End = clients.CLI_Att_Month_End;
+                cv.ParametersClientsModel.CLI_Att_MonthReal = clients.CLI_Att_MonthReal;
 
-                cv.clientsModel.CliGstNumber = "";
-                cv.clientsModel.CliGstRate = 0;
-                cv.clientsModel.CliHsnCode = "";
-                cv.clientsModel.CliTdsRate = 0;
+                cv.clientsModel.CLI_GST_Number = "";
+                cv.clientsModel.CLI_GST_Rate = 0;
+                cv.clientsModel.CLI_HSN_Code = "";
+                cv.clientsModel.CLI_TDS_Rate = 0;
 
-                cv.clientsModel.AdmIdRegisterBy = clients.AdmIdRegisterBy;
-                cv.clientsModel.CliRegisteredOn = clients.CliRegisteredOn;
-                cv.clientsModel.CliLogoImage = clients.CliLogo;
-                IEnumerable<ClientContacts> listClientContacts = clientsManager.GetClientContactsListById(id);
-                cv.ListClientRequirements = clientsManager.GetClientRequirementsListByClientId(id,true);
+                cv.clientsModel.ADM_Id_RegisterBy = clients.ADM_Id_RegisterBy;
+                cv.clientsModel.CLI_RegisteredOn = clients.CLI_RegisteredOn;
+                cv.clientsModel.CliLogoImage = clients.CLI_Logo;
+                IEnumerable<Client_Contacts> listClientContacts = clientsManager.GetClientContactsListById(id);
+                cv.ListClientRequirements = clientsManager.GetClient_RequirementsListByClientId(id,true);
                 cv.ListClientContact = listClientContacts;
-                IEnumerable<ClientsEmployees> listClientsEmployees= clientsManager.listClientsEmployees(ClientId);
+                IEnumerable<Clients_Employees> listClientsEmployees= clientsManager.listClientsEmployees(ClientId);
                 cv.ClientsEmployeesList = listClientsEmployees;
             }
             IEnumerable<Firms> listFirms = new List<Firms>();
@@ -124,35 +126,35 @@ namespace RMERP.Controllers
             if (ModelState.IsValid)
             {
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
-                cv.clientsModel.AdmIdRegisterBy = sessionUtils.GetLoggedAdminID();
+                cv.clientsModel.ADM_Id_RegisterBy = sessionUtils.GetLoggedAdminID();
                 Clients clients = new Clients();
-                IFormFile file = cv.clientsModel.CliLogo;
-                clients.CliId = cv.clientsModel.CliId;
-                clients.FrmId = cv.clientsModel.FrmId;
-                clients.CliName = cv.clientsModel.CliName;
-                clients.CliInternationalDomestic = cv.clientsModel.CliInternationalDomestic;
-                clients.CliAddress = cv.clientsModel.CliAddress;
-                clients.CityId = cv.clientsModel.CityId;
-                clients.CliPincode = cv.clientsModel.CliPincode;
-                clients.CliPhone = cv.clientsModel.CliPhone;
-                clients.CliFax = cv.clientsModel.CliFax;
-                clients.CliEmail = cv.clientsModel.CliEmail;
-                clients.CliEmail2 = cv.clientsModel.CliEmail2;
+                IFormFile file = cv.clientsModel.CLI_Logo;
+                clients.CLI_Id = cv.clientsModel.CLI_Id;
+                clients.FRM_Id = cv.clientsModel.FRM_Id;
+                clients.CLI_Name = cv.clientsModel.CLI_Name;
+                clients.CLI_International_Domestic = cv.clientsModel.CLI_International_Domestic;
+                clients.CLI_Address = cv.clientsModel.CLI_Address;
+                clients.CITY_Id = cv.clientsModel.CITY_Id;
+                clients.CLI_Pincode = cv.clientsModel.CLI_Pincode;
+                clients.CLI_Phone = cv.clientsModel.CLI_Phone;
+                clients.CLI_Fax = cv.clientsModel.CLI_Fax;
+                clients.CLI_Email = cv.clientsModel.CLI_Email;
+                clients.CLI_Email_2 = cv.clientsModel.CLI_Email_2;
 
-                clients.CliGstNumber = "";
-                clients.CliGstRate = 0;
-                clients.CliHsnCode = "";
-                clients.CliTdsRate =0;
-                clients.AdmIdRegisterBy = cv.clientsModel.AdmIdRegisterBy;
-                clients.CliRegisteredOn = cv.clientsModel.CliRegisteredOn;
+                clients.CLI_GST_Number = "";
+                clients.CLI_GST_Rate = 0;
+                clients.CLI_HSN_Code = "";
+                clients.CLI_TDS_Rate =0;
+                clients.ADM_Id_RegisterBy = cv.clientsModel.ADM_Id_RegisterBy;
+                clients.CLI_RegisteredOn = cv.clientsModel.CLI_RegisteredOn;
 
-                if (cv.clientsModel.CliLogo != null)
+                if (cv.clientsModel.CLI_Logo != null)
                 {
-                    clients.CliLogo = cv.clientsModel.CliLogo.FileName;
+                    clients.CLI_Logo = cv.clientsModel.CLI_Logo.FileName;
                 }
                 else
                 {
-                    clients.CliLogo = cv.clientsModel.CliLogoImage;
+                    clients.CLI_Logo = cv.clientsModel.CliLogoImage;
                 }
                 var tuple = clientsManager.saveAddEditClients(file, clients);
                 if (tuple.Item1 != "")
@@ -174,10 +176,10 @@ namespace RMERP.Controllers
             if (ClientId>0)
             {
                 ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-                ClientContacts clientContacts = new ClientContacts();
+                Client_Contacts clientContacts = new Client_Contacts();
                 Clients clients = new Clients();
                 clients = clientsManager.GetClientById(ClientId);
-                clientContactModel.ClientName = clients.CliName;
+                clientContactModel.ClientName = clients.CLI_Name;
                 clients = null;
                 if (ModelState.IsValid)
                 {
@@ -185,17 +187,17 @@ namespace RMERP.Controllers
                     {                                           
                         clientContacts = clientsManager.GetClientContactsById(id);
                         clientsManager = null;
-                        clientContactModel.ConId = clientContacts.ConId;
-                        clientContactModel.CliId = clientContacts.CliId;
-                        clientContactModel.ConFirstName = clientContacts.ConFirstName;
-                        clientContactModel.ConSurName = clientContacts.ConSurName;
-                        clientContactModel.ConDesignation = clientContacts.ConDesignation;
-                        clientContactModel.ConMobile = clientContacts.ConMobile;
-                        clientContactModel.ConEmail = clientContacts.ConEmail;
-                        clientContactModel.ConIsPrimary = clientContacts.ConIsPrimary;
-                        clientContactModel.ConRegisteredOn = ProjectUtils.DateNow();
+                        clientContactModel.CON_Id = clientContacts.CON_Id;
+                        clientContactModel.CLI_Id = clientContacts.CLI_Id;
+                        clientContactModel.CON_FirstName = clientContacts.CON_FirstName;
+                        clientContactModel.CON_SurName = clientContacts.CON_SurName;
+                        clientContactModel.CON_Designation = clientContacts.CON_Designation;
+                        clientContactModel.CON_Mobile = clientContacts.CON_Mobile;
+                        clientContactModel.CON_Email = clientContacts.CON_Email;
+                        clientContactModel.CON_isPrimary = clientContacts.CON_isPrimary;
+                        clientContactModel.CON_RegisteredOn = ProjectUtils.DateNow();
                         SessionUtils sessionUtils = new SessionUtils(Request, Response);
-                        clientContactModel.AdmIdRegisteredBy = sessionUtils.GetLoggedAdminID();
+                        clientContactModel.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
                         clientContacts = null;
                     }
                 }
@@ -210,18 +212,18 @@ namespace RMERP.Controllers
             {
                 if (ClientId > 0)
                 {
-                    ClientContacts clientContacts = new ClientContacts();
-                    clientContacts.CliId = ClientId;
-                    clientContacts.ConId = clientContactModel.ConId;
-                    clientContacts.ConFirstName = clientContactModel.ConFirstName;
-                    clientContacts.ConSurName = clientContactModel.ConSurName;
-                    clientContacts.ConDesignation = clientContactModel.ConDesignation;
-                    clientContacts.ConMobile = clientContactModel.ConMobile;
-                    clientContacts.ConEmail = clientContactModel.ConEmail;
-                    clientContacts.ConIsPrimary = clientContactModel.ConIsPrimary;
-                    clientContacts.ConRegisteredOn = ProjectUtils.DateNow();
+                    Client_Contacts clientContacts = new Client_Contacts();
+                    clientContacts.CLI_Id = ClientId;
+                    clientContacts.CON_Id = clientContactModel.CON_Id;
+                    clientContacts.CON_FirstName = clientContactModel.CON_FirstName;
+                    clientContacts.CON_SurName = clientContactModel.CON_SurName;
+                    clientContacts.CON_Designation = clientContactModel.CON_Designation;
+                    clientContacts.CON_Mobile = clientContactModel.CON_Mobile;
+                    clientContacts.CON_Email = clientContactModel.CON_Email;
+                    clientContacts.CON_isPrimary = clientContactModel.CON_isPrimary;
+                    clientContacts.CON_RegisteredOn = ProjectUtils.DateNow();
                     SessionUtils sessionUtils = new SessionUtils(Request, Response);
-                    clientContacts.AdmIdRegisteredBy = sessionUtils.GetLoggedAdminID();
+                    clientContacts.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
                     string res = clientsManager.saveAddEditContacts(clientContacts);
                     if (res != "")
                     {
@@ -280,35 +282,35 @@ namespace RMERP.Controllers
             Clients clients = new Clients();
            
             clients = clientsManager.GetClientById(ClientId);
-            clientRequirementsModel.CliName = clients.CliName;
-            clientRequirementsModel.CliId = clients.CliId;
-           clientRequirementsModel.CriActive = true;
+            clientRequirementsModel.CliName = clients.CLI_Name;
+            clientRequirementsModel.CLI_Id = clients.CLI_Id;
+           clientRequirementsModel.CRI_Active = true;
             clients = null;
             if (criId > 0)
             {
                 if (ClientId > 0)
                 {                                                      
-                    ClientRequirements clientRequirements = new ClientRequirements();
+                    Client_Requirements clientRequirements = new Client_Requirements();
                     clientRequirements=clientsManager.GetRequirementsById(criId);
-                    clientRequirementsModel.CriId = clientRequirements.CriId;
-                    clientRequirementsModel.CliId = clientRequirements.CliId;
-                    clientRequirementsModel.DesId = clientRequirements.DesId;
-                    clientRequirementsModel.CriBasic = clientRequirements.CriBasic;
-                    clientRequirementsModel.CriDa = clientRequirements.CriDa;
-                    clientRequirementsModel.CriBasicDa = clientRequirements.CriBasicDa;
-                    clientRequirementsModel.CriHraFixed = clientRequirements.CriHraFixed;
-                    clientRequirementsModel.CriHraPercentage = clientRequirements.CriHraPercentage;
-                    clientRequirementsModel.CriAllowanceUpKeep = clientRequirements.CriAllowanceUpKeep;
-                    clientRequirementsModel.CriAllowanceGrade = clientRequirements.CriAllowanceGrade;
-                    clientRequirementsModel.CriAllowanceConveyance = clientRequirements.CriAllowanceConveyance;
-                    clientRequirementsModel.CriAllowanceAttention = clientRequirements.CriAllowanceAttention;
-                    clientRequirementsModel.CriPfPercentage = clientRequirements.CriPfPercentage;
-                    clientRequirementsModel.CriEsicPercentage = clientRequirements.CriEsicPercentage;
-                    clientRequirementsModel.CriEsicArea = clientRequirements.CriEsicArea;
-                    clientRequirementsModel.CriOtRate = clientRequirements.CriOtRate;
-                    clientRequirementsModel.CriOtMultipleTimes = clientRequirements.CriOtMultipleTimes;
-                    clientRequirementsModel.CriWageCalculationOnWeeklyOffPlus = clientRequirements.CriWageCalculationOnWeeklyOffPlus;
-                    clientRequirementsModel.CriActive = clientRequirements.CriActive;
+                    clientRequirementsModel.CRI_Id = clientRequirements.CRI_Id;
+                    clientRequirementsModel.CLI_Id = clientRequirements.CLI_Id;
+                    clientRequirementsModel.DES_Id = clientRequirements.DES_Id;
+                    clientRequirementsModel.CRI_Basic = clientRequirements.CRI_Basic;
+                    clientRequirementsModel.CRI_DA = clientRequirements.CRI_DA;
+                    clientRequirementsModel.CRI_BasicDA = clientRequirements.CRI_BasicDA;
+                    clientRequirementsModel.CRI_HRA_Fixed = clientRequirements.CRI_HRA_Fixed;
+                    clientRequirementsModel.CRI_HRA_Percentage = clientRequirements.CRI_HRA_Percentage;
+                    clientRequirementsModel.CRI_Allowance_UpKeep = clientRequirements.CRI_Allowance_UpKeep;
+                    clientRequirementsModel.CRI_Allowance_Grade = clientRequirements.CRI_Allowance_Grade;
+                    clientRequirementsModel.CRI_Allowance_Conveyance = clientRequirements.CRI_Allowance_Conveyance;
+                    clientRequirementsModel.CRI_Allowance_Attention = clientRequirements.CRI_Allowance_Attention;
+                    clientRequirementsModel.CRI_PF_Percentage = clientRequirements.CRI_PF_Percentage;
+                    clientRequirementsModel.CRI_ESIC_Percentage = clientRequirements.CRI_ESIC_Percentage;
+                    clientRequirementsModel.CRI_ESIC_Area = clientRequirements.CRI_ESIC_Area;
+                    clientRequirementsModel.CRI_OT_Rate = clientRequirements.CRI_OT_Rate;
+                    clientRequirementsModel.CRI_OT_MultipleTimes = clientRequirements.CRI_OT_MultipleTimes;
+                    clientRequirementsModel.CRI_WageCalculationOnWeeklyOffPlus = clientRequirements.CRI_WageCalculationOnWeeklyOffPlus;
+                    clientRequirementsModel.CRI_Active = clientRequirements.CRI_Active;
                     if (!string.IsNullOrEmpty(tab))
                     {
                         clientRequirementsModel.tabName = tab;
@@ -325,28 +327,28 @@ namespace RMERP.Controllers
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             if (ModelState.IsValid)
             {
-                ClientRequirements cr = new ClientRequirements();
-                cr.CriId = clientRequirementsModel.CriId;
-                cr.CliId = clientRequirementsModel.CliId;
-                cr.DesId = clientRequirementsModel.DesId;
-                cr.CriBasic = clientRequirementsModel.CriBasic;
-                cr.CriDa = clientRequirementsModel.CriDa;
-                cr.CriBasicDa = clientRequirementsModel.CriBasicDa;
-                cr.CriHraFixed = clientRequirementsModel.CriHraFixed;
-                cr.CriHraPercentage = clientRequirementsModel.CriHraPercentage;
-                cr.CriAllowanceUpKeep = clientRequirementsModel.CriAllowanceUpKeep;
-                cr.CriAllowanceGrade = clientRequirementsModel.CriAllowanceGrade;
-                cr.CriAllowanceConveyance = clientRequirementsModel.CriAllowanceConveyance;
-                cr.CriAllowanceAttention = clientRequirementsModel.CriAllowanceAttention;
-                cr.CriPfPercentage = clientRequirementsModel.CriPfPercentage;
-                cr.CriEsicPercentage = clientRequirementsModel.CriEsicPercentage;
-                cr.CriEsicArea = clientRequirementsModel.CriEsicArea;
-                cr.CriOtRate = clientRequirementsModel.CriOtRate;
-                cr.CriOtMultipleTimes = clientRequirementsModel.CriOtMultipleTimes;
-                cr.CriWageCalculationOnWeeklyOffPlus = clientRequirementsModel.CriWageCalculationOnWeeklyOffPlus;
-                cr.CriActive = clientRequirementsModel.CriActive;
+                Client_Requirements cr = new Client_Requirements();
+                cr.CRI_Id = clientRequirementsModel.CRI_Id;
+                cr.CLI_Id = clientRequirementsModel.CLI_Id;
+                cr.DES_Id = clientRequirementsModel.DES_Id;
+                cr.CRI_Basic = clientRequirementsModel.CRI_Basic;
+                cr.CRI_DA = clientRequirementsModel.CRI_DA;
+                cr.CRI_BasicDA = clientRequirementsModel.CRI_BasicDA;
+                cr.CRI_HRA_Fixed = clientRequirementsModel.CRI_HRA_Fixed;
+                cr.CRI_HRA_Percentage = clientRequirementsModel.CRI_HRA_Percentage;
+                cr.CRI_Allowance_UpKeep = clientRequirementsModel.CRI_Allowance_UpKeep;
+                cr.CRI_Allowance_Grade = clientRequirementsModel.CRI_Allowance_Grade;
+                cr.CRI_Allowance_Conveyance = clientRequirementsModel.CRI_Allowance_Conveyance;
+                cr.CRI_Allowance_Attention = clientRequirementsModel.CRI_Allowance_Attention;
+                cr.CRI_PF_Percentage = clientRequirementsModel.CRI_PF_Percentage;
+                cr.CRI_ESIC_Percentage = clientRequirementsModel.CRI_ESIC_Percentage;
+                cr.CRI_ESIC_Area = clientRequirementsModel.CRI_ESIC_Area;
+                cr.CRI_OT_Rate = clientRequirementsModel.CRI_OT_Rate;
+                cr.CRI_OT_MultipleTimes = clientRequirementsModel.CRI_OT_MultipleTimes;
+                cr.CRI_WageCalculationOnWeeklyOffPlus = clientRequirementsModel.CRI_WageCalculationOnWeeklyOffPlus;
+                cr.CRI_Active = clientRequirementsModel.CRI_Active;
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
-                cr.AdmIdInactivatedBy =sessionUtils.GetLoggedAdminID();
+                cr.ADM_Id_InactivatedBy =sessionUtils.GetLoggedAdminID();
 
                 res =clientsManager.AddEditRequirement(cr);
             }
@@ -364,9 +366,9 @@ namespace RMERP.Controllers
             DesignationManager designationManager = new DesignationManager(_context);
             ClientRequirementsViewModel crvm = new ClientRequirementsViewModel();
             crvm.ClientRequirementsModel = new ClientRequirementsModel();
-            crvm.ClientRequirementsList = clientsManager.GetClientRequirementsList(desId, cliId, false);
+            crvm.ClientRequirementsList = clientsManager.GetClient_RequirementsList(desId, cliId, false);
             crvm.ClientRequirementsModel.DesTitle = designationManager.GetDesignationsById(desId);
-            crvm.ClientRequirementsModel.CliName = clientsManager.GetClientById(ClientId).CliName;
+            crvm.ClientRequirementsModel.CliName = clientsManager.GetClientById(ClientId).CLI_Name;
             return View(crvm);
         }
 
@@ -374,26 +376,26 @@ namespace RMERP.Controllers
         public ActionResult Parameters(ClientsViewModel cvm)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            if (cvm.clientsModel.CliId > 0)
+            if (cvm.clientsModel.CLI_Id > 0)
             {
                 Clients clients = new Clients();
-                clients.CliId = cvm.clientsModel.CliId;
-                clients.CliGstNumber = cvm.ParametersClientsModel.CliGstNumber;
-                clients.CliGstRate = cvm.ParametersClientsModel.CliGstRate;
-                clients.CliTdsRate = cvm.ParametersClientsModel.CliTdsRate;
-                clients.CliHsnCode = cvm.ParametersClientsModel.CliHsnCode;
+                clients.CLI_Id = cvm.clientsModel.CLI_Id;
+                clients.CLI_GST_Number = cvm.ParametersClientsModel.clientsModel.CLI_GST_Number;
+                clients.CLI_GST_Rate = cvm.ParametersClientsModel.clientsModel.CLI_GST_Rate;
+                clients.CLI_TDS_Rate = cvm.ParametersClientsModel.clientsModel.CLI_TDS_Rate;
+                clients.CLI_HSN_Code = cvm.ParametersClientsModel.clientsModel.CLI_HSN_Code;
 
-                if (cvm.ParametersClientsModel.CliAttMonthReal ==true)
+                if (cvm.ParametersClientsModel.CLI_Att_MonthReal ==true)
                 {
-                    clients.CliAttMonthReal = true;
-                    clients.CliAttMonthStart = null;
-                    clients.CliAttMonthEnd = null;
+                    clients.CLI_Att_MonthReal = true;
+                    clients.CLI_Att_Month_Start = null;
+                    clients.CLI_Att_Month_End = null;
                 }
                 else
                 {
-                    clients.CliAttMonthReal = false;
-                    clients.CliAttMonthStart = cvm.ParametersClientsModel.CliAttMonthStart;
-                    clients.CliAttMonthEnd = cvm.ParametersClientsModel.CliAttMonthEnd;
+                    clients.CLI_Att_MonthReal = false;
+                    clients.CLI_Att_Month_Start = cvm.ParametersClientsModel.CLI_Att_Month_Start;
+                    clients.CLI_Att_Month_End = cvm.ParametersClientsModel.CLI_Att_Month_End;
                 }
                 clientsManager.UpdateParameters(clients);
             }
@@ -412,8 +414,8 @@ namespace RMERP.Controllers
             ViewBag.EmployeeList = listEmployee;
 
             ViewBag.designationList = listDesignations;
-            cvm.CliId = ClientId;
-            ViewBag.ClientName = clientsManager.GetClientById(ClientId).CliName;
+            cvm.CLI_Id = ClientId;
+            ViewBag.ClientName = clientsManager.GetClientById(ClientId).CLI_Name;
             //if (CleId > 0)
             //{
             //    ClientsEmployees ce = new ClientsEmployees();
@@ -430,11 +432,11 @@ namespace RMERP.Controllers
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             if (ModelState.IsValid)
             {
-                ClientsEmployees clientsEmployees = new ClientsEmployees();
-                clientsEmployees.CleId = cvm.CleId;
-                clientsEmployees.CliId = cvm.CliId;
-                clientsEmployees.DesId = cvm.DesId;
-                clientsEmployees.EmpId = cvm.EmpId;
+                Clients_Employees clientsEmployees = new Clients_Employees();
+                clientsEmployees.CLE_Id = cvm.CLE_Id;
+                clientsEmployees.CLI_Id = cvm.CLI_Id;
+                clientsEmployees.DES_Id = cvm.DES_Id;
+                clientsEmployees.EMP_Id = cvm.EMP_Id;
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
                 res = clientsManager.ClientEmployee(clientsEmployees, sessionUtils.GetLoggedAdminID());
                 if (res != string.Empty)
@@ -511,22 +513,22 @@ namespace RMERP.Controllers
 
                 DateTime startDate = DateTime.Now, endDate = DateTime.Now;
 
-                if (client.CliAttMonthReal == true)
+                if (client.CLI_Att_MonthReal == true)
                 {
                     startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                     endDate = startDate.AddMonths(1).AddDays(-1);
                 }
-                else if (client.CliAttMonthReal == false)
+                else if (client.CLI_Att_MonthReal == false)
                 {
-                    startDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CliAttMonthStart.Value);
-                    endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CliAttMonthEnd.Value); ;
+                    startDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CLI_Att_Month_Start.Value);
+                    endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CLI_Att_Month_End.Value); ;
                 }
                 int TotalDays = Convert.ToInt32((endDate - startDate).TotalDays) + 8;
 
 
                 string fullMonthName = DateTime.Now.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
                 ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue(client.CliName);
+                CellHeader.SetCellValue(client.CLI_Name);
                 CellHeader.CellStyle = styleHeader;
                 CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 4));
@@ -589,9 +591,9 @@ namespace RMERP.Controllers
                     row = excelSheet.CreateRow(rowCount);
                     row.CreateCell(0).SetCellValue(j);                 
 
-                    row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EmpId));
-                    row.CreateCell(2).SetCellValue(item.Des.DesTitle);
-                    row.CreateCell(3).SetCellValue(item.Emp.EmpFirstName+" "+ item.Emp.EmpMiddleName+" "+ item.Emp.EmpSurName);
+                    row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
+                    row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
+                    row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName+" "+ item.EMP_.EMP_MiddleName+" "+ item.EMP_.EMP_SurName);
 
                     excelSheet.SetColumnWidth(2, 6000);
                     excelSheet.SetColumnWidth(3, 6000);
@@ -668,22 +670,22 @@ namespace RMERP.Controllers
 
                 DateTime startDate = DateTime.Now, endDate = DateTime.Now;
 
-                if (client.CliAttMonthReal == true)
+                if (client.CLI_Att_MonthReal == true)
                 {
                     startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                     endDate = startDate.AddMonths(1).AddDays(-1);
                 }
-                else if (client.CliAttMonthReal == false)
+                else if (client.CLI_Att_MonthReal == false)
                 {
-                    startDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CliAttMonthStart.Value);
-                    endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CliAttMonthEnd.Value); ;
+                    startDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CLI_Att_Month_Start.Value);
+                    endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CLI_Att_Month_End.Value); ;
                 }
                 int TotalDays = Convert.ToInt32((endDate - startDate).TotalDays) + 6;
 
 
                 string fullMonthName = DateTime.Now.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
                 ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue(client.CliName);
+                CellHeader.SetCellValue(client.CLI_Name);
                 CellHeader.CellStyle = styleHeader;
                 CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 2));
@@ -735,9 +737,9 @@ namespace RMERP.Controllers
                 {
                     row = excelSheet.CreateRow(rowCount);
                     row.CreateCell(0).SetCellValue(j);                   
-                    row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EmpId));
-                    row.CreateCell(2).SetCellValue(item.Des.DesTitle);
-                    row.CreateCell(3).SetCellValue(item.Emp.EmpFirstName + " " + item.Emp.EmpMiddleName + " " + item.Emp.EmpSurName);
+                    row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
+                    row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
+                    row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + " " + item.EMP_.EMP_MiddleName + " " + item.EMP_.EMP_SurName);
 
                     excelSheet.SetColumnWidth(2, 6000);
                     excelSheet.SetColumnWidth(3, 6000);

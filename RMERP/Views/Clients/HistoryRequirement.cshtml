@@ -6,14 +6,7 @@
 
 @if (Model.ClientRequirementsList.Count()>0)
 {
-    @*<div class="col-sm-12">
 
-            <div class="col-sm-8">
-                <h4 class="page-title">@Model.ClientRequirementsModel.CliName</h4>
-                </div><div class="col-sm-4">
-            <h6>Designation -<b>@Model.ClientRequirementsModel.DesTitle</b></h6>
-        </div>
-        </div>*@
 <div class="col-sm-8">
     <h4 class="page-title">@Model.ClientRequirementsModel.CliName</h4>
     <p><b>Designation - @Model.ClientRequirementsModel.DesTitle</b></p>
@@ -30,13 +23,13 @@
                 @foreach (var item in Model.ClientRequirementsList)
                 {
                     <tr>                      
-                        <td>@(Convert.ToDecimal(item.CriBasic) == (0.0m) ? item.CriBasicDa : (item.CriBasic + Convert.ToDecimal(item.CriDa)))</td>
-                        <td>@item.CriRegisteredOn</td>                       
+                        <td>@(Convert.ToDecimal(item.CRI_Basic) == (0.0m) ? item.CRI_BasicDA : (item.CRI_Basic + Convert.ToDecimal(item.CRI_DA)))</td>
+                        <td>@item.CRI_RegisteredOn</td>                       
                         <td class="text-right">
                             <div class="dropdown">
                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href='@Url.Action("AddEditRequirement","Clients",new { criId=item.CriId,tab="History"})' title="ViewRequirement"><i class="fa fa-pencil m-r-5"></i> View </a></li>
+                                    <li><a href='@Url.Action("AddEditRequirement","Clients",new { criId=item.CRI_Id,tab="History"})' title="ViewRequirement"><i class="fa fa-pencil m-r-5"></i> View </a></li>
                                 </ul>
                             </div>
                         </td>

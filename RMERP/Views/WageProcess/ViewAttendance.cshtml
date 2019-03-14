@@ -47,7 +47,7 @@
                     </thead>
                     <tbody>
                         @{
-                            List<Employees> employees = Model.Select(m => m.Emp).Distinct().ToList();
+                            List<Employees> employees = Model.Select(m => m.EMP_).Distinct().ToList();
                         }
 
 
@@ -55,8 +55,8 @@
                         {
 
                             <tr>
-                                <td>@item.EmpFirstName</td>
-                                <td>@item.EmpDesignation</td>
+                                <td>@item.EMP_FirstName</td>
+                                <td>@item.EMP_Designation</td>
                                 @{
                                     int counter1 = 0;
                                     DateTime tmpDate1 = ViewBag.startDate;
@@ -65,7 +65,7 @@
                                     while (ViewBag.endDate >= tmpDate1)
                                     {
                                         counter1 = counter1 + 1;
-                                        Attendance att = Model.Where(m => m.EmpId == item.EmpId && m.AttDate.Equals(tmpDate1)).FirstOrDefault();
+                                        Attendance att = Model.Where(m => m.EMP_Id == item.EMP_Id && m.ATT_Date.Equals(tmpDate1)).FirstOrDefault();
 
                                         if (att != null)
                                         {
@@ -74,13 +74,13 @@
                                                 <div class="row">
                                                     @{
                                                         String str = "";
-                                                        if (att.AttIsWeeklyOff)
+                                                        if (att.ATT_IsWeeklyOff)
                                                         {
                                                             str = "<span style='color:red;'>W/O</span>";
                                                         }
                                                         else
                                                         {
-                                                            if (att.AttIsPresent)
+                                                            if (att.ATT_IsPresent)
                                                             {
                                                                 str = "P";
                                                             }
@@ -94,44 +94,44 @@
                                                     <div class="col-md-12">
                                                         @{
                                                             @Html.Raw("Extra Hrs: ");
-                                                            if (att.AttExtraHoursWorked == 0)
+                                                            if (att.ATT_ExtraHoursWorked == 0)
                                                             {
                                                                 // @:&nbsp;
                                                                 @Html.Raw("-");
                                                             }
                                                             else
                                                             {
-                                                                @att.AttExtraHoursWorked.ToString("#.#")
+                                                                @att.ATT_ExtraHoursWorked.ToString("#.#")
                                                             }
                                                         }
                                                     </div>
                                                     <div class="col-md-12">
                                                         @{
-                                                            if (att.AttShift == null)
+                                                            if (att.ATT_Shift == null)
                                                             {
                                                                 @:&nbsp;
                                                             }
                                                             else
                                                             {
                                                                 @Html.Raw("[ ");
-                                                                @att.AttShift.ToString()                                                        
+                                                                @att.ATT_Shift.ToString()                                                        
                                                             
                                                             @Html.Raw(" ]");
                                                         }
                                                         }
                                                     </div>
                                                     <div class="col-md-12">
-                                                        <a href='@Url.Action("EditAttendanceRecord","WageProcess",new { attId=att.AttId})' title="Edit"><i class="fa fa-pencil m-r-5"></i></a>
+                                                        <a href='@Url.Action("EditAttendanceRecord","WageProcess",new { attId=att.ATT_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i></a>
                                                     </div>
 
                                             </td>
-                                            if (att.AttIsPresent == true)
+                                            if (att.ATT_IsPresent == true)
                                             {
                                                 totWorkingDays++;
                                             }
-                                            if (att.AttExtraHoursWorked > 0)
+                                            if (att.ATT_ExtraHoursWorked > 0)
                                             {
-                                                totExtraWorkingHours += att.AttExtraHoursWorked;
+                                                totExtraWorkingHours += att.ATT_ExtraHoursWorked;
                                             }
 
                                         }

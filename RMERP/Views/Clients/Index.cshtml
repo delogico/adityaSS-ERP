@@ -17,7 +17,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             debugger;
-            $("#clientsModel_CliName").bind("keyup", function () {
+            $("#clientsModel_CLI_Name").bind("keyup", function () {
                 searchClientList();
             });
         });
@@ -38,7 +38,7 @@
         });
         function searchClientList() {
             debugger;
-            var client = $("#clientsModel_CliName").val();
+            var client = $("#clientsModel_CLI_Name").val();
             var Url = siteUrl + "Clients/GetClientList?Client=" + client;
             $.ajax({
                 type: "GET",
@@ -66,14 +66,14 @@
                 <div class="col-sm-3 col-xs-6">
                     <div class="form-group form-focus">
                         <label class="control-label">Client Name</label>
-                        @Html.TextBoxFor(m => m.clientsModel.CliName, new {@class="form-control floating",@onclick= "searchClientList(this)"})
+                        @Html.TextBoxFor(m => m.clientsModel.CLI_Name, new {@class="form-control floating",@onclick= "searchClientList(this)"})
                     </div>
                 </div>
                 @*<div class="col-sm-3 col-xs-6">
                     <div class="form-group form-focus select-focus">
                         <label class="control-label">Active Clients</label>                     
                         
-                        @Html.DropDownListFor(m => m.clientsModel.CliId, new SelectList(ViewBag.List, "CliId", "CliName"), "Select Client", new { @class = "select floating",@onchange= "searchClientList(this)" })
+                        @Html.DropDownListFor(m => m.clientsModel.CLI_Id, new SelectList(ViewBag.List, "CLI_Id", "CLI_Name"), "Select Client", new { @class = "select floating",@onchange= "searchClientList(this)" })
                     </div>
                 </div>*@
                 @*<div class="col-sm-3 col-xs-6">

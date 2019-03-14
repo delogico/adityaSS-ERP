@@ -86,73 +86,6 @@ namespace RMERP.Controllers
             cvm.WageID = wagId;
             return View(cvm);
         }
-        public ActionResult UploadPage(int wagId, int CliId)
-        {
-            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            UploadPageViewModel upvm = new UploadPageViewModel();
-            upvm.WageMonth = wpm.GetMonthFromID(wagId);
-            upvm.ClientName = clientsManager.GetClientById(CliId).CliName;
-            upvm.WageId = wagId;
-            upvm.ClientId = CliId;
-            return View(upvm);
-        }
-     
-        [HttpPost]
-        public ActionResult DisplayWageProcessData(UploadPageViewModel uvm)
-        {
-            IFormFile file = uvm.TemplateFile;           
-            List<DisplayExcel> list = new List<DisplayExcel>();
-            int TotEmp = 0;
-            string folderName = "RMERP_Data";
-            string webRootPath = _hostingEnvironment.WebRootPath;
-            string newPath = Path.Combine(webRootPath, folderName);
-            StringBuilder sb = new StringBuilder();
-            if (!Directory.Exists(newPath))
-            {
-                Directory.CreateDirectory(newPath);
-            }
-            if (file != null)
-            {
-                if (file.Length > 0)
-                {
-                    string sFileExtension = Path.GetExtension(file.FileName).ToLower();
-                    ISheet sheet;
-                    string fullPath = Path.Combine(newPath, file.FileName);
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                        stream.Position = 0;
-                        if (sFileExtension == ".xls")
-                        {
-                            HSSFWorkbook hssfwb = new HSSFWorkbook(stream); //This will read the Excel 97-2000 formats  
-                            sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook  
-                        }
-                        else
-                        {
-                            XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
-                            sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook   
-                        }
-                        IRow headerRow = sheet.GetRow(0); //Get Header Row
-                        int cellCount = headerRow.LastCellNum;
-                        #region rinku
-                        for (int i = (sheet.FirstRowNum + 2); i <= sheet.LastRowNum; i++)
-                        {
-                            DisplayExcel displayExcel = new DisplayExcel();
-                            IRow row = sheet.GetRow(i);
-                            if (row == null) continue;
-                            if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
-                            displayExcel.EmpName = row.GetCell(2).ToString();
-                            displayExcel.DesName = row.GetCell(3).ToString();
-                            TotEmp++;
-                            list.Add(displayExcel);
-                        }
-                        #endregion
-                    }
-                }
-            }
-            ViewBag.totEmp = TotEmp;
-            return View(list);
-        }
         [HttpGet]
         public ActionResult ViewAttendance(int wagId,int CliId)
         {
@@ -163,16 +96,16 @@ namespace RMERP.Controllers
 
             Clients client = clientsManager.GetClientById(CliId);
             DateTime startDate = DateTime.Now, endDate = DateTime.Now;
-            ViewBag.ClientName = client.CliName;
-            if (client.CliAttMonthReal == true)
+            ViewBag.ClientName = client.CLI_Name;
+            if (client.CLI_Att_MonthReal == true)
             {
                 startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                 endDate = startDate.AddMonths(1).AddDays(-1);
             }
-            else if (client.CliAttMonthReal == false)
+            else if (client.CLI_Att_MonthReal == false)
             {
-                startDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CliAttMonthStart.Value);
-                endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CliAttMonthEnd.Value); ;
+                startDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CLI_Att_Month_Start.Value);
+                endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CLI_Att_Month_End.Value); ;
             }
             ViewBag.startDate = startDate;
             ViewBag.endDate = endDate;
@@ -206,8 +139,8 @@ namespace RMERP.Controllers
             List<Attendance> list = wpm.GetAttendanceList(WagID, clientID, empId);          
             alvm.attendancesList = list;
             alvm.EmpID = empId;
-            alvm.EmpName = list.FirstOrDefault().Emp.EmpFirstName;
-            alvm.EmpDesignation = list.FirstOrDefault().Emp.EmpDesignation;
+            alvm.EmpName = list.FirstOrDefault().EMP_.EMP_FirstName;
+            alvm.EmpDesignation = list.FirstOrDefault().EMP_.EMP_Designation;
             return View(alvm);
         }
         [HttpPost]
@@ -217,18 +150,18 @@ namespace RMERP.Controllers
             foreach(var item in alvm.attendancesList)
             {
                 Attendance attendance = new Attendance();
-                attendance.AttId = item.AttId;
-                attendance.AttIsPresent = item.AttIsPresent;
-                attendance.AttIsWeeklyOff = item.AttIsWeeklyOff;
-                attendance.AttExtraHoursWorked = item.AttExtraHoursWorked;
+                attendance.ATT_Id = item.ATT_Id;
+                attendance.ATT_IsPresent = item.ATT_IsPresent;
+                attendance.ATT_IsWeeklyOff = item.ATT_IsWeeklyOff;
+                attendance.ATT_ExtraHoursWorked = item.ATT_ExtraHoursWorked;
                 res=wpm.UpdateAttendance(attendance);
             }
 
             return RedirectToAction("ViewAttendance", new { wagId = WagID , CliId = clientID });
         }
-        public ActionResult ImportWageProcessData(UploadPageViewModel uvm)
+        public ActionResult ImportWageProcessData(UploadExcelViewModel uvm)
         {
-            IFormFile file = uvm.TemplateFile;
+            IFormFile file = uvm.ExcelFile;
             string folderName = "RMERP_Data";
             string webRootPath = _hostingEnvironment.WebRootPath;
             string newPath = Path.Combine(webRootPath, folderName);
@@ -294,20 +227,20 @@ namespace RMERP.Controllers
             if (attID > 0)
             {
                 att = wpm.GetAttendanceById(attID);
-                alvm.attendanceViewModel.AttId = attID;
-                alvm.attendanceViewModel.CriId = att.CriId;
-                alvm.attendanceViewModel.CliId = att.CliId;
-                alvm.attendanceViewModel.EmpId = att.EmpId;
-                alvm.attendanceViewModel.WagId = att.WagId;
-                alvm.attendanceViewModel.AttImportedOn = att.AttImportedOn;
-                alvm.attendanceViewModel.AttIsEarnLeave = att.AttIsEarnLeave;
-                alvm.attendanceViewModel.AttIsPaidHoliday = att.AttIsPaidHoliday;
-                alvm.attendanceViewModel.AttIsPresent = att.AttIsPresent;
-                alvm.attendanceViewModel.AttIsWeeklyOff = att.AttIsWeeklyOff;
-                alvm.attendanceViewModel.AttShift = att.AttShift;
-                alvm.attendanceViewModel.AttDate = att.AttDate;        
-                alvm.attendanceViewModel.AdmIdImportedBy = att.AdmIdImportedBy;
-                alvm.attendanceViewModel.AttExtraHoursWorked = att.AttExtraHoursWorked;
+                alvm.attendanceViewModel.ATT_Id = attID;
+                alvm.attendanceViewModel.CRI_Id = att.CRI_Id;
+                alvm.attendanceViewModel.CLI_Id = att.CLI_Id;
+                alvm.attendanceViewModel.EMP_Id = att.EMP_Id;
+                alvm.attendanceViewModel.WAG_Id = att.WAG_Id;
+                alvm.attendanceViewModel.ATT_ImportedOn = att.ATT_ImportedOn;
+                alvm.attendanceViewModel.ATT_IsEarnLeave = att.ATT_IsEarnLeave;
+                alvm.attendanceViewModel.ATT_IsPaidHoliday = att.ATT_IsPaidHoliday;
+                alvm.attendanceViewModel.ATT_IsPresent = att.ATT_IsPresent;
+                alvm.attendanceViewModel.ATT_IsWeeklyOff = att.ATT_IsWeeklyOff;
+                alvm.attendanceViewModel.ATT_Shift = att.ATT_Shift;
+                alvm.attendanceViewModel.ATT_Date = att.ATT_Date;        
+                alvm.attendanceViewModel.ADM_Id_ImportedBy = att.ADM_Id_ImportedBy;
+                alvm.attendanceViewModel.ATT_ExtraHoursWorked = att.ATT_ExtraHoursWorked;
             }
             return View(alvm);
         }
@@ -319,20 +252,20 @@ namespace RMERP.Controllers
 
             if (ModelState.IsValid)
             {
-                atta.AttId = alvm.attendanceViewModel.AttId;
-                atta.AttImportedOn = alvm.attendanceViewModel.AttImportedOn;
-                atta.AttIsEarnLeave = alvm.attendanceViewModel.AttIsEarnLeave;
-                atta.AttIsPaidHoliday = alvm.attendanceViewModel.AttIsPaidHoliday;
-                atta.AttIsPresent = alvm.attendanceViewModel.AttIsPresent;
-                atta.AttIsWeeklyOff = alvm.attendanceViewModel.AttIsWeeklyOff;
-                atta.AttDate = alvm.attendanceViewModel.AttDate;
-                atta.AdmIdImportedBy = alvm.attendanceViewModel.AdmIdImportedBy;
-                atta.AttShift = alvm.attendanceViewModel.AttShift;
-                atta.CliId = alvm.attendanceViewModel.CliId;
-                atta.EmpId = alvm.attendanceViewModel.EmpId;
-                atta.CriId = alvm.attendanceViewModel.CriId;
-                atta.WagId = alvm.attendanceViewModel.WagId;
-                atta.AttExtraHoursWorked = alvm.attendanceViewModel.AttExtraHoursWorked;
+                atta.ATT_Id = alvm.attendanceViewModel.ATT_Id;
+                atta.ATT_ImportedOn = alvm.attendanceViewModel.ATT_ImportedOn;
+                atta.ATT_IsEarnLeave = alvm.attendanceViewModel.ATT_IsEarnLeave;
+                atta.ATT_IsPaidHoliday = alvm.attendanceViewModel.ATT_IsPaidHoliday;
+                atta.ATT_IsPresent = alvm.attendanceViewModel.ATT_IsPresent;
+                atta.ATT_IsWeeklyOff = alvm.attendanceViewModel.ATT_IsWeeklyOff;
+                atta.ATT_Date = alvm.attendanceViewModel.ATT_Date;
+                atta.ADM_Id_ImportedBy = alvm.attendanceViewModel.ADM_Id_ImportedBy;
+                atta.ATT_Shift = alvm.attendanceViewModel.ATT_Shift;
+                atta.CLI_Id = alvm.attendanceViewModel.CLI_Id;
+                atta.EMP_Id = alvm.attendanceViewModel.EMP_Id;
+                atta.CRI_Id = alvm.attendanceViewModel.CRI_Id;
+                atta.WAG_Id = alvm.attendanceViewModel.WAG_Id;
+                atta.ATT_ExtraHoursWorked = alvm.attendanceViewModel.ATT_ExtraHoursWorked;
 
                 res = wpm.UpdateAttendance(atta);
             }

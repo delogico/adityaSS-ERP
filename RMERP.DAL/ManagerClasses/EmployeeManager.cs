@@ -20,8 +20,8 @@ namespace RMERP.DAL.ManagerClasses
             string res = string.Empty;
             try
             {
-                employees.EmpRegisteredOn = ProjectUtils.DateNow();
-                if (employees.EmpId > 0)
+                employees.EMP_RegisteredOn = ProjectUtils.DateNow();
+                if (employees.EMP_Id > 0)
                 {
                     _context.Employees.Update(employees);
                 }
@@ -41,7 +41,7 @@ namespace RMERP.DAL.ManagerClasses
         {
             try
             {
-                IEnumerable<Employees> listEmployees = _context.Employees.Include(m=>m.Dept).OrderBy(m => m.EmpFirstName).ToList();
+                IEnumerable<Employees> listEmployees = _context.Employees.Include(m=>m.DEPT_).OrderBy(m => m.EMP_FirstName).ToList();
                 return listEmployees;
             }
             catch (Exception ex)
@@ -56,7 +56,7 @@ namespace RMERP.DAL.ManagerClasses
             try
             {
                 Employees employees = new Employees();
-                employees = _context.Employees.Where(m => m.EmpId.Equals(EmpID)).FirstOrDefault();
+                employees = _context.Employees.Where(m => m.EMP_Id.Equals(EmpID)).FirstOrDefault();
                 return employees;
             }
             catch (Exception ex)
@@ -72,8 +72,8 @@ namespace RMERP.DAL.ManagerClasses
             try
             {
                 employees = _context.Employees.Find(EmpId);
-                employees.EmpIsActive=(employees.EmpIsActive == false? true:false);
-                employees.AdmIdInactivatedBy = AdminId;
+                employees.EMP_IsActive=(employees.EMP_IsActive == false? true:false);
+                employees.ADM_Id_InactivatedBy = AdminId;
                 _context.Employees.Update(employees);
                 _context.SaveChanges();
             }

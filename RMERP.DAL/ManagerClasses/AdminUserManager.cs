@@ -17,19 +17,19 @@ namespace RMERP.DAL.ManagerClasses
         }
         public AdminUsers Login(AdminUsers adminUsers)
         {
-            var user = _context.AdminUsers.Where(m => m.AdmEmailId.Equals(adminUsers.AdmEmailId) && m.AdmPassword.Equals(adminUsers.AdmPassword)).FirstOrDefault();
+            var user = _context.AdminUsers.Where(m => m.ADM_EmailId.Equals(adminUsers.ADM_EmailId) && m.ADM_Password.Equals(adminUsers.ADM_Password)).FirstOrDefault();
             return user;
         }
         public IEnumerable<AdminUsers> getAdminUsersList()
         {
-            var adminUserList = _context.AdminUsers.Include(m => m.Frm);
+            var adminUserList = _context.AdminUsers.Include(m => m.FRM_);
             return adminUserList.ToList();
         }
         public string AddEditAdminUsers(AdminUsers adminUsers)
         {
             try
             {
-                if (adminUsers.AdmId != 0)
+                if (adminUsers.ADM_Id != 0)
                 {
                     _context.Update(adminUsers);
                 }

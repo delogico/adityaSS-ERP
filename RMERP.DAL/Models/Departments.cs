@@ -10,8 +10,8 @@ namespace RMERP.DAL.Models
             Employees = new HashSet<Employees>();
         }
 
-        public int DeptId { get; set; }
-        public string DeptTitle { get; set; }
+        public int DEPT_Id { get; set; }
+        public string DEPT_Title { get; set; }
 
         public ICollection<Employees> Employees { get; set; }
     }

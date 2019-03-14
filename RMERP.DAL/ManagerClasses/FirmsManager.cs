@@ -16,7 +16,7 @@ namespace RMERP.DAL.ManagerClasses
         public IEnumerable<Firms> getFirmList()
         {
             List<Firms> listFirms = new List<Firms>();
-            listFirms = _context.Firms.OrderBy(m=>m.FrmName).ToList();
+            listFirms = _context.Firms.OrderBy(m=>m.FRM_Name).ToList();
             return listFirms;
         }  
         public string saveEditFirm(Firms firms)
@@ -24,7 +24,7 @@ namespace RMERP.DAL.ManagerClasses
             string res = string.Empty;
             try
             {
-                if (firms.FrmId > 0)
+                if (firms.FRM_Id > 0)
                 {
                     _context.Firms.Update(firms);
                 }

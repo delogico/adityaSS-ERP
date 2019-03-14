@@ -13,134 +13,76 @@ namespace RMERP.DAL.ViewModel
         public ClientsModel clientsModel { get; set; }
         public ParametersClientsModel ParametersClientsModel { get; set; }
         public IEnumerable<Clients> Listclients { get; set; }
-        public IEnumerable<ClientContacts> ListClientContact { get; set; }
+        public IEnumerable<Client_Contacts> ListClientContact { get; set; }
         public ClientRequirementsModel clientRequirementsModel { get; set; }
-        public IEnumerable<ClientRequirements> ListClientRequirements { get; set; }
+        public IEnumerable<Client_Requirements> ListClientRequirements { get; set; }
         public ClientsEmployeesViewModel ClientsEmployeesViewModel { get; set; }
-        public IEnumerable<ClientsEmployees> ClientsEmployeesList { get; set; }
+        public IEnumerable<Clients_Employees> ClientsEmployeesList { get; set; }
         public int WageID { get; set; }
       
     }
     public class ClientsModel
     {
         [Key]
-        public int CliId { get; set; }
+        public int CLI_Id { get; set; }
         [Display(Name = "Firm")]
         [Required(ErrorMessage = "Please select firm")]
-        public int FrmId { get; set; }
+        public int FRM_Id { get; set; }
         [Display(Name = "Name")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter name")]
-        public string CliName { get; set; }
+        public string CLI_Name { get; set; }
         [Display(Name = "Domain")]
         [Required(ErrorMessage = "Please choose country domain")]
-        public byte CliInternationalDomestic { get; set; }
+        public byte CLI_International_Domestic { get; set; }
         [Display(Name = "Address")]
         [Required(ErrorMessage = "Please enter address")]
-        public string CliAddress { get; set; }
+        public string CLI_Address { get; set; }
         [Display(Name = "City")]
         [Required(ErrorMessage = "Please select city")]
-        public int CityId { get; set; }
+        public int CITY_Id { get; set; }
         [Display(Name = "Pincode")]
         [Required(ErrorMessage = "Please enter pincode")]
         [StringLength(6, MinimumLength = 6, ErrorMessage = "Pincode should have 6 digit ")]
-        public string CliPincode { get; set; }
+        public string CLI_Pincode { get; set; }
         [Display(Name = "Phone")]
         [Required(ErrorMessage = "Please enter phone")]
-        public string CliPhone { get; set; }
+        public string CLI_Phone { get; set; }
         [Display(Name = "Fax")]
-        public string CliFax { get; set; }
+        public string CLI_Fax { get; set; }
         [Display(Name = "Primary email")]
         [EmailAddress]
         [DataType(DataType.EmailAddress)]
         [Required(ErrorMessage = "Please enter email")]
-        public string CliEmail { get; set; }
+        public string CLI_Email { get; set; }
         [Display(Name = "Secondary email")]
         [EmailAddress]
-        public string CliEmail2 { get; set; }
+        public string CLI_Email_2 { get; set; }
         [Display(Name = "GST no")]
-        public string CliGstNumber { get; set; }
+        public string CLI_GST_Number { get; set; }
         [Display(Name = "GST rate")]
-        public int CliGstRate { get; set; }
+        public int CLI_GST_Rate { get; set; }
         [Display(Name = "HSN code")]
-        public string CliHsnCode { get; set; }
+        public string CLI_HSN_Code { get; set; }
         [Display(Name = "TDS rate")]
-        public int CliTdsRate { get; set; }
-        public int AdmIdRegisterBy { get; set; }
-        public DateTime CliRegisteredOn { get; set; }
-        public bool? CliIsActive { get; set; }
+        public int CLI_TDS_Rate { get; set; }
+        public int ADM_Id_RegisterBy { get; set; }
+        public DateTime CLI_RegisteredOn { get; set; }
+        public bool? CLI_IsActive { get; set; }
 
         [Display(Name = "Logo")]
-        public IFormFile CliLogo { get; set; }
+        public IFormFile CLI_Logo { get; set; }
         public string CliLogoImage { get; set; }
         public int totalEmployee { get; set; }
     }
 
+
     public class ParametersClientsModel
     {
-        [Key]
-        public int CliId { get; set; }
-        [Display(Name = "Firm")]
-        [Required(ErrorMessage = "Please select firm")]
-        public int FrmId { get; set; }
-        [Display(Name = "Name")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter name")]
-        public string CliName { get; set; }
-        [Display(Name = "Domain")]
-        [Required(ErrorMessage = "Please choose country domain")]
-        public byte CliInternationalDomestic { get; set; }
-        [Display(Name = "Address")]
-        [Required(ErrorMessage = "Please enter address")]
-        public string CliAddress { get; set; }
-        [Display(Name = "City")]
-        [Required(ErrorMessage = "Please select city")]
-        public int CityId { get; set; }
-        [Display(Name = "Pincode")]
-        [Required(ErrorMessage = "Please enter pincode")]
-        [StringLength(6, MinimumLength = 6, ErrorMessage = "Pincode should have 6 digit ")]
-        public string CliPincode { get; set; }
-        [Display(Name = "Phone")]
-        [Required(ErrorMessage = "Please enter phone")]
-        public string CliPhone { get; set; }
-        [Display(Name = "Fax")]
-        public string CliFax { get; set; }
-        [Display(Name = "Primary email")]
-        [EmailAddress]
-        [DataType(DataType.EmailAddress)]
-        [Required(ErrorMessage = "Please enter email")]
-        public string CliEmail { get; set; }
-        [Display(Name = "Secondary email")]
-        [EmailAddress]
-        public string CliEmail2 { get; set; }
-        [Display(Name = "GST No")]
-        [Required(ErrorMessage = "Please enter GST no")]
-        public string CliGstNumber { get; set; }
-        [Display(Name = "GST Rate")]
-        [Required(ErrorMessage = "Please enter GST rate")]
-        public int CliGstRate { get; set; }
-        [Display(Name = "HSN Code")]
-        [Required(ErrorMessage = "Please enter HSN code")]
-        public string CliHsnCode { get; set; }
-        [Display(Name = "TDS Rate")]
-        [Required(ErrorMessage = "Please enter TDS rate")]
-        public int CliTdsRate { get; set; }
-        public int AdmIdRegisterBy { get; set; }
-        public DateTime CliRegisteredOn { get; set; }
-        public bool? CliIsActive { get; set; }
-
-        [Display(Name = "Logo")]
-        public IFormFile CliLogo { get; set; }
-        public string CliLogoImage { get; set; }
-
-
-        public bool? CliAttMonthReal { get; set; }
-
-        public int? CliAttMonthStart { get; set; }
-        public int? CliAttMonthEnd { get; set; }
-
-
-
+        public ClientsModel clientsModel { get; set; }
+        public bool? CLI_Att_MonthReal { get; set; }
+        public int? CLI_Att_Month_Start { get; set; }
+        public int? CLI_Att_Month_End { get; set; }
     }
-
     public class AttStatus
     {
         public string ClientName { get; set; }

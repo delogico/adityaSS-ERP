@@ -81,14 +81,14 @@ namespace RMERP.Controllers
             {
                 AdminUsers adminUsers = new AdminUsers();
                 adminUsers = adminUsersManager.GetAdminUsersById(AdminId);
-                adminUsersModel.AdmId = AdminId;
-                adminUsersModel.AdmFirstName = adminUsers.AdmFirstName;
-                adminUsersModel.AdmMiddleName = adminUsers.AdmMiddleName;
-                adminUsersModel.AdmLastName = adminUsers.AdmLastName;
-                adminUsersModel.AdmEmailId = adminUsers.AdmEmailId;
-                adminUsersModel.AdmPassword = adminUsers.AdmPassword;
-                adminUsersModel.AdmMobile = adminUsers.AdmMobile;
-                adminUsersModel.FrmId = adminUsers.FrmId;
+                adminUsersModel.ADM_Id = AdminId;
+                adminUsersModel.ADM_FirstName = adminUsers.ADM_FirstName;
+                adminUsersModel.ADM_MiddleName = adminUsers.ADM_MiddleName;
+                adminUsersModel.ADM_LastName = adminUsers.ADM_LastName;
+                adminUsersModel.ADM_EmailId = adminUsers.ADM_EmailId;
+                adminUsersModel.ADM_Password = adminUsers.ADM_Password;
+                adminUsersModel.ADM_Mobile = adminUsers.ADM_Mobile;
+                adminUsersModel.FRM_Id = adminUsers.FRM_Id;
             }           
             return View(adminUsersModel);
         }
@@ -100,14 +100,14 @@ namespace RMERP.Controllers
             if (ModelState.IsValid)
             {
                 AdminUsers adminUsers = new AdminUsers();
-                adminUsers.AdmId = adminUsersModel.AdmId;
-                adminUsers.AdmFirstName = adminUsersModel.AdmFirstName;
-                adminUsers.AdmMiddleName = adminUsersModel.AdmMiddleName;
-                adminUsers.AdmLastName = adminUsersModel.AdmLastName;
-                adminUsers.AdmEmailId = adminUsersModel.AdmEmailId;
-                adminUsers.AdmPassword = adminUsersModel.AdmPassword;
-                adminUsers.AdmMobile = adminUsersModel.AdmMobile;
-                adminUsers.FrmId = adminUsersModel.FrmId;
+                adminUsers.ADM_Id = adminUsersModel.ADM_Id;
+                adminUsers.ADM_FirstName = adminUsersModel.ADM_FirstName;
+                adminUsers.ADM_MiddleName = adminUsersModel.ADM_MiddleName;
+                adminUsers.ADM_LastName = adminUsersModel.ADM_LastName;
+                adminUsers.ADM_EmailId = adminUsersModel.ADM_EmailId;
+                adminUsers.ADM_Password = adminUsersModel.ADM_Password;
+                adminUsers.ADM_Mobile = adminUsersModel.ADM_Mobile;
+                adminUsers.FRM_Id = adminUsersModel.FRM_Id;
 
                 res = adminUsersManager.AddEditAdminUsers(adminUsers);
             }            

@@ -5,24 +5,24 @@ namespace RMERP.DAL.Models
 {
     public partial class Attendance
     {
-        public int AttId { get; set; }
-        public int WagId { get; set; }
-        public int EmpId { get; set; }
-        public int CriId { get; set; }
-        public int CliId { get; set; }
-        public DateTime AttDate { get; set; }
-        public bool AttIsPresent { get; set; }
-        public bool AttIsPaidHoliday { get; set; }
-        public string AttShift { get; set; }
-        public bool AttIsWeeklyOff { get; set; }
-        public bool AttIsEarnLeave { get; set; }
-        public double AttExtraHoursWorked { get; set; }
-        public DateTime AttImportedOn { get; set; }
-        public int AdmIdImportedBy { get; set; }
+        public int ATT_Id { get; set; }
+        public int WAG_Id { get; set; }
+        public int EMP_Id { get; set; }
+        public int CRI_Id { get; set; }
+        public int CLI_Id { get; set; }
+        public DateTime ATT_Date { get; set; }
+        public bool ATT_IsPresent { get; set; }
+        public bool ATT_IsPaidHoliday { get; set; }
+        public string ATT_Shift { get; set; }
+        public bool ATT_IsWeeklyOff { get; set; }
+        public bool ATT_IsEarnLeave { get; set; }
+        public double ATT_ExtraHoursWorked { get; set; }
+        public DateTime ATT_ImportedOn { get; set; }
+        public int ADM_Id_ImportedBy { get; set; }
 
-        public Clients Cli { get; set; }
-        public ClientRequirements Cri { get; set; }
-        public Employees Emp { get; set; }
-        public WageProcess Wag { get; set; }
+        public Clients CLI_ { get; set; }
+        public Client_Requirements CRI_ { get; set; }
+        public Employees EMP_ { get; set; }
+        public Wage_Process WAG_ { get; set; }
     }
 }

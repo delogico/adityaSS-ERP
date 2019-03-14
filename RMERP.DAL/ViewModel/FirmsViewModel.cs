@@ -7,9 +7,10 @@ namespace RMERP.DAL.ViewModel
 {
     public partial class FirmsViewModel
     {        
-        public int FrmId { get; set; }
+        public int FRM_Id { get; set; }
 
         [Required(ErrorMessage ="Please add firm name")]
-        public string FrmName { get; set; }
+        public string FRM_Name { get; set; }
     }
 }
+

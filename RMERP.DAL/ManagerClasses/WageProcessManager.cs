@@ -16,25 +16,25 @@ namespace RMERP.DAL.ManagerClasses
         {
             _context = context;
         }
-        public IEnumerable<WageProcess> getWageProcessList(int AdminId)
+        public IEnumerable<Wage_Process> getWageProcessList(int AdminId)
         {
-            IEnumerable<WageProcess> list = _context.WageProcess.Where(m => m.AdmIdRegisteredBy.Equals(AdminId)).Include(m => m.Attendance).OrderByDescending(m=>m.WagRegisteredOn).ToList();
+            IEnumerable<Wage_Process> list = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId)).Include(m => m.Attendance).OrderByDescending(m=>m.WAG_RegisteredOn).ToList();
             return list;
         }
-        public WageProcess getWageProcessById(int WAG_Id)
+        public Wage_Process getWageProcessById(int WAG_Id)
         {
-            WageProcess wageProcess = _context.WageProcess.Where(m => m.WagId == WAG_Id).FirstOrDefault();
+            Wage_Process wageProcess = _context.Wage_Process.Where(m => m.WAG_Id == WAG_Id).FirstOrDefault();
             return wageProcess;
         }
 
         public string CreateNextMonthWage(int AdminId)
         {
             string res = string.Empty;
-            WageProcess wageProcess = new WageProcess();           
-            wageProcess.WagMonth = nextWageMonth(AdminId);            
-            wageProcess.WagRegisteredOn = ProjectUtils.DateNow();
-            wageProcess.AdmIdRegisteredBy = AdminId;
-            _context.WageProcess.Add(wageProcess);
+            Wage_Process wageProcess = new Wage_Process();           
+            wageProcess.WAG_Month = nextWageMonth(AdminId);            
+            wageProcess.WAG_RegisteredOn = ProjectUtils.DateNow();
+            wageProcess.ADM_Id_RegisteredBy = AdminId;
+            _context.Wage_Process.Add(wageProcess);
             _context.SaveChanges();
             return res;
         }
@@ -43,8 +43,8 @@ namespace RMERP.DAL.ManagerClasses
             string res = string.Empty;
             try
             {
-                var wp = _context.WageProcess.Find(WagId);
-                _context.WageProcess.Remove(wp);
+                var wp = _context.Wage_Process.Find(WagId);
+                _context.Wage_Process.Remove(wp);
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -55,11 +55,11 @@ namespace RMERP.DAL.ManagerClasses
         }
         public DateTime nextWageMonth(int AdminId)
         {
-            int count = _context.WageProcess.Where(m => m.AdmIdRegisteredBy.Equals(AdminId)).Count();
+            int count = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId)).Count();
             if (count > 0)
             {
-                var wp = _context.WageProcess.Where(m => m.AdmIdRegisteredBy.Equals(AdminId)).OrderByDescending(m => m.WagMonth).First();
-                return wp.WagMonth.AddMonths(1);
+                var wp = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId)).OrderByDescending(m => m.WAG_Month).First();
+                return wp.WAG_Month.AddMonths(1);
             }
             else
             {
@@ -72,8 +72,8 @@ namespace RMERP.DAL.ManagerClasses
             string res = string.Empty;
             try
             {
-                var monthYear = _context.WageProcess.Find(WagId);
-                res = monthYear.WagMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"))+"-"+ monthYear.WagMonth.Year.ToString();
+                var monthYear = _context.Wage_Process.Find(WagId);
+                res = monthYear.WAG_Month.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"))+"-"+ monthYear.WAG_Month.Year.ToString();
             }
             catch (Exception ex)
             {
@@ -85,13 +85,13 @@ namespace RMERP.DAL.ManagerClasses
         public IEnumerable<Attendance> GetAttendanceList(int wagId, int CliId)
         {
             IEnumerable<Attendance> list = null;
-            list = _context.Attendance.Include(m=>m.Emp).Include(m=>m.Cli).Where(m=>m.WagId.Equals(wagId) && m.CliId.Equals(CliId)).OrderBy(m=>m.Emp.EmpFirstName).ToList();           
+            list = _context.Attendance.Include(m=>m.EMP_).Include(m=>m.CLI_).Where(m=>m.WAG_Id.Equals(wagId) && m.CLI_Id.Equals(CliId)).OrderBy(m=>m.EMP_.EMP_FirstName).ToList();           
             return list;
         }
         public List<Attendance> GetAttendanceList(int wagId, int CliId,int empId)
         {
             List<Attendance> list = null;
-            list = _context.Attendance.Include(m => m.Emp).Include(m => m.Cli).Where(m => m.WagId.Equals(wagId) && m.CliId.Equals(CliId) &&m.EmpId.Equals(empId)).ToList();
+            list = _context.Attendance.Include(m => m.EMP_).Include(m => m.CLI_).Where(m => m.WAG_Id.Equals(wagId) && m.CLI_Id.Equals(CliId) &&m.EMP_Id.Equals(empId)).ToList();
             return list;
         }
         public string UpdateAttendance(Attendance attendance)
