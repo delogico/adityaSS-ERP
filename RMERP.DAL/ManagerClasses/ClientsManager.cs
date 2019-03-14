@@ -146,7 +146,7 @@ namespace RMERP.DAL.ManagerClasses
             }
             return new Tuple<string, int>(res, clients.CLI_Id);
         }
-        public IEnumerable<Clients> listClients(int? FirmId,bool IsActive,string Client="")
+        public IEnumerable<Clients> listClients(bool IsActive, int? FirmId, string Client="")
         {           
             IQueryable<Clients> ClientList = _contaxt.Clients.Include(m => m.CITY_).Include(m => m.FRM_).Include(m => m.Client_Contacts);
             if (FirmId.HasValue)
@@ -459,7 +459,7 @@ namespace RMERP.DAL.ManagerClasses
             List<Clients> lstClient = new List<Clients>();
 
             var cliList = from a in _contaxt.Clients
-                          where a.CLI_RegisteredOn <= WageMonthDate                                         
+                          where a.CLI_RegisteredOn.Date <= WageMonthDate.Date                                         
                           select a;
 
             foreach(var cli in cliList)

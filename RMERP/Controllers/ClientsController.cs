@@ -44,7 +44,7 @@ namespace RMERP.Controllers
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             ClientsViewModel cvm = new ClientsViewModel();
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            cvm.Listclients = clientsManager.listClients(sessionUtils.GetLoggedFirmID(), IsActive);            
+            cvm.Listclients = clientsManager.listClients(IsActive,sessionUtils.GetLoggedFirmID());            
             ViewBag.List = cvm.Listclients;
             return View(cvm);
         }
@@ -53,7 +53,7 @@ namespace RMERP.Controllers
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             SessionUtils sessionUtils = new SessionUtils(Request,Response);
-            IEnumerable<Clients> listClient = clientsManager.listClients(sessionUtils.GetLoggedFirmID(), IsActive, Client);
+            IEnumerable<Clients> listClient = clientsManager.listClients(IsActive,sessionUtils.GetLoggedFirmID(), Client);
             ViewBag.ActiveClient = "IsActive";
             return PartialView("_ClientList", listClient);
         }

@@ -81,8 +81,8 @@ namespace RMERP.Controllers
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             ClientsViewModel cvm = new ClientsViewModel();
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            cvm.Listclients = clientsManager.listClients(sessionUtils.GetLoggedFirmID(), true);
-          
+            cvm.Listclients = clientsManager.listClients(true, null);
+            List<Clients> clientListForMonth = clientsManager.GetClientsListByMonth(DateTime.Now);
             cvm.WageID = wagId;
             return View(cvm);
         }
