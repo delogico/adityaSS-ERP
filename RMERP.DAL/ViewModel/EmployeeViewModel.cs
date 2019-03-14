@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RMERP.DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -6,12 +7,7 @@ using System.Text;
 namespace RMERP.DAL.ViewModel
 {
     public class EmployeeViewModel
-    {
-        public EmployeeModel EmployeeModel { get; set; }
-        public IEnumerable<EmployeeModel> ListEmployeeModels { get; set; }
-    }
-    public class EmployeeModel
-    {
+    {       
         [Key]
         public int EMP_Id { get; set; }
 
@@ -94,13 +90,16 @@ namespace RMERP.DAL.ViewModel
         public DateTime? EMP_InactivatedOn { get; set; }
         public int? ADM_Id_InactivatedBy { get; set; }
 
-        public string EmpFullName {
+        public string EMP_FullName
+        {
             get
             {
-                return string.Concat(EMP_FirstName + "" + EMP_MiddleName + "" + EMP_SurName);
+                return string.Concat(EMP_FirstName + " " + EMP_MiddleName + " " + EMP_SurName);
             }
         }
-
+        public Departments DEPT_ { get; set; }
+        public ICollection<Attendance> Attendance { get; set; }
+        public ICollection<Clients_Employees> Clients_Employees { get; set; }
     }
 }
 

@@ -41,7 +41,7 @@ namespace RMERP.DAL.ManagerClasses
         {
             try
             {
-                IEnumerable<Employees> listEmployees = _context.Employees.Include(m=>m.DEPT_).OrderBy(m => m.EMP_FirstName).ToList();
+                IEnumerable<Employees> listEmployees = _context.Employees.Where(m=>m.EMP_IsActive.Equals(true)).Include(m=>m.DEPT_).OrderBy(m => m.EMP_FirstName).ToList();
                 return listEmployees;
             }
             catch (Exception ex)

@@ -1,5 +1,4 @@
-﻿@model IEnumerable<RMERP.DAL.Models.Employees>
-@using static RMERP.DAL.App_Code.ProjectUtils;
+﻿@model IEnumerable<RMERP.DAL.ViewModel.EmployeeViewModel>
 
 @{
     ViewData["Title"] = "Employee List";
@@ -42,7 +41,7 @@
                         <table class="table table-striped custom-table datatable">
                             <thead>
                                 <tr>
-                                  
+
                                     <th>Department Name</th>
                                     <th>Name</th>
                                     <th>DOB</th>
@@ -51,45 +50,41 @@
                                     <th>Date Of Joining</th>
                                     <th>Gender</th>
                                     <th>Contact No</th>
-
                                     @*<th>Employee Number</th>
-                                    <th>TPC EmployeeID</th>
-                                    <th>Activation</th>*@
-
+                                        <th>TPC EmployeeID</th>
+                                        <th>Activation</th>*@
                                     <th class="text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model)
                                 {
-                                <tr>
-                                    
-                                    <td>@item.DEPT_.DEPT_Title</td>
-                                    <td>@item.EMP_FirstName&nbsp;@item.EMP_MiddleName&nbsp;@item.EMP_SurName</td>
-                                  
+                                    <tr>
 
-                                    <td>@item.EMP_DOB</td>
-                                    <td>@item.EMP_Designation</td>
-                                    @*<td>@(item.EmpMarried == (byte)MaritalStatus.Married ? "Married" : "UnMarried")</td>*@
+                                        <td>@item.DEPT_.DEPT_Title</td>
+                                        <td>@item.EMP_FullName</td>
+                                        <td>@item.EMP_DOB</td>
+                                        <td>@item.EMP_Designation</td>
+                                        @*<td>@(item.EmpMarried == (byte)MaritalStatus.Married ? "Married" : "UnMarried")</td>*@
 
-                                    <td>@item.EMP_DateOfJoining</td>
-                                    <td>@(item.EMP_Gender == true ? "Male" : "Female")</td>
-                                    <td>@item.EMP_Contact_Primary</td>
+                                        <td>@item.EMP_DateOfJoining</td>
+                                        <td>@(item.EMP_Gender == true ? "Male" : "Female")</td>
+                                        <td>@item.EMP_Contact_Primary</td>
 
-                                    @*<td>@item.EmpEmployeeNumberOffice</td>
-                                    <td>@item.EmpTpcEmployeeId</td>
-                                    <td>@item.EmpIsActive</td>*@
-                                    <td class="text-right">
-                                        <div class="dropdown">
-                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li><a href='@Url.Action("AddEditEmployee","Employees",new { EmpID=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
-                                                <li><a href='@Url.Action("ActiveEmployee","Employees",new { EmpID=item.EMP_Id})' title="Active/InActive"><i class="fa fa-trash m-r-5"></i> Active/InActive</a></li>
-                                                <li><a href='@Url.Action("AddEditEmployee","Employees",new { EmpID=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-pencil m-r-5"></i> View</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        @*<td>@item.EmpEmployeeNumberOffice</td>
+                                            <td>@item.EmpTpcEmployeeId</td>
+                                            <td>@item.EmpIsActive</td>*@
+                                        <td class="text-right">
+                                            <div class="dropdown">
+                                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                <ul class="dropdown-menu pull-right">
+                                                    <li><a href='@Url.Action("AddEditEmployee","Employees",new { EmpID=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
+                                                    <li><a href='@Url.Action("ActiveEmployee","Employees",new { EmpID=item.EMP_Id})' title="Active/InActive"><i class="fa fa-trash m-r-5"></i> Active/InActive</a></li>
+                                                    <li><a href='@Url.Action("AddEditEmployee","Employees",new { EmpID=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-pencil m-r-5"></i> View</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 }
 
                             </tbody>
