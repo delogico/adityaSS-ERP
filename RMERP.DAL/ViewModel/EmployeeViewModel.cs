@@ -7,12 +7,12 @@ using System.Text;
 namespace RMERP.DAL.ViewModel
 {
     public class EmployeeViewModel
-    {       
+    {
         [Key]
         public int EMP_Id { get; set; }
 
-        [Display(Name ="Name")]
-        [Required(AllowEmptyStrings =false, ErrorMessage ="first name is required")]
+        [Display(Name = "Name")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "first name is required")]
         public string EMP_FirstName { get; set; }
 
         [Display(Name = "Middle name")]
@@ -75,7 +75,7 @@ namespace RMERP.DAL.ViewModel
         [Required(AllowEmptyStrings = false, ErrorMessage = "Employee number is required")]
         public int EMP_EmployeeNumber_Office { get; set; }
 
-        [Display(Name ="TPC Employee ID")]
+        [Display(Name = "TPC Employee ID")]
         public string EMP_TPC_EmployeeId { get; set; }
 
         [Required]
