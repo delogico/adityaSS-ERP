@@ -15,7 +15,7 @@ namespace RMERP.Controllers
     public class EmployeesController : Controller
     {
         private readonly RMERPContext _context;
-        EmployeesMapper employeesMapper = new EmployeesMapper();
+        EmployeesMapper employeesMapper=new EmployeesMapper();
         public EmployeesController(RMERPContext context)
         {
             _context = context;
@@ -23,8 +23,8 @@ namespace RMERP.Controllers
         public IActionResult Index()
         {
             EmployeeManager employeeManager = new EmployeeManager(_context);
-            IEnumerable<Employees> listEmp = employeeManager.GetEmployees();
-            return View(employeesMapper.MapMeList(listEmp));
+            IEnumerable<Employees> listEmp= employeeManager.GetEmployees();
+            return View(employeesMapper.MapMeList(listEmp));           
         }
         [HttpGet]
         public ActionResult AddEditEmployee(int EmpID)
@@ -38,9 +38,9 @@ namespace RMERP.Controllers
             {
                 Employees emp = new Employees();
                 emp = employeeManager.GetEmployeesById(EmpID);
-                employeeModel = employeesMapper.MapMeModel(emp);
+                employeeModel = employeesMapper.MapMeModel(emp);                
             }
-
+           
             return View(employeeModel);
         }
         [HttpPost]
@@ -53,9 +53,9 @@ namespace RMERP.Controllers
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
                 Employees employees = new Employees();
                 employees.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
-                employees = employeesMapper.MapMeOriginalModel(employeeModel);
+                employees= employeesMapper.MapMeOriginalModel(employeeModel);
                 res = employeeManager.AddEditEmployee(employees);
-            }
+            }            
             if (res == string.Empty)
             {
                 return RedirectToAction("Index");
@@ -65,18 +65,19 @@ namespace RMERP.Controllers
                 TempData["message"] = "Client data can not Inserted";
                 return RedirectToAction("AddEditEmployee");
             }
-
+           
         }
+
         public ActionResult ActiveEmployee(int EmpID)
         {
             string res = string.Empty;
             EmployeeManager employeeManager = new EmployeeManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            res = employeeManager.ActiveEmployee(EmpID, sessionUtils.GetLoggedAdminID());
+            res = employeeManager.ActiveEmployee(EmpID,sessionUtils.GetLoggedAdminID());
             if (res != string.Empty)
             {
                 TempData["message"] = "There is some problem! Please Try Again";
-            }
+            }            
             return RedirectToAction("Index");
         }
     }
