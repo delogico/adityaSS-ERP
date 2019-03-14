@@ -454,7 +454,6 @@ namespace RMERP.DAL.ManagerClasses
 
         public List<Clients> GetClientsListByMonth(DateTime WageMonthDate)
         {
-            WageMonthDate = new DateTime(2019, 01, 01);
             DateTime LastDate = new DateTime(WageMonthDate.Year, WageMonthDate.Month, 1).AddMonths(1).AddDays(-1);
             List<Clients> lstClient = new List<Clients>();
 
