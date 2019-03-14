@@ -513,7 +513,7 @@ using static RMERP.DAL.App_Code.ProjectUtils;
             WriteLiteral("                                            ");
             EndContext();
             BeginContext(9645, 97, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "d8c8f9b346eb4112807167712c38014a", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("img", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "9f200f415beb4b92be4a2278e950ef4e", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_Razor_TagHelpers_UrlResolutionTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper>();
@@ -1344,7 +1344,7 @@ WriteAttributeValue("", 28344, Url.Action( @excel.ToString(),"Clients"), 28344, 
                         ");
             EndContext();
             BeginContext(28952, 536, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "e84d90b317c34664abb8b04542997ae4", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2b53f7de568345b7a4f4bbdcf1d6952c", async() => {
                 BeginContext(28958, 523, true);
                 WriteLiteral(@"
                             <div class=""modal-body card-box"">

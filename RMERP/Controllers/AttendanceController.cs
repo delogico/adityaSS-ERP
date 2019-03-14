@@ -40,6 +40,18 @@ namespace RMERP.Controllers
             return View();
         }
 
+        //public ActionResult WageAttendanceList(int WAG_Id)
+        //{
+        //    ClientsManager clientsManager = new ClientsManager(_context, _configuration);
+        //    List<Clients> clientsManager.
+        //    ClientsViewModel cvm = new ClientsViewModel();
+        //    SessionUtils sessionUtils = new SessionUtils(Request, Response);
+        //    cvm.Listclients = clientsManager.listClients(sessionUtils.GetLoggedFirmID(), true);
+
+        //    cvm.WageID = wagId;
+        //    return View(cvm);
+        //}
+
         public ActionResult UploadExcel(int WAG_Id, int CLI_Id)
         {
             ClientsManager clientManager = new ClientsManager(_context, _configuration);
