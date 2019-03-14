@@ -446,22 +446,35 @@ namespace RMERP.DAL.ManagerClasses
             IQueryable<Clients> ClientList = null;
             return ClientList;
         }
-        //public IEnumerable<Clients> listClientsFotAttandance(int? FirmId, bool IsActive, string Client = "")
-        //{
-        //    string query = "";
-        //    query += " select Clients.*,ISNULL(totEmployee,'-') as totEmployee from (";
-        //    query += " select count(distinct(EMP_Id)) as totEmployee,Clients.CLI_Name as Cname,Clients.CLI_Id from Attendance";
-        //    query += " inner join Clients on Clients.CLI_Id=Attendance.CLI_Id";
-        //    query += " group by Clients.CLI_Name,Clients.CLI_Id ) tmp";
-        //    query += " right join Clients on  tmp.CLI_Id=Clients.CLI_Id";
 
-        //    var Clients = _contaxt.Clients.FromSql(query).ToList();
-        //    return Clients;
-        //}
         public Tuple<int, int> GetDateByClientID(int cliID)
         {
             return new Tuple<int, int>(0, 0);
         }
 
+        public List<Clients> GetClientsListByMonth(DateTime WageMonthDate)
+        {
+            WageMonthDate = new DateTime(2019, 01, 01);
+            DateTime LastDate = new DateTime(WageMonthDate.Year, WageMonthDate.Month, 1).AddMonths(1).AddDays(-1);
+            List<Clients> lstClient = new List<Clients>();
+
+            var cliList = from a in _contaxt.Clients
+                          where a.CLI_RegisteredOn <= WageMonthDate                                         
+                          select a;
+
+            foreach(var cli in cliList)
+            {
+                if (cli.CLI_IsActive == false && cli.CLI_InActivatedOn >= WageMonthDate)
+                {
+                    lstClient.Add(cli);
+                }
+                else if(cli.CLI_IsActive == true)
+                {
+                    lstClient.Add(cli);
+                }              
+            }           
+           
+            return lstClient;
+        }
     }
 }
