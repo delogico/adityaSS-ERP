@@ -5,75 +5,135 @@
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 
-@if (Model == null)
-{
-    <h4>No data to display</h4>
-}
-else
-{
-<div class="modal-dialog modelLeftSide">
-    <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <div class="modal-content modal-lg">
-        <div class="modal-header">
-            <div class="row">
-                <div class="col-md-7">
-                    <h4 class="modal-title">Summary of Attendance Going to import</h4>
-                    <h6 class="modal-title">Total Employee Found: @Model.totalEmployees</h6>
-                    <h6 class="modal-title">Total Public Holidays: @Model.totalPublicHolidays</h6>
-                </div>
-                <div class="col-md-5">
-                    <h6 class="modal-title">Starting Date: @DateHelper.getDateWithFormat(Model.startDate)</h6>
-                    <h6 class="modal-title">Ending Date: @DateHelper.getDateWithFormat(Model.endDate)</h6>
-                </div>
-            </div>
-            
-        </div>
-        <div class="modal-body">
-            <div>
-                <div class="content container-fluid">
-
+    @if (Model == null)
+    {
+        <h4>No data to display</h4>
+    }
+    else
+    {
+        <div class="modal-dialog modelLeftSide">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
                     <div class="row">
-                        <div class="col-md-12">
-                            <div>
-                                <table class="table table-hover custom-table m-b-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Employee Id</th>
-                                            <th>Employee Name</th>
-                                            <th>Designation</th>
-                                            <th>Total Presence</th>
-                                            <th>Total Extra Hours</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.excelRows)
-                                        {
-                                            <tr>
-                                                <td>@item.EMP_Id</td>
-                                                <td>@item.EMP_Name</td>
-                                                <td>@item.Designation</td>
-                                                <td>@item.TotalPresenceDays</td>
-                                                <td>@item.TotalExtraHours</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            @using (Html.BeginForm("ImportExcel", "Attendance", FormMethod.Post))
-                            {
-                                @Html.HiddenFor(m => m.WAG_Id)
-                                @Html.HiddenFor(m => m.CLI_Id)
-                                @Html.HiddenFor(m => m.fileName)
-                                <div class="m-t-20 text-center">
-                                    <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" />
+                        <div class="col-md-7">
+                            <h4 class="modal-title">Summary of Attendance Going to import</h4>
+                            <h6 class="modal-title">Total Employee Found: @Model.totalEmployees</h6>
+                            <h6 class="modal-title">Total Public Holidays: @Model.totalPublicHolidays</h6>
+                        </div>
+                        <div class="col-md-5">
+                            <h6 class="modal-title">Starting Date: @DateHelper.getDateWithFormat(Model.startDate)</h6>
+                            <h6 class="modal-title">Ending Date: @DateHelper.getDateWithFormat(Model.endDate)</h6>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="content container-fluid">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div>
+                                        <table class="table table-hover custom-table m-b-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Employee Id</th>
+                                                    <th>Employee Name</th>
+                                                    <th>Designation</th>
+                                                    <th>Total Presence</th>
+                                                    <th>Total Extra Hours</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.excelRows)
+                                                {
+                                                    <tr>
+                                                        <td>@item.EMP_Id</td>
+                                                        <td>@item.EMP_Name</td>
+                                                        <td>@item.Designation</td>
+                                                        <td>@item.TotalPresenceDays</td>
+                                                        <td>@item.TotalExtraHours</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    @if (Model.empListExtraInExcel.Count() > 0 || Model.EmpListExtraInDb.Count() > 0 || Model.datePeriod == false)
+                                    {
+                                        <br />
+                                        <div class="row well well-lg" style="color:red;">
+                                            <div class="col-md-7">
+                                                <h4 class="modal-title">Match with clients</h4>
+                                                <hr />
+                                                <ul>
+                                                    @if (Model.empListExtraInExcel.Count() > 0)
+                                                    {
+                                                    <li>
+                                                        We have found this employees which is/are not assign to Client :
+                                                        <ul>
+                                                            @foreach (var item in Model.empListExtraInExcel)
+                                                            {
+                                                                <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
+                                                            }
+                                                        </ul>
+                                                    </li>
+                                                    }
+
+                                                </ul>
+                                                <ul>
+                                                    @if (Model.EmpListExtraInDb.Count() > 0)
+                                                    {
+                                                    <li>
+                                                        We have found this missing employees which is/are assign to Client :
+                                                        <ul>
+                                                            @foreach (var item in Model.empListExtraInExcel)
+                                                            {
+                                                                <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
+                                                            }
+                                                        </ul>
+                                                    </li>
+                                                    }
+
+                                                </ul>
+                                                <ul>
+                                                    @if (Model.datePeriod == false)
+                                                    {
+                                                    <li>We have found date period of excel is not match with client parameter.</li>                                                        
+                                                    }
+
+                                                </ul>
+
+                                                
+                                            </div>
+
+                                        </div>
+                                    }
+                                    
+                                    @using (Html.BeginForm("ImportExcel", "Attendance", FormMethod.Post))
+                                    {
+                                        @Html.HiddenFor(m => m.WAG_Id)
+                                        @Html.HiddenFor(m => m.CLI_Id)
+                                        @Html.HiddenFor(m => m.fileName)
+                                        <div class="m-t-20 text-center">
+                                            @if (Model.btnExportToDatabase == false)
+                                            {
+                                                <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" disabled />
+                                            }
+                                            else
+                                            {
+                                                <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" />
+                                            }
+
+                                        </div>
+                                    }
                                 </div>
-                            }
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-}
+    }
 

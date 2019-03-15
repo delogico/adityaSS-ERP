@@ -36,5 +36,19 @@ namespace RMERP.DAL.ManagerClasses
             _context.Attendance.RemoveRange(_context.Attendance.Where(a => a.WAG_Id == WAG_Id && a.CLI_Id == CLI_Id).ToList());
             _context.SaveChanges();
         }
+        #region Methods by rinku
+        public Clients_Employees assignEmployee(int Cli_Id,int EMP_Id)
+        {
+            Clients_Employees clients_Employees = new Clients_Employees();
+            clients_Employees = _context.Clients_Employees.Where(m => m.CLI_Id.Equals(Cli_Id) && m.EMP_Id.Equals(EMP_Id)).FirstOrDefault();
+            return clients_Employees;
+        }
+        public List<Clients_Employees> assignEmployeeList(int Cli_Id)
+        {
+            List<Clients_Employees> clients_Employees = new List<Clients_Employees>();
+            clients_Employees = _context.Clients_Employees.Where(m => m.CLI_Id.Equals(Cli_Id)).ToList();
+            return clients_Employees;
+        }        
+        #endregion
     }
 }

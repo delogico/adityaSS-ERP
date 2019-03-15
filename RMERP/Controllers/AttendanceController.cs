@@ -77,11 +77,18 @@ namespace RMERP.Controllers
         public ActionResult VerifyTemplate(UploadExcelViewModel uvm)
         {
             WageProcessManager wageManager = new WageProcessManager(_context);
+            AttendanceManager attManager = new AttendanceManager(_context);
+            EmployeeManager empManager = new EmployeeManager(_context);
+            ClientsManager clientsManager = new ClientsManager(_context, _configuration); 
             Wage_Process wageProcess = wageManager.getWageProcessById(uvm.wageProcessVM.WAG_Id);
             IFormFile file = uvm.ExcelFile;
             ExcelViewModel excelViewModel = new ExcelViewModel();
             List<ExcelRowViewModel> rows = new List<ExcelRowViewModel>();
             int TotEmp = 0;
+            #region 
+            List<Employees> empListExtraInExcel = new List<Employees>();
+            List<Employees> empListExtraInDb = new List<Employees>();
+            #endregion 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
             StringBuilder sb = new StringBuilder();
             if (file != null)
@@ -121,14 +128,37 @@ namespace RMERP.Controllers
                         }
                         endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, Convert.ToInt16(secondRow.GetCell(cellCount-5).ToString()));
 
+                        #region
+                        DateTime DbstartDate = DateTime.Now, DbendDate = DateTime.Now;
+                        Clients client = clientsManager.GetClientById(uvm.client.CLI_Id);
+                        if (client.CLI_Att_MonthReal == true)
+                        {
+                            DbstartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                            DbendDate = startDate.AddMonths(1).AddDays(-1);
+                        }
+                        else if (client.CLI_Att_MonthReal == false)
+                        {
+                            DbstartDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CLI_Att_Month_Start.Value);
+                            DbendDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CLI_Att_Month_End.Value); ;
+                        }
+                        if(startDate.Date!=DbstartDate.Date || endDate.Date != DbendDate.Date)
+                        {
+                            excelViewModel.datePeriod = false;
+                        }
+                        #endregion
                         for (int j = (secondRow.FirstCellNum + 4); j <= secondRow.LastCellNum - 4; j++)
                         {
                             if (secondRow.GetCell(j).ToString().Contains("PH"))
                                 totalPublicHolidays++;
                         }
 
+                        #region 
+                        List<Clients_Employees> assignEmployeeList = attManager.assignEmployeeList(uvm.client.CLI_Id);
+                        List<_EmpID> _empID = new List<_EmpID>();
+                        #endregion
                         for (int i = (sheet.FirstRowNum + 2); i <= sheet.LastRowNum; i+=2)
                         {
+                            _EmpID EmpID = new _EmpID();
                             ExcelRowViewModel excelRow = new ExcelRowViewModel();
                             IRow row = sheet.GetRow(i);
                             IRow rowExtra = sheet.GetRow(i + 1);
@@ -136,6 +166,22 @@ namespace RMERP.Controllers
                             if (row == null) continue;
                             if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
                             excelRow.EMP_Id = row.GetCell(1).ToString();
+
+                            #region created by rinku on 15 march - 19 For error display 
+                            int EMP_Id = Convert.ToInt32(row.GetCell(1).ToString());
+                            Clients_Employees emp = assignEmployeeList.Where(m => m.EMP_Id.Equals(EMP_Id)).FirstOrDefault();                           
+
+                            if (emp==null)
+                            {
+                                empListExtraInExcel.Add(empManager.GetEmployeesById(EMP_Id));
+                            }
+                            else
+                            {
+                                EmpID.Id = EMP_Id;
+                                _empID.Add(EmpID);
+                            }
+                          
+                            #endregion
                             excelRow.EMP_Name = row.GetCell(2).ToString();
                             excelRow.Designation = row.GetCell(3).ToString();
                             TotEmp++;
@@ -153,6 +199,14 @@ namespace RMERP.Controllers
                             excelRow.TotalExtraHours = totalExtraHours;
                             rows.Add(excelRow);
                         }
+                        #region
+                        HashSet<int> diffids = new HashSet<int>(_empID.Select(s => s.Id));
+                        var EmployeeIdList = assignEmployeeList.Where(m => !diffids.Contains(m.EMP_Id)).ToList();
+                        foreach(var EMP_Id in EmployeeIdList)
+                        {
+                            empListExtraInDb.Add(empManager.GetEmployeesById(Convert.ToInt32(EMP_Id.EMP_Id)));
+                        }
+                        #endregion
                         excelViewModel.excelRows = rows;
                         excelViewModel.totalEmployees = TotEmp;
                         excelViewModel.startDate = startDate;
@@ -160,11 +214,18 @@ namespace RMERP.Controllers
                         excelViewModel.fileName = fullPath;
                         excelViewModel.totalPublicHolidays = totalPublicHolidays;
                         excelViewModel.WAG_Id = uvm.wageProcessVM.WAG_Id;
-                        excelViewModel.CLI_Id = uvm.client.CLI_Id;
+                        excelViewModel.CLI_Id = uvm.client.CLI_Id;                        
                     }
                 }
             }
-           
+            #region
+            excelViewModel.empListExtraInExcel = empListExtraInExcel;
+            excelViewModel.EmpListExtraInDb = empListExtraInDb;
+            if (empListExtraInExcel.Count >0 || empListExtraInDb.Count >0 || excelViewModel.datePeriod == false)
+            {
+                excelViewModel.btnExportToDatabase = false;
+            }
+            #endregion
             return View(excelViewModel);
         }
 
@@ -254,6 +315,16 @@ namespace RMERP.Controllers
                 }
             }
             return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id});
+        }
+    }
+    public class _EmpID
+    {
+        private int id;
+
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
         }
     }
 }

@@ -11,7 +11,7 @@ namespace RMERP.DAL.ViewModel
         public WageProcessVM wageProcessVM { get; set; }
         public IFormFile ExcelFile { get; set; }
         public Clients client { get; set; }
-        public string Template { get; set; }
+        public string Template { get; set; }       
     }
 
     public class ExcelViewModel
@@ -24,6 +24,11 @@ namespace RMERP.DAL.ViewModel
         public string fileName { get; set; }
         public int WAG_Id { get; set; }
         public int CLI_Id { get; set; }
+
+        public List<Employees> empListExtraInExcel { get; set; }
+        public List<Employees> EmpListExtraInDb { get; set; }
+        public bool btnExportToDatabase { get; set; } = true;
+        public bool datePeriod { get; set; } = true;
     }
     public class ExcelRowViewModel
     {

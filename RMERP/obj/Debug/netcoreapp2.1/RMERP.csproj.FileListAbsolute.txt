@@ -117,3 +117,5 @@ C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\RMERP.csproj.Copy
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\RMERP.dll
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\RMERP.pdb
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\WageAttendanceList.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\AttendanceRegister.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\WageAttendanceList.g.cshtml.cs
