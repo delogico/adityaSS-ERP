@@ -76,16 +76,7 @@ namespace RMERP.Controllers
             var model = wpm.getWageProcessList(sessionUtils.GetLoggedAdminID());
             return PartialView("_WageProcessList", model);
         }
-        public ActionResult AttendancesStatus(int wagId,DateTime WAG_Month)
-        {
-            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            ClientsViewModel cvm = new ClientsViewModel();
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            //     cvm.Listclients = clientsManager.listClients(true, null);
-            cvm.Listclients = clientsManager.GetClientsListByMonth(WAG_Month);
-            cvm.WageID = wagId;
-            return View(cvm);
-        }
+      
         [HttpGet]
         public ActionResult ViewAttendance(int wagId,int CliId)
         {

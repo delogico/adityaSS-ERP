@@ -40,8 +40,16 @@
                                         else
                                         {
                                             <a href='@Url.Action("UploadExcel", "Attendance", new { WAG_Id = Model.wageProcess.WAG_Id, CLI_Id = item.CLI_Id })' title="Upload"><i class="fa fa-upload m-r-5"></i> Upload</a>
-                                         }
+                                        }
                                     }
+                                </td>
+                                <td>
+                                    @{
+                                        if (item.totalEmployees > 0)
+                                        {
+                                            <a onclick="return window.confirm('Are you sure, All attendance of this client will be deleted for this Wage Month?')" href='@Url.Action("DeleteWageClientAttendanceList", "Attendance", new { WAG_Id = Model.wageProcess.WAG_Id, CLI_Id = item.CLI_Id })' title="Reset"><i class="fa fa-remove m-r-5"></i> Reset Attendance</a>
+                                            }
+                                        }
                                 </td>
 </tr>
                             }

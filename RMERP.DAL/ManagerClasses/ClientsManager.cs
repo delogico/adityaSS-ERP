@@ -484,14 +484,15 @@ namespace RMERP.DAL.ManagerClasses
            
             return lstClient;
         }
-        public List<Clients> GetActiveClientofaMonthWithAttandance(DateTime monthStartDate)
+
+        public int getClientRequirementId(int CLI_Id, int EMP_Id)
         {
-            DateTime lastDate = new DateTime(monthStartDate.Year, monthStartDate.Month, 1).AddMonths(1).AddDays(-1);
-            IQueryable<Clients> cliList = from a in _contaxt.Clients.Include(m=>m.Attendance)                                        
-                                          where a.CLI_RegisteredOn.Date <= monthStartDate.Date
-                                          && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
-                                          select a;
-            return cliList.ToList();
+            var query=
+                from cri in _contaxt.Client_Requirements
+                join cle in _contaxt.Clients_Employees on cri.CLI_Id equals cle.CLI_Id
+                where cle.EMP_Id == EMP_Id && cri.CLI_Id == CLI_Id
+                select cri;
+            return query.FirstOrDefault().CRI_Id;
         }
     }
 }

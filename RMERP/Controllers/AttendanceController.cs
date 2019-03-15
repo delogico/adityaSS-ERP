@@ -18,6 +18,7 @@ using System.IO;
 using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
+using RMERP.Helpers;
 
 namespace RMERP.Controllers
 {
@@ -53,7 +54,14 @@ namespace RMERP.Controllers
             return View(pageVM);
         }
 
-        public ActionResult UploadExcel(int WAG_Id, int CLI_Id)
+        public ActionResult DeleteWageClientAttendanceList(int WAG_Id, int CLI_Id)
+        {
+            AttendanceManager attManager = new AttendanceManager(_context);
+            attManager.deleteAllAttendanceofWageClient(WAG_Id,CLI_Id);
+            return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id });
+        }
+
+            public ActionResult UploadExcel(int WAG_Id, int CLI_Id)
         {
             ClientsManager clientManager = new ClientsManager(_context, _configuration);
             WageProcessManager wageManager = new WageProcessManager(_context);
@@ -82,7 +90,7 @@ namespace RMERP.Controllers
                 {
                     string sFileExtension = Path.GetExtension(file.FileName).ToLower();
                     ISheet sheet;
-                    string fullPath = Path.Combine(newPath, file.FileName);
+                    string fullPath = Path.Combine(newPath, ProjectUtils.GetTempFileName()+sFileExtension);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         file.CopyTo(stream);
@@ -149,7 +157,10 @@ namespace RMERP.Controllers
                         excelViewModel.totalEmployees = TotEmp;
                         excelViewModel.startDate = startDate;
                         excelViewModel.endDate = endDate;
+                        excelViewModel.fileName = fullPath;
                         excelViewModel.totalPublicHolidays = totalPublicHolidays;
+                        excelViewModel.WAG_Id = uvm.wageProcessVM.WAG_Id;
+                        excelViewModel.CLI_Id = uvm.client.CLI_Id;
                     }
                 }
             }
@@ -157,16 +168,92 @@ namespace RMERP.Controllers
             return View(excelViewModel);
         }
 
-        [HttpGet]
-        public ActionResult AttendanceRegister(int WAG_Id)
+        [HttpPost]
+        public ActionResult ImportExcel(IFormCollection frm)
         {
+            int WAG_Id = Convert.ToInt32(frm["WAG_Id"]);
+            int CLI_Id = Convert.ToInt32(frm["CLI_Id"]);
+            string strFilePath = frm["fileName"];
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            AttendanceManager attManager = new AttendanceManager(_context);
+            ClientsManager clientManager = new ClientsManager(_context,_configuration);
             WageProcessManager wageManager = new WageProcessManager(_context);
-            ClientsManager clientsManager = new ClientsManager(_context, _configuration);
-            AttendanceRegisterVM registerVM = new AttendanceRegisterVM();
             Wage_Process wageProcess = wageManager.getWageProcessById(WAG_Id);
-            List<Clients> clients = clientsManager.GetActiveClientofaMonthWithAttandance(wageProcess.WAG_Month);
-            registerVM.listClients = clients;
-            return View(registerVM);
+            StringBuilder sb = new StringBuilder();
+            ISheet sheet;
+            using (var stream = new FileStream(strFilePath, FileMode.Open))
+            {
+                string sFileExtension = Path.GetExtension(strFilePath).ToLower();
+                stream.Position = 0;
+                if (sFileExtension == ".xls")
+                {
+                    HSSFWorkbook hssfwb = new HSSFWorkbook(stream); //This will read the Excel 97-2000 formats  
+                    sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook  
+                }
+                else
+                {
+                    XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
+                    sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook   
+                }
+                IRow headerRow = sheet.GetRow(0);
+                IRow secondRow = sheet.GetRow(1);
+                int cellCount = secondRow.LastCellNum;
+                int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
+                DateTime startDate = DateTime.Now, endDate = DateTime.Now;
+                if (intStartDate > 1)
+                {
+                    DateTime lastMonth = wageProcess.WAG_Month.AddMonths(-1);
+                    startDate = new DateTime(lastMonth.Year, lastMonth.Month, intStartDate);
+                }
+                else
+                {
+                    startDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, intStartDate);
+                }
+                endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, Convert.ToInt16(secondRow.GetCell(cellCount - 5).ToString()));
+
+                //for (int j = (secondRow.FirstCellNum + 4); j <= secondRow.LastCellNum - 4; j++)
+                //{
+                //    if (secondRow.GetCell(j).ToString().Contains("PH"))
+                //        totalPublicHolidays++;
+                //}
+
+                for (int i = (sheet.FirstRowNum + 2); i <= sheet.LastRowNum; i += 2)
+                {
+                    ExcelRowViewModel excelRow = new ExcelRowViewModel();
+                    IRow row = sheet.GetRow(i);
+                    IRow rowExtra = sheet.GetRow(i + 1);
+                    if (row == null) continue;
+                    if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
+
+                    int EMP_Id = Convert.ToInt16(row.GetCell(1).ToString());
+                    DateTime tmpDate = startDate;
+                    for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 5; j++)
+                    {
+                        Attendance att = new Attendance();
+                        att.EMP_Id = EMP_Id;
+                        att.WAG_Id = WAG_Id;
+                        att.CLI_Id = CLI_Id;
+                        att.CRI_Id = clientManager.getClientRequirementId(CLI_Id, EMP_Id);
+                        att.ATT_Date = tmpDate;
+                        if (row.GetCell(j).ToString().Equals("P"))
+                            att.ATT_IsPresent = true;
+                        else if (row.GetCell(j).ToString().Equals("A"))
+                            att.ATT_IsPresent = false;
+                        att.ATT_IsPaidHoliday = secondRow.GetCell(j).ToString().Contains("PH");
+                        if (rowExtra.GetCell(j) != null)
+                            if (!rowExtra.GetCell(j).ToString().Equals(""))
+                                att.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
+                        att.ATT_IsEarnLeave = false;
+                        att.ATT_IsWeeklyOff = false;
+                        att.ATT_Shift = "";
+                        att.ATT_ImportedOn = DateTime.Now;
+                        att.ADM_Id_ImportedBy = sessionUtils.GetLoggedAdminID();
+                        attManager.save(att);
+                        tmpDate = tmpDate.AddDays(1);
+                    }
+                }
+            }
+            return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id});
         }
     }
 }

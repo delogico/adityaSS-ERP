@@ -48,21 +48,26 @@ else
                                     <tbody>
                                         @foreach (var item in Model.excelRows)
                                         {
-                                        <tr>
-                                            <td>@item.EMP_Id</td>
-                                            <td>@item.EMP_Name</td>
-                                            <td>@item.Designation</td>
-                                            <td>@item.TotalPresenceDays</td>
-                                            <td>@item.TotalExtraHours</td>
-                                        </tr>
+                                            <tr>
+                                                <td>@item.EMP_Id</td>
+                                                <td>@item.EMP_Name</td>
+                                                <td>@item.Designation</td>
+                                                <td>@item.TotalPresenceDays</td>
+                                                <td>@item.TotalExtraHours</td>
+                                            </tr>
                                         }
-
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="m-t-20 text-center">
-                                <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" />
-                            </div>
+                            @using (Html.BeginForm("ImportExcel", "Attendance", FormMethod.Post))
+                            {
+                                @Html.HiddenFor(m => m.WAG_Id)
+                                @Html.HiddenFor(m => m.CLI_Id)
+                                @Html.HiddenFor(m => m.fileName)
+                                <div class="m-t-20 text-center">
+                                    <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" />
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
