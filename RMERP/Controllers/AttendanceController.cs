@@ -40,17 +40,18 @@ namespace RMERP.Controllers
             return View();
         }
 
-        //public ActionResult WageAttendanceList(int WAG_Id)
-        //{
-        //    ClientsManager clientsManager = new ClientsManager(_context, _configuration);
-        //    List<Clients> clientsManager.
-        //    ClientsViewModel cvm = new ClientsViewModel();
-        //    SessionUtils sessionUtils = new SessionUtils(Request, Response);
-        //    cvm.Listclients = clientsManager.listClients(sessionUtils.GetLoggedFirmID(), true);
-
-        //    cvm.WageID = wagId;
-        //    return View(cvm);
-        //}
+        public ActionResult WageAttendanceList(int WAG_Id)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context, _configuration);
+            AttendanceManager attManager = new AttendanceManager(_context);
+            WageProcessManager wageManager = new WageProcessManager(_context);
+            Wage_Process wage = wageManager.getWageProcessById(WAG_Id);
+            List<Clients> clients = clientsManager.GetActiveClientofaMonth(wage.WAG_Month);
+            WageProcessClientAttendancePageVM pageVM = new WageProcessClientAttendancePageVM();
+            pageVM.wageProcess = WageProcessMapper.mapMe(wage);
+            pageVM.lstClient = WageProcessMapper.mapClientToAttendanceWages(clients, wage, attManager.getAttendance_Wage(WAG_Id));
+            return View(pageVM);
+        }
 
         public ActionResult UploadExcel(int WAG_Id, int CLI_Id)
         {
@@ -154,6 +155,18 @@ namespace RMERP.Controllers
             }
            
             return View(excelViewModel);
+        }
+
+        [HttpGet]
+        public ActionResult AttendanceRegister(int WAG_Id)
+        {
+            WageProcessManager wageManager = new WageProcessManager(_context);
+            ClientsManager clientsManager = new ClientsManager(_context, _configuration);
+            AttendanceRegisterVM registerVM = new AttendanceRegisterVM();
+            Wage_Process wageProcess = wageManager.getWageProcessById(WAG_Id);
+            List<Clients> clients = clientsManager.GetActiveClientofaMonthWithAttandance(wageProcess.WAG_Month);
+            registerVM.listClients = clients;
+            return View(registerVM);
         }
     }
 }

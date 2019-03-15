@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using RMERP.DAL.Models;
 using RMERP.DAL.App_Code;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-
+using System.Data;
 
 namespace RMERP.DAL.ManagerClasses
 {
@@ -452,6 +451,16 @@ namespace RMERP.DAL.ManagerClasses
             return new Tuple<int, int>(0, 0);
         }
 
+        public List<Clients> GetActiveClientofaMonth(DateTime monthStartDate)
+        {
+            DateTime lastDate = new DateTime(monthStartDate.Year, monthStartDate.Month, 1).AddMonths(1).AddDays(-1);
+            IQueryable<Clients> cliList = from a in _contaxt.Clients
+                                    where a.CLI_RegisteredOn.Date <= monthStartDate.Date
+                                    && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
+                                    select a;
+            return cliList.ToList();
+        }
+
         public List<Clients> GetClientsListByMonth(DateTime WageMonthDate)
         {
             DateTime LastDate = new DateTime(WageMonthDate.Year, WageMonthDate.Month, 1).AddMonths(1).AddDays(-1);
@@ -474,6 +483,15 @@ namespace RMERP.DAL.ManagerClasses
             }           
            
             return lstClient;
+        }
+        public List<Clients> GetActiveClientofaMonthWithAttandance(DateTime monthStartDate)
+        {
+            DateTime lastDate = new DateTime(monthStartDate.Year, monthStartDate.Month, 1).AddMonths(1).AddDays(-1);
+            IQueryable<Clients> cliList = from a in _contaxt.Clients.Include(m=>m.Attendance)                                        
+                                          where a.CLI_RegisteredOn.Date <= monthStartDate.Date
+                                          && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
+                                          select a;
+            return cliList.ToList();
         }
     }
 }

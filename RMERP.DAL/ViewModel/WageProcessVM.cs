@@ -16,4 +16,17 @@ namespace RMERP.DAL.ViewModel
             return WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
         }
     }
+
+    public class WageProcessClientAttendancePageVM
+    {
+        public WageProcessVM wageProcess { get; set; }
+        public List<WageProcessClientAttendanceVM> lstClient { get; set; }
+    }
+
+    public class WageProcessClientAttendanceVM
+    {
+        public int CLI_Id { get; set; }
+        public string CLI_Name { get; set; }
+        public int totalEmployees { get; set; }
+    }
 }
