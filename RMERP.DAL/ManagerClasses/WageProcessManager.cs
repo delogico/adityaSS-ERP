@@ -114,5 +114,6 @@ namespace RMERP.DAL.ManagerClasses
             attendance = _context.Attendance.Find(attId);
             return attendance;
         }
+       
     }
 }

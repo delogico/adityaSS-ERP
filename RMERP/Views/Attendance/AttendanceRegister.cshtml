@@ -1,4 +1,6 @@
 ﻿@model RMERP.DAL.ViewModel.AttendanceRegisterVM
+@using RMERP.DAL.Models
+@using RMERP.DAL.ManagerClasses
 @{
     ViewData["Title"] = "AttendanceRegister";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
@@ -9,7 +11,6 @@
     {
         <li><a data-toggle="tab" href="#@item.CLI_Id">@item.CLI_Name</a></li>
     }
-    @*<li class="active"><a data-toggle="tab" href="#home">Home</a></li>*@    
 </ul>
 
 <div class="tab-content">
@@ -19,19 +20,23 @@
         <h3>@item.CLI_Name</h3>
         @if (item.Attendance != null)
         {
+        <table>
             @foreach (var attendance in item.Attendance)
             {
-                <p>@attendance.ATT_Date</p> <br />
-            }
+            <tr>
+                <td>@attendance.ATT_Date</td>
+               
+            </tr>
+             }                
+            </table>
         }
-
     </div>
     }
 
     @*<div id="menu1" class="tab-pane fade">
-        <h3>Menu 1</h3>
-        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>*@
-    
+            <h3>Menu 1</h3>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        </div>*@
+
 </div>
 
