@@ -76,6 +76,11 @@ namespace RMERP.DAL.Helpers
             }
             return newPath;
         }
-  
+
+        public static string GetTempFileName()
+        {
+            return DateTime.Now.ToString("yyyyMMddHHmmss");
+        }
+
     }
 }

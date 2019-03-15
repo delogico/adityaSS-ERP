@@ -21,6 +21,9 @@ namespace RMERP.DAL.ViewModel
         public int totalEmployees { get; set; }
         public int totalPublicHolidays { get; set; }
         public List<ExcelRowViewModel> excelRows { get; set; }
+        public string fileName { get; set; }
+        public int WAG_Id { get; set; }
+        public int CLI_Id { get; set; }
     }
     public class ExcelRowViewModel
     {

@@ -18,5 +18,23 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Attendance.Where(a => a.WAG_Id == WAG_Id).ToList();
         }
+
+        public void save(Attendance attendace)
+        {
+            _context.Attendance.Add(attendace);
+            _context.SaveChanges();
+        }
+
+        public void delete(Attendance attendace)
+        {
+            _context.Attendance.Remove(attendace);
+            _context.SaveChanges();
+        }
+
+        public void deleteAllAttendanceofWageClient(int WAG_Id, int CLI_Id)
+        {
+            _context.Attendance.RemoveRange(_context.Attendance.Where(a => a.WAG_Id == WAG_Id && a.CLI_Id == CLI_Id).ToList());
+            _context.SaveChanges();
+        }
     }
 }
