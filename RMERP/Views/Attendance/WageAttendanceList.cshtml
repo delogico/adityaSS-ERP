@@ -35,7 +35,7 @@
                                     @{
                                         if (item.totalEmployees > 0)
                                         {
-                                            <a href='@Url.Action("ViewAttendance", "WageProcess", new { wagId = Model.wageProcess.WAG_Id, CliId = item.CLI_Id })' title="View"><i class="fa fa-eye m-r-5"></i> View</a>
+                                            <a href='@Url.Action("ViewAttendance", "WageProcess", new { WAG_Id = Model.wageProcess.WAG_Id, CLI_Id = item.CLI_Id })' title="View"><i class="fa fa-eye m-r-5"></i> View</a>
                                         }
                                         else
                                         {
