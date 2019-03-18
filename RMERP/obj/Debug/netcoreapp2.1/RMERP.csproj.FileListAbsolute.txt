@@ -57,6 +57,8 @@ C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.Views.pdb
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.csproj.CopyComplete
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.dll
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.pdb
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\AttendanceRegister.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\WageAttendanceList.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\bin\Debug\netcoreapp2.1\RMERP.deps.json
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\bin\Debug\netcoreapp2.1\RMERP.runtimeconfig.json
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\bin\Debug\netcoreapp2.1\RMERP.runtimeconfig.dev.json
@@ -79,8 +81,10 @@ C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Admin
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\AdminUsers\DashBoard.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\AdminUsers\Index.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\AdminUsers\Login.g.cshtml.cs
+C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\AttendanceRegister.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\UploadExcel.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\VerifyTemplate.g.cshtml.cs
+C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\WageAttendanceList.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Clients\AddEditClients.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Clients\AddEditContacts.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Clients\AddEditRequirement.g.cshtml.cs
@@ -116,6 +120,3 @@ C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\RMERP.Views.pdb
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\RMERP.csproj.CopyComplete
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\RMERP.dll
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\RMERP.pdb
-C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\WageAttendanceList.g.cshtml.cs
-C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\AttendanceRegister.g.cshtml.cs
-C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\WageAttendanceList.g.cshtml.cs

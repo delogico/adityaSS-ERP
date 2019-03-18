@@ -10,6 +10,7 @@ using RMERP.DAL.ManagerClasses;
 using RMERP.DAL.Models;
 using RMERP.Helpers;
 using RMERP.DAL.ViewModel;
+using RMERP.DAL.Mappers;
 using Microsoft.AspNetCore.Http;
 using System.Text;
 using System.IO;
@@ -78,14 +79,11 @@ namespace RMERP.Controllers
         }
       
         [HttpGet]
-        public ActionResult ViewAttendance(int wagId,int CliId)
+        public ActionResult ViewAttendance(int WAG_Id,int CLI_Id)
         {
-            clientID = CliId;
-            WagID = wagId;
-            ClientsManager clientsManager = new ClientsManager(_context, Configuration);            
-            IEnumerable <Attendance> list = wpm.GetAttendanceList(wagId, CliId);
-
-            Clients client = clientsManager.GetClientById(CliId);
+            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            AttendanceManager attendanceManager = new AttendanceManager(_context);
+            Clients client = clientsManager.GetClientById(CLI_Id);
             DateTime startDate = DateTime.Now, endDate = DateTime.Now;
             ViewBag.ClientName = client.CLI_Name;
             if (client.CLI_Att_MonthReal == true)
@@ -100,25 +98,7 @@ namespace RMERP.Controllers
             }
             ViewBag.startDate = startDate;
             ViewBag.endDate = endDate;
-
-            //List<AttendanceListViewModel> listModel = new List<AttendanceListViewModel>();
-            //List<int> lst = list.Select(m => m.EmpId).Distinct().ToList();
-            //foreach (var item in lst)
-            //{
-            //    var tempEmployeeList = list.Where(m => m.EmpId == item).ToList();
-            //    AttendanceListViewModel vm = new AttendanceListViewModel();
-            //    vm.EmpName = tempEmployeeList[0].Emp.EmpFirstName;
-            //    vm.EmpDesignation = tempEmployeeList[0].Emp.EmpDesignation;
-            //    vm.ExtraWorkingHours = tempEmployeeList[0].AttExtraHoursWorked;
-            //    vm.UserDataList = new List<UserData>();
-            //    foreach (var itemEmp in tempEmployeeList)
-            //    {
-            //        UserData userData = new UserData();
-            //        userData.AttendanceDate = itemEmp.AttDate;
-            //        vm.UserDataList.Add(userData);
-            //    }
-            //    listModel.Add(vm);
-            //}
+            List<AttendanceVM> list = AttendanceMapper.mapAttendances(attendanceManager.getAttendance_Wage_Client(WAG_Id, CLI_Id));
             return View(list);
         }
         [HttpGet]
