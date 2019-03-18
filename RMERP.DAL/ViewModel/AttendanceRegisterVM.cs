@@ -8,7 +8,6 @@ namespace RMERP.DAL.ViewModel
     public class AttendanceRegisterVM
     {
         public List<Clients> listClients { get; set; }
-
     }
    
 }

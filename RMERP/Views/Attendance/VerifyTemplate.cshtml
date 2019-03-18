@@ -1,75 +1,135 @@
 ﻿@model RMERP.DAL.ViewModel.ExcelViewModel
 @using RMERP.Helpers;
+@using RMERP.DAL.Models;
 @{
     ViewData["Title"] = "Verify Excel File";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 
-    @if (Model == null)
-    {
-        <h4>No data to display</h4>
-    }
-    else
-    {
-        <div class="modal-dialog modelLeftSide">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <div class="modal-content modal-lg">
-                <div class="modal-header">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h4 class="modal-title">Summary of Attendance Going to import</h4>
-                            <h6 class="modal-title">Total Employee Found: @Model.totalEmployees</h6>
-                            <h6 class="modal-title">Total Public Holidays: @Model.totalPublicHolidays</h6>
-                        </div>
-                        <div class="col-md-5">
-                            <h6 class="modal-title">Starting Date: @DateHelper.getDateWithFormat(Model.startDate)</h6>
-                            <h6 class="modal-title">Ending Date: @DateHelper.getDateWithFormat(Model.endDate)</h6>
-                        </div>
+@if (Model == null)
+{
+    <h4>No data to display</h4>
+}
+else
+{
+    <div class="modal-dialog modelLeftSide" style="width: 100%;">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-content modal-lg" style="width: 90%;">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h4 class="modal-title">Summary of Attendance Going to import</h4>
+                        <h6 class="modal-title">Total Employee Found: @Model.totalEmployees</h6>
+                        <h6 class="modal-title">Total Public Holidays: @Model.totalPublicHolidays</h6>
                     </div>
-
+                    <div class="col-md-5">
+                        <h6 class="modal-title">Starting Date: @DateHelper.getDateWithFormat(Model.startDate)</h6>
+                        <h6 class="modal-title">Ending Date: @DateHelper.getDateWithFormat(Model.endDate)</h6>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div>
-                        <div class="content container-fluid">
 
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div>
-                                        <table class="table table-hover custom-table m-b-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Employee Id</th>
-                                                    <th>Employee Name</th>
-                                                    <th>Designation</th>
-                                                    <th>Total Presence</th>
-                                                    <th>Total Extra Hours</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var item in Model.excelRows)
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="content container-fluid">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div><div class="table-responsive">
+                                    <table class="table table-responsive" style="width: 90%;">
+        <thead>
+            <tr>
+                <th>Emp Id</th>
+                <th>Employee Name</th>
+                <th>Designation</th>
+                @{
+                    DateTime tmpDate = Model.startDate;
+
+                    while (Model.endDate >= tmpDate)
+                    {
+                        <th> @tmpDate.Day</th>
+                        tmpDate = tmpDate.AddDays(1);
+                    }
+                }
+                <th>Total Presence</th>
+                <th>Total Extra Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.excelRows)
+            {
+                <tr>
+                    <td>@item.EMP_Id</td>
+                    <td>@item.EMP_Name</td>
+                    <td>@item.Designation</td>
+                    @{
+                        DateTime tmpDate1 = Model.startDate;
+                        while (Model.endDate >= tmpDate1)
+                        {
+                            Attendance att = Model.listAttendance.Where(m => m.EMP_Id == Convert.ToInt32(item.EMP_Id) && m.ATT_Date.Equals(tmpDate1)).FirstOrDefault();
+                            if (att != null)
+                            {
+                                <td>
+                                    <div class="row">
+                                        @{
+                                            String str = "";
+                                            if (att.ATT_IsWeeklyOff)
+                                            {
+                                                str = "<span style='color:red;'>W/O</span>";
+                                            }
+                                            else
+                                            {
+                                                if (att.ATT_IsPresent)
                                                 {
-                                                    <tr>
-                                                        <td>@item.EMP_Id</td>
-                                                        <td>@item.EMP_Name</td>
-                                                        <td>@item.Designation</td>
-                                                        <td>@item.TotalPresenceDays</td>
-                                                        <td>@item.TotalExtraHours</td>
-                                                    </tr>
+                                                    str = "P";
                                                 }
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    @if (Model.empListExtraInExcel.Count() > 0 || Model.EmpListExtraInDb.Count() > 0 || Model.datePeriod == false)
-                                    {
-                                        <br />
-                                        <div class="row well well-lg" style="color:red;">
-                                            <div class="col-md-7">
-                                                <h4 class="modal-title">Match with clients</h4>
-                                                <hr />
-                                                <ul>
-                                                    @if (Model.empListExtraInExcel.Count() > 0)
+                                                else
+                                                {
+                                                    str = "<span style='color:red;'>A</span>";
+                                                }
+                                            }
+                                            <div class="col-md-12">@Html.Raw(str)</div>
+                                            <div class="col-md-12">
+                                                @{
+                                                    @*@Html.Raw("Extra Hrs: ");*@
+                                                    if (att.ATT_ExtraHoursWorked == 0)
                                                     {
+                                                        @Html.Raw("-");
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.Raw("[");
+                                                        @att.ATT_ExtraHoursWorked.ToString("#.#")
+                                                        @Html.Raw("]");
+                                                    }
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </td>
+                            }
+                            tmpDate1 = tmpDate1.AddDays(1);
+                        }
+                    }
+                    <td>@item.TotalPresenceDays</td>
+                    <td>@item.TotalExtraHours</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+                                </div>
+</div>
+
+                                @if (Model.empListExtraInExcel.Count() > 0 || Model.EmpListExtraInDb.Count() > 0 || Model.datePeriod == false)
+                                {
+                                    <br />
+                                    <div class="row well well-lg" style="color:red;">
+                                        <div class="col-md-7">
+                                            <h4 class="modal-title">Match with clients</h4>
+                                            <hr />
+                                            <ul>
+                                                @if (Model.empListExtraInExcel.Count() > 0)
+                                                {
                                                     <li>
                                                         We have found this employees which is/are not assign to Client :
                                                         <ul>
@@ -79,12 +139,12 @@
                                                             }
                                                         </ul>
                                                     </li>
-                                                    }
+                                                }
 
-                                                </ul>
-                                                <ul>
-                                                    @if (Model.EmpListExtraInDb.Count() > 0)
-                                                    {
+                                            </ul>
+                                            <ul>
+                                                @if (Model.EmpListExtraInDb.Count() > 0)
+                                                {
                                                     <li>
                                                         We have found this missing employees which is/are assign to Client :
                                                         <ul>
@@ -94,46 +154,46 @@
                                                             }
                                                         </ul>
                                                     </li>
-                                                    }
+                                                }
 
-                                                </ul>
-                                                <ul>
-                                                    @if (Model.datePeriod == false)
-                                                    {
-                                                    <li>We have found date period of excel is not match with client parameter.</li>                                                        
-                                                    }
+                                            </ul>
+                                            <ul>
+                                                @if (Model.datePeriod == false)
+                                                {
+                                                    <li>We have found date period of excel is not match with client parameter.</li>
+                                                }
 
-                                                </ul>
+                                            </ul>
 
-                                                
-                                            </div>
 
                                         </div>
-                                    }
-                                    
-                                    @using (Html.BeginForm("ImportExcel", "Attendance", FormMethod.Post))
-                                    {
-                                        @Html.HiddenFor(m => m.WAG_Id)
-                                        @Html.HiddenFor(m => m.CLI_Id)
-                                        @Html.HiddenFor(m => m.fileName)
-                                        <div class="m-t-20 text-center">
-                                            @if (Model.btnExportToDatabase == false)
-                                            {
-                                                <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" disabled />
-                                            }
-                                            else
-                                            {
-                                                <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" />
-                                            }
 
-                                        </div>
-                                    }
-                                </div>
+                                    </div>
+                                }
+
+                                @using (Html.BeginForm("ImportExcel", "Attendance", FormMethod.Post))
+                                {
+                                    @Html.HiddenFor(m => m.WAG_Id)
+                                    @Html.HiddenFor(m => m.CLI_Id)
+                                    @Html.HiddenFor(m => m.fileName)
+                                    <div class="m-t-20 text-center">
+                                        @if (Model.btnExportToDatabase == false)
+                                        {
+                                            <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" disabled />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" />
+                                        }
+
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    }
+    </div>
+}
 
