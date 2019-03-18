@@ -589,9 +589,10 @@ namespace RMERP.Controllers
                 foreach (var item in clientsManager.listClientsEmployees(ClientId))
                 {
                     row = excelSheet.CreateRow(rowCount);
-                    row.CreateCell(0).SetCellValue(j);                 
+                    row.CreateCell(0).SetCellValue(j);
 
-                    row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
+                    //row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
+                    row.CreateCell(1).SetCellValue(item.EMP_Id.ToString("D5"));
                     row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
                     row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName+" "+ item.EMP_.EMP_MiddleName+" "+ item.EMP_.EMP_SurName);
 
@@ -736,8 +737,9 @@ namespace RMERP.Controllers
                 foreach (var item in clientsManager.listClientsEmployees(ClientId))
                 {
                     row = excelSheet.CreateRow(rowCount);
-                    row.CreateCell(0).SetCellValue(j);                   
-                    row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
+                    row.CreateCell(0).SetCellValue(j);
+                    //row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
+                    row.CreateCell(1).SetCellValue(item.EMP_Id.ToString("D5"));
                     row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
                     row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + " " + item.EMP_.EMP_MiddleName + " " + item.EMP_.EMP_SurName);
 

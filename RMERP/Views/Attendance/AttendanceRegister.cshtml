@@ -56,7 +56,7 @@
                         <tr>
                             @{Employees employees = new Employees();
                                 employees = @empMgr.GetEmployeesById(emp.EMP_Id);}
-                            <td>@employees.EMP_Id</td>
+                            <td>@employees.EMP_Id.ToString("D5")</td>
                             <td>@employees.EMP_FirstName</td>
                             <td>@employees.EMP_Designation</td>
                             <td>@emp.CLE_RegisteredOn.ToShortDateString()</td>
@@ -66,7 +66,7 @@
                             @*<td>@(Convert.ToString(cr.CRI_HRA_Percentage) != "" ? Convert.ToString(cr.CRI_HRA_Percentage)+"%" : "-") |
                                     @(Convert.ToString(cr.CRI_HRA_Fixed) == "" ? "-" : Convert.ToString(cr.CRI_HRA_Fixed))</td>*@
                             <td>@(Convert.ToString(cr.CRI_Allowance_UpKeep)!=""? Convert.ToString(cr.CRI_Allowance_UpKeep) : "-")</td>
-                            <td>@Model.listAttendance.Where(m => m.EMP_Id == employees.EMP_Id).Sum(m=>m.ATT_ExtraHoursWorked)</td>
+                            <td>@Model.listAttendance.Where(m => m.EMP_Id == employees.EMP_Id && m.CLI_Id == item.CLI_Id).Sum(m=>m.ATT_ExtraHoursWorked)</td>
                         </tr>
                         }
                     </tbody>
