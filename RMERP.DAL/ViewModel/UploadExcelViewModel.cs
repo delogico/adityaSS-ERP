@@ -29,6 +29,7 @@ namespace RMERP.DAL.ViewModel
         public List<Employees> EmpListExtraInDb { get; set; }
         public bool btnExportToDatabase { get; set; } = true;
         public bool datePeriod { get; set; } = true;
+        public List<Attendance> listAttendance { get; set; }
     }
     public class ExcelRowViewModel
     {

@@ -16,31 +16,42 @@ namespace RMERP.DAL.MetaClasses
     }
     public class EmployeesMetaClass
     {
-        public int EmpId { get; set; }
-        public string EmpFirstName { get; set; }
-        public string EmpMiddleName { get; set; }
-        public string EmpSurName { get; set; }
-        public string EmpAadharName { get; set; }
-        public string EmpAadharNumber { get; set; }
-        public DateTime EmpDob { get; set; }
-        public byte EmpMarried { get; set; }
-        public DateTime EmpDateOfJoining { get; set; }
-        public bool EmpGender { get; set; }
-        public string EmpContactPrimary { get; set; }
-        public string EmpContactSecondry { get; set; }
-        public string EmpAddress { get; set; }
-        public string EmpDesignation { get; set; }
-        public string EmpPanNumber { get; set; }
-        public string EmpEsicNumber { get; set; }
-        public string EmpUanNumber { get; set; }
-        public int DeptId { get; set; }
-        public int EmpEmployeeNumberOffice { get; set; }
-        public string EmpTpcEmployeeId { get; set; }
-        public DateTime EmpRegisteredOn { get; set; }
-        public int AdmIdRegisteredBy { get; set; }
-        public bool? EmpIsActive { get; set; }
-        public DateTime? EmpInactivatedOn { get; set; }
-        public int? AdmIdInactivatedBy { get; set; }
-        
+        public int EMP_Id { get; set; }
+        public string EMP_FirstName { get; set; }
+        public string EMP_MiddleName { get; set; }
+        public string EMP_SurName { get; set; }
+        public string EMP_Aadhar_Name { get; set; }
+        public string EMP_Aadhar_Number { get; set; }
+        public DateTime EMP_DOB { get; set; }
+        public byte EMP_Married { get; set; }
+        public DateTime EMP_DateOfJoining { get; set; }
+        public bool EMP_Gender { get; set; }
+        public string EMP_Contact_Primary { get; set; }
+        public string EMP_Contact_Secondry { get; set; }
+        public string EMP_Address { get; set; }
+        public string EMP_Designation { get; set; }
+        public string EMP_Pan_Number { get; set; }
+        public string EMP_ESIC_Number { get; set; }
+        public string EMP_UAN_Number { get; set; }
+        public int DEPT_Id { get; set; }
+        public int EMP_EmployeeNumber_Office { get; set; }
+        public string EMP_TPC_EmployeeId { get; set; }
+        public DateTime EMP_RegisteredOn { get; set; }
+        public int ADM_Id_RegisteredBy { get; set; }
+        public bool? EMP_IsActive { get; set; }
+        public DateTime? EMP_InactivatedOn { get; set; }
+        public int? ADM_Id_InactivatedBy { get; set; }
+
+        public Departments DEPT_ { get; set; }
+        public ICollection<Attendance> Attendance { get; set; }
+        public ICollection<Clients_Employees> Clients_Employees { get; set; }
+
+        public string EMP_FullName
+        {
+            get
+            {
+                return string.Concat(EMP_FirstName + " " + EMP_MiddleName + " " + EMP_SurName);
+            }
+        }
     }
 }

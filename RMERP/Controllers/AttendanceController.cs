@@ -61,7 +61,7 @@ namespace RMERP.Controllers
             return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id });
         }
 
-            public ActionResult UploadExcel(int WAG_Id, int CLI_Id)
+        public ActionResult UploadExcel(int WAG_Id, int CLI_Id)
         {
             ClientsManager clientManager = new ClientsManager(_context, _configuration);
             WageProcessManager wageManager = new WageProcessManager(_context);
@@ -88,7 +88,8 @@ namespace RMERP.Controllers
             #region 
             List<Employees> empListExtraInExcel = new List<Employees>();
             List<Employees> empListExtraInDb = new List<Employees>();
-            #endregion 
+            List<Attendance> attandanceList=new List<Attendance>();
+            #endregion
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
             StringBuilder sb = new StringBuilder();
             if (file != null)
@@ -156,9 +157,11 @@ namespace RMERP.Controllers
                         List<Clients_Employees> assignEmployeeList = attManager.assignEmployeeList(uvm.client.CLI_Id);
                         List<_EmpID> _empID = new List<_EmpID>();
                         #endregion
+                       
                         for (int i = (sheet.FirstRowNum + 2); i <= sheet.LastRowNum; i+=2)
                         {
                             _EmpID EmpID = new _EmpID();
+                                               
                             ExcelRowViewModel excelRow = new ExcelRowViewModel();
                             IRow row = sheet.GetRow(i);
                             IRow rowExtra = sheet.GetRow(i + 1);
@@ -166,11 +169,12 @@ namespace RMERP.Controllers
                             if (row == null) continue;
                             if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
                             excelRow.EMP_Id = row.GetCell(1).ToString();
-
+                           
                             #region created by rinku on 15 march - 19 For error display 
                             int EMP_Id = Convert.ToInt32(row.GetCell(1).ToString());
-                            Clients_Employees emp = assignEmployeeList.Where(m => m.EMP_Id.Equals(EMP_Id)).FirstOrDefault();                           
-
+                           
+                            Clients_Employees emp = assignEmployeeList.Where(m => m.EMP_Id.Equals(EMP_Id)).FirstOrDefault();
+                            
                             if (emp==null)
                             {
                                 empListExtraInExcel.Add(empManager.GetEmployeesById(EMP_Id));
@@ -187,13 +191,25 @@ namespace RMERP.Controllers
                             TotEmp++;
                             int totalPresence = 0;
                             Double totalExtraHours = 0;
+                            DateTime tmpDate = startDate;
                             for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum-4; j++)
                             {
+                                Attendance attendance = new Attendance();
+                                attendance.EMP_Id = EMP_Id;
+                                attendance.CLI_Id = uvm.client.CLI_Id;
+                                attendance.ATT_Date = tmpDate;
+                                tmpDate = tmpDate.AddDays(1);                               
                                 if (row.GetCell(j).ToString().Equals("P"))
+                                {
+                                    attendance.ATT_IsPresent = true;
                                     totalPresence++;
-                                if(rowExtra.GetCell(j) != null)
-                                    if (!rowExtra.GetCell(j).ToString().Equals(""))
+                                }
+                                if (rowExtra.GetCell(j) != null)
+                                    if (!rowExtra.GetCell(j).ToString().Equals("")) { 
+                                        attendance.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
                                         totalExtraHours += Convert.ToDouble(rowExtra.GetCell(j).ToString());
+                                    }
+                                attandanceList.Add(attendance);
                             }
                             excelRow.TotalPresenceDays = totalPresence;
                             excelRow.TotalExtraHours = totalExtraHours;
@@ -225,6 +241,7 @@ namespace RMERP.Controllers
             {
                 excelViewModel.btnExportToDatabase = false;
             }
+            excelViewModel.listAttendance = attandanceList;
             #endregion
             return View(excelViewModel);
         }
@@ -316,6 +333,17 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id});
         }
+
+        public ActionResult AttendanceRegister(int WAG_Id)
+        {
+            AttendanceRegisterVM avm = new AttendanceRegisterVM();
+            ClientsManager clientsManager = new ClientsManager(_context, _configuration);
+            WageProcessManager wageManager = new WageProcessManager(_context);
+            Wage_Process wage = wageManager.getWageProcessById(WAG_Id);
+            List<Clients> lstCli = clientsManager.GetActiveClientForAttandanceReg(wage.WAG_Month);
+            avm.listClients = lstCli;           
+            return View(avm);
+        }
     }
     public class _EmpID
     {
@@ -327,4 +355,6 @@ namespace RMERP.Controllers
             set { id = value; }
         }
     }
+   
+
 }

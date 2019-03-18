@@ -6,37 +6,77 @@
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            debugger;
+            $(".tab-content").hide();
+        });
+
+            function openClient(evt, CliName) {
+                    debugger;
+                    var i, tabcontent, tablinks;
+                    tabcontent = document.getElementsByClassName("tabcontent");
+                    for (i = 0; i < tabcontent.length; i++) {
+                        tabcontent[i].style.display = "none";
+                    }
+                    tablinks = document.getElementsByClassName("tablinks");
+                    for (i = 0; i < tablinks.length; i++) {
+                        tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                $(".tab-content").show();
+                    document.getElementById(CliName).style.display = "block";
+                    evt.currentTarget.className += " active";
+                }
+    </script>
+}
+
 <ul class="nav nav-tabs">
     @foreach (var item in Model.listClients)
     {
-        <li><a data-toggle="tab" href="#@item.CLI_Id">@item.CLI_Name</a></li>
+        <li><a data-toggle="tab" class="tablinks" onclick="openClient(event,'@item.CLI_Name')">@item.CLI_Name</a></li>
     }
 </ul>
 
 <div class="tab-content">
+   
     @foreach (var item in Model.listClients)
     {
-    <div id="@item.CLI_Id" class="tab-pane fade">
-        <h3>@item.CLI_Name</h3>
-        @if (item.Attendance != null)
-        {
-        <table>
-            @foreach (var attendance in item.Attendance)
+        <div id="@item.CLI_Name" class="tabcontent">
+            <h3>@item.CLI_Name</h3>
+            @if (item.Clients_Employees != null)
             {
-            <tr>
-                <td>@attendance.ATT_Date</td>
-               
-            </tr>
-             }                
-            </table>
-        }
-    </div>
-    }
+                <table class="table table-border">
+                    <thead>
+                        <tr>
+                            <td>Employee ID</td>
+                            <td>Employee Name</td>
+                            <td>Designation</td>
+                            <td>Date Of Joining</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            RMERPContext _context = new RMERPContext();
+                            EmployeeManager empMgr = new EmployeeManager(_context);
 
-    @*<div id="menu1" class="tab-pane fade">
-            <h3>Menu 1</h3>
-            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        </div>*@
+                        }
+                        @foreach (var emp in item.Clients_Employees.OrderBy(m => m.EMP_Id))
+                        {
+                        <tr>
+                            @{Employees employees = new Employees();
+                                employees = @empMgr.GetEmployeesById(emp.EMP_Id);}
+                            <td>@employees.EMP_Id</td>
+                            <td>@employees.EMP_FirstName</td>
+                            <td>@employees.EMP_Designation</td>
+                            <td>@emp.CLE_RegisteredOn.ToShortDateString()</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    }
 
 </div>
 
