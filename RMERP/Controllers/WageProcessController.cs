@@ -29,8 +29,7 @@ namespace RMERP.Controllers
         public IConfiguration Configuration;
         WageProcessManager wpm;
         private IHostingEnvironment _hostingEnvironment;
-        private static int clientID,WagID;
-
+       
         public WageProcessController(RMERPContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
@@ -78,29 +77,7 @@ namespace RMERP.Controllers
             return PartialView("_WageProcessList", model);
         }
       
-        [HttpGet]
-        public ActionResult ViewAttendance(int WAG_Id,int CLI_Id)
-        {
-            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            AttendanceManager attendanceManager = new AttendanceManager(_context);
-            Clients client = clientsManager.GetClientById(CLI_Id);
-            DateTime startDate = DateTime.Now, endDate = DateTime.Now;
-            ViewBag.ClientName = client.CLI_Name;
-            if (client.CLI_Att_MonthReal == true)
-            {
-                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                endDate = startDate.AddMonths(1).AddDays(-1);
-            }
-            else if (client.CLI_Att_MonthReal == false)
-            {
-                startDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CLI_Att_Month_Start.Value);
-                endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CLI_Att_Month_End.Value); ;
-            }
-            ViewBag.startDate = startDate;
-            ViewBag.endDate = endDate;
-            List<AttendanceVM> list = AttendanceMapper.mapAttendances(attendanceManager.getAttendance_Wage_Client(WAG_Id, CLI_Id));
-            return View(list);
-        }
+        
         [HttpGet]
         public ActionResult EditAttendance(int empId)
         {

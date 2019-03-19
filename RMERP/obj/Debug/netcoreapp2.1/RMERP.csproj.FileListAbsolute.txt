@@ -110,7 +110,6 @@ C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageP
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\EditAttendance.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\EditAttendanceRecord.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\Index.g.cshtml.cs
-C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\ViewAttendance.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\_WageProcessList.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\_ViewImports.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\_ViewStart.g.cshtml.cs
@@ -120,3 +119,4 @@ C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\RMERP.Views.pdb
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\RMERP.csproj.CopyComplete
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\RMERP.dll
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\RMERP.pdb
+C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\ViewAttendance.g.cshtml.cs

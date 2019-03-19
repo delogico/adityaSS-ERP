@@ -139,6 +139,16 @@ textarea.form-control {
 	height: 46px;
 }
 
+.present{
+    color:darkgreen;
+}
+.absent{
+    color:red;
+}
+.weekoff{
+    color:darkorange;
+}
+
 /*-----------------
 	2. Table
 -----------------------*/
