@@ -41,6 +41,7 @@
                             <td>HRA(%) | HRA(Fixed)</td>
                             <td>UPKEEP ALLOW.</td>
                             <td>O.T.HRS.</td>
+                            <td>M/F</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,8 +50,7 @@
                             EmployeeManager empMgr = new EmployeeManager(_context);                            
                             List<Clients_Employees> lstCliEmp = item.Clients_Employees.OrderBy(m => m.EMP_Id).ToList();
                             List<Client_Requirements> lstCliReq = item.Client_Requirements.Where(m=>m.CLI_Id==item.CLI_Id && m.CRI_Active==true).ToList();                           
-                        }
-                       
+                        }                       
                         @foreach (var emp in lstCliEmp)
                         {
                         <tr>
@@ -62,11 +62,12 @@
                             <td>@emp.CLE_RegisteredOn.ToShortDateString()</td>
                             @{Client_Requirements cr = lstCliReq.Where(m => m.DES_Id == emp.DES_Id).FirstOrDefault();}
                             <td>@(Convert.ToDecimal(cr.CRI_Basic) == (0.0m) ? cr.CRI_BasicDA : (cr.CRI_Basic + Convert.ToDecimal(cr.CRI_DA)))</td>
-                            <td>@(Convert.ToString(cr.CRI_HRA_Percentage)=="" ? Convert.ToString(cr.CRI_HRA_Fixed) : Convert.ToString(cr.CRI_HRA_Percentage)+"%")</td>
+                            <td>@(Convert.ToString(cr.CRI_HRA_Percentage) == "" ? Convert.ToString(cr.CRI_HRA_Fixed) : Convert.ToString(cr.CRI_HRA_Percentage) + "%")</td>
                             @*<td>@(Convert.ToString(cr.CRI_HRA_Percentage) != "" ? Convert.ToString(cr.CRI_HRA_Percentage)+"%" : "-") |
-                                    @(Convert.ToString(cr.CRI_HRA_Fixed) == "" ? "-" : Convert.ToString(cr.CRI_HRA_Fixed))</td>*@
-                            <td>@(Convert.ToString(cr.CRI_Allowance_UpKeep)!=""? Convert.ToString(cr.CRI_Allowance_UpKeep) : "-")</td>
-                            <td>@Model.listAttendance.Where(m => m.EMP_Id == employees.EMP_Id && m.CLI_Id == item.CLI_Id).Sum(m=>m.ATT_ExtraHoursWorked)</td>
+                                  @(Convert.ToString(cr.CRI_HRA_Fixed) == "" ? "-" : Convert.ToString(cr.CRI_HRA_Fixed))</td>*@
+                            <td>@(Convert.ToString(cr.CRI_Allowance_UpKeep) != "" ? Convert.ToString(cr.CRI_Allowance_UpKeep) : "-")</td>
+                            <td>@Model.listAttendance.Where(m => m.EMP_Id == employees.EMP_Id && m.CLI_Id == item.CLI_Id).Sum(m => m.ATT_ExtraHoursWorked)</td>
+                            <td>@(employees.EMP_Gender == true ? "M" : "F")</td>
                         </tr>
                         }
                     </tbody>
