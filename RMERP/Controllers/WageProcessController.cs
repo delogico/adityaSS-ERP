@@ -229,7 +229,7 @@ namespace RMERP.Controllers
             WageProcessManager wageManager = new WageProcessManager(_context);
             AttendanceManager attMgr = new AttendanceManager(_context);
             Wage_Process wage = wageManager.getWageProcessById(WAG_Id);
-            List<Clients> lstCli = clientsManager.GetActiveClientForAttandanceReg(wage.WAG_Month);
+            List<Clients> lstCli = clientsManager.GetActiveClientForAttandanceReg(wage.WAG_Month, WAG_Id);
             avm.listAttendance = attMgr.getAttendance_Wage(WAG_Id);
 
             EmployeeManager em = new EmployeeManager(_context);

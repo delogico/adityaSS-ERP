@@ -119,4 +119,4 @@ C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.csproj.CopyComplete
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.dll
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.pdb
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\ViewAttendance.g.cshtml.cs
-C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\WageRegister.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\WageRegister.g.cshtml.cs
