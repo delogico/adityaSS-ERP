@@ -498,7 +498,7 @@ namespace RMERP.DAL.ManagerClasses
         {
             DateTime lastDate = new DateTime(monthStartDate.Year, monthStartDate.Month, 1).AddMonths(1).AddDays(-1);
             IQueryable<Clients> cliList = from a in _contaxt.Clients.Include(m=>m.Attendance).Include(m=>m.Clients_Employees).Include(m=>m.Client_Requirements)
-                                          where a.CLI_RegisteredOn.Date <= monthStartDate.Date
+                                          where a.CLI_RegisteredOn.Date <= monthStartDate.Date 
                                           && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
                                           select a;
 
