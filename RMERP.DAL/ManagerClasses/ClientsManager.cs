@@ -497,16 +497,9 @@ namespace RMERP.DAL.ManagerClasses
         public List<Clients> GetActiveClientForAttandanceReg(DateTime monthStartDate,int WAG_Id)
         {
             DateTime lastDate = new DateTime(monthStartDate.Year, monthStartDate.Month, 1).AddMonths(1).AddDays(-1);
-            IQueryable<Clients> cliList = from a in _contaxt.Clients
-                                          .Include(m => m.Client_Requirements.Where(f=>f.CRI_Active==true))
-                                                .ThenInclude(cr => cr.Attendance)
-                                              
-                                            
-                                    
-                                          
-                                          where a.CLI_RegisteredOn.Date <= monthStartDate.Date 
-                                          && ((a.CLI_IsActive == true) 
-                                          || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
+            IQueryable<Clients> cliList = from a in _contaxt.Clients.Include(m=>m.Clients_Employees).Include(m=>m.Client_Requirements).Include(m=>m.Attendance)
+                                          where a.CLI_RegisteredOn.Date <= monthStartDate.Date
+                                          && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
                                           select a;
             
             //var cliListvar = from a in _contaxt.Clients
