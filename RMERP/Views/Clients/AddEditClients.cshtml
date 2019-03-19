@@ -372,7 +372,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div>
-                        @if (Model.ClientsEmployeesList != null)
+                        @if (Model.ClientsEmp.ClientsEmployeesList != null)
                         {
                             <table class="table table-striped custom-table m-b-0 ">
                                 <thead>
@@ -384,10 +384,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model.ClientsEmployeesList)
+                                    @foreach (var item in Model.ClientsEmp.ClientsEmployeesList)
                                     {
                                         <tr>
-                                            <td>@item.DES_.DES_Title</td>
+                                            <td>@item.CRI_.CRI_Id</td>
                                             <td>@item.EMP_.EMP_FirstName @item.EMP_.EMP_MiddleName @item.EMP_.EMP_SurName</td>
                                             <td>@item.CLE_RegisteredOn</td>
 

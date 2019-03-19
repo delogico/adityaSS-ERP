@@ -402,7 +402,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public IEnumerable<Clients_Employees> listClientsEmployees(int ClientId)
         {
-            IEnumerable<Clients_Employees> list=_contaxt.Clients_Employees.Where(m=>m.CLI_Id.Equals(ClientId)).Include(m=>m.EMP_).Include(m => m.DES_).ToList();
+            IEnumerable<Clients_Employees> list=_contaxt.Clients_Employees.Where(m=>m.CLI_Id.Equals(ClientId)).Include(m=>m.EMP_).Include(m => m.CLI_).Include(m=>m.CRI_).ToList();
             return list;
         }
         public Clients_Employees ClientEmployeeById(int CleId)

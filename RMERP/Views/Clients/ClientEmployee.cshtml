@@ -35,8 +35,8 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.DES_Id, new { @class = "control-label" })
-                                    @Html.DropDownListFor(x => x.DES_Id, new SelectList(ViewBag.designationList, "DES_Id", "DES_Title"), "Select Designation", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(x => x.DES_Id, "", new { @class = "text-danger" })
+                                    @Html.DropDownListFor(x => x.CRI_Id, new SelectList(ViewBag.designationList, "CRI_Id", "DES_Title"), "Select Designation", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.CRI_Id, "", new { @class = "text-danger" })
                                 </div>
                             </div>
 

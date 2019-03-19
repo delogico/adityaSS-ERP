@@ -65,6 +65,7 @@ namespace RMERP.Controllers
             FirmsManager firmsManager = new FirmsManager(_context);
             ClientsViewModel cv = new ClientsViewModel();
             cv.clientsModel = new ClientsModel();
+            cv.ClientsEmp = new ClientsEmpVM();
 
             cv.ParametersClientsModel = new ParametersClientsModel();
             cv.ParametersClientsModel.clientsModel = new ClientsModel();
@@ -106,7 +107,7 @@ namespace RMERP.Controllers
                 cv.ListClientRequirements = clientsManager.GetClient_RequirementsListByClientId(id,true);
                 cv.ListClientContact = listClientContacts;
                 IEnumerable<Clients_Employees> listClientsEmployees= clientsManager.listClientsEmployees(ClientId);
-                cv.ClientsEmployeesList = listClientsEmployees;
+                cv.ClientsEmp.ClientsEmployeesList = listClientsEmployees;
             }
             IEnumerable<Firms> listFirms = new List<Firms>();
             List<Cities> listCity = new List<Cities>();          
@@ -408,8 +409,8 @@ namespace RMERP.Controllers
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             ClientsEmployeesViewModel cvm = new ClientsEmployeesViewModel();
             DesignationManager designationManager = new DesignationManager(_context);
-            IEnumerable<Designations> listDesignations = designationManager.getDesignationsListByClientID(ClientId);
-
+            // IEnumerable<Designations> listDesignations = designationManager.getDesignationsListByClientID(ClientId);
+            IEnumerable<AssignEmployeeVM> listDesignations = designationManager.getDesignationsListInVM(ClientId);
             IEnumerable<Employees> listEmployee = clientsManager.getEmployeeList(ClientId);
             ViewBag.EmployeeList = listEmployee;
 
@@ -435,8 +436,9 @@ namespace RMERP.Controllers
                 Clients_Employees clientsEmployees = new Clients_Employees();
                 clientsEmployees.CLE_Id = cvm.CLE_Id;
                 clientsEmployees.CLI_Id = cvm.CLI_Id;
-                clientsEmployees.DES_Id = cvm.DES_Id;
+                clientsEmployees.CLI_Id = cvm.CLI_Id;
                 clientsEmployees.EMP_Id = cvm.EMP_Id;
+                clientsEmployees.CRI_Id = cvm.CRI_Id;
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
                 res = clientsManager.ClientEmployee(clientsEmployees, sessionUtils.GetLoggedAdminID());
                 if (res != string.Empty)
@@ -593,7 +595,7 @@ namespace RMERP.Controllers
 
                     //row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
                     row.CreateCell(1).SetCellValue(item.EMP_Id.ToString("D5"));
-                    row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
+                    row.CreateCell(2).SetCellValue(item.CLI_.CLI_Id);
                     //row.CreateCell(3).SetCellValue(item.EMP_.EMP_FullName);
                     row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName+""+ item.EMP_.EMP_MiddleName+""+ item.EMP_.EMP_SurName);
 
@@ -741,7 +743,7 @@ namespace RMERP.Controllers
                     row.CreateCell(0).SetCellValue(j);
                     //row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
                     row.CreateCell(1).SetCellValue(item.EMP_Id.ToString("D5"));
-                    row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
+                    row.CreateCell(2).SetCellValue(item.CLI_.CLI_Id);
                     // row.CreateCell(3).SetCellValue(item.EMP_.EMP_FullName);
                     row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + "" + item.EMP_.EMP_MiddleName + "" + item.EMP_.EMP_SurName);
 

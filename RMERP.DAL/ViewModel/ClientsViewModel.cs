@@ -16,8 +16,8 @@ namespace RMERP.DAL.ViewModel
         public IEnumerable<Client_Contacts> ListClientContact { get; set; }
         public ClientRequirementsModel clientRequirementsModel { get; set; }
         public IEnumerable<Client_Requirements> ListClientRequirements { get; set; }
-        public ClientsEmployeesViewModel ClientsEmployeesViewModel { get; set; }
-        public IEnumerable<Clients_Employees> ClientsEmployeesList { get; set; }
+        public ClientsEmployeesViewModel ClientsEmployeesViewModel { get; set; }        
+        public ClientsEmpVM ClientsEmp { get; set; }
         public int WageID { get; set; }
       
     }
@@ -74,8 +74,6 @@ namespace RMERP.DAL.ViewModel
         public string CliLogoImage { get; set; }
         public int totalEmployee { get; set; }
     }
-
-
     public class ParametersClientsModel
     {
         public ClientsModel clientsModel { get; set; }
@@ -88,6 +86,13 @@ namespace RMERP.DAL.ViewModel
         public string ClientName { get; set; }
         public int totEmployee { get; set; }
     }
-  
+
+    public class ClientsEmpVM
+    {
+        public IEnumerable<Clients_Employees> ClientsEmployeesList { get; set; }
+        public AssignEmployeeVM assignEmployee { get; set; }
+    }
+
+
 
 }

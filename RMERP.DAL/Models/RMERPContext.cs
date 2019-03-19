@@ -33,7 +33,7 @@ namespace RMERP.DAL.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=DELLPC\\SQLEXPRESS;Database=RMERP;User Id=sa;password=Perfect;Trusted_Connection=False;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=PC_41;Database=RMERP;User Id=sa;password=Perfect;Trusted_Connection=False;MultipleActiveResultSets=true");
             }
         }
 
@@ -290,6 +290,9 @@ namespace RMERP.DAL.Models
             {
                 entity.HasKey(e => e.CLE_Id);
 
+                entity.HasIndex(e => e.CLE_Id)
+                    .HasName("IX_Clients_Employees");
+
                 entity.Property(e => e.CLE_RegisteredOn)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
@@ -300,11 +303,11 @@ namespace RMERP.DAL.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Clients_Employees_Clients");
 
-                entity.HasOne(d => d.DES_)
+                entity.HasOne(d => d.CRI_)
                     .WithMany(p => p.Clients_Employees)
-                    .HasForeignKey(d => d.DES_Id)
+                    .HasForeignKey(d => d.CRI_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Clients_Employees_Designations");
+                    .HasConstraintName("FK_Clients_Employees_Client_Requirements");
 
                 entity.HasOne(d => d.EMP_)
                     .WithMany(p => p.Clients_Employees)

@@ -59,7 +59,7 @@
                             <td>@employees.EMP_FirstName @employees.EMP_MiddleName @employees.EMP_SurName</td>
                             <td>@employees.EMP_Designation</td>
                             <td>@emp.CLE_RegisteredOn.ToShortDateString()</td>
-                            @{Client_Requirements cr = lstCliReq.Where(m => m.DES_Id == emp.DES_Id).FirstOrDefault();}
+                            @{Client_Requirements cr = lstCliReq.Where(m => m.CLI_Id == emp.CLI_Id).FirstOrDefault();}
                             <td>@(Convert.ToDecimal(cr.CRI_Basic) == (0.0m) ? cr.CRI_BasicDA : (cr.CRI_Basic + Convert.ToDecimal(cr.CRI_DA)))</td>
                             <td>@(Convert.ToString(cr.CRI_HRA_Percentage) == "" ? Convert.ToString(cr.CRI_HRA_Fixed) : Convert.ToString(cr.CRI_HRA_Percentage) + "%")</td>
     
