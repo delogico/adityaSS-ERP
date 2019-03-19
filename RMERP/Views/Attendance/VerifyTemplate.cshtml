@@ -14,7 +14,7 @@ else
 {
     <div class="modal-dialog modelLeftSide" style="width: 100%;">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <div class="modal-content modal-lg" style="width: 90%;">
+        <div class="modal-content modal-lg" style="width: 98%;">
             <div class="modal-header">
                 <div class="row">
                     <div class="col-md-7">
@@ -27,22 +27,18 @@ else
                         <h6 class="modal-title">Ending Date: @DateHelper.getDateWithFormat(Model.endDate)</h6>
                     </div>
                 </div>
-
             </div>
             <div class="modal-body">
-                <div>
                     <div class="content container-fluid">
-
                         <div class="row">
                             <div class="col-md-12">
                              
                                 <div class="table-responsive">
-                                    <table class="table table-responsive" style="width: 90%;">
+                                    <table class="table table-striped" style="width: 100%;">
         <thead>
             <tr>
-                <th>Emp Id</th>
-                <th>Employee Name</th>
-                <th>Designation</th>
+                <th>Id</th>
+                <th>Employee</th>
                 @{
                     DateTime tmpDate = Model.startDate;
 
@@ -61,8 +57,7 @@ else
             {
                 <tr>
                     <td>@item.EMP_Id</td>
-                    <td>@item.EMP_Name</td>
-                    <td>@item.Designation</td>
+                    <td><b>@item.EMP_Name</b><br />@item.Designation</td>
                     @{
                         DateTime tmpDate1 = Model.startDate;
                         while (Model.endDate >= tmpDate1)
@@ -76,17 +71,17 @@ else
                                             String str = "";
                                             if (att.ATT_IsWeeklyOff)
                                             {
-                                                str = "<span style='color:red;'>W/O</span>";
+                                                str = "<span class='weekoff'>W/O</span>";
                                             }
                                             else
                                             {
                                                 if (att.ATT_IsPresent)
                                                 {
-                                                    str = "P";
+                                                    str = "<span class='present'>P</span>";
                                                 }
                                                 else
                                                 {
-                                                    str = "<span style='color:red;'>A</span>";
+                                                    str = "<span class='absent'>A</span>";
                                                 }
                                             }
                                             <div class="col-md-12">@Html.Raw(str)</div>
@@ -95,13 +90,11 @@ else
                                                     @*@Html.Raw("Extra Hrs: ");*@
                                                     if (att.ATT_ExtraHoursWorked == 0)
                                                     {
-                                                        @Html.Raw("-");
+                                                        @Html.Raw("");
                                                     }
                                                     else
                                                     {
-                                                        @Html.Raw("[");
                                                         @att.ATT_ExtraHoursWorked.ToString("#.#")
-                                                        @Html.Raw("]");
                                                     }
                                                 }
                                             </div>
@@ -125,49 +118,46 @@ else
                                 {
                                     <br />
                                     <div class="row well well-lg" style="color:red;">
-                                        <div class="col-md-7">
-                                            <h4 class="modal-title">Match with clients</h4>
+                                        <div class="col-md-12">
+                                            <h4 class="modal-title">Match with client's Requirement</h4>
                                             <hr />
                                             <ul>
-                                                @if (Model.empListExtraInExcel.Count() > 0)
-                                                {
-                                                    <li>
-                                                        We have found this employees which is/are not assign to Client :
-                                                        <ul>
-                                                            @foreach (var item in Model.empListExtraInExcel)
-                                                            {
-                                                                <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
-                                                            }
-                                                        </ul>
-                                                    </li>
-                                                }
+                                            @if (Model.empListExtraInExcel.Count() > 0)
+                                            {
+                                                <li>
+                                                    <b>We have found this employees which is/are not assign to Client:</b><br />Solution: Go to client Employees secion and Assign First
+                                                    <ul>
+                                                        @foreach (var item in Model.empListExtraInExcel)
+                                                        {
+                                                            <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            }
+                                            @if (Model.EmpListExtraInDb.Count() > 0)
+                                            {
+                                                <li>
+                                                    <b>We have found this missing employees which is/are assigned to Client:</b><br />
+                                                    Solution: Reveriy Excel sheet you choosed.
+                                                    <ul>
+                                                        @foreach (var item in Model.EmpListExtraInDb)
+                                                        {
+                                                            <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            }
 
-                                            </ul>
-                                            <ul>
-                                                @if (Model.EmpListExtraInDb.Count() > 0)
-                                                {
-                                                    <li>
-                                                        We have found this missing employees which is/are assign to Client :
-                                                        <ul>
-                                                            @foreach (var item in Model.EmpListExtraInDb)
-                                                            {
-                                                                <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
-                                                            }
-                                                        </ul>
-                                                    </li>
-                                                }
+                                            @if (Model.datePeriod == false)
+                                            {
+                                                <li><b>We have found date period of excel is not match with client parameter.</b><br />
+                                                Solution: Check Client parameter and excel sheet again.</li>
+                                            }
 
-                                            </ul>
-                                            <ul>
-                                                @if (Model.datePeriod == false)
-                                                {
-                                                    <li>We have found date period of excel is not match with client parameter.</li>
-                                                }
-
-                                            </ul>
+                                                </ul>
 
 
-                                        </div>
+                                            </div>
 
                                     </div>
                                 }
@@ -195,6 +185,6 @@ else
                 </div>
             </div>
         </div>
-    </div>
+    
 }
 

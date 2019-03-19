@@ -38,6 +38,9 @@
     <Content Update="Views\AdminUsers\Login.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Attendance\ViewAttendance.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Attendance\WageAttendanceList.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

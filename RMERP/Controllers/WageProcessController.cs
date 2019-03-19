@@ -29,8 +29,7 @@ namespace RMERP.Controllers
         public IConfiguration Configuration;
         WageProcessManager wpm;
         private IHostingEnvironment _hostingEnvironment;
-        private static int clientID,WagID;
-
+       
         public WageProcessController(RMERPContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
@@ -78,58 +77,36 @@ namespace RMERP.Controllers
             return PartialView("_WageProcessList", model);
         }
       
-        [HttpGet]
-        public ActionResult ViewAttendance(int WAG_Id,int CLI_Id)
-        {
-            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            AttendanceManager attendanceManager = new AttendanceManager(_context);
-            Clients client = clientsManager.GetClientById(CLI_Id);
-            DateTime startDate = DateTime.Now, endDate = DateTime.Now;
-            ViewBag.ClientName = client.CLI_Name;
-            if (client.CLI_Att_MonthReal == true)
-            {
-                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                endDate = startDate.AddMonths(1).AddDays(-1);
-            }
-            else if (client.CLI_Att_MonthReal == false)
-            {
-                startDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CLI_Att_Month_Start.Value);
-                endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CLI_Att_Month_End.Value); ;
-            }
-            ViewBag.startDate = startDate;
-            ViewBag.endDate = endDate;
-            List<AttendanceVM> list = AttendanceMapper.mapAttendances(attendanceManager.getAttendance_Wage_Client(WAG_Id, CLI_Id));
-            return View(list);
-        }
-        [HttpGet]
-        public ActionResult EditAttendance(int empId)
-        {
-            AttendanceListViewModel alvm = new AttendanceListViewModel();
-            alvm.attendanceViewModel = new AttendanceViewModel();        
+        
+        //[HttpGet]
+        //public ActionResult EditAttendance(int empId)
+        //{
+        //    AttendanceListViewModel alvm = new AttendanceListViewModel();
+        //    alvm.attendanceViewModel = new AttendanceViewModel();        
 
-            List<Attendance> list = wpm.GetAttendanceList(WagID, clientID, empId);          
-            alvm.attendancesList = list;
-            alvm.EmpID = empId;
-            alvm.EmpName = list.FirstOrDefault().EMP_.EMP_FirstName;
-            alvm.EmpDesignation = list.FirstOrDefault().EMP_.EMP_Designation;
-            return View(alvm);
-        }
-        [HttpPost]
-        public ActionResult EditAttendance(AttendanceListViewModel alvm)
-        {
-            string res = string.Empty;
-            foreach(var item in alvm.attendancesList)
-            {
-                Attendance attendance = new Attendance();
-                attendance.ATT_Id = item.ATT_Id;
-                attendance.ATT_IsPresent = item.ATT_IsPresent;
-                attendance.ATT_IsWeeklyOff = item.ATT_IsWeeklyOff;
-                attendance.ATT_ExtraHoursWorked = item.ATT_ExtraHoursWorked;
-                res=wpm.UpdateAttendance(attendance);
-            }
+        //   // List<Attendance> list = wpm.GetAttendanceList(WagID, clientID, empId);          
+        //    //alvm.attendancesList = list;
+        //    //alvm.EmpID = empId;
+        //    //alvm.EmpName = list.FirstOrDefault().EMP_.EMP_FirstName;
+        //    //alvm.EmpDesignation = list.FirstOrDefault().EMP_.EMP_Designation;
+        //    return View(alvm);
+        //}
+        //[HttpPost]
+        //public ActionResult EditAttendance(AttendanceListViewModel alvm)
+        //{
+        //    string res = string.Empty;
+        //    foreach(var item in alvm.attendancesList)
+        //    {
+        //        Attendance attendance = new Attendance();
+        //        attendance.ATT_Id = item.ATT_Id;
+        //        attendance.ATT_IsPresent = item.ATT_IsPresent;
+        //        attendance.ATT_IsWeeklyOff = item.ATT_IsWeeklyOff;
+        //        attendance.ATT_ExtraHoursWorked = item.ATT_ExtraHoursWorked;
+        //        res=wpm.UpdateAttendance(attendance);
+        //    }
 
-            return RedirectToAction("ViewAttendance", new { wagId = WagID , CliId = clientID });
-        }
+        //    return RedirectToAction("ViewAttendance","Attendance", new { WAG_Id = WagID , CLI_Id = clientID });
+        //}
         public ActionResult ImportWageProcessData(UploadExcelViewModel uvm)
         {
             IFormFile file = uvm.ExcelFile;
@@ -242,7 +219,7 @@ namespace RMERP.Controllers
             }
             
 
-            return RedirectToAction("ViewAttendance", new { wagId = WagID, CliId = clientID });
+            return RedirectToAction("ViewAttendance", "Attendance", new { WAG_Id = alvm.attendanceViewModel.WAG_Id, CLI_Id = alvm.attendanceViewModel.CLI_Id });
         }
     }
 }

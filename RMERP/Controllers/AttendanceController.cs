@@ -186,8 +186,8 @@ namespace RMERP.Controllers
                             }
                           
                             #endregion
-                            excelRow.EMP_Name = row.GetCell(2).ToString();
-                            excelRow.Designation = row.GetCell(3).ToString();
+                            excelRow.EMP_Name = row.GetCell(3).ToString();
+                            excelRow.Designation = row.GetCell(2).ToString();
                             TotEmp++;
                             int totalPresence = 0;
                             Double totalExtraHours = 0;
@@ -332,6 +332,30 @@ namespace RMERP.Controllers
                 }
             }
             return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id});
+        }
+
+        [HttpGet]
+        public ActionResult ViewAttendance(int WAG_Id, int CLI_Id)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context, _configuration);
+            AttendanceManager attendanceManager = new AttendanceManager(_context);
+            Clients client = clientsManager.GetClientById(CLI_Id);
+            DateTime startDate = DateTime.Now, endDate = DateTime.Now;
+            ViewBag.ClientName = client.CLI_Name;
+            if (client.CLI_Att_MonthReal == true)
+            {
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
+            }
+            else if (client.CLI_Att_MonthReal == false)
+            {
+                startDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CLI_Att_Month_Start.Value);
+                endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CLI_Att_Month_End.Value); ;
+            }
+            ViewBag.startDate = startDate;
+            ViewBag.endDate = endDate;
+            List<AttendanceVM> list = AttendanceMapper.mapAttendances(attendanceManager.getAttendance_Wage_Client(WAG_Id, CLI_Id));
+            return View(list);
         }
 
         public ActionResult AttendanceRegister(int WAG_Id)
