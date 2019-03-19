@@ -71,17 +71,17 @@ else
                                             String str = "";
                                             if (att.ATT_IsWeeklyOff)
                                             {
-                                                str = "<span class='weekoff'>W/O</span>";
+                                                str = "<span style='color:Orange;'>W/O</span>";
                                             }
                                             else
                                             {
                                                 if (att.ATT_IsPresent)
                                                 {
-                                                    str = "<span class='present'>P</span>";
+                                                    str = "<span style='color:Green;'>P</span>";
                                                 }
                                                 else
                                                 {
-                                                    str = "<span class='absent'>A</span>";
+                                                    str = "<span style='color:Red;'>A</span>";
                                                 }
                                             }
                                             <div class="col-md-12">@Html.Raw(str)</div>
@@ -129,7 +129,7 @@ else
                                                     <ul>
                                                         @foreach (var item in Model.empListExtraInExcel)
                                                         {
-                                                            <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
+                                                        <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
                                                         }
                                                     </ul>
                                                 </li>
@@ -142,7 +142,7 @@ else
                                                     <ul>
                                                         @foreach (var item in Model.EmpListExtraInDb)
                                                         {
-                                                            <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
+                                                        <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
                                                         }
                                                     </ul>
                                                 </li>

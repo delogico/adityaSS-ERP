@@ -9,6 +9,7 @@ namespace RMERP.DAL.ViewModel
     {
         public List<Clients> listClients { get; set; }
         public List<Attendance> listAttendance { get; set; }
+        public IEnumerable<Employees> listEmployee { get; set; }
     }
    
 }

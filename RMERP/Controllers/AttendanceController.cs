@@ -204,6 +204,11 @@ namespace RMERP.Controllers
                                     attendance.ATT_IsPresent = true;
                                     totalPresence++;
                                 }
+                                if (row.GetCell(j).ToString().Equals("W/O"))
+                                {
+                                    attendance.ATT_IsWeeklyOff = true;
+                                    totalPresence++;
+                                }
                                 if (rowExtra.GetCell(j) != null)
                                     if (!rowExtra.GetCell(j).ToString().Equals("")) { 
                                         attendance.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
@@ -367,7 +372,12 @@ namespace RMERP.Controllers
             Wage_Process wage = wageManager.getWageProcessById(WAG_Id);
             List<Clients> lstCli = clientsManager.GetActiveClientForAttandanceReg(wage.WAG_Month);
             avm.listAttendance= attMgr.getAttendance_Wage(WAG_Id);
+
+            EmployeeManager em = new EmployeeManager(_context);
+            IEnumerable<Employees> empList = em.GetEmployees();
+
             avm.listClients = lstCli;
+            avm.listEmployee = empList;
             return View(avm);
         }
     }
