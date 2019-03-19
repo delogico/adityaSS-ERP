@@ -106,7 +106,6 @@ C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Share
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_Layout.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_RMLayout.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_ValidationScriptsPartial.g.cshtml.cs
-C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\AttendancesStatus.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\EditAttendance.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\EditAttendanceRecord.g.cshtml.cs
 C:\inetpub\wwwroot\RM-ERP\rm_erp\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\WageProcess\Index.g.cshtml.cs
