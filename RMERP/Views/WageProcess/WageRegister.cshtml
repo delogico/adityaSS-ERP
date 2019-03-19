@@ -1,8 +1,8 @@
-﻿@model RMERP.DAL.ViewModel.AttendanceRegisterVM
+﻿@model RMERP.DAL.ViewModel.WageRegisterVM
 @using RMERP.DAL.Models
 @using RMERP.DAL.ManagerClasses
 @{
-    ViewData["Title"] = "AttendanceRegister";
+    ViewData["Title"] = "WageRegister";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 
@@ -38,7 +38,7 @@
                             <td>Designation</td>
                             <td>Date Of Joining</td>
                             <td>Basic/(Basic+DA)</td>
-                            <td>HRA(%) | HRA(Fixed)</td>
+                            <td>HRA(%)/HRA(Fixed)</td>
                             <td>UPKEEP ALLOW.</td>
                             <td>M/F</td>
                         </tr>
@@ -55,7 +55,7 @@
                                 employees = Model.listEmployee.Where(m => m.EMP_Id.Equals(emp.EMP_Id)).FirstOrDefault();}
 
                             <td>@employees.EMP_Id.ToString("D5")</td>
-                            <td>@employees.EMP_FirstName</td>
+                            <td>@employees.EMP_FirstName @employees.EMP_MiddleName @employees.EMP_SurName</td>
                             <td>@employees.EMP_Designation</td>
                             <td>@emp.CLE_RegisteredOn.ToShortDateString()</td>
                             @{Client_Requirements cr = lstCliReq.Where(m => m.DES_Id == emp.DES_Id).FirstOrDefault();}

@@ -81,7 +81,6 @@ C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\AdminUsers\Ad
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\AdminUsers\DashBoard.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\AdminUsers\Index.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\AdminUsers\Login.g.cshtml.cs
-C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\AttendanceRegister.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\UploadExcel.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\VerifyTemplate.g.cshtml.cs
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\WageAttendanceList.g.cshtml.cs
@@ -120,3 +119,4 @@ C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.csproj.CopyComplete
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.dll
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\RMERP.pdb
 C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\ViewAttendance.g.cshtml.cs
+C:\inetpub\wwwroot\RMERP\RMERP\obj\Debug\netcoreapp2.1\Razor\Views\Attendance\WageRegister.g.cshtml.cs

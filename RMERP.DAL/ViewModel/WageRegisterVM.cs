@@ -5,7 +5,7 @@ using RMERP.DAL.Models;
 
 namespace RMERP.DAL.ViewModel
 {
-    public class AttendanceRegisterVM
+    public class WageRegisterVM
     {
         public List<Clients> listClients { get; set; }
         public List<Attendance> listAttendance { get; set; }

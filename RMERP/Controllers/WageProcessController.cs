@@ -221,5 +221,23 @@ namespace RMERP.Controllers
 
             return RedirectToAction("ViewAttendance", "Attendance", new { WAG_Id = alvm.attendanceViewModel.WAG_Id, CLI_Id = alvm.attendanceViewModel.CLI_Id });
         }
+
+        public ActionResult WageRegister(int WAG_Id)
+        {
+            WageRegisterVM avm = new WageRegisterVM();
+            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            WageProcessManager wageManager = new WageProcessManager(_context);
+            AttendanceManager attMgr = new AttendanceManager(_context);
+            Wage_Process wage = wageManager.getWageProcessById(WAG_Id);
+            List<Clients> lstCli = clientsManager.GetActiveClientForAttandanceReg(wage.WAG_Month);
+            avm.listAttendance = attMgr.getAttendance_Wage(WAG_Id);
+
+            EmployeeManager em = new EmployeeManager(_context);
+            IEnumerable<Employees> empList = em.GetEmployees();
+
+            avm.listClients = lstCli;
+            avm.listEmployee = empList;
+            return View(avm);
+        }
     }
 }
