@@ -8,12 +8,12 @@ namespace RMERP.DAL.Models
         public Client_Requirements()
         {
             Attendance = new HashSet<Attendance>();
-            Clients_Employees = new HashSet<Clients_Employees>();
         }
 
         public int CRI_Id { get; set; }
         public int CLI_Id { get; set; }
         public int DES_Id { get; set; }
+        public int CRI_Total { get; set; }
         public decimal? CRI_Basic { get; set; }
         public double? CRI_DA { get; set; }
         public decimal? CRI_BasicDA { get; set; }
@@ -37,7 +37,5 @@ namespace RMERP.DAL.Models
         public Clients CLI_ { get; set; }
         public Designations DES_ { get; set; }
         public ICollection<Attendance> Attendance { get; set; }
-        public ICollection<Clients_Employees> Clients_Employees { get; set; }
-
     }
 }

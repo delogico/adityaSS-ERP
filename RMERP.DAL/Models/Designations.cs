@@ -8,11 +8,13 @@ namespace RMERP.DAL.Models
         public Designations()
         {
             Client_Requirements = new HashSet<Client_Requirements>();
+            Clients_Employees = new HashSet<Clients_Employees>();
         }
 
         public int DES_Id { get; set; }
         public string DES_Title { get; set; }
 
         public ICollection<Client_Requirements> Client_Requirements { get; set; }
+        public ICollection<Clients_Employees> Clients_Employees { get; set; }
     }
 }

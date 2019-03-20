@@ -408,7 +408,7 @@ namespace RMERP.Controllers
                 clientsEmployees.CLI_Id = cvm.CLI_Id;
                 clientsEmployees.CLI_Id = cvm.CLI_Id;
                 clientsEmployees.EMP_Id = cvm.EMP_Id;
-                clientsEmployees.CRI_Id = cvm.CRI_Id;
+               // clientsEmployees.CRI_Id = cvm.CRI_Id;
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
                 res = clientsManager.ClientEmployee(clientsEmployees, sessionUtils.GetLoggedAdminID());
                 if (res != string.Empty)

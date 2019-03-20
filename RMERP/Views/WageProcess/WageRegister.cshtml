@@ -52,7 +52,7 @@
                         @foreach (var emp in lstCliEmp)
                         {
                         <tr>
-                            @{Client_Requirements cr = lstCliReq.Where(m => m.CLI_Id == emp.CLI_Id && m.CRI_Id == emp.CRI_Id).FirstOrDefault();}
+                            @{Client_Requirements cr = lstCliReq.Where(m => m.CLI_Id == emp.CLI_Id).FirstOrDefault();}
                             
                             @{Employees employees = new Employees();
                                 employees = Model.listEmployee.Where(m => m.EMP_Id.Equals(emp.EMP_Id)).FirstOrDefault();}
