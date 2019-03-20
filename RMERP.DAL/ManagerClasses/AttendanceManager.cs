@@ -21,13 +21,22 @@ namespace RMERP.DAL.ManagerClasses
 
         public List<Attendance> getAttendance_Wage_Client(int WAG_Id, int CLI_Id)
         {
-            return _context.Attendance.Where(a => a.WAG_Id == WAG_Id && a.CLI_Id == CLI_Id).Include(a=>a.EMP_).Include(a=>a.WAG_).Include(a=>a.CRI_).ThenInclude(c=>c.DES_).ToList();
+            return _context.Attendance.Where(a => a.WAG_Id == WAG_Id && a.CLI_Id == CLI_Id).Include(a=>a.EMP_).Include(a=>a.WAG_).Include(a=>a.DES_).ToList();
         }
 
         public void save(Attendance attendace)
         {
-            _context.Attendance.Add(attendace);
-            _context.SaveChanges();
+            try
+            {
+                _context.Attendance.Add(attendace);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
         }
 
         public void delete(Attendance attendace)

@@ -176,7 +176,7 @@ namespace RMERP.Controllers
             {
                 att = wpm.GetAttendanceById(attID);
                 alvm.attendanceViewModel.ATT_Id = attID;
-                alvm.attendanceViewModel.CRI_Id = att.CRI_Id;
+                alvm.attendanceViewModel.DES_Id = att.DES_Id;
                 alvm.attendanceViewModel.CLI_Id = att.CLI_Id;
                 alvm.attendanceViewModel.EMP_Id = att.EMP_Id;
                 alvm.attendanceViewModel.WAG_Id = att.WAG_Id;
@@ -211,7 +211,7 @@ namespace RMERP.Controllers
                 atta.ATT_Shift = alvm.attendanceViewModel.ATT_Shift;
                 atta.CLI_Id = alvm.attendanceViewModel.CLI_Id;
                 atta.EMP_Id = alvm.attendanceViewModel.EMP_Id;
-                atta.CRI_Id = alvm.attendanceViewModel.CRI_Id;
+                atta.DES_Id = alvm.attendanceViewModel.DES_Id;
                 atta.WAG_Id = alvm.attendanceViewModel.WAG_Id;
                 atta.ATT_ExtraHoursWorked = alvm.attendanceViewModel.ATT_ExtraHoursWorked;
 

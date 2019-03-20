@@ -15,7 +15,7 @@ namespace RMERP.DAL.Mappers
             attendanceVM.WAG_Id = attendance.WAG_Id;
             attendanceVM.ATT_Id = attendance.ATT_Id;
             attendanceVM.EMP_Id = attendance.EMP_Id;
-            attendanceVM.CRI_Id = attendance.CRI_Id;
+            attendanceVM.DES_Id = attendance.DES_Id;
             attendanceVM.CLI_Id = attendance.CLI_Id;
             attendanceVM.ATT_Date = attendance.ATT_Date;
             attendanceVM.ATT_IsPresent = attendance.ATT_IsPresent;
@@ -28,8 +28,8 @@ namespace RMERP.DAL.Mappers
                 attendanceVM.employee = EmployeesMapper.MapMe(attendance.EMP_);
             if (attendance.WAG_ != null)
                 attendanceVM.wage_Process = WageProcessMapper.mapMe(attendance.WAG_);
-            if(attendance.CRI_ != null)
-                attendanceVM.requirement = ClientRequirementMapper.mapMe(attendance.CRI_);
+            //if(attendance.CRI_ != null)
+            //    attendanceVM.requirement = ClientRequirementMapper.mapMe(attendance.CRI_);
             return attendanceVM;
         }
 

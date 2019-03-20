@@ -5,11 +5,6 @@ namespace RMERP.DAL.Models
 {
     public partial class Client_Requirements
     {
-        public Client_Requirements()
-        {
-            Attendance = new HashSet<Attendance>();
-        }
-
         public int CRI_Id { get; set; }
         public int CLI_Id { get; set; }
         public int DES_Id { get; set; }
@@ -36,6 +31,5 @@ namespace RMERP.DAL.Models
 
         public Clients CLI_ { get; set; }
         public Designations DES_ { get; set; }
-        public ICollection<Attendance> Attendance { get; set; }
     }
 }

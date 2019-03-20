@@ -43,5 +43,9 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Designations.Find(desId).DES_Title;
         }
+        public int GetDesignationIdByTitle(string DES_Title)
+        {
+            return 0;
+        }
     }
 }

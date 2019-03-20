@@ -99,11 +99,11 @@ namespace RMERP.DAL.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Attendance_Clients");
 
-                entity.HasOne(d => d.CRI_)
+                entity.HasOne(d => d.DES_)
                     .WithMany(p => p.Attendance)
-                    .HasForeignKey(d => d.CRI_Id)
+                    .HasForeignKey(d => d.DES_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Attendance_Client_Requirements");
+                    .HasConstraintName("FK_Attendance_Designations");
 
                 entity.HasOne(d => d.EMP_)
                     .WithMany(p => p.Attendance)

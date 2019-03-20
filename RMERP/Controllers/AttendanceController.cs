@@ -309,6 +309,8 @@ namespace RMERP.Controllers
                     if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
 
                     int EMP_Id = Convert.ToInt16(row.GetCell(1).ToString());
+                    string DES_Title = row.GetCell(2).ToString();
+
                     DateTime tmpDate = startDate;
                     for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 5; j++)
                     {
@@ -316,7 +318,7 @@ namespace RMERP.Controllers
                         att.EMP_Id = EMP_Id;
                         att.WAG_Id = WAG_Id;
                         att.CLI_Id = CLI_Id;
-                        att.CRI_Id = clientManager.getClientRequirementId(CLI_Id, EMP_Id);
+                        att.DES_Id = clientManager.getClientRequirementId(CLI_Id, EMP_Id);
                         att.ATT_Date = tmpDate;
                         if (row.GetCell(j).ToString().Equals("P"))
                             att.ATT_IsPresent = true;
