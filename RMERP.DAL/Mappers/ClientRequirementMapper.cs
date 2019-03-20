@@ -15,6 +15,7 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_Id = requirement.CRI_Id;
             clientRequirementVM.CLI_Id = requirement.CLI_Id;
             clientRequirementVM.DES_Id = requirement.DES_Id;
+            clientRequirementVM.CRI_Total = requirement.CRI_Total;
             clientRequirementVM.CRI_Basic = requirement.CRI_Basic;
             clientRequirementVM.CRI_DA = requirement.CRI_DA;
             clientRequirementVM.CRI_BasicDA = requirement.CRI_BasicDA;

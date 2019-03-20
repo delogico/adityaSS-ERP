@@ -274,7 +274,6 @@ namespace RMERP.DAL.ManagerClasses
             try
             {
                 clientRequirements.CRI_RegisteredOn = ProjectUtils.DateNow();
-                clientRequirements.CRI_Id = 0;
                 if (clientRequirements.CRI_Id > 0)
                 {
                     List<Client_Requirements> list = _contaxt.Client_Requirements.Where(m => m.CLI_Id.Equals(clientRequirements.CLI_Id) && m.DES_Id.Equals(clientRequirements.DES_Id) && m.CRI_Active == true).ToList();
@@ -283,11 +282,13 @@ namespace RMERP.DAL.ManagerClasses
                         m.CRI_InactivatedOn = ProjectUtils.DateNow();
                         m.ADM_Id_InactivatedBy = ADM_Id;
                     });
-                    _contaxt.SaveChanges();                                    
+                    _contaxt.SaveChanges();
+                    clientRequirements.CRI_Id = 0;
                     _contaxt.Client_Requirements.Add(clientRequirements);
                 }
                 else
                 {
+                    clientRequirements.CRI_Id = 0;
                     _contaxt.Client_Requirements.Add(clientRequirements);
                 }
                 _contaxt.SaveChanges();
@@ -359,14 +360,14 @@ namespace RMERP.DAL.ManagerClasses
             return res;
         
 }
-        public IEnumerable<Employees> getEmployeeList(int ClientId)
+        public IEnumerable<Employees> getEmployeeList(int CLI_Id)
         {
             IEnumerable<Employees> listEmp=null;
             listEmp = _contaxt.Employees.Where(m => m.EMP_IsActive.Equals(true));
-            if (ClientId > 0)
+            if (CLI_Id > 0)
             {        
                 listEmp = from t1 in listEmp
-                              where !(from t2 in _contaxt.Clients_Employees.Where(m=>m.CLI_Id.Equals(ClientId))
+                              where !(from t2 in _contaxt.Clients_Employees.Where(m=>m.CLI_Id.Equals(CLI_Id))
                                       select t2.EMP_Id).Contains(t1.EMP_Id)
                               select t1;
             }                     
@@ -397,7 +398,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public IEnumerable<Clients_Employees> listClientsEmployees(int ClientId)
         {
-            IEnumerable<Clients_Employees> list=_contaxt.Clients_Employees.Where(m=>m.CLI_Id.Equals(ClientId)).Include(m=>m.EMP_).Include(m => m.CLI_).Include(m=>m.DES_).ToList();
+            IEnumerable<Clients_Employees> list=_contaxt.Clients_Employees.Where(m=>m.CLI_Id.Equals(ClientId)).Include(m=>m.EMP_).Include(m=>m.DES_).ToList();
             return list;
         }
         public Clients_Employees ClientEmployeeById(int CleId)

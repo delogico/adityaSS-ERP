@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RMERP.DAL.ViewModel
 {
-    public class ClientsEmployeesViewModel
+    public class ClientEmployeeVM
     {
  
         public int CLE_Id { get; set; }
@@ -14,11 +14,10 @@ namespace RMERP.DAL.ViewModel
         public int EMP_Id { get; set; }
         [Display(Name = "Designation")]
         [Required(ErrorMessage = "Designation is required")]
-        public int DES_Id { get; set; }        
+        public int DES_Id { get; set; } 
         public DateTime CLE_RegisteredOn { get; set; }
         public int ADM_Id_RegisteredBy { get; set; }
-
-        public int CRI_Id { get; set; }
-
+        public string DES_Title { get; set; }
+        public EmployeeVM employee { get; set; }
     }
 }

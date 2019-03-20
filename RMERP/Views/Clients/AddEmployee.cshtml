@@ -1,6 +1,6 @@
-﻿@model RMERP.DAL.ViewModel.ClientsEmployeesViewModel
+﻿@model RMERP.DAL.ViewModel.ClientEmployeeVM
 @{
-    ViewData["Title"] = "ClientEmployee";
+    ViewData["Title"] = "Employees";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 
@@ -11,9 +11,6 @@
     <div class="modal-dialog modelLeftSide">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <div class="modal-content modal-lg">
-            @*<div class="col-sm-12">
-                    <h4 class="page-title"></h4>
-                </div>*@
             <div class="modal-header">
                 <h4 class="modal-title">@ViewBag.ClientName</h4>
             </div>
@@ -28,15 +25,15 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.EMP_Id, new { @class = "control-label" })
-                                    @Html.DropDownListFor(x => x.EMP_Id, new SelectList(ViewBag.EmployeeList, "EMP_Id", "EMP_FirstName"), "Select Employee", new { @class = "form-control" })
+                                    @Html.DropDownListFor(x => x.EMP_Id, new SelectList(ViewBag.EmployeeList, "EMP_Id", "EMP_FullName"), "Select Employee", new { @class = "form-control" })
                                     @Html.ValidationMessageFor(x => x.EMP_Id, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.DES_Id, new { @class = "control-label" })
-                                    @Html.DropDownListFor(x => x.CRI_Id, new SelectList(ViewBag.designationList, "CRI_Id", "DES_Title"), "Select Designation", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(x => x.CRI_Id, "", new { @class = "text-danger" })
+                                    @Html.DropDownListFor(x => x.DES_Id, new SelectList(ViewBag.designationList, "DES_Id", "DES_Title"), "Select Designation", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.DES_Id, "", new { @class = "text-danger" })
                                 </div>
                             </div>
 

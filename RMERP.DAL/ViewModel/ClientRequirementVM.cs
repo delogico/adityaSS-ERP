@@ -16,6 +16,10 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Designation")]
         [Required(ErrorMessage = "Please insert designation")]
         public int DES_Id { get; set; }
+        
+        [Display(Name = "Total Post")]
+        [Required(ErrorMessage = "Please select Total Posts")]
+        public int CRI_Total { get; set; }
         [Display(Name = "Basic")]
         public decimal? CRI_Basic { get; set; }
         [Display(Name = "DA")]
