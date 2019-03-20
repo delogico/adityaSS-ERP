@@ -9,7 +9,7 @@ namespace RMERP.DAL.ViewModel
 
         [Key]
         public int CRI_Id { get; set; }
-        public string CliName { get; set; }
+        public string CLI_Name { get; set; }
         [Display(Name = "Client")]
         [Required(ErrorMessage = "Please select client")]
         public int CLI_Id { get; set; }

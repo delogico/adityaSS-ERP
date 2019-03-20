@@ -20,9 +20,16 @@ namespace RMERP.DAL.ManagerClasses
             IEnumerable<Designations> ListDesignations = _context.Designations.OrderBy(m => m.DES_Title).ToList();
             return ListDesignations;
         }
+
+        public IEnumerable<Designations> getRemainingDesignationsList(int CLI_Id)
+        {
+            IEnumerable<Designations> lstDesignationsOfClient = getDesignationsListByClientID(CLI_Id);
+            IEnumerable<Designations> lstDesignations = getDesignationsList();
+            return lstDesignations.Where(p => !lstDesignationsOfClient.Any(p2 => p2.DES_Id == p.DES_Id));
+        }
         public IEnumerable<Designations> getDesignationsListByClientID(int clientID)
         {      
-            var dess = _context.Client_Requirements.Include(m => m.DES_).Where(m => m.CLI_Id.Equals(clientID)).Select(m => new Designations() { DES_Id = m.DES_Id, DES_Title = m.DES_.DES_Title });            
+            var dess = _context.Client_Requirements.Include(m => m.DES_).Where(m => m.CLI_Id.Equals(clientID)).Select(m => new Designations() { DES_Id = m.DES_Id, DES_Title = m.DES_.DES_Title });
             IEnumerable<Designations> desList = dess.Distinct();
             return desList.ToList();
         }

@@ -1,8 +1,9 @@
-﻿@model RMERP.DAL.ViewModel.ClientRequirementsModel
+﻿@model RMERP.DAL.ViewModel.ClientRequirementVM
 @using static RMERP.DAL.App_Code.ProjectUtils;
+@using RMERP.DAL.Models;
 
 @{
-    ViewData["Title"] = "Add-Edit Requirement";
+    ViewData["Title"] = "Client Requirement Detail";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 
@@ -11,14 +12,8 @@
     <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
-            debugger;
-            var id = $("#CriId").val();
-            if (id > 0) {
-                //$("#DesId").prop("disabled", true);
-                $('#DesId').attr("disabled", true); 
-            }
             var tab = $("#tabName").val();
-            if (tab == "History" || tab =="ViewRequirement") {
+            if (tab == "History" || tab == "ViewRequirement") {
                 $('select', 'form').attr('disabled', true).attr('readonly', true);
                 $('input', 'form').attr('disabled', true).attr('readonly', true);
                 $('button', 'form').attr('disabled', true).attr('readonly', true);
@@ -31,12 +26,14 @@
             $(document).ready(function () {
             alert('@TempData["message"]');
         });
-    </script>
-};
+        </script>
+    };
 
 
 }
-@*<div id="add_contact" class="modal custom-modal fade" role="dialog">*@
+@{
+    Clients client = ViewBag.client;
+}
 <div class="modal-dialog modelLeftSide">
     <div class="modal-content modal-lg">
         <div class="modal-header">
@@ -48,26 +45,33 @@
                 {
                     @Html.AntiForgeryToken()
                     @Html.HiddenFor(m => m.CRI_Id)
+                    @Html.HiddenFor(m => m.CRI_Active)
                     if (Model.CRI_Id > 0)
                     {
                         @Html.HiddenFor(m => m.DES_Id, new { @id = "designationID" })
                     }
-                    @Html.HiddenFor(m => m.CRI_Active)
                     @Html.HiddenFor(m => m.CLI_Id)
-                    @Html.HiddenFor(m => m.tabName)
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.DES_Id, new { @class = "control-label" })
-                                @Html.DropDownListFor(m => m.DES_Id, new SelectList(ViewBag.Designation, "DES_Id", "DES_Title"), "Select Designation", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(x => x.DES_Id, "", new { @class = "text-danger" })
+                                @if (Model.CRI_Id > 0)
+                                {
+                                    @Html.HiddenFor(m => m.DES_Id)
+                                    @Html.TextBox("DES_Title", Model.DES_Title, new { @readonly = "readonly", @class = "form-control" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(m => m.DES_Id, new SelectList(ViewBag.Designation, "DES_Id", "DES_Title"), "Select Designation", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.DES_Id, "", new { @class = "text-danger" })
+                                }
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.CliName, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.CliName, new { @readonly = "readonly", @class = "form-control" })
-                                @Html.ValidationMessageFor(x => x.CliName, "", new { @class = "text-danger" })
+
+                                @Html.LabelFor(m => m.CLI_Name, new { @class = "control-label" })
+                                @Html.TextBox("CLI_Name", client.CLI_Name, new { @readonly = "readonly", @class = "form-control" })
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -190,7 +194,7 @@
                     </div>
 
                     <div class="m-t-20 text-center">
-                        <button class="btn btn-primary">Submit</button>
+                        <button class="btn btn-primary">Save</button>
                     </div>
                 }
 

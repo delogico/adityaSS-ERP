@@ -38,5 +38,6 @@ namespace RMERP.DAL.Models
         public Designations DES_ { get; set; }
         public ICollection<Attendance> Attendance { get; set; }
         public ICollection<Clients_Employees> Clients_Employees { get; set; }
+
     }
 }

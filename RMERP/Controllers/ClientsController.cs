@@ -10,6 +10,7 @@ using RMERP.DAL.ManagerClasses;
 using RMERP.DAL.Models;
 using RMERP.DAL.ViewModel;
 using RMERP.DAL.App_Code;
+using RMERP.DAL.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using RMERP.Helpers;
 using System.Text;
@@ -104,7 +105,7 @@ namespace RMERP.Controllers
                 cv.clientsModel.CLI_RegisteredOn = clients.CLI_RegisteredOn;
                 cv.clientsModel.CliLogoImage = clients.CLI_Logo;
                 IEnumerable<Client_Contacts> listClientContacts = clientsManager.GetClientContactsListById(id);
-                cv.ListClientRequirements = clientsManager.GetClient_RequirementsListByClientId(id,true);
+                cv.requirements = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsofClient(id,true).ToList());
                 cv.ListClientContact = listClientContacts;
                 IEnumerable<Clients_Employees> listClientsEmployees= clientsManager.listClientsEmployees(ClientId);
                 cv.ClientsEmp.ClientsEmployeesList = listClientsEmployees;
@@ -273,85 +274,56 @@ namespace RMERP.Controllers
            // return RedirectToAction("Index","Clients",true);
         }
         [HttpGet]
-        public ActionResult AddEditRequirement(ClientsViewModel cvm,int criId =-1,string tab="")
+        public ActionResult AddEditRequirement(int CLI_Id, int CRI_Id =-1)
         {
             DesignationManager designationManager = new DesignationManager(_context);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            ClientRequirementsModel clientRequirementsModel = new ClientRequirementsModel();
-            ViewBag.Designation = designationManager.getDesignationsList();
-            designationManager = null;
-            Clients clients = new Clients();
-           
-            clients = clientsManager.GetClientById(ClientId);
-            clientRequirementsModel.CliName = clients.CLI_Name;
-            clientRequirementsModel.CLI_Id = clients.CLI_Id;
-           clientRequirementsModel.CRI_Active = true;
-            clients = null;
-            if (criId > 0)
+            ClientRequirementVM clientRequirement = new ClientRequirementVM();
+            Clients client = clientsManager.GetClientById(CLI_Id);
+            ViewBag.client = client;
+            if (CRI_Id > 0)
             {
-                if (ClientId > 0)
-                {                                                      
-                    Client_Requirements clientRequirements = new Client_Requirements();
-                    clientRequirements=clientsManager.GetRequirementsById(criId);
-                    clientRequirementsModel.CRI_Id = clientRequirements.CRI_Id;
-                    clientRequirementsModel.CLI_Id = clientRequirements.CLI_Id;
-                    clientRequirementsModel.DES_Id = clientRequirements.DES_Id;
-                    clientRequirementsModel.CRI_Basic = clientRequirements.CRI_Basic;
-                    clientRequirementsModel.CRI_DA = clientRequirements.CRI_DA;
-                    clientRequirementsModel.CRI_BasicDA = clientRequirements.CRI_BasicDA;
-                    clientRequirementsModel.CRI_HRA_Fixed = clientRequirements.CRI_HRA_Fixed;
-                    clientRequirementsModel.CRI_HRA_Percentage = clientRequirements.CRI_HRA_Percentage;
-                    clientRequirementsModel.CRI_Allowance_UpKeep = clientRequirements.CRI_Allowance_UpKeep;
-                    clientRequirementsModel.CRI_Allowance_Grade = clientRequirements.CRI_Allowance_Grade;
-                    clientRequirementsModel.CRI_Allowance_Conveyance = clientRequirements.CRI_Allowance_Conveyance;
-                    clientRequirementsModel.CRI_Allowance_Attention = clientRequirements.CRI_Allowance_Attention;
-                    clientRequirementsModel.CRI_PF_Percentage = clientRequirements.CRI_PF_Percentage;
-                    clientRequirementsModel.CRI_ESIC_Percentage = clientRequirements.CRI_ESIC_Percentage;
-                    clientRequirementsModel.CRI_ESIC_Area = clientRequirements.CRI_ESIC_Area;
-                    clientRequirementsModel.CRI_OT_Rate = clientRequirements.CRI_OT_Rate;
-                    clientRequirementsModel.CRI_OT_MultipleTimes = clientRequirements.CRI_OT_MultipleTimes;
-                    clientRequirementsModel.CRI_WageCalculationOnWeeklyOffPlus = clientRequirements.CRI_WageCalculationOnWeeklyOffPlus;
-                    clientRequirementsModel.CRI_Active = clientRequirements.CRI_Active;
-                    if (!string.IsNullOrEmpty(tab))
-                    {
-                        clientRequirementsModel.tabName = tab;
-                    }
-                    clientsManager = null;
-                }
-            }            
-            return View(clientRequirementsModel);
+                clientRequirement=ClientRequirementMapper.mapMe(clientsManager.GetRequirementsById(CRI_Id));
+            }
+            else
+            {
+                ViewBag.Designation = designationManager.getRemainingDesignationsList(CLI_Id);
+                clientRequirement.CRI_Id = -1;
+                clientRequirement.CLI_Id = CLI_Id;
+                clientRequirement.CRI_Active = true;
+            }
+            return View(clientRequirement);
         }
+
         [HttpPost]
-        public ActionResult AddEditRequirement(ClientRequirementsModel clientRequirementsModel)
+        public ActionResult AddEditRequirement(ClientRequirementVM clientRequirementVM)
         {
             string res = string.Empty;
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
             if (ModelState.IsValid)
             {
                 Client_Requirements cr = new Client_Requirements();
-                cr.CRI_Id = clientRequirementsModel.CRI_Id;
-                cr.CLI_Id = clientRequirementsModel.CLI_Id;
-                cr.DES_Id = clientRequirementsModel.DES_Id;
-                cr.CRI_Basic = clientRequirementsModel.CRI_Basic;
-                cr.CRI_DA = clientRequirementsModel.CRI_DA;
-                cr.CRI_BasicDA = clientRequirementsModel.CRI_BasicDA;
-                cr.CRI_HRA_Fixed = clientRequirementsModel.CRI_HRA_Fixed;
-                cr.CRI_HRA_Percentage = clientRequirementsModel.CRI_HRA_Percentage;
-                cr.CRI_Allowance_UpKeep = clientRequirementsModel.CRI_Allowance_UpKeep;
-                cr.CRI_Allowance_Grade = clientRequirementsModel.CRI_Allowance_Grade;
-                cr.CRI_Allowance_Conveyance = clientRequirementsModel.CRI_Allowance_Conveyance;
-                cr.CRI_Allowance_Attention = clientRequirementsModel.CRI_Allowance_Attention;
-                cr.CRI_PF_Percentage = clientRequirementsModel.CRI_PF_Percentage;
-                cr.CRI_ESIC_Percentage = clientRequirementsModel.CRI_ESIC_Percentage;
-                cr.CRI_ESIC_Area = clientRequirementsModel.CRI_ESIC_Area;
-                cr.CRI_OT_Rate = clientRequirementsModel.CRI_OT_Rate;
-                cr.CRI_OT_MultipleTimes = clientRequirementsModel.CRI_OT_MultipleTimes;
-                cr.CRI_WageCalculationOnWeeklyOffPlus = clientRequirementsModel.CRI_WageCalculationOnWeeklyOffPlus;
-                cr.CRI_Active = clientRequirementsModel.CRI_Active;
-                SessionUtils sessionUtils = new SessionUtils(Request, Response);
-                cr.ADM_Id_InactivatedBy =sessionUtils.GetLoggedAdminID();
-
-                res =clientsManager.AddEditRequirement(cr);
+                cr.CRI_Id = clientRequirementVM.CRI_Id;
+                cr.CLI_Id = clientRequirementVM.CLI_Id;
+                cr.DES_Id = clientRequirementVM.DES_Id;
+                cr.CRI_Basic = clientRequirementVM.CRI_Basic;
+                cr.CRI_DA = clientRequirementVM.CRI_DA;
+                cr.CRI_BasicDA = clientRequirementVM.CRI_BasicDA;
+                cr.CRI_HRA_Fixed = clientRequirementVM.CRI_HRA_Fixed;
+                cr.CRI_HRA_Percentage = clientRequirementVM.CRI_HRA_Percentage;
+                cr.CRI_Allowance_UpKeep = clientRequirementVM.CRI_Allowance_UpKeep;
+                cr.CRI_Allowance_Grade = clientRequirementVM.CRI_Allowance_Grade;
+                cr.CRI_Allowance_Conveyance = clientRequirementVM.CRI_Allowance_Conveyance;
+                cr.CRI_Allowance_Attention = clientRequirementVM.CRI_Allowance_Attention;
+                cr.CRI_PF_Percentage = clientRequirementVM.CRI_PF_Percentage;
+                cr.CRI_ESIC_Percentage = clientRequirementVM.CRI_ESIC_Percentage;
+                cr.CRI_ESIC_Area = clientRequirementVM.CRI_ESIC_Area;
+                cr.CRI_OT_Rate = clientRequirementVM.CRI_OT_Rate;
+                cr.CRI_OT_MultipleTimes = clientRequirementVM.CRI_OT_MultipleTimes;
+                cr.CRI_WageCalculationOnWeeklyOffPlus = clientRequirementVM.CRI_WageCalculationOnWeeklyOffPlus;
+                cr.CRI_Active = clientRequirementVM.CRI_Active;
+                res =clientsManager.AddEditRequirement(cr, sessionUtils.GetLoggedAdminID());
             }
             if (res != "")
             {
@@ -361,16 +333,14 @@ namespace RMERP.Controllers
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
         }
 
-        public ActionResult HistoryRequirement(int desId = -1,int cliId=-1)
+        public ActionResult HistoryRequirement(int DES_Id,int CLI_Id)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             DesignationManager designationManager = new DesignationManager(_context);
-            ClientRequirementsViewModel crvm = new ClientRequirementsViewModel();
-            crvm.ClientRequirementsModel = new ClientRequirementsModel();
-            crvm.ClientRequirementsList = clientsManager.GetClient_RequirementsList(desId, cliId, false);
-            crvm.ClientRequirementsModel.DesTitle = designationManager.GetDesignationsById(desId);
-            crvm.ClientRequirementsModel.CliName = clientsManager.GetClientById(ClientId).CLI_Name;
-            return View(crvm);
+            List<ClientRequirementVM> lst = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsList(DES_Id, CLI_Id, false).ToList());
+            ViewBag.DES_Title = designationManager.GetDesignationsById(DES_Id);
+            ViewBag.CLI_Name = clientsManager.GetClientById(CLI_Id).CLI_Name;
+            return View(lst);
         }
 
         [HttpPost]

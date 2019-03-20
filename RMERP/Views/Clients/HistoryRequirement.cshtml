@@ -1,45 +1,42 @@
-﻿@model RMERP.DAL.ViewModel.ClientRequirementsViewModel
+﻿@model List<RMERP.DAL.ViewModel.ClientRequirementVM>
+@using RMERP.Helpers;
 @{
-    ViewData["Title"] = "HistoryRequirement";
+    ViewData["Title"] = "History of Requirement";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 
-@if (Model.ClientRequirementsList.Count()>0)
-{
-
 <div class="col-sm-8">
-    <h4 class="page-title">@Model.ClientRequirementsModel.CliName</h4>
-    <p><b>Designation - @Model.ClientRequirementsModel.DesTitle</b></p>
+    <h4 class="page-title">@ViewBag.CLI_Name</h4>
+    <p>Designation - <b>@ViewBag.DES_Title</b></p>
 </div>
+@if (Model.Count() > 0)
+{
+    <div class="col-sm-8">
         <table class="table table-striped custom-table m-b-0 ">
             <thead>
-                <tr>                   
-                    <th>Basic/(Basic+DA)</th>
-                    <th>Registered On</th>                    
-                    <th>Action</th>
+                <tr>
+                    <th>Effective Period</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.ClientRequirementsList)
+                @foreach (var item in Model)
                 {
-                    <tr>                      
-                        <td>@(Convert.ToDecimal(item.CRI_Basic) == (0.0m) ? item.CRI_BasicDA : (item.CRI_Basic + Convert.ToDecimal(item.CRI_DA)))</td>
-                        <td>@item.CRI_RegisteredOn</td>                       
-                        <td class="text-right">
-                            <div class="dropdown">
-                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href='@Url.Action("AddEditRequirement","Clients",new { criId=item.CRI_Id,tab="History"})' title="ViewRequirement"><i class="fa fa-pencil m-r-5"></i> View </a></li>
-                                </ul>
-                            </div>
+                    <tr>
+                        <td>@Html.Raw(DateHelper.getDateWithFormat(item.CRI_RegisteredOn) + " - " + DateHelper.getDateWithFormat(item.CRI_InactivatedOn.Value))</td>
+                        <td>
+                            <a href='@Url.Action("AddEditRequirement", "Clients", new { CRI_Id=item.CRI_Id,tab="History" })' title="View"><i class="fa fa-eye m-r-5"></i> View</a>
                         </td>
                     </tr>
                 }
 
             </tbody>
         </table>
-        }
-        else
-        {
-        <p>No History To Display</p>
-        }
+    </div>
+}
+else
+{
+    <div class="col-sm-8 m-t-30">
+        <p>Never Change happened in This Requirement</p>
+    </div>
+}
