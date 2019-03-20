@@ -1,5 +1,6 @@
 ﻿@model RMERP.DAL.ViewModel.ClientsViewModel
 @using static RMERP.DAL.App_Code.ProjectUtils;
+@using RMERP.Helpers;
 
 @{
     ViewData["Title"] = "Add-Edit Clients";
@@ -116,7 +117,7 @@
                                         @Html.TextBoxFor(m => m.clientsModel.CLI_Email_2, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(x => x.clientsModel.CLI_Email_2, "", new { @class = "text-danger" })
                                     </div>
-                                </div>                                           
+                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div class="col-md-8">
@@ -213,40 +214,37 @@
                     <h4 class="page-title">Client Requirement</h4>
                 </div>
                 <div class="col-sm-4 text-right m-b-30">
-                    <a class="btn btn-primary rounded" href="@Url.Action("AddEditRequirement","Clients")"><i class="fa fa-plus"></i> Add New Requirement</a>
+                    <a class="btn btn-primary rounded" href="@Url.Action("AddEditRequirement","Clients", new { CLI_Id =  Model.clientsModel.CLI_Id})"><i class="fa fa-plus"></i> Add New Requirement</a>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div>
-                        @if (Model.ListClientRequirements != null)
+                        @if (Model.requirements.Count() > 0)
                         {
                             <table class="table table-striped custom-table m-b-0 ">
                                 <thead>
                                     <tr>
-                                        @*<th>Client Name</th>*@
                                         <th>Designation</th>
-                                        <th>Basic/(Basic+DA)</th>
-                                        <th>Last Update since</th>
-                                        <th class="text-right">Action</th>
+                                        <th>Total Post</th>
+                                        <th>Effective from</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model.ListClientRequirements)
+                                    @foreach (var item in Model.requirements)
                                     {
                                         <tr>
-                                            @*<td>@item.Cli.CLI_Name</td>*@
-                                            <td><b>@item.DES_.DES_Title</b></td>
-                                            <td>@(Convert.ToDecimal(item.CRI_Basic) == (0.0m) ? item.CRI_BasicDA : (item.CRI_Basic + Convert.ToDecimal(item.CRI_DA)))</td>
-                                            <td>@item.CRI_RegisteredOn</td>
+                                            <td><b>@item.DES_Title</b></td>
+                                            <td>2</td>
+                                            <td>@DateHelper.getDateWithFormat(item.CRI_RegisteredOn)</td>
                                             <td class="text-right">
                                                 <div class="dropdown">
                                                     <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                     <ul class="dropdown-menu pull-right">
-                                                        <li><a href='@Url.Action("AddEditRequirement","Clients",new { criId=item.CRI_Id})' title="ChangeRequirement"><i class="fa fa-pencil m-r-5"></i> Change On This</a></li>
-                                                        <li><a href='@Url.Action("AddEditRequirement","Clients",new { criId=item.CRI_Id,tab="ViewRequirement"})' title="ViewRequirement"><i class="fa fa-pencil m-r-5"></i> View</a></li>
-                                                        <li><a href='@Url.Action("HistoryRequirement","Clients",new { desId=item.DES_Id,cliId=item.CLI_Id})' title="History"><i class="fa fa-trash m-r-5"></i> History</a></li>
-                                                        @*<li><a onclick="HistoryList(@item.CriId)" title="History"><i class="fa fa-trash m-r-5"></i> History</a></li>*@
+                                                        <li><a href='@Url.Action("AddEditRequirement","Clients",new { CRI_Id=item.CRI_Id,CLI_Id =  Model.clientsModel.CLI_Id})' title="ChangeRequirement"><i class="fa fa-pencil m-r-5"></i> Change On This</a></li>
+                                                        <li><a href='@Url.Action("AddEditRequirement","Clients",new { CRI_Id=item.CRI_Id,CLI_Id =  Model.clientsModel.CLI_Id,tab="ViewRequirement"})' title="ViewRequirement"><i class="fa fa-pencil m-r-5"></i> View</a></li>
+                                                        <li><a href='@Url.Action("HistoryRequirement","Clients",new { DES_Id=item.DES_Id,CLI_Id=item.CLI_Id})' title="History"><i class="fa fa-trash m-r-5"></i> History</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -258,7 +256,7 @@
                         }
                         else
                         {
-                            <p>No Requirements To Display</p>
+                            <p>Register Client's Requirement.</p>
                         }
 
                     </div>
@@ -278,7 +276,6 @@
                                 <h4 class="page-title">Attendence Parameters</h4>
                                 <div class="form-group">
                                     <label class="form-group col-sm-12 " style="font-size: 15px;font-weight: normal;">
-                                        @*<input id="Default" name="AttendenceParameters" type="radio" checked> Month Start With 1st of month till last date of that Month*@
                                         @Html.HiddenFor(m => m.clientsModel.CLI_Id)
                                         @Html.RadioButtonFor(m => m.ParametersClientsModel.CLI_Att_MonthReal, true, htmlAttributes: new { @id = "Default", @checked = "checked" })
                                         Month Start With 1st of month till last date of that Month
@@ -291,7 +288,7 @@
                                     </label>
 
                                     <div id="divSelectdate" class="row">
-                                       
+
                                         <div class="col-md-12">
                                             <div class="col-md-6">
                                                 <div class="form-group">
@@ -310,11 +307,11 @@
                                             </div>
                                             <div class="col-md-6"> </div>
                                         </div>
-                                           
-                                            <div class="form-group col-sm-6"></div>
-                                        </div>
 
+                                        <div class="form-group col-sm-6"></div>
                                     </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -364,8 +361,8 @@
     </div>
     <div id="ClientEmployee" class="tab-pane fade">
         <div class="content container-fluid">
-            <div class="row">             
-                <div class="col-sm-12 text-right m-b-30">                    
+            <div class="row">
+                <div class="col-sm-12 text-right m-b-30">
                     <a class="btn btn-primary rounded" href="@Url.Action("ClientEmployee","Clients")"><i class="fa fa-plus"></i> Assign Employee</a>
                 </div>
             </div>
@@ -433,177 +430,177 @@
 
     </div>
     <div id="ClientDelete" class="tab-pane fade">
-                <div class="modal-dialog">
-                    <div class="modal-content modal-md">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="activeTitle"></h4>
-                        </div>
-                        <form>
-                            <div class="modal-body card-box">
-                                <p id="activeBody">
-
-                                </p>
-                                <div class="m-t-20">
-                                    <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
-                                    <button id="btnSubmit" type="submit" class="btn btn-danger"></button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+        <div class="modal-dialog">
+            <div class="modal-content modal-md">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="activeTitle"></h4>
                 </div>
+                <form>
+                    <div class="modal-body card-box">
+                        <p id="activeBody">
+
+                        </p>
+                        <div class="m-t-20">
+                            <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+                            <button id="btnSubmit" type="submit" class="btn btn-danger"></button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
+</div>
 
-        @section scripts{
-            <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
-            <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+@section scripts{
+    <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 
-            @if (TempData["message"] != null)
-            {
-                <script>
+    @if (TempData["message"] != null)
+    {
+        <script>
             $(document).ready(function () {
             alert('@TempData["message"]');
         });
-                </script>
-            };
-            <script type="text/javascript">
-                var ClientID;
-                var CLI_IsActive;
-                $(document).ready(function () {
-                    debugger;
-                    radioShow();
-                    var CLI_Id = $("#clientsModel_FRM_Id").val();
-                    if (CLI_Id > 0) {
-                        $("#clientsModel_FRM_Id").attr("disabled", true);
-                    }
-                    $("input[type='radio']").click(function () {
-                        debugger;
-                        radioShow();
-                    });
-                    function radioShow() {
-                        debugger;
-                        var radioValue = $("input[name='ParametersClientsModel.CLI_Att_MonthReal']:checked").attr("id");
-                        if (radioValue == "custom") {
-                            $("#divSelectdate").show();
-                        } else if (radioValue == "Default") {
-                            $("#divSelectdate").hide();
-                        }
-                    }
+        </script>
+    };
+    <script type="text/javascript">
+        var ClientID;
+        var CLI_IsActive;
+        $(document).ready(function () {
+            debugger;
+            radioShow();
+            var CLI_Id = $("#clientsModel_FRM_Id").val();
+            if (CLI_Id > 0) {
+                $("#clientsModel_FRM_Id").attr("disabled", true);
+            }
+            $("input[type='radio']").click(function () {
+                debugger;
+                radioShow();
+            });
+            function radioShow() {
+                debugger;
+                var radioValue = $("input[name='ParametersClientsModel.CLI_Att_MonthReal']:checked").attr("id");
+                if (radioValue == "custom") {
+                    $("#divSelectdate").show();
+                } else if (radioValue == "Default") {
+                    $("#divSelectdate").hide();
+                }
+            }
 
-                    $("#ClientHistory").hide();
+            $("#ClientHistory").hide();
+            $("#activeTitle").html("InActive Client");
+            $("#activeBody").html("Are you sure want to InActive this Client?");
+            $("#btnSubmit").html("InActive");
+            ClientID = $('#clientsModel_CLI_Id').val();
+            CLI_IsActive = $('#clientsModel_CLI_IsActive').val();
+
+            if (CLI_IsActive.toLowerCase() == "false") {
+
+                var CurrentActive = $('.nav li.active').find("a").attr("href");
+                var NextActive = $('.nav li.active').next('li').next('li').find("a").attr("href");
+                $('.nav li.active').next('li').next('li').next('li').next('li').addClass("active");
+                $('.nav li.active').prev('li').prev('li').prev('li').prev('li').removeClass("active");
+                $(CurrentActive).removeClass("in active");
+                $("#ClientDelete").addClass("in active");
+                $('.nav li').not('.active').addClass('disabled');
+                $('.nav li').not('.active').find('a').removeAttr("data-toggle");
+
+                $("#activeTitle").html("Activate Client");
+                $("#activeBody").html("Are you sure want to Active this Client?");
+                $("#btnSubmit").html("Active");
+            }
+            if (CLI_IsActive.toLowerCase() == "true") {
+                var CurrentActive = $('.nav li.active').find("a").attr("href");
+
+                if (CurrentActive == "#ClientDelete") {
+                    var prevActive = $('.nav li.active').prev('li').prev('li').find("a").attr("href");
+                    $('.nav li.active').prev('li').prev('li').AddClass("active");
+                    $('.nav li.active').prev('li').AddClass("active");
+                    $('.nav li.active').removeClass("active");
+
+                    $(CurrentActive).removeClass("in active");
+                    $(prevActive).addClass("in active");
+
+                    $('.nav li').not('.active').addClass('disabled');
+
                     $("#activeTitle").html("InActive Client");
                     $("#activeBody").html("Are you sure want to InActive this Client?");
                     $("#btnSubmit").html("InActive");
-                    ClientID = $('#clientsModel_CLI_Id').val();
-                    CLI_IsActive = $('#clientsModel_CLI_IsActive').val();
+                }
 
-                    if (CLI_IsActive.toLowerCase() == "false") {
+            }
+            var tab = GetParameterValues('tab');
+            if (tab == "ContactInfo") {
+                $('.nav li.active').next('li').addClass("active").find('a');
+                var CurrentActive = $('.nav li.active').find("a").attr("href");
+                var PrevActive = $('.nav li.active').next('li').find("a").attr("href");
+                $('.nav li.active').prev('li').removeClass("active");
+                $(CurrentActive).removeClass("in active");
+                $(PrevActive).addClass("in active");
+            }
+            else if (tab == "ClientRequirement") {
+                $('.nav li.active').next('li').next('li').next('li').addClass("active").find('a');
+                var CurrentActive = $('.nav li.active').find("a").attr("href");
+                var PrevActive = $('.nav li.active').next('li').next('li').next('li').find("a").attr("href");
+                $('.nav li.active').prev('li').prev('li').prev('li').removeClass("active");
+                $(CurrentActive).removeClass("in active");
+                $(PrevActive).addClass("in active");
+            }
+            else if (tab == "ClientEmployee") {
+                debugger;
+                $('.nav li.active').next('li').next('li').next('li').next('li').addClass("active").find('a');
+                var CurrentActive = $('.nav li.active').find("a").attr("href");
+                var PrevActive = $('.nav li.active').next('li').next('li').next('li').next('li').find("a").attr("href");
+                $('.nav li.active').prev('li').prev('li').prev('li').prev('li').removeClass("active");
+                $(CurrentActive).removeClass("in active");
+                $(PrevActive).addClass("in active");
+            }
+            if (ClientID == 0) {
+                $('.nav li').not('.active').addClass('disabled');
+                $('.nav li').not('.active').find('a').removeAttr("data-toggle");
+            } else {
+                $('.nav li').not('.active').removeClass('disabled');
+            }
 
-                        var CurrentActive = $('.nav li.active').find("a").attr("href");
-                        var NextActive = $('.nav li.active').next('li').next('li').find("a").attr("href");
-                        $('.nav li.active').next('li').next('li').next('li').next('li').addClass("active");
-                        $('.nav li.active').prev('li').prev('li').prev('li').prev('li').removeClass("active");
-                        $(CurrentActive).removeClass("in active");
-                        $("#ClientDelete").addClass("in active");
-                        $('.nav li').not('.active').addClass('disabled');
-                        $('.nav li').not('.active').find('a').removeAttr("data-toggle");
-
-                        $("#activeTitle").html("Activate Client");
-                        $("#activeBody").html("Are you sure want to Active this Client?");
-                        $("#btnSubmit").html("Active");
-                    }
-                    if (CLI_IsActive.toLowerCase() == "true") {
-                        var CurrentActive = $('.nav li.active').find("a").attr("href");
-
-                        if (CurrentActive == "#ClientDelete") {
-                            var prevActive = $('.nav li.active').prev('li').prev('li').find("a").attr("href");
-                            $('.nav li.active').prev('li').prev('li').AddClass("active");
-                            $('.nav li.active').prev('li').AddClass("active");
-                            $('.nav li.active').removeClass("active");
-
-                            $(CurrentActive).removeClass("in active");
-                            $(prevActive).addClass("in active");
-
-                            $('.nav li').not('.active').addClass('disabled');
-
-                            $("#activeTitle").html("InActive Client");
-                            $("#activeBody").html("Are you sure want to InActive this Client?");
-                            $("#btnSubmit").html("InActive");
-                        }
-
-                    }
-                    var tab = GetParameterValues('tab');
-                    if (tab == "ContactInfo") {
-                        $('.nav li.active').next('li').addClass("active").find('a');
-                        var CurrentActive = $('.nav li.active').find("a").attr("href");
-                        var PrevActive = $('.nav li.active').next('li').find("a").attr("href");
-                        $('.nav li.active').prev('li').removeClass("active");
-                        $(CurrentActive).removeClass("in active");
-                        $(PrevActive).addClass("in active");
-                    }
-                    else if (tab == "ClientRequirement") {
-                        $('.nav li.active').next('li').next('li').next('li').addClass("active").find('a');
-                        var CurrentActive = $('.nav li.active').find("a").attr("href");
-                        var PrevActive = $('.nav li.active').next('li').next('li').next('li').find("a").attr("href");
-                        $('.nav li.active').prev('li').prev('li').prev('li').removeClass("active");
-                        $(CurrentActive).removeClass("in active");
-                        $(PrevActive).addClass("in active");
-                    }
-                    else if (tab == "ClientEmployee") {
-                        debugger;
-                        $('.nav li.active').next('li').next('li').next('li').next('li').addClass("active").find('a');
-                        var CurrentActive = $('.nav li.active').find("a").attr("href");
-                        var PrevActive = $('.nav li.active').next('li').next('li').next('li').next('li').find("a").attr("href");
-                        $('.nav li.active').prev('li').prev('li').prev('li').prev('li').removeClass("active");
-                        $(CurrentActive).removeClass("in active");
-                        $(PrevActive).addClass("in active");
-                    }
-                    if (ClientID == 0) {
-                        $('.nav li').not('.active').addClass('disabled');
-                        $('.nav li').not('.active').find('a').removeAttr("data-toggle");
-                    } else {
-                        $('.nav li').not('.active').removeClass('disabled');
-                    }
-
-                });
-                function ShowImagePreviewMain(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-                        reader.onload = function (e) {
-                            $('#ClientImage').prop('src', e.target.result)
-                                .width(80)
-                                .height(80);
-                        };
-                        reader.readAsDataURL(input.files[0]);
-                    }
+        });
+        function ShowImagePreviewMain(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#ClientImage').prop('src', e.target.result)
+                        .width(80)
+                        .height(80);
                 };
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
 
-                $("#btnSubmit").click(
-                    function () {
-                        debugger;
-                        var Url = siteUrl + "Clients/InActiveClient?ClientID=" + ClientID + "&Active=" + CLI_IsActive;
-                        $.ajax({
-                            type: "POST",
-                            url: Url,
-                            success: function (data) {
-                                if (data.d == null) {
-                                    window.location.replace(siteUrl + "Clients/Index");
-                                }
-                            }
-                        })
-
-                    });
-                function GetParameterValues(param) {
-                    var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-                    for (var i = 0; i < url.length; i++) {
-                        var urlparam = url[i].split('=');
-                        if (urlparam[0] == param) {
-                            return urlparam[1];
+        $("#btnSubmit").click(
+            function () {
+                debugger;
+                var Url = siteUrl + "Clients/InActiveClient?ClientID=" + ClientID + "&Active=" + CLI_IsActive;
+                $.ajax({
+                    type: "POST",
+                    url: Url,
+                    success: function (data) {
+                        if (data.d == null) {
+                            window.location.replace(siteUrl + "Clients/Index");
                         }
                     }
-                };
-            </script>
-        }
+                })
+
+            });
+        function GetParameterValues(param) {
+            var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < url.length; i++) {
+                var urlparam = url[i].split('=');
+                if (urlparam[0] == param) {
+                    return urlparam[1];
+                }
+            }
+        };
+    </script>
+}
 
 
 

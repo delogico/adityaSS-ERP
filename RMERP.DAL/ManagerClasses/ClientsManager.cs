@@ -268,7 +268,7 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public string AddEditRequirement(Client_Requirements clientRequirements)
+        public string AddEditRequirement(Client_Requirements clientRequirements, int ADM_Id)
         {
             string res = string.Empty;
             try
@@ -276,8 +276,12 @@ namespace RMERP.DAL.ManagerClasses
                 clientRequirements.CRI_RegisteredOn = ProjectUtils.DateNow();
                 if (clientRequirements.CRI_Id > 0)
                 {
-                    List<Client_Requirements> list = _contaxt.Client_Requirements.Where(m => m.CLI_Id.Equals(clientRequirements.CLI_Id) && m.DES_Id.Equals(clientRequirements.DES_Id)).ToList();
-                    list.ForEach(m => m.CRI_Active = false);
+                    List<Client_Requirements> list = _contaxt.Client_Requirements.Where(m => m.CLI_Id.Equals(clientRequirements.CLI_Id) && m.DES_Id.Equals(clientRequirements.DES_Id) && m.CRI_Active == true).ToList();
+                    list.ForEach(m => {
+                        m.CRI_Active = false;
+                        m.CRI_InactivatedOn = ProjectUtils.DateNow();
+                        m.ADM_Id_InactivatedBy = ADM_Id;
+                    });
                     _contaxt.SaveChanges();                   
                     clientRequirements.CRI_Id = 0;
                     _contaxt.Client_Requirements.Add(clientRequirements);
@@ -295,18 +299,9 @@ namespace RMERP.DAL.ManagerClasses
             
             return res;
         }
-        public Client_Requirements GetRequirementsById(int criId)
+        public Client_Requirements GetRequirementsById(int CRI_Id)
         {
-            Client_Requirements clientRequirements = new Client_Requirements();
-            try
-            {               
-                clientRequirements = _contaxt.Client_Requirements.Find(criId);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }            
-            return clientRequirements;
+            return _contaxt.Client_Requirements.Where(c => c.CRI_Id == CRI_Id).Include(c => c.DES_).FirstOrDefault();
         }
 
         public IEnumerable<Client_Requirements> GetClient_RequirementsList(int desId, int cliId, bool active = true)
@@ -315,9 +310,9 @@ namespace RMERP.DAL.ManagerClasses
             return list;
         }
 
-        public IEnumerable<Client_Requirements> GetClient_RequirementsListByClientId(int cliId, bool active = true)
+        public IEnumerable<Client_Requirements> GetClient_RequirementsofClient(int CLI_Id, bool active = true)
         {
-            IEnumerable<Client_Requirements> list = _contaxt.Client_Requirements.Include(m => m.CLI_).Include(m => m.DES_).Where(m => m.CLI_Id.Equals(cliId) && m.CRI_Active.Equals(active)).OrderByDescending(m => m.CRI_RegisteredOn).ToList();
+            IEnumerable<Client_Requirements> list = _contaxt.Client_Requirements.Include(m => m.DES_).Where(m => m.CLI_Id.Equals(CLI_Id) && m.CRI_Active.Equals(active)).OrderByDescending(m => m.CRI_RegisteredOn).ToList();
             return list;
         }
 

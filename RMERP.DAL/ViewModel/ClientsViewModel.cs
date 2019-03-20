@@ -15,7 +15,7 @@ namespace RMERP.DAL.ViewModel
         public IEnumerable<Clients> Listclients { get; set; }
         public IEnumerable<Client_Contacts> ListClientContact { get; set; }
         public ClientRequirementsModel clientRequirementsModel { get; set; }
-        public IEnumerable<Client_Requirements> ListClientRequirements { get; set; }
+        public List<ClientRequirementVM> requirements { get; set; }
         public ClientsEmployeesViewModel ClientsEmployeesViewModel { get; set; }        
         public ClientsEmpVM ClientsEmp { get; set; }
         public int WageID { get; set; }
