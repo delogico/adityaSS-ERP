@@ -236,7 +236,7 @@
                                     {
                                         <tr>
                                             <td><b>@item.DES_Title</b></td>
-                                            <td>2</td>
+                                            <td>@item.CRI_Total</td>
                                             <td>@DateHelper.getDateWithFormat(item.CRI_RegisteredOn)</td>
                                             <td class="text-right">
                                                 <div class="dropdown">
@@ -363,37 +363,36 @@
         <div class="content container-fluid">
             <div class="row">
                 <div class="col-sm-12 text-right m-b-30">
-                    <a class="btn btn-primary rounded" href="@Url.Action("ClientEmployee","Clients")"><i class="fa fa-plus"></i> Assign Employee</a>
+                    <a class="btn btn-primary rounded" href="@Url.Action("AddEmployee","Clients", new { CLI_Id=Model.clientsModel.CLI_Id})"><i class="fa fa-plus"></i> Assign Employee</a>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div>
-                        @if (Model.ClientsEmp.ClientsEmployeesList != null)
+                        @if (Model.employees.Count() > 0)
                         {
                             <table class="table table-striped custom-table m-b-0 ">
                                 <thead>
                                     <tr>
                                         <th>Designation</th>
-                                        <th>EmployeeName</th>
+                                        <th>Employee</th>
                                         <th>Assign On</th>
                                         <th class="text-right">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model.ClientsEmp.ClientsEmployeesList)
+                                    @foreach (var item in Model.employees)
                                     {
                                         <tr>
-                                            <td>@item.DES_.DES_Title</td>
-                                            <td>@item.EMP_.EMP_FirstName @item.EMP_.EMP_MiddleName @item.EMP_.EMP_SurName</td>
-                                            <td>@item.CLE_RegisteredOn</td>
+                                            <td><b>@item.DES_Title</b></td>
+                                            <td>@item.employee.EMP_FullName</td>
+                                            <td>@DateHelper.getDateWithFormat(item.CLE_RegisteredOn)</td>
 
                                             <td class="text-right">
                                                 <div class="dropdown">
                                                     <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                     <ul class="dropdown-menu pull-right">
-                                                        @*<li><a href='@Url.Action("ClientEmployee","Clients",new { CleId=item.CleId})' title="Edit ClientEmployee"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>*@
-                                                        <li><a href='@Url.Action("DeleteClientEmployee","Clients",new { CleId=item.CLE_Id})' title="Delete"><i class="fa fa-trash m-r-5"></i> Delete</a></li>
+                                                        <li><a href='@Url.Action("DeleteClientEmployee","Clients",new { CLE_Id=item.CLE_Id})' title="Delete"><i class="fa fa-trash m-r-5"></i> Delete</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -405,7 +404,7 @@
                         }
                         else
                         {
-                            <p>No Client-Employee To Display</p>
+                            <p>Assign first Employee to this Client</p>
                         }
 
                     </div>

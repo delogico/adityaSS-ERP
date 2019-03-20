@@ -66,8 +66,7 @@ namespace RMERP.Controllers
             FirmsManager firmsManager = new FirmsManager(_context);
             ClientsViewModel cv = new ClientsViewModel();
             cv.clientsModel = new ClientsModel();
-            cv.ClientsEmp = new ClientsEmpVM();
-
+            
             cv.ParametersClientsModel = new ParametersClientsModel();
             cv.ParametersClientsModel.clientsModel = new ClientsModel();
             if (id > 0)
@@ -105,10 +104,9 @@ namespace RMERP.Controllers
                 cv.clientsModel.CLI_RegisteredOn = clients.CLI_RegisteredOn;
                 cv.clientsModel.CliLogoImage = clients.CLI_Logo;
                 IEnumerable<Client_Contacts> listClientContacts = clientsManager.GetClientContactsListById(id);
-                cv.requirements = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsofClient(id,true).ToList());
                 cv.ListClientContact = listClientContacts;
-                IEnumerable<Clients_Employees> listClientsEmployees= clientsManager.listClientsEmployees(ClientId);
-                cv.ClientsEmp.ClientsEmployeesList = listClientsEmployees;
+                cv.requirements = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsofClient(id, true).ToList());
+                cv.employees = ClientEmployeeMapper.mapEmployees(clientsManager.listClientsEmployees(id).ToList());
             }
             IEnumerable<Firms> listFirms = new List<Firms>();
             List<Cities> listCity = new List<Cities>();          
@@ -307,6 +305,7 @@ namespace RMERP.Controllers
                 cr.CRI_Id = clientRequirementVM.CRI_Id;
                 cr.CLI_Id = clientRequirementVM.CLI_Id;
                 cr.DES_Id = clientRequirementVM.DES_Id;
+                cr.CRI_Total = clientRequirementVM.CRI_Total;
                 cr.CRI_Basic = clientRequirementVM.CRI_Basic;
                 cr.CRI_DA = clientRequirementVM.CRI_DA;
                 cr.CRI_BasicDA = clientRequirementVM.CRI_BasicDA;
@@ -374,30 +373,21 @@ namespace RMERP.Controllers
         }
 
         [HttpGet]
-        public ActionResult ClientEmployee(int CleId = -1)
+        public ActionResult AddEmployee(int CLI_Id)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            ClientsEmployeesViewModel cvm = new ClientsEmployeesViewModel();
+            ClientEmployeeVM cvm = new ClientEmployeeVM();
             DesignationManager designationManager = new DesignationManager(_context);
-            // IEnumerable<Designations> listDesignations = designationManager.getDesignationsListByClientID(ClientId);
-            IEnumerable<AssignEmployeeVM> listDesignations = designationManager.getDesignationsListInVM(ClientId);
-            IEnumerable<Employees> listEmployee = clientsManager.getEmployeeList(ClientId);
+            IEnumerable<AssignEmployeeVM> listDesignations = designationManager.getDesignationsListInVM(CLI_Id);
+            IEnumerable<EmployeeVM> listEmployee = EmployeesMapper.MapEmployees(clientsManager.getEmployeeList(CLI_Id).ToList());
             ViewBag.EmployeeList = listEmployee;
-
             ViewBag.designationList = listDesignations;
-            cvm.CLI_Id = ClientId;
-            ViewBag.ClientName = clientsManager.GetClientById(ClientId).CLI_Name;
-            //if (CleId > 0)
-            //{
-            //    ClientsEmployees ce = new ClientsEmployees();
-            //    ce=clientsManager.ClientEmployeeById(CleId);
-            //    cvm.DesId = ce.DesId;
-            //    cvm.EmpId = ce.EmpId;
-            //}            
+            cvm.CLI_Id = CLI_Id;
+            ViewBag.ClientName = clientsManager.GetClientById(CLI_Id).CLI_Name;
             return View(cvm);
         }
         [HttpPost]
-        public ActionResult ClientEmployee(ClientsEmployeesViewModel cvm)
+        public ActionResult ClientEmployee(ClientEmployeeVM cvm)
         {
             string res = string.Empty;
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
@@ -406,9 +396,8 @@ namespace RMERP.Controllers
                 Clients_Employees clientsEmployees = new Clients_Employees();
                 clientsEmployees.CLE_Id = cvm.CLE_Id;
                 clientsEmployees.CLI_Id = cvm.CLI_Id;
-                clientsEmployees.CLI_Id = cvm.CLI_Id;
                 clientsEmployees.EMP_Id = cvm.EMP_Id;
-               // clientsEmployees.CRI_Id = cvm.CRI_Id;
+                clientsEmployees.DES_Id = cvm.DES_Id;
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
                 res = clientsManager.ClientEmployee(clientsEmployees, sessionUtils.GetLoggedAdminID());
                 if (res != string.Empty)
@@ -416,17 +405,17 @@ namespace RMERP.Controllers
                     TempData["message"] = "ClientEmployee data can not Inserted";
                 }
             }
-            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
+            return RedirectToAction("AddEditClients", new { id = cvm.CLI_Id, tab = "ClientEmployee" });
         }
-        public ActionResult DeleteClientEmployee(int CleId = -1)
+        public ActionResult DeleteClientEmployee(int CLE_Id = -1)
         {
             ClientsViewModel clientsViewModel = new ClientsViewModel();
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             if (ModelState.IsValid)
             {
-                if (CleId > 0)
+                if (CLE_Id > 0)
                 {
-                    string res = clientsManager.deleteClientEmployee(CleId);
+                    string res = clientsManager.deleteClientEmployee(CLE_Id);
                     if (res != string.Empty)
                     {
                         TempData["message"] = "Employee can not deleted";

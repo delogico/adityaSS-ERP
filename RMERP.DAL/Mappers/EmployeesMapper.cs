@@ -108,7 +108,15 @@ namespace RMERP.DAL.Mappers
             return emp;
         }
 
-        public Employees MapMeOriginalModel(EmployeeViewModel employees)
+        public static List<EmployeeVM> MapEmployees(List<Employees> employees)
+        {
+            List<EmployeeVM> lst = new List<EmployeeVM>();
+            foreach (Employees employee in employees)
+                lst.Add(MapMe(employee));
+            return lst;
+        }
+
+            public Employees MapMeOriginalModel(EmployeeViewModel employees)
         {
             Employees emp = new Employees();
             emp.EMP_Id = employees.EMP_Id;
