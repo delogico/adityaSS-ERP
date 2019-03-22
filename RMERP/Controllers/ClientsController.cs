@@ -103,8 +103,7 @@ namespace RMERP.Controllers
                 cv.clientsModel.ADM_Id_RegisterBy = clients.ADM_Id_RegisterBy;
                 cv.clientsModel.CLI_RegisteredOn = clients.CLI_RegisteredOn;
                 cv.clientsModel.CliLogoImage = clients.CLI_Logo;
-                IEnumerable<Client_Contacts> listClientContacts = clientsManager.GetClientContactsListById(id);
-                cv.ListClientContact = listClientContacts;
+                cv.contacts = ClientContactMapper.mapContacts(clientsManager.GetClientContactsListById(id).ToList());
                 cv.requirements = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsofClient(id, true).ToList());
                 cv.employees = ClientEmployeeMapper.mapEmployees(clientsManager.listClientsEmployees(id).ToList());
             }
@@ -170,42 +169,31 @@ namespace RMERP.Controllers
             return RedirectToAction("AddEditClients",new { id= clientID });
         }
         [HttpGet]
-        public ActionResult AddEditContacts(int id=-1)
+        public ActionResult AddEditContacts(int CLI_Id, int CON_Id=-1)
         {
-            ClientContactModel clientContactModel = new ClientContactModel();
-            if (ClientId>0)
+            ClientContactVM contactVM = new ClientContactVM();
+            if (CLI_Id>0)
             {
                 ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-                Client_Contacts clientContacts = new Client_Contacts();
-                Clients clients = new Clients();
-                clients = clientsManager.GetClientById(ClientId);
-                clientContactModel.ClientName = clients.CLI_Name;
-                clients = null;
-                if (ModelState.IsValid)
+                Clients clients = clientsManager.GetClientById(CLI_Id);
+                if (CON_Id > 0)
+                {                                           
+                    Client_Contacts contact = clientsManager.GetClientContactsById(CON_Id);
+                    contactVM = ClientContactMapper.mapMe(contact);
+                }else
                 {
-                    if (id > 0)
-                    {                                           
-                        clientContacts = clientsManager.GetClientContactsById(id);
-                        clientsManager = null;
-                        clientContactModel.CON_Id = clientContacts.CON_Id;
-                        clientContactModel.CLI_Id = clientContacts.CLI_Id;
-                        clientContactModel.CON_FirstName = clientContacts.CON_FirstName;
-                        clientContactModel.CON_SurName = clientContacts.CON_SurName;
-                        clientContactModel.CON_Designation = clientContacts.CON_Designation;
-                        clientContactModel.CON_Mobile = clientContacts.CON_Mobile;
-                        clientContactModel.CON_Email = clientContacts.CON_Email;
-                        clientContactModel.CON_isPrimary = clientContacts.CON_isPrimary;
-                        clientContactModel.CON_RegisteredOn = ProjectUtils.DateNow();
-                        SessionUtils sessionUtils = new SessionUtils(Request, Response);
-                        clientContactModel.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
-                        clientContacts = null;
-                    }
+                    contactVM = new ClientContactVM();
+                    contactVM.CON_Id = 0;
+                    contactVM.CLI_Id = CLI_Id;
+                    contactVM.CON_RegisteredOn = ProjectUtils.DateNow();
+                    SessionUtils sessionUtils = new SessionUtils(Request, Response);
+                    contactVM.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
                 }
-            }                    
-            return View(clientContactModel);
+            }                 
+            return View(contactVM);
         }
         [HttpPost]
-        public ActionResult AddEditContacts(ClientContactModel clientContactModel)
+        public ActionResult AddEditContacts(ClientContactVM contactVM)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             if (ModelState.IsValid)
@@ -214,13 +202,13 @@ namespace RMERP.Controllers
                 {
                     Client_Contacts clientContacts = new Client_Contacts();
                     clientContacts.CLI_Id = ClientId;
-                    clientContacts.CON_Id = clientContactModel.CON_Id;
-                    clientContacts.CON_FirstName = clientContactModel.CON_FirstName;
-                    clientContacts.CON_SurName = clientContactModel.CON_SurName;
-                    clientContacts.CON_Designation = clientContactModel.CON_Designation;
-                    clientContacts.CON_Mobile = clientContactModel.CON_Mobile;
-                    clientContacts.CON_Email = clientContactModel.CON_Email;
-                    clientContacts.CON_isPrimary = clientContactModel.CON_isPrimary;
+                    clientContacts.CON_Id = contactVM.CON_Id;
+                    clientContacts.CON_FirstName = contactVM.CON_FirstName;
+                    clientContacts.CON_SurName = contactVM.CON_SurName;
+                    clientContacts.CON_Designation = contactVM.CON_Designation;
+                    clientContacts.CON_Mobile = contactVM.CON_Mobile;
+                    clientContacts.CON_Email = contactVM.CON_Email;
+                    clientContacts.CON_isPrimary = contactVM.CON_isPrimary;
                     clientContacts.CON_RegisteredOn = ProjectUtils.DateNow();
                     SessionUtils sessionUtils = new SessionUtils(Request, Response);
                     clientContacts.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
