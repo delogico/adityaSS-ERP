@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using RMERP.DAL.Models;
 
 namespace RMERP.DAL.ViewModel
 {
-    public class ClientContactModel
+    public class ClientContactVM
     {
         [Key]
         public int CON_Id { get; set; }
         public int CLI_Id { get; set; }
-        public string ClientName { get; set; }
         [Display(Name = "First Name")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please insert first name")]
         public string CON_FirstName { get; set; }
@@ -31,5 +30,14 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Set as primary contact ?")]
         [Required(ErrorMessage = "Please select if you wants to make contact as primary")]
         public bool CON_isPrimary { get; set; }
+
+        public string CON_FullName
+        {
+            get
+            {
+                return string.Concat(CON_FirstName, " ", CON_SurName);
+            }
+        }
+        public Clients client { get; set; }
     }    
 }

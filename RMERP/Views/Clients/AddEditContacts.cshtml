@@ -1,4 +1,4 @@
-﻿@model RMERP.DAL.ViewModel.ClientContactModel
+﻿@model RMERP.DAL.ViewModel.ClientContactVM
 @{
     ViewData["Title"] = "Add-Edit Contacts";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
@@ -18,7 +18,6 @@
     };
 
 }
-@*<div id="add_contact" class="modal custom-modal fade" role="dialog">*@
 <div class="modal-dialog">
     <div class="modal-content modal-md">
         <div class="modal-header">
@@ -31,13 +30,6 @@
                     @Html.AntiForgeryToken()
                     @Html.HiddenFor(m => m.CON_Id)
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.ClientName, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.ClientName, new { @readonly = "readonly", @class = "form-control" })
-                                @Html.ValidationMessageFor(x => x.ClientName, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.CON_FirstName, new { @class = "control-label" })

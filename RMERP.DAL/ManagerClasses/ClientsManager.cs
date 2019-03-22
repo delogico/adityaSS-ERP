@@ -179,19 +179,9 @@ namespace RMERP.DAL.ManagerClasses
             
             return clients;
         }
-        public Client_Contacts GetClientContactsById(int id)
+        public Client_Contacts GetClientContactsById(int CON_Id)
         {
-            Client_Contacts clientContacts = new Client_Contacts();
-            try
-            {
-                clientContacts = _contaxt.Client_Contacts.Find(id);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            return clientContacts;
+            return _contaxt.Client_Contacts.Where(c=>c.CON_Id.Equals(CON_Id)).Include(c=>c.CLI_).FirstOrDefault();
         }
         public string saveAddEditContacts(Client_Contacts clientContacts)
         {
@@ -220,12 +210,12 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public List<Client_Contacts> GetClientContactsListById(int Clientid)
+        public List<Client_Contacts> GetClientContactsListById(int CLI_Id)
         {
             List<Client_Contacts> clientContactsList = new List<Client_Contacts>();
             try
             {
-                clientContactsList = _contaxt.Client_Contacts.Include(m=>m.CLI_).Where(m => m.CLI_Id.Equals(Clientid)).OrderByDescending(m=>m.CON_isPrimary).ToList();
+                clientContactsList = _contaxt.Client_Contacts.Include(m=>m.CLI_).Where(m => m.CLI_Id.Equals(CLI_Id)).OrderByDescending(m=>m.CON_isPrimary).ToList();
             }
             catch (Exception ex)
             {

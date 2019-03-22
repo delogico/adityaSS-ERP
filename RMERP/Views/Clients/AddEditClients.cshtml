@@ -150,13 +150,13 @@
                     <h4 class="page-title">Client Contact</h4>
                 </div>
                 <div class="col-sm-4 text-right m-b-30">
-                    <a class="btn btn-primary rounded" href="@Url.Action("AddEditContacts","Clients")"><i class="fa fa-plus"></i> Add New Contacts</a>
+                    <a class="btn btn-primary rounded" href="@Url.Action("AddEditContacts","Clients", new { CLI_Id = Model.clientsModel.CLI_Id})"><i class="fa fa-plus"></i> Register New Contact</a>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div>
-                        @if (Model.ListClientContact != null)
+                        @if (Model.contacts.Count() > 0)
                         {
                             <table class="table table-striped custom-table m-b-0 ">
                                 <thead>
@@ -164,30 +164,28 @@
                                         <th>Contact Name</th>
                                         <th>Mobile No</th>
                                         <th>Email Address</th>
-                                        @*<th>Primary Contact?</th>*@
-                                        <th class="text-right">Action</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                    @foreach (var item in Model.ListClientContact)
+                                    @foreach (var item in Model.contacts)
                                     {
                                         var style = item.CON_isPrimary == true ? "background-color:#3bb73b4a" : null;
                                         <tr style="@style">
                                             <td>
-                                                @item.CON_FirstName &nbsp;@item.CON_SurName
+                                                @item.CON_FullName
                                                 <br><b>@item.CON_Designation</b>
                                             </td>
                                             <td>@item.CON_Mobile</td>
                                             <td>@item.CON_Email</td>
-                                            @*<td>@item.CON_isPrimary</td>*@
                                             <td class="text-right">
                                                 <div class="dropdown">
                                                     <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                     <ul class="dropdown-menu pull-right">
-                                                        <li><a href='@Url.Action("AddEditContacts","Clients",new { id=item.CON_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
+                                                        <li><a href='@Url.Action("AddEditContacts","Clients",new { CON_Id=item.CON_Id, CLI_Id=Model.clientsModel.CLI_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
 
-                                                        <li><a href='@Url.Action("DeleteContact","Clients",new { id=item.CON_Id})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Delete</a></li>
+                                                        <li><a href='@Url.Action("DeleteContact","Clients",new { CON_Id=item.CON_Id,CLI_Id=Model.clientsModel.CLI_Id})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Delete</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -199,7 +197,7 @@
                         }
                         else
                         {
-                            <p>No Contact List To Display</p>
+                            <p>No Contact registered</p>
                         }
 
                     </div>
