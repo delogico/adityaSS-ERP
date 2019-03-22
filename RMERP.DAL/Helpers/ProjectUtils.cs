@@ -40,31 +40,7 @@ namespace RMERP.DAL.Helpers
             TimeZoneInfo myZone = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
             DateTime custDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, myZone);
             return custDateTime;
-        }
-        public static string convertDigit(int ID)
-        {
-            string no = Convert.ToString(ID);
-            int length = ID.ToString().Length;
-            switch (length)
-            {
-                case 1:
-                    no = ("0000" + no);
-                    break;
-                case 2:
-                    no = ("000" + no);
-                    break;
-                case 3:
-                    no = ("00" + no);
-                    break;
-                case 4:
-                    no = ("0" + no);
-                    break;
-                default:
-                    no = ("" + no);
-                    break;
-            }
-            return no;
-        }
+        }        
 
         public static string GetTempFolderPath(string webRootPath)
         {

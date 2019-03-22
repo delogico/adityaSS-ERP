@@ -104,6 +104,7 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
+
         public Employee_Advance GetEmployeeAdvanceById(int ADV_Id)
         {
             Employee_Advance employee_Advance = new Employee_Advance();

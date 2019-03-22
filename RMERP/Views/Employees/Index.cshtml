@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<RMERP.DAL.ViewModel.EmployeeViewModel>
-
+@using RMERP.Helpers
 @{
     ViewData["Title"] = "Employee List";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
@@ -63,11 +63,11 @@
 
                                         <td>@item.DEPT_.DEPT_Title</td>
                                         <td>@item.EMP_FullName</td>
-                                        <td>@item.EMP_DOB</td>
+                                        <td>@DateHelper.getDateWithFormat(@item.EMP_DOB)</td>
                                         <td>@item.EMP_Designation</td>
                                         @*<td>@(item.EmpMarried == (byte)MaritalStatus.Married ? "Married" : "UnMarried")</td>*@
 
-                                        <td>@item.EMP_DateOfJoining</td>
+                                        <td>@DateHelper.getDateWithFormat(@item.EMP_DateOfJoining)</td>
                                         <td>@(item.EMP_Gender == true ? "Male" : "Female")</td>
                                         <td>@item.EMP_Contact_Primary</td>
 

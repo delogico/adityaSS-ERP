@@ -18,5 +18,7 @@ namespace RMERP.DAL.ViewModel
         public decimal ADV_Amount { get; set; }
         public DateTime ADV_RegisteredOn { get; set; }
         public int ADM_Id_RegisteredBy { get; set; }
+
+        public string EmployeeName { get; set; }
     }
 }
