@@ -1,7 +1,7 @@
 ﻿@model List<RMERP.DAL.ViewModel.AttendanceVM>
 @using RMERP.DAL.Models;
 @using RMERP.DAL.ViewModel;
-@using static RMERP.DAL.App_Code.ProjectUtils;
+
 @{
     ViewData["Title"] = "View Attendance";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
@@ -54,9 +54,9 @@
                         @foreach (var EMP_Id in EMP_Ids)
                         {
                             EmployeeVM employee = Model.Where(a=>a.EMP_Id == EMP_Id).Select(m => m.employee).First();
-                            ClientRequirementVM requirement = Model.Where(a => a.EMP_Id == EMP_Id).Select(m => m.requirement).First();
+                            Designations designation = Model.Where(a => a.EMP_Id == EMP_Id).Select(m => m.designation).First();
                         <tr>
-                            <td><b>@employee.EMP_FullName</b><br />@requirement.DES_Title</td>
+                            <td><b>@employee.EMP_FullName</b><br />@designation.DES_Title</td>
                             @{
                                 int counter1 = 0;
                                 DateTime tmpDate1 = ViewBag.startDate;

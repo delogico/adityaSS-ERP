@@ -24,6 +24,7 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Clients_Employees> Clients_Employees { get; set; }
         public virtual DbSet<Departments> Departments { get; set; }
         public virtual DbSet<Designations> Designations { get; set; }
+        public virtual DbSet<Employee_Advance> Employee_Advance { get; set; }
         public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<Firms> Firms { get; set; }
         public virtual DbSet<Wage_Process> Wage_Process { get; set; }
@@ -336,6 +337,21 @@ namespace RMERP.DAL.Models
                     .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Employee_Advance>(entity =>
+            {
+                entity.HasKey(e => e.ADV_Id);
+
+                entity.Property(e => e.ADV_Amount).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.ADV_RegisteredOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.EMP_)
+                    .WithMany(p => p.Employee_Advance)
+                    .HasForeignKey(d => d.EMP_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Employee_Advance_Employees");
             });
 
             modelBuilder.Entity<Employees>(entity =>

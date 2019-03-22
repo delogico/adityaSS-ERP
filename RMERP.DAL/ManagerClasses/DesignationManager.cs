@@ -43,9 +43,18 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Designations.Find(desId).DES_Title;
         }
-        public int GetDesignationIdByTitle(string DES_Title)
+       public int getDesignationIdForAttandance(int CLI_Id,int EMP_Id)
         {
-            return 0;
+            int i = 0;
+            try
+            {
+                i = _context.Clients_Employees.Where(m => m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id)).FirstOrDefault().DES_Id;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return i;
         }
     }
 }

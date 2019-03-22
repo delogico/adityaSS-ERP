@@ -101,5 +101,12 @@ namespace RMERP.DAL.ViewModel
         public ICollection<Attendance> Attendance { get; set; }
         public ICollection<Clients_Employees> Clients_Employees { get; set; }
     }
+
+    public class EmployeeAddEditVM
+    {
+        public EmployeeViewModel employeeViewModel { get; set; }
+        public IEnumerable<Employee_Advance> ListEmployee_Advance { get; set; }
+        public Employee_Advance employee_Advance { get; set; }
+    }
 }
 

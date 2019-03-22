@@ -28,8 +28,8 @@ namespace RMERP.DAL.Mappers
                 attendanceVM.employee = EmployeesMapper.MapMe(attendance.EMP_);
             if (attendance.WAG_ != null)
                 attendanceVM.wage_Process = WageProcessMapper.mapMe(attendance.WAG_);
-            //if(attendance.CRI_ != null)
-            //    attendanceVM.requirement = ClientRequirementMapper.mapMe(attendance.CRI_);
+            if (attendance.DES_ != null)
+                attendanceVM.designation = attendance.DES_;
             return attendanceVM;
         }
 

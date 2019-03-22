@@ -494,20 +494,10 @@ namespace RMERP.DAL.ManagerClasses
         {
             DateTime lastDate = new DateTime(monthStartDate.Year, monthStartDate.Month, 1).AddMonths(1).AddDays(-1);
             IQueryable<Clients> cliList = from a in _contaxt.Clients.Include(m=>m.Clients_Employees).Include(m=>m.Client_Requirements).Include(m=>m.Attendance)
-                                          where a.CLI_RegisteredOn.Date <= monthStartDate.Date
+                                          where
+                                          a.CLI_RegisteredOn.Date <= monthStartDate.Date
                                           && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
                                           select a;
-            
-            //var cliListvar = from a in _contaxt.Clients
-            //                 join b in _contaxt.Attendance on a.CLI_Id equals b.CLI_Id
-            //                 join c in _contaxt.Clients_Employees on b.CLI_Id equals c.CLI_Id
-            //              where a.CLI_RegisteredOn.Date <= monthStartDate.Date
-            //               && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
-            //                 select new { a, b ,c};
-
-            //var Clients = _contaxt.Clients
-            //            .FromSql("SELECT * FROM dbo.Clients")
-            //            .ToList();
 
             return cliList.ToList();
         }

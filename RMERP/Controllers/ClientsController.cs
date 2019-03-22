@@ -554,9 +554,9 @@ namespace RMERP.Controllers
 
                     //row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
                     row.CreateCell(1).SetCellValue(item.EMP_Id.ToString("D5"));
-                    row.CreateCell(2).SetCellValue(item.CLI_.CLI_Id);
+                    row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
                     //row.CreateCell(3).SetCellValue(item.EMP_.EMP_FullName);
-                    row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName+""+ item.EMP_.EMP_MiddleName+""+ item.EMP_.EMP_SurName);
+                    row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName+" "+ item.EMP_.EMP_MiddleName+" "+ item.EMP_.EMP_SurName);
 
                     excelSheet.SetColumnWidth(2, 6000);
                     excelSheet.SetColumnWidth(3, 6000);
@@ -702,9 +702,9 @@ namespace RMERP.Controllers
                     row.CreateCell(0).SetCellValue(j);
                     //row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
                     row.CreateCell(1).SetCellValue(item.EMP_Id.ToString("D5"));
-                    row.CreateCell(2).SetCellValue(item.CLI_.CLI_Id);
+                    row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
                     // row.CreateCell(3).SetCellValue(item.EMP_.EMP_FullName);
-                    row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + "" + item.EMP_.EMP_MiddleName + "" + item.EMP_.EMP_SurName);
+                    row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + " " + item.EMP_.EMP_MiddleName + " " + item.EMP_.EMP_SurName);
 
                     excelSheet.SetColumnWidth(2, 6000);
                     excelSheet.SetColumnWidth(3, 6000);

@@ -259,6 +259,7 @@ namespace RMERP.Controllers
             string strFilePath = frm["fileName"];
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             AttendanceManager attManager = new AttendanceManager(_context);
+            DesignationManager designationManager = new DesignationManager(_context);
             ClientsManager clientManager = new ClientsManager(_context,_configuration);
             WageProcessManager wageManager = new WageProcessManager(_context);
             Wage_Process wageProcess = wageManager.getWageProcessById(WAG_Id);
@@ -309,16 +310,14 @@ namespace RMERP.Controllers
                     if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
 
                     int EMP_Id = Convert.ToInt16(row.GetCell(1).ToString());
-                    string DES_Title = row.GetCell(2).ToString();
-
-                    DateTime tmpDate = startDate;
+;                    DateTime tmpDate = startDate;
                     for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 5; j++)
                     {
                         Attendance att = new Attendance();
                         att.EMP_Id = EMP_Id;
                         att.WAG_Id = WAG_Id;
                         att.CLI_Id = CLI_Id;
-                        att.DES_Id = clientManager.getClientRequirementId(CLI_Id, EMP_Id);
+                        att.DES_Id = designationManager.getDesignationIdForAttandance(CLI_Id, EMP_Id);
                         att.ATT_Date = tmpDate;
                         if (row.GetCell(j).ToString().Equals("P"))
                             att.ATT_IsPresent = true;

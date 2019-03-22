@@ -1,6 +1,6 @@
 ﻿@model RMERP.DAL.ViewModel.WageRegisterVM
 @using RMERP.DAL.Models
-@using RMERP.DAL.ManagerClasses
+
 @{
     ViewData["Title"] = "WageRegister";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
@@ -26,8 +26,17 @@
    
     @foreach (var item in Model.listClients)
     {
-        <div id="@item.CLI_Id" class="tabcontent tab-pane fade">
-            <h3>@item.CLI_Name</h3>
+    <div id="@item.CLI_Id" class="tabcontent tab-pane fade">
+        <h3><u>@item.CLI_Name</u></h3>
+        <hr/>
+        @{
+            List<int> designationID = Model.listAttendance.Where(m=>m.CLI_Id.Equals(item.CLI_Id)).Select(m => m.DES_Id).Distinct().ToList();
+        }
+        @foreach (int desID in designationID)
+        {
+          
+        <h4>@Model.listDesignations.Where(m => m.DES_Id.Equals(Convert.ToInt32(desID))).FirstOrDefault().DES_Title </h4>                               
+        
             @if (item.Clients_Employees != null && item.Client_Requirements != null)
             {
                 <table class="table table-border">
@@ -35,50 +44,56 @@
                         <tr>
                             <td>Employee ID</td>
                             <td>Employee Name</td>
-                            <td>Designation</td>
                             <td>Date Of Joining</td>
                             <td>Basic/(Basic+DA)</td>
                             <td>HRA(%)/HRA(Fixed)</td>
                             <td>UPKEEP ALLOW.</td>
                             <td>M/F</td>
                             <td>Pay Days</td>
+                            <td>OT Hours</td>
+                            <td>Gross Total</td>
+                            <td>PF</td>
                         </tr>
                     </thead>
                     <tbody>
-                        @{                            
-                            List<Clients_Employees> lstCliEmp = item.Clients_Employees.Where(m=>m.CLE_RegisteredOn.Month<=Model.WAG_Month.Month).OrderBy(m => m.EMP_Id).ToList();
-                            List<Client_Requirements> lstCliReq = item.Client_Requirements.Where(m=>m.CLI_Id==item.CLI_Id ).ToList();   
-                        }                       
+                        @{
+                            List<Clients_Employees> lstCliEmp = item.Clients_Employees.Where(m=> m.DES_Id.Equals(desID)).OrderBy(m => m.EMP_Id).ToList();
+                            List<Client_Requirements> lstCliReq = item.Client_Requirements.Where(m => m.CLI_Id == item.CLI_Id && m.DES_Id.Equals(desID)).ToList();
+                        }
                         @foreach (var emp in lstCliEmp)
                         {
-                        <tr>
-                            @{Client_Requirements cr = lstCliReq.Where(m => m.CLI_Id == emp.CLI_Id).FirstOrDefault();}
-                            
-                            @{Employees employees = new Employees();
-                                employees = Model.listEmployee.Where(m => m.EMP_Id.Equals(emp.EMP_Id)).FirstOrDefault();}
+                            <tr>
+                                @if (Model.listAttendance.Where(m => m.CLI_Id.Equals(item.CLI_Id)).Count() > 0)
+                                {
+                                    Client_Requirements cr = lstCliReq.Where(m => m.CLI_Id == item.CLI_Id && m.CRI_Active == true && m.DES_Id == emp.DES_Id).FirstOrDefault();
+                                    int PayDays;
+                                    Employees employees = new Employees();
+                                    employees = Model.listEmployee.Where(m => m.EMP_Id.Equals(emp.EMP_Id)).FirstOrDefault();
 
-                            <td>@employees.EMP_Id.ToString("D5")</td>
-                            <td>@employees.EMP_FirstName @employees.EMP_MiddleName @employees.EMP_SurName</td>
-                            <td>
-                                @{ 
-                                    string des = Model.listDesignations.Where(m=>m.DES_Id.Equals(Convert.ToInt32(cr.DES_Id))).FirstOrDefault().DES_Title;}
-                                @des
-                            </td>
-                        <td>@emp.CLE_RegisteredOn.ToShortDateString()</td>
+                                    <td>@employees.EMP_Id.ToString("D5")</td>
+                                    <td>@employees.EMP_FirstName @employees.EMP_MiddleName @employees.EMP_SurName</td>
 
-                        <td>@(Convert.ToDecimal(cr.CRI_Basic) == (0.0m) ? cr.CRI_BasicDA : (cr.CRI_Basic + Convert.ToDecimal(cr.CRI_DA)))</td>
-                        <td>@(Convert.ToString(cr.CRI_HRA_Percentage) == "" ? Convert.ToString(cr.CRI_HRA_Fixed) : Convert.ToString(cr.CRI_HRA_Percentage) + "%")</td>
+                                    <td>@emp.CLE_RegisteredOn.ToShortDateString()</td>
 
-                        <td>@(Convert.ToString(cr.CRI_Allowance_UpKeep) != "" ? Convert.ToString(cr.CRI_Allowance_UpKeep) : "-")</td>
-                        @*<td>@Model.listAttendance.Where(m => m.EMP_Id == employees.EMP_Id && m.CLI_Id == item.CLI_Id).Sum(m => m.ATT_ExtraHoursWorked)</td>*@
-                        <td>@(employees.EMP_Gender == true ? "M" : "F")</td>
-                        <td>@item.Attendance.Where(m => m.EMP_Id == employees.EMP_Id && m.ATT_IsPresent == true).Count()</td>
-                        </tr>
+                                    <td>@(Convert.ToDecimal(cr.CRI_Basic) == (0.0m) ? cr.CRI_BasicDA : (cr.CRI_Basic + Convert.ToDecimal(cr.CRI_DA)))</td>
+                                    <td>@(Convert.ToString(cr.CRI_HRA_Percentage) == "" ? Convert.ToString(cr.CRI_HRA_Fixed) : Convert.ToString(cr.CRI_HRA_Percentage) + "%")</td>
+
+                                    <td>@(Convert.ToString(cr.CRI_Allowance_UpKeep) != "" ? Convert.ToString(cr.CRI_Allowance_UpKeep) : "-")</td>
+                                    <td>@(employees.EMP_Gender == true ? "M" : "F")</td>
+                                    <td> @{PayDays = Model.listAttendance.Where(m => m.EMP_Id == employees.EMP_Id && m.ATT_IsPresent == true && m.CLI_Id.Equals(item.CLI_Id)).Count();} @PayDays</td>
+                                    <td>@Model.listAttendance.Where(m => m.EMP_Id == employees.EMP_Id).Sum(m => m.ATT_ExtraHoursWorked)</td>
+                                    <td>@(Convert.ToDecimal(cr.CRI_Basic) == (0.0m) ? cr.CRI_BasicDA : (cr.CRI_Basic + Convert.ToDecimal(cr.CRI_DA)) * PayDays)</td>
+                                    <td>@(Convert.ToString(cr.CRI_PF_Percentage) == "" ? "-" : Convert.ToString(cr.CRI_PF_Percentage))</td>
+                                }
+                            </tr>
                         }
+
                     </tbody>
                 </table>
             }
-        </div>
+        }
+
+    </div>
     }
 
 </div>
