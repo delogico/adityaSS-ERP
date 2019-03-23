@@ -5,19 +5,19 @@ namespace RMERP.DAL.Models
 {
     public partial class Client_Requirements
     {
+        public Client_Requirements()
+        {
+            Client_Requirement_Allowances = new HashSet<Client_Requirement_Allowances>();
+        }
+
         public int CRI_Id { get; set; }
         public int CLI_Id { get; set; }
         public int DES_Id { get; set; }
         public int CRI_Total { get; set; }
         public decimal? CRI_Basic { get; set; }
         public double? CRI_DA { get; set; }
-        public decimal? CRI_BasicDA { get; set; }
         public decimal? CRI_HRA_Fixed { get; set; }
         public double? CRI_HRA_Percentage { get; set; }
-        public decimal? CRI_Allowance_UpKeep { get; set; }
-        public decimal? CRI_Allowance_Grade { get; set; }
-        public decimal? CRI_Allowance_Conveyance { get; set; }
-        public decimal? CRI_Allowance_Attention { get; set; }
         public double? CRI_PF_Percentage { get; set; }
         public double? CRI_ESIC_Percentage { get; set; }
         public string CRI_ESIC_Area { get; set; }
@@ -31,5 +31,6 @@ namespace RMERP.DAL.Models
 
         public Clients CLI_ { get; set; }
         public Designations DES_ { get; set; }
+        public ICollection<Client_Requirement_Allowances> Client_Requirement_Allowances { get; set; }
     }
 }

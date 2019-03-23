@@ -12,13 +12,32 @@
     <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
+            
             var tab = $("#tabName").val();
             if (tab == "History" || tab == "ViewRequirement") {
                 $('select', 'form').attr('disabled', true).attr('readonly', true);
                 $('input', 'form').attr('disabled', true).attr('readonly', true);
                 $('button', 'form').attr('disabled', true).attr('readonly', true);
             }
-        });
+           
+            $('input[type="checkbox"]').click(function () {
+                debugger;
+                if ($(this).prop("checked") == true) {
+                    alert("Checkbox is checked. ID=" + this.id);
+                    $("#divReqAllow").show();
+                  //  $("#" + this.id).show();
+
+                }
+                else if ($(this).prop("checked") == false) {
+                    alert("Checkbox is unchecked.");
+                    $("#divReqAllow").hide();
+                  //  $("#" + this.id).hide();
+                }
+            });
+           
+        });  
+       
+
     </script>
     @if (TempData["message"] != null)
     {
@@ -96,13 +115,6 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            @Html.LabelFor(m => m.CRI_BasicDA, new { @class = "control-label" })
-                            @Html.TextBoxFor(m => m.CRI_BasicDA, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(x => x.CRI_BasicDA, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
                             @Html.LabelFor(m => m.CRI_HRA_Fixed, new { @class = "control-label" })
                             @Html.TextBoxFor(m => m.CRI_HRA_Fixed, new { @class = "form-control" })
                             @Html.ValidationMessageFor(x => x.CRI_HRA_Fixed, "", new { @class = "text-danger" })
@@ -116,33 +128,6 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.CRI_Allowance_UpKeep, new { @class = "control-label" })
-                            @Html.TextBoxFor(m => m.CRI_Allowance_UpKeep, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(x => x.CRI_Allowance_UpKeep, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.CRI_Allowance_Grade, new { @class = "control-label" })
-                            @Html.TextBoxFor(m => m.CRI_Allowance_Grade, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(x => x.CRI_Allowance_Grade, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.CRI_Allowance_Conveyance, new { @class = "control-label" })
-                            @Html.TextBoxFor(m => m.CRI_Allowance_Conveyance, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(x => x.CRI_Allowance_Conveyance, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.CRI_Allowance_Attention, new { @class = "control-label" })
-                            @Html.TextBoxFor(m => m.CRI_Allowance_Attention, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(x => x.CRI_Allowance_Attention, "", new { @class = "text-danger" })
-                        </div>
-                    </div> <div class="col-md-6">
                         <div class="form-group">
                             @Html.LabelFor(m => m.CRI_PF_Percentage, new { @class = "control-label" })
                             @Html.TextBoxFor(m => m.CRI_PF_Percentage, new { @class = "form-control" })
@@ -197,6 +182,27 @@
                             @Html.ValidationMessageFor(x => x.CRI_WageCalculationOnWeeklyOffPlus, "", new { @class = "text-danger" })
                         </div>
                     </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @foreach (var item in Model.ListAllowances)
+                            {
+                                <input type="checkbox" id="@item.ALL_Id" name="@item.ALL_Title" />@item.ALL_Title <br />
+                                <div id="divReqAllow"  style="display:none">
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">                                           
+                                        <input type="text" id="@item.ALL_Id" name="@item.ALL_Title" />
+                                        </div>
+                                        <div class="col-md-6" id="@item.ALL_Id" >
+                                            <input type="radio" name="Calculation" value="1"> Day Wise Calculation<br>
+                                            <input type="radio" name="Calculation" value="0"> Full Salary Calculation<br>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        </div>
+
                 </div>
 
                     <div class="m-t-20 text-center">

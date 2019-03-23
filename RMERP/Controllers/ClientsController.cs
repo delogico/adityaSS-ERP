@@ -264,6 +264,7 @@ namespace RMERP.Controllers
         {
             DesignationManager designationManager = new DesignationManager(_context);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            EmployeeAllowanceManager employeeAllowanceManager = new EmployeeAllowanceManager(_context);
             ClientRequirementVM clientRequirement = new ClientRequirementVM();
             Clients client = clientsManager.GetClientById(CLI_Id);
             ViewBag.client = client;
@@ -278,6 +279,7 @@ namespace RMERP.Controllers
                 clientRequirement.CLI_Id = CLI_Id;
                 clientRequirement.CRI_Active = true;
             }
+            clientRequirement.ListAllowances = employeeAllowanceManager.GetAllowanceList();
             return View(clientRequirement);
         }
 
@@ -296,13 +298,8 @@ namespace RMERP.Controllers
                 cr.CRI_Total = clientRequirementVM.CRI_Total;
                 cr.CRI_Basic = clientRequirementVM.CRI_Basic;
                 cr.CRI_DA = clientRequirementVM.CRI_DA;
-                cr.CRI_BasicDA = clientRequirementVM.CRI_BasicDA;
                 cr.CRI_HRA_Fixed = clientRequirementVM.CRI_HRA_Fixed;
                 cr.CRI_HRA_Percentage = clientRequirementVM.CRI_HRA_Percentage;
-                cr.CRI_Allowance_UpKeep = clientRequirementVM.CRI_Allowance_UpKeep;
-                cr.CRI_Allowance_Grade = clientRequirementVM.CRI_Allowance_Grade;
-                cr.CRI_Allowance_Conveyance = clientRequirementVM.CRI_Allowance_Conveyance;
-                cr.CRI_Allowance_Attention = clientRequirementVM.CRI_Allowance_Attention;
                 cr.CRI_PF_Percentage = clientRequirementVM.CRI_PF_Percentage;
                 cr.CRI_ESIC_Percentage = clientRequirementVM.CRI_ESIC_Percentage;
                 cr.CRI_ESIC_Area = clientRequirementVM.CRI_ESIC_Area;

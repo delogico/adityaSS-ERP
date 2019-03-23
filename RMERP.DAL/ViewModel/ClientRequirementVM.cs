@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using RMERP.DAL.Models;
 
 namespace RMERP.DAL.ViewModel
 {
@@ -24,20 +25,12 @@ namespace RMERP.DAL.ViewModel
         public decimal? CRI_Basic { get; set; }
         [Display(Name = "DA")]
         public double? CRI_DA { get; set; }
-        [Display(Name = "Basic DA")]
-        public decimal? CRI_BasicDA { get; set; }
+       
         [Display(Name = "HRA Fixed")]
         public decimal? CRI_HRA_Fixed { get; set; }
         [Display(Name = "HRA Percentage (%)")]
         public double? CRI_HRA_Percentage { get; set; }
-        [Display(Name = "Allowance Up-Keep")]
-        public decimal? CRI_Allowance_UpKeep { get; set; }
-        [Display(Name = "Allowance Grade")]
-        public decimal? CRI_Allowance_Grade { get; set; }
-        [Display(Name = "Allowance Conveyance")]
-        public decimal? CRI_Allowance_Conveyance { get; set; }
-        [Display(Name = "Allowance Attention")]
-        public decimal? CRI_Allowance_Attention { get; set; }
+       
         [Display(Name = "PF Percentage (%)")]
         public double? CRI_PF_Percentage { get; set; }
         [Display(Name = "ESIC Percentage (%)")]
@@ -61,5 +54,6 @@ namespace RMERP.DAL.ViewModel
         public string tabName { get; set; }
         public string DES_Title { get; set; }
 
+        public List<Allowances> ListAllowances { get; set; }
     }
 }

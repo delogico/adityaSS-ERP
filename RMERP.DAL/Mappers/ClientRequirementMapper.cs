@@ -18,14 +18,9 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_Total = requirement.CRI_Total;
             clientRequirementVM.CRI_Basic = requirement.CRI_Basic;
             clientRequirementVM.CRI_DA = requirement.CRI_DA;
-            clientRequirementVM.CRI_BasicDA = requirement.CRI_BasicDA;
             clientRequirementVM.CRI_HRA_Fixed = requirement.CRI_HRA_Fixed;
             clientRequirementVM.DES_Title = requirement.DES_.DES_Title;
             clientRequirementVM.CRI_HRA_Percentage = requirement.CRI_HRA_Percentage;
-            clientRequirementVM.CRI_Allowance_UpKeep = requirement.CRI_Allowance_UpKeep;
-            clientRequirementVM.CRI_Allowance_Grade = requirement.CRI_Allowance_Grade;
-            clientRequirementVM.CRI_Allowance_Conveyance = requirement.CRI_Allowance_Conveyance;
-            clientRequirementVM.CRI_Allowance_Attention = requirement.CRI_Allowance_Attention;
             clientRequirementVM.CRI_PF_Percentage = requirement.CRI_PF_Percentage;
             clientRequirementVM.CRI_ESIC_Percentage = requirement.CRI_ESIC_Percentage;
             clientRequirementVM.CRI_ESIC_Area = requirement.CRI_ESIC_Area;

@@ -75,14 +75,13 @@
 
                                     <td>@emp.CLE_RegisteredOn.ToShortDateString()</td>
 
-                                    <td>@(Convert.ToDecimal(cr.CRI_Basic) == (0.0m) ? cr.CRI_BasicDA : (cr.CRI_Basic + Convert.ToDecimal(cr.CRI_DA)))</td>
+                                    <td>-</td>
                                     <td>@(Convert.ToString(cr.CRI_HRA_Percentage) == "" ? Convert.ToString(cr.CRI_HRA_Fixed) : Convert.ToString(cr.CRI_HRA_Percentage) + "%")</td>
 
-                                    <td>@(Convert.ToString(cr.CRI_Allowance_UpKeep) != "" ? Convert.ToString(cr.CRI_Allowance_UpKeep) : "-")</td>
                                     <td>@(employees.EMP_Gender == true ? "M" : "F")</td>
                                     <td> @{PayDays = Model.listAttendance.Where(m => m.EMP_Id == employees.EMP_Id && m.ATT_IsPresent == true && m.CLI_Id.Equals(item.CLI_Id)).Count();} @PayDays</td>
                                     <td>@Model.listAttendance.Where(m => m.EMP_Id == employees.EMP_Id).Sum(m => m.ATT_ExtraHoursWorked)</td>
-                                    <td>@(Convert.ToDecimal(cr.CRI_Basic) == (0.0m) ? cr.CRI_BasicDA : (cr.CRI_Basic + Convert.ToDecimal(cr.CRI_DA)) * PayDays)</td>
+                                    <td>-</td>
                                     <td>@(Convert.ToString(cr.CRI_PF_Percentage) == "" ? "-" : Convert.ToString(cr.CRI_PF_Percentage))</td>
                                 }
                             </tr>
