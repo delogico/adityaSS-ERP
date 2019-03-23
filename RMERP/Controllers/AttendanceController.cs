@@ -177,7 +177,7 @@ namespace RMERP.Controllers
                             
                             if (emp==null)
                             {
-                                empListExtraInExcel.Add(empManager.GetEmployeesById(EMP_Id));
+                                empListExtraInExcel.Add(empManager.GetEmployeeById(EMP_Id));
                             }
                             else
                             {
@@ -225,7 +225,7 @@ namespace RMERP.Controllers
                         var EmployeeIdList = assignEmployeeList.Where(m => !diffids.Contains(m.EMP_Id)).ToList();
                         foreach(var EMP_Id in EmployeeIdList)
                         {
-                            empListExtraInDb.Add(empManager.GetEmployeesById(Convert.ToInt32(EMP_Id.EMP_Id)));
+                            empListExtraInDb.Add(empManager.GetEmployeeById(Convert.ToInt32(EMP_Id.EMP_Id)));
                         }
                         #endregion
                         excelViewModel.excelRows = rows;
@@ -336,6 +336,7 @@ namespace RMERP.Controllers
                         tmpDate = tmpDate.AddDays(1);
                     }
                 }
+                new FileInfo(strFilePath).Delete();
             }
             return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id});
         }

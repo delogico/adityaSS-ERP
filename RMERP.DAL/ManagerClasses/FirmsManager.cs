@@ -15,9 +15,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public IEnumerable<Firms> getFirmList()
         {
-            List<Firms> listFirms = new List<Firms>();
-            listFirms = _context.Firms.OrderBy(m=>m.FRM_Name).ToList();
-            return listFirms;
+            return _context.Firms.OrderBy(m=>m.FRM_Name).ToList();
         }  
         public string saveEditFirm(Firms firms)
         {
@@ -40,24 +38,9 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public Firms GetFirms(int ?id)
+        public Firms GetFirm(int FRM_Id)
         {
-            return _context.Firms.Find(id);
-        }
-        public string DeleteFirms(int id)
-        {
-            string res="";
-            try
-            {
-              var firms=  _context.Firms.Find(id);
-                _context.Firms.Remove(firms);
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                res = ex.Message;
-            }
-            return res;
+            return _context.Firms.Find(FRM_Id);
         }
     }
 }

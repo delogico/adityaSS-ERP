@@ -1,7 +1,6 @@
-﻿@model IEnumerable<RMERP.DAL.Models.Firms>
+﻿@model List<RMERP.DAL.ViewModel.FirmVM>
 @{
     ViewData["Title"] = "Our Firms";
-    //ViewBag["Modeltitle"] = Model.Firms.FRM_Id > 0 ? "Edit Firm" : "Add Firm";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 
@@ -30,31 +29,23 @@
                 <h4 class="page-title">@ViewData["Title"]</h4>
             </div>
             <div class="col-sm-4 text-right m-b-30">
-                <a class="btn btn-primary rounded" href="@Url.Action("AddEditFirms","Firms")"><i class="fa fa-plus"></i> Add New Firm</a>
+                <a class="btn btn-primary rounded" href="@Url.Action("AddEditFirm","Firms")"><i class="fa fa-plus"></i> Register New Firm</a>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <div>
+            <div class="col-md-8">
+                <div class="table-responsive">
                     <table class="table table-striped custom-table m-b-0">
-                       
                         <tbody>
                             @foreach (var item in Model)
                             {
                                 <tr>
                                     <td><b>@item.FRM_Name</b></td>
-                                    <td class="text-right">
-                                        <div class="dropdown">
-                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li><a href='@Url.Action("AddEditFirms","Firms",new { id=item.FRM_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
-                                                <li><a href='@Url.Action("DeleteFirms","Firms",new { id=item.FRM_Id})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Delete</a></li>                                                
-                                            </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-
+                                    <td>
+                                        <a href='@Url.Action("AddEditFirm","Firms",new { FRM_Id=item.FRM_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RMERP.DAL.ViewModel
 {
-    public partial class FirmsViewModel
+    public partial class FirmVM
     {        
         public int FRM_Id { get; set; }
 

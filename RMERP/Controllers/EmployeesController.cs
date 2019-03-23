@@ -24,42 +24,39 @@ namespace RMERP.Controllers
         public IActionResult Index()
         {
             EmployeeManager employeeManager = new EmployeeManager(_context);
-            IEnumerable<Employees> listEmp= employeeManager.GetEmployees();
-            return View(employeesMapper.MapMeList(listEmp));           
+            return View(EmployeesMapper.MapEmployees(employeeManager.GetEmployees().ToList()));
         }
         [HttpGet]
-        public ActionResult AddEditEmployee(int EmpID=-1)
+        public ActionResult AddEditEmployee(int EMP_Id=0)
         {
             EmployeeManager employeeManager = new EmployeeManager(_context);
             DepartmentManager departmentManager = new DepartmentManager(_context);
             ViewBag.deptList = departmentManager.getDepartmentList();
-            EmployeeAddEditVM employeeAddEditVM = new EmployeeAddEditVM();
-            employeeAddEditVM.employeeViewModel = new EmployeeViewModel();
-            employeeAddEditVM.employeeViewModel.EMP_IsActive = true;
-            if (EmpID > 0)
+            EmployeeVM employeeVM = new EmployeeVM();
+            if (EMP_Id > 0)
             {
-                Employees emp = new Employees();
-                emp = employeeManager.GetEmployeesById(EmpID);
-                Emp_Id = EmpID;
-                employeeAddEditVM.employeeViewModel = employeesMapper.MapMeModel(emp);                
+                Employees emp = employeeManager.GetEmployeeById(EMP_Id);
+                employeeVM = EmployeesMapper.MapMe(emp);
             }
-            employeeAddEditVM.ListEmployee_Advance = employeeManager.GetEmployee_Advances(EmpID);
-            return View(employeeAddEditVM);
+            else
+            {
+                employeeVM.EMP_IsActive = true;
+            }
+            
+            return View(employeeVM);
         }
         [HttpPost]
-        public ActionResult AddEditEmployee(EmployeeAddEditVM employeeAddEditVM)
+        public ActionResult AddEditEmployee(EmployeeVM employeeVM)
         {
             string res = string.Empty;
             EmployeeManager employeeManager = new EmployeeManager(_context);
-           
             if (ModelState.IsValid)
             {
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
-                Employees employees = new Employees();
-                Emp_Id = employeeAddEditVM.employeeViewModel.EMP_Id;
-                employees.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
-                employees= employeesMapper.MapMeOriginalModel(employeeAddEditVM.employeeViewModel);
-                res = employeeManager.AddEditEmployee(employees);
+                Employees employee = new Employees();
+                employee = employeesMapper.MapMeModel(employeeVM);
+                employee.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
+                res = employeeManager.AddEditEmployee(employee);
             }            
             if (res == string.Empty)
             {
@@ -68,17 +65,17 @@ namespace RMERP.Controllers
             else
             {
                 TempData["message"] = "Employee data can not Inserted";
-                return RedirectToAction("AddEditEmployee");
+                return RedirectToAction("AddEditEmployee", new { EMP_Id = employeeVM.EMP_Id});
             }
            
         }
 
-        public ActionResult ActiveEmployee(int EmpID)
+        public ActionResult ActiveEmployee(int EMP_Id)
         {
             string res = string.Empty;
             EmployeeManager employeeManager = new EmployeeManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            res = employeeManager.ActiveEmployee(EmpID,sessionUtils.GetLoggedAdminID());
+            res = employeeManager.ActiveEmployee(EMP_Id, sessionUtils.GetLoggedAdminID());
             if (res != string.Empty)
             {
                 TempData["message"] = "There is some problem! Please Try Again";
@@ -87,22 +84,20 @@ namespace RMERP.Controllers
         }
 
         [HttpGet]
-        public ActionResult AddEditAdvance(int ADV_Id=-1)
+        public ActionResult AddEditAdvance(int EMP_Id, int ADV_Id=-1)
         {
             EmployeeAdvanceVM employeeAdvanceVM = new EmployeeAdvanceVM();
             EmployeeManager employeeManager = new EmployeeManager(_context);
             Employee_Advance employee_Advance = new Employee_Advance();
-            employeeAdvanceVM.EMP_Id = Emp_Id;
-            
             if (ADV_Id > 0)
             {                
                 employee_Advance = employeeManager.GetEmployeeAdvanceById(ADV_Id);
-                employeeAdvanceVM = EmployeeAdvanceMapper.mapMeInVM(employee_Advance);
+                employeeAdvanceVM = EmployeeAdvanceMapper.mapMe(employee_Advance);
             }
             if (Emp_Id > 0)
             {
-                Employees emp = employeeManager.GetEmployeesById(Emp_Id);
-                employeeAdvanceVM.EmployeeName = emp.EMP_FirstName + " " + emp.EMP_MiddleName + " " + emp.EMP_SurName;
+                employeeAdvanceVM.EMP_Id = EMP_Id;
+                employeeAdvanceVM.EmployeeName = EmployeesMapper.MapMe(employeeManager.GetEmployeeById(Emp_Id)).EMP_FullName;
             }
             return View(employeeAdvanceVM);
         }
@@ -115,7 +110,7 @@ namespace RMERP.Controllers
             if (ModelState.IsValid)
             {
                 Employee_Advance employee_Advance = new Employee_Advance();               
-                employee_Advance = EmployeeAdvanceMapper.mapMeInOriginal(employeeAdvanceVM);
+                employee_Advance = EmployeeAdvanceMapper.mapMeModel(employeeAdvanceVM);
                 employee_Advance.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
                 res = employeeManager.AddEditAdvance(employee_Advance);
             }
@@ -124,9 +119,9 @@ namespace RMERP.Controllers
                 TempData["message"] = "Advance data can not Inserted";
             }
             
-            return RedirectToAction("AddEditEmployee",new{ EmpID = Emp_Id,tab = "AddEditAdvance" });
+            return RedirectToAction("AddEditEmployee",new{ EMP_Id = employeeAdvanceVM.EMP_Id,tab = "AddEditAdvance" });
         }
-        public ActionResult DeleteAdvance(int ADV_Id)
+        public ActionResult DeleteAdvance(int ADV_Id, int EMP_Id)
         {
             string res = string.Empty;            
             EmployeeManager employeeManager = new EmployeeManager(_context);
@@ -135,7 +130,7 @@ namespace RMERP.Controllers
             {
                 TempData["message"] = "Advance data can not Deleted";
             }
-            return RedirectToAction("AddEditEmployee", new { EmpID = Emp_Id, tab = "AddEditAdvance" });
+            return RedirectToAction("AddEditEmployee", new { EMP_Id = EMP_Id, tab = "AddEditAdvance" });
         }
     }
 }
