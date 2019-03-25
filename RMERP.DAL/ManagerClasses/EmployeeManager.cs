@@ -51,19 +51,9 @@ namespace RMERP.DAL.ManagerClasses
             }
 
         }
-        public Employees GetEmployeesById(int EmpID)
+        public Employees GetEmployeeById(int EMP_Id)
         {
-            try
-            {
-                Employees employees = new Employees();
-                employees = _context.Employees.Where(m => m.EMP_Id.Equals(EmpID)).FirstOrDefault();
-                return employees;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
+            return _context.Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Include(e=>e.DEPT_).Include(e=>e.Employee_Advance).FirstOrDefault();
         }
         public string ActiveEmployee(int EmpId, int AdminId)
         {

@@ -8,7 +8,7 @@ namespace RMERP.DAL.Mappers
 {
     public class EmployeeAdvanceMapper
     {
-        public static EmployeeAdvanceVM mapMeInVM(Employee_Advance employee_Advance)
+        public static EmployeeAdvanceVM mapMe(Employee_Advance employee_Advance)
         {
             EmployeeAdvanceVM employeeAdvanceVM = new EmployeeAdvanceVM();
             employeeAdvanceVM.ADV_Id = employee_Advance.ADV_Id;
@@ -18,7 +18,7 @@ namespace RMERP.DAL.Mappers
             employeeAdvanceVM.ADM_Id_RegisteredBy = employee_Advance.ADM_Id_RegisteredBy;
             return employeeAdvanceVM;
         }
-        public static Employee_Advance mapMeInOriginal(EmployeeAdvanceVM employee_AdvanceVM)
+        public static Employee_Advance mapMeModel(EmployeeAdvanceVM employee_AdvanceVM)
         {
             Employee_Advance employeeAdvance = new Employee_Advance();
             employeeAdvance.ADV_Id = employee_AdvanceVM.ADV_Id;
@@ -28,21 +28,14 @@ namespace RMERP.DAL.Mappers
             employeeAdvance.ADM_Id_RegisteredBy = employee_AdvanceVM.ADM_Id_RegisteredBy;
             return employeeAdvance;
         }
-        public static List<EmployeeAdvanceVM> mapMeInVMList(List<Employee_Advance> employee_Advances)
+        public static List<EmployeeAdvanceVM> mapAdvances(List<Employee_Advance> employee_Advances)
         {
-            List<EmployeeAdvanceVM> employeeAdvancesVM = new List<EmployeeAdvanceVM>();
-            foreach(var item in employee_Advances)
+            List<EmployeeAdvanceVM> lst = new List<EmployeeAdvanceVM>();
+            foreach(Employee_Advance item in employee_Advances)
             {
-                EmployeeAdvanceVM employeeAdvanceVM = new EmployeeAdvanceVM();
-                employeeAdvanceVM.ADV_Id = item.ADV_Id;
-                employeeAdvanceVM.EMP_Id = item.EMP_Id;
-                employeeAdvanceVM.ADV_Amount = item.ADV_Amount;
-                employeeAdvanceVM.ADV_RegisteredOn = item.ADV_RegisteredOn;
-                employeeAdvanceVM.ADM_Id_RegisteredBy = item.ADM_Id_RegisteredBy;
-                employeeAdvancesVM.Add(employeeAdvanceVM);
+                lst.Add(mapMe(item));
             }
-           
-            return employeeAdvancesVM;
+            return lst;
         }
     }
 }

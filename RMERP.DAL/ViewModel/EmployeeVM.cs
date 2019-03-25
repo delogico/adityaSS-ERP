@@ -97,9 +97,28 @@ namespace RMERP.DAL.ViewModel
                 return string.Concat(EMP_FirstName + " " + EMP_MiddleName + " " + EMP_SurName);
             }
         }
+        public string DEPT_Title
+        {
+            get
+            {
+                if (DEPT_ != null)
+                    return DEPT_.DEPT_Title;
+                else
+                    return "";
+            }
+        }
+
+        public string EMP_MoF
+        {
+            get
+            {
+                return EMP_Gender == true ? "M" : "F";
+            }
+        }
         public Departments DEPT_ { get; set; }
         public ICollection<Attendance> Attendance { get; set; }
         public ICollection<Clients_Employees> Clients_Employees { get; set; }
+        public List<EmployeeAdvanceVM> advances { get; set; }
     }
 }
 
