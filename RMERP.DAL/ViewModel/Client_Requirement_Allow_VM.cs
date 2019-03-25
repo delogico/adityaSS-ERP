@@ -17,10 +17,9 @@ namespace RMERP.DAL.ViewModel
         public int ALL_Id { get; set; }
         [Required(ErrorMessage = "Allowance Amount is required")]
         [Display(Name = "Allowance Amount")]
-        public decimal CRA_Amount { get; set; }
+        public decimal CRA_Amount { get; set; } = 0M;
         [Required(ErrorMessage = "Select calculation method")]
         [Display(Name = "Calculation on daywise OR full ?")]
         public bool CRA_DayswiseOrFull { get; set; }
-
     }
 }

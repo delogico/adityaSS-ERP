@@ -54,6 +54,9 @@ namespace RMERP.DAL.ViewModel
         public string tabName { get; set; }
         public string DES_Title { get; set; }
 
-        public List<Allowances> ListAllowances { get; set; }
+        public List<AllowancesVM> ListAllowances { get; set; }
+
+        public List<Client_Requirement_Allow_VM> client_Requirement_Allows { get; set; }
+       
     }
 }

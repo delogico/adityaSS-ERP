@@ -22,6 +22,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 using System.Globalization;
 
+
 namespace RMERP.Controllers
 {
     [Authorize]
@@ -279,19 +280,23 @@ namespace RMERP.Controllers
                 clientRequirement.CLI_Id = CLI_Id;
                 clientRequirement.CRI_Active = true;
             }
-            clientRequirement.ListAllowances = employeeAllowanceManager.GetAllowanceList();
+            clientRequirement.ListAllowances = AllowancsMapper.mapMeInVMlist(employeeAllowanceManager.GetAllowanceList());
+           
             return View(clientRequirement);
         }
 
         [HttpPost]
         public ActionResult AddEditRequirement(ClientRequirementVM clientRequirementVM)
         {
+
+            List<Client_Requirement_Allowances> listReqAllows = Client_Requirement_AllowMapper.mapMeList(clientRequirementVM.client_Requirement_Allows);
             string res = string.Empty;
+            Client_Requirements cr = new Client_Requirements();
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            EmployeeAllowanceManager employeeAllowanceManager = new EmployeeAllowanceManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            if (ModelState.IsValid)
-            {
-                Client_Requirements cr = new Client_Requirements();
+            //if (ModelState.IsValid)
+            //{                
                 cr.CRI_Id = clientRequirementVM.CRI_Id;
                 cr.CLI_Id = clientRequirementVM.CLI_Id;
                 cr.DES_Id = clientRequirementVM.DES_Id;
@@ -307,12 +312,18 @@ namespace RMERP.Controllers
                 cr.CRI_OT_MultipleTimes = clientRequirementVM.CRI_OT_MultipleTimes;
                 cr.CRI_WageCalculationOnWeeklyOffPlus = clientRequirementVM.CRI_WageCalculationOnWeeklyOffPlus;
                 cr.CRI_Active = clientRequirementVM.CRI_Active;
-                res =clientsManager.AddEditRequirement(cr, sessionUtils.GetLoggedAdminID());
-            }
+                res =clientsManager.AddEditRequirement(cr, listReqAllows, sessionUtils.GetLoggedAdminID());
+           // }
             if (res != "")
             {
                 TempData["message"] = "Error In Client Requirement! Please Check";
-                return View();                
+                return View();
+            }
+            else
+            {
+                List<Client_Requirement_Allowances> list = new List<Client_Requirement_Allowances>();
+                list = Client_Requirement_AllowMapper.mapMeList(clientRequirementVM.client_Requirement_Allows);
+                employeeAllowanceManager.AddEditRequirement_Allowances(list);
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
         }

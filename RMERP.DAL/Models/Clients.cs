@@ -11,6 +11,8 @@ namespace RMERP.DAL.Models
             Client_Contacts = new HashSet<Client_Contacts>();
             Client_Requirements = new HashSet<Client_Requirements>();
             Clients_Employees = new HashSet<Clients_Employees>();
+            Wage_Process_Clients = new HashSet<Wage_Process_Clients>();
+            Wage_Register = new HashSet<Wage_Register>();
         }
 
         public int CLI_Id { get; set; }
@@ -44,5 +46,7 @@ namespace RMERP.DAL.Models
         public ICollection<Client_Contacts> Client_Contacts { get; set; }
         public ICollection<Client_Requirements> Client_Requirements { get; set; }
         public ICollection<Clients_Employees> Clients_Employees { get; set; }
+        public ICollection<Wage_Process_Clients> Wage_Process_Clients { get; set; }
+        public ICollection<Wage_Register> Wage_Register { get; set; }
     }
 }

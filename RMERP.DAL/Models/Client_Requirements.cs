@@ -8,6 +8,7 @@ namespace RMERP.DAL.Models
         public Client_Requirements()
         {
             Client_Requirement_Allowances = new HashSet<Client_Requirement_Allowances>();
+            Wage_Register = new HashSet<Wage_Register>();
         }
 
         public int CRI_Id { get; set; }
@@ -32,5 +33,6 @@ namespace RMERP.DAL.Models
         public Clients CLI_ { get; set; }
         public Designations DES_ { get; set; }
         public ICollection<Client_Requirement_Allowances> Client_Requirement_Allowances { get; set; }
+        public ICollection<Wage_Register> Wage_Register { get; set; }
     }
 }

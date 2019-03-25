@@ -15,6 +15,7 @@ namespace RMERP.DAL.ManagerClasses
     {
         RMERPContext _contaxt;
         public IConfiguration Configuration;
+        private static int CRI_Id;
         public ClientsManager(RMERPContext contaxt,IConfiguration configuration)
         {
             _contaxt = contaxt;
@@ -258,30 +259,54 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public string AddEditRequirement(Client_Requirements clientRequirements, int ADM_Id)
+        public string AddEditRequirement(Client_Requirements clientRequirements, List<Client_Requirement_Allowances> listReqAllws, int ADM_Id)
         {
             string res = string.Empty;
+            string flag = string.Empty;
             try
             {
-                clientRequirements.CRI_RegisteredOn = ProjectUtils.DateNow();
-                if (clientRequirements.CRI_Id > 0)
+                foreach(var item in listReqAllws)
                 {
-                    List<Client_Requirements> list = _contaxt.Client_Requirements.Where(m => m.CLI_Id.Equals(clientRequirements.CLI_Id) && m.DES_Id.Equals(clientRequirements.DES_Id) && m.CRI_Active == true).ToList();
-                    list.ForEach(m => {
-                        m.CRI_Active = false;
-                        m.CRI_InactivatedOn = ProjectUtils.DateNow();
-                        m.ADM_Id_InactivatedBy = ADM_Id;
-                    });
-                    _contaxt.SaveChanges();
-                    clientRequirements.CRI_Id = 0;
-                    _contaxt.Client_Requirements.Add(clientRequirements);
-                }
-                else
-                {
-                    clientRequirements.CRI_Id = 0;
-                    _contaxt.Client_Requirements.Add(clientRequirements);
-                }
-                _contaxt.SaveChanges();
+                    Client_Requirement_Allowances cra = new Client_Requirement_Allowances();                   
+                    if (item.CRA_Amount !=0 && item.ALL_Id!=0)
+                    {
+                        clientRequirements.CRI_RegisteredOn = ProjectUtils.DateNow();
+                        if (clientRequirements.CRI_Id > 0)
+                        {
+                            List<Client_Requirements> list = _contaxt.Client_Requirements.Where(m => m.CLI_Id.Equals(clientRequirements.CLI_Id) && m.DES_Id.Equals(clientRequirements.DES_Id) && m.CRI_Active == true).ToList();
+                            list.ForEach(m => {
+                                m.CRI_Active = false;
+                                m.CRI_InactivatedOn = ProjectUtils.DateNow();
+                                m.ADM_Id_InactivatedBy = ADM_Id;
+                            });
+                            _contaxt.SaveChanges();                           
+                            clientRequirements.CRI_Id = 0;
+                            _contaxt.Client_Requirements.Add(clientRequirements);
+                            _contaxt.SaveChanges();
+                            flag = "update";
+                        }
+                        else
+                        {                            
+                            clientRequirements.CRI_Id = 0;
+                            _contaxt.Client_Requirements.Add(clientRequirements);
+                            _contaxt.SaveChanges();
+                            flag = "add";
+                        }
+                        CRI_Id = clientRequirements.CRI_Id;
+                        cra.CRI_Id = CRI_Id;
+                        cra.ALL_Id = item.ALL_Id;
+                        cra.CRA_Amount = item.CRA_Amount;
+                        cra.CRA_DayswiseOrFull = item.CRA_DayswiseOrFull;
+                        if(flag== "add")
+                            _contaxt.Client_Requirement_Allowances.Add(cra);
+                        if (flag == "update")
+                            _contaxt.Client_Requirement_Allowances.Update(cra);
+                        _contaxt.SaveChanges();
+                        cra = null;
+                        clientRequirements.CRI_Id = 0;
+                    }                   
+                }                
+               
             }
             catch (Exception ex)
             {

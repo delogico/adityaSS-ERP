@@ -30,6 +30,8 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<Firms> Firms { get; set; }
         public virtual DbSet<Wage_Process> Wage_Process { get; set; }
+        public virtual DbSet<Wage_Process_Clients> Wage_Process_Clients { get; set; }
+        public virtual DbSet<Wage_Register> Wage_Register { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -480,6 +482,64 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.WAG_RegisteredOn)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
+            });
+
+            modelBuilder.Entity<Wage_Process_Clients>(entity =>
+            {
+                entity.HasKey(e => e.WPC_Id);
+
+                entity.Property(e => e.WPC_SavedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.CLI_)
+                    .WithMany(p => p.Wage_Process_Clients)
+                    .HasForeignKey(d => d.CLI_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Process_Clients_Clients");
+
+                entity.HasOne(d => d.WAG_)
+                    .WithMany(p => p.Wage_Process_Clients)
+                    .HasForeignKey(d => d.WAG_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Process_Clients_Wage_Process");
+            });
+
+            modelBuilder.Entity<Wage_Register>(entity =>
+            {
+                entity.HasKey(e => e.WAR_Id);
+
+                entity.Property(e => e.WAR_Basic).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_DA).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_GrossTotal).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_HRA).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_LastModifiedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.CLI_)
+                    .WithMany(p => p.Wage_Register)
+                    .HasForeignKey(d => d.CLI_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Clients");
+
+                entity.HasOne(d => d.CRI_)
+                    .WithMany(p => p.Wage_Register)
+                    .HasForeignKey(d => d.CRI_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Client_Requirements");
+
+                entity.HasOne(d => d.EMP_)
+                    .WithMany(p => p.Wage_Register)
+                    .HasForeignKey(d => d.EMP_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Employees");
+
+                entity.HasOne(d => d.WAG_)
+                    .WithMany(p => p.Wage_Register)
+                    .HasForeignKey(d => d.WAG_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Wage_Process");
             });
         }
     }

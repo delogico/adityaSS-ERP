@@ -8,6 +8,8 @@ namespace RMERP.DAL.Models
         public Wage_Process()
         {
             Attendance = new HashSet<Attendance>();
+            Wage_Process_Clients = new HashSet<Wage_Process_Clients>();
+            Wage_Register = new HashSet<Wage_Register>();
         }
 
         public int WAG_Id { get; set; }
@@ -16,5 +18,7 @@ namespace RMERP.DAL.Models
         public int ADM_Id_RegisteredBy { get; set; }
 
         public ICollection<Attendance> Attendance { get; set; }
+        public ICollection<Wage_Process_Clients> Wage_Process_Clients { get; set; }
+        public ICollection<Wage_Register> Wage_Register { get; set; }
     }
 }
