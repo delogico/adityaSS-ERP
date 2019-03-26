@@ -32,6 +32,11 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_RegisteredOn = requirement.CRI_RegisteredOn;
             if (requirement.CLI_ != null)
                 clientRequirementVM.CLI_Name = requirement.CLI_.CLI_Name;
+
+            if (requirement.CRI_HRA_Fixed != null)
+                clientRequirementVM.HRAselection = true;
+            else if(requirement.CRI_HRA_Percentage !=null)
+                clientRequirementVM.HRAselection = false;
             return clientRequirementVM;
         }
 
@@ -44,8 +49,7 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_Total = requirementVM.CRI_Total;
             requirement.CRI_Basic = requirementVM.CRI_Basic;
             requirement.CRI_DA = requirementVM.CRI_DA;
-            requirement.CRI_HRA_Fixed = requirementVM.CRI_HRA_Fixed;
-            requirement.CRI_HRA_Percentage = requirementVM.CRI_HRA_Percentage;
+          
             requirement.CRI_PF_Percentage = requirementVM.CRI_PF_Percentage;
             requirement.CRI_ESIC_Percentage = requirementVM.CRI_ESIC_Percentage;
             requirement.CRI_ESIC_Area = requirementVM.CRI_ESIC_Area;
@@ -55,6 +59,11 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_Active = requirementVM.CRI_Active;
             requirement.CRI_InactivatedOn = requirementVM.CRI_InactivatedOn;
             requirement.CRI_RegisteredOn = requirementVM.CRI_RegisteredOn;
+            if (requirementVM.HRAselection ==true)
+                requirement.CRI_HRA_Fixed = requirementVM.CRI_HRA_Fixed;
+            else if(requirementVM.HRAselection == false)
+                requirement.CRI_HRA_Percentage = requirementVM.CRI_HRA_Percentage;
+
             return requirement;
         }
 

@@ -21,8 +21,10 @@ namespace RMERP.DAL.ViewModel
         [Required(ErrorMessage = "Please select Total Posts")]
         public int CRI_Total { get; set; }
         [Display(Name = "Basic")]
+        [Required(ErrorMessage = "Please add BASIC")]
         public decimal? CRI_Basic { get; set; }
         [Display(Name = "DA")]
+        [Required(ErrorMessage = "Please add DA")]
         public double? CRI_DA { get; set; }
        
         [Display(Name = "HRA Fixed")]
@@ -53,6 +55,7 @@ namespace RMERP.DAL.ViewModel
         public string tabName { get; set; }
         public string DES_Title { get; set; }
 
+        public bool HRAselection { get; set; }
         //public List<AllowancesVM> ListAllowances { get; set; }
 
         public List<ClientReqAllowanceVM> allAllowances { get; set; }
