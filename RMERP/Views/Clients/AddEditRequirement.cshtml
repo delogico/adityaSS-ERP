@@ -14,7 +14,17 @@
     <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
-            var tab = $("#tabName").val();
+            var tab = GetParameterValues("tab");
+
+            function GetParameterValues(param) {
+                var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for (var i = 0; i < url.length; i++) {
+                    var urlparam = url[i].split('=');
+                    if (urlparam[0] == param) {
+                        return urlparam[1];
+                    }
+                }
+            };
             if (tab == "History" || tab == "ViewRequirement") {
                 $('select', 'form').attr('disabled', true).attr('readonly', true);
                 $('input', 'form').attr('disabled', true).attr('readonly', true);
