@@ -305,12 +305,6 @@ namespace RMERP.Controllers
                 TempData["message"] = "Error In Client Requirement! Please Check";
                 return View();
             }
-            //else
-            //{
-            //    List<Client_Requirement_Allowances> list = new List<Client_Requirement_Allowances>();
-            //    list = Client_Requirement_AllowMapper.mapMeList(clientRequirementVM.client_Requirement_Allows);
-            //    employeeAllowanceManager.AddEditRequirement_Allowances(list);
-            //}
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
         }
 

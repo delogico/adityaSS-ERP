@@ -91,7 +91,7 @@
                     }
                     @Html.HiddenFor(m => m.CLI_Id)
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.DES_Id, new { @class = "control-label" })
                                 @if (Model.CRI_Id > 0)
@@ -106,12 +106,16 @@
                                 }
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.CRI_Total, new { @class = "control-label" })
                                 @Html.TextBoxFor(m => m.CRI_Total, new { @type = "number", @min = "1", @class = "form-control" })
                             </div>
                         </div>
+                    </div>
+                    <h4>Salary and Incentives</h4>
+                    <hr />
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.CRI_Basic, new { @class = "control-label" })
@@ -129,115 +133,120 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 @Html.Label("HRA")
-                                @Html.RadioButtonFor(m => m.HRAselection, false, new { @class = "HRAselection", @checked = "checked" , @style="margin: 0px 0 0" }) Percentage
+                                @Html.RadioButtonFor(m => m.HRAselection, false, new { @class = "HRAselection", @checked = "checked", @style = "margin: 0px 0 0" }) Percentage
                                 @Html.RadioButtonFor(m => m.HRAselection, true, new { @class = "HRAselection", @style = "margin: 0px 0 0" }) Fixed
 
                                 @Html.TextBoxFor(m => m.CRI_HRA_Percentage, new { @class = "form-control", style = "display:" + (@Model.HRAselection == true ? "none" : "block") })
-                                @Html.TextBoxFor(m => m.CRI_HRA_Fixed, new { @class = "form-control", style = "display:"+(@Model.HRAselection==true ? "block" : "none")})
+                                @Html.TextBoxFor(m => m.CRI_HRA_Fixed, new { @class = "form-control", style = "display:" + (@Model.HRAselection == true ? "block" : "none") })
 
-                                
+
                                 @Html.ValidationMessageFor(x => x.CRI_HRA_Fixed, "", new { @class = "text-danger" })
                             </div>
                         </div>
-                        @*<div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.CRI_HRA_Percentage, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.CRI_HRA_Percentage, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(x => x.CRI_HRA_Percentage, "", new { @class = "text-danger" })
+                        <div class="col-md-6 col-md-offset-6"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.CRI_OT_Rate, new { @class = "control-label" })
+                                    @Html.TextBoxFor(m => m.CRI_OT_Rate, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.CRI_OT_Rate, "", new { @class = "text-danger" })
+                                </div>
                             </div>
-                        </div>*@
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.CRI_PF_Percentage, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.CRI_PF_Percentage, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(x => x.CRI_PF_Percentage, "", new { @class = "text-danger" })
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.CRI_OT_MultipleTimes, new { @class = "control-label" })
+                                    @Html.TextBoxFor(m => m.CRI_OT_MultipleTimes, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.CRI_OT_MultipleTimes, "", new { @class = "text-danger" })
+                                </div>
                             </div>
-                        </div> <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.CRI_ESIC_Percentage, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.CRI_ESIC_Percentage, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(x => x.CRI_ESIC_Percentage, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.CRI_ESIC_Area, new { @class = "control-label" })
-                                <label class="radio-inline form-control ">
-                                    @foreach (var ESIC_AREA in Enum.GetValues(typeof(ESIC_AREA)))
-                                    {
-                                        <label class="radio-inline">
-                                            @Html.RadioButtonFor(s => s.CRI_ESIC_Area, (int)ESIC_AREA, (int)ESIC_AREA == 1 ? (object)new { @checked = true, @id = (int)ESIC_AREA } : new { @id = (int)ESIC_AREA })@ESIC_AREA
-                                        </label>
-                                    }
-                                </label>
-                                @Html.ValidationMessageFor(x => x.CRI_ESIC_Area, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.CRI_OT_Rate, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.CRI_OT_Rate, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(x => x.CRI_OT_Rate, "", new { @class = "text-danger" })
-                            </div>
-                        </div> <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.CRI_OT_MultipleTimes, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.CRI_OT_MultipleTimes, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(x => x.CRI_OT_MultipleTimes, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.CRI_WageCalculationOnWeeklyOffPlus, new { @class = "control-label" })
-                                <label class="radio-inline form-control ">
-                                    <label class="radio-inline">
-                                        @Html.RadioButtonFor(m => m.CRI_WageCalculationOnWeeklyOffPlus, true, new { @checked = "checked" }) Yes
-                                    </label>
-                                    <label class="radio-inline">
-                                        @Html.RadioButtonFor(m => m.CRI_WageCalculationOnWeeklyOffPlus, false) No
-                                    </label>
-
-                                </label>
-                                @Html.ValidationMessageFor(x => x.CRI_WageCalculationOnWeeklyOffPlus, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <div class="row">
-                                    @for (var i = 0; i < Model.allAllowances.Count; i++)
-                                    {
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        @for (var i = 0; i < Model.allAllowances.Count; i++)
+                                        {
                                         <div class="col-md-12">
-                                            @Html.CheckBoxFor(m => m.allAllowances[i].flagClientRequirement, new { @id = Model.allAllowances[i].ALL_Id })@Model.allAllowances[i].allowance.ALL_Title
-                                            @Html.HiddenFor(m => m.allAllowances[i].ALL_Id)
-                                            @Html.HiddenFor(m => m.allAllowances[i].flagClientRequirement, new { @id = "flagClientRequirement" + Model.allAllowances[i].ALL_Id })
-                                            <div id="divReqAllow_@Model.allAllowances[i].ALL_Id" style="display:@(Model.allAllowances[i].flagClientRequirement?"block":"none")">
-                                                <div class="col-md-12">
-                                                    <div class="col-md-6">
-                                                        @Html.TextBoxFor(m => m.allAllowances[i].CRA_Amount, new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(m => m.allAllowances[i].CRA_Amount, "", new { @class = "text-danger" })
-                                                    </div>
-                                                    <div class="col-md-6" id="rdo_@Model.allAllowances[i].ALL_Id">
-                                                        @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, false)Full Salary Calculation
-                                                        @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, true)Day Wise Calculation
-                                                        @Html.ValidationMessageFor(x => x.allAllowances[i].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
+                                            <label for="@Model.allAllowances[i].ALL_Id">
+                                                @Html.CheckBoxFor(m => m.allAllowances[i].flagClientRequirement, new { @id = Model.allAllowances[i].ALL_Id })&nbsp;@Model.allAllowances[i].allowance.ALL_Title
+                                                </label>
+                                                @Html.HiddenFor(m => m.allAllowances[i].ALL_Id)
+                                                @Html.HiddenFor(m => m.allAllowances[i].flagClientRequirement, new { @id = "flagClientRequirement" + Model.allAllowances[i].ALL_Id })
+                                                <div id="divReqAllow_@Model.allAllowances[i].ALL_Id" style="display:@(Model.allAllowances[i].flagClientRequirement?"block":"none")">
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-6">
+                                                            @Html.TextBoxFor(m => m.allAllowances[i].CRA_Amount, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(m => m.allAllowances[i].CRA_Amount, "", new { @class = "text-danger" })
+                                                        </div>
+                                                        <div class="col-md-6" id="rdo_@Model.allAllowances[i].ALL_Id">
+                                                            @{string id = i+"radioTrue";}
+                                                            @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, false, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Full Amount", new { @for = id })
+                                                            @{id = i+"radioFalse";}
+                                                            @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, true, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Daywise Calculation", new { @for = id })
+                                                            @Html.ValidationMessageFor(x => x.allAllowances[i].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    }
+</div>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <h4>Deductions</h4>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.CRI_PF_Percentage, new { @class = "control-label" })
+                                    @Html.TextBoxFor(m => m.CRI_PF_Percentage, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.CRI_PF_Percentage, "", new { @class = "text-danger" })
+                                </div>
+                            </div> <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.CRI_ESIC_Percentage, new { @class = "control-label" })
+                                    @Html.TextBoxFor(m => m.CRI_ESIC_Percentage, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.CRI_ESIC_Percentage, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.CRI_ESIC_Area, new { @class = "control-label" })
+                                    <label class="radio-inline form-control ">
+                                        @foreach (var ESIC_AREA in Enum.GetValues(typeof(ESIC_AREA)))
+                                        {
+                                            <label class="radio-inline">
+                                                @Html.RadioButtonFor(s => s.CRI_ESIC_Area, (int)ESIC_AREA, (int)ESIC_AREA == 1 ? (object)new { @checked = true, @id = (int)ESIC_AREA } : new { @id = (int)ESIC_AREA })@ESIC_AREA
+                                            </label>
+                                        }
+                                    </label>
+                                    @Html.ValidationMessageFor(x => x.CRI_ESIC_Area, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.CRI_WageCalculationOnWeeklyOffPlus, new { @class = "control-label" })
+                                    <label class="radio-inline form-control ">
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(m => m.CRI_WageCalculationOnWeeklyOffPlus, true, new { @checked = "checked" }) Yes
+                                        </label>
+                                        <label class="radio-inline">
+                                            @Html.RadioButtonFor(m => m.CRI_WageCalculationOnWeeklyOffPlus, false) No
+                                        </label>
+
+                                    </label>
+                                    @Html.ValidationMessageFor(x => x.CRI_WageCalculationOnWeeklyOffPlus, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="m-t-20 text-center">
+                            <button class="btn btn-primary">Save</button>
+                        </div>
+                        }
 
                     </div>
-
-                    <div class="m-t-20 text-center">
-                        <button class="btn btn-primary">Save</button>
-                    </div>
-                }
-
-            </div>
         </div>
     </div>
 </div>
