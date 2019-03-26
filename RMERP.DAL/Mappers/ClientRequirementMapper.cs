@@ -30,7 +30,32 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_Active = requirement.CRI_Active;
             clientRequirementVM.CRI_InactivatedOn = requirement.CRI_InactivatedOn;
             clientRequirementVM.CRI_RegisteredOn = requirement.CRI_RegisteredOn;
+            if (requirement.CLI_ != null)
+                clientRequirementVM.CLI_Name = requirement.CLI_.CLI_Name;
             return clientRequirementVM;
+        }
+
+        public static Client_Requirements mapMeModel(ClientRequirementVM requirementVM)
+        {
+            Client_Requirements requirement = new Client_Requirements();
+            requirement.CRI_Id = requirementVM.CRI_Id;
+            requirement.CLI_Id = requirementVM.CLI_Id;
+            requirement.DES_Id = requirementVM.DES_Id;
+            requirement.CRI_Total = requirementVM.CRI_Total;
+            requirement.CRI_Basic = requirementVM.CRI_Basic;
+            requirement.CRI_DA = requirementVM.CRI_DA;
+            requirement.CRI_HRA_Fixed = requirementVM.CRI_HRA_Fixed;
+            requirement.CRI_HRA_Percentage = requirementVM.CRI_HRA_Percentage;
+            requirement.CRI_PF_Percentage = requirementVM.CRI_PF_Percentage;
+            requirement.CRI_ESIC_Percentage = requirementVM.CRI_ESIC_Percentage;
+            requirement.CRI_ESIC_Area = requirementVM.CRI_ESIC_Area;
+            requirement.CRI_OT_Rate = requirementVM.CRI_OT_Rate;
+            requirement.CRI_OT_MultipleTimes = requirementVM.CRI_OT_MultipleTimes;
+            requirement.CRI_WageCalculationOnWeeklyOffPlus = requirementVM.CRI_WageCalculationOnWeeklyOffPlus;
+            requirement.CRI_Active = requirementVM.CRI_Active;
+            requirement.CRI_InactivatedOn = requirementVM.CRI_InactivatedOn;
+            requirement.CRI_RegisteredOn = requirementVM.CRI_RegisteredOn;
+            return requirement;
         }
 
         public static List<ClientRequirementVM> mapRequirements(List<Client_Requirements> requirements)
@@ -38,6 +63,14 @@ namespace RMERP.DAL.Mappers
             List<ClientRequirementVM> lst = new List<ClientRequirementVM>();
             foreach (Client_Requirements requirement in requirements)
                 lst.Add(mapMe(requirement));
+            return lst;
+        }
+
+        public static List<Client_Requirements> mapRequirements(List<ClientRequirementVM> requirements)
+        {
+            List<Client_Requirements> lst = new List<Client_Requirements>();
+            foreach (ClientRequirementVM requirement in requirements)
+                lst.Add(mapMeModel(requirement));
             return lst;
         }
     }

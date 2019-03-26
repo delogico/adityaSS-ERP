@@ -259,18 +259,12 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public string AddEditRequirement(Client_Requirements clientRequirements, List<Client_Requirement_Allowances> listReqAllws, int ADM_Id)
+        public string AddEditRequirement(Client_Requirements clientRequirements, List<Client_Requirement_Allowances> lst, int ADM_Id)
         {
             string res = string.Empty;
-            string flag = string.Empty;
             try
-            {
-                foreach(var item in listReqAllws)
-                {
-                    Client_Requirement_Allowances cra = new Client_Requirement_Allowances();                   
-                    if (item.CRA_Amount !=0 && item.ALL_Id!=0)
-                    {
-                        clientRequirements.CRI_RegisteredOn = ProjectUtils.DateNow();
+            {                                                                       
+                       clientRequirements.CRI_RegisteredOn = ProjectUtils.DateNow();
                         if (clientRequirements.CRI_Id > 0)
                         {
                             List<Client_Requirements> list = _contaxt.Client_Requirements.Where(m => m.CLI_Id.Equals(clientRequirements.CLI_Id) && m.DES_Id.Equals(clientRequirements.DES_Id) && m.CRI_Active == true).ToList();
@@ -283,30 +277,26 @@ namespace RMERP.DAL.ManagerClasses
                             clientRequirements.CRI_Id = 0;
                             _contaxt.Client_Requirements.Add(clientRequirements);
                             _contaxt.SaveChanges();
-                            flag = "update";
                         }
                         else
                         {                            
                             clientRequirements.CRI_Id = 0;
                             _contaxt.Client_Requirements.Add(clientRequirements);
                             _contaxt.SaveChanges();
-                            flag = "add";
                         }
                         CRI_Id = clientRequirements.CRI_Id;
-                        cra.CRI_Id = CRI_Id;
-                        cra.ALL_Id = item.ALL_Id;
-                        cra.CRA_Amount = item.CRA_Amount;
-                        cra.CRA_DayswiseOrFull = item.CRA_DayswiseOrFull;
-                        if(flag== "add")
-                            _contaxt.Client_Requirement_Allowances.Add(cra);
-                        if (flag == "update")
-                            _contaxt.Client_Requirement_Allowances.Update(cra);
-                        _contaxt.SaveChanges();
-                        cra = null;
-                        clientRequirements.CRI_Id = 0;
-                    }                   
-                }                
-               
+                        
+                    foreach (var item in lst)
+                    {                        
+                            Client_Requirement_Allowances cra = new Client_Requirement_Allowances();
+                            cra.CRI_Id = CRI_Id;
+                            cra.ALL_Id = item.ALL_Id;
+                            cra.CRA_Amount = item.CRA_Amount;
+                            cra.CRA_DayswiseOrFull = item.CRA_DayswiseOrFull;
+                            _contaxt.Client_Requirement_Allowances.Add(cra);                          
+                            _contaxt.SaveChanges();
+                            cra = null;                     
+                    }                                                                
             }
             catch (Exception ex)
             {
@@ -317,7 +307,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public Client_Requirements GetRequirementsById(int CRI_Id)
         {
-            return _contaxt.Client_Requirements.Where(c => c.CRI_Id == CRI_Id).Include(c => c.DES_).FirstOrDefault();
+            return _contaxt.Client_Requirements.Where(c => c.CRI_Id == CRI_Id).Include(c => c.DES_).Include(m=>m.Client_Requirement_Allowances).FirstOrDefault();
         }
 
         public IEnumerable<Client_Requirements> GetClient_RequirementsList(int desId, int cliId, bool active = true)

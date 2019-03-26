@@ -1,6 +1,7 @@
 ﻿@model RMERP.DAL.ViewModel.ClientRequirementVM
 @using static RMERP.DAL.App_Code.ProjectUtils;
 @using RMERP.DAL.Models;
+@using RMERP.DAL.ViewModel;
 
 
 @{
@@ -19,22 +20,16 @@
                 $('input', 'form').attr('disabled', true).attr('readonly', true);
                 $('button', 'form').attr('disabled', true).attr('readonly', true);
             }
-            //var arr = [];
-            //var commaSaparatedIds = "";
             $('input[type="checkbox"]').click(function () {
                 if ($(this).prop("checked") == true) {
                     $("#divReqAllow_" + this.id).show();
-                    $("#txt_" + this.id).show();
-                    $("#rdo_" + this.id).show();
-                    //arr.push(this.id);
+                    $("#flagClientRequirement" + this.id).val("true");
                 }
                 else if ($(this).prop("checked") == false) {
                     $("#divReqAllow_" + this.id).hide();
-                    $("#txt_" + this.id).hide();
-                    $("#rdo_" + this.id).hide();
+                    $("#flagClientRequirement" + this.id).val("false");
                 }
             });
-            //commaSaparatedIds = arr.toString();
         });
 
 
@@ -93,12 +88,12 @@
                             </div>
                         </div>
                         @*<div class="col-md-12">
-                            <div class="form-group">
+                    <div class="form-group">
 
-                                @Html.LabelFor(m => m.CLI_Name, new { @class = "control-label" })
-                                @Html.TextBox("CLI_Name", client.CLI_Name, new { @readonly = "readonly", @class = "form-control" })
-                            </div>
-                        </div>*@
+                        @Html.LabelFor(m => m.CLI_Name, new { @class = "control-label" })
+                        @Html.TextBox("CLI_Name", client.CLI_Name, new { @readonly = "readonly", @class = "form-control" })
+                    </div>
+                </div>*@
                         <div class="col-md-6">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.CRI_Basic, new { @class = "control-label" })
@@ -186,30 +181,101 @@
                         <div class="col-md-12">
                             <div class="form-group">
 
-                                @for (var i = 0; i < Model.ListAllowances.Count; i++)
-                                {
-                   
-                                    @Html.TextBoxFor(m => m.ListAllowances[i].ALL_Id, new { @id = Model.ListAllowances[i].ALL_Id, @type = "checkbox" })@Model.ListAllowances[i].ALL_Title <br />                              
-                                    @Html.HiddenFor(m => m.ListAllowances[i].ALL_Id);
-                                    @Html.HiddenFor(m => m.ListAllowances[i].ALL_Title);
+                                @* @{ List<Client_Requirement_Allow_VM>
+                                                   cr = new List<Client_Requirement_Allow_VM>();
+                         cr = Model.client_Requirement_Allows;
 
-                                    <div id="divReqAllow_@Model.ListAllowances[i].ALL_Id" style="display:none">
-                                        <div class="col-md-12">
-                                            <div class="col-md-6">
-                                                @Html.TextBoxFor(m => m.client_Requirement_Allows[i].CRA_Amount, new { @class = "form-control" })
-                                                @Html.ValidationMessageFor(m=>m.client_Requirement_Allows[i].CRA_Amount, "", new { @class = "text-danger" })
-                                                @Html.Hidden("client_Requirement_Allows[" + i + "].ALL_Id", Model.ListAllowances[i].ALL_Id)
-                                            </div>
-                                            <div class="col-md-6" id="rdo_@Model.ListAllowances[i].ALL_Id">
-                                                @Html.RadioButtonFor(m => m.client_Requirement_Allows[i].CRA_DayswiseOrFull, true, new { @value = 0 })Full Salary Calculation
-                                                @Html.RadioButtonFor(m => m.client_Requirement_Allows[i].CRA_DayswiseOrFull, true, new { @value = 1 })Day Wise Calculation
-                                                @Html.ValidationMessageFor(x => x.client_Requirement_Allows[i].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
+                         List<int> arr = new List<int>();
+                         int crCount = 0;
+                         int crVal = 0;
+                         if (cr!=null)
+                         {
+                             Model.client_Requirement_Allows = null;
+                             arr = cr.Select(m => m.ALL_Id).ToList();
+                             crCount = cr.Count();
+                         }
+                         }
+
+                         @for (var i = 0; i < Model.ListAllowances.Count; i++)
+                         {
+                             @Html.TextBoxFor(m => m.ListAllowances[i].ALL_Id, new { @id = Model.ListAllowances[i].ALL_Id, @type = "checkbox" })@Model.ListAllowances[i].ALL_Title <br />
+                             @Html.HiddenFor(m => m.ListAllowances[i].ALL_Id);
+                             @Html.HiddenFor(m => m.ListAllowances[i].ALL_Title);
+
+                        @while (crCount > 0)
+                         {
+
+                             if (cr[crVal].ALL_Id == Model.ListAllowances[i].ALL_Id)
+                             {
+                                 <div id="divReqAllow_@Model.ListAllowances[i].ALL_Id">
+                                     <div class="col-md-12">
+                                         <div class="col-md-6">
+                                             @Html.TextBoxFor(m => m.client_Requirement_Allows[crVal].CRA_Amount, new { @class = "form-control" })
+                                             @Html.ValidationMessageFor(m => m.client_Requirement_Allows[crVal].CRA_Amount, "", new { @class = "text-danger" })
+                                             @Html.Hidden("client_Requirement_Allows[" + crVal + "].ALL_Id", Model.ListAllowances[i].ALL_Id)
+                                         </div>
+                                         <div class="col-md-6" id="rdo_@Model.ListAllowances[i].ALL_Id">
+                                             @Html.RadioButtonFor(m => m.client_Requirement_Allows[crVal].CRA_DayswiseOrFull, false, new { @value = 0 })Full Salary Calculation
+                                             @Html.RadioButtonFor(m => m.client_Requirement_Allows[crVal].CRA_DayswiseOrFull, true, new { @value = 1 })Day Wise Calculation
+                                             @Html.ValidationMessageFor(x => x.client_Requirement_Allows[crVal].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
+                                         </div>
+                                     </div>
+                                 </div>
+                                 crCount--;
+                                 crVal++;
+                             }
+                             break;
+                         }
+
+                                                      @for (var i = 0; i < Model.allAllowances.Count; i++)
+                                                {
+                                                    @Html.TextBoxFor(m => m.allAllowances[i].ALL_Id, new { @id = Model.allAllowances[i].ALL_Id, @type = "checkbox" })@Model.allAllowances[i].allowance.ALL_Title
+                                                    @Html.HiddenFor(m => m.allAllowances[i].ALL_Id);
+                                                    <div id="divReqAllow_@Model.allAllowances[i].ALL_Id" style="display:@Model.allAllowances[i].flagClientRequirement?'block':'none'">
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-6">
+                                                                @Html.TextBox("client_Requirement_Allows[" + i + "].CRA_Amount", Convert.ToString(arr.Contains(Model.ListAllowances[i].ALL_Id) == true ? cr.Where(m => m.ALL_Id == Model.ListAllowances[i].ALL_Id).First().CRA_Amount : 0M), new { @class = "form-control", @id = "client_Requirement_Allows_" + i + "__CRA_Amount" })
+                                                                @Html.ValidationMessageFor(m => m.client_Requirement_Allows[i].CRA_Amount, "", new { @class = "text-danger" })
+                                                                @Html.Hidden("client_Requirement_Allows[" + i + "].ALL_Id", Model.ListAllowances[i].ALL_Id)
+
+                                                            </div>
+                                                            <div class="col-md-6" id="rdo_@Model.ListAllowances[i].ALL_Id">
+
+                                                                @Html.RadioButton("client_Requirement_Allows[" + i + "].CRA_DayswiseOrFull", 0, Convert.ToBoolean(arr.Contains(Model.ListAllowances[i].ALL_Id) == true ? (cr.Where(m => m.ALL_Id == Model.ListAllowances[i].ALL_Id).First().CRA_DayswiseOrFull == true ? false : true) : true), new { @id = "client_Requirement_Allows_" + i + "__CRA_DayswiseOrFull", @value = 0 })Full Salary Calculation
+                                                                @Html.RadioButton("client_Requirement_Allows[" + i + "].CRA_DayswiseOrFull", 1, Convert.ToBoolean(arr.Contains(Model.ListAllowances[i].ALL_Id) == true ? (cr.Where(m => m.ALL_Id == Model.ListAllowances[i].ALL_Id).First().CRA_DayswiseOrFull == true ? true : false) : false), new { @id = "client_Requirement_Allows_" + i + "__CRA_DayswiseOrFull", @value = 1 })Day Wise Calculation
+
+
+                                                              
+                                                                @Html.ValidationMessageFor(x => x.client_Requirement_Allows[i].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                }*@
+                                <div class="row">
+                                    @for (var i = 0; i < Model.allAllowances.Count; i++)
+                                    {
+                                    <div class="col-md-12">
+                                        @Html.CheckBoxFor(m => m.allAllowances[i].flagClientRequirement, new { @id = Model.allAllowances[i].ALL_Id })@Model.allAllowances[i].allowance.ALL_Title
+                                        @Html.HiddenFor(m => m.allAllowances[i].ALL_Id)
+                                        @Html.HiddenFor(m => m.allAllowances[i].flagClientRequirement, new {@id= "flagClientRequirement"+ Model.allAllowances[i].ALL_Id })
+                                        <div id="divReqAllow_@Model.allAllowances[i].ALL_Id" style="display:@(Model.allAllowances[i].flagClientRequirement?"block":"none")">
+                                            <div class="col-md-12">
+                                                <div class="col-md-6">
+                                                    @Html.TextBoxFor(m => m.allAllowances[i].CRA_Amount, new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(m => m.allAllowances[i].CRA_Amount, "", new { @class = "text-danger" })
+                                                </div>
+                                                <div class="col-md-6" id="rdo_@Model.allAllowances[i].ALL_Id">
+                                                    @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, false)Full Salary Calculation
+                                                    @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, true)Day Wise Calculation
+                                                    @Html.ValidationMessageFor(x => x.allAllowances[i].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                }
-                               
-                            </div>
+                                    }
+                                </div>
+                                            </div>
                         </div>
 
                     </div>

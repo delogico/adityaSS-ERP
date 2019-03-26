@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -6,7 +7,7 @@ using RMERP.DAL.Models;
 
 namespace RMERP.DAL.ViewModel
 {
-    public class Client_Requirement_Allow_VM
+    public class ClientReqAllowanceVM
     {
         [Key]
         public int CRA_Id { get; set; }
@@ -21,5 +22,8 @@ namespace RMERP.DAL.ViewModel
         [Required(ErrorMessage = "Select calculation method")]
         [Display(Name = "Calculation on daywise OR full ?")]
         public bool CRA_DayswiseOrFull { get; set; }
+        public AllowanceVM allowance { get; set; }
+        public ClientRequirementVM requirement { get; set; }
+        public Boolean flagClientRequirement { get; set; }
     }
 }

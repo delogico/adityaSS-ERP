@@ -7,7 +7,6 @@ namespace RMERP.DAL.ViewModel
 {
     public class ClientRequirementVM
     {
-
         [Key]
         public int CRI_Id { get; set; }
         public string CLI_Name { get; set; }
@@ -54,9 +53,9 @@ namespace RMERP.DAL.ViewModel
         public string tabName { get; set; }
         public string DES_Title { get; set; }
 
-        public List<AllowancesVM> ListAllowances { get; set; }
+        //public List<AllowancesVM> ListAllowances { get; set; }
 
-        public List<Client_Requirement_Allow_VM> client_Requirement_Allows { get; set; }
+        public List<ClientReqAllowanceVM> allAllowances { get; set; }
        
     }
 }

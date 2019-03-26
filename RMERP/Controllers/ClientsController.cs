@@ -263,15 +263,18 @@ namespace RMERP.Controllers
         [HttpGet]
         public ActionResult AddEditRequirement(int CLI_Id, int CRI_Id =-1)
         {
+            CLI_Id=(CLI_Id==0? ClientId: CLI_Id);
             DesignationManager designationManager = new DesignationManager(_context);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             EmployeeAllowanceManager employeeAllowanceManager = new EmployeeAllowanceManager(_context);
             ClientRequirementVM clientRequirement = new ClientRequirementVM();
             Clients client = clientsManager.GetClientById(CLI_Id);
             ViewBag.client = client;
+            List<Client_Requirement_Allowances> listClientReqAllowances = new List<Client_Requirement_Allowances>();
             if (CRI_Id > 0)
             {
                 clientRequirement=ClientRequirementMapper.mapMe(clientsManager.GetRequirementsById(CRI_Id));
+                listClientReqAllowances = employeeAllowanceManager.GetClient_Requirement_AllowanceList(CRI_Id);
             }
             else
             {
@@ -280,51 +283,35 @@ namespace RMERP.Controllers
                 clientRequirement.CLI_Id = CLI_Id;
                 clientRequirement.CRI_Active = true;
             }
-            clientRequirement.ListAllowances = AllowancsMapper.mapMeInVMlist(employeeAllowanceManager.GetAllowanceList());
-           
+            clientRequirement.allAllowances = AllowanceMapper.mapMeAllowancesWithClientReq(employeeAllowanceManager.GetAllowanceList(), listClientReqAllowances);
             return View(clientRequirement);
         }
 
         [HttpPost]
         public ActionResult AddEditRequirement(ClientRequirementVM clientRequirementVM)
         {
-
-            List<Client_Requirement_Allowances> listReqAllows = Client_Requirement_AllowMapper.mapMeList(clientRequirementVM.client_Requirement_Allows);
             string res = string.Empty;
             Client_Requirements cr = new Client_Requirements();
+            List<Client_Requirement_Allowances> lst = AllowanceMapper.mapMeClientReqAllowances(clientRequirementVM.allAllowances);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             EmployeeAllowanceManager employeeAllowanceManager = new EmployeeAllowanceManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            //if (ModelState.IsValid)
-            //{                
-                cr.CRI_Id = clientRequirementVM.CRI_Id;
-                cr.CLI_Id = clientRequirementVM.CLI_Id;
-                cr.DES_Id = clientRequirementVM.DES_Id;
-                cr.CRI_Total = clientRequirementVM.CRI_Total;
-                cr.CRI_Basic = clientRequirementVM.CRI_Basic;
-                cr.CRI_DA = clientRequirementVM.CRI_DA;
-                cr.CRI_HRA_Fixed = clientRequirementVM.CRI_HRA_Fixed;
-                cr.CRI_HRA_Percentage = clientRequirementVM.CRI_HRA_Percentage;
-                cr.CRI_PF_Percentage = clientRequirementVM.CRI_PF_Percentage;
-                cr.CRI_ESIC_Percentage = clientRequirementVM.CRI_ESIC_Percentage;
-                cr.CRI_ESIC_Area = clientRequirementVM.CRI_ESIC_Area;
-                cr.CRI_OT_Rate = clientRequirementVM.CRI_OT_Rate;
-                cr.CRI_OT_MultipleTimes = clientRequirementVM.CRI_OT_MultipleTimes;
-                cr.CRI_WageCalculationOnWeeklyOffPlus = clientRequirementVM.CRI_WageCalculationOnWeeklyOffPlus;
-                cr.CRI_Active = clientRequirementVM.CRI_Active;
-                res =clientsManager.AddEditRequirement(cr, listReqAllows, sessionUtils.GetLoggedAdminID());
-           // }
+            if (ModelState.IsValid)
+            {
+                cr= ClientRequirementMapper.mapMeModel(clientRequirementVM);
+                res = clientsManager.AddEditRequirement(cr, lst,sessionUtils.GetLoggedAdminID());
+            }
             if (res != "")
             {
                 TempData["message"] = "Error In Client Requirement! Please Check";
                 return View();
             }
-            else
-            {
-                List<Client_Requirement_Allowances> list = new List<Client_Requirement_Allowances>();
-                list = Client_Requirement_AllowMapper.mapMeList(clientRequirementVM.client_Requirement_Allows);
-                employeeAllowanceManager.AddEditRequirement_Allowances(list);
-            }
+            //else
+            //{
+            //    List<Client_Requirement_Allowances> list = new List<Client_Requirement_Allowances>();
+            //    list = Client_Requirement_AllowMapper.mapMeList(clientRequirementVM.client_Requirement_Allows);
+            //    employeeAllowanceManager.AddEditRequirement_Allowances(list);
+            //}
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
         }
 
