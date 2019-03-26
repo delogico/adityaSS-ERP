@@ -266,7 +266,7 @@ namespace RMERP.Controllers
             CLI_Id=(CLI_Id==0? ClientId: CLI_Id);
             DesignationManager designationManager = new DesignationManager(_context);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            EmployeeAllowanceManager employeeAllowanceManager = new EmployeeAllowanceManager(_context);
+            AllowanceManager AllowanceManager = new AllowanceManager(_context);
             ClientRequirementVM clientRequirement = new ClientRequirementVM();
             Clients client = clientsManager.GetClientById(CLI_Id);
             ViewBag.client = client;
@@ -274,7 +274,7 @@ namespace RMERP.Controllers
             if (CRI_Id > 0)
             {
                 clientRequirement=ClientRequirementMapper.mapMe(clientsManager.GetRequirementsById(CRI_Id));
-                listClientReqAllowances = employeeAllowanceManager.GetClient_Requirement_AllowanceList(CRI_Id);
+                listClientReqAllowances = AllowanceManager.GetClient_Requirement_AllowanceList(CRI_Id);
             }
             else
             {
@@ -283,7 +283,7 @@ namespace RMERP.Controllers
                 clientRequirement.CLI_Id = CLI_Id;
                 clientRequirement.CRI_Active = true;
             }
-            clientRequirement.allAllowances = AllowanceMapper.mapMeAllowancesWithClientReq(employeeAllowanceManager.GetAllowanceList(), listClientReqAllowances);
+            clientRequirement.allAllowances = AllowanceMapper.mapMeAllowancesWithClientReq(AllowanceManager.GetAllowanceList(), listClientReqAllowances);
             return View(clientRequirement);
         }
 
@@ -294,7 +294,6 @@ namespace RMERP.Controllers
             Client_Requirements cr = new Client_Requirements();
             List<Client_Requirement_Allowances> lst = AllowanceMapper.mapMeClientReqAllowances(clientRequirementVM.allAllowances);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            EmployeeAllowanceManager employeeAllowanceManager = new EmployeeAllowanceManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             if (ModelState.IsValid)
             {

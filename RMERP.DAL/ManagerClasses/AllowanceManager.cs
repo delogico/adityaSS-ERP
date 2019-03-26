@@ -7,11 +7,11 @@ using System.Text;
 
 namespace RMERP.DAL.ManagerClasses
 {
-    public class EmployeeAllowanceManager
+    public class AllowanceManager
     {
         RMERPContext _contaxt;
         public IConfiguration Configuration;
-        public EmployeeAllowanceManager(RMERPContext contaxt)
+        public AllowanceManager(RMERPContext contaxt)
         {
             _contaxt = contaxt;
         }
@@ -27,22 +27,6 @@ namespace RMERP.DAL.ManagerClasses
             list = _contaxt.Client_Requirement_Allowances.Where(m=>m.CRI_Id.Equals(CRI_Id)).ToList();
             return list;
         }
-        //public string AddEditRequirement_Allowances(List<Client_Requirement_Allowances> CRA)
-        //{
-        //    string res = string.Empty;
-        //    try
-        //    {
-        //        foreach(var item in CRA)
-        //        {
-        //            _contaxt.Client_Requirement_Allowances.Add(item);
-        //            _contaxt.SaveChanges();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        res = ex.Message;
-        //    }
-        //    return res;
-        //}
+        
     }
 }
