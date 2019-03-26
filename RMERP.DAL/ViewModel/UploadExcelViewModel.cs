@@ -30,6 +30,8 @@ namespace RMERP.DAL.ViewModel
         public bool btnExportToDatabase { get; set; } = true;
         public bool datePeriod { get; set; } = true;
         public List<Attendance> listAttendance { get; set; }
+
+        public string Template { get; set; }
     }
     public class ExcelRowViewModel
     {
