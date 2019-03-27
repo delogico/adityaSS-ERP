@@ -9,91 +9,97 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-            debugger;
             $("#myTab a:first").tab('show');
         });          
     </script>
 }
 
     <ul class="nav nav-tabs" id="myTab">
-        @foreach (var item in Model.listClients)
+        @foreach (var client in Model.listClients)
         {
-            <li><a data-toggle="tab" href="#@item.CLI_Id">@item.CLI_Name</a></li>
+            <li><a data-toggle="tab" href="#@client.CLI_Id">@client.CLI_Name</a></li>
         }
     </ul>
 
-<div class="tab-content">
-   
-    @foreach (var item in Model.listClients)
-    {
-    <div id="@item.CLI_Id" class="tabcontent tab-pane fade">
-        <h3><u>@item.CLI_Name</u></h3>
-        <hr/>
-        @{
-            List<int> designationID = Model.listAttendance.Where(m=>m.CLI_Id.Equals(item.CLI_Id)).Select(m => m.DES_Id).Distinct().ToList();
-        }
-        @foreach (int desID in designationID)
+    <div class="tab-content">
+        @foreach (var item in Model.listClients)
         {
-          
-        <h4>@Model.listDesignations.Where(m => m.DES_Id.Equals(Convert.ToInt32(desID))).FirstOrDefault().DES_Title </h4>                               
-        
-            @if (item.Clients_Employees != null && item.Client_Requirements != null)
+        <div id="@item.CLI_Id" class="tabcontent tab-pane fade">
+            <h3><u>@item.CLI_Name</u></h3>
+            <hr />
+            @{
+                List<Clients_Employees> clientsEmployees = item.Clients_Employees.ToList();
+                IEnumerable<int> designationID = clientsEmployees.Select(m => m.DES_.DES_Id).Distinct();
+            }
+
+            @foreach (var desID in designationID)
             {
+                Client_Requirements cr = Model.client_Requirements.Where(m => m.DES_Id.Equals(desID) && m.CLI_Id.Equals(item.CLI_Id)).First();
+                List<Allowances> allowances = Model.allowances;
+                <h3>@Model.listDesignations.Where(m => m.DES_Id.Equals(desID)).First().DES_Title</h3>
+
+               
                 <table class="table table-border">
                     <thead>
                         <tr>
                             <td>Employee ID</td>
                             <td>Employee Name</td>
                             <td>Date Of Joining</td>
-                            <td>Basic/(Basic+DA)</td>
-                            <td>HRA(%)/HRA(Fixed)</td>
-                            <td>UPKEEP ALLOW.</td>
-                            <td>M/F</td>
                             <td>Pay Days</td>
+                            <td>Basic+DA</td>
+                            <td>HRA(%)/HRA(Fixed)</td>
+                            @foreach (var all in cr.Client_Requirement_Allowances)
+                            {
+                                <td>@allowances.Where(m=>m.ALL_Id.Equals(all.ALL_Id)).First().ALL_Title</td>
+                            }
+                            <td>M/F</td>
                             <td>OT Hours</td>
+                            <td>OT Amount</td>
                             <td>Gross Total</td>
                             <td>PF</td>
                         </tr>
                     </thead>
                     <tbody>
-                        @{
-                            List<Clients_Employees> lstCliEmp = item.Clients_Employees.Where(m=> m.DES_Id.Equals(desID)).OrderBy(m => m.EMP_Id).ToList();
-                            List<Client_Requirements> lstCliReq = item.Client_Requirements.Where(m => m.CLI_Id == item.CLI_Id && m.DES_Id.Equals(desID)).ToList();
-                        }
-                        @foreach (var emp in lstCliEmp)
+                        @foreach (var employee in clientsEmployees.Where(m => m.DES_Id.Equals(desID)))
                         {
-                            <tr>
-                                @if (Model.listAttendance.Where(m => m.CLI_Id.Equals(item.CLI_Id)).Count() > 0)
-                                {
-                                    Client_Requirements cr = lstCliReq.Where(m => m.CLI_Id == item.CLI_Id && m.CRI_Active == true && m.DES_Id == emp.DES_Id).FirstOrDefault();
-                                    int PayDays;
-                                    Employees employees = new Employees();
-                                    employees = Model.listEmployee.Where(m => m.EMP_Id.Equals(emp.EMP_Id)).FirstOrDefault();
+                        <tr>
+                            <td>@employee.EMP_Id.ToString("D5")</td>
+                            <td>@employee.EMP_.EMP_FirstName @employee.EMP_.EMP_MiddleName @employee.EMP_.EMP_SurName</td>
+                            <td>@employee.CLE_RegisteredOn.ToShortDateString()</td>
+                            @{
+                                decimal basic;
+                                int payDays;
+                                double OThrs;
+                                int DaysInMonth = DateTime.DaysInMonth(Model.WAG_Month.Year,Model.WAG_Month.Month);
+                                List<Attendance> attendances = employee.EMP_.Attendance.Where(m => m.CLI_Id.Equals(item.CLI_Id)).ToList();
+                            }
+                            <td>@(payDays = attendances.Where(m => m.ATT_IsPresent).Count())</td>
+                            <td>@(basic = Decimal.Add(cr.CRI_Basic.Value, Convert.ToDecimal(cr.CRI_DA)))</td>
+                            <td>@(cr.CRI_HRA_Fixed == null ? ((basic * Convert.ToDecimal(cr.CRI_HRA_Percentage)) / 100) : cr.CRI_HRA_Fixed)</td>
+                           
+                            @foreach (var all in cr.Client_Requirement_Allowances)
+                            {
+                                <td>@all.CRA_Amount</td>
 
-                                    <td>@employees.EMP_Id.ToString("D5")</td>
-                                    <td>@employees.EMP_FirstName @employees.EMP_MiddleName @employees.EMP_SurName</td>
-
-                                    <td>@emp.CLE_RegisteredOn.ToShortDateString()</td>
-
-                                    <td>-</td>
-                                    <td>@(Convert.ToString(cr.CRI_HRA_Percentage) == "" ? Convert.ToString(cr.CRI_HRA_Fixed) : Convert.ToString(cr.CRI_HRA_Percentage) + "%")</td>
-
-                                    <td>@(employees.EMP_Gender == true ? "M" : "F")</td>
-                                    <td> @{PayDays = Model.listAttendance.Where(m => m.EMP_Id == employees.EMP_Id && m.ATT_IsPresent == true && m.CLI_Id.Equals(item.CLI_Id)).Count();} @PayDays</td>
-                                    <td>@Model.listAttendance.Where(m => m.EMP_Id == employees.EMP_Id).Sum(m => m.ATT_ExtraHoursWorked)</td>
-                                    <td>-</td>
-                                    <td>@(Convert.ToString(cr.CRI_PF_Percentage) == "" ? "-" : Convert.ToString(cr.CRI_PF_Percentage))</td>
-                                }
-                            </tr>
+                            }
+                            <td>@(employee.EMP_.EMP_Gender == true ? "M" : "F")</td>
+                            <td>@(OThrs=attendances.Sum(m => m.ATT_ExtraHoursWorked))</td>
+                            <td>@(Math.Round(((Convert.ToDouble(basic) / DaysInMonth) / 8)*OThrs,2))</td>
+                            <td>@(payDays * basic)</td>
+                            <td>@(cr.CRI_PF_Percentage == null ? 0.0 : cr.CRI_PF_Percentage)</td>
+                        </tr>
                         }
-
                     </tbody>
                 </table>
             }
+
+
+        </div>
+            
+
         }
 
+
     </div>
-    }
 
-</div>
-
+    

@@ -18,27 +18,23 @@
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script>
         $(document).ready(function () {
-            debugger;
 
-            EMP_Id = $('#employeeViewModel_EMP_Id').val();
+            EMP_Id = $('#EMP_Id').val();
             if (EMP_Id == 0) {
                 $('.nav li').not('.active').addClass('disabled');
                 $('.nav li').not('.active').find('a').removeAttr("data-toggle");
             } else {
                 $('.nav li').not('.active').removeClass('disabled');
             }
-
             var tab = GetParameterValues('tab');
-            var EMP_Id = GetParameterValues('EMP_Id');
+            var EMP_Id = GetParameterValues('EMP_Id');           
             if (tab == "View") {
                 $('select', 'form').attr('disabled', true).attr('readonly', true);
                 $('input', 'form').attr('disabled', true).attr('readonly', true);
             }
             if (tab == "AddEditAdvance") {
-                debugger;
                 var CurrentActive = $('.nav li.active').find("a").attr("href");
                 var NextActive = $('.nav li.active').next('li').find("a").attr("href");
-
                 $('.nav li.active').next('li').addClass("active");
                 $('.nav li.active').prev('li').removeClass("active");
                 $(CurrentActive).removeClass("in active");

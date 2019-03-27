@@ -17,13 +17,11 @@
    
     <script type="text/javascript">
         $(document).ready(function () {
-            debugger;
             $("#clientsModel_CLI_Name").bind("keyup", function () {
                 searchClientList();
             });
         });
         $(".IsActive").click(function () {
-            debugger;
             var active = $(".active").find("input").attr("value") == 1 ? false : true;
             var Url = siteUrl + "Clients/GetClientList?IsActive=" + active;
             $.ajax({
@@ -38,7 +36,6 @@
             })
         });
         function searchClientList() {
-            debugger;
             var client = $("#clientsModel_CLI_Name").val();
             var Url = siteUrl + "Clients/GetClientList?Client=" + client;
             $.ajax({

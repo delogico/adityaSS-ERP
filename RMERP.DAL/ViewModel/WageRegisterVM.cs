@@ -11,7 +11,9 @@ namespace RMERP.DAL.ViewModel
         public List<Attendance> listAttendance { get; set; }
         public IEnumerable<Designations> listDesignations { get; set; }
         public IEnumerable<Employees> listEmployee { get; set; }
+        public List<Client_Requirements> client_Requirements { get; set; }
         public DateTime WAG_Month { get; set; }
+        public List<Allowances> allowances { get; set; }
     }
    
 }

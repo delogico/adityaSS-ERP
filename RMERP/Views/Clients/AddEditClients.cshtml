@@ -1,6 +1,8 @@
 ﻿@model RMERP.DAL.ViewModel.ClientsViewModel
 @using static RMERP.DAL.App_Code.ProjectUtils;
 @using RMERP.Helpers;
+@using Microsoft.Extensions.Configuration;
+
 
 @{
     ViewData["Title"] = "Add-Edit Clients";
@@ -15,12 +17,16 @@
 <ul class="nav nav-tabs" id="ClientTab">
     <li class="active"><a data-toggle="tab" href="#ClientInfo">Client Info</a></li>
     <li><a data-toggle="tab" href="#ContactInfo">Contact Info</a></li>
-    <li><a data-toggle="tab" href="#Parameters">Parameters</a></li>
+    <li><a data-toggle="tab" href="#Parameters">Attendence Parameters</a></li>
     <li><a data-toggle="tab" href="#ClientRequirement">Client Requirement</a></li>
     <li><a data-toggle="tab" href="#ClientEmployee">Assign Employee</a></li>
     <li><a data-toggle="tab" href="#ClientDelete">Client Activation</a></li>
 </ul>
-
+@{
+    @inject IConfiguration Configuration;
+    string ImagePath = Configuration.GetSection("ImagePath").GetSection("APP_DEFAULT_LOGO_IMAGE_PATH").Value + "/" + Configuration.GetSection("ImagePath").GetSection("APP_CLIENTS_LOGO_IMAGE_PATH").Value + "/" + Model.clientsModel.CLI_Id + "/" + Model.clientsModel.CliLogoImage;
+    string path = (Model.clientsModel.CliLogoImage != null ? ImagePath : "/RMERP_Data/user.jpg");
+}
 <div class="tab-content">
     <div id="ClientInfo" class="tab-pane fade in active">
         <div class="modal-dialog modelLeftSide">
@@ -124,10 +130,10 @@
                                             @Html.LabelFor(m => m.clientsModel.CLI_Logo, new { @class = "control-label" })
                                             @Html.TextBoxFor(m => m.clientsModel.CLI_Logo, new { @type = "file", @class = "form-control", @onchange = "ShowImagePreviewMain(this);" })
                                             @Html.ValidationMessageFor(x => x.clientsModel.CLI_Logo, "", new { @class = "text-danger" })
+
                                         </div>
                                         <div class="col-md-4">
-                                            @*<input type="file" name="file" onchange="ShowImagePreviewMain(this);" class="form-control" />*@
-                                            <img id="ClientImage" src="~/RMERP_Data/user.jpg" height="80" width="80" class="img-thumbnail" />
+                                            <img id="ClientImage" src="@path" height="80" width="80" class="img-thumbnail" />
                                         </div>
                                     </div>
                                 </div>
@@ -147,7 +153,7 @@
         <div class="content container-fluid">
             <div class="row">
                 <div class="col-sm-8">
-                    <h4 class="page-title">Client Contact</h4>
+                    @*<h4 class="page-title">Client Contact</h4>*@
                 </div>
                 <div class="col-sm-4 text-right m-b-30">
                     <a class="btn btn-primary rounded" href="@Url.Action("AddEditContacts","Clients", new { CLI_Id = Model.clientsModel.CLI_Id})"><i class="fa fa-plus"></i> Register New Contact</a>
@@ -156,7 +162,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div>
-                        @if (Model.contacts.Count() > 0)
+                        @if (Model.contacts != null)
                         {
                             <table class="table table-striped custom-table m-b-0 ">
                                 <thead>
@@ -209,7 +215,7 @@
         <div class="content container-fluid">
             <div class="row">
                 <div class="col-sm-8">
-                    <h4 class="page-title">Client Requirement</h4>
+                    @*<h4 class="page-title">Client Requirement</h4>*@
                 </div>
                 <div class="col-sm-4 text-right m-b-30">
                     <a class="btn btn-primary rounded" href="@Url.Action("AddEditRequirement","Clients", new { CLI_Id =  Model.clientsModel.CLI_Id})"><i class="fa fa-plus"></i> Add New Requirement</a>
@@ -218,7 +224,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div>
-                        @if (Model.requirements.Count() > 0)
+                        @if (Model.requirements != null)
                         {
                             <table class="table table-striped custom-table m-b-0 ">
                                 <thead>
@@ -271,7 +277,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="profile-view">
-                                <h4 class="page-title">Attendence Parameters</h4>
+                                @*<h4 class="page-title">Attendence Parameters</h4>*@
                                 <div class="form-group">
                                     <label class="form-group col-sm-12 " style="font-size: 15px;font-weight: normal;">
                                         @Html.HiddenFor(m => m.clientsModel.CLI_Id)
@@ -367,7 +373,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div>
-                        @if (Model.employees.Count() > 0)
+                        @if (Model.employees != null)
                         {
                             <table class="table table-striped custom-table m-b-0 ">
                                 <thead>
@@ -464,18 +470,16 @@
         var ClientID;
         var CLI_IsActive;
         $(document).ready(function () {
-            debugger;
             radioShow();
             var CLI_Id = $("#clientsModel_FRM_Id").val();
             if (CLI_Id > 0) {
                 $("#clientsModel_FRM_Id").attr("disabled", true);
             }
             $("input[type='radio']").click(function () {
-                debugger;
+
                 radioShow();
             });
             function radioShow() {
-                debugger;
                 var radioValue = $("input[name='ParametersClientsModel.CLI_Att_MonthReal']:checked").attr("id");
                 if (radioValue == "custom") {
                     $("#divSelectdate").show();
@@ -495,8 +499,8 @@
 
                 var CurrentActive = $('.nav li.active').find("a").attr("href");
                 var NextActive = $('.nav li.active').next('li').next('li').find("a").attr("href");
-                $('.nav li.active').next('li').next('li').next('li').next('li').addClass("active");
-                $('.nav li.active').prev('li').prev('li').prev('li').prev('li').removeClass("active");
+                $('.nav li.active').next('li').next('li').next('li').next('li').next('li').addClass("active");
+                $('.nav li.active').prev('li').prev('li').prev('li').prev('li').prev('li').removeClass("active");
                 $(CurrentActive).removeClass("in active");
                 $("#ClientDelete").addClass("in active");
                 $('.nav li').not('.active').addClass('disabled');
@@ -544,7 +548,6 @@
                 $(PrevActive).addClass("in active");
             }
             else if (tab == "ClientEmployee") {
-                debugger;
                 $('.nav li.active').next('li').next('li').next('li').next('li').addClass("active").find('a');
                 var CurrentActive = $('.nav li.active').find("a").attr("href");
                 var PrevActive = $('.nav li.active').next('li').next('li').next('li').next('li').find("a").attr("href");
@@ -574,7 +577,6 @@
 
         $("#btnSubmit").click(
             function () {
-                debugger;
                 var Url = siteUrl + "Clients/InActiveClient?ClientID=" + ClientID + "&Active=" + CLI_IsActive;
                 $.ajax({
                     type: "POST",

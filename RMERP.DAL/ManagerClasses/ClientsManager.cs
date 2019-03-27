@@ -8,6 +8,7 @@ using RMERP.DAL.App_Code;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace RMERP.DAL.ManagerClasses
 {
@@ -67,23 +68,38 @@ namespace RMERP.DAL.ManagerClasses
                 {
                     System.IO.Directory.CreateDirectory(ImagePath + "/" + clients.CLI_Id);
                 }
-                if (file == null || file.Length == 0)
+                else
                 {
-                    clients.CLI_Logo = "user.jpg";
+                    #region
+                    
+                    string[] files = System.IO.Directory.GetFiles(ImagePath + "/" + clients.CLI_Id);
+                    // Copy the files and overwrite destination files if they already exist.
+                    foreach (string s in files)
+                    {
+                        // Use static Path methods to extract only the file name from the path.
+                        string fileName = System.IO.Path.GetFileName(s);
+                        System.IO.File.Delete(ImagePath + "/" + clients.CLI_Id+"/"+fileName);
+                    }
+                    #endregion
+                }
+                if (file == null || file.Length <= 0)
+                {
+                   // clients.CLI_Logo = "user.jpg";
                 }
                 else
                 {
+                    
                     var path = Path.Combine(
                           Directory.GetCurrentDirectory(), ImagePath + "/" + clients.CLI_Id,
                           file.FileName);
                  
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
-                        file.CopyToAsync(stream);
+                         file.CopyToAsync(stream);                        
                     }
                     clients.CLI_Logo = file.FileName;
                 }
-                clients.CLI_RegisteredOn = ProjectUtils.DateNow();
+               
                 clients.CLI_IsActive = true;
                 if (clients.CLI_Id > 0)
                 {
@@ -91,6 +107,7 @@ namespace RMERP.DAL.ManagerClasses
                 }
                 else
                 {
+                    clients.CLI_RegisteredOn = ProjectUtils.DateNow();
                     _contaxt.Clients.Add(clients);
                 }                
                 _contaxt.SaveChanges();
@@ -495,10 +512,18 @@ namespace RMERP.DAL.ManagerClasses
                 select cri;
             return query.FirstOrDefault().CRI_Id;
         }
-        public List<Clients> GetActiveClientForAttandanceReg(DateTime monthStartDate,int WAG_Id)
+
+        public List<Client_Requirements> getClientRequirements()
+        {
+            List<Client_Requirements> list = new List<Client_Requirements>();
+            list = _contaxt.Client_Requirements.Include(m => m.Client_Requirement_Allowances).Where(m => m.CRI_Active.Equals(true)).ToList();            
+            return list;
+        }
+
+        public List<Clients> GetActiveClientForAttandanceReg(DateTime monthStartDate)
         {
             DateTime lastDate = new DateTime(monthStartDate.Year, monthStartDate.Month, 1).AddMonths(1).AddDays(-1);
-            IQueryable<Clients> cliList = from a in _contaxt.Clients.Include(m=>m.Clients_Employees).Include(m=>m.Client_Requirements).Include(m=>m.Attendance)
+            IQueryable<Clients> cliList = from a in _contaxt.Clients.Include(m=>m.Clients_Employees).Include(m=>m.Attendance).Include(m => m.Client_Requirements)
                                           where
                                           a.CLI_RegisteredOn.Date <= monthStartDate.Date
                                           && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))

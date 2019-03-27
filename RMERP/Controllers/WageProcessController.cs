@@ -229,17 +229,38 @@ namespace RMERP.Controllers
             WageProcessManager wageManager = new WageProcessManager(_context);
             DesignationManager ds = new DesignationManager(_context);
             AttendanceManager attMgr = new AttendanceManager(_context);
+            AllowanceManager allowanceManager = new AllowanceManager(_context);
             Wage_Process wage = wageManager.getWageProcessById(WAG_Id);
-            List<Clients> lstCli = clientsManager.GetActiveClientForAttandanceReg(wage.WAG_Month, WAG_Id);
-            avm.listAttendance = attMgr.getAttendance_Wage(WAG_Id);
+            List<Clients> lstCli = clientsManager.GetActiveClientForAttandanceReg(wage.WAG_Month);
 
+            avm.listAttendance = attMgr.getAttendance_Wage(WAG_Id);
+            avm.client_Requirements = clientsManager.getClientRequirements();
             EmployeeManager em = new EmployeeManager(_context);
-            IEnumerable<Employees> empList = em.GetEmployees();
+            avm.allowances = allowanceManager.GetAllowanceList();
             avm.listDesignations = ds.getDesignationsList();
             avm.listClients = lstCli;
-            avm.listEmployee = empList;
+            avm.listEmployee = em.GetEmployees();
             avm.WAG_Month = wage.WAG_Month;
             return View(avm);
         }
+        //public ActionResult WageRegister(int WAG_Id)
+        //{
+        //    WageRegisterVM avm = new WageRegisterVM();
+        //    ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+        //    WageProcessManager wageManager = new WageProcessManager(_context);
+        //    DesignationManager ds = new DesignationManager(_context);
+        //    AttendanceManager attMgr = new AttendanceManager(_context);
+
+        //    Wage_Process wage = wageManager.getWageProcessById(WAG_Id);
+        //    List<Clients> lstCli = clientsManager.GetActiveClientForAttandanceReg(wage.WAG_Month);
+        //    avm.listAttendance = attMgr.getAttendance_Wage(WAG_Id);
+
+        //    EmployeeManager em = new EmployeeManager(_context);
+        //    avm.listDesignations = ds.getDesignationsList();
+        //    avm.listClients = lstCli;
+        //    avm.listEmployee = em.GetEmployees();
+        //    avm.WAG_Month = wage.WAG_Month;
+        //    return View(avm);
+        //}
     }
 }

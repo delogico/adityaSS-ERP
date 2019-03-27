@@ -1,14 +1,33 @@
 ﻿@model IEnumerable<RMERP.DAL.Models.Clients>
+@using Microsoft.Extensions.Configuration;
+
+@{
+    @inject IConfiguration Configuration;
+    string ImagePath = Configuration.GetSection("ImagePath").GetSection("APP_DEFAULT_LOGO_IMAGE_PATH").Value + "/" + Configuration.GetSection("ImagePath").GetSection("APP_CLIENTS_LOGO_IMAGE_PATH").Value;
+
+}
 
 <div class="row staff-grid-row">
     @foreach (var item in Model)
     {
+        string Path = "/" +item.CLI_Id + "/" + item.CLI_Logo;
+
         <div class="col-md-4 col-sm-4 col-xs-6 col-lg-3">
             <div class="profile-widget ClientProfile">
                 <div class="profile-img">
-                    <a class="avatar">@item.CLI_Name[0].ToString()</a>
+                    <a class="avatar">
+                        @if (item.CLI_Logo!=null)
+                        {
+                            <img class="avatar" src="@ImagePath/@Path" />
+                        }
+                        else
+                        {
+                            @item.CLI_Name[0].ToString()
+                        }
+                    </a>
+                   
                 </div>
-                
+
                 <h4 class="user-name m-t-10 m-b-0 text-ellipsis"><a>@item.CLI_Name</a></h4>
                 @if (item.Client_Contacts.Where(m => m.CON_isPrimary.Equals(true)).Count() > 0)
                 {

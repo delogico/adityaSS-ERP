@@ -156,7 +156,7 @@ namespace RMERP.Controllers
                 {
                     clients.CLI_Logo = cv.clientsModel.CliLogoImage;
                 }
-                var tuple = clientsManager.saveAddEditClients(file, clients);
+                 var tuple = clientsManager.saveAddEditClients(file, clients);
                 if (tuple.Item1 != "")
                 {
                     TempData["message"] = "Client data can not Inserted";

@@ -5,7 +5,6 @@ $("document").ready(function () {
 });
 
 function onAddClick(id) {
-    debugger;
     var Url = siteUrl + "Admin/AddEditAdmin?id=" + id;
     $.ajax({
         type: "GET",
@@ -17,7 +16,6 @@ function onAddClick(id) {
     })
 };
 function onSaveClick() {
-    debugger;
     var Url = siteUrl + "Admin/saveEditAdmin";    
     var form_data = $("#frmAddEdit").serialize();
     $.ajax({
@@ -47,7 +45,6 @@ function onSaveClick() {
 //    //---------------------------------------------------------//
 //};
 function ClosePopup() {
-    debugger;
     $('#add_user').modal('hide');
     listAdminUsers();
 };
@@ -61,7 +58,6 @@ function listAdminUsers() {
     })
 };
 function onDeleteClick(id) {
-    debugger;
     var Url = siteUrl + "Admin/deleteAdminUser?id="+id;
     $.ajax({
         type: "GET",
@@ -72,13 +68,11 @@ function onDeleteClick(id) {
     })
 };
 function onDeleteShow(id) {
-    debugger;
     $('#delete_user').modal('show');
     $('#dltAdminBtn').val(id);
 };
 
 $(document).on("click", "#dltAdminBtn", function () {
-    debugger;
     var AdmID = $('#dltAdminBtn').val();
     var Url = siteUrl + "Admin/deleteAdminUser?id=" + AdmID;
     $.ajax({

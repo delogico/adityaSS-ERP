@@ -94,10 +94,10 @@ namespace RMERP.Controllers
                 employee_Advance = employeeManager.GetEmployeeAdvanceById(ADV_Id);
                 employeeAdvanceVM = EmployeeAdvanceMapper.mapMe(employee_Advance);
             }
-            if (Emp_Id > 0)
+            if (EMP_Id > 0)
             {
                 employeeAdvanceVM.EMP_Id = EMP_Id;
-                employeeAdvanceVM.EmployeeName = EmployeesMapper.MapMe(employeeManager.GetEmployeeById(Emp_Id)).EMP_FullName;
+                employeeAdvanceVM.EmployeeName = EmployeesMapper.MapMe(employeeManager.GetEmployeeById(EMP_Id)).EMP_FullName;
             }
             return View(employeeAdvanceVM);
         }
