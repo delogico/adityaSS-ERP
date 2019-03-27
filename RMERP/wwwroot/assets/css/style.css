@@ -158,12 +158,12 @@ textarea.form-control {
 .font10 {
     font-size: 10px;
 }
+
 /*-----------------
 	2. Table
 -----------------------*/
-
 .table {
-	color: #000;
+    color: #000;
 }
 .table.table-white {
 	background-color: #fff;

@@ -13,8 +13,8 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Client")]
         [Required(ErrorMessage = "Please select client")]
         public int CLI_Id { get; set; }
-        [Display(Name = "Designation")]
-        [Required(ErrorMessage = "Please insert designation")]
+        [Display(Name = "Requirement for")]
+        [Required(ErrorMessage = "Please select designation")]
         public int DES_Id { get; set; }
         
         [Display(Name = "Total Post")]
