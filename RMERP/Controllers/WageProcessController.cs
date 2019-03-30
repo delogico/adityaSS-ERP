@@ -19,6 +19,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using RMERP.DAL.App_Code;
 
 namespace RMERP.Controllers
 {
@@ -224,35 +225,46 @@ namespace RMERP.Controllers
 
         public ActionResult WageRegister(int WAG_Id=-1)
         {
-            WageRegisterVM avm = new WageRegisterVM();
+            WageRegisterVM avm = new WageRegisterVM();           
             avm = GetWage_RegisterData(WAG_Id);
+            avm.listWageProcessClients = wpm.GetWage_Process_Clients(WAG_Id);
             return View(avm);
             
         }
         [HttpPost]
-        public ActionResult ResetWageRegister(int WAG_Id)
+        public ActionResult ResetWageRegister(int WAG_Id, string CurrentActiveCLI_Id)
         {
-            return RedirectToAction("WageRegister");
+            string res= wpm.ResetWageRegister(WAG_Id, CurrentActiveCLI_Id);
+            if (res != string.Empty)
+            {
+                TempData["message"] = "Wage Register is not saved!";
+            }
+            return RedirectToAction("WageRegister", WAG_Id);
+
         }
         [HttpPost]
-        public ActionResult SaveWageRegister(int WAG_Id)
+        public ActionResult SaveWageRegister(int WAG_Id, string CurrentActiveCLI_Id)
         {
             WageRegisterVM avm = new WageRegisterVM();
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
             avm = GetWage_RegisterData(WAG_Id);
-            Wage_Register wr = new Wage_Register();
-
-            wr.WAG_Id = WAG_Id;
-            foreach(var item in avm.listClients)
+           
+            List<Clients> clients = avm.listClients.Where(m => m.CLI_Id.Equals(Convert.ToInt32(CurrentActiveCLI_Id))).ToList();
+           
+            foreach(var item in clients)
             {
-                wr.CLI_Id = item.CLI_Id;
+                List<Wage_Register> lst = new List<Wage_Register>();                
                 List<Clients_Employees> clientsEmployees = item.Clients_Employees.ToList();
                 IEnumerable<int> designationID = clientsEmployees.Select(m => m.DES_.DES_Id).Distinct();
                 foreach (var desID in designationID)
-                {
+                {                  
                     Client_Requirements cr = avm.client_Requirements.Where(m => m.DES_Id.Equals(desID) && m.CLI_Id.Equals(item.CLI_Id)).First();
                     List<Allowances> allowances = avm.allowances;
                     foreach(var employee in clientsEmployees.Where(m => m.DES_Id.Equals(desID)))
                     {
+                        Wage_Register wr = new Wage_Register();
+                        wr.WAG_Id = WAG_Id;
+                        wr.CLI_Id = item.CLI_Id;
                         wr.EMP_Id = employee.EMP_Id;
                         wr.CRI_Id = cr.CRI_Id;
 
@@ -267,8 +279,7 @@ namespace RMERP.Controllers
                         HRA = (cr.CRI_HRA_Fixed == null ? ((BasicDa * Convert.ToDecimal(cr.CRI_HRA_Percentage)) / 100) : ((Decimal.Multiply(cr.CRI_HRA_Fixed.Value, payDays)) / DaysInMonth));
 
                         wr.WAR_TotalPaybleDays = payDays;
-                        wr.WAR_TotalWorkingDays = DaysInMonth;
-                        wr.WAR_ExtraWorkingHours = 1;
+                        wr.WAR_TotalWorkingDays = DaysInMonth;                       
 
                         decimal OTAmt, allAllowancesAmt, PFAmt, EsicAmt;
                         double OThrs = attendances.Sum(m => m.ATT_ExtraHoursWorked);
@@ -278,6 +289,9 @@ namespace RMERP.Controllers
                         EsicAmt = Decimal.Multiply(BasicDa, Convert.ToDecimal(cr.CRI_ESIC_Percentage)) / 100;
 
                         wr.WAR_ExtraWorkingHours = OThrs;
+                        wr.WAR_Basic = Math.Round(basic,2);
+                        wr.WAR_DA = Math.Round(da,2);
+                        wr.WAR_HRA = Math.Round(HRA,2);                       
 
                         foreach (var all in cr.Client_Requirement_Allowances)
                         {
@@ -285,24 +299,32 @@ namespace RMERP.Controllers
                             decimal fullAmt = Decimal.Multiply(amount, Convert.ToDecimal(payDays)) / DaysInMonth;
                             if (all.CRA_DayswiseOrFull)
                             {
-                                @Math.Round(amount, 2);
+                                Math.Round(amount, 2);
                                 allAllowancesAmt += amount;
                             }
                             else
                             {
-                                @Math.Round(fullAmt, 2);
+                                Math.Round(fullAmt, 2);
                                 allAllowancesAmt += fullAmt;
                              }
 
                         }
                         decimal GrossTot = basic + da + HRA + allAllowancesAmt + OTAmt;
                         decimal finalAmt = GrossTot - (PFAmt + EsicAmt);
+                        wr.WAR_GrossTotal = Math.Round(GrossTot,2);
+                        wr.ADM_LastModifiedBy = sessionUtils.GetLoggedAdminID();
+                        wr.WAR_LastModifiedOn = ProjectUtils.DateNow();
+                        lst.Add(wr);                        
+                        
                     }
                 }
-            }
-
-            string res=  wpm.SaveWageRegister(wr);
-            return RedirectToAction("WageRegister");
+                string res = wpm.SaveWageRegister(lst, WAG_Id, CurrentActiveCLI_Id, sessionUtils.GetLoggedAdminID());
+                if (res != string.Empty)
+                {
+                    TempData["message"] = "Wage Register is not saved!";
+                }
+            }           
+            return RedirectToAction("WageRegister",new { WAG_Id = WAG_Id });
         }
         private WageRegisterVM GetWage_RegisterData(int WAG_Id)
         {
@@ -313,7 +335,7 @@ namespace RMERP.Controllers
             AttendanceManager attMgr = new AttendanceManager(_context);
             AllowanceManager allowanceManager = new AllowanceManager(_context);
             EmployeeManager em = new EmployeeManager(_context);
-
+           
             Wage_Process wage = wageManager.getWageProcessById(WAG_Id);
             List<Clients> lstCli = clientsManager.GetActiveClientForAttandanceReg(wage.WAG_Month);
             avm.listAttendance = attMgr.getAttendance_Wage(WAG_Id);

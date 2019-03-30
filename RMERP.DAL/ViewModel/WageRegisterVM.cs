@@ -15,6 +15,7 @@ namespace RMERP.DAL.ViewModel
         public DateTime WAG_Month { get; set; }
         public List<Allowances> allowances { get; set; }
         public int WAG_Id { get; set; }
+        public List<Wage_Process_Clients> listWageProcessClients  { get; set; }
         public string WAG_Full_Month()
         {
             return WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
