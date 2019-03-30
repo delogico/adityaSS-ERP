@@ -14,6 +14,11 @@ namespace RMERP.DAL.ViewModel
         public List<Client_Requirements> client_Requirements { get; set; }
         public DateTime WAG_Month { get; set; }
         public List<Allowances> allowances { get; set; }
+        public int WAG_Id { get; set; }
+        public string WAG_Full_Month()
+        {
+            return WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
+        }
     }
    
 }

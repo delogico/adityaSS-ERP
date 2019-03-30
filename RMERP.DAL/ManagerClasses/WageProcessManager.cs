@@ -114,6 +114,20 @@ namespace RMERP.DAL.ManagerClasses
             attendance = _context.Attendance.Find(attId);
             return attendance;
         }
-       
+        public string SaveWageRegister(Wage_Register wr)
+        {
+            string res = string.Empty;
+            return res;
+        }
+        public string ResetWageRegister(int WAR_Id)
+        {
+            string res = string.Empty;
+            var WAR = _context.Wage_Register.Find(WAR_Id);
+            _context.Wage_Register.Remove(WAR);
+            _context.SaveChanges();
+            return res;
+        }
+
+        
     }
 }

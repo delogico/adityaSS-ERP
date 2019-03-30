@@ -50,7 +50,7 @@
     <Content Update="Views\Attendance\VerifyTemplate.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Clients\AddEditRequirement - Copy.cshtml">
+    <Content Update="Views\Clients\AddEditRequirement3.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>

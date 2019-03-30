@@ -283,10 +283,16 @@ namespace RMERP.Controllers
                 clientRequirement.CLI_Id = CLI_Id;
                 clientRequirement.CRI_Active = true;
             }
+           
             clientRequirement.allAllowances = AllowanceMapper.mapMeAllowancesWithClientReq(AllowanceManager.GetAllowanceList(), listClientReqAllowances);
+
+
+            ViewBag.ADList = designationManager.getRemainingDesignationsList(CLI_Id).Select(m => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = Convert.ToString(m.DES_Id), Text = m.DES_Title });
+            
+
             return View(clientRequirement);
         }
-
+       
         [HttpPost]
         public ActionResult AddEditRequirement(ClientRequirementVM clientRequirementVM)
         {
@@ -295,6 +301,7 @@ namespace RMERP.Controllers
             List<Client_Requirement_Allowances> lst = AllowanceMapper.mapMeClientReqAllowances(clientRequirementVM.allAllowances);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
+
             if (ModelState.IsValid)
             {
                 cr= ClientRequirementMapper.mapMeModel(clientRequirementVM);

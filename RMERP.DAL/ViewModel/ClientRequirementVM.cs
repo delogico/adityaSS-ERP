@@ -26,14 +26,14 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "DA")]
         [Required(ErrorMessage = "Please add DA")]
         public double? CRI_DA { get; set; }
-       
+
         [Display(Name = "HRA Fixed")]
-        public decimal? CRI_HRA_Fixed { get; set; }
+        public decimal? CRI_HRA_Fixed { get; set; } = 0;
         [Display(Name = "HRA Percentage (%)")]
-        public double? CRI_HRA_Percentage { get; set; }
-       
+        public double? CRI_HRA_Percentage { get; set; } = 0;
+
         [Display(Name = "PF Percentage (%)")]
-        public double? CRI_PF_Percentage { get; set; }
+        public double? CRI_PF_Percentage { get; set; } 
         [Display(Name = "ESIC Percentage (%)")]
         public double? CRI_ESIC_Percentage { get; set; }
         [Display(Name = "ESIC Area")]

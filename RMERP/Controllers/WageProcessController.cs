@@ -222,7 +222,89 @@ namespace RMERP.Controllers
             return RedirectToAction("ViewAttendance", "Attendance", new { WAG_Id = alvm.attendanceViewModel.WAG_Id, CLI_Id = alvm.attendanceViewModel.CLI_Id });
         }
 
-        public ActionResult WageRegister(int WAG_Id)
+        public ActionResult WageRegister(int WAG_Id=-1)
+        {
+            WageRegisterVM avm = new WageRegisterVM();
+            avm = GetWage_RegisterData(WAG_Id);
+            return View(avm);
+            
+        }
+        [HttpPost]
+        public ActionResult ResetWageRegister(int WAG_Id)
+        {
+            return RedirectToAction("WageRegister");
+        }
+        [HttpPost]
+        public ActionResult SaveWageRegister(int WAG_Id)
+        {
+            WageRegisterVM avm = new WageRegisterVM();
+            avm = GetWage_RegisterData(WAG_Id);
+            Wage_Register wr = new Wage_Register();
+
+            wr.WAG_Id = WAG_Id;
+            foreach(var item in avm.listClients)
+            {
+                wr.CLI_Id = item.CLI_Id;
+                List<Clients_Employees> clientsEmployees = item.Clients_Employees.ToList();
+                IEnumerable<int> designationID = clientsEmployees.Select(m => m.DES_.DES_Id).Distinct();
+                foreach (var desID in designationID)
+                {
+                    Client_Requirements cr = avm.client_Requirements.Where(m => m.DES_Id.Equals(desID) && m.CLI_Id.Equals(item.CLI_Id)).First();
+                    List<Allowances> allowances = avm.allowances;
+                    foreach(var employee in clientsEmployees.Where(m => m.DES_Id.Equals(desID)))
+                    {
+                        wr.EMP_Id = employee.EMP_Id;
+                        wr.CRI_Id = cr.CRI_Id;
+
+                        decimal basic, da, BasicDa, HRA;
+                        int payDays;
+                        int DaysInMonth = DateTime.DaysInMonth(avm.WAG_Month.Year, avm.WAG_Month.Month);
+                        List<Attendance> attendances = employee.EMP_.Attendance.Where(m => m.CLI_Id.Equals(item.CLI_Id)).ToList();
+                        payDays = attendances.Where(m => m.ATT_IsPresent).Count();
+                        basic = (Decimal.Multiply(cr.CRI_Basic.Value, Convert.ToDecimal(payDays))) / DaysInMonth;
+                        da = (Decimal.Multiply(cr.CRI_Basic.Value, Convert.ToDecimal(cr.CRI_DA))) / 100;
+                        BasicDa = (Decimal.Add(cr.CRI_Basic.Value, Convert.ToDecimal(cr.CRI_DA)));
+                        HRA = (cr.CRI_HRA_Fixed == null ? ((BasicDa * Convert.ToDecimal(cr.CRI_HRA_Percentage)) / 100) : ((Decimal.Multiply(cr.CRI_HRA_Fixed.Value, payDays)) / DaysInMonth));
+
+                        wr.WAR_TotalPaybleDays = payDays;
+                        wr.WAR_TotalWorkingDays = DaysInMonth;
+                        wr.WAR_ExtraWorkingHours = 1;
+
+                        decimal OTAmt, allAllowancesAmt, PFAmt, EsicAmt;
+                        double OThrs = attendances.Sum(m => m.ATT_ExtraHoursWorked);
+                        OTAmt = (((Convert.ToDecimal(cr.CRI_Basic.Value) / Convert.ToDecimal(DaysInMonth)) / 8) * Convert.ToDecimal(OThrs));
+                        allAllowancesAmt = 0M;
+                        PFAmt = Decimal.Multiply(BasicDa, Convert.ToDecimal(cr.CRI_PF_Percentage)) / 100;
+                        EsicAmt = Decimal.Multiply(BasicDa, Convert.ToDecimal(cr.CRI_ESIC_Percentage)) / 100;
+
+                        wr.WAR_ExtraWorkingHours = OThrs;
+
+                        foreach (var all in cr.Client_Requirement_Allowances)
+                        {
+                            decimal amount = all.CRA_Amount;
+                            decimal fullAmt = Decimal.Multiply(amount, Convert.ToDecimal(payDays)) / DaysInMonth;
+                            if (all.CRA_DayswiseOrFull)
+                            {
+                                @Math.Round(amount, 2);
+                                allAllowancesAmt += amount;
+                            }
+                            else
+                            {
+                                @Math.Round(fullAmt, 2);
+                                allAllowancesAmt += fullAmt;
+                             }
+
+                        }
+                        decimal GrossTot = basic + da + HRA + allAllowancesAmt + OTAmt;
+                        decimal finalAmt = GrossTot - (PFAmt + EsicAmt);
+                    }
+                }
+            }
+
+            string res=  wpm.SaveWageRegister(wr);
+            return RedirectToAction("WageRegister");
+        }
+        private WageRegisterVM GetWage_RegisterData(int WAG_Id)
         {
             WageRegisterVM avm = new WageRegisterVM();
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
@@ -230,37 +312,19 @@ namespace RMERP.Controllers
             DesignationManager ds = new DesignationManager(_context);
             AttendanceManager attMgr = new AttendanceManager(_context);
             AllowanceManager allowanceManager = new AllowanceManager(_context);
+            EmployeeManager em = new EmployeeManager(_context);
+
             Wage_Process wage = wageManager.getWageProcessById(WAG_Id);
             List<Clients> lstCli = clientsManager.GetActiveClientForAttandanceReg(wage.WAG_Month);
-
             avm.listAttendance = attMgr.getAttendance_Wage(WAG_Id);
-            avm.client_Requirements = clientsManager.getClientRequirements();
-            EmployeeManager em = new EmployeeManager(_context);
+            avm.client_Requirements = clientsManager.getClientRequirements();            
             avm.allowances = allowanceManager.GetAllowanceList();
             avm.listDesignations = ds.getDesignationsList();
             avm.listClients = lstCli;
             avm.listEmployee = em.GetEmployees();
             avm.WAG_Month = wage.WAG_Month;
-            return View(avm);
+            avm.WAG_Id = WAG_Id;
+            return avm;
         }
-        //public ActionResult WageRegister(int WAG_Id)
-        //{
-        //    WageRegisterVM avm = new WageRegisterVM();
-        //    ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-        //    WageProcessManager wageManager = new WageProcessManager(_context);
-        //    DesignationManager ds = new DesignationManager(_context);
-        //    AttendanceManager attMgr = new AttendanceManager(_context);
-
-        //    Wage_Process wage = wageManager.getWageProcessById(WAG_Id);
-        //    List<Clients> lstCli = clientsManager.GetActiveClientForAttandanceReg(wage.WAG_Month);
-        //    avm.listAttendance = attMgr.getAttendance_Wage(WAG_Id);
-
-        //    EmployeeManager em = new EmployeeManager(_context);
-        //    avm.listDesignations = ds.getDesignationsList();
-        //    avm.listClients = lstCli;
-        //    avm.listEmployee = em.GetEmployees();
-        //    avm.WAG_Month = wage.WAG_Month;
-        //    return View(avm);
-        //}
     }
 }

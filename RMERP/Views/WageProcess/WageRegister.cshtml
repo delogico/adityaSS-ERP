@@ -4,102 +4,166 @@
 @{
     ViewData["Title"] = "WageRegister";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
+    Allowances allowances1 = new Allowances();
 }
 
 @section scripts{
     <script>
         $(document).ready(function () {
             $("#myTab a:first").tab('show');
-        });          
+        });
     </script>
 }
+<style>
+    .gainsboro {
+        background-color: #DCDCDC;
+    }
+    .lightgray {
+        background-color: #D3D3D3;
+    }
+    .silver {
+        background-color: #C0C0C0;
+    }
+    .darkgray {
+        background-color: #A9A9A9;
+    }
+    .gray {
+        background-color: #a29e9e;
+    }
 
-    <ul class="nav nav-tabs" id="myTab">
-        @foreach (var client in Model.listClients)
-        {
-            <li><a data-toggle="tab" href="#@client.CLI_Id">@client.CLI_Name</a></li>
-        }
-    </ul>
+</style>
 
-    <div class="tab-content">
-        @foreach (var item in Model.listClients)
-        {
+ @{int DaysInMonth = DateTime.DaysInMonth(Model.WAG_Month.Year, Model.WAG_Month.Month); }
+
+    <h2>@Model.WAG_Full_Month() <small>Total Days: @DaysInMonth</small></h2>
+
+
+<ul class="nav nav-tabs" id="myTab">
+    @foreach (var client in Model.listClients)
+    {
+        <li><a data-toggle="tab" href="#@client.CLI_Id">@client.CLI_Name</a></li>
+    }
+</ul>
+
+<div class="tab-content">
+    @foreach (var item in Model.listClients)
+    {
+        List<Clients_Employees> clientsEmployees = item.Clients_Employees.ToList();
+        IEnumerable<int> designationID = clientsEmployees.Select(m => m.DES_.DES_Id).Distinct();
+
         <div id="@item.CLI_Id" class="tabcontent tab-pane fade">
-            <h3><u>@item.CLI_Name</u></h3>
+            <div class="well well-sm"> <h3><u>@item.CLI_Name</u></h3></div>
             <hr />
-            @{
-                List<Clients_Employees> clientsEmployees = item.Clients_Employees.ToList();
-                IEnumerable<int> designationID = clientsEmployees.Select(m => m.DES_.DES_Id).Distinct();
-            }
 
             @foreach (var desID in designationID)
             {
                 Client_Requirements cr = Model.client_Requirements.Where(m => m.DES_Id.Equals(desID) && m.CLI_Id.Equals(item.CLI_Id)).First();
                 List<Allowances> allowances = Model.allowances;
+
                 <h3>@Model.listDesignations.Where(m => m.DES_Id.Equals(desID)).First().DES_Title</h3>
-
-               
-                <table class="table table-border">
-                    <thead>
-                        <tr>
-                            <td>Employee ID</td>
-                            <td>Employee Name</td>
-                            <td>Date Of Joining</td>
-                            <td>Pay Days</td>
-                            <td>Basic+DA</td>
-                            <td>HRA(%)/HRA(Fixed)</td>
-                            @foreach (var all in cr.Client_Requirement_Allowances)
+                <div class="table-responsive">
+                    <table class="table table-border">
+                        <thead style="font-weight:500">
+                            <tr>
+                                <td class="gainsboro">ID</td>
+                                <td class="gainsboro">Name</td>
+                                <td class="gainsboro">M/F</td>
+                                <td class="gainsboro">Date Of Joining</td>
+                                <td class="lightgray">Total Days</td>
+                                <td class="lightgray">Pay Days</td>
+                                <td class="lightgray">Basic</td>
+                                <td class="lightgray">DA</td>
+                                <td class="lightgray">HRA(%)/HRA(Fixed)</td>
+                                @foreach (var all in cr.Client_Requirement_Allowances)
+                                {
+                                    <td class="lightgray">@allowances.Where(m => m.ALL_Id.Equals(all.ALL_Id)).First().ALL_Title</td>
+                                }
+                                <td class="lightgray">OT Hours</td>
+                                <td class="lightgray">OT Amount</td>
+                                <td class="silver">Gross Total</td>
+                                <td class="silver">PF</td>
+                                <td class="silver">ESIC</td>
+                                <td class="gray">Final Amount</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var employee in clientsEmployees.Where(m => m.DES_Id.Equals(desID)))
                             {
-                                <td>@allowances.Where(m=>m.ALL_Id.Equals(all.ALL_Id)).First().ALL_Title</td>
-                            }
-                            <td>M/F</td>
-                            <td>OT Hours</td>
-                            <td>OT Amount</td>
-                            <td>Gross Total</td>
-                            <td>PF</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var employee in clientsEmployees.Where(m => m.DES_Id.Equals(desID)))
-                        {
-                        <tr>
-                            <td>@employee.EMP_Id.ToString("D5")</td>
-                            <td>@employee.EMP_.EMP_FirstName @employee.EMP_.EMP_MiddleName @employee.EMP_.EMP_SurName</td>
-                            <td>@employee.CLE_RegisteredOn.ToShortDateString()</td>
-                            @{
-                                decimal basic;
+
+                                decimal basic, da, BasicDa, HRA;
                                 int payDays;
-                                double OThrs;
-                                int DaysInMonth = DateTime.DaysInMonth(Model.WAG_Month.Year,Model.WAG_Month.Month);
                                 List<Attendance> attendances = employee.EMP_.Attendance.Where(m => m.CLI_Id.Equals(item.CLI_Id)).ToList();
-                            }
-                            <td>@(payDays = attendances.Where(m => m.ATT_IsPresent).Count())</td>
-                            <td>@(basic = Decimal.Add(cr.CRI_Basic.Value, Convert.ToDecimal(cr.CRI_DA)))</td>
-                            <td>@(cr.CRI_HRA_Fixed == null ? ((basic * Convert.ToDecimal(cr.CRI_HRA_Percentage)) / 100) : cr.CRI_HRA_Fixed)</td>
-                           
-                            @foreach (var all in cr.Client_Requirement_Allowances)
-                            {
-                                <td>@all.CRA_Amount</td>
+                                payDays = attendances.Where(m => m.ATT_IsPresent).Count();
+                                basic = (Decimal.Multiply(cr.CRI_Basic.Value, Convert.ToDecimal(payDays))) / DaysInMonth;
+                                da = (Decimal.Multiply(cr.CRI_Basic.Value, Convert.ToDecimal(cr.CRI_DA))) / 100;
+                                BasicDa = (Decimal.Add(cr.CRI_Basic.Value, Convert.ToDecimal(cr.CRI_DA)));
+                                HRA = (cr.CRI_HRA_Fixed == null ? ((BasicDa * Convert.ToDecimal(cr.CRI_HRA_Percentage)) / 100) : ((Decimal.Multiply(cr.CRI_HRA_Fixed.Value, payDays)) / DaysInMonth));
+                                <tr>
+                                    <td class="gainsboro">@employee.EMP_Id.ToString("D5")</td>
+                                    <td class="gainsboro">@employee.EMP_.EMP_FirstName @employee.EMP_.EMP_MiddleName @employee.EMP_.EMP_SurName</td>
+                                    <td class="gainsboro">@(employee.EMP_.EMP_Gender == true ? "M" : "F")</td>
+                                    <td class="gainsboro">@employee.CLE_RegisteredOn.ToShortDateString()</td>
+                                    <td class="lightgray">@DaysInMonth</td>
+                                    <td class="lightgray">@payDays</td>
+                                    <td class="lightgray">@Math.Round(basic, 2)</td>
+                                    <td class="lightgray">@Math.Round(da, 2)</td>
+                                    <td class="lightgray">@Math.Round(HRA, 2)</td>
 
+                                    @{
+                                        decimal OTAmt, allAllowancesAmt, PFAmt, EsicAmt;
+                                        double OThrs = attendances.Sum(m => m.ATT_ExtraHoursWorked);
+                                        OTAmt = (((Convert.ToDecimal(cr.CRI_Basic.Value) / Convert.ToDecimal(DaysInMonth)) / 8) * Convert.ToDecimal(OThrs));
+                                        allAllowancesAmt = 0M;
+                                        PFAmt = Decimal.Multiply(BasicDa, Convert.ToDecimal(cr.CRI_PF_Percentage)) / 100;
+                                        EsicAmt = Decimal.Multiply(BasicDa, Convert.ToDecimal(cr.CRI_ESIC_Percentage)) / 100;
+                                        foreach (var all in cr.Client_Requirement_Allowances)
+                                        {
+                                            decimal amount = all.CRA_Amount;
+                                            decimal fullAmt = Decimal.Multiply(amount, Convert.ToDecimal(payDays)) / DaysInMonth;
+                                            if (all.CRA_DayswiseOrFull)
+                                            {
+                                                <td class="lightgray">@Math.Round(amount, 2)</td>
+                                                allAllowancesAmt += amount;
+                                            }
+                                            else
+                                            {
+                                                <td class="lightgray">@Math.Round(fullAmt, 2)</td>
+                                                allAllowancesAmt += fullAmt;
+                                            }
+
+                                        }
+                                        decimal GrossTot = basic + da + HRA + allAllowancesAmt + OTAmt;
+                                        decimal finalAmt = GrossTot - (PFAmt + EsicAmt);
+                                    }
+                                    <td class="lightgray">@OThrs</td>
+                                    <td class="lightgray">@Math.Round(OTAmt, 2)</td>
+                                    <td class="silver">@Math.Round(GrossTot, 2)</td>
+                                    <td class="silver">@Math.Round(PFAmt, 2)</td>
+                                    <td class="silver">@Math.Round(EsicAmt, 2)</td>
+                                    <td class="gray">@Math.Round(finalAmt, 2)</td>
+
+                                </tr>
                             }
-                            <td>@(employee.EMP_.EMP_Gender == true ? "M" : "F")</td>
-                            <td>@(OThrs=attendances.Sum(m => m.ATT_ExtraHoursWorked))</td>
-                            <td>@(Math.Round(((Convert.ToDouble(basic) / DaysInMonth) / 8)*OThrs,2))</td>
-                            <td>@(payDays * basic)</td>
-                            <td>@(cr.CRI_PF_Percentage == null ? 0.0 : cr.CRI_PF_Percentage)</td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             }
-
-
         </div>
-            
-
-        }
+    }
 
 
+    <div class="container">        
+        <div class="alert alert-success" style="position: absolute;">
+            <h2>Web Register is ready to finalize</h2> <br />
+            @using (Html.BeginForm("SaveWageRegister", "WageProcess", FormMethod.Post))
+            {
+                @Html.HiddenFor(m => m.WAG_Id)                           
+                <input type="submit" value="Reset" onclick="return confirm('Are you sure you want to reset?');" formaction="ResetWageRegister" class="btn btn-danger" />
+                <input type="submit" value="Save" formaction="SaveWageRegister" class="btn btn-success" />     
+            }
+        </div>       
     </div>
-
     
+
+</div>
+
