@@ -232,24 +232,24 @@ namespace RMERP.Controllers
             
         }
         [HttpPost]
-        public ActionResult ResetWageRegister(int WAG_Id, string CurrentActiveCLI_Id)
+        public ActionResult ResetWageRegister(int WAG_Id, string item_CLI_Id)
         {
-            string res= wpm.ResetWageRegister(WAG_Id, CurrentActiveCLI_Id);
+            string res= wpm.ResetWageRegister(WAG_Id, item_CLI_Id);
             if (res != string.Empty)
             {
                 TempData["message"] = "Wage Register is not saved!";
             }
-            return RedirectToAction("WageRegister", WAG_Id);
+            return RedirectToAction("WageRegister", new { WAG_Id = WAG_Id });
 
         }
         [HttpPost]
-        public ActionResult SaveWageRegister(int WAG_Id, string CurrentActiveCLI_Id)
+        public ActionResult SaveWageRegister(int WAG_Id, string item_CLI_Id)
         {
             WageRegisterVM avm = new WageRegisterVM();
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             avm = GetWage_RegisterData(WAG_Id);
            
-            List<Clients> clients = avm.listClients.Where(m => m.CLI_Id.Equals(Convert.ToInt32(CurrentActiveCLI_Id))).ToList();
+            List<Clients> clients = avm.listClients.Where(m => m.CLI_Id.Equals(Convert.ToInt32(item_CLI_Id))).ToList();
            
             foreach(var item in clients)
             {
@@ -318,10 +318,14 @@ namespace RMERP.Controllers
                         
                     }
                 }
-                string res = wpm.SaveWageRegister(lst, WAG_Id, CurrentActiveCLI_Id, sessionUtils.GetLoggedAdminID());
+                string res = wpm.SaveWageRegister(lst, WAG_Id, item_CLI_Id, sessionUtils.GetLoggedAdminID());
                 if (res != string.Empty)
                 {
                     TempData["message"] = "Wage Register is not saved!";
+                }
+                else
+                {
+                    TempData["message"] = "Wage Register is successfully saved!";
                 }
             }           
             return RedirectToAction("WageRegister",new { WAG_Id = WAG_Id });

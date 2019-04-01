@@ -141,21 +141,12 @@ namespace RMERP.DAL.ManagerClasses
             string res = string.Empty;
             List<Wage_Register> lst = _context.Wage_Register.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(Convert.ToInt32(CurrentActiveCLI_Id))).ToList();
             _context.Wage_Register.RemoveRange(lst);
+            Wage_Process_Clients wg  = _context.Wage_Process_Clients.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(Convert.ToInt32(CurrentActiveCLI_Id))).FirstOrDefault();
+            _context.Wage_Process_Clients.RemoveRange(wg);
             _context.SaveChanges();
             return res;
         }
-        //public bool IsAddedWageProcess(int WAG_Id, string CurrentActiveCLI_Id)
-        //{
-        //    var IsAdded = _context.Wage_Process_Clients.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(Convert.ToInt32(CurrentActiveCLI_Id)));
-        //    if (IsAdded != null)
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }           
-        //}
+        
         public List<Wage_Process_Clients> GetWage_Process_Clients(int WAG_Id)
         {
             List<Wage_Process_Clients> lst = new List<Wage_Process_Clients>();
