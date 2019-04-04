@@ -32,6 +32,7 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Wage_Process> Wage_Process { get; set; }
         public virtual DbSet<Wage_Process_Clients> Wage_Process_Clients { get; set; }
         public virtual DbSet<Wage_Register> Wage_Register { get; set; }
+        public virtual DbSet<Wage_Register_Allowances> Wage_Register_Allowances { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -509,13 +510,31 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.WAR_Basic).HasColumnType("decimal(9, 2)");
 
+                entity.Property(e => e.WAR_Basic_Calculated).HasColumnType("decimal(9, 2)");
+
                 entity.Property(e => e.WAR_DA).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_DA_Calculated).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_ESIC).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_ESIC_Calculated).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_FinalTotal).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_GrossTotal).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_HRA).HasColumnType("decimal(9, 2)");
 
+                entity.Property(e => e.WAR_HRA_Calculated).HasColumnType("decimal(9, 2)");
+
                 entity.Property(e => e.WAR_LastModifiedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.WAR_OverTime_Calculated).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_PF).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_PF_Calculated).HasColumnType("decimal(9, 2)");
 
                 entity.HasOne(d => d.CLI_)
                     .WithMany(p => p.Wage_Register)
@@ -540,6 +559,27 @@ namespace RMERP.DAL.Models
                     .HasForeignKey(d => d.WAG_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Wage_Register_Wage_Process");
+            });
+
+            modelBuilder.Entity<Wage_Register_Allowances>(entity =>
+            {
+                entity.HasKey(e => e.WAA_Id);
+
+                entity.Property(e => e.WAA_Amount).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAA_Amount_Calculated).HasColumnType("decimal(9, 2)");
+
+                entity.HasOne(d => d.CRA_)
+                    .WithMany(p => p.Wage_Register_Allowances)
+                    .HasForeignKey(d => d.CRA_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Allowances_Client_Requirement_Allowances");
+
+                entity.HasOne(d => d.WAR_)
+                    .WithMany(p => p.Wage_Register_Allowances)
+                    .HasForeignKey(d => d.WAR_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Allowances_Wage_Register");
             });
         }
     }

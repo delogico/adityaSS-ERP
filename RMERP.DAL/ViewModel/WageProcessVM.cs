@@ -29,4 +29,11 @@ namespace RMERP.DAL.ViewModel
         public string CLI_Name { get; set; }
         public int totalEmployees { get; set; }
     }
+
+    public class WageProcessClientVM
+    {
+        public int WPC_Id { get; set; }
+        public bool WPC_WageRegisterSaved { get; set; }
+        public DateTime WPC_SavedOn { get; set; }
+    }
 }

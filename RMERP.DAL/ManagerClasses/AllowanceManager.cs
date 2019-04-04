@@ -27,6 +27,12 @@ namespace RMERP.DAL.ManagerClasses
             list = _contaxt.Client_Requirement_Allowances.Where(m=>m.CRI_Id.Equals(CRI_Id)).ToList();
             return list;
         }
+        public Allowances GetAllowanceById(int ALL_Id)
+        {
+            Allowances allowances = new Allowances();
+            allowances = _contaxt.Allowances.Find(ALL_Id);
+            return allowances;
+        }
         
     }
 }

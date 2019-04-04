@@ -1,0 +1,166 @@
+﻿@model List<RMERP.DAL.ViewModel.ClientWageRegisterVM>
+@using RMERP.DAL.Models
+@using RMERP.Helpers
+@using RMERP.DAL.ViewModel
+
+@{
+    ViewData["Title"] = "WageRegister";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+    Allowances allowances1 = new Allowances();
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#myTab a:first").tab('show');
+        });
+
+
+    </script>
+}
+
+<style>
+    .gainsboro {
+        background-color: #DCDCDC;
+    }
+
+    .lightgray {
+        background-color: #D3D3D3;
+    }
+
+    .silver {
+        background-color: #C0C0C0;
+    }
+
+    .darkgray {
+        background-color: #A9A9A9;
+    }
+
+    .gray {
+        background-color: #a29e9e;
+    }
+</style>
+
+@{
+    WageProcessVM wage = Model[0].wageProcessVM;
+    int DaysInMonth = DateTime.DaysInMonth(wage.WAG_Month.Year, wage.WAG_Month.Month); 
+    }
+
+<h2>@wage.WAG_Full_Month() <small>Total Days: @DaysInMonth</small></h2>
+
+<ul class="nav nav-tabs" id="myTab">
+    @foreach (var client in Model.Select(m => m.client).Distinct())
+    {
+        <li><a data-toggle="tab" href="#@client.CLI_Id">@client.CLI_Name</a></li>
+    }
+</ul>
+
+<div class="tab-content">
+    @foreach (var item in Model)
+    {
+    <div id="@item.client.CLI_Id" class="tabcontent tab-pane fade">
+        <div class="well well-sm"> <h3><u>@item.client.CLI_Name</u></h3></div>
+        <hr />
+        @{
+            var distinceDesignations = item.wageRegisterVMs.Select(q => new { q.designation.DES_Id, q.designation.DES_Title }).Distinct();
+        }
+        @foreach (var dd in distinceDesignations)
+        {            
+            var Desig_Employee = item.wageRegisterVMs.Where(r => r.designation.DES_Id.Equals(dd.DES_Id)).ToList();            
+            <h3>@dd.DES_Title</h3>
+            <div class="table-responsive">
+                <table class="table table-border">
+                    <thead style="font-weight:500">
+                        <tr>
+                            <td class="gainsboro">ID</td>
+                            <td class="gainsboro">Name</td>
+                            <td class="gainsboro">M/F</td>
+                            <td class="gainsboro">Date Of Joining</td>
+                            <td class="lightgray">Total Days</td>
+                            <td class="lightgray">Pay Days</td>
+                            <td class="lightgray">Basic</td>
+                            <td class="lightgray">Basic Calculated</td>
+                            <td class="lightgray">DA</td>
+                            <td class="lightgray">DA Calculated</td>
+                            <td class="lightgray">HRA(%)/HRA(Fixed)</td>
+                            <td class="lightgray">HRA Calculated</td>
+                            @foreach (var all in Desig_Employee[0].allowanceVMs)
+                            {
+                                <td class="lightgray">@all.allowanceVM.ALL_Alias</td>
+                            }
+                            <td class="lightgray">OT Hours</td>
+                            <td class="lightgray">OT Amount</td>
+                            <td class="silver">Gross Total</td>
+                            <td class="silver">PF</td>
+                            <td class="silver">PF_Calculated</td>
+                            <td class="silver">ESIC</td>
+                            <td class="silver">ESIC_Calculated</td>
+                            <td class="gray">Final Amount</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var employee in Desig_Employee)
+                        {
+                            <tr>
+                                <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
+                                <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
+                                <td class="gainsboro">@(employee.employeeVM.EMP_Gender == true ? "M" : "F")</td>
+                                <td class="gainsboro"></td>
+                                <td class="lightgray">@employee.WAR_TotalWorkingDays</td>
+                                <td class="lightgray">@employee.WAR_TotalPaybleDays</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_Basic, 2)</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_Basic_Calculated, 2)</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_DA, 2)</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_DA_Calculated, 2)</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_HRA, 2)</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_HRA_Calculated, 2)</td>
+                                @{
+                                    foreach (var all in employee.allowanceVMs)
+                                    {
+                                        <td class="lightgray">@Math.Round(all.WAA_Amount_Calculated,2)</td>
+                                    }
+                                }
+                                <td class="lightgray">@employee.WAR_ExtraWorkingHours</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_OverTime_Calculated, 2)</td>
+                                <td class="silver">@Math.Round(employee.WAR_GrossTotal, 2)</td>
+                                <td class="silver">@Math.Round(employee.WAR_PF, 2)</td>
+                                <td class="silver">@Math.Round(employee.WAR_PF_Calculated, 2)</td>
+                                <td class="silver">@Math.Round(employee.WAR_ESIC, 2)</td>
+                                <td class="silver">@Math.Round(employee.WAR_ESIC_Calculated, 2)</td>
+                                <td class="gray">@Math.Round(employee.WAR_FinalTotal, 2)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+            <div class="container">
+                @using (Html.BeginForm("SaveWageRegister", "WageRegister"))
+                {
+                    <input type="hidden" name="item_CLI_Id" value="@item.client.CLI_Id" />
+                    <input type="hidden" name="WAG_Id" value="@wage.WAG_Id" />
+
+                    if (item.wageProcessClientVM != null)
+                    {
+                        <div class="alert alert-info" style="position: absolute;">
+                            <h2>Web Register is finalized on  @DateHelper.getDateWithFormat(item.wageProcessClientVM.WPC_SavedOn)</h2> <br />
+                            <input type="submit" value="Reset" formaction="ResetWageRegister" class="btn btn-danger pull-right" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-success" style="position: absolute;">
+                            <h2>Web Register is ready to finalize</h2> <br />
+                            <input type="submit" value="Save" formaction="SaveWageRegister" class="btn btn-success pull-right" />
+                        </div>
+                    }
+                }
+            </div>
+    </div>
+
+    }
+
+</div>
+

@@ -423,6 +423,8 @@ namespace RMERP.DAL.ManagerClasses
             IEnumerable<Clients_Employees> list=_contaxt.Clients_Employees.Where(m=>m.CLI_Id.Equals(ClientId)).Include(m=>m.EMP_).Include(m=>m.DES_).ToList();
             return list;
         }
+
+
         public Clients_Employees ClientEmployeeById(int CleId)
         {
             Clients_Employees clientsEmployees = _contaxt.Clients_Employees.Find(CleId);
@@ -518,6 +520,11 @@ namespace RMERP.DAL.ManagerClasses
             List<Client_Requirements> list = new List<Client_Requirements>();
             list = _contaxt.Client_Requirements.Include(m => m.Client_Requirement_Allowances).Where(m => m.CRI_Active.Equals(true)).ToList();            
             return list;
+        }
+
+        public Client_Requirements getActiveClientRequirement(int CLI_Id, int DES_Id)
+        {
+            return _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.DES_Id == DES_Id && r.CRI_Active == true).Include(c=>c.Client_Requirement_Allowances).ThenInclude(a=>a.ALL_).FirstOrDefault();
         }
 
         public List<Clients> GetActiveClientForAttandanceReg(DateTime monthStartDate)

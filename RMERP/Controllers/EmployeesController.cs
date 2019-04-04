@@ -14,8 +14,7 @@ namespace RMERP.Controllers
 {
     public class EmployeesController : Controller
     {
-        private readonly RMERPContext _context;
-        EmployeesMapper employeesMapper=new EmployeesMapper();
+        private readonly RMERPContext _context;        
         private static int Emp_Id=0;
         public EmployeesController(RMERPContext context)
         {
@@ -54,7 +53,7 @@ namespace RMERP.Controllers
             {
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
                 Employees employee = new Employees();
-                employee = employeesMapper.MapMeModel(employeeVM);
+                employee = EmployeesMapper.MapMeModel(employeeVM);
                 employee.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
                 res = employeeManager.AddEditEmployee(employee);
             }            

@@ -22,7 +22,7 @@
                         <tr>
                             <td><b>@item.WAG_Month.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")) - @item.WAG_Month.Year.ToString()</b></td>
                             <td>@Html.ActionLink("Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = item.WAG_Id })</td>
-                            <td>@Html.ActionLink("Wage Register", "WageRegister", "WageProcess", new { WAG_Id = item.WAG_Id })</td>
+                            <td>@Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = item.WAG_Id })</td>
                         </tr>
                         }
 

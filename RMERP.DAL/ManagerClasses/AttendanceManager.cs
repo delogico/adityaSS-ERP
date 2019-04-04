@@ -23,6 +23,10 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Attendance.Where(a => a.WAG_Id == WAG_Id && a.CLI_Id == CLI_Id).Include(a=>a.EMP_).Include(a=>a.WAG_).Include(a=>a.DES_).ToList();
         }
+        public IEnumerable<Attendance> getAttendance_Wage_Client_Employee_Designation(int WAG_Id, int CLI_Id, int EMP_Id, int DES_Id)
+        {
+            return _context.Attendance.Where(a => a.WAG_Id == WAG_Id && a.CLI_Id == CLI_Id && a.EMP_Id == EMP_Id && a.DES_Id == DES_Id);
+        }
 
         public void save(Attendance attendace)
         {

@@ -114,38 +114,6 @@ namespace RMERP.DAL.ManagerClasses
             attendance = _context.Attendance.Find(attId);
             return attendance;
         }
-        public string SaveWageRegister(List<Wage_Register> wage_Registers, int WAG_Id, string CurrentActiveCLI_Id,int AdminID)
-        {
-            string res = string.Empty;
-            try
-            {
-                Wage_Process_Clients process_Client = new Wage_Process_Clients();
-                process_Client.WAG_Id = WAG_Id;
-                process_Client.CLI_Id =Convert.ToInt32(CurrentActiveCLI_Id);
-                process_Client.WPC_WageRegisterSaved = true;
-                process_Client.ADM_Id_SavedBy = AdminID;
-                process_Client.WPC_SavedOn = ProjectUtils.DateNow();
-
-                _context.Wage_Process_Clients.Add(process_Client);
-                _context.AddRange(wage_Registers);
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                res = ex.Message;
-            }            
-            return res;
-        }
-        public string ResetWageRegister(int WAG_Id,string CurrentActiveCLI_Id)
-        {
-            string res = string.Empty;
-            List<Wage_Register> lst = _context.Wage_Register.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(Convert.ToInt32(CurrentActiveCLI_Id))).ToList();
-            _context.Wage_Register.RemoveRange(lst);
-            Wage_Process_Clients wg  = _context.Wage_Process_Clients.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(Convert.ToInt32(CurrentActiveCLI_Id))).FirstOrDefault();
-            _context.Wage_Process_Clients.RemoveRange(wg);
-            _context.SaveChanges();
-            return res;
-        }
         
         public List<Wage_Process_Clients> GetWage_Process_Clients(int WAG_Id)
         {
@@ -154,6 +122,10 @@ namespace RMERP.DAL.ManagerClasses
             return lst;
         }
 
+        public Wage_Process_Clients GetWage_Process_Clients(int WAG_Id, int CLI_Id)
+        {
+            return _context.Wage_Process_Clients.Where(c => c.WAG_Id == WAG_Id && c.CLI_Id == CLI_Id).FirstOrDefault();
+        }
 
     }
 }

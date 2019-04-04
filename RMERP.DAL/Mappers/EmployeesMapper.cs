@@ -51,7 +51,7 @@ namespace RMERP.DAL.Mappers
             return lst;
         }
 
-        public Employees MapMeModel(EmployeeVM employee)
+        public static Employees MapMeModel(EmployeeVM employee)
         {
             Employees emp = new Employees();
             emp.EMP_Id = employee.EMP_Id;
