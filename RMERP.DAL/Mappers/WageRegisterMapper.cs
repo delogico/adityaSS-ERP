@@ -12,7 +12,11 @@ namespace RMERP.DAL.Mappers
         public static WageRegisterVM mapMe(Wage_Register wageRegister)
         {
             WageRegisterVM wageRegisterVM = new WageRegisterVM();
+            wageRegisterVM.WAR_Id = wageRegister.WAR_Id;
             wageRegisterVM.WAG_Id = wageRegister.WAG_Id;
+            wageRegisterVM.EMP_Id = wageRegister.EMP_Id;
+            wageRegisterVM.CLI_Id = wageRegister.CLI_Id;
+            wageRegisterVM.CRI_Id = wageRegister.CRI_Id;
             wageRegisterVM.WAR_Basic = wageRegister.WAR_Basic;
             wageRegisterVM.WAR_Basic_Calculated = wageRegister.WAR_Basic_Calculated;
             wageRegisterVM.WAR_DA = wageRegister.WAR_DA;
@@ -31,12 +35,15 @@ namespace RMERP.DAL.Mappers
             wageRegisterVM.WAR_TotalPaybleDays = wageRegister.WAR_TotalPaybleDays;
             wageRegisterVM.WAR_TotalWorkingDays = wageRegister.WAR_TotalWorkingDays;
 
-            if (wageRegister.CRI_.DES_ != null)
-                wageRegisterVM.designation = wageRegister.CRI_.DES_;
-            if (wageRegister.EMP_ != null)
-                wageRegisterVM.employeeVM = EmployeesMapper.MapMe(wageRegister.EMP_);
-            if (wageRegister.CRI_ != null)
+            if (wageRegister.CRI_!= null)
+            {
                 wageRegisterVM.clientRequirementVM = ClientRequirementMapper.mapMe(wageRegister.CRI_);
+                if (wageRegister.CRI_.DES_ != null)
+                    wageRegisterVM.designation = wageRegister.CRI_.DES_;
+            }                
+            if (wageRegister.EMP_ != null)
+                wageRegisterVM.employeeVM = EmployeesMapper.MapMe(wageRegister.EMP_);            
+               
             if (wageRegister.Wage_Register_Allowances != null)
                 wageRegisterVM.allowanceVMs = mapWageAllowances(wageRegister.Wage_Register_Allowances.ToList());
             return wageRegisterVM;
@@ -54,6 +61,9 @@ namespace RMERP.DAL.Mappers
             Wage_Register wageRegister = new Wage_Register();
             wageRegister.CLI_Id = wageRegisterVM.CLI_Id;
             wageRegister.WAG_Id = wageRegisterVM.WAG_Id;
+            wageRegister.EMP_Id = wageRegisterVM.EMP_Id;
+            wageRegister.CRI_Id = wageRegisterVM.CRI_Id;
+            wageRegister.WAR_Id = wageRegisterVM.WAR_Id;
             wageRegister.WAR_Basic = wageRegisterVM.WAR_Basic;
             wageRegister.WAR_Basic_Calculated = wageRegisterVM.WAR_Basic_Calculated;
             wageRegister.WAR_DA = wageRegisterVM.WAR_DA;

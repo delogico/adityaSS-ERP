@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using RMERP.DAL.Models;
 
@@ -28,28 +29,41 @@ namespace RMERP.DAL.ViewModel
         public EmployeeVM employeeVM { get; set; }
         public int CRI_Id { get; set; }
         public ClientRequirementVM clientRequirementVM { get; set; }
-
+        [Display(Name ="Total Payble Days")]
         public double WAR_TotalPaybleDays { get; set; }
+        [Display(Name = "Total Working Days")]
         public double WAR_TotalWorkingDays { get; set; }
+        [Display(Name = "Total Extra Working Hours")]
         public double WAR_ExtraWorkingHours { get; set; }
+        [Display(Name = "Basic")]
         public decimal WAR_Basic { get; set; }
+        [Display(Name = "Calculated Basic")]
         public decimal WAR_Basic_Calculated { get; set; }
+        [Display(Name = "DA")]
         public decimal WAR_DA { get; set; }
+        [Display(Name = "Calculated DA")]
         public decimal WAR_DA_Calculated { get; set; }
+        [Display(Name = "HRA")]
         public decimal WAR_HRA { get; set; }
+        [Display(Name = "Calculated HRA")]
         public decimal WAR_HRA_Calculated { get; set; }
+        [Display(Name = "Calculated Extra Working Amount")]
         public decimal WAR_OverTime_Calculated { get; set; }
+        [Display(Name = "Gross Total")]
         public decimal WAR_GrossTotal { get; set; }
-
+        [Display(Name = "PF")]
         public decimal WAR_PF { get; set; }
+        [Display(Name = "Calculated PF")]
         public decimal WAR_PF_Calculated { get; set; }
+        [Display(Name = "ESIC")]
         public decimal WAR_ESIC { get; set; }
+        [Display(Name = "Calculated ESIC")]
         public decimal WAR_ESIC_Calculated { get; set; }
+        [Display(Name = "Final Total")]
         public decimal WAR_FinalTotal { get; set; }
         public DateTime WAR_LastModifiedOn { get; set; }
         public int ADM_LastModifiedBy { get; set; }
-        public Designations designation { get; set; }
-        
+        public Designations designation { get; set; }        
 
         public List<WageRegisterAllowanceVM> allowanceVMs { get; set; }
     }
@@ -62,5 +76,11 @@ namespace RMERP.DAL.ViewModel
         public WageProcessVM wageProcessVM { get; set; }
         public WageProcessClientVM wageProcessClientVM { get; set; }
 
+    }
+
+    public class EditWageRegisterVM
+    {
+        public WageRegisterVM wageRegisterVM { get; set; }
+        public List<Wage_Register_Allowances> wage_Register_Allowances { get; set; }
     }
 }

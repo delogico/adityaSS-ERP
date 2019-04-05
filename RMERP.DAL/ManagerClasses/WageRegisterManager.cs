@@ -101,8 +101,7 @@ namespace RMERP.DAL.ManagerClasses
                     WAR_Basic_Calculated = (Decimal.Multiply(CRI_Basic, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays;
                     WAR_OverTime_Calculated = (((CRI_Basic / Convert.ToDecimal(totalWorkingDays)) / 8) * Convert.ToDecimal(WAR_ExtraWorkingHours));
                     
-                }
-                
+                }                
                 WAR_PF = Convert.ToDecimal(cr.CRI_PF_Percentage);
                 WAR_ESIC = Convert.ToDecimal(cr.CRI_ESIC_Percentage);
                 WAR_PF_Calculated = Decimal.Multiply(BasicDa, WAR_PF) / 100;
@@ -116,7 +115,7 @@ namespace RMERP.DAL.ManagerClasses
                 wageRegisterVM.WAR_ESIC = WAR_ESIC;
                 wageRegisterVM.WAR_ESIC_Calculated = WAR_ESIC_Calculated;
 
-                //************************** ALLOWANCES CALCULATION *****************************/
+                //************************** ALLOWANCES CALCULATION *****************************//
                 List<WageRegisterAllowanceVM> allowances = new List<WageRegisterAllowanceVM>();
                 decimal AllowancesTotal = 0;
                 foreach (var allowance in cr.Client_Requirement_Allowances)
@@ -212,6 +211,33 @@ namespace RMERP.DAL.ManagerClasses
             
             return res;
         }
-
+        public Wage_Register GetWage_RegisterByID(int WAR_Id)
+        {
+            Wage_Register wage = new Wage_Register();
+            wage = _context.Wage_Register.Include(m => m.CRI_).ThenInclude(m=>m.DES_).SingleOrDefault(m => m.WAR_Id.Equals(WAR_Id));            
+            return wage;
+        }
+        public List<Wage_Register_Allowances> GetWage_Register_Allowances(int WAR_Id)
+        {
+            List<Wage_Register_Allowances> wage_Register_Allowances = new List<Wage_Register_Allowances>();
+            wage_Register_Allowances = _context.Wage_Register_Allowances.Include(m=>m.CRA_).ThenInclude(m=>m.ALL_).Where(m => m.WAR_Id.Equals(WAR_Id)).ToList();
+            return wage_Register_Allowances;
+        }
+        public string UpdateWageRegister(Wage_Register wage_Register)
+        {
+            string res = string.Empty;
+            try
+            {
+                wage_Register.WAR_LastModifiedOn = ProjectUtils.DateNow();
+                //;_context.Wage_Register.Update(wage_Register);
+                _context.Entry(wage_Register).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                res = ex.InnerException.Message;
+            }
+            return res;
+        }
     }
 }

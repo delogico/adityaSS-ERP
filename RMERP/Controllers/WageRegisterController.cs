@@ -59,5 +59,27 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("WageRegister", new { WAG_Id = WAG_Id });
         }
+
+        public ActionResult EditWageRegister(int WAR_Id=-1)
+        {
+            EditWageRegisterVM editWageRegisterVM = new EditWageRegisterVM();
+            WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
+            editWageRegisterVM .wageRegisterVM= WageRegisterMapper.mapMe(wageRegisterManager.GetWage_RegisterByID(WAR_Id));
+            editWageRegisterVM.wage_Register_Allowances = wageRegisterManager.GetWage_Register_Allowances(WAR_Id);
+            return View(editWageRegisterVM);
+        }
+        [HttpPost]
+        public ActionResult EditWageRegister(WageRegisterVM wageRegisterVM)
+        {            
+            WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            wageRegisterVM.ADM_LastModifiedBy = sessionUtils.GetLoggedAdminID();
+            string res= wageRegisterManager.UpdateWageRegister(WageRegisterMapper.mapMe(wageRegisterVM));
+            if (res != string.Empty)
+            {
+                TempData["message"] = "Wage Register is not updated!";
+            }
+            return RedirectToAction("WageRegister",new { WAG_Id = wageRegisterVM.WAG_Id });
+        }
     }
 }
