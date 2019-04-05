@@ -1,4 +1,6 @@
 ﻿@model RMERP.DAL.ViewModel.WageProcessClientAttendancePageVM
+@using RMERP.DAL.Models;
+@using RMERP.Helpers;
 @{
     ViewData["Title"] = "Attendance status";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
@@ -27,31 +29,42 @@
                         <tbody>
                             @foreach (var item in Model.lstClient)
                             {
-                            <tr>
-                                <td><b>@item.CLI_Name</b></td>
-                                <td>@Html.Raw((item.totalEmployees > 0 ? "<span class='label label-success-border'>Imported</span>" : "<span class='label label-danger-border'>Not Imported yet</span>"))</td>
-                                <td>@(item.totalEmployees > 0 ? item.totalEmployees.ToString() : "-")</td>
-                                <td>
-                                    @{
-                                        if (item.totalEmployees > 0)
-                                        {
-                                            <a href='@Url.Action("ViewAttendance", "Attendance", new { WAG_Id = Model.wageProcess.WAG_Id, CLI_Id = item.CLI_Id })' title="View"><i class="fa fa-eye m-r-5"></i> View</a>
+                                <tr>
+                                    <td><b>@item.CLI_Name</b></td>
+                                    <td>@Html.Raw((item.totalEmployees > 0 ? "<span class='label label-success-border'>Imported</span>" : "<span class='label label-danger-border'>Not Imported yet</span>"))</td>
+                                    <td>@(item.totalEmployees > 0 ? item.totalEmployees.ToString() : "-")</td>
+                                    <td>
+                                        @{
+                                            if (item.totalEmployees > 0)
+                                            {
+                                                <a href='@Url.Action("ViewAttendance", "Attendance", new { WAG_Id = Model.wageProcess.WAG_Id, CLI_Id = item.CLI_Id })' title="View"><i class="fa fa-eye m-r-5"></i> View</a>
+                                            }
+                                            else
+                                            {
+                                                <a href='@Url.Action("UploadExcel", "Attendance", new { WAG_Id = Model.wageProcess.WAG_Id, CLI_Id = item.CLI_Id })' title="Upload"><i class="fa fa-upload m-r-5"></i> Upload</a>
+                                            }
                                         }
-                                        else
-                                        {
-                                            <a href='@Url.Action("UploadExcel", "Attendance", new { WAG_Id = Model.wageProcess.WAG_Id, CLI_Id = item.CLI_Id })' title="Upload"><i class="fa fa-upload m-r-5"></i> Upload</a>
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (item.totalEmployees > 0)
+                                            {
+                                                Wage_Process_Clients wage = Model.wageProcess.wage_Process_Clients.Where(m => m.CLI_Id.Equals(item.CLI_Id) && m.WAG_Id.Equals(Model.wageProcess.WAG_Id)).FirstOrDefault();
+                                                if (wage != null)
+                                                {
+                                                    <span class='label label-warning-border'>Wage is already registed on  @DateHelper.getDateWithFormat(wage.WPC_SavedOn)</span>
+                                                }
+                                                else
+                                                {
+                                                    <a onclick="return window.confirm('Are you sure, All attendance of this client will be deleted for this Wage Month?')"
+                                                       href='@Url.Action("DeleteWageClientAttendanceList", "Attendance", new { WAG_Id = Model.wageProcess.WAG_Id, CLI_Id = item.CLI_Id })' title="Reset">
+                                                        <i class="fa fa-remove m-r-5"></i> Reset Attendance
+                                                    </a>
+                                                }
+                                            }
                                         }
-                                    }
-                                </td>
-                                <td>
-                                    @{
-                                        if (item.totalEmployees > 0)
-                                        {
-                                            <a onclick="return window.confirm('Are you sure, All attendance of this client will be deleted for this Wage Month?')" href='@Url.Action("DeleteWageClientAttendanceList", "Attendance", new { WAG_Id = Model.wageProcess.WAG_Id, CLI_Id = item.CLI_Id })' title="Reset"><i class="fa fa-remove m-r-5"></i> Reset Attendance</a>
-                                        }
-                                     }
-                                </td>
-</tr>
+                                    </td>
+                                </tr>
                             }
 
                         </tbody>

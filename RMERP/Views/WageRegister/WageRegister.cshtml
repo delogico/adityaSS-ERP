@@ -14,8 +14,6 @@
         $(document).ready(function () {
             $("#myTab a:first").tab('show');
         });
-
-
     </script>
 }
 
@@ -23,38 +21,37 @@
     .gainsboro {
         background-color: #DCDCDC;
     }
-
     .lightgray {
         background-color: #D3D3D3;
     }
-
     .silver {
         background-color: #C0C0C0;
     }
-
     .darkgray {
         background-color: #A9A9A9;
     }
-
     .gray {
         background-color: #a29e9e;
     }
-
     .dimgray {
         background-color: #7b7878;
     }
-
     a {
-        color: #f5f5f5;
+       color: #f5f5f5;
     }
-
-        a:hover,
-        a:active,
-        a:focus {
-            text-decoration: none;
-            color: #C0C0C0;
-            outline: none;
-        }
+    a:hover,
+    a:active,
+    a:focus {
+        text-decoration: none;
+        color: #C0C0C0;
+        outline: none;
+    }
+    .fa-check {
+        color: green;
+    }
+    .fa-times {
+        color: red;
+    }
 </style>
 
 @{
@@ -65,9 +62,14 @@
 <h2>@wage.WAG_Full_Month() <small>Total Days: @DaysInMonth</small></h2>
 
 <ul class="nav nav-tabs" id="myTab">
-    @foreach (var client in Model.Select(m => m.client).Distinct())
+    @foreach (var client in Model.Select(m => new { m.client ,m.wageProcessClientVM}).Distinct())
     {
-        <li><a data-toggle="tab" href="#@client.CLI_Id">@client.CLI_Name</a></li>
+        <li>
+            <a data-toggle="tab" href="#@client.client.CLI_Id">
+            <i class="fa fa-@(client.wageProcessClientVM != null ? "check" :"times" )"></i>       
+            @client.client.CLI_Name
+            </a>
+        </li>
     }
 </ul>
 
@@ -116,7 +118,6 @@
                                 {
                                     <td class="dimgray">Edit</td>
                                 }
-
                             </tr>
                         </thead>
                         <tbody>
@@ -170,16 +171,16 @@
 
                     if (item.wageProcessClientVM != null)
                     {
-                        <div class="alert alert-info" style="position: absolute;">
+                        <div class="alert alert-success" style="position: absolute;">
                             <h2>Web Register is finalized on  @DateHelper.getDateWithFormat(item.wageProcessClientVM.WPC_SavedOn)</h2> <br />
-                            <input type="submit" value="Reset" formaction="ResetWageRegister" class="btn btn-danger pull-right" />
+                            <input type="submit" value="Reset" formaction="ResetWageRegister" class="btn btn-success pull-right" />
                         </div>
                     }
                     else
                     {
-                        <div class="alert alert-success" style="position: absolute;">
+                        <div class="alert alert-danger" style="position: absolute;">
                             <h2>Web Register is ready to finalize</h2> <br />
-                            <input type="submit" value="Save" formaction="SaveWageRegister" class="btn btn-success pull-right" />
+                            <input type="submit" value="Save" formaction="SaveWageRegister" class="btn btn-danger pull-right" />
                         </div>
                     }
                 }

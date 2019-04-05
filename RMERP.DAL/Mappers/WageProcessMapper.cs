@@ -21,6 +21,8 @@ namespace RMERP.DAL.Mappers
             wageProcessVM.WAG_Month = wageProcess.WAG_Month;
             if (wageProcess.Attendance != null)           
                 wageProcessVM.Attendance = wageProcess.Attendance.ToList();
+            if (wageProcess.Wage_Process_Clients != null)
+                wageProcessVM.wage_Process_Clients = wageProcess.Wage_Process_Clients.ToList();
             return wageProcessVM;
         }
 
