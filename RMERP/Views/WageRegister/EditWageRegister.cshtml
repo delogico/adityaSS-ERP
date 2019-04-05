@@ -10,6 +10,7 @@
     function calculateTotal() {       
         var totalPaybleDays = $("#wageRegisterVM_WAR_TotalPaybleDays").val();
         var totalWorkingDays = $("#wageRegisterVM_WAR_TotalWorkingDays").val();
+        
         var WAR_ExtraWorkingHours = $("#wageRegisterVM_WAR_ExtraWorkingHours").val();
         var CRI_Basic = $("#wageRegisterVM_WAR_Basic").val();
         var CRI_DA = $("#wageRegisterVM_WAR_DA").val();
@@ -49,13 +50,15 @@
             {
                 WAA_Amount_Calculated = fullAmt.toFixed(2);
                 AllowancesTotal = parseInt(AllowancesTotal) + parseInt(fullAmt);
-                $("#wage_Register_Allowances_" + i + "__WAA_Amount_Calculated").val(WAA_Amount_Calculated);
+                var d = parseInt(WAA_Amount_Calculated);
+                $("#wage_Register_Allowances_" + i + "__WAA_Amount_Calculated").val(d.toFixed(2));
             }
             else if (CRA_Dayswise == false && CRA_Full == true)
             {
                 WAA_Amount_Calculated = WAA_Amount;
                 AllowancesTotal = parseInt(AllowancesTotal) + parseInt(WAA_Amount);
-                $("#wage_Register_Allowances_" + i + "__WAA_Amount_Calculated").val(WAA_Amount_Calculated);
+                var d = parseInt(WAA_Amount_Calculated);
+                $("#wage_Register_Allowances_" + i + "__WAA_Amount_Calculated").val(d.toFixed(2));
             }            
             
         }
