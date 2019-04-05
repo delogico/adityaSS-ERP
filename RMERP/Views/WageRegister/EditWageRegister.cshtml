@@ -34,7 +34,7 @@
         var AllowancesTotal = 0;
 
         for (var i = 0; i < @Model.wage_Register_Allowances.Count(); i++) {
-            
+           
             var CRA_Dayswise = document.getElementById("CRA_Dayswise["+i+"]").checked;
             var CRA_Full = document.getElementById("CRA_Full[" + i + "]").checked;
 
@@ -47,14 +47,14 @@
             
             if (CRA_Dayswise == true && CRA_Full == false)
             {
-                WAA_Amount_Calculated = fullAmt;
+                WAA_Amount_Calculated = fullAmt.toFixed(2);
                 AllowancesTotal = parseInt(AllowancesTotal) + parseInt(fullAmt);
                 $("#wage_Register_Allowances_" + i + "__WAA_Amount_Calculated").val(WAA_Amount_Calculated);
             }
             else if (CRA_Dayswise == false && CRA_Full == true)
             {
                 WAA_Amount_Calculated = WAA_Amount;
-                AllowancesTotal = parseInt(AllowancesTotal) +parseInt(WAA_Amount);
+                AllowancesTotal = parseInt(AllowancesTotal) + parseInt(WAA_Amount);
                 $("#wage_Register_Allowances_" + i + "__WAA_Amount_Calculated").val(WAA_Amount_Calculated);
             }            
             
@@ -209,8 +209,8 @@
                             {
                                 <div class="col-md-12">
                                     @Html.Label(Model.wage_Register_Allowances[i].CRA_.ALL_.ALL_Title)
-                                    @Html.RadioButtonFor(m => Model.wage_Register_Allowances[i].CRA_.CRA_DayswiseOrFull, true, new { @id = "CRA_Dayswise[" + @i + "]", @checked = "checked", @style = "margin: 0px 0 0" }) Dayswise Calculation
-                                    @Html.RadioButtonFor(m => Model.wage_Register_Allowances[i].CRA_.CRA_DayswiseOrFull, false, new { @id = "CRA_Full[" + @i + "]", @style = "margin: 0px 0 0" })  Full Amount
+                                    @Html.RadioButtonFor(m => Model.wage_Register_Allowances[i].CRA_.CRA_DayswiseOrFull, true, new { @id = "CRA_Dayswise[" + @i + "]", @checked = "checked", @style = "margin: 0px 0 0" ,onclick = "calculateTotal()" }) Dayswise Calculation
+                                    @Html.RadioButtonFor(m => Model.wage_Register_Allowances[i].CRA_.CRA_DayswiseOrFull, false, new { @id = "CRA_Full[" + @i + "]", @style = "margin: 0px 0 0", onclick = "calculateTotal()" })  Full Amount
                                     <div class="form-group">
                                         <div class="col-md-6">
                                             @Html.EditorFor(m => Model.wage_Register_Allowances[i].WAA_Amount, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
