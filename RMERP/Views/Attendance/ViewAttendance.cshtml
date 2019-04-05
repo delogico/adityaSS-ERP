@@ -49,8 +49,6 @@
                         @{
                             List<Int32> EMP_Ids = Model.Select(m => m.employee.EMP_Id).Distinct().ToList();
                         }
-
-
                         @foreach (var EMP_Id in EMP_Ids)
                         {
                             EmployeeVM employee = Model.Where(a => a.EMP_Id == EMP_Id).Select(m => m.employee).First();
@@ -69,7 +67,6 @@
 
                                         if (att != null)
                                         {
-
                                             <td>
                                                 <div class="row" onmouseover="mousehover(@att.ATT_Id);" onmouseout="mouseout();">
                                                     @{

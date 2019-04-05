@@ -18,7 +18,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public IEnumerable<Wage_Process> getWageProcessList(int AdminId)
         {
-            IEnumerable<Wage_Process> list = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId)).Include(m => m.Attendance).OrderByDescending(m=>m.WAG_RegisteredOn).ToList();
+            IEnumerable<Wage_Process> list = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId)).Include(m => m.Attendance).Include(m=>m.Wage_Process_Clients).OrderByDescending(m=>m.WAG_RegisteredOn).ToList();
             return list;
         }
         public Wage_Process getWageProcessById(int WAG_Id)
@@ -120,7 +120,7 @@ namespace RMERP.DAL.ManagerClasses
             List<Wage_Process_Clients> lst = new List<Wage_Process_Clients>();
             lst = _context.Wage_Process_Clients.Where(m=>m.WAG_Id.Equals(WAG_Id)).ToList();
             return lst;
-        }
+        }        
 
         public Wage_Process_Clients GetWage_Process_Clients(int WAG_Id, int CLI_Id)
         {

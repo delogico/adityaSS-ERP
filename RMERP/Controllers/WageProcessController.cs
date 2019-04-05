@@ -27,24 +27,27 @@ namespace RMERP.Controllers
     public class WageProcessController : Controller
     {
         private readonly RMERPContext _context;
-        public IConfiguration Configuration;
+        public IConfiguration _configuration;
         WageProcessManager wpm;
         private IHostingEnvironment _hostingEnvironment;
        
         public WageProcessController(RMERPContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
-            Configuration = configuration;
+            _configuration = configuration;
             wpm = new WageProcessManager(context);
             _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index()
         {
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);            
             DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID());
+            WageProcessVM wageProcessVM = new WageProcessVM();
+            WageProcessManager wageProcessManager = new WageProcessManager(_context);
             ViewBag.month = nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
-            return View(wpm.getWageProcessList(sessionUtils.GetLoggedAdminID()));
+            IEnumerable<Wage_Process> wage_Processes = wpm.getWageProcessList(sessionUtils.GetLoggedAdminID());            
+            return View(WageProcessMapper.mapMeVMs(wage_Processes, _context, _configuration));
         }
         public IActionResult CreateNextMonthWage()
         {

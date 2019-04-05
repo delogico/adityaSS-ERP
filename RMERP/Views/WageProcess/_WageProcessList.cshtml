@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RMERP.DAL.Models.Wage_Process>
+﻿@model IEnumerable<RMERP.DAL.ViewModel.WageProcessVM>
 @using System.Globalization;
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,8 +21,20 @@
                         {
                         <tr>
                             <td><b>@item.WAG_Month.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")) - @item.WAG_Month.Year.ToString()</b></td>
-                            <td>@Html.ActionLink("Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = item.WAG_Id })</td>
-                            <td>@Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = item.WAG_Id })</td>
+                            <td>
+                                @Html.ActionLink("Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = item.WAG_Id })
+                                [ <a data-toggle="tooltip" data-placement="top" title="Total Clients">@item.ActiveClients,</a>
+                                  <a data-toggle="tooltip" data-placement="bottom" title="Imported Clients">@item.ImportedClients(),</a>
+                                  <a data-toggle="tooltip" data-placement="right" title="Not Imported Clients">@item.NotImportedClients()</a>
+                                ]
+                            </td>
+                            <td>
+                                @Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = item.WAG_Id })
+                                [     <a data-toggle="tooltip" data-placement="top" title="Total WageRegisters">@item.ActiveClients,</a>
+                                      <a data-toggle="tooltip" data-placement="bottom" title="Saved WageRegisters">@item.WageRegisterSaved(),</a>
+                                      <a data-toggle="tooltip" data-placement="right" title="Not Saved WageRegisters">@item.WageRegisterNotSaved()</a>
+                                ]
+                            </td>
                         </tr>
                         }
 

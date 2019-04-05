@@ -4,17 +4,51 @@ using RMERP.DAL.Models;
 using RMERP.DAL.ViewModel;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using RMERP.DAL.ManagerClasses;
+using Microsoft.Extensions.Configuration;
 
 namespace RMERP.DAL.Mappers
 {
     public class WageProcessMapper
     {
+        private readonly RMERPContext _context = new RMERPContext();
+        public IConfiguration _configuration;
+
         public static WageProcessVM mapMe(Wage_Process wageProcess)
-        {
+        {            
             WageProcessVM wageProcessVM = new WageProcessVM();
             wageProcessVM.WAG_Id = wageProcess.WAG_Id;
             wageProcessVM.WAG_Month = wageProcess.WAG_Month;
+            if (wageProcess.Attendance != null)           
+                wageProcessVM.Attendance = wageProcess.Attendance.ToList();
             return wageProcessVM;
+        }
+
+        public static WageProcessVM mapMeWageProcessVM(Wage_Process wageProcess, RMERPContext _context, IConfiguration _configuration)
+        {
+            WageProcessVM wageProcessVM = new WageProcessVM();
+            ClientsManager clientsManager = new ClientsManager(_context, _configuration);
+            WageProcessManager wageProcessManager = new WageProcessManager(_context);
+            wageProcessVM.WAG_Id = wageProcess.WAG_Id;
+            wageProcessVM.WAG_Month = wageProcess.WAG_Month;
+            List<Clients> clients = clientsManager.GetActiveClientofaMonth(wageProcess.WAG_Month);
+            if (clients!=null)
+                wageProcessVM.ActiveClients = clients.Count();
+            if (wageProcess.Attendance != null)
+                wageProcessVM.Attendance = wageProcess.Attendance.ToList();            
+            if (wageProcess.Wage_Process_Clients != null)
+                wageProcessVM.wage_Process_Clients = wageProcess.Wage_Process_Clients.ToList();
+            return wageProcessVM;
+        }
+
+        public static IEnumerable<WageProcessVM> mapMeVMs(IEnumerable<Wage_Process> wage_Processes, RMERPContext _context, IConfiguration _configuration)
+        {
+            List<WageProcessVM> wageProcessVMs = new List<WageProcessVM>();
+            foreach(Wage_Process item in wage_Processes)
+            {
+                wageProcessVMs.Add(mapMeWageProcessVM(item, _context, _configuration));
+            }
+            return wageProcessVMs;
         }
 
         public static List<WageProcessClientAttendanceVM> mapClientToAttendanceWages(List<Clients> clients, Wage_Process wage, List<Attendance> lstAttendance)
