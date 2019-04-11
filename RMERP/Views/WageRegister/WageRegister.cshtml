@@ -59,7 +59,7 @@
     int DaysInMonth = DateTime.DaysInMonth(wage.WAG_Month.Year, wage.WAG_Month.Month);
 }
 
-<h2>@wage.WAG_Full_Month() <small>Total Days: @DaysInMonth</small></h2>
+<h2>@wage.WAG_Full_Month() @*<small>Total Days: @DaysInMonth</small>*@</h2>
 
 <ul class="nav nav-tabs" id="myTab">
     @foreach (var client in Model.Select(m => new { m.client ,m.wageProcessClientVM}).Distinct())
@@ -155,7 +155,6 @@
                                     {
                                         <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id })</td>                                  
                                     }
-
                                 </tr>
                             }
                         </tbody>

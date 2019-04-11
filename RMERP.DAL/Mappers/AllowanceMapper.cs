@@ -14,6 +14,7 @@ namespace RMERP.DAL.Mappers
             allowancesVM.ALL_Id = allowance.ALL_Id;
             allowancesVM.ALL_Title = allowance.ALL_Title;
             allowancesVM.ALL_Alias = allowance.ALL_Alias;
+            allowancesVM.ALL_Shortform = allowance.ALL_Shortform;
             return allowancesVM;
         }
         public static Allowances mapMeModel(AllowanceVM allowanceVM)//
@@ -22,6 +23,7 @@ namespace RMERP.DAL.Mappers
             allowances.ALL_Id = allowanceVM.ALL_Id;
             allowances.ALL_Title = allowanceVM.ALL_Title;
             allowances.ALL_Alias = allowanceVM.ALL_Alias;
+            allowances.ALL_Shortform = allowanceVM.ALL_Shortform;
             return allowances;
         }
 

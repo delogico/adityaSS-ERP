@@ -13,6 +13,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using RMERP.Helpers;
+using SmartBreadcrumbs.Attributes;
 
 namespace RMERP.Controllers
 {
@@ -25,6 +26,7 @@ namespace RMERP.Controllers
         {
             _context = context;
         }
+        //[DefaultBreadcrumb("DashBoard")]
         public IActionResult DashBoard()
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
@@ -64,6 +66,7 @@ namespace RMERP.Controllers
             var login = HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "AdminUsers");
         }
+        //[Breadcrumb("Admin Users")]
         public IActionResult Index()
         {
             AdminUsersManager adminUsersManager = new AdminUsersManager(_context);
@@ -71,6 +74,7 @@ namespace RMERP.Controllers
             return View(AdminUsersList);
         }
         [HttpGet]
+        //[Breadcrumb("Add-Edit AdminUsers", FromAction= "Index")]
         public ActionResult AddEditAdminUsers(int AdminId)
         {
             AdminUsersManager adminUsersManager = new AdminUsersManager(_context);
@@ -88,8 +92,8 @@ namespace RMERP.Controllers
                 adminUsersModel.ADM_EmailId = adminUsers.ADM_EmailId;
                 adminUsersModel.ADM_Password = adminUsers.ADM_Password;
                 adminUsersModel.ADM_Mobile = adminUsers.ADM_Mobile;
-                adminUsersModel.FRM_Id = adminUsers.FRM_Id;
-            }           
+                adminUsersModel.FRM_Id = adminUsers.FRM_Id;                           
+            }         
             return View(adminUsersModel);
         }
         [HttpPost]

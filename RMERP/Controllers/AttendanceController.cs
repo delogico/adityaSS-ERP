@@ -19,6 +19,7 @@ using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using RMERP.Helpers;
+using SmartBreadcrumbs.Attributes;
 
 namespace RMERP.Controllers
 {
@@ -35,12 +36,12 @@ namespace RMERP.Controllers
             _configuration = configuration;
             _hostingEnvironment = hostingEnvironment;
         }
-
+        //[Breadcrumb("Index")]
         public IActionResult Index()
         {
             return View();
         }
-
+        //[Breadcrumb("Wage Attendance", FromAction = "Index")]
         public ActionResult WageAttendanceList(int WAG_Id)
         {
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);
@@ -519,6 +520,7 @@ namespace RMERP.Controllers
 
         }
         [HttpGet]
+        //[Breadcrumb("View Attendance", FromAction = "WageAttendanceList")]
         public ActionResult ViewAttendance(int WAG_Id, int CLI_Id)
         {
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);

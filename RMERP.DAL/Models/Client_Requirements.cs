@@ -16,10 +16,12 @@ namespace RMERP.DAL.Models
         public int DES_Id { get; set; }
         public int CRI_Total { get; set; }
         public decimal? CRI_Basic { get; set; }
-        public double? CRI_DA { get; set; }
+        public decimal? CRI_DA { get; set; }
         public decimal? CRI_HRA_Fixed { get; set; }
         public double? CRI_HRA_Percentage { get; set; }
+        public string CRI_PF_Formula { get; set; }
         public double? CRI_PF_Percentage { get; set; }
+        public string CRI_ESIC_Formula { get; set; }
         public double? CRI_ESIC_Percentage { get; set; }
         public string CRI_ESIC_Area { get; set; }
         public decimal? CRI_OT_Rate { get; set; }

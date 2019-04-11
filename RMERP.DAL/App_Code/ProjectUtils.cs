@@ -38,7 +38,8 @@ namespace RMERP.DAL.App_Code
             //O=0,
             I=1,
             II=2,
-            III=3
+            III=3,
+            G=4
         }
         public enum WageRegister_Saved
         {

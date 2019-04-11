@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using SmartBreadcrumbs.Extensions;
 
 namespace RMERP
 {
@@ -56,11 +57,7 @@ namespace RMERP
                 options.Conventions.AuthorizeFolder("/");
                 options.Conventions.AllowAnonymousToPage("/AdminUsers/Login");
             });
-            // Register SQL database configuration context as services.    
-            // services.AddDbContext<RMERP.DAL.Models.RMERPContext>();
-            // services.AddDbContext<RMERP.DAL.Models.RMERPContext>(options =>
-            //options.UseSqlServer(Configuration.GetConnectionString("RMERP")));
-
+            
             ConnectionString = (Configuration.GetConnectionString("RMERP"));
 
             services.AddDistributedMemoryCache();
@@ -73,11 +70,12 @@ namespace RMERP
             });
 
             services.AddSingleton<IConfiguration>(Configuration);
-            
 
-            //services.AddDbContext<RMERP.DAL.Models.RMERPContext>();
+            //services.AddBreadcrumbs(GetType().Assembly);
+
             services.AddDbContext<RMERP.DAL.Models.RMERPContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("RMERP")));
+
             services.AddMvc();           
         }
 

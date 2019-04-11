@@ -94,6 +94,10 @@ namespace RMERP.DAL.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.ALL_Shortform)
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.ALL_Title)
                     .IsRequired()
                     .HasMaxLength(100)
@@ -216,15 +220,21 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.CRI_Basic).HasColumnType("decimal(9, 2)");
 
+                entity.Property(e => e.CRI_DA).HasColumnType("decimal(9, 2)");
+
                 entity.Property(e => e.CRI_ESIC_Area)
                     .HasMaxLength(10)
                     .IsUnicode(false);
+
+                entity.Property(e => e.CRI_ESIC_Formula).HasMaxLength(200);
 
                 entity.Property(e => e.CRI_HRA_Fixed).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.CRI_InactivatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.CRI_OT_Rate).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.CRI_PF_Formula).HasMaxLength(200);
 
                 entity.Property(e => e.CRI_RegisteredOn)
                     .HasColumnType("datetime")

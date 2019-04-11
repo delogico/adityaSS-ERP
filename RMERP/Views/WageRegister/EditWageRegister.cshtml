@@ -10,7 +10,9 @@
     function calculateTotal() {       
         var totalPaybleDays = $("#wageRegisterVM_WAR_TotalPaybleDays").val();
         var totalWorkingDays = $("#wageRegisterVM_WAR_TotalWorkingDays").val();
-        
+        if (totalPaybleDays > totalWorkingDays) {
+            $("#wageRegisterVM_WAR_TotalPaybleDays").val(0);
+        }
         var WAR_ExtraWorkingHours = $("#wageRegisterVM_WAR_ExtraWorkingHours").val();
         var CRI_Basic = $("#wageRegisterVM_WAR_Basic").val();
         var CRI_DA = $("#wageRegisterVM_WAR_DA").val();
@@ -18,14 +20,15 @@
         var WAR_PF = $("#wageRegisterVM_WAR_PF").val();
         var WAR_ESIC = $("#wageRegisterVM_WAR_ESIC").val();
         
-        var CRI_DA_Calculated = (CRI_Basic * CRI_DA) / 100;
+        
         var BasicDa = parseInt(CRI_Basic) + parseInt(CRI_DA);      
         
         var Percentage = document.getElementById("Percentage").checked; 
         var Fixed = document.getElementById("Fixed").checked;          
 
-        var CRI_HRA_Calculated = 0, WAR_Basic_Calculated = 0, WAR_OverTime_Calculated=0;
+        var CRI_HRA_Calculated = 0, WAR_Basic_Calculated = 0, WAR_OverTime_Calculated = 0, CRI_DA_Calculated=0;
         if (totalWorkingDays != 0) {
+            CRI_DA_Calculated = (CRI_DA * totalPaybleDays) / totalWorkingDays;
             CRI_HRA_Calculated = (Percentage == true ? ((BasicDa * CRI_HRA) / 100) : ((CRI_HRA * totalPaybleDays) / totalPaybleDays));
             WAR_Basic_Calculated = (CRI_Basic*totalPaybleDays) / totalWorkingDays;
             WAR_OverTime_Calculated = ((CRI_Basic / totalWorkingDays) / 8) * WAR_ExtraWorkingHours;
@@ -92,13 +95,8 @@
                     @Html.HiddenFor(m => m.wageRegisterVM.WAG_Id)      
                     @Html.HiddenFor(m => m.wageRegisterVM.CLI_Id)
                     @Html.HiddenFor(m => m.wageRegisterVM.CRI_Id)
-                    @Html.HiddenFor(m => m.wageRegisterVM.EMP_Id)                                                                                                                                                                                                    
-
-                    @*<div style="display: none;">@Html.EditorFor(model => model.wageRegisterVM.designation)</div>
-                    <div style="display: none;">@Html.EditorFor(model => model.wageRegisterVM.clientVM)</div>
-                    <div style="display: none;">@Html.EditorFor(model => model.wageRegisterVM.clientRequirementVM)</div>
-                    <div style="display: none;">@Html.EditorFor(model => model.wageRegisterVM.employeeVM)</div>*@
-
+                    @Html.HiddenFor(m => m.wageRegisterVM.EMP_Id)                                                                                                                                                                                                   
+                   
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">

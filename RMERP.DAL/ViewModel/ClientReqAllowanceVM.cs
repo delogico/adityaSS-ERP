@@ -25,5 +25,7 @@ namespace RMERP.DAL.ViewModel
         public AllowanceVM allowance { get; set; }
         public ClientRequirementVM requirement { get; set; }
         public Boolean flagClientRequirement { get; set; }
+        public Boolean PFflagClientRequirement { get; set; }
+        public Boolean ESICflagClientRequirement { get; set; }
     }
 }

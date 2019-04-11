@@ -20,20 +20,23 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Total Post")]
         [Required(ErrorMessage = "Please select Total Posts")]
         public int CRI_Total { get; set; }
-        [Display(Name = "Basic")]
+        [Display(Name = "Basic(INR)")]
         [Required(ErrorMessage = "Please add BASIC")]
         public decimal? CRI_Basic { get; set; }
-        [Display(Name = "DA")]
+        [Display(Name = "DA(INR)")]
         [Required(ErrorMessage = "Please add DA")]
-        public double? CRI_DA { get; set; }
+        public decimal? CRI_DA { get; set; }
 
         [Display(Name = "HRA Fixed")]
         public decimal? CRI_HRA_Fixed { get; set; } = 0;
         [Display(Name = "HRA Percentage (%)")]
         public double? CRI_HRA_Percentage { get; set; } = 0;
-
+        [Display(Name = "PF Formula")]
+        public string CRI_PF_Formula { get; set; }
         [Display(Name = "PF Percentage (%)")]
-        public double? CRI_PF_Percentage { get; set; } 
+        public double? CRI_PF_Percentage { get; set; }
+        [Display(Name = "ESIC Formula")]
+        public string CRI_ESIC_Formula { get; set; }
         [Display(Name = "ESIC Percentage (%)")]
         public double? CRI_ESIC_Percentage { get; set; }
         [Display(Name = "ESIC Area")]
@@ -56,6 +59,15 @@ namespace RMERP.DAL.ViewModel
         public string DES_Title { get; set; }
 
         public bool HRAselection { get; set; }
+
+        public bool Basic_PFselection { get; set; }
+        public bool DA_PFselection { get; set; }
+        public bool HRA_PFselection { get; set; }
+
+        public bool Basic_ESICselection { get; set; }
+        public bool DA_ESICselection { get; set; }
+        public bool HRA_ESICselection { get; set; }
+
         //public List<AllowancesVM> ListAllowances { get; set; }
 
         public List<ClientReqAllowanceVM> allAllowances { get; set; }

@@ -43,9 +43,9 @@
 
     <script>
         $(document).ready(function () {
-
+            
             var tab = GetParameterValues("tab");
-
+          
             function GetParameterValues(param) {
                 var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
                 for (var i = 0; i < url.length; i++) {
@@ -60,19 +60,78 @@
                 $('input', 'form').attr('disabled', true).attr('readonly', true);
                 $('button', 'form').attr('disabled', true).attr('readonly', true);
             }
+            //$('input[type="checkbox"]').click(function () {               
+            //    debugger;
+            //    if ($(this).prop("checked") == true) {
+            //        $("#divReqAllow_" + this.id).show();
+            //        addCheckbox(this.id);
+            //        $("#flagClientRequirement" + this.id).val("true");
+            //    }
+            //    else if ($(this).prop("checked") == false) {
+            //        $("#divReqAllow_" + this.id).hide();
+            //        $("#chk_" + this.id).remove();
+            //        $("#lbl_" + this.id).remove();
+            //        $("#br" + this.id).remove();
+            //        $("#flagClientRequirement" + this.id).val("false");
+            //    }
+            //});
 
-            $('input[type="checkbox"]').click(function () {
+            $('input[class="Allselection"]').click(function () {
+                debugger;
                 if ($(this).prop("checked") == true) {
                     $("#divReqAllow_" + this.id).show();
+                    addCheckbox(this.id);
                     $("#flagClientRequirement" + this.id).val("true");
                 }
                 else if ($(this).prop("checked") == false) {
                     $("#divReqAllow_" + this.id).hide();
+                    $("#chk_" + this.id).remove();
+                    $("#lbl_" + this.id).remove();
+                    $("#br" + this.id).remove();
                     $("#flagClientRequirement" + this.id).val("false");
                 }
             });
-        });
+          
+            var ESICSelection = [];
+            var PFSelection = [];
+            $('input[class="PFselection"]').click(function () {
+                debugger;               
+                if ($(this).prop("checked") == true) {
+                   PFSelection.push($(this).prop('value'));
+                }
+                else if ($(this).prop("checked") == false) {                   
+                    PFSelection.splice(PFSelection.indexOf($(this).prop('value')), 1) 
+                }            
+                $("#PFselection").html(PFSelection.join("+ ")); 
+            });
+            $('input[class="ESICselection"]').click(function () {
+                debugger;
+                if ($(this).prop("checked") == true) {
+                    ESICSelection.push($(this).prop('value'));
+                }
+                else if ($(this).prop("checked") == false) {
+                    ESICSelection.splice(ESICSelection.indexOf($(this).prop('value')), 1)
+                }
+                $("#ESICSelection").html(ESICSelection.join("+ ")); 
+            });
+                                     
+            function addCheckbox(AllId) {
+                var id = parseInt(AllId);
+                var v = $("#allAllowances_" + (parseInt(id)-1) + "__allowance_ALL_Title");             
+                var container = $('#PFlist');
+                var containerEsic = $('#ESIClist');
+                var name = 'allAllowances[' + id + '].allowance.ALL_Shortform';   
+                var short = $("#allAllowances_" + (parseInt(id) - 1) + "__allowance_ALL_Shortform");
 
+                $('<input />', { type: 'checkbox', class : 'PFselection', id: 'chk_' + id, value: short.val() }).appendTo(container);               
+                $('<label />', { 'for': 'pf' + id, id: 'lbl_' + id, text: v.val(), value: short.val() }).appendTo(container); 
+                $('<br/>', { id: 'br' + id }).appendTo(container);
+                $('<input />', { type: 'checkbox', class: 'ESICselection', id: 'chk_' + id, value: short.val() }).appendTo(containerEsic);
+                $('<label />', { 'for': 'esic' + id, id: 'lbl_' + id, text: v.val(), value: short.val() }).appendTo(containerEsic);                 
+                $('<br/>', { id: 'br' + id }).appendTo(containerEsic);
+
+            }
+        });
         $('.HRAselection').change(function () {
             debugger;
             var value = $(this).filter(':checked').val();
@@ -120,7 +179,6 @@
                     }
                     @Html.HiddenFor(m => m.CLI_Id)
 
-
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#Designation" data-toggle="tab">Designation <i class="fa"></i></a></li>
                         <li><a href="#SalaryAllowances" data-toggle="tab">Salary and Incentives <i class="fa"></i></a></li>
@@ -137,16 +195,12 @@
                                         @if (Model.CRI_Id > 0)
                                         {
                                             @Html.HiddenFor(m => m.DES_Id)
-                                            @Html.TextBox("DES_Title", Model.DES_Title, new { @readonly = "readonly", @class = "form-control" })
-                                            @*@Html.TextBox("DES_Id", Model.DES_Title, new { @readonly = "readonly", @class = "form-control", @Name = "DES_Id", @id = "DES_Id" })*@
+                                            @Html.TextBox("DES_Title", Model.DES_Title, new { @readonly = "readonly", @class = "form-control" })                                            
                                         }
                                         else
                                         {
-                                            @Html.DropDownListFor(m => m.DES_Id, new SelectList(ViewBag.Designation, "DES_Id", "DES_Title"), "Select Designation", new { @class = "form-control" })
-                                            @*@Html.ValidationMessageFor(x => x.DES_Id, "", new { @class = "text-danger" })*@
-                                        }
-
-                                        @*@Html.DropDownListFor(m => m.DES_Id, (IEnumerable<SelectListItem>)ViewBag.ADList)*@
+                                            @Html.DropDownListFor(m => m.DES_Id, new SelectList(ViewBag.Designation, "DES_Id", "DES_Title"), "Select Designation", new { @class = "form-control" })                                            
+                                        }                                        
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -193,26 +247,36 @@
                                             @for (var i = 0; i < Model.allAllowances.Count; i++)
                                             {
                                                 <div class="col-md-12">
-                                                    <label for="@Model.allAllowances[i].ALL_Id">
-                                                        @Html.CheckBoxFor(m => m.allAllowances[i].flagClientRequirement, new { @id = Model.allAllowances[i].ALL_Id })&nbsp;@Model.allAllowances[i].allowance.ALL_Title
+                                                    <label >
+                                                        @Html.CheckBoxFor(m => m.allAllowances[i].flagClientRequirement, new { @class = "Allselection", @id = Model.allAllowances[i].ALL_Id })&nbsp;@Model.allAllowances[i].allowance.ALL_Title
+
+                                                        @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Title, new { @Value = Model.allAllowances[i].allowance.ALL_Title })
+                                                        @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Shortform, new { @Value = Model.allAllowances[i].allowance.ALL_Shortform })
                                                     </label>
                                                     @Html.HiddenFor(m => m.allAllowances[i].ALL_Id)
                                                     @Html.HiddenFor(m => m.allAllowances[i].flagClientRequirement, new { @id = "flagClientRequirement" + Model.allAllowances[i].ALL_Id })
                                                     <div id="divReqAllow_@Model.allAllowances[i].ALL_Id" style="display:@(Model.allAllowances[i].flagClientRequirement?"block":"none")">
                                                         <div class="col-md-12">
                                                             <div class="col-md-6">
-                                                                @Html.TextBoxFor(m => m.allAllowances[i].CRA_Amount, new { @class = "form-control" })
-                                                                @Html.ValidationMessageFor(m => m.allAllowances[i].CRA_Amount, "", new { @class = "text-danger" })
-                                                            </div>
-                                                            <div class="col-md-6" id="rdo_@Model.allAllowances[i].ALL_Id">
-                                                                @{string id = i + "radioTrue";}
-                                                                @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, false, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Full Amount", new { @for = id })
-                                                                @{id = i + "radioFalse";}
-                                                                @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, true, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Daywise Calculation", new { @for = id })
-                                                                @Html.ValidationMessageFor(x => x.allAllowances[i].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-10">
+                                                                        @Html.TextBoxFor(m => m.allAllowances[i].CRA_Amount, new { @class = "form-control" }) 
+                                                                        @Html.ValidationMessageFor(m => m.allAllowances[i].CRA_Amount, "", new { @class = "text-danger" })
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        @Html.Raw("INR")
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                                        <div class="col-md-6" id="rdo_@Model.allAllowances[i].ALL_Id">
+                                                                            @{string id = i + "radioTrue";}
+                                                                            @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, false, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Full Amount", new { @for = id })
+                                                                            @{id = i + "radioFalse";}
+                                                                            @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, true, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Daywise Calculation", new { @for = id })
+                                                                            @Html.ValidationMessageFor(x => x.allAllowances[i].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                 </div>
                                             }
                                         </div>
@@ -224,47 +288,111 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label>
+                                                @Html.LabelFor(m => m.CRI_PF_Formula, new { @class = "control-label" })
+                                            </label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => m.HRA_PFselection, new { @class = "PFselection", @value = "HRA" }) HRA                                                
+                                            </label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => m.Basic_PFselection, new { @class = "PFselection", @value = "BASIC" }) BASIC
+                                            </label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => m.DA_PFselection, new { @class = "PFselection" , @value ="DA"}) DA
+                                                @Html.HiddenFor(m => m.CRI_DA, new { @Name = "CRI_DA" })
+                                            </label>
+                                        </div>
+
+                                        @for (var i = 0; i < Model.allAllowances.Count; i++)
+                                        {
+                                            if (Model.allAllowances[i].flagClientRequirement == true)
+                                            {
+                                        <div class="col-md-12">
+                                            <label>
+                                                @Html.CheckBoxFor(m => m.allAllowances[i].PFflagClientRequirement, new { @class = "PFselection", @Value = Model.allAllowances[i].allowance.ALL_Shortform })
+                                                @Model.allAllowances[i].allowance.ALL_Title
+                                            </label>
+                                            @Html.HiddenFor(m => m.allAllowances[i].ALL_Id)
+                                            @Html.HiddenFor(m => m.allAllowances[i].PFflagClientRequirement, new { @id = "PFflagClientRequirement" + Model.allAllowances[i].ALL_Id })
+                                           
+                                        </div>
+                                            }
+                                        }
+                                        <div class="col-md-12">
+                                            <div id="PFlist">
+                                                <label> </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label>
+                                                <div id="PFselection">
+                                                </div>
+                                            </label>
+                                        </div>
                                         @Html.LabelFor(m => m.CRI_PF_Percentage, new { @class = "control-label" })
                                         @Html.TextBoxFor(m => m.CRI_PF_Percentage, new { @class = "form-control" })
-                                        @*@Html.ValidationMessageFor(x => x.CRI_PF_Percentage, "", new { @class = "text-danger" })*@
                                     </div>
-                                </div> <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.CRI_ESIC_Percentage, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.CRI_ESIC_Percentage, new { @class = "form-control" })
-                                        @*@Html.ValidationMessageFor(x => x.CRI_ESIC_Percentage, "", new { @class = "text-danger" })*@
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.CRI_ESIC_Area, new { @class = "control-label" })
-                                        <label class="radio-inline form-control ">
-                                            @foreach (var ESIC_AREA in Enum.GetValues(typeof(ESIC_AREA)))
-                                            {
-                                                <label class="radio-inline">
-                                                    @Html.RadioButtonFor(s => s.CRI_ESIC_Area, (int)ESIC_AREA, (int)ESIC_AREA == 1 ? (object)new { @checked = true, @id = (int)ESIC_AREA } : new { @id = (int)ESIC_AREA })@ESIC_AREA
-                                                </label>
-                                            }
-                                        </label>
-                                        @Html.ValidationMessageFor(x => x.CRI_ESIC_Area, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
+                                </div> 
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label>
+                                                        @Html.LabelFor(m => m.CRI_ESIC_Formula, new { @class = "control-label" })
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label>
+                                                        @Html.CheckBoxFor(m => m.HRA_ESICselection, new { @name = "CRI_HRA_Fixed", @class = "ESICselection", @value = "HRA" }) HRA                                                        
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label>
+                                                        @Html.CheckBoxFor(m => m.Basic_ESICselection, new { @class = "ESICselection", @value = "BASIC" }) BASIC                                                       
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label>
+                                                        @Html.CheckBoxFor(m => m.DA_ESICselection, new { @class = "ESICselection", @value = "DA" }) DA
+                                                    </label>
+                                                </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.CRI_WageCalculationOnWeeklyOffPlus, new { @class = "control-label" })
-                                        <label class="radio-inline form-control ">
-                                            <label class="radio-inline">
-                                                @Html.RadioButtonFor(m => m.CRI_WageCalculationOnWeeklyOffPlus, true, new { @checked = "checked" }) Yes
-                                            </label>
-                                            <label class="radio-inline">
-                                                @Html.RadioButtonFor(m => m.CRI_WageCalculationOnWeeklyOffPlus, false) No
-                                            </label>
+                                                @for (var i = 0; i < Model.allAllowances.Count; i++)
+                                                {
+                                                    if (Model.allAllowances[i].flagClientRequirement == true)
+                                                    {
+                                                        <div class="col-md-12">
+                                                            <label>
+                                                                @Html.CheckBoxFor(m => m.allAllowances[i].ESICflagClientRequirement, new { @class = "ESICselection", @value = @Model.allAllowances[i].allowance.ALL_Shortform })
+                                                                @Model.allAllowances[i].allowance.ALL_Title
+                                                            </label>
+                                                        </div>
+                                                    }
+                                                }
+                                                <div class="col-md-12">
 
-                                        </label>
-                                        @Html.ValidationMessageFor(x => x.CRI_WageCalculationOnWeeklyOffPlus, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
+                                                    <div id="ESIClist">
+                                                        <label> </label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label>
+                                                        <div id="ESICSelection">
+
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                                @Html.LabelFor(m => m.CRI_ESIC_Percentage, new { @class = "control-label" })
+                                                @Html.TextBoxFor(m => m.CRI_ESIC_Percentage, new { @class = "form-control" })
+                                            </div>
+                                </div>                                
 
                             </div>
                         </div>
@@ -286,13 +414,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    @*<div style="margin: 15px" class="m-t-20 text-center">
-                            <div class="form-group">
-                                <div class="col-sm-5 col-sm-offset-3"><button type="submit" class="btn btn-primary">Save</button><button class="btn btn-primary">Save</button>
-                                </div>
-                            </div>
-                        </div>*@
+                    </div>                   
 
                     <div class="m-t-20 text-center">
                         <button type="submit" class="btn btn-primary">Save</button>

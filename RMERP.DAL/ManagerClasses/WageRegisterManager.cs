@@ -87,7 +87,7 @@ namespace RMERP.DAL.ManagerClasses
 
                 CRI_Basic = cr.CRI_Basic.Value;
                 CRI_DA = Convert.ToDecimal(cr.CRI_DA);
-                CRI_DA_Calculated = (Decimal.Multiply(CRI_Basic, Convert.ToDecimal(CRI_DA))) / 100;
+               // CRI_DA_Calculated = (Decimal.Multiply(CRI_Basic, Convert.ToDecimal(CRI_DA))) / 100;
                 BasicDa = (Decimal.Add(CRI_Basic, Convert.ToDecimal(cr.CRI_DA)));
                 CRI_HRA = (cr.CRI_HRA_Fixed == null ? Convert.ToDecimal(cr.CRI_HRA_Percentage.Value) : cr.CRI_HRA_Fixed.Value);
 
@@ -97,6 +97,7 @@ namespace RMERP.DAL.ManagerClasses
                 
                 if (totalWorkingDays != 0)
                 {
+                    CRI_DA_Calculated = (CRI_DA * totalPaybleDays) / totalWorkingDays;
                     CRI_HRA_Calculated = (cr.CRI_HRA_Fixed == null ? ((BasicDa * Convert.ToDecimal(cr.CRI_HRA_Percentage)) / 100) : ((Decimal.Multiply(cr.CRI_HRA_Fixed.Value, totalPaybleDays)) / totalWorkingDays));
                     WAR_Basic_Calculated = (Decimal.Multiply(CRI_Basic, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays;
                     WAR_OverTime_Calculated = (((CRI_Basic / Convert.ToDecimal(totalWorkingDays)) / 8) * Convert.ToDecimal(WAR_ExtraWorkingHours));
