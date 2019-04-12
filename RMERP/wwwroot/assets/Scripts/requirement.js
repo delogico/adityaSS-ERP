@@ -52,7 +52,7 @@
         // Called when a field is invalid
         .on('error.field.bv', function(e, data) {
             // data.element --> The field element
-            debugger;
+         
             var $tabPane = data.element.parents('.tab-pane'),
                 tabId    = $tabPane.attr('id');
 
@@ -64,7 +64,7 @@
         })
         // Called when a field is valid
         .on('success.field.bv', function (e, data) {
-            debugger;
+           
             // data.bv      --> The BootstrapValidator instance
             // data.element --> The field element
 
@@ -77,7 +77,7 @@
 
             // Check if the submit button is clicked
             if (data.bv.getSubmitButton()) {
-                debugger;
+               
                 // Check if all fields in tab are valid
                 var isValidTab = data.bv.isValidContainer($tabPane);
                 $icon.addClass(isValidTab ? 'fa-check' : 'fa-times');

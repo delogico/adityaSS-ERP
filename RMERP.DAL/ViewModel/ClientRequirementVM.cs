@@ -68,8 +68,6 @@ namespace RMERP.DAL.ViewModel
         public bool DA_ESICselection { get; set; }
         public bool HRA_ESICselection { get; set; }
 
-        //public List<AllowancesVM> ListAllowances { get; set; }
-
         public List<ClientReqAllowanceVM> allAllowances { get; set; }
        
     }

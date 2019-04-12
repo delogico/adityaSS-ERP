@@ -15,7 +15,7 @@ namespace RMERP.Controllers
     public class EmployeesController : Controller
     {
         private readonly RMERPContext _context;        
-        private static int Emp_Id=0;
+       // private static int Emp_Id=0;
         public EmployeesController(RMERPContext context)
         {
             _context = context;

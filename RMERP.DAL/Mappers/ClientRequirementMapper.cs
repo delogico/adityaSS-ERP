@@ -30,6 +30,8 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_Active = requirement.CRI_Active;
             clientRequirementVM.CRI_InactivatedOn = requirement.CRI_InactivatedOn;
             clientRequirementVM.CRI_RegisteredOn = requirement.CRI_RegisteredOn;
+            clientRequirementVM.CRI_PF_Formula = requirement.CRI_PF_Formula;
+            clientRequirementVM.CRI_ESIC_Formula = requirement.CRI_ESIC_Formula;
             if (requirement.CLI_ != null)
                 clientRequirementVM.CLI_Name = requirement.CLI_.CLI_Name;
 
@@ -59,6 +61,8 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_Active = requirementVM.CRI_Active;
             requirement.CRI_InactivatedOn = requirementVM.CRI_InactivatedOn;
             requirement.CRI_RegisteredOn = requirementVM.CRI_RegisteredOn;
+            requirement.CRI_PF_Formula = requirementVM.CRI_PF_Formula;
+            requirement.CRI_ESIC_Formula = requirementVM.CRI_ESIC_Formula;
             if (requirementVM.HRAselection ==true)
                 requirement.CRI_HRA_Fixed = requirementVM.CRI_HRA_Fixed;
             else if(requirementVM.HRAselection == false)
