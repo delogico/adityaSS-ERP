@@ -27,8 +27,10 @@ namespace RMERP.DAL.Models
         public decimal WAR_OverTime_Calculated { get; set; }
         public decimal WAR_GrossTotal { get; set; }
         public decimal WAR_PF { get; set; }
+        public string WAR_PF_Formula { get; set; }
         public decimal WAR_PF_Calculated { get; set; }
         public decimal WAR_ESIC { get; set; }
+        public string WAR_ESIC_Formula { get; set; }
         public decimal WAR_ESIC_Calculated { get; set; }
         public decimal WAR_FinalTotal { get; set; }
         public DateTime? WAR_LastModifiedOn { get; set; }

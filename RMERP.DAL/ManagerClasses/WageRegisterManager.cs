@@ -80,6 +80,7 @@ namespace RMERP.DAL.ManagerClasses
                 wageRegisterVM.wageProcessVM = WageProcessMapper.mapMe(wageProcess);
                 wageRegisterVM.employeeVM = EmployeesMapper.MapMe(employee.EMP_);
                 wageRegisterVM.designation = employee.DES_;
+                
                 wageRegisterVM.clientRequirementVM = ClientRequirementMapper.mapMe(clientsManager.getActiveClientRequirement(CLI_Id, employee.DES_Id));
                 wageRegisterVM.WAR_TotalWorkingDays = totalWorkingDays;
                 wageRegisterVM.WAR_TotalPaybleDays = totalPaybleDays;
@@ -100,21 +101,14 @@ namespace RMERP.DAL.ManagerClasses
                     CRI_DA_Calculated = (CRI_DA * totalPaybleDays) / totalWorkingDays;
                     CRI_HRA_Calculated = (cr.CRI_HRA_Fixed == null ? ((BasicDa * Convert.ToDecimal(cr.CRI_HRA_Percentage)) / 100) : ((Decimal.Multiply(cr.CRI_HRA_Fixed.Value, totalPaybleDays)) / totalWorkingDays));
                     WAR_Basic_Calculated = (Decimal.Multiply(CRI_Basic, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays;
-                    WAR_OverTime_Calculated = (((CRI_Basic / Convert.ToDecimal(totalWorkingDays)) / 8) * Convert.ToDecimal(WAR_ExtraWorkingHours));
+                    WAR_OverTime_Calculated = (((CRI_Basic / Convert.ToDecimal(totalWorkingDays)) / 8) * Convert.ToDecimal(WAR_ExtraWorkingHours));                   
                     
                 }                
-                WAR_PF = Convert.ToDecimal(cr.CRI_PF_Percentage);
-                WAR_ESIC = Convert.ToDecimal(cr.CRI_ESIC_Percentage);
-                WAR_PF_Calculated = Decimal.Multiply(BasicDa, WAR_PF) / 100;
-                WAR_ESIC_Calculated = Decimal.Multiply(BasicDa, WAR_ESIC) / 100;
-
+               
                 wageRegisterVM.WAR_OverTime_Calculated = WAR_OverTime_Calculated;
                 wageRegisterVM.WAR_Basic_Calculated = WAR_Basic_Calculated;
                 wageRegisterVM.WAR_HRA_Calculated = CRI_HRA_Calculated;
-                wageRegisterVM.WAR_PF = WAR_PF;
-                wageRegisterVM.WAR_PF_Calculated = WAR_PF_Calculated;
-                wageRegisterVM.WAR_ESIC = WAR_ESIC;
-                wageRegisterVM.WAR_ESIC_Calculated = WAR_ESIC_Calculated;
+                
 
                 //************************** ALLOWANCES CALCULATION *****************************//
                 List<WageRegisterAllowanceVM> allowances = new List<WageRegisterAllowanceVM>();
@@ -142,6 +136,20 @@ namespace RMERP.DAL.ManagerClasses
                     }                    
                     allowances.Add(all);
                 }
+                //************************** START PF-ESIC CALCULATION *****************************/                             
+                decimal PFsum = GetAmountBasedOnFormula(cr.CRI_PF_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays);
+                decimal ESICsum = GetAmountBasedOnFormula(cr.CRI_ESIC_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays);               
+                WAR_PF = Convert.ToDecimal(cr.CRI_PF_Percentage);
+                WAR_ESIC = Convert.ToDecimal(cr.CRI_ESIC_Percentage);
+                WAR_PF_Calculated = Decimal.Multiply(PFsum, WAR_PF) / 100;
+                WAR_ESIC_Calculated = Decimal.Multiply(ESICsum, WAR_ESIC) / 100;
+                //**************************END PF-ESIC CALCULATION *****************************/
+                wageRegisterVM.WAR_PF_Formula = cr.CRI_PF_Formula;
+                wageRegisterVM.WAR_ESIC_Formula = cr.CRI_ESIC_Formula;
+                wageRegisterVM.WAR_PF = WAR_PF;
+                wageRegisterVM.WAR_PF_Calculated = WAR_PF_Calculated;
+                wageRegisterVM.WAR_ESIC = WAR_ESIC;
+                wageRegisterVM.WAR_ESIC_Calculated = WAR_ESIC_Calculated;
                 wageRegisterVM.allowanceVMs = allowances;
                 //************************** ALLOWANCES CALCULATION *****************************/
                 decimal WAR_GrossTotal = WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated  + WAR_OverTime_Calculated + AllowancesTotal;
@@ -155,6 +163,55 @@ namespace RMERP.DAL.ManagerClasses
                 lstRegister.Add(wageRegisterVM);
             }
             return lstRegister;
+        }
+        public decimal GetAmountBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated,List<Client_Requirement_Allowances> All,int totalWorkingDays,int totalPaybleDays)
+        {
+            decimal sum = 0M;
+            string[] arr_CRI_Formula;
+
+            if (CRI_Formula != null)
+            {
+                arr_CRI_Formula = CRI_Formula.Split("+");
+                foreach (string item in arr_CRI_Formula)
+                {
+                    switch (item)
+                    {
+                        case "BASIC":
+                            sum += Convert.ToDecimal(WAR_Basic_Calculated);
+                            break;
+                        case "DA":
+                            sum += Convert.ToDecimal(CRI_DA_Calculated);
+                            break;
+                        case "HRA":
+                            sum += Convert.ToDecimal(CRI_HRA_Calculated);
+                            break;
+                        default:
+                            {
+                                foreach (var allowance in All)
+                                {
+                                    if (allowance.ALL_.ALL_Shortform == item)
+                                    {
+                                        decimal amount = allowance.CRA_Amount;
+                                        decimal fullAmt = 0M;
+                                        if (totalWorkingDays != 0)
+                                            fullAmt = (Decimal.Multiply(amount, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays;
+
+                                        if (allowance.CRA_DayswiseOrFull)
+                                        {
+                                            sum += fullAmt;
+                                        }
+                                        else
+                                        {
+                                            sum += amount;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return sum;
         }
         public string SaveWageRegister(List<Wage_Register> wage_Registers, int WAG_Id, string CLI_Id, int AdminID)
         {

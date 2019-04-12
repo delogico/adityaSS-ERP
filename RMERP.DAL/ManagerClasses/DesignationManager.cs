@@ -29,7 +29,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public IEnumerable<Designations> getDesignationsListByClientID(int clientID)
         {      
-            var dess = _context.Client_Requirements.Include(m => m.DES_).Where(m => m.CLI_Id.Equals(clientID)).Select(m => new Designations() { DES_Id = m.DES_Id, DES_Title = m.DES_.DES_Title });
+            var dess = _context.Client_Requirements.Where(m=>m.CRI_Active.Equals(true)).Include(m => m.DES_).Where(m => m.CLI_Id.Equals(clientID)).Select(m => new Designations() { DES_Id = m.DES_Id, DES_Title = m.DES_.DES_Title });
             IEnumerable<Designations> desList = dess.Distinct();
             return desList.ToList();
         }

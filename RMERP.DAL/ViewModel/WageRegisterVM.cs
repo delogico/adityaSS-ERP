@@ -53,10 +53,14 @@ namespace RMERP.DAL.ViewModel
         public decimal WAR_GrossTotal { get; set; }
         [Display(Name = "PF")]
         public decimal WAR_PF { get; set; }
+        [Display(Name = "PF Formula")]
+        public string WAR_PF_Formula { get; set; }
         [Display(Name = "Calculated PF")]
         public decimal WAR_PF_Calculated { get; set; }
         [Display(Name = "ESIC")]
         public decimal WAR_ESIC { get; set; }
+        [Display(Name = "ESIC Formula")]
+        public string WAR_ESIC_Formula { get; set; }
         [Display(Name = "Calculated ESIC")]
         public decimal WAR_ESIC_Calculated { get; set; }
         [Display(Name = "Final Total")]

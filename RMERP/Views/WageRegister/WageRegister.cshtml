@@ -110,8 +110,10 @@
                                 <td class="lightgray">OT Amount</td>
                                 <td class="silver">Gross Total</td>
                                 <td class="silver">PF</td>
+                                <td class="silver">PF Formula</td>
                                 <td class="silver">PF_Calculated</td>
                                 <td class="silver">ESIC</td>
+                                <td class="silver">ESIC Formula</td>
                                 <td class="silver">ESIC_Calculated</td>
                                 <td class="gray">Final Amount</td>
                                 @if (item.wageProcessClientVM != null)
@@ -124,38 +126,40 @@
 
                             @foreach (var employee in Desig_Employee)
                             {
-                                <tr>
-                                    <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
-                                    <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
-                                    <td class="gainsboro">@(employee.employeeVM.EMP_Gender == true ? "M" : "F")</td>
-                                    <td class="gainsboro"></td>
-                                    <td class="lightgray">@employee.WAR_TotalWorkingDays</td>
-                                    <td class="lightgray">@employee.WAR_TotalPaybleDays</td>
-                                    <td class="lightgray">@Math.Round(employee.WAR_Basic, 2)</td>
-                                    <td class="lightgray">@Math.Round(employee.WAR_Basic_Calculated, 2)</td>
-                                    <td class="lightgray">@Math.Round(employee.WAR_DA, 2)</td>
-                                    <td class="lightgray">@Math.Round(employee.WAR_DA_Calculated, 2)</td>
-                                    <td class="lightgray">@Math.Round(employee.WAR_HRA, 2)</td>
-                                    <td class="lightgray">@Math.Round(employee.WAR_HRA_Calculated, 2)</td>
-                                    @{
-                                        foreach (var all in employee.allowanceVMs)
-                                        {
-                                            <td class="lightgray">@Math.Round(all.WAA_Amount_Calculated, 2)</td>
-                                        }
-                                    }
-                                    <td class="lightgray">@employee.WAR_ExtraWorkingHours</td>
-                                    <td class="lightgray">@Math.Round(employee.WAR_OverTime_Calculated, 2)</td>
-                                    <td class="silver">@Math.Round(employee.WAR_GrossTotal, 2)</td>
-                                    <td class="silver">@Math.Round(employee.WAR_PF, 2)</td>
-                                    <td class="silver">@Math.Round(employee.WAR_PF_Calculated, 2)</td>
-                                    <td class="silver">@Math.Round(employee.WAR_ESIC, 2)</td>
-                                    <td class="silver">@Math.Round(employee.WAR_ESIC_Calculated, 2)</td>
-                                    <td class="gray">@Math.Round(employee.WAR_FinalTotal, 2)</td>
-                                    @if (item.wageProcessClientVM != null)
+                            <tr>
+                                <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
+                                <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
+                                <td class="gainsboro">@(employee.employeeVM.EMP_Gender == true ? "M" : "F")</td>
+                                <td class="gainsboro"></td>
+                                <td class="lightgray">@employee.WAR_TotalWorkingDays</td>
+                                <td class="lightgray">@employee.WAR_TotalPaybleDays</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_Basic, 2)</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_Basic_Calculated, 2)</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_DA, 2)</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_DA_Calculated, 2)</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_HRA, 2)</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_HRA_Calculated, 2)</td>
+                                @{
+                                    foreach (var all in employee.allowanceVMs)
                                     {
-                                        <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id })</td>                                  
+                                        <td class="lightgray">@Math.Round(all.WAA_Amount_Calculated, 2)</td>
                                     }
-                                </tr>
+                                }
+                                <td class="lightgray">@employee.WAR_ExtraWorkingHours</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_OverTime_Calculated, 2)</td>
+                                <td class="silver">@Math.Round(employee.WAR_GrossTotal, 2)</td>
+                                <td class="silver">@Math.Round(employee.WAR_PF, 2)</td>
+                                <td class="silver">@employee.WAR_PF_Formula</td>
+                                <td class="silver">@Math.Round(employee.WAR_PF_Calculated, 2)</td>
+                                <td class="silver">@Math.Round(employee.WAR_ESIC, 2)</td>
+                                <td class="silver">@employee.WAR_ESIC_Formula</td>
+                                <td class="silver">@Math.Round(employee.WAR_ESIC_Calculated, 2)</td>
+                                <td class="gray">@Math.Round(employee.WAR_FinalTotal, 2)</td>
+                                @if (item.wageProcessClientVM != null)
+                                {
+                                    <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id })</td>
+                                }
+                            </tr>
                             }
                         </tbody>
                     </table>

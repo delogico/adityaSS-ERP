@@ -30,6 +30,8 @@ namespace RMERP.DAL.Mappers
             wageRegisterVM.WAR_HRA_Calculated = wageRegister.WAR_HRA_Calculated;
             wageRegisterVM.WAR_LastModifiedOn = wageRegister.WAR_LastModifiedOn.Value;
             wageRegisterVM.WAR_OverTime_Calculated = wageRegister.WAR_OverTime_Calculated;
+            wageRegisterVM.WAR_PF_Formula = wageRegister.WAR_PF_Formula;
+            wageRegisterVM.WAR_ESIC_Formula = wageRegister.WAR_ESIC_Formula;
             wageRegisterVM.WAR_PF = wageRegister.WAR_PF;
             wageRegisterVM.WAR_PF_Calculated = wageRegister.WAR_PF_Calculated;
             wageRegisterVM.WAR_TotalPaybleDays = wageRegister.WAR_TotalPaybleDays;
@@ -69,6 +71,7 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_DA = wageRegisterVM.WAR_DA;
             wageRegister.WAR_DA_Calculated = wageRegisterVM.WAR_DA_Calculated;
             wageRegister.WAR_ESIC = wageRegisterVM.WAR_ESIC;
+            wageRegister.WAR_ESIC_Formula = wageRegisterVM.WAR_ESIC_Formula;
             wageRegister.WAR_ESIC_Calculated = wageRegisterVM.WAR_ESIC_Calculated;
             wageRegister.WAR_ExtraWorkingHours = wageRegisterVM.WAR_ExtraWorkingHours;
             wageRegister.WAR_FinalTotal = wageRegisterVM.WAR_FinalTotal;
@@ -78,7 +81,8 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_LastModifiedOn = wageRegisterVM.WAR_LastModifiedOn;
             wageRegister.ADM_LastModifiedBy = wageRegisterVM.ADM_LastModifiedBy;
             wageRegister.WAR_OverTime_Calculated = wageRegisterVM.WAR_OverTime_Calculated;
-            wageRegister.WAR_PF = wageRegisterVM.WAR_PF;
+            wageRegister.WAR_PF = wageRegisterVM.WAR_PF;           
+            wageRegister.WAR_PF_Formula = wageRegisterVM.WAR_PF_Formula;
             wageRegister.WAR_PF_Calculated = wageRegisterVM.WAR_PF_Calculated;
             wageRegister.WAR_TotalPaybleDays = wageRegisterVM.WAR_TotalPaybleDays;
             wageRegister.WAR_TotalWorkingDays = wageRegisterVM.WAR_TotalWorkingDays;

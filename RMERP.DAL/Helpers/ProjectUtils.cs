@@ -57,6 +57,7 @@ namespace RMERP.DAL.Helpers
         {
             return DateTime.Now.ToString("yyyyMMddHHmmss");
         }
+        
 
     }
 }

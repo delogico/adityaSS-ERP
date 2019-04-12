@@ -530,6 +530,8 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.WAR_ESIC_Calculated).HasColumnType("decimal(9, 2)");
 
+                entity.Property(e => e.WAR_ESIC_Formula).HasMaxLength(200);
+
                 entity.Property(e => e.WAR_FinalTotal).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_GrossTotal).HasColumnType("decimal(9, 2)");
@@ -545,6 +547,8 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.WAR_PF).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_PF_Calculated).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_PF_Formula).HasMaxLength(200);
 
                 entity.HasOne(d => d.CLI_)
                     .WithMany(p => p.Wage_Register)
