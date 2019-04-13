@@ -46,6 +46,12 @@ namespace RMERP.DAL.App_Code
             Saved = 0,
             Pending = 1
         }
+        public enum Total_WorkingDyas_In_Month
+        {
+            Consider_RealDays = 0,
+            Excluding_WeeklyOff = 1,
+            Reduce_StaticDays = 2
+        }
         public static DateTime DateNow()
         {
             DateTime utcTime = DateTime.UtcNow;

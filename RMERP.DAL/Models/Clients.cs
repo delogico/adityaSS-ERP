@@ -39,6 +39,8 @@ namespace RMERP.DAL.Models
         public bool? CLI_Att_MonthReal { get; set; }
         public int? CLI_Att_Month_Start { get; set; }
         public int? CLI_Att_Month_End { get; set; }
+        public byte CLI_Total_WorkingDays { get; set; }
+        public int? CLI_No_Reduce_Days { get; set; }
 
         public Cities CITY_ { get; set; }
         public Firms FRM_ { get; set; }

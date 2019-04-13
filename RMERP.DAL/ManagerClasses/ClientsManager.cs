@@ -372,6 +372,8 @@ namespace RMERP.DAL.ManagerClasses
                 client.CLI_GST_Rate = clients.CLI_GST_Rate;
                 client.CLI_TDS_Rate = clients.CLI_TDS_Rate;
                 client.CLI_HSN_Code = clients.CLI_HSN_Code;
+                client.CLI_Total_WorkingDays = clients.CLI_Total_WorkingDays;
+                client.CLI_No_Reduce_Days = clients.CLI_No_Reduce_Days;
                 _contaxt.Clients.Update(client);
                 _contaxt.SaveChanges();
             }

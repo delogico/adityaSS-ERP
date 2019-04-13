@@ -71,6 +71,12 @@ namespace RMERP.DAL.ViewModel
         public IFormFile CLI_Logo { get; set; }
         public string CliLogoImage { get; set; }
         public int totalEmployee { get; set; }
+        [Display(Name = "Select Working Days Count Method")]
+        [Required(ErrorMessage = "Please select working days count method")]
+        public byte CLI_Total_WorkingDays { get; set; }
+        [Display(Name = "Number Of Reduce Days")]
+        [Required(ErrorMessage = "Add Reduce Days")]
+        public int? CLI_No_Reduce_Days { get; set; } = 1;
     }
     public class ParametersClientsModel
     {
