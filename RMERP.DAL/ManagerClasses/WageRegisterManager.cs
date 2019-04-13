@@ -86,9 +86,7 @@ namespace RMERP.DAL.ManagerClasses
                         totalWorkingDays = days-Convert.ToInt16(cli.CLI_No_Reduce_Days);
                         break;
                     default: break;
-                }
-
-               
+                }               
                 #endregion
 
                 totalPaybleDays = attendances.Where(a => a.ATT_IsPresent == true).Count();

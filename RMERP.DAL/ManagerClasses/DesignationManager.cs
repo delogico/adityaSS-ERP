@@ -43,7 +43,11 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Designations.Find(desId).DES_Title;
         }
-       public int getDesignationIdForAttandance(int CLI_Id,int EMP_Id)
+        public Designations GetDesignationById(int desId)
+        {
+            return _context.Designations.Find(desId);
+        }
+        public int getDesignationIdForAttandance(int CLI_Id,int EMP_Id)
         {
             int i = 0;
             try
@@ -55,6 +59,27 @@ namespace RMERP.DAL.ManagerClasses
                 throw ex;
             }
             return i;
+        }
+        public string saveEditDesignation(Designations designations)
+        {
+            string res = string.Empty;
+            try
+            {
+                if (designations.DES_Id > 0)
+                {
+                    _context.Designations.Update(designations);
+                }
+                else
+                {
+                    _context.Designations.Add(designations);
+                }
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                res = ex.Message;
+            }
+            return res;
         }
     }
 }

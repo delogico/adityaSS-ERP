@@ -1,0 +1,62 @@
+﻿@model List<RMERP.DAL.ViewModel.DesignationVM>
+@{
+    ViewData["Title"] = "Designations";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+
+@section scripts{
+    @if (TempData["message"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+            alert('@TempData["message"]');
+        });
+        </script>
+    };
+
+}
+<style>
+    .modal-dialog {
+        transform: translate(0, -50%);
+        top: 30%;
+        margin: 0 auto;
+    }
+</style>
+<div>
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <h4 class="page-title">@ViewData["Title"]</h4>
+            </div>
+            <div class="col-sm-4 text-right m-b-30">
+                <a class="btn btn-primary rounded" href="@Url.Action("AddEditDesignation","Designations")"><i class="fa fa-plus"></i> Register New Designation</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <table class="table table-striped custom-table datatable">
+                        <thead>
+                            <tr>                                
+                                <th>Designation</th>                                
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td><b>@item.DES_Title</b></td>
+                                    <td>
+                                        <a href='@Url.Action("AddEditDesignation","Designations",new { DES_Id=item.DES_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
