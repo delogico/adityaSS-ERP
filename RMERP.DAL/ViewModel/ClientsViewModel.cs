@@ -76,7 +76,7 @@ namespace RMERP.DAL.ViewModel
         public byte CLI_Total_WorkingDays { get; set; }
         [Display(Name = "Number Of Reduce Days")]
         [Required(ErrorMessage = "Add Reduce Days")]
-        public int? CLI_No_Reduce_Days { get; set; } = 1;
+        public int? CLI_No_Reduce_Days { get; set; } = 0;
     }
     public class ParametersClientsModel
     {

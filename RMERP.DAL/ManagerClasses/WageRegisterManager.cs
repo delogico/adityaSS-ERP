@@ -71,7 +71,26 @@ namespace RMERP.DAL.ManagerClasses
                 decimal CRI_DA = 0M, CRI_DA_Calculated = 0M, CRI_HRA = 0M, CRI_HRA_Calculated = 0M;
                 double WAR_ExtraWorkingHours = attendances.Sum(m => m.ATT_ExtraHoursWorked);
 
-                totalWorkingDays = attendances.Where(a => a.ATT_IsWeeklyOff == false).Count();
+                #region Total working day calculation
+                Clients cli = clientsManager.GetClientById(CLI_Id);
+                int days = attendances.Count();
+                switch (cli.CLI_Total_WorkingDays)
+                {
+                    case 0: //  0:Consider_RealDays
+                        totalWorkingDays = days;
+                        break;
+                    case 1://   1:Excluding_WeeklyOff
+                        totalWorkingDays = attendances.Where(a => a.ATT_IsWeeklyOff == false).Count();
+                        break;
+                    case 2://   2:Reduce_StaticDays
+                        totalWorkingDays = days-Convert.ToInt16(cli.CLI_No_Reduce_Days);
+                        break;
+                    default: break;
+                }
+
+               
+                #endregion
+
                 totalPaybleDays = attendances.Where(a => a.ATT_IsPresent == true).Count();
                 WageRegisterVM wageRegisterVM = new WageRegisterVM();
                 wageRegisterVM.WAG_Id = wageProcess.WAG_Id;
@@ -136,14 +155,14 @@ namespace RMERP.DAL.ManagerClasses
                     }                    
                     allowances.Add(all);
                 }
-                //************************** START PF-ESIC CALCULATION *****************************/                             
+                #region START PF-ESIC CALCULATION                              
                 decimal PFsum = GetAmountBasedOnFormula(cr.CRI_PF_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays);
                 decimal ESICsum = GetAmountBasedOnFormula(cr.CRI_ESIC_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays);               
                 WAR_PF = Convert.ToDecimal(cr.CRI_PF_Percentage);
                 WAR_ESIC = Convert.ToDecimal(cr.CRI_ESIC_Percentage);
                 WAR_PF_Calculated = Decimal.Multiply(PFsum, WAR_PF) / 100;
                 WAR_ESIC_Calculated = Decimal.Multiply(ESICsum, WAR_ESIC) / 100;
-                //**************************END PF-ESIC CALCULATION *****************************/
+                #endregion
                 wageRegisterVM.WAR_PF_Formula = cr.CRI_PF_Formula;
                 wageRegisterVM.WAR_ESIC_Formula = cr.CRI_ESIC_Formula;
                 wageRegisterVM.WAR_PF = WAR_PF;
