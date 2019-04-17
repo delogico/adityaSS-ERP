@@ -23,16 +23,16 @@
                             <td><b>@item.WAG_Month.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")) - @item.WAG_Month.Year.ToString()</b></td>
                             <td>
                                 @Html.ActionLink("Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = item.WAG_Id })
-                                [ <a data-toggle="tooltip" data-placement="top" title="Total Clients">@item.ActiveClients,</a>
-                                  <a data-toggle="tooltip" data-placement="bottom" title="Imported Clients">@item.ImportedClients(),</a>
-                                  <a data-toggle="tooltip" data-placement="right" title="Not Imported Clients">@item.NotImportedClients()</a>
+                                [ <a data-toggle="tooltip" data-placement="top" title="Total Clients" style="color:black;font-weight: 600;">@item.ActiveClients,</a>
+                                  <a data-toggle="tooltip" data-placement="bottom" title="Imported Clients" style="color:green;font-weight: 600;">@item.ImportedClients(),</a>
+                                  <a data-toggle="tooltip" data-placement="right" title="Not Imported Clients" style="color:red;font-weight: 600;">@item.NotImportedClients()</a>
                                 ]
                             </td>
                             <td>
                                 @Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = item.WAG_Id })
-                                [     <a data-toggle="tooltip" data-placement="top" title="Total WageRegisters">@item.ActiveClients,</a>
-                                      <a data-toggle="tooltip" data-placement="bottom" title="Saved WageRegisters">@item.WageRegisterSaved(),</a>
-                                      <a data-toggle="tooltip" data-placement="right" title="Not Saved WageRegisters">@item.WageRegisterNotSaved()</a>
+                                [     <a data-toggle="tooltip" data-placement="top" title="Total WageRegisters"  style="color:black;font-weight: 600;">@item.ActiveClients,</a>
+                                      <a data-toggle="tooltip" data-placement="bottom" title="Saved WageRegisters" style="color:green;font-weight: 600;">@item.WageRegisterSaved(),</a>
+                                      <a data-toggle="tooltip" data-placement="right" title="Not Saved WageRegisters" style="color:red;font-weight: 600;">@item.WageRegisterNotSaved()</a>
                                 ]
                             </td>
                         </tr>

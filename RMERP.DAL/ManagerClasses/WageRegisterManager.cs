@@ -65,6 +65,7 @@ namespace RMERP.DAL.ManagerClasses
             foreach(Clients_Employees employee in clientsEmployees)
             {
                 IEnumerable<Attendance> attendances = attManager.getAttendance_Wage_Client_Employee_Designation(wageProcess.WAG_Id, CLI_Id, employee.EMP_Id, employee.DES_.DES_Id);
+                if (attendances.Count() > 0) { 
                 Client_Requirements cr = clientsManager.getActiveClientRequirement(CLI_Id,employee.DES_.DES_Id);
                 int totalWorkingDays = 0, totalPaybleDays = 0;
                 decimal CRI_Basic = 0M, WAR_Basic_Calculated=0M, BasicDa = 0M, WAR_OverTime_Calculated = 0M, WAR_PF, WAR_PF_Calculated = 0M, WAR_ESIC = 0M, WAR_ESIC_Calculated = 0M;
@@ -178,6 +179,7 @@ namespace RMERP.DAL.ManagerClasses
                 wageRegisterVM.WAR_DA_Calculated = CRI_DA_Calculated;
                 wageRegisterVM.ADM_LastModifiedBy = AdminID;
                 lstRegister.Add(wageRegisterVM);
+                }
             }
             return lstRegister;
         }

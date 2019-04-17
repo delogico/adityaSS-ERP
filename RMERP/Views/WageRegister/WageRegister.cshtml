@@ -36,21 +36,14 @@
     .dimgray {
         background-color: #7b7878;
     }
-    /*a {
-       color: #f5f5f5;
-    }
-     a:hover,
-     a:active,
-     a:focus {
-        text-decoration: none;
-        color: #C0C0C0;
-        outline: none;
-    }*/
-    .fa-check {
+    .fa-check-circle {
         color: green;
     }
-    .fa-times {
+    .fa-times-circle {
         color: red;
+    }
+    .fa-info-circle {
+        color: #ff9b44;
     }
 
     a.myClass {
@@ -73,12 +66,14 @@
 <h2>@wage.WAG_Full_Month() @*<small>Total Days: @DaysInMonth</small>*@</h2>
 
 <ul class="nav nav-tabs" id="myTab">
-    @foreach (var client in Model.Select(m => new { m.client ,m.wageProcessClientVM}).Distinct())
+    @foreach (var client in Model.Select(m => new { m.client, m.wageProcessClientVM, m.wageProcessVM.Attendance }).Distinct())
     {
         <li>
             <a data-toggle="tab" href="#@client.client.CLI_Id">
-            <i class="fa fa-@(client.wageProcessClientVM != null ? "check" :"times" )"></i>       
-            @client.client.CLI_Name
+                @*fa-question-circle*@
+                @{int attCount = client.Attendance.Where(m => m.CLI_Id.Equals(client.client.CLI_Id)).Count();}
+                <i class="fa fa-@( client.wageProcessClientVM != null ? "check-circle" :attCount <=0 ? "times-circle":"info-circle" )"></i>
+                @client.client.CLI_Name
             </a>
         </li>
     }
@@ -177,28 +172,36 @@
                 </div>
             }
 
-            <div class="container">
-                @using (Html.BeginForm("SaveWageRegister", "WageRegister"))
-                {
-                    <input type="hidden" name="item_CLI_Id" value="@item.client.CLI_Id" />
-                    <input type="hidden" name="WAG_Id" value="@wage.WAG_Id" />
-
-                    if (item.wageProcessClientVM != null)
+                <div class="container">
+                    @using (Html.BeginForm("SaveWageRegister", "WageRegister"))
                     {
-                        <div class="alert alert-success" style="position: absolute;">
-                            <h2>Web Register is finalized on  @DateHelper.getDateWithFormat(item.wageProcessClientVM.WPC_SavedOn)</h2> <br />
-                            <input type="submit" value="Reset" formaction="ResetWageRegister" class="btn btn-success pull-right" />
-                        </div>
+                        <input type="hidden" name="item_CLI_Id" value="@item.client.CLI_Id" />
+                        <input type="hidden" name="WAG_Id" value="@wage.WAG_Id" />
+                        int v = item.wageProcessVM.Attendance.Where(m => m.CLI_Id.Equals(item.client.CLI_Id)).Count();
+                        if (item.wageProcessClientVM != null)
+                        {
+                            <div class="alert alert-success" style="position: absolute;">
+                                <h2>Web Register is finalized on  @DateHelper.getDateWithFormat(item.wageProcessClientVM.WPC_SavedOn)</h2> <br />
+                                <input type="submit" value="Reset" formaction="ResetWageRegister" class="btn btn-success pull-right" />
+                            </div>
+                        }
+                        else if (item.wageProcessVM.Attendance.Where(m=>m.CLI_Id.Equals(item.client.CLI_Id)).Count()<=0)
+                        {
+                            <div class="alert alert-danger" style="position: absolute;">
+                                <h2>Web Register is not ready yet. </h2><br /><br />
+                                <h3>Please complete attandance process</h3> <br />
+                                @*<input type="submit" value="Save" formaction="SaveWageRegister" class="btn btn-danger pull-right" />*@
+                            </div>
+                        }
+                        else 
+                        {
+                            <div class="alert alert-warning" style="position: absolute;">
+                                <h2>Web Register is ready to finalize</h2> <br />
+                                <input type="submit" value="Save" formaction="SaveWageRegister" class="btn btn-warning pull-right" />
+                            </div>
+                        }
                     }
-                    else
-                    {
-                        <div class="alert alert-danger" style="position: absolute;">
-                            <h2>Web Register is ready to finalize</h2> <br />
-                            <input type="submit" value="Save" formaction="SaveWageRegister" class="btn btn-danger pull-right" />
-                        </div>
-                    }
-                }
-            </div>
+                </div>
         </div>
 
     }
