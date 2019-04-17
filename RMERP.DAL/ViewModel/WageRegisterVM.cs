@@ -45,6 +45,13 @@ namespace RMERP.DAL.ViewModel
         public decimal WAR_DA_Calculated { get; set; }
         [Display(Name = "HRA")]
         public decimal WAR_HRA { get; set; }
+        [Display(Name = "HRA")]
+        public string WAR_HRA_PER {
+            get
+            {
+                return (clientRequirementVM.CRI_HRA_Fixed.ToString() == "" ? (clientRequirementVM.CRI_HRA_Percentage.Value.ToString() + "%") : (Math.Round(clientRequirementVM.CRI_HRA_Fixed.Value, 2) + "INR")); 
+            }
+        }
         [Display(Name = "Calculated HRA")]
         public decimal WAR_HRA_Calculated { get; set; }
         [Display(Name = "Calculated Extra Working Amount")]

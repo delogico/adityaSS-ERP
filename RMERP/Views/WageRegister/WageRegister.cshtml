@@ -106,21 +106,22 @@
                                 <td class="lightgray">Basic Calculated</td>
                                 <td class="lightgray">DA</td>
                                 <td class="lightgray">DA Calculated</td>
-                                <td class="lightgray">HRA(%)/HRA(Fixed)</td>
+                                <td class="lightgray">HRA</td>
                                 <td class="lightgray">HRA Calculated</td>
                                 @foreach (var all in Desig_Employee[0].allowanceVMs)
                                 {
                                     <td class="lightgray">@all.allowanceVM.ALL_Alias</td>
+                                    <td class="lightgray">@all.allowanceVM.ALL_Alias Calculated</td>
                                 }
                                 <td class="lightgray">OT Hours</td>
                                 <td class="lightgray">OT Amount</td>
                                 <td class="silver">Gross Total</td>
-                                <td class="silver">PF</td>
-                                <td class="silver">PF Formula</td>
-                                <td class="silver">PF_Calculated</td>
+                                <td class="silver" rowspan="2">PF</td>
+                                @*<td class="silver">PF Formula</td>*@
+                                <td class="silver">PF Calculated</td>
                                 <td class="silver">ESIC</td>
                                 <td class="silver">ESIC Formula</td>
-                                <td class="silver">ESIC_Calculated</td>
+                                <td class="silver">ESIC Calculated</td>
                                 <td class="gray">Final Amount</td>
                                 @if (item.wageProcessClientVM != null)
                                 {
@@ -143,21 +144,22 @@
                                 <td class="lightgray">@Math.Round(employee.WAR_Basic_Calculated, 2)</td>
                                 <td class="lightgray">@Math.Round(employee.WAR_DA, 2)</td>
                                 <td class="lightgray">@Math.Round(employee.WAR_DA_Calculated, 2)</td>
-                                <td class="lightgray">@Math.Round(employee.WAR_HRA, 2)</td>
+                                <td class="lightgray">@employee.WAR_HRA_PER</td>
                                 <td class="lightgray">@Math.Round(employee.WAR_HRA_Calculated, 2)</td>
                                 @{
                                     foreach (var all in employee.allowanceVMs)
                                     {
+                                        <td class="lightgray">@Math.Round(all.WAA_Amount, 2)</td>
                                         <td class="lightgray">@Math.Round(all.WAA_Amount_Calculated, 2)</td>
                                     }
                                 }
                                 <td class="lightgray">@employee.WAR_ExtraWorkingHours</td>
                                 <td class="lightgray">@Math.Round(employee.WAR_OverTime_Calculated, 2)</td>
                                 <td class="silver">@Math.Round(employee.WAR_GrossTotal, 2)</td>
-                                <td class="silver">@Math.Round(employee.WAR_PF, 2)</td>
-                                <td class="silver">@employee.WAR_PF_Formula</td>
+                                <td class="silver">@Convert.ToDouble(employee.WAR_PF)%  (@employee.WAR_PF_Formula)</td>
+
                                 <td class="silver">@Math.Round(employee.WAR_PF_Calculated, 2)</td>
-                                <td class="silver">@Math.Round(employee.WAR_ESIC, 2)</td>
+                                <td class="silver">@Convert.ToDouble(employee.WAR_ESIC)%</td>
                                 <td class="silver">@employee.WAR_ESIC_Formula</td>
                                 <td class="silver">@Math.Round(employee.WAR_ESIC_Calculated, 2)</td>
                                 <td class="gray">@Math.Round(employee.WAR_FinalTotal, 2)</td>
@@ -182,22 +184,20 @@
                         {
                             <div class="alert alert-success" style="position: absolute;">
                                 <h2>Web Register is finalized on  @DateHelper.getDateWithFormat(item.wageProcessClientVM.WPC_SavedOn)</h2> <br />
-                                <input type="submit" value="Reset" formaction="ResetWageRegister" class="btn btn-success pull-right" />
+                                <input type="submit" value="Reset" formaction="ResetWageRegister" onclick="return confirm('Are you sure you want to reset?');" class="btn btn-success pull-right" />
                             </div>
                         }
                         else if (item.wageProcessVM.Attendance.Where(m=>m.CLI_Id.Equals(item.client.CLI_Id)).Count()<=0)
                         {
                             <div class="alert alert-danger" style="position: absolute;">
-                                <h2>Web Register is not ready yet. </h2><br /><br />
-                                <h3>Please complete attandance process</h3> <br />
-                                @*<input type="submit" value="Save" formaction="SaveWageRegister" class="btn btn-danger pull-right" />*@
+                                <h2>Attandance is pending </h2><br />
                             </div>
                         }
                         else 
                         {
                             <div class="alert alert-warning" style="position: absolute;">
                                 <h2>Web Register is ready to finalize</h2> <br />
-                                <input type="submit" value="Save" formaction="SaveWageRegister" class="btn btn-warning pull-right" />
+                                <input type="submit" value="Save" formaction="SaveWageRegister" onclick="return confirm('Are you sure you want to save?');" class="btn btn-warning pull-right" />
                             </div>
                         }
                     }

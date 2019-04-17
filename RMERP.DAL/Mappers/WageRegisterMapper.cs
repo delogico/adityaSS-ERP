@@ -36,7 +36,7 @@ namespace RMERP.DAL.Mappers
             wageRegisterVM.WAR_PF_Calculated = wageRegister.WAR_PF_Calculated;
             wageRegisterVM.WAR_TotalPaybleDays = wageRegister.WAR_TotalPaybleDays;
             wageRegisterVM.WAR_TotalWorkingDays = wageRegister.WAR_TotalWorkingDays;
-
+            
             if (wageRegister.CRI_!= null)
             {
                 wageRegisterVM.clientRequirementVM = ClientRequirementMapper.mapMe(wageRegister.CRI_);

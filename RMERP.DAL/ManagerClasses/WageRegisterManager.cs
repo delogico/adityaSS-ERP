@@ -108,7 +108,7 @@ namespace RMERP.DAL.ManagerClasses
                 CRI_DA = Convert.ToDecimal(cr.CRI_DA);
                // CRI_DA_Calculated = (Decimal.Multiply(CRI_Basic, Convert.ToDecimal(CRI_DA))) / 100;
                 BasicDa = (Decimal.Add(CRI_Basic, Convert.ToDecimal(cr.CRI_DA)));
-                CRI_HRA = (cr.CRI_HRA_Fixed == null ? Convert.ToDecimal(cr.CRI_HRA_Percentage.Value) : cr.CRI_HRA_Fixed.Value);
+                CRI_HRA = (cr.CRI_HRA_Fixed == null ? Convert.ToDecimal(cr.CRI_HRA_Percentage.Value) : cr.CRI_HRA_Fixed.Value);             
 
                 wageRegisterVM.WAR_Basic = CRI_Basic;
                 wageRegisterVM.WAR_HRA = CRI_HRA;
