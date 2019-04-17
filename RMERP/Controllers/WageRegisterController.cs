@@ -9,6 +9,8 @@ using RMERP.DAL.Models;
 using RMERP.DAL.Mappers;
 using RMERP.Helpers;
 using RMERP.DAL.ViewModel;
+using SmartBreadcrumbs.Attributes;
+using static RMERP.DAL.Helpers.ProjectUtils;
 
 namespace RMERP.Controllers
 {
@@ -20,8 +22,10 @@ namespace RMERP.Controllers
         {
             _context = context;
         }
+        [Breadcrumb("Wage Register", FromAction = "Index", FromController = typeof(WageProcessController))]
         public ActionResult WageRegister(int WAG_Id)
         {
+            WAG_Id = (WAG_Id <= 0 ? WagId : WAG_Id);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             if (WAG_Id > 0)
@@ -59,12 +63,13 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("WageRegister", new { WAG_Id = WAG_Id });
         }
-
+        [Breadcrumb("Edit WageRegister", FromAction = "WageRegister")]
         public ActionResult EditWageRegister(int WAR_Id=-1)
         {
             EditWageRegisterVM editWageRegisterVM = new EditWageRegisterVM();
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             editWageRegisterVM .wageRegisterVM= WageRegisterMapper.mapMe(wageRegisterManager.GetWage_RegisterByID(WAR_Id));
+            WagId = editWageRegisterVM.wageRegisterVM.WAG_Id;
             editWageRegisterVM.wage_Register_Allowances = wageRegisterManager.GetWage_Register_Allowances(WAR_Id);
             return View(editWageRegisterVM);
         }

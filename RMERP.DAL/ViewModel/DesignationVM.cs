@@ -11,10 +11,7 @@ namespace RMERP.DAL.ViewModel
 
         [Required(ErrorMessage ="Please add designation title")]
         [Display( Name ="Designation Title")]
-        public string DES_Title { get; set; }
-
-       
-        
+        public string DES_Title { get; set; }              
     }
 }
 

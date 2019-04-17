@@ -26,7 +26,7 @@ namespace RMERP.Controllers
         {
             _context = context;
         }
-        //[DefaultBreadcrumb("DashBoard")]
+        [DefaultBreadcrumb("DashBoard")]
         public IActionResult DashBoard()
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
@@ -66,7 +66,7 @@ namespace RMERP.Controllers
             var login = HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "AdminUsers");
         }
-        //[Breadcrumb("Admin Users")]
+        [Breadcrumb("Admin Users")]
         public IActionResult Index()
         {
             AdminUsersManager adminUsersManager = new AdminUsersManager(_context);
@@ -74,7 +74,7 @@ namespace RMERP.Controllers
             return View(AdminUsersList);
         }
         [HttpGet]
-        //[Breadcrumb("Add-Edit AdminUsers", FromAction= "Index")]
+        [Breadcrumb("Add-Edit AdminUsers", FromAction = "Index")]
         public ActionResult AddEditAdminUsers(int AdminId)
         {
             AdminUsersManager adminUsersManager = new AdminUsersManager(_context);

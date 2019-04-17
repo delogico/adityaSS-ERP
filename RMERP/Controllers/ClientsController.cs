@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using RMERP.DAL.ManagerClasses;
 using RMERP.DAL.Models;
 using RMERP.DAL.ViewModel;
-using RMERP.DAL.App_Code;
+using RMERP.DAL.Helpers;
 using RMERP.DAL.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using RMERP.Helpers;
@@ -22,6 +22,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SmartBreadcrumbs.Attributes;
 
 namespace RMERP.Controllers
 {
@@ -41,8 +42,10 @@ namespace RMERP.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
         [HttpGet]
+        [Breadcrumb("Clients")]
         public IActionResult Index(bool IsActive=true)
         {
+            ClientId = -1;
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             ClientsViewModel cvm = new ClientsViewModel();
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
@@ -60,16 +63,20 @@ namespace RMERP.Controllers
             return PartialView("_ClientList", listClient);
         }
         [HttpGet]
+        [Breadcrumb("Client Info", FromAction = "Index")]
         public ActionResult AddEditClients(int id=-1)
-        {           
+        {
+            ClientId = (id <= 0 ? ClientId : id);
+            id = ClientId;
+
             AdminUserManager adminUserManager = new AdminUserManager(_context);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             FirmsManager firmsManager = new FirmsManager(_context);
             ClientsViewModel cv = new ClientsViewModel();
-            cv.clientsModel = new ClientsModel();
-            
+            cv.clientsModel = new ClientsModel();            
             cv.ParametersClientsModel = new ParametersClientsModel();
             cv.ParametersClientsModel.clientsModel = new ClientsModel();
+           
             if (id > 0)
             {
                 Clients clients = new Clients();
@@ -116,7 +123,7 @@ namespace RMERP.Controllers
             ViewBag.TotalWorkingDays = from action in WorkingDays
                                 select new SelectListItem
                                 {
-                                    Text = action.ToString(),
+                                    Text = GetFullEnumString(action.ToString()),
                                     Value = ((int)action).ToString()
                                 };           
             IEnumerable<Firms> listFirms = new List<Firms>();
@@ -129,8 +136,22 @@ namespace RMERP.Controllers
            
             return View(cv);
         }
+        public string GetFullEnumString(string action)
+        {
+            switch (action)
+            {
+                case "Consider_RealDays_In_Month":
+                    return "Consider Real Days In Month";
+                case "Exclude_WeeklyOff":
+                    return "Exclude Weekly Off";
+                case "Reduce_Fixed_Days":
+                    return "Reduce Fixed Days";
+                default:
+                    return "";
+            }
+        }
         [HttpPost]
-        public ActionResult AddEditClients(ClientsViewModel cv)
+        public ActionResult AddEditClient(ClientsViewModel cv)
         {            
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             int clientID = 0;
@@ -185,11 +206,13 @@ namespace RMERP.Controllers
             return RedirectToAction("AddEditClients",new { id= clientID });
         }
         [HttpGet]
+        [Breadcrumb("Add-Edit Contact", FromAction = "AddEditClients")]
         public ActionResult AddEditContacts(int CLI_Id, int CON_Id=-1)
         {
             ClientContactVM contactVM = new ClientContactVM();
             if (CLI_Id>0)
             {
+                ClientId = CLI_Id;
                 ClientsManager clientsManager = new ClientsManager(_context, Configuration);
                 Clients clients = clientsManager.GetClientById(CLI_Id);
                 if (CON_Id > 0)
@@ -276,9 +299,10 @@ namespace RMERP.Controllers
            // return RedirectToAction("Index","Clients",true);
         }
         [HttpGet]
+        [Breadcrumb("Add-Edit Requirement", FromAction = "AddEditClients")]
         public ActionResult AddEditRequirement(int CLI_Id, int CRI_Id =-1)
         {
-            CLI_Id=(CLI_Id==0? ClientId: CLI_Id);
+            ClientId = CLI_Id;
             DesignationManager designationManager = new DesignationManager(_context);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             AllowanceManager AllowanceManager = new AllowanceManager(_context);
@@ -306,8 +330,7 @@ namespace RMERP.Controllers
             
 
             return View(clientRequirement);
-        }
-       
+        }       
         [HttpPost]
         public ActionResult AddEditRequirement(ClientRequirementVM clientRequirementVM)
         {
@@ -329,9 +352,10 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
         }
-
+        [Breadcrumb("Requirement History", FromAction = "AddEditClients")]
         public ActionResult HistoryRequirement(int DES_Id,int CLI_Id)
         {
+            ClientId = CLI_Id; 
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             DesignationManager designationManager = new DesignationManager(_context);
             List<ClientRequirementVM> lst = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsList(DES_Id, CLI_Id, false).ToList());
@@ -372,6 +396,7 @@ namespace RMERP.Controllers
         }
 
         [HttpGet]
+        [Breadcrumb("Assign Employee", FromAction = "AddEditClients")]
         public ActionResult AddEmployee(int CLI_Id)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
@@ -382,6 +407,7 @@ namespace RMERP.Controllers
             ViewBag.EmployeeList = listEmployee;
             ViewBag.designationList = listDesignations;
             cvm.CLI_Id = CLI_Id;
+            ClientId = CLI_Id; 
             ViewBag.ClientName = clientsManager.GetClientById(CLI_Id).CLI_Name;
             return View(cvm);
         }

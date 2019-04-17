@@ -36,22 +36,33 @@
     .dimgray {
         background-color: #7b7878;
     }
-    a {
+    /*a {
        color: #f5f5f5;
     }
-    a:hover,
-    a:active,
-    a:focus {
+     a:hover,
+     a:active,
+     a:focus {
         text-decoration: none;
         color: #C0C0C0;
         outline: none;
-    }
+    }*/
     .fa-check {
         color: green;
     }
     .fa-times {
         color: red;
     }
+
+    a.myClass {
+        color: #f5f5f5;
+    }
+        a.myClass:hover,
+        a.myClass:active,
+        a.myClass:focus {
+            text-decoration: none;
+            color: #C0C0C0;
+            outline: none;
+        }
 </style>
 
 @{
@@ -157,7 +168,7 @@
                                 <td class="gray">@Math.Round(employee.WAR_FinalTotal, 2)</td>
                                 @if (item.wageProcessClientVM != null)
                                 {
-                                    <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id })</td>
+                                    <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id }, new { @class = "myClass" })</td>
                                 }
                             </tr>
                             }

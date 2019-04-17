@@ -74,7 +74,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Select Working Days Count Method")]
         [Required(ErrorMessage = "Please select working days count method")]
         public byte CLI_Total_WorkingDays { get; set; }
-        [Display(Name = "Number Of Reduce Days")]
+        [Display(Name = "Number of fixed days to be reduce in each month ")]
         [Required(ErrorMessage = "Add Reduce Days")]
         public int? CLI_No_Reduce_Days { get; set; } = 0;
     }

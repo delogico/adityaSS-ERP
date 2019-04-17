@@ -33,7 +33,12 @@ namespace RMERP.DAL.Helpers
             BASIC_WithShifts = 1,
             COMPLEX_WithoutShift = 2
         }
-
+        public enum Total_WorkingDyas_In_Month
+        {
+            Consider_RealDays_In_Month = 0,
+            Exclude_WeeklyOff = 1,
+            Reduce_Fixed_Days = 2
+        }
         public static DateTime DateNow()
         {
             DateTime utcTime = DateTime.UtcNow;
@@ -57,7 +62,7 @@ namespace RMERP.DAL.Helpers
         {
             return DateTime.Now.ToString("yyyyMMddHHmmss");
         }
-        
+        public static int WagId, CliId, ClientId, EmpId;
 
     }
 }

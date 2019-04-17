@@ -9,6 +9,8 @@ using RMERP.DAL.ManagerClasses;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RMERP.Helpers;
 using RMERP.DAL.Mappers;
+using static RMERP.DAL.Helpers.ProjectUtils;
+using SmartBreadcrumbs.Attributes;
 
 namespace RMERP.Controllers
 {
@@ -20,14 +22,18 @@ namespace RMERP.Controllers
         {
             _context = context;
         }
+        [Breadcrumb("Employees")]
         public IActionResult Index()
         {
+            EmpId = 0;
             EmployeeManager employeeManager = new EmployeeManager(_context);
             return View(EmployeesMapper.MapEmployees(employeeManager.GetEmployees().ToList()));
         }
         [HttpGet]
+        [Breadcrumb("Employee Info", FromAction = "Index")]
         public ActionResult AddEditEmployee(int EMP_Id=0)
         {
+            EMP_Id = (EMP_Id <= 0 ? EmpId : EMP_Id);
             EmployeeManager employeeManager = new EmployeeManager(_context);
             DepartmentManager departmentManager = new DepartmentManager(_context);
             ViewBag.deptList = departmentManager.getDepartmentList();
@@ -45,7 +51,7 @@ namespace RMERP.Controllers
             return View(employeeVM);
         }
         [HttpPost]
-        public ActionResult AddEditEmployee(EmployeeVM employeeVM)
+        public ActionResult AddEditEmployees(EmployeeVM employeeVM)
         {
             string res = string.Empty;
             EmployeeManager employeeManager = new EmployeeManager(_context);
@@ -83,8 +89,10 @@ namespace RMERP.Controllers
         }
 
         [HttpGet]
+        [Breadcrumb("Advance", FromAction = "AddEditEmployee")]
         public ActionResult AddEditAdvance(int EMP_Id, int ADV_Id=-1)
         {
+            EmpId = (EMP_Id <= 0 ? EmpId : EMP_Id);           
             EmployeeAdvanceVM employeeAdvanceVM = new EmployeeAdvanceVM();
             EmployeeManager employeeManager = new EmployeeManager(_context);
             Employee_Advance employee_Advance = new Employee_Advance();

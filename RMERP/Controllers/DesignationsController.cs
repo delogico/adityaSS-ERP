@@ -8,6 +8,7 @@ using RMERP.DAL.ViewModel;
 using RMERP.DAL.ManagerClasses;
 using RMERP.DAL.Mappers;
 using Microsoft.AspNetCore.Http;
+using SmartBreadcrumbs.Attributes;
 
 namespace RMERP.Controllers
 {
@@ -19,11 +20,13 @@ namespace RMERP.Controllers
         {
             _context = context;
         }
+        [Breadcrumb("Designations")]
         public IActionResult Index()
         {
             DesignationManager designationManager = new DesignationManager(_context);
             return View(DesignationMapper.mapDesignations(designationManager.getDesignationsList().ToList()));
         }
+        [Breadcrumb("Add-Edit Designation", FromAction = "Index")]
         public ActionResult AddEditDesignation(int DES_Id = 0)
         {
             DesignationManager designationManager = new DesignationManager(_context);

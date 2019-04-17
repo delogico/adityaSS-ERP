@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using RMERP.DAL.App_Code;
 using SmartBreadcrumbs.Attributes;
+using static RMERP.DAL.Helpers.ProjectUtils;
 
 namespace RMERP.Controllers
 {
@@ -39,7 +40,7 @@ namespace RMERP.Controllers
             wpm = new WageProcessManager(context);
             _hostingEnvironment = hostingEnvironment;
         }
-        
+        [Breadcrumb("Wage Process")]
         public IActionResult Index()
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);            
@@ -171,8 +172,8 @@ namespace RMERP.Controllers
             }
             return this.Content(sb.ToString());
         }
-        
-        //[Breadcrumb("Edit Attendance Record List")]
+
+        [Breadcrumb("Edit Attendance Record", FromAction = "UploadExcel", FromController = typeof(AttendanceController))]
         public ActionResult EditAttendanceRecord(int attID)
         {
             AttendanceListViewModel alvm = new AttendanceListViewModel();
@@ -181,7 +182,9 @@ namespace RMERP.Controllers
             Attendance att = new Attendance();
             if (attID > 0)
             {
+                
                 att = wpm.GetAttendanceById(attID);
+                CliId = att.CLI_Id;
                 alvm.attendanceViewModel.ATT_Id = attID;
                 alvm.attendanceViewModel.DES_Id = att.DES_Id;
                 alvm.attendanceViewModel.CLI_Id = att.CLI_Id;
@@ -207,6 +210,7 @@ namespace RMERP.Controllers
 
             if (ModelState.IsValid)
             {
+                CliId = atta.CLI_Id;
                 atta.ATT_Id = alvm.attendanceViewModel.ATT_Id;
                 atta.ATT_ImportedOn = alvm.attendanceViewModel.ATT_ImportedOn;
                 atta.ATT_IsEarnLeave = alvm.attendanceViewModel.ATT_IsEarnLeave;

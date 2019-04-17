@@ -1,5 +1,5 @@
 ﻿@model RMERP.DAL.ViewModel.ClientsViewModel
-@using static RMERP.DAL.App_Code.ProjectUtils;
+@using static RMERP.DAL.Helpers.ProjectUtils;
 @using RMERP.Helpers;
 @using Microsoft.Extensions.Configuration;
 
@@ -37,7 +37,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="m-b-30">
-                        @using (Html.BeginForm("AddEditClients", "Clients", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        @using (Html.BeginForm("AddEditClient", "Clients", FormMethod.Post, new { enctype = "multipart/form-data" }))
                         {
                             @Html.HiddenFor(m => m.clientsModel.CLI_Id)
                             @Html.HiddenFor(m => m.clientsModel.CLI_IsActive)
@@ -456,7 +456,7 @@
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle btn btn-success rounded" data-toggle="dropdown" aria-expanded="false">Get Excel</a>
                             <ul class="dropdown-menu pull-right">
-                                @foreach (var excel in Enum.GetValues(typeof(Execl_BasicShifts)))
+                                @foreach (var excel in Enum.GetValues(typeof(ATTENDANCE_EXCEL_TEMPLATE)))
                                 {
                                     <li><a href='@Url.Action( @excel.ToString(),"Clients")' title="BASIC_WithoutShifts"><i class="fa fa-file-excel-o m-r-5"></i>  @excel.ToString()</a></li>
                                 }

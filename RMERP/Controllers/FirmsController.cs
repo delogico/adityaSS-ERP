@@ -8,6 +8,8 @@ using RMERP.DAL.ViewModel;
 using RMERP.DAL.ManagerClasses;
 using RMERP.DAL.Mappers;
 using Microsoft.AspNetCore.Http;
+using static RMERP.DAL.Helpers.ProjectUtils;
+using SmartBreadcrumbs.Attributes;
 
 namespace RMERP.Controllers
 {
@@ -19,11 +21,13 @@ namespace RMERP.Controllers
         {
             _context = context;
         }
+        [Breadcrumb("Firms")]
         public IActionResult Index()
         {
             FirmsManager firmsManager = new FirmsManager(_context);            
             return View(FirmMapper.mapFirms(firmsManager.getFirmList().ToList()));
-        }       
+        }
+        [Breadcrumb("Firm Info", FromAction = "Index")]
         public ActionResult AddEditFirm(int FRM_Id=0)
         {
             FirmsManager firmsManager = new FirmsManager(_context);

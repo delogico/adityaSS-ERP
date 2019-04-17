@@ -25,7 +25,7 @@
                     <tr>
                         <td>@Html.Raw(DateHelper.getDateWithFormat(item.CRI_RegisteredOn) + " - " + DateHelper.getDateWithFormat(item.CRI_InactivatedOn.Value))</td>
                         <td>
-                            <a href='@Url.Action("AddEditRequirement", "Clients", new { CRI_Id=item.CRI_Id,tab="History" })' title="View"><i class="fa fa-eye m-r-5"></i> View</a>
+                            <a href='@Url.Action("AddEditRequirement", "Clients", new {CLI_Id=item.CLI_Id, CRI_Id=item.CRI_Id,tab="History" })' title="View"><i class="fa fa-eye m-r-5"></i> View</a>
                         </td>
                     </tr>
                 }
