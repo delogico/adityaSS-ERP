@@ -123,7 +123,7 @@
                                 <td class="silver">ESIC Formula</td>
                                 <td class="silver">ESIC Calculated</td>
                                 <td class="gray">Final Amount</td>
-                                @if (item.wageProcessClientVM != null)
+                                @if (item.wageProcessClientVM != null && item.wageProcessVM.WageStatus == false)
                                 {
                                     <td class="dimgray">Edit</td>
                                 }
@@ -163,23 +163,25 @@
                                 <td class="silver">@employee.WAR_ESIC_Formula</td>
                                 <td class="silver">@Math.Round(employee.WAR_ESIC_Calculated, 2)</td>
                                 <td class="gray">@Math.Round(employee.WAR_FinalTotal, 2)</td>
-                                @if (item.wageProcessClientVM != null)
+                                @if (item.wageProcessClientVM != null && item.wageProcessVM.WageStatus == false)
                                 {
-                                    <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id }, new { @class = "myClass" })</td>
+                                        <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id }, new { @class = "myClass" })</td>                                   
                                 }
+
                             </tr>
                             }
                         </tbody>
                     </table>
                 </div>
             }
-
+            
+            @if (item.wageProcessVM.WageStatus == false)
+            {
                 <div class="container">
                     @using (Html.BeginForm("SaveWageRegister", "WageRegister"))
                     {
                         <input type="hidden" name="item_CLI_Id" value="@item.client.CLI_Id" />
                         <input type="hidden" name="WAG_Id" value="@wage.WAG_Id" />
-                        int v = item.wageProcessVM.Attendance.Where(m => m.CLI_Id.Equals(item.client.CLI_Id)).Count();
                         if (item.wageProcessClientVM != null)
                         {
                             <div class="alert alert-success" style="position: absolute;">
@@ -202,8 +204,9 @@
                         }
                     }
                 </div>
+            }
         </div>
 
-    }
+                                    }
 
 </div>

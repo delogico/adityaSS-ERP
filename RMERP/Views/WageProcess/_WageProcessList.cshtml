@@ -36,9 +36,23 @@
                                 <a data-toggle="tooltip" data-placement="bottom" title="Saved WageRegisters" style="color:green;font-weight: 600;">@item.WageRegisterSaved(),</a>
                                 <a data-toggle="tooltip" data-placement="right" title="Not Saved WageRegisters" style="color:red;font-weight: 600;">@item.WageRegisterNotSaved()</a>
                                 ]
-                                @if (item.WageRegisterSaved() == item.ActiveClients && item.WageRegisterNotSaved()==0)
+                                @if (item.WageRegisterSaved() == item.ActiveClients && item.WageRegisterNotSaved() == 0)
                                 {
-                                <span class='label label-danger-border'> Can not be able to edit </span>
+                                    @*<a onclick="return window.confirm('Are you sure,You want to confirm? Now onwards wage register can not be able to modify.')"
+                                       href='@Url.Action("WageRegisterStatus", "WageProcess", new { WAG_Id = item.WAG_Id})' title="Confirm">
+                                        <i class="fa fa-check-circle m-r-5"></i> Confirm WageRegisters
+                                    </a>*@
+                                    if (item.WageStatus == true)
+                                    {
+                                        <span class='label label-danger-border'> Wage Register Confirmed! Now can not be able to edit. </span>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-white btn-sm rounded" onclick="return window.confirm('Are you sure,You want to confirm? Now onwards wage register can not be able to modify.')"
+                                           href='@Url.Action("WageRegisterStatus", "WageProcess", new { WAG_Id = item.WAG_Id})' title="Confirm">
+                                            <i class="fa fa-dot-circle-o text-success"></i> Confirm WageRegisters
+                                        </a>
+                                    }
                                 }
                             </td>
                             

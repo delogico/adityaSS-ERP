@@ -82,38 +82,7 @@ namespace RMERP.Controllers
             var model = wpm.getWageProcessList(sessionUtils.GetLoggedAdminID());
             return PartialView("_WageProcessList", model);
         }
-
-        //[HttpGet]
-        //public ActionResult EditAttendance(int empId)
-        //{
-        //    AttendanceListViewModel alvm = new AttendanceListViewModel();
-        //    alvm.attendanceViewModel = new AttendanceViewModel();        
-
-        //   // List<Attendance> list = wpm.GetAttendanceList(WagID, clientID, empId);          
-        //    //alvm.attendancesList = list;
-        //    //alvm.EmpID = empId;
-        //    //alvm.EmpName = list.FirstOrDefault().EMP_.EMP_FirstName;
-        //    //alvm.EmpDesignation = list.FirstOrDefault().EMP_.EMP_Designation;
-        //    return View(alvm);
-        //}
-        //[HttpPost]
-        //public ActionResult EditAttendance(AttendanceListViewModel alvm)
-        //{
-        //    string res = string.Empty;
-        //    foreach(var item in alvm.attendancesList)
-        //    {
-        //        Attendance attendance = new Attendance();
-        //        attendance.ATT_Id = item.ATT_Id;
-        //        attendance.ATT_IsPresent = item.ATT_IsPresent;
-        //        attendance.ATT_IsWeeklyOff = item.ATT_IsWeeklyOff;
-        //        attendance.ATT_ExtraHoursWorked = item.ATT_ExtraHoursWorked;
-        //        res=wpm.UpdateAttendance(attendance);
-        //    }
-
-        //    return RedirectToAction("ViewAttendance","Attendance", new { WAG_Id = WagID , CLI_Id = clientID });
-        //}
-
-        //[Breadcrumb("Import WageProcessData")]
+        
         public ActionResult ImportWageProcessData(UploadExcelViewModel uvm)
         {
             IFormFile file = uvm.ExcelFile;
@@ -232,7 +201,18 @@ namespace RMERP.Controllers
 
             return RedirectToAction("ViewAttendance", "Attendance", new { WAG_Id = alvm.attendanceViewModel.WAG_Id, CLI_Id = alvm.attendanceViewModel.CLI_Id });
         }
-        
+        public ActionResult WageRegisterStatus(int WAG_Id)
+        {
+            string res = string.Empty;
+            ClientsManager clientsManager = new ClientsManager(_context, _configuration);
+            Wage_Process wage=wpm.getWageProcessById(WAG_Id);
+            res = wpm.WageRegisterStatus(wage);            
+            if (res != "")
+            {
+                TempData["message"] = "Wage Process status is not changed!";                
+            }
+            return RedirectToAction("Index");
+        }
 
     }
 

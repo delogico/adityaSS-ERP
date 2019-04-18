@@ -19,6 +19,7 @@ namespace RMERP.DAL.Mappers
             WageProcessVM wageProcessVM = new WageProcessVM();
             wageProcessVM.WAG_Id = wageProcess.WAG_Id;
             wageProcessVM.WAG_Month = wageProcess.WAG_Month;
+            wageProcessVM.WageStatus = wageProcess.WAG_Status;
             if (wageProcess.Attendance != null)           
                 wageProcessVM.Attendance = wageProcess.Attendance.ToList();
             if (wageProcess.Wage_Process_Clients != null)
@@ -32,6 +33,7 @@ namespace RMERP.DAL.Mappers
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
             wageProcessVM.WAG_Id = wageProcess.WAG_Id;
+            wageProcessVM.WageStatus = wageProcess.WAG_Status;
             wageProcessVM.WAG_Month = wageProcess.WAG_Month;
             List<Clients> clients = clientsManager.GetActiveClientofaMonth(wageProcess.WAG_Month);
             if (clients!=null)

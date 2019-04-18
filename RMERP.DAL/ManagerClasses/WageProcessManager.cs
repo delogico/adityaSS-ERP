@@ -23,7 +23,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public Wage_Process getWageProcessById(int WAG_Id)
         {
-            Wage_Process wageProcess = _context.Wage_Process.Include(m=>m.Wage_Process_Clients).Where(m => m.WAG_Id == WAG_Id).FirstOrDefault();
+            Wage_Process wageProcess = _context.Wage_Process.Include(m=>m.Wage_Process_Clients).Include(m=>m.Attendance).Where(m => m.WAG_Id == WAG_Id).FirstOrDefault();
             return wageProcess;
         }
 
@@ -126,6 +126,24 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Wage_Process_Clients.Where(c => c.WAG_Id == WAG_Id && c.CLI_Id == CLI_Id).FirstOrDefault();
         }
-
+        public string WageRegisterStatus(Wage_Process wage)
+        {
+            string res = string.Empty;
+            try
+            {
+                wage.WAG_Status = true;
+                _context.Wage_Process.Update(wage);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                res = ex.Message;
+            }                       
+            return res;
+        }
+        public bool confirmWageRegister(int WAG_Id)
+        {
+            return true;
+        }
     }
 }

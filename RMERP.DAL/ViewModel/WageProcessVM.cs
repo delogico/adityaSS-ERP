@@ -13,7 +13,7 @@ namespace RMERP.DAL.ViewModel
         public DateTime WAG_Month { get; set; }
         public List<Attendance> Attendance { get; set; }
         public List<Wage_Process_Clients> wage_Process_Clients { get; set; }
-
+        public bool WageStatus { get; set; }
         public int ActiveClients { get; set; }
 
         int imported = 0;
@@ -45,10 +45,7 @@ namespace RMERP.DAL.ViewModel
             return WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
         }
     }
-    public class WageProcessListVM
-    {
-        
-    }
+    
     public class WageProcessClientAttendancePageVM
     {
         public WageProcessVM wageProcess { get; set; }

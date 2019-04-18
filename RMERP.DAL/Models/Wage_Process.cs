@@ -15,6 +15,7 @@ namespace RMERP.DAL.Models
         public int WAG_Id { get; set; }
         public DateTime WAG_Month { get; set; }
         public DateTime WAG_RegisteredOn { get; set; }
+        public bool WAG_Status { get; set; }
         public int ADM_Id_RegisteredBy { get; set; }
 
         public ICollection<Attendance> Attendance { get; set; }
