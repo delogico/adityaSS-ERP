@@ -125,7 +125,7 @@
                                 <td class="gray">Final Amount</td>
                                 @if (item.wageProcessClientVM != null && item.wageProcessVM.WageStatus == false)
                                 {
-                                    <td class="dimgray">Edit</td>
+                                    <td class="dimgray"></td>
                                 }
                             </tr>
                         </thead>
@@ -137,7 +137,7 @@
                                 <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
                                 <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
                                 <td class="gainsboro">@(employee.employeeVM.EMP_Gender == true ? "M" : "F")</td>
-                                <td class="gainsboro"></td>
+                                <td class="gainsboro">@DateHelper.getDateWithFormat(employee.employeeVM.EMP_DateOfJoining)</td>
                                 <td class="lightgray">@employee.WAR_TotalWorkingDays</td>
                                 <td class="lightgray">@employee.WAR_TotalPaybleDays</td>
                                 <td class="lightgray">@Math.Round(employee.WAR_Basic, 2)</td>
