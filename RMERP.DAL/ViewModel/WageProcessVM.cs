@@ -44,6 +44,7 @@ namespace RMERP.DAL.ViewModel
         {
             return WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
         }
+        public int totEmpTakeAdvance { get; set; }
     }
     
     public class WageProcessClientAttendancePageVM

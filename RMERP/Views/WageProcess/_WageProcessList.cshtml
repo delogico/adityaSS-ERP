@@ -14,6 +14,8 @@
                             <th>Wag Month</th>
                             <th>Attendance</th>
                             <th>Wage Register</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,7 +30,7 @@
                                 <a data-toggle="tooltip" data-placement="right" title="Not Imported Clients" style="color:red;font-weight: 600;">@item.NotImportedClients()</a>
                                 ]
                             </td>
-                           
+
                             <td>
                                 @Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = item.WAG_Id })
                                 [
@@ -44,7 +46,7 @@
                                     </a>*@
                                     if (item.WageStatus == true)
                                     {
-                                        <span class='label label-danger-border'> Wage Register Confirmed! Now can not be able to edit. </span>
+                                        <span class='label label-danger-border'> Wage register confirmed! Now can not be able to edit. </span>
                                     }
                                     else
                                     {
@@ -55,7 +57,15 @@
                                     }
                                 }
                             </td>
-                            
+                            <td>
+                                @Html.ActionLink("Advance report for bank", "AdvanceRptForBank", "Employees", new { WAG_Month = item.WAG_Month })
+                                [
+                                <a data-toggle="tooltip" data-placement="top" title="Total employees who take advance" style="color:black;font-weight: 600;">@item.totEmpTakeAdvance</a>
+                                ]
+                            </td>
+                            <td>
+                                @Html.ActionLink("Advance list which is not completed", "NotCompletedAdvanceLst", "Employees", new { WAG_Month = item.WAG_Month })
+                            </td>
 
                         </tr>
                         }

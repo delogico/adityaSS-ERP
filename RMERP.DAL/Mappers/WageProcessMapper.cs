@@ -32,9 +32,11 @@ namespace RMERP.DAL.Mappers
             WageProcessVM wageProcessVM = new WageProcessVM();
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
+            EmployeeManager employeeManager = new EmployeeManager(_context);            
             wageProcessVM.WAG_Id = wageProcess.WAG_Id;
             wageProcessVM.WageStatus = wageProcess.WAG_Status;
             wageProcessVM.WAG_Month = wageProcess.WAG_Month;
+            wageProcessVM.totEmpTakeAdvance = employeeManager.AdvanceRptForBank((wageProcess.WAG_Month)).Select(m=>m.EMP_Id).Distinct().Count();
             List<Clients> clients = clientsManager.GetActiveClientofaMonth(wageProcess.WAG_Month);
             if (clients!=null)
                 wageProcessVM.ActiveClients = clients.Count();

@@ -31,7 +31,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Date of birth")]
         [Required(ErrorMessage = "Date of birth is required")]
         [DataType(DataType.Date)]
-        public DateTime EMP_DOB { get; set; }
+        public DateTime EMP_DOB { get; set; }= DateTime.Today;
 
         [Display(Name = "Marital status")]
         [Required(ErrorMessage = "Marital status is required")]
@@ -40,7 +40,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Date of joining")]
         [Required(ErrorMessage = "Date of joining is required")]
         [DataType(DataType.Date)]
-        public DateTime EMP_DateOfJoining { get; set; }
+        public DateTime EMP_DateOfJoining { get; set; } = DateTime.Today;
 
         [Display(Name = "Gender")]
         [Required(ErrorMessage = "Gender is required")]

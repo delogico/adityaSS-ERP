@@ -122,5 +122,18 @@ namespace RMERP.DAL.ManagerClasses
             employee_Advances = _context.Employee_Advance.Where(m=>m.EMP_Id.Equals(EMP_Id)).Include(m=>m.EMP_).ToList();
             return employee_Advances;
         }
+        public List<Employee_Advance> AdvanceRptForBank(DateTime WAG_Month)
+        {
+            List<Employee_Advance> employee_Advances = _context.Employee_Advance.Include(m => m.EMP_).Where(m => m.ADV_RegisteredOn.Month.Equals(WAG_Month.Month)).ToList();  
+            return employee_Advances;
+        }
+        public List<Employee_Advance> NotCompletedAdvanceLst(DateTime WAG_Month)
+        {
+            List<Employee_Advance> employee_Advances = _context.Employee_Advance.Include(m=>m.EMP_)
+                .Where(m => m.ADV_RegisteredOn.Month.Equals(WAG_Month.Month) && m.ADV_Status.Equals(false))
+                .ToList();
+            return employee_Advances;
+        }
+        
     }
 }

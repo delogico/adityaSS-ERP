@@ -9,6 +9,7 @@ namespace RMERP.DAL.Models
         public int EMP_Id { get; set; }
         public decimal ADV_Amount { get; set; }
         public DateTime ADV_RegisteredOn { get; set; }
+        public bool ADV_Status { get; set; }
         public int ADM_Id_RegisteredBy { get; set; }
 
         public Employees EMP_ { get; set; }

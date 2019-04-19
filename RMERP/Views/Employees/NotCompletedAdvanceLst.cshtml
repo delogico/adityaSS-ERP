@@ -1,0 +1,71 @@
+﻿@model IEnumerable<RMERP.DAL.ViewModel.EmployeeAdvanceVM>
+@using RMERP.DAL.ViewModel
+@{
+    ViewData["Title"] = "Advance list which is not completed";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+@section scripts{
+    @if (TempData["message"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+            alert('@TempData["message"]');
+        });
+        </script>
+    };
+}
+<style>
+    .modal-dialog {
+        transform: translate(0, -50%);
+        top: 30%;
+        margin: 0 auto;
+    }
+</style>
+<div>
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <h4 class="page-title">@ViewBag.WAG_Month</h4>
+            </div>
+            <div class="col-sm-4 text-right m-b-30">
+                @*<a class="btn btn-primary rounded" href="@Url.Action("AddEditDesignation","Designations")"><i class="fa fa-plus"></i> Register New Designation</a>*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <table class="table table-striped custom-table datatable">
+                        <thead>
+                            <tr>
+                                <th>Employee Name</th>
+                                <th>Total Advance Amount</th>
+                                <th>Enter Paid Amount</th>
+                                <th>Remaining Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.GroupBy(x => x.EMP_Id).Select(g => new
+                            {
+                                EmployeeName=g.Select(n=>n.EmployeeName).First(),                               
+                                ADV_Amount = g.Sum(x => x.ADV_Amount)
+                            }))
+                            {
+                            <tr>
+                                <td><b>@item.EmployeeName</b></td>
+                                <td><b>@item.ADV_Amount</b></td>
+                                <td>
+                                    @Html.TextBoxFor(m=>item.ADV_Amount, new { @class = "form-control" })
+                                    <input type="button" name="Add" value="Add" class="btn btn-success btn-xs" />
+                                </td>
+                                <td>@item.ADV_Amount</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

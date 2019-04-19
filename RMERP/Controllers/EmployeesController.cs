@@ -139,5 +139,21 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditEmployee", new { EMP_Id = EMP_Id, tab = "AddEditAdvance" });
         }
+        [Breadcrumb("Advance Report For Bank", FromAction = "Index", FromController = typeof(WageProcessController))]
+        public ActionResult AdvanceRptForBank(DateTime WAG_Month)
+        {
+            EmployeeManager employeeManager = new EmployeeManager(_context);
+            List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(employeeManager.AdvanceRptForBank((WAG_Month)));
+            ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
+            return View(advancesVM);
+        }
+        [Breadcrumb("Pending Advance List", FromAction = "Index", FromController = typeof(WageProcessController))]
+        public ActionResult NotCompletedAdvanceLst(DateTime WAG_Month)
+        {
+            EmployeeManager employeeManager = new EmployeeManager(_context);
+            List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(employeeManager.NotCompletedAdvanceLst((WAG_Month)));
+            ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
+            return View(advancesVM);
+        }
     }
 }
