@@ -17,7 +17,6 @@ namespace RMERP.Controllers
     public class EmployeesController : Controller
     {
         private readonly RMERPContext _context;        
-       // private static int Emp_Id=0;
         public EmployeesController(RMERPContext context)
         {
             _context = context;
@@ -139,7 +138,7 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditEmployee", new { EMP_Id = EMP_Id, tab = "AddEditAdvance" });
         }
-        [Breadcrumb("Advance Report For Bank", FromAction = "Index", FromController = typeof(WageProcessController))]
+        [Breadcrumb("Advance Taken", FromAction = "Index", FromController = typeof(WageProcessController))]
         public ActionResult AdvanceRptForBank(DateTime WAG_Month)
         {
             EmployeeManager employeeManager = new EmployeeManager(_context);
@@ -147,7 +146,7 @@ namespace RMERP.Controllers
             ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
             return View(advancesVM);
         }
-        [Breadcrumb("Pending Advance List", FromAction = "Index", FromController = typeof(WageProcessController))]
+        [Breadcrumb("Advance EMI", FromAction = "Index", FromController = typeof(WageProcessController))]
         public ActionResult NotCompletedAdvanceLst(DateTime WAG_Month)
         {
             EmployeeManager employeeManager = new EmployeeManager(_context);

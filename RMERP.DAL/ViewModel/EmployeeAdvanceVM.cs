@@ -12,11 +12,14 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Employee")]
         [Required(ErrorMessage = "Employee is required")]
         public int EMP_Id { get; set; }
-        [Display(Name ="Advance Amount")]
+        [Display(Name ="Amount Taken")]
         [Required(ErrorMessage = "Advance amount is required")]
         [RegularExpression(@"^(0|-?\d{0,16}(\.\d{0,2})?)$")]
         public decimal ADV_Amount { get; set; }
-        public DateTime ADV_RegisteredOn { get; set; }
+        [Display(Name = "Amount taken on")]
+        [Required(ErrorMessage = "Date is required")]
+        [DataType(DataType.Date)]
+        public DateTime ADV_RegisteredOn { get; set; } = DateTime.Today;
         public int ADM_Id_RegisteredBy { get; set; }
         public bool ADV_Status { get; set; }
         public string EmployeeName { get; set; }

@@ -129,8 +129,9 @@ namespace RMERP.DAL.ManagerClasses
         }
         public List<Employee_Advance> NotCompletedAdvanceLst(DateTime WAG_Month)
         {
+            DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
             List<Employee_Advance> employee_Advances = _context.Employee_Advance.Include(m=>m.EMP_)
-                .Where(m => m.ADV_RegisteredOn.Month.Equals(WAG_Month.Month) && m.ADV_Status.Equals(false))
+                .Where(m => m.ADV_RegisteredOn.Date <= lastDate.Date && m.ADV_Status.Equals(false))
                 .ToList();
             return employee_Advances;
         }

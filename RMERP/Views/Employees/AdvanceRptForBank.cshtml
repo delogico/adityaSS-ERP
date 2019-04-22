@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<RMERP.DAL.ViewModel.EmployeeAdvanceVM>
+@using RMERP.Helpers
 @{
     ViewData["Title"] = "Advance Report For Bank";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
@@ -34,7 +35,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div>
-                    <table class="table table-striped custom-table datatable">
+                    <table class="table table-striped custom-table">
                         <thead>
                             <tr>
                                 <th>Employee Name</th>
@@ -46,10 +47,9 @@
                             @foreach (var item in Model)
                             {
                             <tr>
-                                <td><b>@item.EmployeeName</b></td>
-                                <td><b>@item.ADV_Amount</b></td>
-                                <td><b>@item.ADV_RegisteredOn</b></td>
-
+                                <td>@item.EmployeeName</td>
+                                <td>@item.ADV_Amount</td>
+                                <td>@DateHelper.getDateWithFormat(item.ADV_RegisteredOn)</td>
                             </tr>
                             }
                         </tbody>

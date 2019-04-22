@@ -10,10 +10,25 @@
     {
         <script>
             $(document).ready(function () {
-            alert('@TempData["message"]');
-        });
+                alert('@TempData["message"]');
+            });
+            
         </script>
     };
+    <script>
+        function RemainigAmt(advance, id) {
+            debugger;
+            if ($("#Amount" + id).val() > $("#amt_" + id).html()) {
+                $("#Amount" + id).val(0);
+                alert("Your Amount Must Be Less Than Remaining Amount");
+            } else {
+                var EMIamt = $("#Amount" + id).val();
+                var RemaimigAmt = (advance - parseInt(EMIamt));
+                $("#amt_" + id).html(RemaimigAmt);
+            }
+           
+        }
+    </script>
 }
 <style>
     .modal-dialog {
@@ -38,27 +53,30 @@
                     <table class="table table-striped custom-table datatable">
                         <thead>
                             <tr>
-                                <th>Employee Name</th>
-                                <th>Total Advance Amount</th>
-                                <th>Enter Paid Amount</th>
+                                <th>Employee</th>
+                                <th>Total Advance</th>
+                                <th>Amount</th>
                                 <th>Remaining Amount</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model.GroupBy(x => x.EMP_Id).Select(g => new
                             {
-                                EmployeeName=g.Select(n=>n.EmployeeName).First(),                               
+                                EmployeeName=g.Select(n=>n.EmployeeName).First(),
+                                Emp_ID = g.Key,
                                 ADV_Amount = g.Sum(x => x.ADV_Amount)
                             }))
                             {
                             <tr>
                                 <td><b>@item.EmployeeName</b></td>
+                                @{var formated = String.Format("{0:00}", item.ADV_Amount);}
                                 <td><b>@item.ADV_Amount</b></td>
                                 <td>
-                                    @Html.TextBoxFor(m=>item.ADV_Amount, new { @class = "form-control" })
-                                    <input type="button" name="Add" value="Add" class="btn btn-success btn-xs" />
+                                    @*@Html.TextBox("Amount" + item.Emp_ID, "", new { htmlAttributes = new { @class = "form-control" } })*@
+                                    @Html.TextBoxFor(m=>item.ADV_Amount, new { @class = "form-control",id= "Amount" + item.Emp_ID })
+                                    <input type="button" onclick="RemainigAmt(@item.ADV_Amount,@item.Emp_ID)" name="Add" value="Add" class="btn btn-success btn-xs" />
                                 </td>
-                                <td>@item.ADV_Amount</td>
+                                <td id="amt_@item.Emp_ID">@Html.DisplayFor(m => item.ADV_Amount, new { @id = "Remaining" + item.Emp_ID })</td>
                             </tr>
                             }
                         </tbody>

@@ -12,59 +12,59 @@
                     <thead>
                         <tr>
                             <th>Wag Month</th>
-                            <th>Attendance</th>
-                            <th>Wage Register</th>
                             <th></th>
                             <th></th>
+                            <th></th>
+                            <th></th>
+
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
+                            var style = (item.WageStatus == true ? "#55ce634f;" : "none");
+                        <tr style="background-color:@style;">
                             <td><b>@item.WAG_Month.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")) - @item.WAG_Month.Year.ToString()</b></td>
                             <td>
                                 @Html.ActionLink("Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = item.WAG_Id })
-                                [ <a data-toggle="tooltip" data-placement="top" title="Total Clients" style="color:black;font-weight: 600;">@item.ActiveClients,</a>
-                                <a data-toggle="tooltip" data-placement="bottom" title="Imported Clients" style="color:green;font-weight: 600;">@item.ImportedClients(),</a>
-                                <a data-toggle="tooltip" data-placement="right" title="Not Imported Clients" style="color:red;font-weight: 600;">@item.NotImportedClients()</a>
+                                [ <a data-toggle="tooltip" data-placement="top" title="Total Clients" style="color:black;font-weight: 400;">@item.ActiveClients,</a>
+                                <a data-toggle="tooltip" data-placement="bottom" title="Imported Clients" style="color:green;font-weight: 400;">@item.ImportedClients(),</a>
+                                <a data-toggle="tooltip" data-placement="right" title="Not Imported Clients" style="color:red;font-weight: 400;">@item.NotImportedClients()</a>
                                 ]
+                            </td>
+
+                            <td>
+                                @Html.ActionLink("Taken anount of for this month", "AdvanceRptForBank", "Employees", new { WAG_Month = item.WAG_Month })
+                                [
+                                <a data-toggle="tooltip" data-placement="top" title="Total employees who take advance" style="color:black;font-weight: 400;">@item.totEmpTakeAdvance</a>
+                                ]
+                            </td>
+
+                            <td>
+                                @Html.ActionLink("Update advance EMI for this month", "NotCompletedAdvanceLst", "Employees", new { WAG_Month = item.WAG_Month })
                             </td>
 
                             <td>
                                 @Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = item.WAG_Id })
                                 [
-                                <a data-toggle="tooltip" data-placement="top" title="Total WageRegisters" style="color:black;font-weight: 600;">@item.ActiveClients,</a>
-                                <a data-toggle="tooltip" data-placement="bottom" title="Saved WageRegisters" style="color:green;font-weight: 600;">@item.WageRegisterSaved(),</a>
-                                <a data-toggle="tooltip" data-placement="right" title="Not Saved WageRegisters" style="color:red;font-weight: 600;">@item.WageRegisterNotSaved()</a>
+                                <a data-toggle="tooltip" data-placement="top" title="Total WageRegisters" style="color:black;font-weight: 400;">@item.ActiveClients,</a>
+                                <a data-toggle="tooltip" data-placement="bottom" title="Saved WageRegisters" style="color:green;font-weight: 400;">@item.WageRegisterSaved(),</a>
+                                <a data-toggle="tooltip" data-placement="right" title="Not Saved WageRegisters" style="color:red;font-weight: 400;">@item.WageRegisterNotSaved()</a>
                                 ]
                                 @if (item.WageRegisterSaved() == item.ActiveClients && item.WageRegisterNotSaved() == 0)
                                 {
-                                    @*<a onclick="return window.confirm('Are you sure,You want to confirm? Now onwards wage register can not be able to modify.')"
-                                       href='@Url.Action("WageRegisterStatus", "WageProcess", new { WAG_Id = item.WAG_Id})' title="Confirm">
-                                        <i class="fa fa-check-circle m-r-5"></i> Confirm WageRegisters
-                                    </a>*@
                                     if (item.WageStatus == true)
                                     {
-                                        <span class='label label-danger-border'> Wage register confirmed! Now can not be able to edit. </span>
+                                        <span class='label label-danger-border'> Wage register confirmed. </span>
                                     }
                                     else
                                     {
-                                        <a class="btn btn-white btn-sm rounded" onclick="return window.confirm('Are you sure,You want to confirm? Now onwards wage register can not be able to modify.')"
+                                        <a class="btn btn-primary  btn-sm" onclick="return window.confirm('Are you sure,You want to confirm? Now onwards wage register can not be able to modify.')"
                                            href='@Url.Action("WageRegisterStatus", "WageProcess", new { WAG_Id = item.WAG_Id})' title="Confirm">
-                                            <i class="fa fa-dot-circle-o text-success"></i> Confirm WageRegisters
+                                            Confirm WageRegisters
                                         </a>
                                     }
                                 }
-                            </td>
-                            <td>
-                                @Html.ActionLink("Advance report for bank", "AdvanceRptForBank", "Employees", new { WAG_Month = item.WAG_Month })
-                                [
-                                <a data-toggle="tooltip" data-placement="top" title="Total employees who take advance" style="color:black;font-weight: 600;">@item.totEmpTakeAdvance</a>
-                                ]
-                            </td>
-                            <td>
-                                @Html.ActionLink("Advance list which is not completed", "NotCompletedAdvanceLst", "Employees", new { WAG_Month = item.WAG_Month })
                             </td>
 
                         </tr>

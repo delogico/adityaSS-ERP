@@ -6,17 +6,17 @@
 }
 
 @section scripts{
+   
     @if (TempData["message"] != null)
     {
         <script>
-            $(document).ready(function () {               
+            $(document).ready(function () {              
                 alert('@TempData["message"]');
                 WageProcessList();
         });
         </script>
     };
     <script>
-
         function onConfirmClick() {
             $.ajax({
                 type: "GET",
@@ -24,7 +24,7 @@
                 success: function (data) {
                     bootbox.confirm({
                         title: "Confirmation",
-                        message: "Are you sure want to create wage for " + data+"?",
+                        message: "Are you sure want to create wage for " + data + "?",
                         buttons: {
                             confirm: {
                                 label: 'Yes',
@@ -52,7 +52,7 @@
                 }
             })
         };
-        
+
         function WageProcessList() {
             $.ajax({
                 type: "GET",
@@ -60,7 +60,7 @@
                 success: function (data) {
                     $('#WageProcessList').html(data);
                 }
-            })          
+            })
         };
     </script>
 }
@@ -74,7 +74,7 @@
 <div>
     <div class="content container-fluid">
         <div class="row">
-           
+
             <div class="col-sm-8">
                 <h4 class="page-title">@ViewData["Title"]</h4>
             </div>
