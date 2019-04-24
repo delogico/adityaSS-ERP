@@ -41,7 +41,9 @@
                             </td>
 
                             <td>
-                                @Html.ActionLink("Update advance EMI for this month", "NotCompletedAdvanceLst", "Employees", new { WAG_Month = item.WAG_Month })
+                                @*@Html.ActionLink("Update advance EMI for this month", "NotCompletedAdvanceLst", "Employees", new { WAG_Month = item.WAG_Month, WAG_Id = item.WAG_Id })*@
+                                @Html.ActionLink("Update advance EMI for this month", "UpdateAdvanceEMI", "Employees", new { WAG_Month = item.WAG_Month, WAG_Id = item.WAG_Id })
+                                
                             </td>
 
                             <td>

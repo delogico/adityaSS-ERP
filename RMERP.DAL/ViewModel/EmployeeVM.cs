@@ -119,6 +119,7 @@ namespace RMERP.DAL.ViewModel
         public ICollection<Attendance> Attendance { get; set; }
         public ICollection<Clients_Employees> Clients_Employees { get; set; }
         public List<EmployeeAdvanceVM> advances { get; set; }
+        public List<WageRegisterAdvancesVM> wageRegisterAdvances { get; set; }
     }
 }
 

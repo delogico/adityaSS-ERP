@@ -13,6 +13,7 @@ namespace RMERP.DAL.ViewModel
         public DateTime WAG_Month { get; set; }
         public List<Attendance> Attendance { get; set; }
         public List<Wage_Process_Clients> wage_Process_Clients { get; set; }
+        public List<Wage_Register_Advances> wage_Register_Advances { get; set; }      
         public bool WageStatus { get; set; }
         public int ActiveClients { get; set; }
 

@@ -1,0 +1,127 @@
+﻿@model RMERP.DAL.ViewModel.UpdateAdvanceEMI
+@using RMERP.DAL.ViewModel;
+@{
+    ViewData["Title"] = "UpdateAdvanceEMI";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+@section scripts{
+    @if (TempData["message"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+                alert('@TempData["message"]');
+            });
+
+        </script>
+    };
+    <script>
+        function RemainigAmt(total, id) {           
+            var advance = $("#Amount" + id).val();
+            if (parseInt(advance) > parseInt($("#amt_" + id).html())) {
+                $("#Amount" + id).val(0);
+                alert("Your Amount Must Be Less Than Remaining Amount");
+            } else {
+                debugger;
+                var RemaimigAmt = (total - parseInt(advance));
+                $("#amt_" + id).html(RemaimigAmt);
+                $("#Ramt_" + id).html("<b>"+RemaimigAmt+"</b>");
+                var Cheked = $("#WAD_Status" + id).prop("checked");
+                var Url = siteUrl + "Employees/addWageRegisterAdvances?EMP_id=" + id + "&WAG_Id=" +@Model.WAG_Id+"&WAD_Amount=" + advance + "&WAD_Status=" + Cheked;
+                $.ajax({
+                    type: "POST",
+                    url: Url
+                });
+
+            }
+        };
+
+    </script>
+}
+<style>
+    .modal-dialog {
+        transform: translate(0, -50%);
+        top: 30%;
+        margin: 0 auto;
+    }
+</style>
+<div>
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <h4 class="page-title">@ViewBag.WAG_Month</h4>
+            </div>
+            <div class="col-sm-4 text-right m-b-30">
+              
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <table class="table table-striped custom-table">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Total Advance</th>
+                                <th>Amount</th>
+                                <th>Remaining Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                            @foreach (var item in Model.employeeAdvanceVMs.Select(n => new { n.EMP_Id,n.EmployeeName}).Distinct().ToList())
+                            {                               
+                                DateTime lastDate = new DateTime(Model.WAG_Month.Year, Model.WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
+                                decimal totalAmt = 0;
+                                if (Model.employeeAdvanceVMs.Where(v => v.EMP_Id.Equals(item.EMP_Id)).Count() > 0)
+                                {
+                                    var totalAdvance = Model.employeeAdvanceVMs.Where(m => m.EMP_Id == item.EMP_Id && m.ADV_Status == false && m.ADV_RegisteredOn.Date <= lastDate.Date).GroupBy(m => m.EMP_Id).Select(g => new
+                                    {
+                                        ADV_Amt = g.Sum(n => n.ADV_Amount)
+                                    });
+                                    totalAmt = Convert.ToDecimal(totalAdvance.Select(g => g.ADV_Amt).First());
+                                }
+                                decimal totalEMI = 0M;
+                                if (Model.wageRegisterAdvancesVMs.Where(v=>v.EMP_Id.Equals(item.EMP_Id)).Count() > 0)
+                                {
+                                    var EMI = Model.wageRegisterAdvancesVMs.Where(m => m.EMP_Id == item.EMP_Id && m.WAD_Status == false).GroupBy(m => m.EMP_Id).Select(g => new
+                                    {
+                                        WAD_Amt = g.Sum(n => n.WAD_Amount)
+                                    });
+                                    totalEMI = Convert.ToDecimal(EMI.Select(g => g.WAD_Amt).First());
+                                }
+                                decimal RemainingAmt = totalAmt - totalEMI;
+                                <tr>
+                                    <td><b>@item.EmployeeName</b></td>
+                                    <td id="Ramt_@item.EMP_Id"><b>@RemainingAmt</b></td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        @Html.TextBox("RemainingAmt", null, new { @class = "form-control", id = "Amount" + item.EMP_Id })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        @Html.CheckBox("WAD_Status", new { @id = "WAD_Status" + item.EMP_Id, @value = item.EMP_Id })Consider Loan Completed
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <input type="button" onclick="RemainigAmt(@totalAmt,@item.EMP_Id)" name="Add" value="Add" class="btn btn-success btn-xs" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+</td>
+                                    <td id="amt_@item.EMP_Id">@Html.DisplayFor(m => RemainingAmt, new { @id = "Remaining" + item.EMP_Id })</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

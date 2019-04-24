@@ -24,6 +24,8 @@ namespace RMERP.DAL.Mappers
                 wageProcessVM.Attendance = wageProcess.Attendance.ToList();
             if (wageProcess.Wage_Process_Clients != null)
                 wageProcessVM.wage_Process_Clients = wageProcess.Wage_Process_Clients.ToList();
+            if (wageProcess.Wage_Register_Advances != null)
+                wageProcessVM.wage_Register_Advances = wageProcess.Wage_Register_Advances.ToList();
             return wageProcessVM;
         }
 
@@ -32,11 +34,12 @@ namespace RMERP.DAL.Mappers
             WageProcessVM wageProcessVM = new WageProcessVM();
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
-            EmployeeManager employeeManager = new EmployeeManager(_context);            
+            AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);            
             wageProcessVM.WAG_Id = wageProcess.WAG_Id;
             wageProcessVM.WageStatus = wageProcess.WAG_Status;
             wageProcessVM.WAG_Month = wageProcess.WAG_Month;
-            wageProcessVM.totEmpTakeAdvance = employeeManager.AdvanceRptForBank((wageProcess.WAG_Month)).Select(m=>m.EMP_Id).Distinct().Count();
+
+            wageProcessVM.totEmpTakeAdvance = advance.AdvanceRptForBank((wageProcess.WAG_Month)).Select(m=>m.EMP_Id).Distinct().Count();
             List<Clients> clients = clientsManager.GetActiveClientofaMonth(wageProcess.WAG_Month);
             if (clients!=null)
                 wageProcessVM.ActiveClients = clients.Count();
@@ -44,6 +47,8 @@ namespace RMERP.DAL.Mappers
                 wageProcessVM.Attendance = wageProcess.Attendance.ToList();            
             if (wageProcess.Wage_Process_Clients != null)
                 wageProcessVM.wage_Process_Clients = wageProcess.Wage_Process_Clients.ToList();
+            if (wageProcess.Wage_Register_Advances != null)
+                wageProcessVM.wage_Register_Advances = wageProcess.Wage_Register_Advances.ToList();
             return wageProcessVM;
         }
 

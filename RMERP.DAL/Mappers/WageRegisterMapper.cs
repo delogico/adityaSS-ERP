@@ -36,7 +36,8 @@ namespace RMERP.DAL.Mappers
             wageRegisterVM.WAR_PF_Calculated = wageRegister.WAR_PF_Calculated;
             wageRegisterVM.WAR_TotalPaybleDays = wageRegister.WAR_TotalPaybleDays;
             wageRegisterVM.WAR_TotalWorkingDays = wageRegister.WAR_TotalWorkingDays;
-            
+            if(wageRegister.WAR_Advance_Amount!=null)
+                wageRegisterVM.WAR_Advance_Amount = wageRegister.WAR_Advance_Amount.Value;
             if (wageRegister.CRI_!= null)
             {
                 wageRegisterVM.clientRequirementVM = ClientRequirementMapper.mapMe(wageRegister.CRI_);
@@ -86,7 +87,8 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_PF_Calculated = wageRegisterVM.WAR_PF_Calculated;
             wageRegister.WAR_TotalPaybleDays = wageRegisterVM.WAR_TotalPaybleDays;
             wageRegister.WAR_TotalWorkingDays = wageRegisterVM.WAR_TotalWorkingDays;
-
+            if(wageRegisterVM.WAR_Advance_Amount!=null)
+                wageRegister.WAR_Advance_Amount = wageRegisterVM.WAR_Advance_Amount;
             if (wageRegisterVM.employeeVM != null)
                 wageRegister.EMP_ = EmployeesMapper.MapMeModel(wageRegisterVM.employeeVM);
             if (wageRegisterVM.clientRequirementVM != null)

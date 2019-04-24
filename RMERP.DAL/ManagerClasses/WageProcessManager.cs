@@ -23,7 +23,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public Wage_Process getWageProcessById(int WAG_Id)
         {
-            Wage_Process wageProcess = _context.Wage_Process.Include(m=>m.Wage_Process_Clients).Include(m=>m.Attendance).Where(m => m.WAG_Id == WAG_Id).FirstOrDefault();
+            Wage_Process wageProcess = _context.Wage_Process.Include(m=>m.Wage_Process_Clients).Include(m=>m.Wage_Register_Advances).Include(m=>m.Attendance).Where(m => m.WAG_Id == WAG_Id).FirstOrDefault();
             return wageProcess;
         }
 

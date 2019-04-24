@@ -5,6 +5,7 @@ using System.Text;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using RMERP.DAL.App_Code;
+using RMERP.DAL.ViewModel;
 
 namespace RMERP.DAL.ManagerClasses
 {
@@ -122,19 +123,23 @@ namespace RMERP.DAL.ManagerClasses
             employee_Advances = _context.Employee_Advance.Where(m=>m.EMP_Id.Equals(EMP_Id)).Include(m=>m.EMP_).ToList();
             return employee_Advances;
         }
-        public List<Employee_Advance> AdvanceRptForBank(DateTime WAG_Month)
-        {
-            List<Employee_Advance> employee_Advances = _context.Employee_Advance.Include(m => m.EMP_).Where(m => m.ADV_RegisteredOn.Month.Equals(WAG_Month.Month)).ToList();  
-            return employee_Advances;
-        }
-        public List<Employee_Advance> NotCompletedAdvanceLst(DateTime WAG_Month)
-        {
-            DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
-            List<Employee_Advance> employee_Advances = _context.Employee_Advance.Include(m=>m.EMP_)
-                .Where(m => m.ADV_RegisteredOn.Date <= lastDate.Date && m.ADV_Status.Equals(false))
-                .ToList();
-            return employee_Advances;
-        }
         
+        //public List<UpdateAdvanceEMI> UpdateAdvanceEMIs(DateTime WAG_Month)
+        //{
+        //    DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
+        //    List<UpdateAdvanceEMI> UpdateAdvanceEMIs = new List<UpdateAdvanceEMI>();
+        //    List<Employee_Advance> employee_Advances = _context.Employee_Advance.Include(m => m.EMP_)
+        //        .Where(m => m.ADV_RegisteredOn.Date <= lastDate.Date && m.ADV_Status.Equals(false))
+        //        .ToList();
+        //    foreach(var item in employee_Advances)
+        //    {
+        //        UpdateAdvanceEMI update = new UpdateAdvanceEMI();
+        //        update.EMP_Id = item.EMP_Id;
+        //        update.EmployeeName = item.EMP_.EMP_FirstName;
+        //        update.WAG_Month = WAG_Month;                
+        //    }
+        //    return UpdateAdvanceEMIs;
+        //}
+
     }
 }

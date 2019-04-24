@@ -89,8 +89,8 @@
                 var distinceDesignations = item.wageRegisterVMs.Select(q => new { q.designation.DES_Id, q.designation.DES_Title }).Distinct();
             }
             @foreach (var dd in distinceDesignations)
-            {
-                var Desig_Employee = item.wageRegisterVMs.Where(r => r.designation.DES_Id.Equals(dd.DES_Id)).ToList();
+            {                
+                List<WageRegisterVM> wageRegisters = item.wageRegisterVMs.Where(r => r.designation.DES_Id.Equals(dd.DES_Id)).ToList();
                 <h3>@dd.DES_Title</h3>
                 <div class="table-responsive">
                     <table class="table table-border">
@@ -108,7 +108,7 @@
                                 <td class="lightgray">DA Calculated</td>
                                 <td class="lightgray">HRA</td>
                                 <td class="lightgray">HRA Calculated</td>
-                                @foreach (var all in Desig_Employee[0].allowanceVMs)
+                                @foreach (var all in wageRegisters[0].allowanceVMs)
                                 {
                                     <td class="lightgray">@all.allowanceVM.ALL_Alias</td>
                                     <td class="lightgray">@all.allowanceVM.ALL_Alias Calculated</td>
@@ -122,6 +122,7 @@
                                 <td class="silver">ESIC</td>
                                 <td class="silver">ESIC Formula</td>
                                 <td class="silver">ESIC Calculated</td>
+                                <td class="silver">Advance Amount</td>
                                 <td class="gray">Final Amount</td>
                                 @if (item.wageProcessClientVM != null && item.wageProcessVM.WageStatus == false)
                                 {
@@ -131,8 +132,21 @@
                         </thead>
                         <tbody>
 
-                            @foreach (var employee in Desig_Employee)
+                            @foreach (var employee in wageRegisters)
                             {
+                                ////List<EmployeeAdvanceVM> empAdvance = wageRegisters.Where(m => m.EMP_Id.Equals(employee.EMP_Id)).Where(m => m.employeeVM.advances!=null).SelectMany(m => m.employeeVM.advances).ToList();
+                                //List<Wage_Register_Advances> wageRegAdvance = item.wageProcessVM.wage_Register_Advances.Where(m => m.EMP_Id.Equals(employee.EMP_Id)).ToList();
+                                //// List<WageRegisterAdvancesVM> wageRegAdvance = wageRegisters.Where(m => m.EMP_Id.Equals(employee.EMP_Id)).Where(m => m.employeeVM.wageRegisterAdvances != null).SelectMany(m => m.employeeVM.wageRegisterAdvances).ToList();                       
+
+                                //decimal totalEMI = 0;
+                                //if (wageRegAdvance.Count() > 0)
+                                //{
+                                //    var EMI = wageRegAdvance.Where(m => m.WAD_Status == false).GroupBy(m => m.EMP_Id).Select(g => new
+                                //    {
+                                //        WAD_Amt = g.Sum(n => n.WAD_Amount)
+                                //    });
+                                //    totalEMI = Convert.ToDecimal(EMI.Select(g => g.WAD_Amt).First());
+                                //}
                             <tr>
                                 <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
                                 <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
@@ -162,10 +176,11 @@
                                 <td class="silver">@Convert.ToDouble(employee.WAR_ESIC)%</td>
                                 <td class="silver">@employee.WAR_ESIC_Formula</td>
                                 <td class="silver">@Math.Round(employee.WAR_ESIC_Calculated, 2)</td>
+                                <td class="silver">@employee.WAR_Advance_Amount</td>
                                 <td class="gray">@Math.Round(employee.WAR_FinalTotal, 2)</td>
                                 @if (item.wageProcessClientVM != null && item.wageProcessVM.WageStatus == false)
                                 {
-                                        <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id }, new { @class = "myClass" })</td>                                   
+                                    <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id }, new { @class = "myClass" })</td>
                                 }
 
                             </tr>

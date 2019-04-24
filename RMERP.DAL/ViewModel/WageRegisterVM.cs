@@ -74,8 +74,8 @@ namespace RMERP.DAL.ViewModel
         public decimal WAR_FinalTotal { get; set; }
         public DateTime WAR_LastModifiedOn { get; set; }
         public int ADM_LastModifiedBy { get; set; }
-        public Designations designation { get; set; }        
-
+        public Designations designation { get; set; }
+        public decimal WAR_Advance_Amount { get; set; }
         public List<WageRegisterAllowanceVM> allowanceVMs { get; set; }
     }
 
@@ -86,7 +86,6 @@ namespace RMERP.DAL.ViewModel
         public ClientsModel client { get; set; }
         public WageProcessVM wageProcessVM { get; set; }
         public WageProcessClientVM wageProcessClientVM { get; set; }
-
     }
 
     public class EditWageRegisterVM

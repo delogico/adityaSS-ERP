@@ -11,6 +11,7 @@ namespace RMERP.DAL.Models
             Clients_Employees = new HashSet<Clients_Employees>();
             Employee_Advance = new HashSet<Employee_Advance>();
             Wage_Register = new HashSet<Wage_Register>();
+            Wage_Register_Advances = new HashSet<Wage_Register_Advances>();
         }
 
         public int EMP_Id { get; set; }
@@ -44,5 +45,6 @@ namespace RMERP.DAL.Models
         public ICollection<Clients_Employees> Clients_Employees { get; set; }
         public ICollection<Employee_Advance> Employee_Advance { get; set; }
         public ICollection<Wage_Register> Wage_Register { get; set; }
+        public ICollection<Wage_Register_Advances> Wage_Register_Advances { get; set; }
     }
 }

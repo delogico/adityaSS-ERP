@@ -540,5 +540,12 @@ namespace RMERP.DAL.ManagerClasses
 
             return cliList.ToList();
         }
+        public int GetClientIDByEmpID(int EMP_Id,DateTime WAG_Month)
+        {
+            int CLI_Id = 0;
+            if (_contaxt.Clients_Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Count() > 0)
+                CLI_Id = _contaxt.Clients_Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).First().CLI_Id;
+            return CLI_Id;
+        }
     }
 }

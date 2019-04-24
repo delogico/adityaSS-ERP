@@ -32,6 +32,7 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Wage_Process> Wage_Process { get; set; }
         public virtual DbSet<Wage_Process_Clients> Wage_Process_Clients { get; set; }
         public virtual DbSet<Wage_Register> Wage_Register { get; set; }
+        public virtual DbSet<Wage_Register_Advances> Wage_Register_Advances { get; set; }
         public virtual DbSet<Wage_Register_Allowances> Wage_Register_Allowances { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -518,6 +519,8 @@ namespace RMERP.DAL.Models
             {
                 entity.HasKey(e => e.WAR_Id);
 
+                entity.Property(e => e.WAR_Advance_Amount).HasColumnType("decimal(9, 2)");
+
                 entity.Property(e => e.WAR_Basic).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_Basic_Calculated).HasColumnType("decimal(9, 2)");
@@ -573,6 +576,27 @@ namespace RMERP.DAL.Models
                     .HasForeignKey(d => d.WAG_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Wage_Register_Wage_Process");
+            });
+
+            modelBuilder.Entity<Wage_Register_Advances>(entity =>
+            {
+                entity.HasKey(e => e.WAD_Id);
+
+                entity.Property(e => e.WAD_Amount).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAD_ClosedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.EMP_)
+                    .WithMany(p => p.Wage_Register_Advances)
+                    .HasForeignKey(d => d.EMP_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Advances_Employees");
+
+                entity.HasOne(d => d.WAG_)
+                    .WithMany(p => p.Wage_Register_Advances)
+                    .HasForeignKey(d => d.WAG_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Advances_Wage_Process");
             });
 
             modelBuilder.Entity<Wage_Register_Allowances>(entity =>

@@ -35,6 +35,7 @@ namespace RMERP.DAL.Models
         public decimal WAR_FinalTotal { get; set; }
         public DateTime? WAR_LastModifiedOn { get; set; }
         public int? ADM_LastModifiedBy { get; set; }
+        public decimal? WAR_Advance_Amount { get; set; }
 
         public Clients CLI_ { get; set; }
         public Client_Requirements CRI_ { get; set; }

@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<RMERP.DAL.ViewModel.EmployeeAdvanceVM>
 @using RMERP.DAL.ViewModel
 @{
-    ViewData["Title"] = "Advance list which is not completed";
+    ViewData["Title"] = "Update advance EMI for this month";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 
@@ -16,14 +16,14 @@
         </script>
     };
     <script>
-        function RemainigAmt(advance, id) {
+        function RemainigAmt(total,id) {
             debugger;
-            if ($("#Amount" + id).val() > $("#amt_" + id).html()) {
+            var advance = $("#Amount" + id).val();
+            if (parseInt(advance) > parseInt($("#amt_" + id).html())) {
                 $("#Amount" + id).val(0);
                 alert("Your Amount Must Be Less Than Remaining Amount");
             } else {
-                var EMIamt = $("#Amount" + id).val();
-                var RemaimigAmt = (advance - parseInt(EMIamt));
+                var RemaimigAmt = (total - parseInt(advance));
                 $("#amt_" + id).html(RemaimigAmt);
             }
            
@@ -72,8 +72,9 @@
                                 @{var formated = String.Format("{0:00}", item.ADV_Amount);}
                                 <td><b>@item.ADV_Amount</b></td>
                                 <td>
-                                    @*@Html.TextBox("Amount" + item.Emp_ID, "", new { htmlAttributes = new { @class = "form-control" } })*@
-                                    @Html.TextBoxFor(m=>item.ADV_Amount, new { @class = "form-control",id= "Amount" + item.Emp_ID })
+                                    @Html.TextBox("Amount" + item.Emp_ID, "", new { htmlAttributes = new { @class = "form-control" } })
+                                    @*@Html.TextBoxFor(m => item.WAD_Amount, new { @class = "form-control", id = "Amount" + item.Emp_ID })*@
+                                    @Html.CheckBox("WAD_Status", false)Consider Loan Completed
                                     <input type="button" onclick="RemainigAmt(@item.ADV_Amount,@item.Emp_ID)" name="Add" value="Add" class="btn btn-success btn-xs" />
                                 </td>
                                 <td id="amt_@item.Emp_ID">@Html.DisplayFor(m => item.ADV_Amount, new { @id = "Remaining" + item.Emp_ID })</td>

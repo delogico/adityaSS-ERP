@@ -26,7 +26,7 @@ namespace RMERP.DAL.ManagerClasses
 
         public List<Wage_Register> GetWageRegisters(int WAG_Id,int CLI_Id)
         {
-            return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id && r.CLI_Id == CLI_Id).Include(m=>m.EMP_).Include(m=>m.CRI_).ThenInclude(m=>m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n=>n.CRA_).ThenInclude(n=>n.ALL_).ToList();
+            return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id && r.CLI_Id == CLI_Id).Include(m=>m.EMP_).ThenInclude(m=>m.Employee_Advance).Include(n=>n.EMP_).ThenInclude(n=>n.Wage_Register_Advances).Include(m=>m.CRI_).ThenInclude(m=>m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n=>n.CRA_).ThenInclude(n=>n.ALL_).ToList();
         }
 
         public List<ClientWageRegisterVM> GenerateWageRegisterTable(int WAG_Id,int AdminID)
@@ -98,7 +98,19 @@ namespace RMERP.DAL.ManagerClasses
                 wageRegisterVM.wageProcessVM = WageProcessMapper.mapMe(wageProcess);
                 wageRegisterVM.employeeVM = EmployeesMapper.MapMe(employee.EMP_);
                 wageRegisterVM.designation = employee.DES_;
-                
+                #region EMI Calculation
+                decimal totalEMI = 0;
+                if (employee.EMP_.Wage_Register_Advances.Count() > 0)
+                {
+                    var EMI = employee.EMP_.Wage_Register_Advances.Where(m => m.WAD_Status == false).GroupBy(m => m.EMP_Id).Select(g => new
+                    {
+                        WAD_Amt = g.Sum(n => n.WAD_Amount)
+                    });
+                    totalEMI = Convert.ToDecimal(EMI.Select(g => g.WAD_Amt).First());
+                }
+                wageRegisterVM.WAR_Advance_Amount = totalEMI;
+                #endregion
+
                 wageRegisterVM.clientRequirementVM = ClientRequirementMapper.mapMe(clientsManager.getActiveClientRequirement(CLI_Id, employee.DES_Id));
                 wageRegisterVM.WAR_TotalWorkingDays = totalWorkingDays;
                 wageRegisterVM.WAR_TotalPaybleDays = totalPaybleDays;
@@ -315,6 +327,16 @@ namespace RMERP.DAL.ManagerClasses
                 res = ex.InnerException.Message;
             }
             return res;
+        }
+        public List<Wage_Register_Advances> GetWageRegisterAdvances(DateTime WAG_Month)
+        {
+            List<Wage_Register_Advances> wage_Register_Advances = new List<Wage_Register_Advances>();
+            DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
+            wage_Register_Advances = _context.Wage_Register_Advances.Include(m => m.EMP_)
+                .Where(m=> m.WAD_Status.Equals(false))
+                .ToList();
+           
+            return wage_Register_Advances;
         }
     }
 }

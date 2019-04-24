@@ -11,12 +11,18 @@ using RMERP.Helpers;
 using RMERP.DAL.Mappers;
 using static RMERP.DAL.Helpers.ProjectUtils;
 using SmartBreadcrumbs.Attributes;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RMERP.Controllers
 {
+    [Authorize]
     public class EmployeesController : Controller
     {
-        private readonly RMERPContext _context;        
+        private readonly RMERPContext _context;
+        public IConfiguration _configuration;
+        private IHostingEnvironment _hostingEnvironment;
         public EmployeesController(RMERPContext context)
         {
             _context = context;
@@ -141,18 +147,46 @@ namespace RMERP.Controllers
         [Breadcrumb("Advance Taken", FromAction = "Index", FromController = typeof(WageProcessController))]
         public ActionResult AdvanceRptForBank(DateTime WAG_Month)
         {
-            EmployeeManager employeeManager = new EmployeeManager(_context);
-            List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(employeeManager.AdvanceRptForBank((WAG_Month)));
+            AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
+            List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.AdvanceRptForBank((WAG_Month)));
             ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
             return View(advancesVM);
         }
+        //[Breadcrumb("Advance EMI", FromAction = "Index", FromController = typeof(WageProcessController))]
+        //public ActionResult NotCompletedAdvanceLst(DateTime WAG_Month,int WAG_Id)
+        //{
+        //    AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
+        //    List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.NotCompletedAdvanceLst((WAG_Month)));
+        //    ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
+        //    return View(advancesVM);
+        //}
+
         [Breadcrumb("Advance EMI", FromAction = "Index", FromController = typeof(WageProcessController))]
-        public ActionResult NotCompletedAdvanceLst(DateTime WAG_Month)
+        public ActionResult UpdateAdvanceEMI(DateTime WAG_Month, int WAG_Id)
         {
-            EmployeeManager employeeManager = new EmployeeManager(_context);
-            List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(employeeManager.NotCompletedAdvanceLst((WAG_Month)));
+            AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
+            WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
+            UpdateAdvanceEMI updateAdvanceEMI = new UpdateAdvanceEMI();            
+            List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.NotCompletedAdvanceLst((WAG_Month)));
+            List<WageRegisterAdvancesVM> wageRegisterAdvancesVMs = WageRegisterAdvancesMapper.mapMeModels(wageRegisterManager.GetWageRegisterAdvances(WAG_Month));
+            updateAdvanceEMI.employeeAdvanceVMs = advancesVM;
+            updateAdvanceEMI.wageRegisterAdvancesVMs = wageRegisterAdvancesVMs;
+            updateAdvanceEMI.WAG_Month = WAG_Month;
+            updateAdvanceEMI.WAG_Id = WAG_Id;
             ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
-            return View(advancesVM);
+            return View(updateAdvanceEMI);
         }
+        [HttpPost]
+        public ActionResult addWageRegisterAdvances(int EMP_id,int WAG_Id, decimal WAD_Amount,bool WAD_Status)
+        {
+            WageProcessManager wageProcess = new WageProcessManager(_context);
+            AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
+            ClientsManager clients = new ClientsManager(_context, _configuration);
+            DateTime WAG_Month= wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+            int CLI_id = clients.GetClientIDByEmpID(EMP_id, WAG_Month);
+            string res=advance.addWageRegisterAdvances(EMP_id, WAG_Id, CLI_id, WAD_Amount, WAG_Month, WAD_Status);
+            return RedirectToAction("UpdateAdvanceEMI",new { WAG_Month= WAG_Month, WAG_Id= WAG_Id });
+        }
+
     }
 }

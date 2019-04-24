@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Linq;
 
 namespace RMERP.DAL.ViewModel
 {
@@ -22,6 +23,16 @@ namespace RMERP.DAL.ViewModel
         public DateTime ADV_RegisteredOn { get; set; } = DateTime.Today;
         public int ADM_Id_RegisteredBy { get; set; }
         public bool ADV_Status { get; set; }
-        public string EmployeeName { get; set; }
+        public string EmployeeName { get; set; }    
+       
+    }
+
+    public class UpdateAdvanceEMI
+    {
+        public int EMP_Id { get; set; }     
+        public DateTime WAG_Month { get; set; }
+        public int WAG_Id { get; set; }
+        public List<EmployeeAdvanceVM> employeeAdvanceVMs { get; set; }
+        public List<WageRegisterAdvancesVM> wageRegisterAdvancesVMs { get; set; }       
     }
 }

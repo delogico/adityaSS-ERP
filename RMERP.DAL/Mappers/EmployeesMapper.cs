@@ -40,6 +40,8 @@ namespace RMERP.DAL.Mappers
                 emp.DEPT_ = employee.DEPT_;
             if (employee.Employee_Advance.Count > 0)
                 emp.advances = EmployeeAdvanceMapper.mapAdvances(employee.Employee_Advance.ToList());
+            if (employee.Wage_Register_Advances.Count > 0)
+                emp.wageRegisterAdvances = WageRegisterAdvancesMapper.mapMeModels(employee.Wage_Register_Advances.ToList());
             return emp;
         }
 
