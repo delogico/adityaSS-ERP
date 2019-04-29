@@ -1,84 +1,73 @@
-﻿@model IEnumerable<RMERP.DAL.ViewModel.WageProcessVM>
-@using System.Globalization;
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
-<div class="row">
-    <div class="col-md-12">
-        <div>
-            @if (Model.Count() > 0)
+﻿@using System.Globalization;
+@model RMERP.DAL.ViewModel.WageProcessVM
+<div class="row wage_raw">
+    <div class="col-md-2">
+        <h4>@Model.WAG_Month.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")) - @Model.WAG_Month.Year.ToString()</h4>
+        Total Clients: @Model.ActiveClients
+    </div>
+    <div class="col-md-2">
+        <h6>Attendance:</h6>
+        <b>@Html.ActionLink("Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = Model.WAG_Id })</b>
+        <div style="font-size:10px;">
+            @if (Model.ImportedClients() == Model.ActiveClients)
             {
-                <table class="table table-striped custom-table m-b-0">
-                    <thead>
-                        <tr>
-                            <th>Wag Month</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            var style = (item.WageStatus == true ? "#55ce634f;" : "none");
-                        <tr style="background-color:@style;">
-                            <td><b>@item.WAG_Month.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")) - @item.WAG_Month.Year.ToString()</b></td>
-                            <td>
-                                @Html.ActionLink("Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = item.WAG_Id })
-                                [ <a data-toggle="tooltip" data-placement="top" title="Total Clients" style="color:black;font-weight: 400;">@item.ActiveClients,</a>
-                                <a data-toggle="tooltip" data-placement="bottom" title="Imported Clients" style="color:green;font-weight: 400;">@item.ImportedClients(),</a>
-                                <a data-toggle="tooltip" data-placement="right" title="Not Imported Clients" style="color:red;font-weight: 400;">@item.NotImportedClients()</a>
-                                ]
-                            </td>
-
-                            <td>
-                                @Html.ActionLink("Taken anount of for this month", "AdvanceRptForBank", "Employees", new { WAG_Month = item.WAG_Month })
-                                [
-                                <a data-toggle="tooltip" data-placement="top" title="Total employees who take advance" style="color:black;font-weight: 400;">@item.totEmpTakeAdvance</a>
-                                ]
-                            </td>
-
-                            <td>
-                                @*@Html.ActionLink("Update advance EMI for this month", "NotCompletedAdvanceLst", "Employees", new { WAG_Month = item.WAG_Month, WAG_Id = item.WAG_Id })*@
-                                @Html.ActionLink("Update advance EMI for this month", "UpdateAdvanceEMI", "Employees", new { WAG_Month = item.WAG_Month, WAG_Id = item.WAG_Id })
-                                
-                            </td>
-
-                            <td>
-                                @Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = item.WAG_Id })
-                                [
-                                <a data-toggle="tooltip" data-placement="top" title="Total WageRegisters" style="color:black;font-weight: 400;">@item.ActiveClients,</a>
-                                <a data-toggle="tooltip" data-placement="bottom" title="Saved WageRegisters" style="color:green;font-weight: 400;">@item.WageRegisterSaved(),</a>
-                                <a data-toggle="tooltip" data-placement="right" title="Not Saved WageRegisters" style="color:red;font-weight: 400;">@item.WageRegisterNotSaved()</a>
-                                ]
-                                @if (item.WageRegisterSaved() == item.ActiveClients && item.WageRegisterNotSaved() == 0)
-                                {
-                                    if (item.WageStatus == true)
-                                    {
-                                        <span class='label label-danger-border'> Wage register confirmed. </span>
-                                    }
-                                    else
-                                    {
-                                        <a class="btn btn-primary  btn-sm" onclick="return window.confirm('Are you sure,You want to confirm? Now onwards wage register can not be able to modify.')"
-                                           href='@Url.Action("WageRegisterStatus", "WageProcess", new { WAG_Id = item.WAG_Id})' title="Confirm">
-                                            Confirm WageRegisters
-                                        </a>
-                                    }
-                                }
-                            </td>
-
-                        </tr>
-                        }
-
-                    </tbody>
-                </table>
+                <span class="done" style="color:green;">Attendence Imported for all clients.</span>
             }
             else
             {
-                <p>No Wage Process To Display</p>
+                <span style="color:orangered;">@Model.NotImportedClients() client's attendence Pending to import.</span>
             }
+        </div>
+    </div>
+    <div class="col-md-2">
+        <h6>Advance:</h6>
+        <ul style="font-size:10px;padding-left: 10px !important;">
+            <li>@Html.ActionLink("Advance Distribution Report(" + Model.totEmpTakeAdvance + ")", "AdvanceRptForBank", "Employees", new { WAG_Month = Model.WAG_Month })</li>
+            <li>@Html.ActionLink("Set installment against advance", "UpdateAdvanceEMI", "Employees", new { WAG_Month = Model.WAG_Month, WAG_Id = Model.WAG_Id })</li>
+        </ul>
+    </div>
+    <div class="col-md-2">
+        <h6>Wage Register:</h6>
+        <b>@Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = Model.WAG_Id })</b>
+        <div style="font-size:10px;">
+
+            @if (Model.WageStatus == true)
+            {
+                <span class="done" style="color:green;font-weight:bold;">Wage Register Finalized.</span>
+            }
+            else
+            {
+                @if (Model.WageRegisterSaved() == Model.ActiveClients)
+                {
+                    <span style="color:green;">Wage Register for all Clients is Finalize.</span><br />
+                    <a class="btn btn-primary btn-xs" onclick="return window.confirm('Are you sure, you want to finalize wage Register for this month? Now onwards wage register can not be able to modify.')"
+                       href='@Url.Action("WageRegisterStatus", "WageProcess", new { WAG_Id = Model.WAG_Id})' title="Confirm">
+                        Finalize Web Register
+                    </a>
+                }
+                else
+                {
+                    <span style="color:orangered;">@Model.WageRegisterNotSaved() client's Wage register Pending to finalize.</span>
+                }
+
+            }
+        </div>
+    </div>
+    <div class="col-md-4">
+        <h6>Reports:</h6>
+        <div class="raw">
+            <div class="col-md-6">
+                <ul style="font-size:10px;padding-left: 10px !important;">
+                    <li>@Html.ActionLink("PF Report", "", "", new { WAG_Month = Model.WAG_Month })</li>
+                    <li>@Html.ActionLink("ESIC Report", "", "", new { WAG_Month = Model.WAG_Month, WAG_Id = Model.WAG_Id })</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul style="font-size:10px;padding-left: 10px !important;">
+                    <li>@Html.ActionLink("NEFT/Bank Report", "", "", new { WAG_Month = Model.WAG_Month })</li>
+                    <li>@Html.ActionLink("ESIC Report", "", "", new { WAG_Month = Model.WAG_Month, WAG_Id = Model.WAG_Id })</li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

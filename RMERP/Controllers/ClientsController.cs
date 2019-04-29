@@ -450,25 +450,21 @@ namespace RMERP.Controllers
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
         }
 
-        public FileResult BASIC_WithoutShifts()
+        public FileResult GenerateExcelTemplate()
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             Clients client = clientsManager.GetClientById(ClientId);
-            int totalEmployee = clientsManager.listClientsEmployees(ClientId).Count();
-            string sWebRootFolder = _hostingEnvironment.WebRootPath;
-            string fileName = DateTime.Now.ToString("ddMMyyyyHHmm") + "_ClientId" + ClientId+".xlsx";
-            string sFileName = fileName;
-            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
-            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            IEnumerable<Clients_Employees> employees = clientsManager.listClientsEmployees(ClientId);
+            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+            string fileName = "Template_" +  DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name +".xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
+            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
             var memory = new MemoryStream();
-            using (var fs = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.Write))
+            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
             {
                 IWorkbook workbook;
                 workbook = new XSSFWorkbook();
-                ISheet excelSheet = workbook.CreateSheet("BASIC_WithoutShifts");                
-
-                
-                // excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 35, 40));
+                ISheet excelSheet = workbook.CreateSheet("Template");                
                 IFont font = workbook.CreateFont();
                 font.IsBold = true;
                 font.FontHeightInPoints=((short)24);
@@ -497,33 +493,22 @@ namespace RMERP.Controllers
                 IRow row = excelSheet.CreateRow(0);
                 row.Height = 500;
 
-                DateTime startDate = DateTime.Now, endDate = DateTime.Now;
-
-                if (client.CLI_Att_MonthReal == true)
-                {
-                    startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                    endDate = startDate.AddMonths(1).AddDays(-1);
-                }
-                else if (client.CLI_Att_MonthReal == false)
-                {
-                    startDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CLI_Att_Month_Start.Value);
-                    endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CLI_Att_Month_End.Value); ;
-                }
-                int TotalDays = Convert.ToInt32((endDate - startDate).TotalDays) + 8;
+                DateTime[] period = DateHelper.getStartEndDatePeriodForAttendance(client, DateTime.Now);
+                int TotalDays = Convert.ToInt32((period[1] - period[0]).TotalDays) + 4;
 
 
-                string fullMonthName = DateTime.Now.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
                 ICell CellHeader = row.CreateCell(0);
                 CellHeader.SetCellValue(client.CLI_Name);
                 CellHeader.CellStyle = styleHeader;
                 CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 4));
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 7));
 
-                ICell CellMonth = row.CreateCell(TotalDays - 3);
-                CellMonth.SetCellValue(fullMonthName + "," + DateTime.Now.ToString("yyyy"));
+                ICell CellMonth = row.CreateCell(TotalDays - 6);
+                string fullMonthName = DateTime.Now.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
+                CellMonth.SetCellValue(fullMonthName + "-" + DateTime.Now.ToString("yy"));
                 CellMonth.CellStyle = styleHeader;
                 CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 3, TotalDays));
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 6, TotalDays));
 
                 row = excelSheet.CreateRow(1);
                 row.HeightInPoints=((5 * excelSheet.DefaultRowHeightInPoints));
@@ -543,8 +528,8 @@ namespace RMERP.Controllers
                 cell3.SetCellValue("NAME");         
                 cell3.CellStyle = style;
                 int i = 4;
-                DateTime tmpDate = startDate;
-                while(endDate >= tmpDate)
+                DateTime tmpDate = period[0];
+                while(period[1] >= tmpDate)
                 {
                     ICell c = row.CreateCell(i);                    
                     c.SetCellValue(tmpDate.Day);
@@ -553,26 +538,10 @@ namespace RMERP.Controllers
                     tmpDate = tmpDate.AddDays(1);
                     i++;
                 }
-                
-                ICell cellx = row.CreateCell(i);
-                cellx.SetCellValue("PRE.DAYS");
-                cellx.CellStyle = style;
-                ICell celly = row.CreateCell(i + 1);
-                celly.SetCellValue("PH");
-                celly.CellStyle = style;
-                ICell cellz = row.CreateCell(i + 2);
-                cellz.SetCellValue("EXTRA WORK DAYS");
-                excelSheet.AutoSizeColumn(i+2);
-                cellz.CellStyle = style;
-                ICell cellw = row.CreateCell(i + 3);
-                cellw.SetCellValue("TOTAL DAYS");
-                excelSheet.AutoSizeColumn(i + 3);
-                cellw.CellStyle = style;
-
 
                 int rowCount = 2;
                 int j = 1 ;
-                foreach (var item in clientsManager.listClientsEmployees(ClientId))
+                foreach (var item in employees)
                 {
                     row = excelSheet.CreateRow(rowCount);
                     row.CreateCell(0).SetCellValue(j);
@@ -592,8 +561,8 @@ namespace RMERP.Controllers
                     excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 3, 3));
                     
                     int k = 4;
-                    DateTime tmp1Date = startDate;
-                    while (endDate >= tmp1Date)
+                    DateTime tmp1Date = period[0];
+                    while (period[1] >= tmp1Date)
                     {
                         ICell c = row.CreateCell(k);
                         tmp1Date = tmp1Date.AddDays(1);
@@ -610,12 +579,13 @@ namespace RMERP.Controllers
 
                 workbook.Write(fs);
             }
-            using (var stream = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Open))
+            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
             {
                 stream.CopyToAsync(memory);
             }
             memory.Position = 0;
-            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sFileName);          
+            new FileInfo(Path.Combine(newPath, fileName)).Delete();
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);          
         }
 
         public FileResult BASIC_WithShifts()

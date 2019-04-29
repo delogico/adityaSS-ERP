@@ -432,27 +432,30 @@ namespace RMERP.Controllers
                 DateTime tmpDate = startDate;
                 for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
                 {
-                    Attendance att = new Attendance();
-                    att.EMP_Id = EMP_Id;
-                    att.WAG_Id = wageProcess.WAG_Id;
-                    att.CLI_Id = client.CLI_Id;
-                    att.DES_Id = designationManager.getDesignationIdForAttandance(client.CLI_Id, EMP_Id);
-                    att.ATT_Date = tmpDate;
-                    if (row.GetCell(j).ToString().Equals("P"))
-                        att.ATT_IsPresent = true;
-                    else if (row.GetCell(j).ToString().Equals("A"))
-                        att.ATT_IsPresent = false;
-                    att.ATT_IsPaidHoliday = secondRow.GetCell(j).ToString().Contains("PH");
-                    if (rowExtra.GetCell(j) != null)
-                        if (!rowExtra.GetCell(j).ToString().Equals(""))
-                            att.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
-                    att.ATT_IsEarnLeave = false;
-                    att.ATT_IsWeeklyOff = false;
-                    att.ATT_Shift = "";
-                    att.ATT_ImportedOn = DateTime.Now;
-                    att.ADM_Id_ImportedBy = sessionUtils.GetLoggedAdminID();
-                    attManager.save(att);
-                    tmpDate = tmpDate.AddDays(1);
+                    if (secondRow.GetCell(j) != null)
+                    {
+                        Attendance att = new Attendance();
+                        att.EMP_Id = EMP_Id;
+                        att.WAG_Id = wageProcess.WAG_Id;
+                        att.CLI_Id = client.CLI_Id;
+                        att.DES_Id = designationManager.getDesignationIdForAttandance(client.CLI_Id, EMP_Id);
+                        att.ATT_Date = tmpDate;
+                        if (row.GetCell(j).ToString().Equals("P"))
+                            att.ATT_IsPresent = true;
+                        else if (row.GetCell(j).ToString().Equals("A"))
+                            att.ATT_IsPresent = false;
+                        att.ATT_IsPaidHoliday = secondRow.GetCell(j).ToString().Contains("PH");
+                        if (rowExtra.GetCell(j) != null)
+                            if (!rowExtra.GetCell(j).ToString().Equals(""))
+                                att.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
+                        att.ATT_IsEarnLeave = false;
+                        att.ATT_IsWeeklyOff = false;
+                        att.ATT_Shift = "";
+                        att.ATT_ImportedOn = DateTime.Now;
+                        att.ADM_Id_ImportedBy = sessionUtils.GetLoggedAdminID();
+                        attManager.save(att);
+                        tmpDate = tmpDate.AddDays(1);
+                    }
                 }
             }
         }
@@ -539,6 +542,7 @@ namespace RMERP.Controllers
             Wage_Process wage = wagManager.getWageProcessById(WAG_Id);
             Clients client = clientsManager.GetClientById(CLI_Id);
             ViewBag.ClientName = client.CLI_Name;
+            ViewBag.CLI_Id = client.CLI_Id;
             DateTime[] arrDate = DateHelper.getStartEndDatePeriodForAttendance(client, wage.WAG_Month);
             ViewBag.startDate = arrDate[0];
             ViewBag.endDate = arrDate[1];

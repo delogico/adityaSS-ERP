@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using RMERP.Helpers;
+@using System.Web;
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -8,16 +10,16 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="~/assets/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="~/assets/css/line-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="~/assets/plugins/morris/morris.css">
-        <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/line-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/plugins/morris/morris.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
 
     <link rel="stylesheet" type="text/css" href="~/assets/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="~/assets/css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="~/assets/css/bootstrap-datetimepicker.min.css">
 
-    <link rel="stylesheet" href="~/assets/Scripts/Custom.css"/>
+    <link rel="stylesheet" href="~/assets/Scripts/Custom.css" />
     @*<link href="~/assets/bundle.min.css" rel="stylesheet" />*@
 
 
@@ -26,19 +28,19 @@
         <script src="~/assets/js/respond.min.js"></script>
     <![endif]-->
 
-<script>var siteUrl= '@Url.Content("~/")';</script>
+    <script>var siteUrl= '@Url.Content("~/")';</script>
 </head>
 <body>
     <div class="main-wrapper">
         <div class="header">
             <div class="header-left">
                 <a href="#" class="logo">
-                    <img src="~/assets/img/logo.png" width="40" height="40" alt="">
+                    <img src="~/assets/img/logo2.png" width="88" height="60" alt="">
                 </a>
             </div>
             <a id="toggle_btn" href="javascript:void(0);"><i class="la la-bars"></i></a>
             <div class="page-title-box pull-left">
-                <h3>RM-ERP</h3>
+                <h3>Wage Solutions</h3>
             </div>
             <a id="mobile_btn" class="mobile_btn pull-left" href="#sidebar"><i class="fa fa-bars" aria-hidden="true"></i></a>
             <ul class="nav navbar-nav navbar-right user-menu pull-right">
@@ -49,13 +51,15 @@
                             <img class="img-circle" src="~/assets/img/user.jpg" width="40" alt="Admin">
                             <span class="status online"></span>
                         </span>
-                        <span>Admin</span>
+                        <span>
+                            @{
+                                SessionUtils sessionUtils = new SessionUtils(this.Context.Request, this.Context.Response);
+                            }
+                            @sessionUtils.GetLoggedAdminFullName()
+                        </span>
                         <i class="caret"></i>
                     </a>
                     <ul class="dropdown-menu">
-                        @*<li><a href="profile.html">My Profile</a></li>
-                        <li><a href="edit-profile.html">Edit Profile</a></li>
-                        <li><a href="settings.html">Settings</a></li>*@
                         <li>
                             <a asp-action="Logout" asp-controller="AdminUsers">
                                 Logout
@@ -64,7 +68,6 @@
                     </ul>
                 </li>
             </ul>
-           
         </div>
         <div class="sidebar" id="sidebar">
             <div class="sidebar-inner slimscroll">
@@ -72,43 +75,47 @@
                     <ul>
                         <li class="active">
                             <a asp-action="DashBoard" asp-controller="AdminUsers">
-                                <i class="la la-dashboard"></i> <span>Dashboard</span>
+                                <i class="la la-pie-chart"></i> <span>Dashboard</span>
                             </a>
                         </li>
                         <li>
                             <a asp-action="Index" asp-controller="Clients">
-                                <i class="la la-user"></i> <span>Clients</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="Index" asp-controller="Employees">
-                                <i class="la la-user"></i> <span>Employees</span>
+                                <i class="la la-black-tie"></i> <span>Clients</span>
                             </a>
                         </li>
                         <li>
                             <a asp-action="Index" asp-controller="WageProcess">
-                                <i class="la la-user"></i> <span>Wage Process</span>
+                                <i class="la la-money"></i> <span>Wage Process</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Employees">
+                                <i class="la la-users"></i> <span>Employees</span>
                             </a>
                         </li>
                         <li>
                             <a asp-action="Index" asp-controller="AdminUsers">
-                                <i class="la la-user-plus"></i> <span>Admin Users</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-action="Index" asp-controller="Firms">
-                                <i class="la la-share-alt"></i> <span>Firms</span>
+                                <i class="la la-user-secret"></i> <span>Admin Users</span>
                             </a>
                         </li>
                         <li>
                             <a asp-action="Index" asp-controller="Designations">
-                                <i class="la la-share-alt"></i> <span> Designations</span>
+                                <i class="la la-angle-double-up"></i> <span> Designations</span>
                             </a>
                         </li>
-                       
+                        <li>
+                            <a asp-action="Index" asp-controller="Firms">
+                                <i class="la la-industry"></i> <span>Firms</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
-            </div>
+                <div class="row" style="position:absolute;bottom:10px;right:10px; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:11px;color:#777777;">
+                    <div class="col-md-1"></div>
+                        <div class="col-md-2" style="padding-top:5px;"><a href="http://www.delogico.com" target="_blank"><img src="~/assets/img/delogico_logo_icon.png" alt="Delogico Solutions" /></a></div>
+                        <div class="col-md-8">Developed and Maintain by Delogico Solutions</div>
+                    </div>
+                </div>
         </div>
         <div class="page-wrapper">
             <div class="content container-fluid">
@@ -119,7 +126,6 @@
                 </div>
 
             </div>
-
         </div>
     </div>
     <div class="sidebar-overlay" data-reff="#sidebar"></div>

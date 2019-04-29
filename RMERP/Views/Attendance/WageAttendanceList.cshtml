@@ -49,7 +49,7 @@
                                         @{
                                             if (item.totalEmployees > 0)
                                             {
-                                                Wage_Process_Clients wage = Model.wageProcess.wage_Process_Clients.Where(m => m.CLI_Id.Equals(item.CLI_Id) && m.WAG_Id.Equals(Model.wageProcess.WAG_Id)).FirstOrDefault();
+                                                Wage_Process_Clients wage = Model.wageProcess.wage_Process_Clients.Where(m => m.CLI_Id.Equals(item.CLI_Id)).FirstOrDefault();
                                                 if (wage != null)
                                                 {
                                                     <span class='label label-warning-border'>Wage is already registed on  @DateHelper.getDateWithFormat(wage.WPC_SavedOn)</span>

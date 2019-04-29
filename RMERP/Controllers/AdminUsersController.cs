@@ -26,11 +26,9 @@ namespace RMERP.Controllers
         {
             _context = context;
         }
-        [DefaultBreadcrumb("DashBoard")]
+        [DefaultBreadcrumb("Dashboard")]
         public IActionResult DashBoard()
         {
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            ViewBag.Welcome = "Welcome " + sessionUtils.GetLoggedAdminFullName();
             return View();
         }
         [AllowAnonymous]

@@ -453,16 +453,16 @@
                 <div class="row">
                     <br />
                     <div class="col-sm-12 text-right m-b-30">
-                        <div class="dropdown">
-                            <a href="#" class="dropdown-toggle btn btn-success rounded" data-toggle="dropdown" aria-expanded="false">Get Excel</a>
-                            <ul class="dropdown-menu pull-right">
-                                @foreach (var excel in Enum.GetValues(typeof(ATTENDANCE_EXCEL_TEMPLATE)))
-                                {
-                                    <li><a href='@Url.Action( @excel.ToString(),"Clients")' title="BASIC_WithoutShifts"><i class="fa fa-file-excel-o m-r-5"></i>  @excel.ToString()</a></li>
-                                }
-                            </ul>
-                        </div>
-
+                        @*<div class="dropdown">
+            <a href="#" class="dropdown-toggle btn btn-success rounded" data-toggle="dropdown" aria-expanded="false">Get Excel</a>
+            <ul class="dropdown-menu pull-right">
+                @foreach (var excel in Enum.GetValues(typeof(ATTENDANCE_EXCEL_TEMPLATE)))
+                {
+                    <li><a href='@Url.Action( @excel.ToString(),"Clients")' title="@excel.ToString()"><i class="fa fa-file-excel-o m-r-5"></i>  @excel.ToString()</a></li>
+                }
+            </ul>
+        </div>*@
+                        <a href='@Url.Action( "GenerateExcelTemplate","Clients")' title="Generate Excel Template"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template </a>
                     </div>
                 </div>
 

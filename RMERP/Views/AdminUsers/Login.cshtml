@@ -29,33 +29,15 @@
     <div class="main-wrapper">
         <div class="account-page">
             <div class="container">
-                <h3 class="account-title">RMERP Management Login</h3>
+                <h3 class="account-title">Reliable Manpower Wage Solution Login</h3>
                 <div class="account-box">
                     <div class="account-wrapper">
                         <div class="account-logo">
-                            <a href="index-2.html"><img src="~/assets/img/logo2.png" alt="Focus Technologies"></a>
+                            <a href="index-2.html"><img src="~/assets/img/logo2.png" alt="Reliable Manpower"></a>
                         </div>
-
-                        @*<form asp-controller="AdminUsers" asp-action="Login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group form-focus">
-                <label asp-for="ADM_EmailId" class="control-label"></label>
-                <input asp-for="ADM_EmailId" class="form-control floating" /><br/>
-                <span asp-validation-for="ADM_EmailId" class="text-danger"></span>
-            </div>
-            <div class="form-group form-focus">
-                <label asp-for="ADM_Password" class="control-label"></label>
-                <input asp-for="ADM_Password" class="form-control floating" /><br />
-                <span asp-validation-for="ADM_Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary btn-block account-btn" type="submit">Login</button>
-            </div>
-        </form>*@
-
-                        <form asp-controller="AdminUsers" asp-action="Login">                            
+                        <form asp-controller="AdminUsers" asp-action="Login">
                             @Html.AntiForgeryToken()
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })                  
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -78,16 +60,14 @@
                                 <button class="btn btn-primary btn-block account-btn" type="submit">Login</button>
                             </div>
                         </form>
-
-                            <div class="text-center">
-                                <a href="forgot-password.html">Forgot your password?</a>
-                            </div>
-</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="sidebar-overlay" data-reff="#sidebar"></div>
-   
+    <div style="position:absolute;bottom:10px;right:10px; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-size:11px;color:#cdcdcd;">
+        <div class="col-md-12">Developed and Maintain by Delogico Solutions&nbsp;<a href="http://www.delogico.com" target="_blank"><img src="~/assets/img/delogico_logo_icon.png" alt="Delogico Solutions" /></a></div>
+    </div>
 </body>
 </html>
