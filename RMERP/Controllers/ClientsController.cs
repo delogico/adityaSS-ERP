@@ -96,6 +96,7 @@ namespace RMERP.Controllers
                 cv.clientsModel.CLI_Email_2 = clients.CLI_Email_2;
                 cv.clientsModel.CLI_Total_WorkingDays = clients.CLI_Total_WorkingDays;
                 cv.clientsModel.CLI_No_Reduce_Days = clients.CLI_No_Reduce_Days;
+                cv.clientsModel.CLI_WorkingHours_In_Day = clients.CLI_WorkingHours_In_Day;
 
                 cv.ParametersClientsModel.clientsModel.CLI_GST_Number = clients.CLI_GST_Number;
                 cv.ParametersClientsModel.clientsModel.CLI_GST_Rate = clients.CLI_GST_Rate;
@@ -178,8 +179,9 @@ namespace RMERP.Controllers
                 clients.CLI_HSN_Code = "";
                 clients.CLI_TDS_Rate =0;
 
-                clients.CLI_Total_WorkingDays = cv.clientsModel.CLI_Total_WorkingDays;
+                clients.CLI_Total_WorkingDays = cv.clientsModel.CLI_Total_WorkingDays;                
                 clients.CLI_No_Reduce_Days = cv.clientsModel.CLI_No_Reduce_Days;
+                clients.CLI_WorkingHours_In_Day = cv.clientsModel.CLI_WorkingHours_In_Day;
 
                 clients.ADM_Id_RegisterBy = cv.clientsModel.ADM_Id_RegisterBy;
                 clients.CLI_RegisteredOn = cv.clientsModel.CLI_RegisteredOn;
@@ -378,6 +380,7 @@ namespace RMERP.Controllers
                 clients.CLI_HSN_Code = cvm.ParametersClientsModel.clientsModel.CLI_HSN_Code;
                 clients.CLI_Total_WorkingDays = cvm.clientsModel.CLI_Total_WorkingDays;
                 clients.CLI_No_Reduce_Days = cvm.clientsModel.CLI_No_Reduce_Days;
+                clients.CLI_WorkingHours_In_Day = cvm.clientsModel.CLI_WorkingHours_In_Day;
                 if (cvm.ParametersClientsModel.CLI_Att_MonthReal ==true)
                 {
                     clients.CLI_Att_MonthReal = true;

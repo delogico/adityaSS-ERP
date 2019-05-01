@@ -24,6 +24,9 @@ namespace RMERP.DAL.Models
         public decimal WAR_DA_Calculated { get; set; }
         public decimal WAR_HRA { get; set; }
         public decimal WAR_HRA_Calculated { get; set; }
+        public string WAR_OverTime_Formula { get; set; }
+        public int? WAR_OverTime_Payment { get; set; }
+        public int WAR_WorkingHrs_In_Day { get; set; }
         public decimal WAR_OverTime_Calculated { get; set; }
         public decimal WAR_GrossTotal { get; set; }
         public decimal WAR_PF { get; set; }

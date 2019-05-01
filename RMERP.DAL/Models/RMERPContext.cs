@@ -233,6 +233,8 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.CRI_InactivatedOn).HasColumnType("datetime");
 
+                entity.Property(e => e.CRI_OT_Formula).HasMaxLength(200);
+
                 entity.Property(e => e.CRI_OT_Rate).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.CRI_PF_Formula).HasMaxLength(200);
@@ -315,6 +317,8 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.CLI_RegisteredOn)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.CLI_WorkingHours_In_Day).HasDefaultValueSql("((8))");
 
                 entity.HasOne(d => d.CITY_)
                     .WithMany(p => p.Clients)
@@ -547,11 +551,17 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.WAR_OverTime_Calculated).HasColumnType("decimal(9, 2)");
 
+                entity.Property(e => e.WAR_OverTime_Formula).HasMaxLength(200);
+
+                entity.Property(e => e.WAR_OverTime_Payment).HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.WAR_PF).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_PF_Calculated).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_PF_Formula).HasMaxLength(200);
+
+                entity.Property(e => e.WAR_WorkingHrs_In_Day).HasDefaultValueSql("((8))");
 
                 entity.HasOne(d => d.CLI_)
                     .WithMany(p => p.Wage_Register)

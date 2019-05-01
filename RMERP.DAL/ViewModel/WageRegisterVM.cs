@@ -48,14 +48,22 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "HRA")]
         public string WAR_HRA_PER {
             get
-            {
-                return (clientRequirementVM.CRI_HRA_Fixed.ToString() == "" ? (clientRequirementVM.CRI_HRA_Percentage.Value.ToString() + "%") : (Math.Round(clientRequirementVM.CRI_HRA_Fixed.Value, 2) + "INR")); 
+            {                
+                return (clientRequirementVM.CRI_HRA_Fixed.ToString() == "" ? (clientRequirementVM.CRI_HRA_Percentage.Value.ToString() + "%") :  clientRequirementVM.CRI_HRA_Fixed.Value + ""); 
             }
         }
         [Display(Name = "Calculated HRA")]
         public decimal WAR_HRA_Calculated { get; set; }
+
+        [Display(Name = "OT Formula")]
+        public string WAR_OverTime_Formula { get; set; }
+        [Display(Name = "OverTime Payment Times")]
+        public int? WAR_OverTime_Payment { get; set; }   
+
         [Display(Name = "Calculated Extra Working Amount")]
         public decimal WAR_OverTime_Calculated { get; set; }
+        [Display(Name = "WorkingHrs in day")]
+        public int WAR_WorkingHrs_In_Day { get; set; }
         [Display(Name = "Gross Total")]
         public decimal WAR_GrossTotal { get; set; }
         [Display(Name = "PF")]

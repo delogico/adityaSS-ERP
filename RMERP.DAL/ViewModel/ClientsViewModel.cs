@@ -77,6 +77,9 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Number of fixed days to be reduce in each month ")]
         [Required(ErrorMessage = "Add Reduce Days")]
         public int? CLI_No_Reduce_Days { get; set; } = 0;
+        [Display(Name = "Number of working hours in a Day ")]
+        [Required(ErrorMessage = "Add Working Hours")]
+        public int CLI_WorkingHours_In_Day { get; set; } = 8;
     }
     public class ParametersClientsModel
     {

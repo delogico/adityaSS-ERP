@@ -24,6 +24,7 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_PF_Percentage = requirement.CRI_PF_Percentage;
             clientRequirementVM.CRI_ESIC_Percentage = requirement.CRI_ESIC_Percentage;
             clientRequirementVM.CRI_ESIC_Area = requirement.CRI_ESIC_Area;
+            clientRequirementVM.CRI_OT_Formula = requirement.CRI_OT_Formula;
             clientRequirementVM.CRI_OT_Rate = requirement.CRI_OT_Rate;
             clientRequirementVM.CRI_OT_MultipleTimes = requirement.CRI_OT_MultipleTimes;
             clientRequirementVM.CRI_WageCalculationOnWeeklyOffPlus = requirement.CRI_WageCalculationOnWeeklyOffPlus;
@@ -55,6 +56,7 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_PF_Percentage = requirementVM.CRI_PF_Percentage;
             requirement.CRI_ESIC_Percentage = requirementVM.CRI_ESIC_Percentage;
             requirement.CRI_ESIC_Area = requirementVM.CRI_ESIC_Area;
+            requirement.CRI_OT_Formula = requirementVM.CRI_OT_Formula;
             requirement.CRI_OT_Rate = requirementVM.CRI_OT_Rate;
             requirement.CRI_OT_MultipleTimes = requirementVM.CRI_OT_MultipleTimes;
             requirement.CRI_WageCalculationOnWeeklyOffPlus = requirementVM.CRI_WageCalculationOnWeeklyOffPlus;

@@ -35,7 +35,27 @@
 
             }
         };
+        
+        function EditAmt(total, id, WAD_Id) {
+            debugger;
+            var advance = $("#Amount" + id).val();
+            if (parseInt(advance) > total) {
+                $("#Amount" + id).val(0);
+                alert("Your Amount Must Be Less Than Remaining Amount");
+            } else {
+                debugger;
+                var RemaimigAmt = (total - parseInt(advance));
+                $("#amt_" + id).html(RemaimigAmt);
+                $("#Ramt_" + id).html("<b>"+RemaimigAmt+"</b>");
+                var Cheked = $("#WAD_Status" + id).prop("checked");
+                var Url = siteUrl + "Employees/UpdateWageRegisterAdvances?EMP_id=" + id + "&WAG_Id=" +@Model.WAG_Id+"&WAD_Amount=" + parseInt(advance) + "&WAD_Status=" + Cheked + "&WAD_Id=" + WAD_Id;
+                $.ajax({
+                    type: "POST",
+                    url: Url
+                });
 
+            }
+        };
     </script>
 }
 <style>
@@ -70,9 +90,11 @@
                         <tbody>
                            
                             @foreach (var item in Model.employeeAdvanceVMs.Select(n => new { n.EMP_Id,n.EmployeeName}).Distinct().ToList())
-                            {                               
+                            {
+                                bool IsPaid = false;
+                                int WADId=0;
                                 DateTime lastDate = new DateTime(Model.WAG_Month.Year, Model.WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
-                                decimal totalAmt = 0;
+                                decimal totalAmt = 0, amount=0;
                                 if (Model.employeeAdvanceVMs.Where(v => v.EMP_Id.Equals(item.EMP_Id)).Count() > 0)
                                 {
                                     var totalAdvance = Model.employeeAdvanceVMs.Where(m => m.EMP_Id == item.EMP_Id && m.ADV_Status == false && m.ADV_RegisteredOn.Date <= lastDate.Date).GroupBy(m => m.EMP_Id).Select(g => new
@@ -89,7 +111,15 @@
                                         WAD_Amt = g.Sum(n => n.WAD_Amount)
                                     });
                                     totalEMI = Convert.ToDecimal(EMI.Select(g => g.WAD_Amt).First());
+                                    if (Model.wageRegisterAdvancesVMs.Where(v => v.EMP_Id.Equals(item.EMP_Id)).First().WAG_Id==Model.WAG_Id)
+                                    {
+                                        IsPaid = true;
+                                        var AdvancesVM = Model.wageRegisterAdvancesVMs.Where(m => m.EMP_Id == item.EMP_Id && m.WAD_Status == false && m.WAG_Id == Model.WAG_Id).First();
+                                        WADId = AdvancesVM.WAD_Id;
+                                        amount = AdvancesVM.WAD_Amount;
+                                    }
                                 }
+
                                 decimal RemainingAmt = totalAmt - totalEMI;
                                 <tr>
                                     <td><b>@item.EmployeeName</b></td>
@@ -99,9 +129,16 @@
                                             <div class="col-md-12">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        @Html.TextBox("RemainingAmt", null, new { @class = "form-control", id = "Amount" + item.EMP_Id })
+                                                        @*@if (IsPaid == true) {
+                                                         @Html.TextBox("RemainingAmt", amount, new { @class = "form-control", id = "Amount" + item.EMP_Id, @disabled= "disabled" })
+                                                        }
+                                                        else
+                                                        {*@
+                                                             @Html.TextBox("RemainingAmt", amount, new { @class = "form-control", id = "Amount" + item.EMP_Id })
+                                                        @*}*@
                                                     </div>
                                                 </div>
+                                                @*@disabled = (IsPaid == true ? "disabled" :"none")*@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         @Html.CheckBox("WAD_Status", new { @id = "WAD_Status" + item.EMP_Id, @value = item.EMP_Id })Consider Loan Completed
@@ -109,12 +146,19 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <input type="button" onclick="RemainigAmt(@totalAmt,@item.EMP_Id)" name="Add" value="Add" class="btn btn-success btn-xs" />
+                                                        @if (IsPaid == false)
+                                                        {
+                                                            <input type="button" onclick="RemainigAmt(@totalAmt,@item.EMP_Id)" name="Add" value="Add" class="btn btn-success btn-xs" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="button" onclick="EditAmt(@totalAmt,@item.EMP_Id,@WADId)" name="Edit" value="Edit" class="btn btn-warning btn-xs" />
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-</td>
+                                    </td>
                                     <td id="amt_@item.EMP_Id">@Html.DisplayFor(m => RemainingAmt, new { @id = "Remaining" + item.EMP_Id })</td>
                                 </tr>
                             }

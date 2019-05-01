@@ -1,10 +1,9 @@
-﻿@using System.Globalization;
-@model RMERP.DAL.ViewModel.WageProcessVM
+﻿@model RMERP.DAL.ViewModel.WageProcessVM
 <div class="row wage_raw">
     <div class="col-md-2">
-        <h4>@Model.WAG_Month.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")) - @Model.WAG_Month.Year.ToString()</h4>
-        Total Clients: @Model.ActiveClients
-    </div>
+        <h4>@Model.WAG_Full_Month()</h4>    
+    Total Clients: @Model.ActiveClients
+</div>
     <div class="col-md-2">
         <h6>Attendance:</h6>
         <b>@Html.ActionLink("Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = Model.WAG_Id })</b>

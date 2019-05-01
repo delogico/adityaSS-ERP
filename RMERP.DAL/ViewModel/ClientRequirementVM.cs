@@ -41,9 +41,11 @@ namespace RMERP.DAL.ViewModel
         public double? CRI_ESIC_Percentage { get; set; }
         [Display(Name = "ESIC Area")]
         public string CRI_ESIC_Area { get; set; }
+        [Display(Name = "OT Formula")]
+        public string CRI_OT_Formula { get; set; }
         [Display(Name = "OT Rate")]
         public decimal? CRI_OT_Rate { get; set; }
-        [Display(Name = "OT Times")]
+        [Display(Name = "OT Payment")]
         public double? CRI_OT_MultipleTimes { get; set; }
         [Display(Name = "Wage calculation on weekly off")]
         [Required(ErrorMessage = "Please select")]
