@@ -327,14 +327,17 @@
                                 <h4 class="page-title">Working days / hours calculation</h4>
                                 <div class="form-group">
                                     <div class="col-md-12">
-                                        @Html.LabelFor(m => m.clientsModel.CLI_Total_WorkingDays, new { @class = "control-label" })
-                                        @Html.DropDownListFor(x => x.clientsModel.CLI_Total_WorkingDays, new SelectList(ViewBag.TotalWorkingDays, "Value", "Text"), new { @class = "form-control", onchange = "WorkingDays_Change(this)" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Total_WorkingDays, "", new { @class = "text-danger" })
-                                    </div>
-                                    <div class="col-md-12">
-                                        @Html.LabelFor(m => m.clientsModel.CLI_WorkingHours_In_Day, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.clientsModel.CLI_WorkingHours_In_Day, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_WorkingHours_In_Day, "", new { @class = "text-danger" })
+                                        <div class="col-md-6">
+                                            @Html.LabelFor(m => m.clientsModel.CLI_Total_WorkingDays, new { @class = "control-label" })
+                                            @Html.DropDownListFor(x => x.clientsModel.CLI_Total_WorkingDays, new SelectList(ViewBag.TotalWorkingDays, "Value", "Text"), new { @class = "form-control", onchange = "WorkingDays_Change(this)" })
+                                            @Html.ValidationMessageFor(x => x.clientsModel.CLI_Total_WorkingDays, "", new { @class = "text-danger" })
+                                        </div><div class="col-md-6"> </div>
+                                    </div> <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            @Html.LabelFor(m => m.clientsModel.CLI_WorkingHours_In_Day, new { @class = "control-label" })
+                                            @Html.TextBoxFor(m => m.clientsModel.CLI_WorkingHours_In_Day, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => x.clientsModel.CLI_WorkingHours_In_Day, "", new { @class = "text-danger" })
+                                        </div><div class="col-md-6"> </div>
                                     </div>
 
                                     <div id="divSelectMethod" class="row">
