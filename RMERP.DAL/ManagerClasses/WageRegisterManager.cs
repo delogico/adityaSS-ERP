@@ -44,14 +44,12 @@ namespace RMERP.DAL.ManagerClasses
                     clientWageRegisterVM.wageProcessClientVM = WageProcessClientsMapper.mapMe(wage_Process_Clients);
                 clientWageRegisterVM.client = ClientMapper.mapMe(client);
                 clientWageRegisterVM.wageProcessVM = WageProcessMapper.mapMe(wageProcess);
-                Wage_Process_Clients wageOfClient = wageManager.GetWage_Process_Clients(WAG_Id, client.CLI_Id);
                 List<WageRegisterVM> lstRegister = new List<WageRegisterVM>();
-                if (wageOfClient != null)
+                if (wage_Process_Clients != null)
                     lstRegister = WageRegisterMapper.mapWageRegisters(GetWageRegisters(WAG_Id, client.CLI_Id));
                 else
                     lstRegister = GetWageRegisterCalculated(wageProcess, client.CLI_Id, AdminID);
                 clientWageRegisterVM.wageRegisterVMs = lstRegister;
-
                 lst.Add(clientWageRegisterVM);
             }
             return lst;
@@ -91,7 +89,9 @@ namespace RMERP.DAL.ManagerClasses
                     }
                     #endregion
 
-                    totalPaybleDays = attendances.Where(a => a.ATT_IsPresent == true).Count();
+                    totalPaybleDays = attendances.Where(a => a.ATT_IsPresent == true).Count() + attendances.Where(a => a.ATT_EarnedExtraDay == true).Count() + attendances.Where(a => a.ATT_IsPaidLeave == true).Count() + attendances.Where(a => a.ATT_IsEarnLeave == true).Count() + attendances.Where(a => a.ATT_IsHoliday == true).Count() + attendances.Where(a => a.ATT_IsPublicHoliday == true).Count();
+                    if (cli.CLI_Total_WorkingDays != 1)
+                        totalPaybleDays = totalPaybleDays + attendances.Where(a => a.ATT_IsWeeklyOff == true).Count();
                     WageRegisterVM wageRegisterVM = new WageRegisterVM();
                     wageRegisterVM.WAG_Id = wageProcess.WAG_Id;
                     wageRegisterVM.CLI_Id = CLI_Id;
@@ -160,6 +160,7 @@ namespace RMERP.DAL.ManagerClasses
                         all.CRA_Id = allowance.CRA_Id;
                         all.CRI_Id = allowance.CRI_Id;
                         all.WAA_Amount = allowance.CRA_Amount;
+                        all.WAA_DayswiseOrFull = allowance.CRA_DayswiseOrFull;
                         all.allowanceVM = AllowanceMapper.mapMe(allowance.ALL_);
                         decimal amount = allowance.CRA_Amount;
                         decimal fullAmt = 0M;

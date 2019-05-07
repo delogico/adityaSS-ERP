@@ -2,6 +2,7 @@
 @using RMERP.DAL.Models
 @using RMERP.Helpers
 @using RMERP.DAL.ViewModel
+@using RMERP.DAL.Helpers
 
 @{
     ViewData["Title"] = "WageRegister";
@@ -100,29 +101,19 @@
                                 <td class="gainsboro">Name</td>
                                 <td class="gainsboro">M/F</td>
                                 <td class="gainsboro">Date Of Joining</td>
-                                <td class="lightgray">Total Days</td>
-                                <td class="lightgray">Pay Days</td>
+                                <td class="gainsboro">Total Working Days</td>
+                                <td class="gainsboro">Total Paybe Days</td>
                                 <td class="lightgray">Basic</td>
-                                <td class="lightgray">Basic Calculated</td>
                                 <td class="lightgray">DA</td>
-                                <td class="lightgray">DA Calculated</td>
                                 <td class="lightgray">HRA</td>
-                                <td class="lightgray">HRA Calculated</td>
                                 @foreach (var all in wageRegisters[0].allowanceVMs)
                                 {
                                     <td class="lightgray">@all.allowanceVM.ALL_Alias</td>
-                                    <td class="lightgray">@all.allowanceVM.ALL_Alias Calculated</td>
                                 }
-                                <td class="lightgray" rowspan="2">OT Hours</td>
-                                <td class="lightgray">OT Payment times</td>
                                 <td class="lightgray">OT Amount</td>
-                                <td class="lightgray">Working Hrs In Day</td>
                                 <td class="lightgray">Gross Total</td>
-                                <td class="silver" rowspan="2">PF</td>
-                                <td class="silver">PF Calculated</td>
+                                <td class="silver">PF</td>
                                 <td class="silver">ESIC</td>
-                                <td class="silver">ESIC Formula</td>
-                                <td class="silver">ESIC Calculated</td>
                                 <td class="silver">Advance Installment</td>
                                 <td class="gray">Final Amount</td>
                                 @if (item.wageProcessClientVM != null && item.wageProcessVM.WageStatus == false)
@@ -134,37 +125,55 @@
                         <tbody>
 
                             @foreach (var employee in wageRegisters)
-                            {                                
+                            {
                             <tr>
                                 <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
                                 <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
                                 <td class="gainsboro">@(employee.employeeVM.EMP_Gender == true ? "M" : "F")</td>
                                 <td class="gainsboro">@DateHelper.getDateWithFormat(employee.employeeVM.EMP_DateOfJoining)</td>
-                                <td class="lightgray">@employee.WAR_TotalWorkingDays</td>
-                                <td class="lightgray">@employee.WAR_TotalPaybleDays</td>
-                                <td class="lightgray">@(String.Format("{0:0.##}", employee.WAR_Basic))</td>
-                                <td class="lightgray">@(String.Format("{0:0.##}", employee.WAR_Basic_Calculated))</td>
-                                <td class="lightgray">@(String.Format("{0:0.##}", employee.WAR_DA))</td>
-                                <td class="lightgray">@(String.Format("{0:0.##}", employee.WAR_DA_Calculated))</td>
-                                <td class="lightgray">@employee.WAR_HRA_PER</td>
-                                <td class="lightgray">@(String.Format("{0:0.##}", employee.WAR_HRA_Calculated))</td>
+                                <td class="gainsboro">@employee.WAR_TotalWorkingDays</td>
+                                <td class="gainsboro">@employee.WAR_TotalPaybleDays</td>
+                                <td class="lightgray"><span title="(@(String.Format("{0:0.##}", employee.WAR_Basic)) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays ">@(String.Format("{0:0.##}", employee.WAR_Basic_Calculated))</span></td>
+                                <td class="lightgray"><span title="(@(String.Format("{0:0.##}", employee.WAR_DA)) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays">@(String.Format("{0:0.##}", employee.WAR_DA_Calculated))</span></td>
+                                @{
+                                    string str1 = "";
+                                    if (employee.clientRequirementVM.CRI_HRA_Fixed.ToString() == "")
+                                    {
+                                        str1 = "(" + String.Format("{0:0.##}", employee.WAR_Basic_Calculated) + "+" + String.Format("{0:0.##}", employee.WAR_DA_Calculated) + ")*" + employee.WAR_HRA + "%";
+                                    }
+                                    else
+                                    {
+                                        str1 = "(" + employee.WAR_HRA + "/" + employee.WAR_TotalWorkingDays + ")*" + employee.WAR_TotalPaybleDays;
+                                    }
+                                }
+                                <td class="lightgray"><span title="@str1">@(String.Format("{0:0.##}", employee.WAR_HRA_Calculated))</span></td>
                                 @{
                                     foreach (var all in employee.allowanceVMs)
                                     {
-                                        <td class="lightgray">@(String.Format("{0:0.##}", all.WAA_Amount))</td>
-                                        <td class="lightgray">@(String.Format("{0:0.##}", all.WAA_Amount_Calculated))</td>
+                                        string str = "";
+                                        if (all.WAA_DayswiseOrFull)
+                                        {
+                                            str = "(" + String.Format("{0:0.##}", all.WAA_Amount) + "/" + employee.WAR_TotalWorkingDays + ")*" + employee.WAR_TotalPaybleDays;
+                                        }
+                                        else
+                                        {
+                                            str = "Fixed " + String.Format("{0:0.##}", all.WAA_Amount);
+                                        }
+                                        <td class="lightgray"><span title="@str">@(String.Format("{0:0.##}", all.WAA_Amount_Calculated))</span></td>
                                     }
                                 }
-                                <td class="lightgray">@employee.WAR_ExtraWorkingHours (@(employee.WAR_OverTime_Formula != null ? employee.WAR_OverTime_Formula : "-"))</td>
-                                <td class="lightgray">@(employee.WAR_OverTime_Payment)</td>
                                 <td class="lightgray">@(String.Format("{0:0.##}", employee.WAR_OverTime_Calculated))</td>
-                                <td class="lightgray">@(employee.WAR_WorkingHrs_In_Day)</td>
                                 <td class="lightgray">@Math.Round(employee.WAR_GrossTotal, 2)</td>
-                                <td class="silver">@Convert.ToDouble(employee.WAR_PF)%  (@(employee.WAR_PF_Formula != null ? employee.WAR_PF_Formula : "-"))</td>
-                                <td class="silver">@(String.Format("{0:0.##}", employee.WAR_PF_Calculated))</td>
-                                <td class="silver">@Convert.ToDouble(employee.WAR_ESIC)%</td>
-                                <td class="silver">@employee.WAR_ESIC_Formula</td>
-                                <td class="silver">@(String.Format("{0:0.##}", employee.WAR_ESIC_Calculated))</td>
+                                @{
+                                    string toolPF = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_PF_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
+                                    toolPF = "(" + toolPF + ")*" + employee.WAR_PF + "%";
+                                }
+                                <td class="silver"><span title="@toolPF">@(String.Format("{0:0.##}", employee.WAR_PF_Calculated))</span></td>
+                                @{
+                                    string toolESIC = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_ESIC_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
+                                    toolESIC = "(" + toolESIC + ")*" + employee.WAR_ESIC + "%";
+                                }
+                                <td class="silver"><span title="@toolESIC">@(String.Format("{0:0.##}", employee.WAR_ESIC_Calculated))</span></td>
                                 <td class="silver">@employee.WAR_Advance_Amount</td>
                                 <td class="gray">@(String.Format("{0:0.##}", employee.WAR_FinalTotal))</td>
 

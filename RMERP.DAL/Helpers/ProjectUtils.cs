@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Text;
-
+using System.Collections.Generic;
+using RMERP.DAL.ViewModel;
 namespace RMERP.DAL.Helpers
 {
     public static class ProjectUtils
@@ -29,9 +29,9 @@ namespace RMERP.DAL.Helpers
 
         public enum ATTENDANCE_EXCEL_TEMPLATE
         {
-            BASIC_WithoutShifts = 0,
-            BASIC_WithShifts = 1,
-            COMPLEX_WithoutShift = 2
+            TWOROW_WithoutShifts = 0,
+            TWOROW_WithShifts = 1,
+            ONEROW_WithoutShift = 2
         }
         public enum Total_WorkingDyas_In_Month
         {
@@ -64,5 +64,42 @@ namespace RMERP.DAL.Helpers
         }
         public static int WagId, CliId, ClientId, EmpId;
 
+        public static string GetTooltipBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<WageRegisterAllowanceVM> All)
+        {
+            string str = "";
+            string[] arr_CRI_Formula;
+
+            if (CRI_Formula != null)
+            {
+                arr_CRI_Formula = CRI_Formula.Split("+");
+                foreach (string item in arr_CRI_Formula)
+                {
+                    switch (item)
+                    {
+                        case "BASIC":
+                            str = String.Format("{0:0.##}", Convert.ToDecimal(WAR_Basic_Calculated));
+                            break;
+                        case "DA":
+                            str = str + "+" + String.Format("{0:0.##}", Convert.ToDecimal(CRI_DA_Calculated));
+                            break;
+                        case "HRA":
+                            str = str + "+" + String.Format("{0:0.##}", Convert.ToDecimal(CRI_HRA_Calculated));
+                            break;
+                        default:
+                            {
+                                foreach (var allowance in All)
+                                {
+                                    if (allowance.allowanceVM.ALL_Shortform == item)
+                                    {
+                                            str = str + "+" + String.Format("{0:0.##}", allowance.WAA_Amount_Calculated);
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return str;
+        }
     }
 }

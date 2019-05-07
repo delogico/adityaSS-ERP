@@ -336,7 +336,7 @@ namespace RMERP.Controllers
                             else if (rowExtra.GetCell(j).ToString().Equals("PH"))
                             {
                                 totalPresence++;
-                                attendance.ATT_IsPaidHoliday = true;
+                                attendance.ATT_IsPublicHoliday = true;
                             }
                             else
                             {
@@ -504,7 +504,7 @@ namespace RMERP.Controllers
                         saveAttendance_BASIC_WithShifts(sheet,wageProcess,client);
                         break;
                     case "2":
-                        saveAttendance_COMPLEX_WithoutShift(sheet);
+                        saveAttendance_ONEROW_WithoutShift(sheet,wageProcess,client);
                         break;
                 }
                 new FileInfo(strFilePath).Delete();
@@ -555,7 +555,7 @@ namespace RMERP.Controllers
                             att.ATT_IsPresent = true;
                         else if (row.GetCell(j).ToString().Equals("A"))
                             att.ATT_IsPresent = false;
-                        att.ATT_IsPaidHoliday = secondRow.GetCell(j).ToString().Contains("PH");
+                        att.ATT_IsPublicHoliday = secondRow.GetCell(j).ToString().Contains("PH");
                         if (rowExtra.GetCell(j) != null)
                             if (!rowExtra.GetCell(j).ToString().Equals(""))
                                 att.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
@@ -626,7 +626,7 @@ namespace RMERP.Controllers
                             if (rowExtra.GetCell(j).ToString().Equals("EL"))
                                 att.ATT_IsEarnLeave = true;
                             else if (rowExtra.GetCell(j).ToString().Equals("PH"))
-                                att.ATT_IsPaidHoliday = true;
+                                att.ATT_IsPublicHoliday = true;
                             else
                                 att.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
                         }
@@ -638,9 +638,107 @@ namespace RMERP.Controllers
             }
         }
 
-        public void saveAttendance_COMPLEX_WithoutShift(ISheet sheet)
+        public void saveAttendance_ONEROW_WithoutShift(ISheet sheet, Wage_Process wageProcess, Clients client)
         {
+            AttendanceManager attManager = new AttendanceManager(_context);
+            DesignationManager designationManager = new DesignationManager(_context);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            IRow headerRow = sheet.GetRow(0);
+            IRow secondRow = sheet.GetRow(1);
+            int cellCount = secondRow.LastCellNum;
+            int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
+            DateTime startDate = DateTime.Now, endDate = DateTime.Now;
+            if (intStartDate > 1)
+            {
+                DateTime lastMonth = wageProcess.WAG_Month.AddMonths(-1);
+                startDate = new DateTime(lastMonth.Year, lastMonth.Month, intStartDate);
+            }
+            else
+            {
+                startDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, intStartDate);
+            }
+            endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, Convert.ToInt16(secondRow.GetCell(cellCount - 1).ToString()));
+            for (int i = (sheet.FirstRowNum + 2); i <= sheet.LastRowNum; i++)
+            {
+                IRow row = sheet.GetRow(i);
+                if (row == null) continue;
+                if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
 
+                int EMP_Id = Convert.ToInt16(row.GetCell(1).ToString());
+                DateTime tmpDate = startDate;
+                for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
+                {
+                    if (secondRow.GetCell(j) != null)
+                    {
+                        Attendance att = new Attendance();
+                        att.EMP_Id = EMP_Id;
+                        att.WAG_Id = wageProcess.WAG_Id;
+                        att.CLI_Id = client.CLI_Id;
+                        att.DES_Id = designationManager.getDesignationIdForAttandance(client.CLI_Id, EMP_Id);
+                        att.ATT_Date = tmpDate;
+                        att.ATT_Shift = "";
+                        att.ATT_ExtraHoursWorked = 0.0;
+                        att.ATT_IsEarnLeave = false;
+                        switch (row.GetCell(j).ToString())
+                        {
+                            case "P":
+                                att.ATT_IsPresent = true;
+                                break;
+                            case "A":
+                                att.ATT_IsPresent = false;
+                                break;
+                            case "WO":
+                                att.ATT_IsWeeklyOff = true;
+                                att.ATT_IsPresent = false;
+                                break;
+                            case "PN":
+                                att.ATT_EarnedExtraDay = true;
+                                att.ATT_IsPresent = true;
+                                break;
+                            case "CO":
+                                att.ATT_IsPresent = false;
+                                att.ATT_IsEarnLeave = true;
+                                break;
+                            case "CP":
+                                att.ATT_IsPresent = true;
+                                att.ATT_NightShift = true;
+                                break;
+                            case "NH":
+                                att.ATT_IsPresent = false;
+                                att.ATT_IsPublicHoliday = true;
+                                break;
+                            case "CW":
+                                att.ATT_NightShift = true;
+                                break;
+                            case "PL":
+                                att.ATT_IsPresent = false;
+                                att.ATT_IsPaidLeave = true;
+                                break;
+                            case "PW":
+                                att.ATT_IsPresent = true;
+                                break;
+                            case "PO":
+                                att.ATT_IsPresent = true;
+                                break;
+                            case "HO":
+                                att.ATT_IsPresent = false;
+                                att.ATT_IsHoliday = true;
+                                break;
+                            case "NC":
+                                att.ATT_NightShift = true;
+                                att.ATT_IsPresent = true;
+                                att.ATT_EarnedExtraDay = true;
+                                break;
+                        }
+                        att.ATT_Orignal_Row1 = row.GetCell(j).ToString();
+                        att.ATT_Orignal_Row2 = "";
+                        att.ATT_ImportedOn = DateTime.Now;
+                        att.ADM_Id_ImportedBy = sessionUtils.GetLoggedAdminID();
+                        attManager.save(att);
+                        tmpDate = tmpDate.AddDays(1);
+                    }
+                }
+            }
         }
         [HttpGet]
         [Breadcrumb("View Attendance", FromAction = "WageAttendanceList")]
@@ -654,6 +752,7 @@ namespace RMERP.Controllers
             Clients client = clientsManager.GetClientById(CLI_Id);
             ViewBag.ClientName = client.CLI_Name;
             ViewBag.CLI_Id = client.CLI_Id;
+            ViewBag.CLI_Total_WorkingDays = client.CLI_Total_WorkingDays;
             DateTime[] arrDate = DateHelper.getStartEndDatePeriodForAttendance(client, wage.WAG_Month);
             ViewBag.startDate = arrDate[0];
             ViewBag.endDate = arrDate[1];

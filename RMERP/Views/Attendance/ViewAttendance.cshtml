@@ -41,9 +41,10 @@
                                 }
                             }
                             <th>Present Days</th>
-                            <th>Public Holidays</th>
-                            <th>Total Extra Working Hours</th>
                             <th>Total Week Offs</th>
+                            <th>Total Paid Holidays</th>
+                            <th>Total Extra Working Hours</th>
+                            <th>Total Payble Days</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -59,7 +60,7 @@
                             @{
                                 int counter1 = 0;
                                 DateTime tmpDate1 = ViewBag.startDate;
-                                int totWorkingDays = 0, totWeekOffs = 0, totPublicHolidays = 0;
+                                int totWorkingDays = 0, totWeekOffs = 0, totPaidHolidas = 0; ;
                                 double totExtraWorkingHours = 0;
                                 while (ViewBag.endDate >= tmpDate1)
                                 {
@@ -74,12 +75,14 @@
                                                     String str = "";
                                                     if (att.ATT_IsWeeklyOff)
                                                     {
+                                                        totWeekOffs++;
                                                         str = "<span class='weekoff'>W/O</span>";
                                                     }
                                                     else
                                                     {
                                                         if (att.ATT_IsPresent)
                                                         {
+                                                            totWorkingDays++;
                                                             if (att.ATT_Shift != null && att.ATT_Shift.Length > 0)
                                                             {
                                                                 str = "<span class='present'>" + att.ATT_Shift + "</span>";
@@ -89,65 +92,59 @@
                                                                 str = "<span class='present'>P</span>";
                                                             }
                                                         }
+                                                        else if (att.ATT_IsPaidLeave)
+                                                        {
+                                                            totPaidHolidas++;
+                                                            str = "<span class='present'>PL</span>";
+                                                        }
+                                                        else if (att.ATT_IsEarnLeave)
+                                                        {
+                                                            totPaidHolidas++;
+                                                            str = "<span class='present'>EL</span>";
+                                                        }
+                                                        else if ((att.ATT_IsHoliday) || (att.ATT_IsPublicHoliday))
+                                                        {
+                                                            totPaidHolidas++;
+                                                            str = "<span class='present'>PH</span>";
+                                                        }
                                                         else
                                                         {
                                                             str = "<span class='absent'>A</span>";
+                                                        }
+                                                        if (att.ATT_EarnedExtraDay)
+                                                        {
+                                                            totWorkingDays++;
+                                                            str = str + "<span class='extra'>+1</span>";
                                                         }
                                                     }
                                                 }
                                                 <div class="col-md-12">@Html.Raw(str)</div>
                                                 <div class="col-md-12 font10">
                                                     @{
-                                                        if (att.ATT_ExtraHoursWorked == 0)
-                                                        {
-                                                            if (att.ATT_IsEarnLeave)
-                                                            {
-                                                                @Html.Raw("EL");
-                                                            }
-                                                            else if (att.ATT_IsPaidHoliday)
-                                                            {
-                                                                @Html.Raw("PH");
-                                                            }
-                                                            else
-                                                            {
-                                                                @Html.Raw("&nbsp;");
-                                                            }
-                                                        }
-                                                        else
+                                                        if (att.ATT_ExtraHoursWorked != 0)
                                                         {
                                                             @att.ATT_ExtraHoursWorked.ToString("#.#")
                                                         }
                                                     }
                                                 </div>
-                                                @{ 
+                                                @{
                                                     Wage_Process_Clients wageC = att.wage_Process.wage_Process_Clients.Where(m => m.CLI_Id.Equals(ViewBag.CLI_Id)).FirstOrDefault();
                                                 }
-                                                @if (wageC == null) { 
-                                                <div class="col-md-12">
-                                                    <a class="editatt edit_@att.ATT_Id" href='@Url.Action("EditAttendanceRecord","WageProcess",new { attId=att.ATT_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i></a>
-                                                </div>
+                                                @if (wageC == null)
+                                                {
+                                                    <div class="col-md-12">
+                                                        <a class="editatt edit_@att.ATT_Id" href='@Url.Action("EditAttendanceRecord","WageProcess",new { attId=att.ATT_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i></a>
+                                                    </div>
                                                 }
                                             </div>
                                         </td>
-                                                            if (att.ATT_IsPresent == true)
-                                                            {
-                                                                totWorkingDays++;
-                                                            }
-                                                            if (att.ATT_ExtraHoursWorked > 0)
-                                                            {
-                                                                totExtraWorkingHours += att.ATT_ExtraHoursWorked;
-                                                            }
-                                                            if (att.ATT_IsWeeklyOff)
-                                                            {
-                                                                totWeekOffs++;
-                                                            }
-                                                            if (att.ATT_IsPaidHoliday)
-                                                            {
-                                                                totPublicHolidays++;
-                                                            }
-                                                        }
-                                                        else
+                                                        if (att.ATT_ExtraHoursWorked > 0)
                                                         {
+                                                            totExtraWorkingHours += att.ATT_ExtraHoursWorked;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
                                         <td>
                                             -
                                         </td>
@@ -159,9 +156,19 @@
                             }
 
                             <td>@totWorkingDays</td>
-                            <td>@totPublicHolidays</td>
-                            <td>@totExtraWorkingHours</td>
                             <td>@totWeekOffs</td>
+                            <td>@totPaidHolidas</td>
+                            <td>@totExtraWorkingHours</td>
+                            <td>
+                                @{ 
+                                    int total = totWorkingDays+ totPaidHolidas;
+                                    if (ViewBag.CLI_Total_WorkingDays != 1)
+                                    {
+                                        total = total + totWeekOffs;
+                                    }
+                                }
+                                @total
+                            </td>
                         </tr>
                         }
 

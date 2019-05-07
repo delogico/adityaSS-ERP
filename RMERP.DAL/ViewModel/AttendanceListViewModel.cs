@@ -14,7 +14,7 @@ namespace RMERP.DAL.ViewModel
         public string WorkingHours { get; set; }
         public double ExtraWorkingHours { get; set; }
         public List<UserData> UserDataList { get; set; }
-        public AttendanceViewModel attendanceViewModel { get; set; }
+        public AttendanceVM attendanceVM { get; set; }
         public List<Attendance> attendancesList { get; set; }
         public Attendance attendanceModel { get; set; }
         public UserData userData { get; set; }

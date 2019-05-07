@@ -167,9 +167,12 @@ textarea.form-control {
     color:darkorange;
     font-size:75%;
 }
-
-.font11{
-    font-size:11px;
+.extra{
+    font-size:9px;
+    margin-bottom:5px;
+}
+.font11 {
+    font-size: 11px;
 }
 
 

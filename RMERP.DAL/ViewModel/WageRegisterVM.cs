@@ -14,6 +14,7 @@ namespace RMERP.DAL.ViewModel
         public AllowanceVM allowanceVM { get; set; }
         public int CRI_Id { get; set; }
         public int CRA_Id { get; set; }
+        public bool WAA_DayswiseOrFull { get; set; }
         public decimal WAA_Amount { get; set; }
         public decimal WAA_Amount_Calculated { get; set; }
     }

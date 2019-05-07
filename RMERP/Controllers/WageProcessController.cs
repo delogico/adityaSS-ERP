@@ -146,7 +146,7 @@ namespace RMERP.Controllers
         public ActionResult EditAttendanceRecord(int attID)
         {
             AttendanceListViewModel alvm = new AttendanceListViewModel();
-            alvm.attendanceViewModel = new AttendanceViewModel();
+            alvm.attendanceVM = new AttendanceVM();
            
             Attendance att = new Attendance();
             if (attID > 0)
@@ -154,20 +154,20 @@ namespace RMERP.Controllers
                 
                 att = wpm.GetAttendanceById(attID);
                 CliId = att.CLI_Id;
-                alvm.attendanceViewModel.ATT_Id = attID;
-                alvm.attendanceViewModel.DES_Id = att.DES_Id;
-                alvm.attendanceViewModel.CLI_Id = att.CLI_Id;
-                alvm.attendanceViewModel.EMP_Id = att.EMP_Id;
-                alvm.attendanceViewModel.WAG_Id = att.WAG_Id;
-                alvm.attendanceViewModel.ATT_ImportedOn = att.ATT_ImportedOn;
-                alvm.attendanceViewModel.ATT_IsEarnLeave = att.ATT_IsEarnLeave;
-                alvm.attendanceViewModel.ATT_IsPaidHoliday = att.ATT_IsPaidHoliday;
-                alvm.attendanceViewModel.ATT_IsPresent = att.ATT_IsPresent;
-                alvm.attendanceViewModel.ATT_IsWeeklyOff = att.ATT_IsWeeklyOff;
-                alvm.attendanceViewModel.ATT_Shift = att.ATT_Shift;
-                alvm.attendanceViewModel.ATT_Date = att.ATT_Date;        
-                alvm.attendanceViewModel.ADM_Id_ImportedBy = att.ADM_Id_ImportedBy;
-                alvm.attendanceViewModel.ATT_ExtraHoursWorked = att.ATT_ExtraHoursWorked;
+                alvm.attendanceVM.ATT_Id = attID;
+                alvm.attendanceVM.DES_Id = att.DES_Id;
+                alvm.attendanceVM.CLI_Id = att.CLI_Id;
+                alvm.attendanceVM.EMP_Id = att.EMP_Id;
+                alvm.attendanceVM.WAG_Id = att.WAG_Id;
+                alvm.attendanceVM.ATT_ImportedOn = att.ATT_ImportedOn;
+                alvm.attendanceVM.ATT_IsEarnLeave = att.ATT_IsEarnLeave;
+                alvm.attendanceVM.ATT_IsPublicHoliday = att.ATT_IsPublicHoliday;
+                alvm.attendanceVM.ATT_IsPresent = att.ATT_IsPresent;
+                alvm.attendanceVM.ATT_IsWeeklyOff = att.ATT_IsWeeklyOff;
+                alvm.attendanceVM.ATT_Shift = att.ATT_Shift;
+                alvm.attendanceVM.ATT_Date = att.ATT_Date;        
+                alvm.attendanceVM.ADM_Id_ImportedBy = att.ADM_Id_ImportedBy;
+                alvm.attendanceVM.ATT_ExtraHoursWorked = att.ATT_ExtraHoursWorked;
             }
             return View(alvm);
         }
@@ -180,26 +180,26 @@ namespace RMERP.Controllers
             if (ModelState.IsValid)
             {
                 CliId = atta.CLI_Id;
-                atta.ATT_Id = alvm.attendanceViewModel.ATT_Id;
-                atta.ATT_ImportedOn = alvm.attendanceViewModel.ATT_ImportedOn;
-                atta.ATT_IsEarnLeave = alvm.attendanceViewModel.ATT_IsEarnLeave;
-                atta.ATT_IsPaidHoliday = alvm.attendanceViewModel.ATT_IsPaidHoliday;
-                atta.ATT_IsPresent = alvm.attendanceViewModel.ATT_IsPresent;
-                atta.ATT_IsWeeklyOff = alvm.attendanceViewModel.ATT_IsWeeklyOff;
-                atta.ATT_Date = alvm.attendanceViewModel.ATT_Date;
-                atta.ADM_Id_ImportedBy = alvm.attendanceViewModel.ADM_Id_ImportedBy;
-                atta.ATT_Shift = alvm.attendanceViewModel.ATT_Shift;
-                atta.CLI_Id = alvm.attendanceViewModel.CLI_Id;
-                atta.EMP_Id = alvm.attendanceViewModel.EMP_Id;
-                atta.DES_Id = alvm.attendanceViewModel.DES_Id;
-                atta.WAG_Id = alvm.attendanceViewModel.WAG_Id;
-                atta.ATT_ExtraHoursWorked = alvm.attendanceViewModel.ATT_ExtraHoursWorked;
+                atta.ATT_Id = alvm.attendanceVM.ATT_Id;
+                atta.ATT_ImportedOn = alvm.attendanceVM.ATT_ImportedOn;
+                atta.ATT_IsEarnLeave = alvm.attendanceVM.ATT_IsEarnLeave;
+                atta.ATT_IsPublicHoliday = alvm.attendanceVM.ATT_IsPublicHoliday;
+                atta.ATT_IsPresent = alvm.attendanceVM.ATT_IsPresent;
+                atta.ATT_IsWeeklyOff = alvm.attendanceVM.ATT_IsWeeklyOff;
+                atta.ATT_Date = alvm.attendanceVM.ATT_Date;
+                atta.ADM_Id_ImportedBy = alvm.attendanceVM.ADM_Id_ImportedBy;
+                atta.ATT_Shift = alvm.attendanceVM.ATT_Shift;
+                atta.CLI_Id = alvm.attendanceVM.CLI_Id;
+                atta.EMP_Id = alvm.attendanceVM.EMP_Id;
+                atta.DES_Id = alvm.attendanceVM.DES_Id;
+                atta.WAG_Id = alvm.attendanceVM.WAG_Id;
+                atta.ATT_ExtraHoursWorked = alvm.attendanceVM.ATT_ExtraHoursWorked;
 
                 res = wpm.UpdateAttendance(atta);
             }
             
 
-            return RedirectToAction("ViewAttendance", "Attendance", new { WAG_Id = alvm.attendanceViewModel.WAG_Id, CLI_Id = alvm.attendanceViewModel.CLI_Id });
+            return RedirectToAction("ViewAttendance", "Attendance", new { WAG_Id = alvm.attendanceVM.WAG_Id, CLI_Id = alvm.attendanceVM.CLI_Id });
         }
         public ActionResult WageRegisterStatus(int WAG_Id)
         {

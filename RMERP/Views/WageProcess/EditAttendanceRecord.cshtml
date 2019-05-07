@@ -16,90 +16,90 @@
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.HiddenFor(m => m.attendanceViewModel.ATT_Id)
-                    @Html.HiddenFor(m => m.attendanceViewModel.EMP_Id)
-                    @Html.HiddenFor(m => m.attendanceViewModel.DES_Id)
-                    @Html.HiddenFor(m => m.attendanceViewModel.WAG_Id)
-                    @Html.HiddenFor(m => m.attendanceViewModel.CLI_Id)
-                    @Html.HiddenFor(m => m.attendanceViewModel.ATT_Date)
-                    @Html.HiddenFor(m => m.attendanceViewModel.ATT_ImportedOn)
+                    @Html.HiddenFor(m => m.attendanceVM.ATT_Id)
+                    @Html.HiddenFor(m => m.attendanceVM.EMP_Id)
+                    @Html.HiddenFor(m => m.attendanceVM.DES_Id)
+                    @Html.HiddenFor(m => m.attendanceVM.WAG_Id)
+                    @Html.HiddenFor(m => m.attendanceVM.CLI_Id)
+                    @Html.HiddenFor(m => m.attendanceVM.ATT_Date)
+                    @Html.HiddenFor(m => m.attendanceVM.ATT_ImportedOn)
                     
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            @Html.LabelFor(m => m.attendanceViewModel.ATT_Date, new { @class = "control-label" })
-                            @*@Html.DisplayFor(m => m.attendanceViewModel.AttDate, new { @class = "form-control" })*@
-                            @Convert.ToString(string.Format("{0:dd-MMM-yyyy}", Model.attendanceViewModel.ATT_Date))
-                            @Html.ValidationMessageFor(m => m.attendanceViewModel.ATT_Date, "", new { @class = "text-danger" })
+                            @Html.LabelFor(m => m.attendanceVM.ATT_Date, new { @class = "control-label" })
+                            @*@Html.DisplayFor(m => m.attendanceVM.AttDate, new { @class = "form-control" })*@
+                            @Convert.ToString(string.Format("{0:dd-MMM-yyyy}", Model.attendanceVM.ATT_Date))
+                            @Html.ValidationMessageFor(m => m.attendanceVM.ATT_Date, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="form-group">
-                            @Html.LabelFor(m => m.attendanceViewModel.ATT_IsEarnLeave, new { @class = "control-label" })
+                            @Html.LabelFor(m => m.attendanceVM.ATT_IsEarnLeave, new { @class = "control-label" })
                             <label class="switch">
-                                @Html.CheckBoxFor(m => m.attendanceViewModel.ATT_IsEarnLeave, (Model.attendanceViewModel.ATT_IsEarnLeave == true ? (object)new { type = "checkbox", @checked = (Model.attendanceViewModel.ATT_IsEarnLeave == true ? "checked" : "") } : new { type = "checkbox" }))
+                                @Html.CheckBoxFor(m => m.attendanceVM.ATT_IsEarnLeave, (Model.attendanceVM.ATT_IsEarnLeave == true ? (object)new { type = "checkbox", @checked = (Model.attendanceVM.ATT_IsEarnLeave == true ? "checked" : "") } : new { type = "checkbox" }))
                                 <span class="slider round"></span>
                             </label>
-                            @Html.ValidationMessageFor(m => m.attendanceViewModel.ATT_IsEarnLeave, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.attendanceVM.ATT_IsEarnLeave, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            @Html.LabelFor(m => m.attendanceViewModel.ATT_IsPaidHoliday, new { @class = "control-label" })
+                            @Html.LabelFor(m => m.attendanceVM.ATT_IsPublicHoliday, new { @class = "control-label" })
                             <label class="switch">
-                                @Html.CheckBoxFor(m => m.attendanceViewModel.ATT_IsPaidHoliday, (Model.attendanceViewModel.ATT_IsPaidHoliday == true ? (object)new { type = "checkbox", @checked = (Model.attendanceViewModel.ATT_IsPaidHoliday == true ? "checked" : "") } : new { type = "checkbox" }))
+                                @Html.CheckBoxFor(m => m.attendanceVM.ATT_IsPublicHoliday, (Model.attendanceVM.ATT_IsPublicHoliday == true ? (object)new { type = "checkbox", @checked = (Model.attendanceVM.ATT_IsPublicHoliday == true ? "checked" : "") } : new { type = "checkbox" }))
                                 <span class="slider round"></span>
                             </label>
-                            @Html.ValidationMessageFor(m => m.attendanceViewModel.ATT_IsPaidHoliday, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.attendanceVM.ATT_IsPublicHoliday, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="form-group">
-                            @Html.LabelFor(m => m.attendanceViewModel.ATT_IsPresent, new { @class = "control-label" })
+                            @Html.LabelFor(m => m.attendanceVM.ATT_IsPresent, new { @class = "control-label" })
                             <label class="switch">
-                                @Html.CheckBoxFor(m => m.attendanceViewModel.ATT_IsPresent, (Model.attendanceViewModel.ATT_IsPresent == true ? (object)new { type = "checkbox", @checked = (Model.attendanceViewModel.ATT_IsPresent == true ? "checked" : "") } : new { type = "checkbox" }))
+                                @Html.CheckBoxFor(m => m.attendanceVM.ATT_IsPresent, (Model.attendanceVM.ATT_IsPresent == true ? (object)new { type = "checkbox", @checked = (Model.attendanceVM.ATT_IsPresent == true ? "checked" : "") } : new { type = "checkbox" }))
                                 <span class="slider round"></span>
                             </label>
-                            @Html.ValidationMessageFor(m => m.attendanceViewModel.ATT_IsPresent, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.attendanceVM.ATT_IsPresent, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="form-group">
-                            @Html.LabelFor(m => m.attendanceViewModel.ATT_IsWeeklyOff, new { @class = "control-label" })
+                            @Html.LabelFor(m => m.attendanceVM.ATT_IsWeeklyOff, new { @class = "control-label" })
 
                             <label class="switch">
-                                @Html.CheckBoxFor(m => m.attendanceViewModel.ATT_IsWeeklyOff, (Model.attendanceViewModel.ATT_IsWeeklyOff == true ? (object)new { type = "checkbox", @checked = (Model.attendanceViewModel.ATT_IsWeeklyOff == true ? "checked" : "") } : new { type = "checkbox" }))
+                                @Html.CheckBoxFor(m => m.attendanceVM.ATT_IsWeeklyOff, (Model.attendanceVM.ATT_IsWeeklyOff == true ? (object)new { type = "checkbox", @checked = (Model.attendanceVM.ATT_IsWeeklyOff == true ? "checked" : "") } : new { type = "checkbox" }))
                                 <span class="slider round"></span>
                             </label>
-                            @Html.ValidationMessageFor(m => m.attendanceViewModel.ATT_IsWeeklyOff, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.attendanceVM.ATT_IsWeeklyOff, "", new { @class = "text-danger" })
 
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            @Html.LabelFor(m => m.attendanceViewModel.ATT_Shift, new { @class = "control-label" })
-                            @*@Html.TextBoxFor(m => m.attendanceViewModel.AttShift, new { @class = "form-control" })*@
+                            @Html.LabelFor(m => m.attendanceVM.ATT_Shift, new { @class = "control-label" })
+                            @*@Html.TextBoxFor(m => m.attendanceVM.AttShift, new { @class = "form-control" })*@
                             Choose Template :
                             <label class="radio-inline form-control">
                                 @foreach (var AttendanceShift in Enum.GetValues(typeof(AttendanceShift)))
                                 {
                                     <label class="radio-inline">
-                                        <b>@Html.RadioButtonFor(s => s.attendanceViewModel.ATT_Shift, (int)AttendanceShift, (int)AttendanceShift == 1 ? (object)new { @checked = true, @id = (int)AttendanceShift } : new { @id = (int)AttendanceShift })@AttendanceShift</b>
+                                        <b>@Html.RadioButtonFor(s => s.attendanceVM.ATT_Shift, (int)AttendanceShift, (int)AttendanceShift == 1 ? (object)new { @checked = true, @id = (int)AttendanceShift } : new { @id = (int)AttendanceShift })@AttendanceShift</b>
                                     </label>
                                 }
                             </label>
-                            @Html.ValidationMessageFor(m => m.attendanceViewModel.ATT_Shift, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.attendanceVM.ATT_Shift, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="form-group">
-                            @Html.LabelFor(m => m.attendanceViewModel.ATT_ExtraHoursWorked, new { @class = "control-label" })
-                            @Html.TextBoxFor(m => m.attendanceViewModel.ATT_ExtraHoursWorked, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.attendanceViewModel.ATT_ExtraHoursWorked, "", new { @class = "text-danger" })
+                            @Html.LabelFor(m => m.attendanceVM.ATT_ExtraHoursWorked, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.attendanceVM.ATT_ExtraHoursWorked, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.attendanceVM.ATT_ExtraHoursWorked, "", new { @class = "text-danger" })
                         </div>
                     </div>
                   
