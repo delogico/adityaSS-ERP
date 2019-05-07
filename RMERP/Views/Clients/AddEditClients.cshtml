@@ -466,9 +466,15 @@
                 }
             </ul>
         </div>*@
-                        <a href='@Url.Action( "GenerateExcelTemplate","Clients")' title="Generate Excel Template"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template </a>
+                        <div class="dropdown">
+                            <a href="#" class="dropdown-toggle btn btn-success rounded" data-toggle="dropdown" aria-expanded="false">Get Excel</a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href='@Url.Action( "GenerateExcelTemplate_TwoRow","Clients")' title="Generate Excel Template / Double rows"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Double Rows</a></li>
+                                <li><a href='@Url.Action( "GenerateExcelTemplate_OneRow","Clients")' title="Generate Excel Template / Single Row"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Single Row</a></li>
+                            </ul>
+                        </div>
+                        </div>
                     </div>
-                </div>
 
             </div>
             <div id="ClientDelete" class="tab-pane fade">

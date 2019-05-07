@@ -48,72 +48,102 @@ else
                                                         tmpDate = tmpDate.AddDays(1);
                                                     }
                                                 }
-                                                <th>Total Presence</th>
+                                                <th>Present Days</th>
+                                                <th>Weekly Off</th>
+                                                <th>Leave Days</th>
+                                                <th>Holidays</th>
+                                                <th>Extra Days</th>
+                                                <th>CO</th>
+                                                <th>WO Present</th>
+                                                <th>HO Present</th>
                                                 <th>Total Extra Hours</th>
+                                                <th>Total Payble Days</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach (var item in Model.excelRows)
                                             {
-                                                <tr>
-                                                    <td>@item.EMP_Id</td>
-                                                    <td><b>@item.EMP_Name</b><br />@item.Designation</td>
-                                                    @{
-                                                        DateTime tmpDate1 = Model.startDate;
-                                                        while (Model.endDate >= tmpDate1)
+                                            <tr>
+                                                <td>@item.EMP_Id</td>
+                                                <td><b>@item.EMP_Name</b><br />@item.Designation</td>
+                                                @{
+                                                    DateTime tmpDate1 = Model.startDate;
+                                                    while (Model.endDate >= tmpDate1)
+                                                    {
+                                                        Attendance att = Model.listAttendance.Where(m => m.EMP_Id == Convert.ToInt32(item.EMP_Id) && m.ATT_Date.Equals(tmpDate1)).FirstOrDefault();
+                                                        if (att != null)
                                                         {
-                                                            Attendance att = Model.listAttendance.Where(m => m.EMP_Id == Convert.ToInt32(item.EMP_Id) && m.ATT_Date.Equals(tmpDate1)).FirstOrDefault();
-                                                            if (att != null)
-                                                            {
-                                                                <td align="center">
-                                                                    <div class="row">
-                                                                        @{
-                                                                            String str = "";
-                                                                            if (att.ATT_IsWeeklyOff)
+                                                            <td align="center">
+                                                                <div class="row">
+                                                                    @{
+                                                                        String str = "";
+                                                                        if (att.ATT_IsWeeklyOff)
+                                                                        {
+                                                                            str = "<span class='weekoff'>W/O</span>";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (att.ATT_IsPresent)
                                                                             {
-                                                                                str = "<span class='weekoff'>W/O</span>";
+                                                                                if (att.ATT_Shift != null)
+                                                                                {
+                                                                                    str = "<span class='present'>" + att.ATT_Shift + "</span>";
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    str = "<span class='present'>P</span>";
+                                                                                }
                                                                             }
                                                                             else
                                                                             {
-                                                                                if (att.ATT_IsPresent)
+                                                                                str = "<span class='absent'>A</span>";
+                                                                            }
+                                                                        }
+                                                                        <div class="col-md-12">@Html.Raw(str)</div>
+                                                                        <div class="col-md-12 font10">
+                                                                            @{
+                                                                                if (att.ATT_ExtraHoursWorked == 0)
                                                                                 {
-                                                                                    if (att.ATT_Shift != null)
+                                                                                    if (att.ATT_IsEarnLeave)
                                                                                     {
-                                                                                        str = "<span class='present'>" + att.ATT_Shift + "</span>";
+                                                                                        @Html.Raw("EL");
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        str = "<span class='present'>P</span>";
+                                                                                        if (att.ATT_IsPaidHoliday)
+                                                                                        {
+                                                                                            @Html.Raw("PH");
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            @Html.Raw("");
+                                                                                        }
                                                                                     }
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    str = "<span class='absent'>A</span>";
+                                                                                    @att.ATT_ExtraHoursWorked.ToString("#.#")
                                                                                 }
                                                                             }
-                                                                            <div class="col-md-12">@Html.Raw(str)</div>
-                                                                            <div class="col-md-12 font10">
-                                                                                @{
-                                                                                    if (att.ATT_ExtraHoursWorked == 0)
-                                                                                    {
-                                                                                        @Html.Raw("");
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        @att.ATT_ExtraHoursWorked.ToString("#.#")
-                                                                                    }
-                                                                                }
-                                                                            </div>
-                                                                        }
-                                                                    </div>
-                                                                </td>
-                                                            }
-                                                            tmpDate1 = tmpDate1.AddDays(1);
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            </td>
                                                         }
+                                                        tmpDate1 = tmpDate1.AddDays(1);
                                                     }
-                                                    <td>@item.TotalPresenceDays</td>
-                                                    <td>@item.TotalExtraHours</td>
-                                                </tr>
+                                                }
+                                                <td>@item.TotalPresenceDays</td>
+                                                <td>@item.totalWeeklyOff</td>
+                                                <td>@item.totalLeaves</td>
+                                                <td>@item.totalHolidays</td>
+                                                <td>@item.totalExtraDays</td>
+                                                <td>@item.totalCOs</td>
+                                                <td>@item.totalWOPresent</td>
+                                                <td>@item.totalHOPresent</td>
+                                                <td>@item.TotalExtraHours</td>
+                                                <td>@item.totalPaybleDays</td>
+                                            </tr>
                                             }
                                         </tbody>
                                     </table>

@@ -29,9 +29,9 @@ namespace RMERP.DAL.App_Code
         }
         public enum Execl_BasicShifts
         {
-            BASIC_WithoutShifts = 0,
-            BASIC_WithShifts = 1,
-            COMPLEX_WithoutShift=2
+            TwoRows_WithoutShifts = 0,
+            TwoRow_WithShifts = 1,
+            OneRow_WithoutShifts=2
         }
         public enum AttendanceShift
         {

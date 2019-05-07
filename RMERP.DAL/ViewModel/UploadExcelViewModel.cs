@@ -32,6 +32,7 @@ namespace RMERP.DAL.ViewModel
         public List<Attendance> listAttendance { get; set; }
 
         public string Template { get; set; }
+
     }
     public class ExcelRowViewModel
     {
@@ -40,6 +41,15 @@ namespace RMERP.DAL.ViewModel
         public string Designation { get; set; }
         public int TotalPresenceDays { get; set; }
         public Double TotalExtraHours { get; set; }
+        public int totalWeeklyOff { get; set; }
+        public int totalLeaves { get; set; }
+        public int totalHolidays { get; set; }
+        public int totalExtraDays { get; set; }
+        public int totalAbsentDays { get; set; }
+        public int totalCOs { get; set; }
+        public int totalWOPresent { get; set; }
+        public int totalHOPresent { get; set; }
+        public int totalPaybleDays { get; set; }
     }
         
 }
