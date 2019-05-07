@@ -115,6 +115,14 @@ namespace RMERP.DAL.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
+                entity.Property(e => e.ATT_Orignal_Row1)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ATT_Orignal_Row2)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.ATT_Shift)
                     .HasMaxLength(10)
                     .IsUnicode(false);

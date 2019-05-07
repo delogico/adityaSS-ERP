@@ -12,7 +12,14 @@ namespace RMERP.DAL.Models
         public int CLI_Id { get; set; }
         public DateTime ATT_Date { get; set; }
         public bool ATT_IsPresent { get; set; }
-        public bool ATT_IsPaidHoliday { get; set; }
+        public bool ATT_IsPublicHoliday { get; set; }
+        public bool ATT_IsHoliday { get; set; }
+        public bool ATT_EarnedExtraDay { get; set; }
+        public bool ATT_IsCompensatoryOff { get; set; }
+        public bool ATT_IsPaidLeave { get; set; }
+        public bool ATT_NightShift { get; set; }
+        public string ATT_Orignal_Row1 { get; set; }
+        public string ATT_Orignal_Row2 { get; set; }
         public string ATT_Shift { get; set; }
         public bool ATT_IsWeeklyOff { get; set; }
         public bool ATT_IsEarnLeave { get; set; }
