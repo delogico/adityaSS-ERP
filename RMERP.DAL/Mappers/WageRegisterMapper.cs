@@ -36,17 +36,25 @@ namespace RMERP.DAL.Mappers
             wageRegisterVM.WAR_PF_Calculated = wageRegister.WAR_PF_Calculated;
             wageRegisterVM.WAR_TotalPaybleDays = wageRegister.WAR_TotalPaybleDays;
             wageRegisterVM.WAR_TotalWorkingDays = wageRegister.WAR_TotalWorkingDays;
-            if(wageRegister.WAR_Advance_Amount!=null)
+
+            if (wageRegister.WAR_ProffesionalTax_Calculated != null)
+                wageRegisterVM.WAR_ProffesionalTax_Calculated = wageRegister.WAR_ProffesionalTax_Calculated;
+            if (wageRegister.WAR_RevenueDeduction_Calculated != null)
+                wageRegisterVM.WAR_RevenueDeduction_Calculated = wageRegister.WAR_RevenueDeduction_Calculated;
+            if (wageRegister.WAR_CanteenFacility_Calculation != null)
+                wageRegisterVM.WAR_CanteenFacility_Calculation = wageRegister.WAR_CanteenFacility_Calculation;
+
+            if (wageRegister.WAR_Advance_Amount != null)
                 wageRegisterVM.WAR_Advance_Amount = wageRegister.WAR_Advance_Amount.Value;
-            if (wageRegister.CRI_!= null)
+            if (wageRegister.CRI_ != null)
             {
                 wageRegisterVM.clientRequirementVM = ClientRequirementMapper.mapMe(wageRegister.CRI_);
                 if (wageRegister.CRI_.DES_ != null)
                     wageRegisterVM.designation = wageRegister.CRI_.DES_;
-            }                
+            }
             if (wageRegister.EMP_ != null)
-                wageRegisterVM.employeeVM = EmployeesMapper.MapMe(wageRegister.EMP_);            
-               
+                wageRegisterVM.employeeVM = EmployeesMapper.MapMe(wageRegister.EMP_);
+
             if (wageRegister.Wage_Register_Allowances != null)
                 wageRegisterVM.allowanceVMs = mapWageAllowances(wageRegister.Wage_Register_Allowances.ToList());
             return wageRegisterVM;
@@ -82,12 +90,17 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_LastModifiedOn = wageRegisterVM.WAR_LastModifiedOn;
             wageRegister.ADM_LastModifiedBy = wageRegisterVM.ADM_LastModifiedBy;
             wageRegister.WAR_OverTime_Calculated = wageRegisterVM.WAR_OverTime_Calculated;
-            wageRegister.WAR_PF = wageRegisterVM.WAR_PF;           
+            wageRegister.WAR_PF = wageRegisterVM.WAR_PF;
             wageRegister.WAR_PF_Formula = wageRegisterVM.WAR_PF_Formula;
             wageRegister.WAR_PF_Calculated = wageRegisterVM.WAR_PF_Calculated;
             wageRegister.WAR_TotalPaybleDays = wageRegisterVM.WAR_TotalPaybleDays;
             wageRegister.WAR_TotalWorkingDays = wageRegisterVM.WAR_TotalWorkingDays;
-            if(wageRegisterVM.WAR_Advance_Amount!=null)
+
+            wageRegister.WAR_ProffesionalTax_Calculated = wageRegisterVM.WAR_ProffesionalTax_Calculated;
+            wageRegister.WAR_RevenueDeduction_Calculated = wageRegisterVM.WAR_RevenueDeduction_Calculated;
+            wageRegister.WAR_CanteenFacility_Calculation = wageRegisterVM.WAR_CanteenFacility_Calculation;
+
+            if (wageRegisterVM.WAR_Advance_Amount != null)
                 wageRegister.WAR_Advance_Amount = wageRegisterVM.WAR_Advance_Amount;
             if (wageRegisterVM.employeeVM != null)
                 wageRegister.EMP_ = EmployeesMapper.MapMeModel(wageRegisterVM.employeeVM);
@@ -112,8 +125,8 @@ namespace RMERP.DAL.Mappers
             wageRegisterAllowanceVM.WAA_Amount = wage_Register_Allowances.WAA_Amount;
             wageRegisterAllowanceVM.WAA_Amount_Calculated = wage_Register_Allowances.WAA_Amount_Calculated;
             wageRegisterAllowanceVM.WAA_Id = wage_Register_Allowances.WAA_Id;
-            if (wage_Register_Allowances.CRA_.ALL_!=null)
-                wageRegisterAllowanceVM.allowanceVM =AllowanceMapper.mapMe(wage_Register_Allowances.CRA_.ALL_);
+            if (wage_Register_Allowances.CRA_.ALL_ != null)
+                wageRegisterAllowanceVM.allowanceVM = AllowanceMapper.mapMe(wage_Register_Allowances.CRA_.ALL_);
             return wageRegisterAllowanceVM;
         }
 
@@ -123,7 +136,7 @@ namespace RMERP.DAL.Mappers
             wageRegisterAllowanceVM.WAA_Amount = wage_Register_Allowances.WAA_Amount;
             wageRegisterAllowanceVM.WAA_Amount_Calculated = wage_Register_Allowances.WAA_Amount_Calculated;
             wageRegisterAllowanceVM.WAA_Id = wage_Register_Allowances.WAA_Id;
-            wageRegisterAllowanceVM.CRA_Id = wage_Register_Allowances.CRA_Id;            
+            wageRegisterAllowanceVM.CRA_Id = wage_Register_Allowances.CRA_Id;
             return wageRegisterAllowanceVM;
         }
         public static List<Wage_Register_Allowances> mapWageAllowancesList(List<WageRegisterAllowanceVM> wageRegisters)
@@ -137,7 +150,7 @@ namespace RMERP.DAL.Mappers
         {
             List<WageRegisterAllowanceVM> lst = new List<WageRegisterAllowanceVM>();
             foreach (Wage_Register_Allowances wageReg in wageRegisters)
-                lst.Add(mapMeAllowance(wageReg));            
+                lst.Add(mapMeAllowance(wageReg));
             return lst;
         }
     }

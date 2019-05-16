@@ -22,27 +22,35 @@
     .gainsboro {
         background-color: #DCDCDC;
     }
+
     .lightgray {
         background-color: #D3D3D3;
     }
+
     .silver {
         background-color: #C0C0C0;
     }
+
     .darkgray {
         background-color: #A9A9A9;
     }
+
     .gray {
         background-color: #a29e9e;
     }
+
     .dimgray {
         background-color: #7b7878;
     }
+
     .fa-check-circle {
         color: green;
     }
+
     .fa-times-circle {
         color: red;
     }
+
     .fa-info-circle {
         color: #ff9b44;
     }
@@ -50,6 +58,7 @@
     a.myClass {
         color: #f5f5f5;
     }
+
         a.myClass:hover,
         a.myClass:active,
         a.myClass:focus {
@@ -90,9 +99,24 @@
                 var distinceDesignations = item.wageRegisterVMs.Select(q => new { q.designation.DES_Id, q.designation.DES_Title }).Distinct();
             }
             @foreach (var dd in distinceDesignations)
-            {                
+            {
                 List<WageRegisterVM> wageRegisters = item.wageRegisterVMs.Where(r => r.designation.DES_Id.Equals(dd.DES_Id)).ToList();
-                <h3>@dd.DES_Title</h3>
+                ClientRequirementVM clientRequirement = wageRegisters.Select(m => m.clientRequirementVM).Where(m => m.CLI_Id.Equals(item.client.CLI_Id) && m.DES_Id.Equals(dd.DES_Id)).First();
+
+                <div class="row">
+                    <div class="col-sm-6"><h3>@dd.DES_Title</h3></div>
+                    <div class="col-sm-6 text-right">
+                        @if (clientRequirement.CRI_CanteenFacility == true)
+                        {
+                            @if (item.wageProcessClientVM == null && item.wageProcessVM.WageStatus == false)
+                            {
+                                @Html.ActionLink("Update canteen Amount", "UpdateCanteenAmount", "Canteen", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id }, new { @class = "btn btn-sm btn-primary rounded" });
+                            }
+                        }
+                    </div>
+                </div>
+
+
                 <div class="table-responsive">
                     <table class="table table-border">
                         <thead style="font-weight:500">
@@ -114,6 +138,19 @@
                                 <td class="lightgray">Gross Total</td>
                                 <td class="silver">PF</td>
                                 <td class="silver">ESIC</td>
+
+                                @if (clientRequirement.CRI_ProfessionalTax == true)
+                                {
+                                    <td class="silver">Proffesional Tax</td>
+                                }
+                                @if (clientRequirement.CRI_RevenueDeduction == true)
+                                {
+                                    <td class="silver">Revenue Deduction</td>
+                                }
+                                @if (clientRequirement.CRI_CanteenFacility == true)
+                                {
+                                    <td class="silver">Canteen Facility</td>
+                                }
                                 <td class="silver">Advance Installment</td>
                                 <td class="gray">Final Amount</td>
                                 @if (item.wageProcessClientVM != null && item.wageProcessVM.WageStatus == false)
@@ -126,69 +163,95 @@
 
                             @foreach (var employee in wageRegisters)
                             {
-                            <tr>
-                                <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
-                                <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
-                                <td class="gainsboro">@(employee.employeeVM.EMP_Gender == true ? "M" : "F")</td>
-                                <td class="gainsboro">@DateHelper.getDateWithFormat(employee.employeeVM.EMP_DateOfJoining)</td>
-                                <td class="gainsboro">@employee.WAR_TotalWorkingDays</td>
-                                <td class="gainsboro">@employee.WAR_TotalPaybleDays</td>
-                                <td class="lightgray"><span title="(@(String.Format("{0:0.##}", employee.WAR_Basic)) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays ">@(String.Format("{0:0.##}", employee.WAR_Basic_Calculated))</span></td>
-                                <td class="lightgray"><span title="(@(String.Format("{0:0.##}", employee.WAR_DA)) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays">@(String.Format("{0:0.##}", employee.WAR_DA_Calculated))</span></td>
-                                @{
-                                    string str1 = "";
-                                    if (employee.clientRequirementVM.CRI_HRA_Fixed.ToString() == "")
-                                    {
-                                        str1 = "(" + String.Format("{0:0.##}", employee.WAR_Basic_Calculated) + "+" + String.Format("{0:0.##}", employee.WAR_DA_Calculated) + ")*" + employee.WAR_HRA + "%";
-                                    }
-                                    else
-                                    {
-                                        str1 = "(" + employee.WAR_HRA + "/" + employee.WAR_TotalWorkingDays + ")*" + employee.WAR_TotalPaybleDays;
-                                    }
-                                }
-                                <td class="lightgray"><span title="@str1">@(String.Format("{0:0.##}", employee.WAR_HRA_Calculated))</span></td>
-                                @{
-                                    foreach (var all in employee.allowanceVMs)
-                                    {
-                                        string str = "";
-                                        if (all.WAA_DayswiseOrFull)
+                                <tr>
+                                    <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
+                                    <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
+                                    <td class="gainsboro">@(employee.employeeVM.EMP_Gender == true ? "M" : "F")</td>
+                                    <td class="gainsboro">@DateHelper.getDateWithFormat(employee.employeeVM.EMP_DateOfJoining)</td>
+                                    <td class="gainsboro">@employee.WAR_TotalWorkingDays</td>
+                                    <td class="gainsboro">@employee.WAR_TotalPaybleDays</td>
+                                    <td class="lightgray"><span title="(@(String.Format("{0:0.##}", employee.WAR_Basic)) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays ">@(String.Format("{0:0.##}", employee.WAR_Basic_Calculated))</span></td>
+                                    <td class="lightgray"><span title="(@(String.Format("{0:0.##}", employee.WAR_DA)) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays">@(String.Format("{0:0.##}", employee.WAR_DA_Calculated))</span></td>
+                                    @{
+                                        string str1 = "";
+                                        if (employee.clientRequirementVM.CRI_HRA_Fixed.ToString() == "")
                                         {
-                                            str = "(" + String.Format("{0:0.##}", all.WAA_Amount) + "/" + employee.WAR_TotalWorkingDays + ")*" + employee.WAR_TotalPaybleDays;
+                                            str1 = "(" + String.Format("{0:0.##}", employee.WAR_Basic_Calculated) + "+" + String.Format("{0:0.##}", employee.WAR_DA_Calculated) + ")*" + employee.WAR_HRA + "%";
                                         }
                                         else
                                         {
-                                            str = "Fixed " + String.Format("{0:0.##}", all.WAA_Amount);
+                                            str1 = "(" + employee.WAR_HRA + "/" + employee.WAR_TotalWorkingDays + ")*" + employee.WAR_TotalPaybleDays;
                                         }
-                                        <td class="lightgray"><span title="@str">@(String.Format("{0:0.##}", all.WAA_Amount_Calculated))</span></td>
                                     }
-                                }
-                                <td class="lightgray">@(String.Format("{0:0.##}", employee.WAR_OverTime_Calculated))</td>
-                                <td class="lightgray">@Math.Round(employee.WAR_GrossTotal, 2)</td>
-                                @{
-                                    string toolPF = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_PF_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
-                                    toolPF = "(" + toolPF + ")*" + employee.WAR_PF + "%";
-                                }
-                                <td class="silver"><span title="@toolPF">@(String.Format("{0:0.##}", employee.WAR_PF_Calculated))</span></td>
-                                @{
-                                    string toolESIC = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_ESIC_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
-                                    toolESIC = "(" + toolESIC + ")*" + employee.WAR_ESIC + "%";
-                                }
-                                <td class="silver"><span title="@toolESIC">@(String.Format("{0:0.##}", employee.WAR_ESIC_Calculated))</span></td>
-                                <td class="silver">@employee.WAR_Advance_Amount</td>
-                                <td class="gray">@(String.Format("{0:0.##}", employee.WAR_FinalTotal))</td>
+                                    <td class="lightgray"><span title="@str1">@(String.Format("{0:0.##}", employee.WAR_HRA_Calculated))</span></td>
+                                    @{
+                                        foreach (var all in employee.allowanceVMs)
+                                        {
+                                            string str = "";
+                                            if (all.WAA_DayswiseOrFull)
+                                            {
+                                                str = "(" + String.Format("{0:0.##}", all.WAA_Amount) + "/" + employee.WAR_TotalWorkingDays + ")*" + employee.WAR_TotalPaybleDays;
+                                            }
+                                            else
+                                            {
+                                                str = "Fixed " + String.Format("{0:0.##}", all.WAA_Amount);
+                                            }
+                                            <td class="lightgray"><span title="@str">@(String.Format("{0:0.##}", all.WAA_Amount_Calculated))</span></td>
+                                        }
+                                    }
+                                    <td class="lightgray">@(String.Format("{0:0.##}", employee.WAR_OverTime_Calculated))</td>
+                                    <td class="lightgray">@Math.Round(employee.WAR_GrossTotal, 2)</td>
+                                    @{
+                                        string toolPF = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_PF_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
+                                        toolPF = "(" + toolPF + ")*" + employee.WAR_PF + "%";
+                                    }
+                                    <td class="silver"><span title="@toolPF">@(String.Format("{0:0.##}", employee.WAR_PF_Calculated))</span></td>
+                                    @{
+                                        string toolESIC = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_ESIC_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
+                                        toolESIC = "(" + toolESIC + ")*" + employee.WAR_ESIC + "%";
+                                    }
+                                    <td class="silver"><span title="@toolESIC">@(String.Format("{0:0.##}", employee.WAR_ESIC_Calculated))</span></td>
 
-                                @if (item.wageProcessClientVM != null && item.wageProcessVM.WageStatus == false)
-                                {
-                                    <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id }, new { @class = "myClass" })</td>
-                                }
+                                    @if (clientRequirement.CRI_ProfessionalTax == true)
+                                    {
+                                        <td class="silver"><span title="toolESIC">@(String.Format("{0:0.##}", employee.WAR_ProffesionalTax_Calculated))</span></td>
+                                    }
+                                    @if (clientRequirement.CRI_RevenueDeduction == true)
+                                    {
+                                        <td class="silver"><span title="toolESIC">@(String.Format("{0:0.##}", employee.WAR_RevenueDeduction_Calculated))</span></td>
+                                    }
+                                    @if (clientRequirement.CRI_CanteenFacility == true)
+                                    {
+                                        @if (employee.WAR_CanteenFacility_Calculation == "-")
+                                        {
+                                            <td class="silver">
+                                                <span style="color:darkred">-</span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="silver">
+                                                <span>@(String.Format("{0:0.##}", employee.WAR_CanteenFacility_Calculation))</span>
+                                            </td>
+                                        }
 
-                            </tr>
+
+                                    }
+                                    <td class="silver">@employee.WAR_Advance_Amount</td>
+                                    <td class="gray">@(String.Format("{0:0.##}", employee.WAR_FinalTotal))</td>
+
+                                    @if (item.wageProcessClientVM != null && item.wageProcessVM.WageStatus == false)
+                                    {
+                                        <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id }, new { @class = "myClass" })</td>
+                                    }
+
+                                </tr>
                             }
                         </tbody>
                     </table>
                 </div>
             }
-            
+
             @if (item.wageProcessVM.WageStatus == false)
             {
                 <div class="container">
@@ -203,13 +266,13 @@
                                 <input type="submit" value="Reset" formaction="ResetWageRegister" onclick="return confirm('Are you sure you want to reset?');" class="btn btn-success pull-right" />
                             </div>
                         }
-                        else if (item.wageProcessVM.Attendance.Where(m=>m.CLI_Id.Equals(item.client.CLI_Id)).Count()<=0)
+                        else if (item.wageProcessVM.Attendance.Where(m => m.CLI_Id.Equals(item.client.CLI_Id)).Count() <= 0)
                         {
                             <div class="alert alert-danger" style="position: absolute;">
                                 <h2>Attandance is pending </h2><br />
                             </div>
                         }
-                        else 
+                        else
                         {
                             <div class="alert alert-warning" style="position: absolute;">
                                 <h2>Web Register is ready to finalize</h2> <br />
@@ -221,6 +284,6 @@
             }
         </div>
 
-     }
+    }
 
 </div>

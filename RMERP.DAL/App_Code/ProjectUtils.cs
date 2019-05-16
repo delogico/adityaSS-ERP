@@ -46,7 +46,8 @@ namespace RMERP.DAL.App_Code
             Saved = 0,
             Pending = 1
         }
-       
+
+        
         public static DateTime DateNow()
         {
             DateTime utcTime = DateTime.UtcNow;

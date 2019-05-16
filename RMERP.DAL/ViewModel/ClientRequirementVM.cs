@@ -41,6 +41,14 @@ namespace RMERP.DAL.ViewModel
         public double? CRI_ESIC_Percentage { get; set; }
         [Display(Name = "ESIC Area")]
         public string CRI_ESIC_Area { get; set; }
+
+        [Display(Name = "Professional Tax")]
+        public bool CRI_ProfessionalTax { get; set; }
+        [Display(Name = "Revenue Deduction")]
+        public bool CRI_RevenueDeduction { get; set; }
+        [Display(Name = "Canteen Facility")]
+        public bool CRI_CanteenFacility { get; set; }
+
         [Display(Name = "OT Formula")]
         public string CRI_OT_Formula { get; set; }
         [Display(Name = "OT Rate")]

@@ -1,9 +1,10 @@
 ﻿@model RMERP.DAL.ViewModel.WageProcessVM
+
 <div class="row wage_raw">
     <div class="col-md-2">
-        <h4>@Model.WAG_Full_Month()</h4>    
-    Total Clients: @Model.ActiveClients
-</div>
+        <h4>@Model.WAG_Full_Month()</h4>
+        Total Clients: @Model.ActiveClients
+    </div>
     <div class="col-md-2">
         <h6>Attendance:</h6>
         <b>@Html.ActionLink("Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = Model.WAG_Id })</b>
@@ -54,19 +55,55 @@
     </div>
     <div class="col-md-4">
         <h6>Reports:</h6>
+
         <div class="raw">
             <div class="col-md-6">
                 <ul style="font-size:10px;padding-left: 10px !important;">
-                    <li>@Html.ActionLink("PF Report", "", "", new { WAG_Month = Model.WAG_Month })</li>
-                    <li>@Html.ActionLink("ESIC Report", "", "", new { WAG_Month = Model.WAG_Month, WAG_Id = Model.WAG_Id })</li>
+                    @if (Model.WageStatus == true)
+                    {
+                        @*<li>@Html.ActionLink("PF Report", "PFReport", "Reports", new { WAG_Id = Model.WAG_Id })</li>*@
+                        <li><a href='@Url.Action( "PFReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-excel-o m-r-5"></i>PF Report.xlsx</a></li>
+                        <li><a href='@Url.Action( "PFReportText","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-text-o m-r-5"></i>PF Report.txt</a></li>
+
+                        <li><a href='@Url.Action( "ESICReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Report.xlsx</a></li>
+
+
+                    }
+                    else
+                    {
+                        <li><i class="fa fa-file-excel-o m-r-5"></i>PF Report.xlsx</li>
+                        <li><i class="fa fa-file-text-o m-r-5"></i>PF Report.txt</li>
+                        <li><i class="fa fa-file-excel-o m-r-5"></i>ESIC Report.xlsx</li>
+                    }
+
+
                 </ul>
             </div>
             <div class="col-md-6">
                 <ul style="font-size:10px;padding-left: 10px !important;">
-                    <li>@Html.ActionLink("NEFT/Bank Report", "", "", new { WAG_Month = Model.WAG_Month })</li>
-                    <li>@Html.ActionLink("ESIC Report", "", "", new { WAG_Month = Model.WAG_Month, WAG_Id = Model.WAG_Id })</li>
+                    @if (Model.WageStatus == true)
+                    {
+                        <li>@Html.ActionLink("NEFT/Bank Report", "", "", new { WAG_Month = Model.WAG_Month })</li>
+                        <li>@Html.ActionLink("ESIC Report", "", "", new { WAG_Month = Model.WAG_Month, WAG_Id = Model.WAG_Id })</li>
+                    }
+                    else
+                    {
+                        <li>NEFT/Bank Report</li>
+                        <li>ESIC Report</li>
+                    }
+
                 </ul>
             </div>
         </div>
     </div>
 </div>
+
+@*<script type="text/javascript">
+    $(document).ready(function () {
+        debugger;
+        if ($("#WageStatus").val() == false) {
+            debugger;
+            $("#PFReport").attr("disabled", true)
+        }
+    });
+</script>*@

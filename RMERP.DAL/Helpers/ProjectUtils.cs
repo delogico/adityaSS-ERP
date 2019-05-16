@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using RMERP.DAL.ViewModel;
+using RMERP.DAL.Models;
 namespace RMERP.DAL.Helpers
 {
     public static class ProjectUtils
@@ -9,7 +11,7 @@ namespace RMERP.DAL.Helpers
         public enum CountryRegion
         {
             International = 0,
-            Domestic=1
+            Domestic = 1
         }
         public enum Gender
         {
@@ -39,13 +41,21 @@ namespace RMERP.DAL.Helpers
             Exclude_WeeklyOff = 1,
             Reduce_Fixed_Days = 2
         }
+
+        public enum DEDUCTION_TAX
+        {
+            Proffesional_Tax = 0,
+            Revenue_Deduction = 1,
+            Canteen_Facility = 2
+        }
+
         public static DateTime DateNow()
         {
             DateTime utcTime = DateTime.UtcNow;
             TimeZoneInfo myZone = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
             DateTime custDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, myZone);
             return custDateTime;
-        }        
+        }
 
         public static string GetTempFolderPath(string webRootPath)
         {
@@ -91,7 +101,7 @@ namespace RMERP.DAL.Helpers
                                 {
                                     if (allowance.allowanceVM.ALL_Shortform == item)
                                     {
-                                            str = str + "+" + String.Format("{0:0.##}", allowance.WAA_Amount_Calculated);
+                                        str = str + "+" + String.Format("{0:0.##}", allowance.WAA_Amount_Calculated);
                                     }
                                 }
                             }
@@ -100,6 +110,99 @@ namespace RMERP.DAL.Helpers
                 }
             }
             return str;
+        }
+
+        public static decimal CalculatePF(Employees emp, decimal PFsum)
+        {
+            if (emp.EMP_Gender == true) //Male
+            {
+                if (PFsum < 1)
+                {
+                    return 0;
+                }
+                else if (PFsum>=1 && PFsum < 75)
+                {
+                    return 17;
+                }
+                else if (PFsum >= 75 && PFsum < 10000)
+                {
+                    return 200;
+                }
+                else
+                {
+                    return 500;
+                }
+            }
+            else
+            {
+                if (PFsum < 1)
+                {
+                    return 0;
+                }
+                else if (PFsum >= 1 && PFsum < 75)
+                {
+                    return 17;
+                }
+                else if (PFsum >= 75 && PFsum < 10000)
+                {
+                    return 200;
+                }
+                else
+                {
+                    return 500;
+                }
+            }
+        }
+
+        public static decimal GetGrossAmountBasedOnFormula(string CRI_Formula, Wage_Register wage_Register)
+        {
+            decimal sum = 0M;
+            string[] arr_CRI_Formula;
+
+            if (CRI_Formula != null)
+            {
+                arr_CRI_Formula = CRI_Formula.Split("+");
+                foreach (string item in arr_CRI_Formula)
+                {
+                    switch (item)
+                    {
+                        case "BASIC":
+                            sum += Convert.ToDecimal(wage_Register.WAR_Basic_Calculated);
+                            break;
+                        case "DA":
+                            sum += Convert.ToDecimal(wage_Register.WAR_DA_Calculated);
+                            break;
+                        case "HRA":
+                            sum += Convert.ToDecimal(wage_Register.WAR_HRA_Calculated);
+                            break;
+                        default:
+                            {
+                                List<Client_Requirement_Allowances> All = wage_Register.CRI_.Client_Requirement_Allowances.ToList();
+                                foreach (var allowance in All)
+                                {
+                                    if (allowance.ALL_.ALL_Shortform == item)
+                                    {
+                                        decimal amount = allowance.CRA_Amount;
+                                        decimal fullAmt = 0M;
+                                        if (wage_Register.WAR_TotalWorkingDays != 0)
+                                            fullAmt = (Decimal.Multiply(amount, Convert.ToDecimal(wage_Register.WAR_TotalPaybleDays))) / Convert.ToDecimal(wage_Register.WAR_TotalWorkingDays);
+
+                                        if (allowance.CRA_DayswiseOrFull)
+                                        {
+                                            sum += fullAmt;
+                                        }
+                                        else
+                                        {
+                                            sum += amount;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return sum;            
         }
     }
 }

@@ -5,6 +5,11 @@ namespace RMERP.DAL.Models
 {
     public partial class Clients_Employees
     {
+        public Clients_Employees()
+        {
+            Wage_Register_Canteen = new HashSet<Wage_Register_Canteen>();
+        }
+
         public int CLE_Id { get; set; }
         public int CLI_Id { get; set; }
         public int EMP_Id { get; set; }
@@ -15,5 +20,6 @@ namespace RMERP.DAL.Models
         public Clients CLI_ { get; set; }
         public Designations DES_ { get; set; }
         public Employees EMP_ { get; set; }
+        public ICollection<Wage_Register_Canteen> Wage_Register_Canteen { get; set; }
     }
 }

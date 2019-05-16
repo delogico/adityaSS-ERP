@@ -62,9 +62,11 @@ namespace RMERP.DAL.ViewModel
         public string EMP_Pan_Number { get; set; }
 
         [Display(Name = "ESIC account number")]
+        [Required(ErrorMessage = "ESIC account number is required")]
         public string EMP_ESIC_Number { get; set; }
 
         [Display(Name = "UAN number")]
+        [Required(ErrorMessage = "UAN number is required")]
         public string EMP_UAN_Number { get; set; }
 
         [Display(Name = "Department")]

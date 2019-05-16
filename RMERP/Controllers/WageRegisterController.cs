@@ -86,5 +86,7 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("WageRegister",new { WAG_Id = wageRegisterVM.WAG_Id });
         }
+
+        
     }
 }

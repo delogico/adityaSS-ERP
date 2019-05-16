@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using RMERP.DAL.App_Code;
+//using RMERP.DAL.App_Code;
+using RMERP.DAL.Helpers;
 using RMERP.DAL.Mappers;
 using RMERP.DAL.Models;
 using RMERP.DAL.ViewModel;
@@ -59,6 +60,7 @@ namespace RMERP.DAL.ManagerClasses
             List<WageRegisterVM> lstRegister = new List<WageRegisterVM>();
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);
             AttendanceManager attManager = new AttendanceManager(_context);
+            CanteenManager canteenManager = new CanteenManager(_context);
             IEnumerable<Clients_Employees> clientsEmployees = clientsManager.listClientsEmployees(CLI_Id);
             foreach (Clients_Employees employee in clientsEmployees)
             {
@@ -70,7 +72,7 @@ namespace RMERP.DAL.ManagerClasses
                     decimal CRI_Basic = 0M, WAR_Basic_Calculated = 0M, BasicDa = 0M, WAR_OverTime_Calculated = 0M, WAR_PF, WAR_PF_Calculated = 0M, WAR_ESIC = 0M, WAR_ESIC_Calculated = 0M;
                     decimal CRI_DA = 0M, CRI_DA_Calculated = 0M, CRI_HRA = 0M, CRI_HRA_Calculated = 0M;
                     double WAR_ExtraWorkingHours = attendances.Sum(m => m.ATT_ExtraHoursWorked);
-
+                    
                     #region Total working day calculation
                     Clients cli = clientsManager.GetClientById(CLI_Id);
                     int days = attendances.Count();
@@ -93,12 +95,15 @@ namespace RMERP.DAL.ManagerClasses
                     if (cli.CLI_Total_WorkingDays != 1)
                         totalPaybleDays = totalPaybleDays + attendances.Where(a => a.ATT_IsWeeklyOff == true).Count();
                     WageRegisterVM wageRegisterVM = new WageRegisterVM();
+
+                    wageRegisterVM.CLE_Id = employee.CLE_Id;
                     wageRegisterVM.WAG_Id = wageProcess.WAG_Id;
                     wageRegisterVM.CLI_Id = CLI_Id;
                     wageRegisterVM.EMP_Id = employee.EMP_Id;
                     wageRegisterVM.wageProcessVM = WageProcessMapper.mapMe(wageProcess);
                     wageRegisterVM.employeeVM = EmployeesMapper.MapMe(employee.EMP_);
                     wageRegisterVM.designation = employee.DES_;
+
                     #region EMI Calculation
                     decimal totalEMI = 0;
                     if (employee.EMP_.Wage_Register_Advances.Count() > 0)
@@ -148,7 +153,7 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.WAR_OverTime_Payment = Convert.ToInt16(cr.CRI_OT_MultipleTimes);
                     wageRegisterVM.WAR_Basic_Calculated = WAR_Basic_Calculated;
                     wageRegisterVM.WAR_HRA_Calculated = CRI_HRA_Calculated;
-
+                    
 
                     //************************** ALLOWANCES CALCULATION *****************************//
                     List<WageRegisterAllowanceVM> allowances = new List<WageRegisterAllowanceVM>();
@@ -189,6 +194,14 @@ namespace RMERP.DAL.ManagerClasses
                     WAR_PF_Calculated = Decimal.Multiply(PFsum, WAR_PF) / 100;
                     WAR_ESIC_Calculated = Decimal.Multiply(ESICsum, WAR_ESIC) / 100;
                     #endregion
+                    #region DeductionTax Calculation
+                    decimal WAR_ProffesionalTax_Calculated = 0M, WAR_RevenueDeduction_Calculated = 0M, WAR_CanteenFacility_Calculation = 0M;
+                    if (cr.CRI_ProfessionalTax == true)
+                    {
+                        WAR_ProffesionalTax_Calculated = ProjectUtils.CalculatePF(employee.EMP_, PFsum);
+                    }                   
+                    
+                    #endregion
                     wageRegisterVM.WAR_PF_Formula = cr.CRI_PF_Formula;
                     wageRegisterVM.WAR_ESIC_Formula = cr.CRI_ESIC_Formula;
                     wageRegisterVM.WAR_PF = WAR_PF;
@@ -197,9 +210,33 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.WAR_ESIC_Calculated = WAR_ESIC_Calculated;
                     wageRegisterVM.allowanceVMs = allowances;
                     //************************** ALLOWANCES CALCULATION *****************************/
-                    decimal WAR_GrossTotal = WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + WAR_OverTime_Calculated + AllowancesTotal;
-                    decimal WAR_FinalTotal = WAR_GrossTotal - (WAR_PF_Calculated + WAR_ESIC_Calculated + totalEMI);
+                    decimal WAR_GrossTotal = WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + WAR_OverTime_Calculated + AllowancesTotal;                   
 
+                    if (cr.CRI_RevenueDeduction == true)
+                    {
+                        WAR_RevenueDeduction_Calculated = 1;                        
+                    }
+                    if (cr.CRI_CanteenFacility == true)
+                    {
+                        Wage_Register_Canteen canteen = new Wage_Register_Canteen();
+                        canteen = canteenManager.GetCanteenByCLE(wageProcess.WAG_Id, employee.CLE_Id,employee.CLI_Id);
+                        if (canteen != null)
+                        {
+                            WAR_CanteenFacility_Calculation = canteen.WRC_Amount;
+                            wageRegisterVM.WRC_Id = canteen.WRC_Id;
+                            wageRegisterVM.WAR_CanteenFacility_Calculation = WAR_CanteenFacility_Calculation.ToString();
+                        }
+                        else
+                        {
+                           wageRegisterVM.WAR_CanteenFacility_Calculation = "-";
+                        }                      
+                       
+                    }
+                    wageRegisterVM.WAR_ProffesionalTax_Calculated = WAR_ProffesionalTax_Calculated.ToString();
+                    wageRegisterVM.WAR_RevenueDeduction_Calculated = WAR_RevenueDeduction_Calculated.ToString();
+                   
+
+                    decimal WAR_FinalTotal = WAR_GrossTotal - (WAR_PF_Calculated + WAR_ESIC_Calculated + totalEMI + WAR_ProffesionalTax_Calculated+ WAR_RevenueDeduction_Calculated+ WAR_CanteenFacility_Calculation);                  
                     wageRegisterVM.WAR_GrossTotal = WAR_GrossTotal;
                     wageRegisterVM.WAR_FinalTotal = WAR_FinalTotal;
                     wageRegisterVM.WAR_DA = CRI_DA;
@@ -259,6 +296,7 @@ namespace RMERP.DAL.ManagerClasses
             }
             return sum;
         }
+
         public string SaveWageRegister(List<Wage_Register> wage_Registers, int WAG_Id, string CLI_Id, int AdminID)
         {
             string res = string.Empty;
@@ -353,5 +391,13 @@ namespace RMERP.DAL.ManagerClasses
 
             return wage_Register_Advances;
         }
+
+
+        public List<Wage_Register> GetWageRegistersByEmpId(int WAG_Id, int EMP_Id)
+        {
+            return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id && r.EMP_Id == EMP_Id).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
+        }
+
+
     }
 }

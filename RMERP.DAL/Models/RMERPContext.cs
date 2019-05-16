@@ -34,6 +34,7 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Wage_Register> Wage_Register { get; set; }
         public virtual DbSet<Wage_Register_Advances> Wage_Register_Advances { get; set; }
         public virtual DbSet<Wage_Register_Allowances> Wage_Register_Allowances { get; set; }
+        public virtual DbSet<Wage_Register_Canteen> Wage_Register_Canteen { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -210,7 +211,7 @@ namespace RMERP.DAL.Models
                     .WithMany(p => p.Client_Requirement_Allowances)
                     .HasForeignKey(d => d.ALL_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Client_Requirement_Allowances_Allowances");
+                    .HasConstraintName("FK_Client_Requirement_Allowances_Allowances1");
 
                 entity.HasOne(d => d.CRI_)
                     .WithMany(p => p.Client_Requirement_Allowances)
@@ -441,8 +442,10 @@ namespace RMERP.DAL.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.EMP_ESIC_Number)
+                    .IsRequired()
                     .HasMaxLength(10)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('Pending')");
 
                 entity.Property(e => e.EMP_FirstName)
                     .IsRequired()
@@ -477,8 +480,10 @@ namespace RMERP.DAL.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.EMP_UAN_Number)
+                    .IsRequired()
                     .HasMaxLength(12)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('Pending')");
 
                 entity.HasOne(d => d.DEPT_)
                     .WithMany(p => p.Employees)
@@ -537,6 +542,10 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.WAR_Basic_Calculated).HasColumnType("decimal(9, 2)");
 
+                entity.Property(e => e.WAR_CanteenFacility_Calculation)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.WAR_DA).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_DA_Calculated).HasColumnType("decimal(9, 2)");
@@ -568,6 +577,14 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.WAR_PF_Calculated).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_PF_Formula).HasMaxLength(200);
+
+                entity.Property(e => e.WAR_ProffesionalTax_Calculated)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.WAR_RevenueDeduction_Calculated)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.WAR_WorkingHrs_In_Day).HasDefaultValueSql("((8))");
 
@@ -636,6 +653,25 @@ namespace RMERP.DAL.Models
                     .HasForeignKey(d => d.WAR_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Wage_Register_Allowances_Wage_Register");
+            });
+
+            modelBuilder.Entity<Wage_Register_Canteen>(entity =>
+            {
+                entity.HasKey(e => e.WRC_Id);
+
+                entity.Property(e => e.WRC_Amount).HasColumnType("decimal(9, 2)");
+
+                entity.HasOne(d => d.CLE_)
+                    .WithMany(p => p.Wage_Register_Canteen)
+                    .HasForeignKey(d => d.CLE_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Canteen_Clients_Employees");
+
+                entity.HasOne(d => d.WAG_)
+                    .WithMany(p => p.Wage_Register_Canteen)
+                    .HasForeignKey(d => d.WAG_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Canteen_Wage_Process");
             });
         }
     }

@@ -33,6 +33,11 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_RegisteredOn = requirement.CRI_RegisteredOn;
             clientRequirementVM.CRI_PF_Formula = requirement.CRI_PF_Formula;
             clientRequirementVM.CRI_ESIC_Formula = requirement.CRI_ESIC_Formula;
+
+            clientRequirementVM.CRI_ProfessionalTax = requirement.CRI_ProfessionalTax;
+            clientRequirementVM.CRI_RevenueDeduction =requirement.CRI_RevenueDeduction;
+            clientRequirementVM.CRI_CanteenFacility = requirement.CRI_CanteenFacility;
+
             if (requirement.CLI_ != null)
                 clientRequirementVM.CLI_Name = requirement.CLI_.CLI_Name;
 
@@ -65,6 +70,11 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_RegisteredOn = requirementVM.CRI_RegisteredOn;
             requirement.CRI_PF_Formula = requirementVM.CRI_PF_Formula;
             requirement.CRI_ESIC_Formula = requirementVM.CRI_ESIC_Formula;
+
+            requirement.CRI_ProfessionalTax = requirementVM.CRI_ProfessionalTax;
+            requirement.CRI_RevenueDeduction = requirementVM.CRI_RevenueDeduction;
+            requirement.CRI_CanteenFacility = requirementVM.CRI_CanteenFacility;
+
             if (requirementVM.HRAselection ==true)
                 requirement.CRI_HRA_Fixed = requirementVM.CRI_HRA_Fixed;
             else if(requirementVM.HRAselection == false)

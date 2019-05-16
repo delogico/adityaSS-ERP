@@ -13,6 +13,9 @@ namespace RMERP.DAL.Models
         public DateTime ATT_Date { get; set; }
         public bool ATT_IsPresent { get; set; }
         public bool ATT_IsPublicHoliday { get; set; }
+        public string ATT_Shift { get; set; }
+        public bool ATT_IsWeeklyOff { get; set; }
+        public bool ATT_IsEarnLeave { get; set; }
         public bool ATT_IsHoliday { get; set; }
         public bool ATT_EarnedExtraDay { get; set; }
         public bool ATT_IsCompensatoryOff { get; set; }
@@ -20,9 +23,6 @@ namespace RMERP.DAL.Models
         public bool ATT_NightShift { get; set; }
         public string ATT_Orignal_Row1 { get; set; }
         public string ATT_Orignal_Row2 { get; set; }
-        public string ATT_Shift { get; set; }
-        public bool ATT_IsWeeklyOff { get; set; }
-        public bool ATT_IsEarnLeave { get; set; }
         public double ATT_ExtraHoursWorked { get; set; }
         public DateTime ATT_ImportedOn { get; set; }
         public int ADM_Id_ImportedBy { get; set; }

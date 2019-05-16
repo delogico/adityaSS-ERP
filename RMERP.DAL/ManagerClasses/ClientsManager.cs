@@ -324,7 +324,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public Client_Requirements GetRequirementsById(int CRI_Id)
         {
-            return _contaxt.Client_Requirements.Where(c => c.CRI_Id == CRI_Id).Include(c => c.DES_).Include(m=>m.Client_Requirement_Allowances).FirstOrDefault();
+            return _contaxt.Client_Requirements.Where(c => c.CRI_Id == CRI_Id).Include(m=>m.Wage_Register).Include(c => c.DES_).Include(m=>m.Client_Requirement_Allowances).FirstOrDefault();
         }
 
         public IEnumerable<Client_Requirements> GetClient_RequirementsList(int desId, int cliId, bool active = true)
@@ -424,6 +424,11 @@ namespace RMERP.DAL.ManagerClasses
         public IEnumerable<Clients_Employees> listClientsEmployees(int ClientId)
         {
             IEnumerable<Clients_Employees> list=_contaxt.Clients_Employees.Where(m=>m.CLI_Id.Equals(ClientId)).Include(m=>m.EMP_).Include(m=>m.DES_).ToList();
+            return list;
+        }
+        public IEnumerable<Clients_Employees> listClientsEmployees(int ClientId,int DES_Id)
+        {
+            IEnumerable<Clients_Employees> list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId) && m.DES_Id.Equals(DES_Id)).Include(m => m.EMP_).Include(m => m.DES_).ToList();
             return list;
         }
 

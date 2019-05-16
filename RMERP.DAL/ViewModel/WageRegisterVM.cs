@@ -23,6 +23,10 @@ namespace RMERP.DAL.ViewModel
     {
         public int WAR_Id { get; set; }
         public int WAG_Id { get; set; }
+        public int WRC_Id { get; set; }
+
+        public int CLE_Id { get; set; }
+
         public WageProcessVM wageProcessVM { get; set; }
         public int CLI_Id { get; set; }
         public ClientsModel clientVM { get; set; }
@@ -79,6 +83,14 @@ namespace RMERP.DAL.ViewModel
         public string WAR_ESIC_Formula { get; set; }
         [Display(Name = "Calculated ESIC")]
         public decimal WAR_ESIC_Calculated { get; set; }
+
+        [Display(Name = "Calculated Proffesional Tax")]
+        public string WAR_ProffesionalTax_Calculated { get; set; }
+        [Display(Name = "Calculated Revenue Deduction")]
+        public string WAR_RevenueDeduction_Calculated { get; set; }
+        [Display(Name = "Calculated Canteen Facility")]
+        public string WAR_CanteenFacility_Calculation { get; set; }
+
         [Display(Name = "Final Total")]
         public decimal WAR_FinalTotal { get; set; }
         public DateTime WAR_LastModifiedOn { get; set; }

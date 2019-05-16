@@ -24,6 +24,9 @@ namespace RMERP.DAL.Models
         public string CRI_ESIC_Formula { get; set; }
         public double? CRI_ESIC_Percentage { get; set; }
         public string CRI_ESIC_Area { get; set; }
+        public bool CRI_ProfessionalTax { get; set; }
+        public bool CRI_RevenueDeduction { get; set; }
+        public bool CRI_CanteenFacility { get; set; }
         public string CRI_OT_Formula { get; set; }
         public decimal? CRI_OT_Rate { get; set; }
         public double? CRI_OT_MultipleTimes { get; set; }

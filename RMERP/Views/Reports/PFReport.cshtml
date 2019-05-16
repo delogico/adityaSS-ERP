@@ -1,0 +1,59 @@
+﻿@model List<RMERP.DAL.ViewModel.PFReportVM>
+@{
+    ViewData["Title"] = "PF Report";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+<div>
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <h4 class="page-title">@ViewData["Title"]</h4>
+            </div>
+            <div class="col-sm-4 text-right m-b-30">
+                <a class="btn btn-primary rounded" href="@Url.Action("PFReportExcel","Reports")"><i class="fa fa-plus"></i> Excel Download</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-striped custom-table m-b-0">
+                        <thead>
+                            <tr>
+                                <th>@Html.LabelFor(m => Model[0].EMP_UAN_Number)</th>
+                                <th>@Html.LabelFor(m => Model[0].EMP_FullName)</th>
+                                <th>@Html.LabelFor(m => Model[0].GrossWages)</th>
+                                <th>@Html.LabelFor(m => Model[0].EPFWages)</th>
+                                <th>@Html.LabelFor(m => Model[0].EPSWages)</th>
+                                <th>@Html.LabelFor(m => Model[0].EDLIWages)</th>
+                                <th>@Html.LabelFor(m => Model[0].EPF_CONTRI_REMITTED)</th>
+                                <th>@Html.LabelFor(m => Model[0].EPS_CONTRI_REMITTED)</th>
+                                <th>@Html.LabelFor(m => Model[0].EPF_EPS_DIFF_REMITTED)</th>
+                                <th>@Html.LabelFor(m => Model[0].NCP_DAYS)</th>
+                                <th>@Html.LabelFor(m => Model[0].REFUND_OF_ADVANCES)</th>
+                            </tr>                            
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                            <tr>                               
+                                <td>@(item.EMP_UAN_Number != null ? item.EMP_UAN_Number : "-")</td>
+                                <td>@item.EMP_FullName</td>
+                                <td>@item.GrossWages</td>
+                                <td>@item.EPFWages</td>
+                                <td>@item.EPSWages</td>
+                                <td>@item.EDLIWages</td>
+                                <td>@item.EPF_CONTRI_REMITTED</td>
+                                <td>@item.EPS_CONTRI_REMITTED</td>
+                                <td>@item.EPF_EPS_DIFF_REMITTED</td>
+                                <td>@item.NCP_DAYS</td>
+                                <td>@item.REFUND_OF_ADVANCES</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
