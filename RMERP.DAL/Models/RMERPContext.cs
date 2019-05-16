@@ -29,6 +29,7 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Employee_Advance> Employee_Advance { get; set; }
         public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<Firms> Firms { get; set; }
+        public virtual DbSet<ProfessionalTaxCalculation> ProfessionalTaxCalculation { get; set; }
         public virtual DbSet<Wage_Process> Wage_Process { get; set; }
         public virtual DbSet<Wage_Process_Clients> Wage_Process_Clients { get; set; }
         public virtual DbSet<Wage_Register> Wage_Register { get; set; }
@@ -500,6 +501,22 @@ namespace RMERP.DAL.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ProfessionalTaxCalculation>(entity =>
+            {
+                entity.HasKey(e => e.PTC_Id);
+
+                entity.Property(e => e.PTC_Amount).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.PTC_From).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.PTC_MF)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PTC_To).HasColumnType("decimal(9, 2)");
             });
 
             modelBuilder.Entity<Wage_Process>(entity =>
