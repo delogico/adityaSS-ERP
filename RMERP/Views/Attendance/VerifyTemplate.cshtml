@@ -108,21 +108,14 @@ else
                                                                                     {
                                                                                         @Html.Raw("EL");
                                                                                     }
-                                                                                    else
-                                                                                    {
-                                                                                        if (att.ATT_IsPublicHoliday)
-                                                                                        {
-                                                                                            @Html.Raw("PH");
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                                            @Html.Raw("");
-                                                                                        }
-                                                                                    }
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     @att.ATT_ExtraHoursWorked.ToString("#.#")
+                                                                                }
+                                                                                if (att.ATT_IsPublicHoliday)
+                                                                                {
+                                                                                    @Html.Raw("PH");
                                                                                 }
                                                                             }
                                                                         </div>

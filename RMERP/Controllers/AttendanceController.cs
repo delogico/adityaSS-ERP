@@ -227,7 +227,7 @@ namespace RMERP.Controllers
                 excelRow.EMP_Name = row.GetCell(3).ToString();
                 excelRow.Designation = row.GetCell(2).ToString();
                 TotEmp++;
-                int totalPresence = 0;
+                int totalPresence = 0, totalHolidays = 0;
                 Double totalExtraHours = 0;
                 DateTime tmpDate = startDate;
                 for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
@@ -247,6 +247,8 @@ namespace RMERP.Controllers
                         attendance.ATT_IsWeeklyOff = true;
                         totalPresence++;
                     }
+                    if (secondRow.GetCell(j).ToString().Contains("PH"))
+                        totalHolidays++;
                     if (rowExtra.GetCell(j) != null)
                         if (!rowExtra.GetCell(j).ToString().Equals(""))
                         {
@@ -257,6 +259,7 @@ namespace RMERP.Controllers
                 }
                 excelRow.TotalPresenceDays = totalPresence;
                 excelRow.TotalExtraHours = totalExtraHours;
+                excelRow.totalHolidays = totalHolidays;
                 rows.Add(excelRow);
             }
             excelViewModel.listAttendance = attandanceList;

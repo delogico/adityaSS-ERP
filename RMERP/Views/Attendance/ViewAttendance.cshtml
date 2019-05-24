@@ -44,6 +44,7 @@
                             <th>Total Week Offs</th>
                             <th>Total Paid Holidays</th>
                             <th>Total Extra Working Hours</th>
+                            <th>Total Extra Working Days</th>
                             <th>Total Payble Days</th>
                         </tr>
                     </thead>
@@ -60,7 +61,8 @@
                             @{
                                 int counter1 = 0;
                                 DateTime tmpDate1 = ViewBag.startDate;
-                                int totWorkingDays = 0, totWeekOffs = 0, totPaidHolidas = 0; ;
+                                int totWorkingDays = 0, totWeekOffs = 0, totPaidHolidas = 0;
+                                double totExtraWorkingDays = 0.0;
                                 double totExtraWorkingHours = 0;
                                 while (ViewBag.endDate >= tmpDate1)
                                 {
@@ -102,7 +104,7 @@
                                                             totPaidHolidas++;
                                                             str = "<span class='present'>EL</span>";
                                                         }
-                                                        else if ((att.ATT_IsHoliday) || (att.ATT_IsPublicHoliday))
+                                                        else if (att.ATT_IsHoliday)
                                                         {
                                                             totPaidHolidas++;
                                                             str = "<span class='present'>PH</span>";
@@ -115,6 +117,11 @@
                                                         {
                                                             totWorkingDays++;
                                                             str = str + "<span class='extra'>+1</span>";
+                                                        }
+                                                        if (att.ATT_IsPublicHoliday)
+                                                        {
+                                                            totPaidHolidas++;
+                                                            str = str + " <span class='present'>PH</span>";
                                                         }
                                                     }
                                                 }
@@ -138,13 +145,13 @@
                                                 }
                                             </div>
                                         </td>
-                                                        if (att.ATT_ExtraHoursWorked > 0)
-                                                        {
-                                                            totExtraWorkingHours += att.ATT_ExtraHoursWorked;
-                                                        }
-                                                    }
-                                                    else
-                                                    {
+                                        if (att.ATT_ExtraHoursWorked > 0)
+                                        {
+                                            totExtraWorkingHours += att.ATT_ExtraHoursWorked;
+                                        }
+                                    }
+                                    else
+                                    {
                                         <td>
                                             -
                                         </td>
@@ -152,16 +159,17 @@
 
                                     tmpDate1 = tmpDate1.AddDays(1);
                                 }
-
+                                totExtraWorkingDays = totExtraWorkingHours / 8;
                             }
 
                             <td>@totWorkingDays</td>
                             <td>@totWeekOffs</td>
                             <td>@totPaidHolidas</td>
                             <td>@totExtraWorkingHours</td>
+                            <td>@totExtraWorkingDays</td>
                             <td>
-                                @{ 
-                                    int total = totWorkingDays+ totPaidHolidas;
+                                @{
+                                    double total = totWorkingDays + totPaidHolidas + totExtraWorkingDays;
                                     if (ViewBag.CLI_Total_WorkingDays != 1)
                                     {
                                         total = total + totWeekOffs;
