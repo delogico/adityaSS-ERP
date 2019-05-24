@@ -15,13 +15,14 @@ namespace RMERP.DAL.ManagerClasses
         public ReportsManager(RMERPContext context)
         {
             _context = context;
-        }
+        }       
         public List<Employees> GetActiveEmployeesOfMonth(int WAG_Id)
         {
             List<Employees> employees = new List<Employees>();
             employees = _context.Wage_Register.Where(m => m.WAG_Id.Equals(WAG_Id)).Select(m => m.EMP_).Distinct().ToList();
             return employees;
         }
+       
         public List<PFReportVM> PFReports(int WAG_Id)
         {
             List<PFReportVM> reports = new List<PFReportVM>();
@@ -91,6 +92,70 @@ namespace RMERP.DAL.ManagerClasses
                 ESICreport.EMP_SurName = emp.EMP_SurName;
                 ESICreport.IP_Number = emp.EMP_ESIC_Number;
                 reports.Add(ESICreport);
+            }
+            return reports;
+        }
+
+        public List<NEFT_BankReportVM> NEFT_BankReports(int WAG_Id)
+        {
+            List<NEFT_BankReportVM> reports = new List<NEFT_BankReportVM>();
+            //List<Employees> employees = GetActiveEmployeesOfMonth(WAG_Id);
+            WageRegisterManager registerManager = new WageRegisterManager(_context);
+            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersByWAG_Id(WAG_Id);
+            
+            foreach (var cli in wage_Registers.Select( m => new { m.CLI_Id ,m.CLI_.CLI_Name}).Distinct())
+            {
+                NEFT_BankReportVM bankReportVM = new NEFT_BankReportVM();
+                bankReportVM.CLI_Id = cli.CLI_Id;
+                bankReportVM.CLI_Name = cli.CLI_Name;
+                List<Wage_Register> register = registerManager.GetWageRegisters(WAG_Id,cli.CLI_Id);
+                List<NEFTBank_EMP_ReportVM> rptEmployees = new List<NEFTBank_EMP_ReportVM>();
+                foreach(var wage in register)
+                {
+                    NEFTBank_EMP_ReportVM rptEmployee = new NEFTBank_EMP_ReportVM();
+                    rptEmployee.EMP_FirstName = wage.EMP_.EMP_FirstName;
+                    rptEmployee.EMP_MiddleName = wage.EMP_.EMP_MiddleName;
+                    rptEmployee.EMP_SurName = wage.EMP_.EMP_SurName;
+                    rptEmployee.EMP_Account_Number = "";
+                    rptEmployee.CURRENCY_CODE = "INR";
+                    rptEmployee.PART_TRAN_TYPE = "C";
+                    rptEmployee.TRANSACTION_AMOUNT = wage.WAR_FinalTotal;
+                    DateTime WAG_Month = wage_Registers.First().WAG_.WAG_Month;
+                    rptEmployee.TRANSACTION_PARTICULARS = "Salary " + WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
+                    rptEmployees.Add(rptEmployee);
+                }
+                bankReportVM.NEFTBank_EMP_ReportVMs = rptEmployees;
+                reports.Add(bankReportVM);
+            }            
+            return reports;
+        }
+
+        public List<MLWF_ContributionVM> MLWF_ContributionReports(int WAG_Id)
+        {
+            List<MLWF_ContributionVM> reports = new List<MLWF_ContributionVM>();
+            WageRegisterManager registerManager = new WageRegisterManager(_context);
+            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersByWAG_Id(WAG_Id);
+            foreach(var item in wage_Registers.Select(m => new { m.CLI_Id ,m.CLI_.CLI_Name}).Distinct())
+            {
+                MLWF_ContributionVM report = new MLWF_ContributionVM();
+                report.CLI_Id = item.CLI_Id;
+                report.CLI_Name = item.CLI_Name;
+                List<Wage_Register> register = registerManager.GetWageRegisters(WAG_Id, item.CLI_Id);
+                int EMP_BELOW_3K = 0, EMP_ABOVE_3K = 0;
+                foreach (var emp in register)
+                {
+                    if(emp.WAR_FinalTotal > 0 && emp.WAR_FinalTotal < 3000)
+                    {
+                        EMP_BELOW_3K++;
+                    }
+                    else if(emp.WAR_FinalTotal >= 3000)
+                    {
+                        EMP_ABOVE_3K++;
+                    }
+                }
+                report.EMP_ABOVE_3K = EMP_ABOVE_3K;
+                report.EMP_BELOW_3K = EMP_BELOW_3K;
+                reports.Add(report);
             }
             return reports;
         }
