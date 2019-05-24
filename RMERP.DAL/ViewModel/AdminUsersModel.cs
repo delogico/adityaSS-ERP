@@ -23,6 +23,7 @@ namespace RMERP.DAL.ViewModel
         public string ADM_EmailId { get; set; }
         [Display(Name = "Password")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Password is required")]
+        [DataType(DataType.Password)]
         public string ADM_Password { get; set; }
         [Display(Name = "Mobile")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Mobile is required")]

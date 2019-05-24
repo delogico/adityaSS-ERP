@@ -30,6 +30,11 @@ namespace RMERP.DAL.ManagerClasses
             return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id && r.CLI_Id == CLI_Id).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
         }
 
+        public List<Wage_Register> GetWageRegistersByWAG_Id(int WAG_Id)
+        {
+            return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id).Include(m=>m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
+        }
+
         public List<ClientWageRegisterVM> GenerateWageRegisterTable(int WAG_Id, int AdminID)
         {
             List<ClientWageRegisterVM> lst = new List<ClientWageRegisterVM>();
@@ -55,6 +60,7 @@ namespace RMERP.DAL.ManagerClasses
             }
             return lst;
         }
+
         public List<WageRegisterVM> GetWageRegisterCalculated(Wage_Process wageProcess, int CLI_Id, int AdminID)
         {
             List<WageRegisterVM> lstRegister = new List<WageRegisterVM>();
@@ -247,6 +253,7 @@ namespace RMERP.DAL.ManagerClasses
             }
             return lstRegister;
         }
+
         public decimal GetAmountBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Client_Requirement_Allowances> All, int totalWorkingDays, int totalPaybleDays)
         {
             decimal sum = 0M;
@@ -330,6 +337,7 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
+
         public string ResetWageRegister(int WAG_Id, string CLI_Id)
         {
             string res = string.Empty;
@@ -353,18 +361,21 @@ namespace RMERP.DAL.ManagerClasses
 
             return res;
         }
+
         public Wage_Register GetWage_RegisterByID(int WAR_Id)
         {
             Wage_Register wage = new Wage_Register();
             wage = _context.Wage_Register.Include(m => m.CRI_).ThenInclude(m => m.DES_).SingleOrDefault(m => m.WAR_Id.Equals(WAR_Id));
             return wage;
         }
+
         public List<Wage_Register_Allowances> GetWage_Register_Allowances(int WAR_Id)
         {
             List<Wage_Register_Allowances> wage_Register_Allowances = new List<Wage_Register_Allowances>();
             wage_Register_Allowances = _context.Wage_Register_Allowances.Include(m => m.CRA_).ThenInclude(m => m.ALL_).Where(m => m.WAR_Id.Equals(WAR_Id)).ToList();
             return wage_Register_Allowances;
         }
+
         public string UpdateWageRegister(Wage_Register wage_Register)
         {
             string res = string.Empty;
@@ -381,6 +392,7 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
+
         public List<Wage_Register_Advances> GetWageRegisterAdvances(DateTime WAG_Month)
         {
             List<Wage_Register_Advances> wage_Register_Advances = new List<Wage_Register_Advances>();

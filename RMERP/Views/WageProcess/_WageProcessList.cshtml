@@ -83,8 +83,9 @@
                 <ul style="font-size:10px;padding-left: 10px !important;">
                     @if (Model.WageStatus == true)
                     {
-                        <li>@Html.ActionLink("NEFT/Bank Report", "", "", new { WAG_Month = Model.WAG_Month })</li>
-                        <li>@Html.ActionLink("ESIC Report", "", "", new { WAG_Month = Model.WAG_Month, WAG_Id = Model.WAG_Id })</li>
+                        <li><a href='@Url.Action( "NEFT_BankReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="NEFT/Bank Report"><i class="fa fa-file-excel-o m-r-5"></i>NEFT/Bank Report.xlsx</a></li>
+                        <li><a href='@Url.Action( "MLWF_ContributionExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="MLWF CONTRIBUTION Report"><i class="fa fa-file-excel-o m-r-5"></i>MLWF CONTRIBUTION Report.xlsx</a></li>
+                        @*<li>@Html.ActionLink("MLWF CONTRIBUTION Report", "", "", new { WAG_Month = Model.WAG_Month, WAG_Id = Model.WAG_Id })</li>*@
                     }
                     else
                     {
