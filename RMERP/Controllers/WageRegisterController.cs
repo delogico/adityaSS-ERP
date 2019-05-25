@@ -68,8 +68,13 @@ namespace RMERP.Controllers
         {
             EditWageRegisterVM editWageRegisterVM = new EditWageRegisterVM();
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
-            editWageRegisterVM .wageRegisterVM= WageRegisterMapper.mapMe(wageRegisterManager.GetWage_RegisterByID(WAR_Id));
+            editWageRegisterVM .wageRegisterVM= WageRegisterMapper.mapMe(wageRegisterManager.GetWage_RegisterByID(WAR_Id));           
             WagId = editWageRegisterVM.wageRegisterVM.WAG_Id;
+
+            WageProcessManager wageProcessManager = new WageProcessManager(_context);
+            DateTime WAG_Month = wageProcessManager.getWageProcessById(WagId).WAG_Month;
+            ViewBag.Wag_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
+
             editWageRegisterVM.wage_Register_Allowances = wageRegisterManager.GetWage_Register_Allowances(WAR_Id);
             return View(editWageRegisterVM);
         }

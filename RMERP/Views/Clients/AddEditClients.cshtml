@@ -11,6 +11,12 @@
     ViewBag.ClientName = Model.clientsModel.CLI_Id > 0 ? Model.clientsModel.CLI_Name : "Create-Edit Client";
 
 }
+
+<style>
+    .modal-dialog {
+        padding-top:50px;
+    }
+</style>
 <div class="col-sm-12">
     <h4 class="page-title"> @ViewBag.ClientName</h4>
 </div>
@@ -332,17 +338,9 @@
                                             @Html.DropDownListFor(x => x.clientsModel.CLI_Total_WorkingDays, new SelectList(ViewBag.TotalWorkingDays, "Value", "Text"), new { @class = "form-control", onchange = "WorkingDays_Change(this)" })
                                             @Html.ValidationMessageFor(x => x.clientsModel.CLI_Total_WorkingDays, "", new { @class = "text-danger" })
                                         </div><div class="col-md-6"> </div>
-                                    </div> <div class="col-md-12">
-                                        <div class="col-md-6">
-                                            @Html.LabelFor(m => m.clientsModel.CLI_WorkingHours_In_Day, new { @class = "control-label" })
-                                            @Html.TextBoxFor(m => m.clientsModel.CLI_WorkingHours_In_Day, new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(x => x.clientsModel.CLI_WorkingHours_In_Day, "", new { @class = "text-danger" })
-                                        </div><div class="col-md-6"> </div>
                                     </div>
-
-                                    <div id="divSelectMethod" class="row">
-
-                                        <div class="col-md-12">
+                                    @*<div id="divSelectMethod" class="row">*@
+                                        <div id="divSelectMethod" class="col-md-12">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     @Html.LabelFor(m => m.clientsModel.CLI_No_Reduce_Days)
@@ -352,10 +350,17 @@
                                             </div>
                                             <div class="col-md-6"> </div>
                                         </div>
-
-                                        <div class="form-group col-sm-6"></div>
-                                    </div>
-
+                                        @*<div class="form-group col-sm-6"></div>*@
+                                    @*</div>*@
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.clientsModel.CLI_WorkingHours_In_Day, new { @class = "control-label" })
+                                                @Html.TextBoxFor(m => m.clientsModel.CLI_WorkingHours_In_Day, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(x => x.clientsModel.CLI_WorkingHours_In_Day, "", new { @class = "text-danger" })
+                                            </div>
+                                            </div><div class="col-md-6"> </div>
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -469,12 +474,11 @@
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle btn btn-success rounded" data-toggle="dropdown" aria-expanded="false">Get Excel</a>
                     <ul class="dropdown-menu pull-right">
-                        @*<li><a href='#' title="Generate Excel Template / Double rows" onclick="onConfirmClick()"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Double Rows</a></li>
-                        <li><a href='#' title="Generate Excel Template / Single row" onclick="onConfirmClickSingle()"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Single Row</a></li>*@
-
-
-                        <li><a href='@Url.Action( "GenerateExcelTemplate_TwoRow","Clients")' title="Generate Excel Template / Double rows"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Double Rows</a></li>
-                        <li><a href='@Url.Action( "GenerateExcelTemplate_OneRow","Clients")' title="Generate Excel Template / Single Row"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Single Row</a></li>
+                        <li><a href='#' title="Generate Excel Template / Double rows" onclick="onConfirmClick()"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Double Rows</a></li>
+                        <li><a href='#' title="Generate Excel Template / Single row" onclick="onConfirmClickSingle()"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Single Row</a></li>
+                        
+                        @*<li><a href='@Url.Action( "GenerateExcelTemplate_TwoRow","Clients")' title="Generate Excel Template / Double rows"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Double Rows</a></li>
+                        <li><a href='@Url.Action( "GenerateExcelTemplate_OneRow","Clients")' title="Generate Excel Template / Single Row"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Single Row</a></li>*@
                                               
 
                     </ul>
@@ -506,10 +510,10 @@
 </div>
 
 
-<div id="myModal" class="modal fade" role="dialog">
+@*<div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
-        <!-- Modal content-->
+         Modal content
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -524,7 +528,7 @@
             </div>
         </div>
 
-    </div>
+    </div>*@
 
 
 @section scripts{
@@ -690,87 +694,23 @@
                 $("#clientsModel_CLI_No_Reduce_Days").val(0);
             }
         }       
-
-
-        
-        //function onConfirmClick() {
-        //    debugger;
-        //    bootbox.prompt({
-        //        title: "Choose month!",
-        //        inputType: 'select',
-        //        inputOptions: [    
-        //            {
-        //                text: 'Choose one...',
-        //                value: '',
-        //            },
-        //            {
-        //                text: 'January',
-        //                value: '1',
-        //            },
-        //            {
-        //                text: 'February',
-        //                value: '2',
-        //            },
-        //            {
-        //                text: 'March',
-        //                value: '3',
-        //            },
-        //            {
-        //                text: 'April',
-        //                value: '4',
-        //            },
-        //            {
-        //                text: 'May',
-        //                value: '4',
-        //            },{
-        //                text: 'Jun',
-        //                value: '5',
-        //            },{
-        //                text: 'July',
-        //                value: '7',
-        //            },
-        //            {
-        //                text: 'August',
-        //                value: '8',
-        //            },{
-        //                text: 'September',
-        //                value: '9',
-        //            },{
-        //                text: 'October',
-        //                value: '10',
-        //            },{
-        //                text: 'November',
-        //                value: '11',
-        //            },{
-        //                text: 'December',
-        //                value: '12',
-        //            }
-        //        ],
-        //        callback: function (result) {                   
-        //            if (result!='') {
-        //                $.ajax({
-        //                    type: "POST",
-        //                    url: "/Clients/GenerateExcelTemplate_TwoRow?month=" + result[0]                          
-                            
-        //                })
-        //            }
-        //            else if (result == null) {                       
-        //            }
-        //        }
-        //    });
-        //}
-
         function onConfirmClick() {
-            debugger;
             bootbox.prompt({
                 title: "Choose Month!",
                 inputType: 'date',
            
-                callback: function (result) {                    
-                    if (result != '') {
+                callback: function (result) {   
+                    debugger;
+                    if (result != null) {
                         $.ajax({
                             type: "POST",
-                            url: "/Clients/GenerateExcelTemplate_TwoRow?month=" + result
+                            url: "/Clients/GenerateExcelTemplate_TwoRow?month=" + result,
+                            contentType: 'application/json; charset=utf-8',
+                            datatype: 'json',                            
+                            type: "GET",
+                            success: function () {
+                                window.location = '@Url.Action("GenerateExcelTemplate_TwoRow", "Clients")?month='+result;
+                            }
 
                         })
                     }
@@ -781,16 +721,21 @@
         }
 
         function onConfirmClickSingle() {
-            debugger;
             bootbox.prompt({
                 title: "Choose Month!",
                 inputType: 'date',
 
                 callback: function (result) {
-                    if (result != '') {
+                    if (result != null) {
                         $.ajax({
                             type: "POST",
-                            url: "/Clients/GenerateExcelTemplate_OneRow?month=" + result
+                            url: "/Clients/GenerateExcelTemplate_OneRow?month=" + result,
+                            contentType: 'application/json; charset=utf-8',
+                            datatype: 'json',                            
+                            type: "GET",
+                            success: function () {
+                                window.location = '@Url.Action("GenerateExcelTemplate_OneRow", "Clients")?month='+result;
+                            }
 
                         })
                     }

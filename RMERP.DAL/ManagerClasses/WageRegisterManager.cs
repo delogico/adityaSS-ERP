@@ -99,36 +99,70 @@ namespace RMERP.DAL.ManagerClasses
                     #endregion
 
                     #region Paybale day counting
-                    int totWorkingDays = 0, totPaidHolidas=0, totWeekOffs=0;
-                    double totExtraWorkingDays = 0.0;
+                    int totWorkingDays = 0, totPaidHolidas = 0, totWeekOffs = 0;
+                    double totExtraWorkingDays = 0.0, totExtraWorkingHours=0;
+
+                    //foreach (var att in attendances)
+                    //{
+                    //    if (att.ATT_IsWeeklyOff)
+                    //    {
+                    //        totWeekOffs++;
+                    //    }
+                    //    else
+                    //    {
+                    //        if (att.ATT_IsPresent)
+                    //        {
+                    //            totWorkingDays++;
+                    //        }
+                    //        else if (att.ATT_IsPaidLeave)
+                    //        {
+                    //            totPaidHolidas++;
+                    //        }
+                    //        else if (att.ATT_IsEarnLeave)
+                    //        {
+                    //            totPaidHolidas++;
+                    //        }
+                    //        else if (att.ATT_IsHoliday)
+                    //        {
+                    //            totPaidHolidas++;
+                    //        }
+                    //        if (att.ATT_EarnedExtraDay)
+                    //        {
+                    //            totWorkingDays++;
+                    //        }
+                    //        if (att.ATT_IsPublicHoliday)
+                    //        {
+                    //            totPaidHolidas++;
+                    //        }
+                    //    }
+                    //    if (att.ATT_ExtraHoursWorked > 0)
+                    //    {
+                    //        totExtraWorkingHours += att.ATT_ExtraHoursWorked;
+                    //    }
+                    //}
+                    //totExtraWorkingDays = totExtraWorkingHours / 8;
+                    //double total = totWorkingDays + totPaidHolidas + totExtraWorkingDays;
+                    //if (cli.CLI_Total_WorkingDays != 1)
+                    //{
+                    //    total = total + totWeekOffs;
+                    //}
+                    //totalPaybleDays = total;
+
 
                     totWorkingDays = attendances.Where(a => a.ATT_IsPresent == true).Count() +
                                      attendances.Where(a => a.ATT_EarnedExtraDay == true).Count();
-
                     totPaidHolidas = attendances.Where(a => a.ATT_IsPaidLeave == true).Count() +
                                      attendances.Where(a => a.ATT_IsEarnLeave == true).Count() +
                                      attendances.Where(a => a.ATT_IsHoliday == true).Count() +
                                      attendances.Where(a => a.ATT_IsPublicHoliday == true).Count();
-
                     totExtraWorkingDays = WAR_ExtraWorkingHours / 8;
-
                     totWeekOffs = attendances.Where(a => a.ATT_IsWeeklyOff == true).Count();
-
-                    //totalPaybleDays = attendances.Where(a => a.ATT_IsPresent == true).Count() +
-                    //             attendances.Where(a => a.ATT_EarnedExtraDay == true).Count() +
-                    //             attendances.Where(a => a.ATT_IsPaidLeave == true).Count() +
-                    //             attendances.Where(a => a.ATT_IsEarnLeave == true).Count() +
-                    //             attendances.Where(a => a.ATT_IsHoliday == true).Count() +
-                    //             attendances.Where(a => a.ATT_IsPublicHoliday == true).Count();
-
                     totalPaybleDays = totWorkingDays + totPaidHolidas + totExtraWorkingDays;
                     if (cli.CLI_Total_WorkingDays != 1)
                     {
                         totalPaybleDays = totalPaybleDays + totWeekOffs;
                     }
 
-                    //if (cli.CLI_Total_WorkingDays != 1)
-                    //    totalPaybleDays = totalPaybleDays + attendances.Where(a => a.ATT_IsWeeklyOff == true).Count();
                     #endregion
 
 

@@ -75,8 +75,7 @@ namespace RMERP.Controllers
             ClientsViewModel cv = new ClientsViewModel();
             cv.clientsModel = new ClientsModel();            
             cv.ParametersClientsModel = new ParametersClientsModel();
-            cv.ParametersClientsModel.clientsModel = new ClientsModel();
-           
+            cv.ParametersClientsModel.clientsModel = new ClientsModel();           
             if (id > 0)
             {
                 Clients clients = new Clients();
@@ -217,6 +216,7 @@ namespace RMERP.Controllers
                 ClientId = CLI_Id;
                 ClientsManager clientsManager = new ClientsManager(_context, Configuration);
                 Clients clients = clientsManager.GetClientById(CLI_Id);
+                ViewBag.ClientName = clients.CLI_Name;
                 if (CON_Id > 0)
                 {                                           
                     Client_Contacts contact = clientsManager.GetClientContactsById(CON_Id);
@@ -229,8 +229,9 @@ namespace RMERP.Controllers
                     contactVM.CON_RegisteredOn = ProjectUtils.DateNow();
                     SessionUtils sessionUtils = new SessionUtils(Request, Response);
                     contactVM.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
-                }
-            }                 
+                                   }
+            }
+           
             return View(contactVM);
         }
         [HttpPost]
@@ -452,16 +453,15 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
         }
+        
 
-        //public FileResult GenerateExcelTemplate_TwoRow(DateTime month)
-        //{ 
-        //    DateTime date = new DateTime(month.Year, month.Month, 1);
-
+        //public FileResult GenerateExcelTemplate_TwoRow()
+        //{
         //    ClientsManager clientsManager = new ClientsManager(_context, Configuration);
         //    Clients client = clientsManager.GetClientById(ClientId);
         //    IEnumerable<Clients_Employees> employees = clientsManager.listClientsEmployees(ClientId);
         //    string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
-        //    string fileName = "Template_" + date.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_TwoRow.xlsx";
+        //    string fileName = "Template_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_TwoRow.xlsx";
         //    string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
         //    FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
         //    var memory = new MemoryStream();
@@ -498,7 +498,7 @@ namespace RMERP.Controllers
         //        IRow row = excelSheet.CreateRow(0);
         //        row.Height = 500;
 
-        //        DateTime[] period = DateHelper.getStartEndDatePeriodForAttendance(client, date);
+        //        DateTime[] period = DateHelper.getStartEndDatePeriodForAttendance(client, DateTime.Now);
         //        int TotalDays = Convert.ToInt32((period[1] - period[0]).TotalDays) + 4;
 
 
@@ -509,8 +509,8 @@ namespace RMERP.Controllers
         //        excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 7));
 
         //        ICell CellMonth = row.CreateCell(TotalDays - 6);
-        //        string fullMonthName = date.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
-        //        CellMonth.SetCellValue(fullMonthName + "-" + date.ToString("yy"));
+        //        string fullMonthName = DateTime.Now.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
+        //        CellMonth.SetCellValue(fullMonthName + "-" + DateTime.Now.ToString("yy"));
         //        CellMonth.CellStyle = styleHeader;
         //        CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
         //        excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 6, TotalDays));
@@ -589,14 +589,13 @@ namespace RMERP.Controllers
         //    return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         //}
 
-        //public FileResult GenerateExcelTemplate_OneRow(DateTime month)
+        //public FileResult GenerateExcelTemplate_OneRow()
         //{
-        //    DateTime date = new DateTime(month.Year, month.Month, 1);
         //    ClientsManager clientsManager = new ClientsManager(_context, Configuration);
         //    Clients client = clientsManager.GetClientById(ClientId);
         //    IEnumerable<Clients_Employees> employees = clientsManager.listClientsEmployees(ClientId);
         //    string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
-        //    string fileName = "Template_" + date.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_OneRow.xlsx";
+        //    string fileName = "Template_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_OneRow.xlsx";
         //    string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
         //    FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
         //    var memory = new MemoryStream();
@@ -633,7 +632,7 @@ namespace RMERP.Controllers
         //        IRow row = excelSheet.CreateRow(0);
         //        row.Height = 500;
 
-        //        DateTime[] period = DateHelper.getStartEndDatePeriodForAttendance(client, date);
+        //        DateTime[] period = DateHelper.getStartEndDatePeriodForAttendance(client, DateTime.Now);
         //        int TotalDays = Convert.ToInt32((period[1] - period[0]).TotalDays) + 4;
 
 
@@ -644,8 +643,8 @@ namespace RMERP.Controllers
         //        excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 7));
 
         //        ICell CellMonth = row.CreateCell(TotalDays - 6);
-        //        string fullMonthName = date.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
-        //        CellMonth.SetCellValue(fullMonthName + "-" + date.ToString("yy"));
+        //        string fullMonthName = DateTime.Now.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
+        //        CellMonth.SetCellValue(fullMonthName + "-" + DateTime.Now.ToString("yy"));
         //        CellMonth.CellStyle = styleHeader;
         //        CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
         //        excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 6, TotalDays));
@@ -715,266 +714,6 @@ namespace RMERP.Controllers
         //    new FileInfo(Path.Combine(newPath, fileName)).Delete();
         //    return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         //}
-
-        public FileResult GenerateExcelTemplate_TwoRow()
-        {
-            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            Clients client = clientsManager.GetClientById(ClientId);
-            IEnumerable<Clients_Employees> employees = clientsManager.listClientsEmployees(ClientId);
-            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
-            string fileName = "Template_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_TwoRow.xlsx";
-            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
-            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
-            var memory = new MemoryStream();
-            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
-            {
-                IWorkbook workbook;
-                workbook = new XSSFWorkbook();
-                ISheet excelSheet = workbook.CreateSheet("Template");
-                IFont font = workbook.CreateFont();
-                font.IsBold = true;
-                font.FontHeightInPoints = ((short)24);
-                font.FontName = ("Cambria");
-
-                ICellStyle styleHeader = workbook.CreateCellStyle();
-                styleHeader.FillBackgroundColor = HSSFColor.BlueGrey.Index;
-                styleHeader.SetFont(font);
-
-                // Grey25Percent background
-                ICellStyle style = workbook.CreateCellStyle();
-                style.FillForegroundColor = IndexedColors.Grey25Percent.Index;
-                style.FillPattern = FillPattern.SolidForeground;
-                style.FillBackgroundColor = IndexedColors.Grey25Percent.Index;
-
-                // Style the cell with borders all around.
-                style.BorderBottom = (BorderStyle.Thin);
-                style.BottomBorderColor = (IndexedColors.Black.Index);
-                style.BorderLeft = (BorderStyle.Thin);
-                style.LeftBorderColor = (IndexedColors.Black.Index);
-                style.BorderRight = (BorderStyle.Thin);
-                style.RightBorderColor = (IndexedColors.Black.Index);
-                style.BorderTop = (BorderStyle.Thin);
-                style.TopBorderColor = (IndexedColors.Black.Index);
-
-                IRow row = excelSheet.CreateRow(0);
-                row.Height = 500;
-
-                DateTime[] period = DateHelper.getStartEndDatePeriodForAttendance(client, DateTime.Now);
-                int TotalDays = Convert.ToInt32((period[1] - period[0]).TotalDays) + 4;
-
-
-                ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue(client.CLI_Name);
-                CellHeader.CellStyle = styleHeader;
-                CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 7));
-
-                ICell CellMonth = row.CreateCell(TotalDays - 6);
-                string fullMonthName = DateTime.Now.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
-                CellMonth.SetCellValue(fullMonthName + "-" + DateTime.Now.ToString("yy"));
-                CellMonth.CellStyle = styleHeader;
-                CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 6, TotalDays));
-
-                row = excelSheet.CreateRow(1);
-                row.HeightInPoints = ((5 * excelSheet.DefaultRowHeightInPoints));
-                //excelSheet.AutoSizeColumn(1);
-
-
-                ICell cell0 = row.CreateCell(0);
-                cell0.SetCellValue("SR.NO");
-                cell0.CellStyle = style;
-                ICell cell1 = row.CreateCell(1);
-                cell1.SetCellValue("EMP_Id");
-                cell1.CellStyle = style;
-                ICell cell2 = row.CreateCell(2);
-                cell2.SetCellValue("Designation");
-                cell2.CellStyle = style;
-                ICell cell3 = row.CreateCell(3);
-                cell3.SetCellValue("NAME");
-                cell3.CellStyle = style;
-                int i = 4;
-                DateTime tmpDate = period[0];
-                while (period[1] >= tmpDate)
-                {
-                    ICell c = row.CreateCell(i);
-                    c.SetCellValue(tmpDate.Day);
-                    c.CellStyle = style;
-                    excelSheet.AutoSizeColumn(i);
-                    tmpDate = tmpDate.AddDays(1);
-                    i++;
-                }
-
-                int rowCount = 2;
-                int j = 1;
-                foreach (var item in employees)
-                {
-                    row = excelSheet.CreateRow(rowCount);
-                    row.CreateCell(0).SetCellValue(j);
-
-                    //row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
-                    row.CreateCell(1).SetCellValue(item.EMP_Id.ToString("D5"));
-                    row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
-                    //row.CreateCell(3).SetCellValue(item.EMP_.EMP_FullName);
-                    row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + " " + item.EMP_.EMP_MiddleName + " " + item.EMP_.EMP_SurName);
-
-                    excelSheet.SetColumnWidth(2, 6000);
-                    excelSheet.SetColumnWidth(3, 6000);
-
-
-                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 0, 0));
-                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 1, 1));
-                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 2, 2));
-                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 3, 3));
-
-                    int k = 4;
-                    DateTime tmp1Date = period[0];
-                    while (period[1] >= tmp1Date)
-                    {
-                        ICell c = row.CreateCell(k);
-                        tmp1Date = tmp1Date.AddDays(1);
-                        k++;
-                    }
-                    rowCount = rowCount + 2;
-                    j++;
-                }
-
-                workbook.Write(fs);
-            }
-            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
-            {
-                stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
-            new FileInfo(Path.Combine(newPath, fileName)).Delete();
-            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-        }
-
-        public FileResult GenerateExcelTemplate_OneRow()
-        {
-            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            Clients client = clientsManager.GetClientById(ClientId);
-            IEnumerable<Clients_Employees> employees = clientsManager.listClientsEmployees(ClientId);
-            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
-            string fileName = "Template_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_OneRow.xlsx";
-            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
-            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
-            var memory = new MemoryStream();
-            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
-            {
-                IWorkbook workbook;
-                workbook = new XSSFWorkbook();
-                ISheet excelSheet = workbook.CreateSheet("Template");
-                IFont font = workbook.CreateFont();
-                font.IsBold = true;
-                font.FontHeightInPoints = ((short)24);
-                font.FontName = ("Cambria");
-
-                ICellStyle styleHeader = workbook.CreateCellStyle();
-                styleHeader.FillBackgroundColor = HSSFColor.BlueGrey.Index;
-                styleHeader.SetFont(font);
-
-                // Grey25Percent background
-                ICellStyle style = workbook.CreateCellStyle();
-                style.FillForegroundColor = IndexedColors.Grey25Percent.Index;
-                style.FillPattern = FillPattern.SolidForeground;
-                style.FillBackgroundColor = IndexedColors.Grey25Percent.Index;
-
-                // Style the cell with borders all around.
-                style.BorderBottom = (BorderStyle.Thin);
-                style.BottomBorderColor = (IndexedColors.Black.Index);
-                style.BorderLeft = (BorderStyle.Thin);
-                style.LeftBorderColor = (IndexedColors.Black.Index);
-                style.BorderRight = (BorderStyle.Thin);
-                style.RightBorderColor = (IndexedColors.Black.Index);
-                style.BorderTop = (BorderStyle.Thin);
-                style.TopBorderColor = (IndexedColors.Black.Index);
-
-                IRow row = excelSheet.CreateRow(0);
-                row.Height = 500;
-
-                DateTime[] period = DateHelper.getStartEndDatePeriodForAttendance(client, DateTime.Now);
-                int TotalDays = Convert.ToInt32((period[1] - period[0]).TotalDays) + 4;
-
-
-                ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue(client.CLI_Name);
-                CellHeader.CellStyle = styleHeader;
-                CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 7));
-
-                ICell CellMonth = row.CreateCell(TotalDays - 6);
-                string fullMonthName = DateTime.Now.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
-                CellMonth.SetCellValue(fullMonthName + "-" + DateTime.Now.ToString("yy"));
-                CellMonth.CellStyle = styleHeader;
-                CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 6, TotalDays));
-
-                row = excelSheet.CreateRow(1);
-                row.HeightInPoints = ((5 * excelSheet.DefaultRowHeightInPoints));
-                //excelSheet.AutoSizeColumn(1);
-
-
-                ICell cell0 = row.CreateCell(0);
-                cell0.SetCellValue("SR.NO");
-                cell0.CellStyle = style;
-                ICell cell1 = row.CreateCell(1);
-                cell1.SetCellValue("EMP_Id");
-                cell1.CellStyle = style;
-                ICell cell2 = row.CreateCell(2);
-                cell2.SetCellValue("Designation");
-                cell2.CellStyle = style;
-                ICell cell3 = row.CreateCell(3);
-                cell3.SetCellValue("NAME");
-                cell3.CellStyle = style;
-                int i = 4;
-                DateTime tmpDate = period[0];
-                while (period[1] >= tmpDate)
-                {
-                    ICell c = row.CreateCell(i);
-                    c.SetCellValue(tmpDate.Day);
-                    c.CellStyle = style;
-                    excelSheet.SetColumnWidth(i, 1000);
-                    tmpDate = tmpDate.AddDays(1);
-                    i++;
-                }
-
-                int rowCount = 2;
-                int j = 1;
-                foreach (var item in employees)
-                {
-                    row = excelSheet.CreateRow(rowCount);
-                    row.CreateCell(0).SetCellValue(j);
-                    row.HeightInPoints = (float)(1.5 * excelSheet.DefaultRowHeightInPoints);
-                    row.CreateCell(1).SetCellValue(item.EMP_Id.ToString("D5"));
-                    row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
-                    row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + " " + item.EMP_.EMP_MiddleName + " " + item.EMP_.EMP_SurName);
-
-                    excelSheet.SetColumnWidth(2, 6000);
-                    excelSheet.SetColumnWidth(3, 6000);
-
-                    int k = 4;
-                    DateTime tmp1Date = period[0];
-                    while (period[1] >= tmp1Date)
-                    {
-                        row.CreateCell(k);
-                        tmp1Date = tmp1Date.AddDays(1);
-                        k++;
-                    }
-                    rowCount++;
-                    j++;
-                }
-
-                workbook.Write(fs);
-            }
-            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
-            {
-                stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
-            new FileInfo(Path.Combine(newPath, fileName)).Delete();
-            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-        }
 
         public FileResult BASIC_WithShifts()
         {
@@ -1120,6 +859,268 @@ namespace RMERP.Controllers
             }
             memory.Position = 0;
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sFileName);
+        }
+
+
+        public async Task<FileResult> GenerateExcelTemplate_TwoRow(DateTime month)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            Clients client = clientsManager.GetClientById(ClientId);
+            IEnumerable<Clients_Employees> employees = clientsManager.listClientsEmployees(ClientId);
+            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+            string fileName = "Template_" + month.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_TwoRow.xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
+            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
+            var memory = new MemoryStream();
+            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook;
+                workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("Template");
+                IFont font = workbook.CreateFont();
+                font.IsBold = true;
+                font.FontHeightInPoints = ((short)24);
+                font.FontName = ("Cambria");
+
+                ICellStyle styleHeader = workbook.CreateCellStyle();
+                styleHeader.FillBackgroundColor = HSSFColor.BlueGrey.Index;
+                styleHeader.SetFont(font);
+
+                // Grey25Percent background
+                ICellStyle style = workbook.CreateCellStyle();
+                style.FillForegroundColor = IndexedColors.Grey25Percent.Index;
+                style.FillPattern = FillPattern.SolidForeground;
+                style.FillBackgroundColor = IndexedColors.Grey25Percent.Index;
+
+                // Style the cell with borders all around.
+                style.BorderBottom = (BorderStyle.Thin);
+                style.BottomBorderColor = (IndexedColors.Black.Index);
+                style.BorderLeft = (BorderStyle.Thin);
+                style.LeftBorderColor = (IndexedColors.Black.Index);
+                style.BorderRight = (BorderStyle.Thin);
+                style.RightBorderColor = (IndexedColors.Black.Index);
+                style.BorderTop = (BorderStyle.Thin);
+                style.TopBorderColor = (IndexedColors.Black.Index);
+
+                IRow row = excelSheet.CreateRow(0);
+                row.Height = 500;
+
+                DateTime[] period = DateHelper.getStartEndDatePeriodForAttendance(client, month);
+                int TotalDays = Convert.ToInt32((period[1] - period[0]).TotalDays) + 4;
+
+
+                ICell CellHeader = row.CreateCell(0);
+                CellHeader.SetCellValue(client.CLI_Name);
+                CellHeader.CellStyle = styleHeader;
+                CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 7));
+
+                ICell CellMonth = row.CreateCell(TotalDays - 6);
+                string fullMonthName = month.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
+                CellMonth.SetCellValue(fullMonthName + "-" + month.ToString("yy"));
+                CellMonth.CellStyle = styleHeader;
+                CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 6, TotalDays));
+
+                row = excelSheet.CreateRow(1);
+                row.HeightInPoints = ((5 * excelSheet.DefaultRowHeightInPoints));
+                //excelSheet.AutoSizeColumn(1);
+
+
+                ICell cell0 = row.CreateCell(0);
+                cell0.SetCellValue("SR.NO");
+                cell0.CellStyle = style;
+                ICell cell1 = row.CreateCell(1);
+                cell1.SetCellValue("EMP_Id");
+                cell1.CellStyle = style;
+                ICell cell2 = row.CreateCell(2);
+                cell2.SetCellValue("Designation");
+                cell2.CellStyle = style;
+                ICell cell3 = row.CreateCell(3);
+                cell3.SetCellValue("NAME");
+                cell3.CellStyle = style;
+                int i = 4;
+                DateTime tmpDate = period[0];
+                while (period[1] >= tmpDate)
+                {
+                    ICell c = row.CreateCell(i);
+                    c.SetCellValue(tmpDate.Day);
+                    c.CellStyle = style;
+                    excelSheet.AutoSizeColumn(i);
+                    tmpDate = tmpDate.AddDays(1);
+                    i++;
+                }
+
+                int rowCount = 2;
+                int j = 1;
+                foreach (var item in employees)
+                {
+                    row = excelSheet.CreateRow(rowCount);
+                    row.CreateCell(0).SetCellValue(j);
+
+                    //row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
+                    row.CreateCell(1).SetCellValue(item.EMP_Id.ToString("D5"));
+                    row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
+                    //row.CreateCell(3).SetCellValue(item.EMP_.EMP_FullName);
+                    row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + " " + item.EMP_.EMP_MiddleName + " " + item.EMP_.EMP_SurName);
+
+                    excelSheet.SetColumnWidth(2, 6000);
+                    excelSheet.SetColumnWidth(3, 6000);
+
+
+                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 0, 0));
+                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 1, 1));
+                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 2, 2));
+                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 3, 3));
+
+                    int k = 4;
+                    DateTime tmp1Date = period[0];
+                    while (period[1] >= tmp1Date)
+                    {
+                        ICell c = row.CreateCell(k);
+                        tmp1Date = tmp1Date.AddDays(1);
+                        k++;
+                    }
+                    rowCount = rowCount + 2;
+                    j++;
+                }
+
+                workbook.Write(fs);
+            }
+            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
+            {
+                //stream.CopyToAsync(memory);
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            new FileInfo(Path.Combine(newPath, fileName)).Delete();
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
+
+        public async Task<FileResult> GenerateExcelTemplate_OneRow(DateTime month)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            Clients client = clientsManager.GetClientById(ClientId);
+            IEnumerable<Clients_Employees> employees = clientsManager.listClientsEmployees(ClientId);
+            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+            string fileName = "Template_" + month.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_OneRow.xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
+            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
+            var memory = new MemoryStream();
+            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook;
+                workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("Template");
+                IFont font = workbook.CreateFont();
+                font.IsBold = true;
+                font.FontHeightInPoints = ((short)24);
+                font.FontName = ("Cambria");
+
+                ICellStyle styleHeader = workbook.CreateCellStyle();
+                styleHeader.FillBackgroundColor = HSSFColor.BlueGrey.Index;
+                styleHeader.SetFont(font);
+
+                // Grey25Percent background
+                ICellStyle style = workbook.CreateCellStyle();
+                style.FillForegroundColor = IndexedColors.Grey25Percent.Index;
+                style.FillPattern = FillPattern.SolidForeground;
+                style.FillBackgroundColor = IndexedColors.Grey25Percent.Index;
+
+                // Style the cell with borders all around.
+                style.BorderBottom = (BorderStyle.Thin);
+                style.BottomBorderColor = (IndexedColors.Black.Index);
+                style.BorderLeft = (BorderStyle.Thin);
+                style.LeftBorderColor = (IndexedColors.Black.Index);
+                style.BorderRight = (BorderStyle.Thin);
+                style.RightBorderColor = (IndexedColors.Black.Index);
+                style.BorderTop = (BorderStyle.Thin);
+                style.TopBorderColor = (IndexedColors.Black.Index);
+
+                IRow row = excelSheet.CreateRow(0);
+                row.Height = 500;
+
+                DateTime[] period = DateHelper.getStartEndDatePeriodForAttendance(client, month);
+                int TotalDays = Convert.ToInt32((period[1] - period[0]).TotalDays) + 4;
+
+
+                ICell CellHeader = row.CreateCell(0);
+                CellHeader.SetCellValue(client.CLI_Name);
+                CellHeader.CellStyle = styleHeader;
+                CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 7));
+
+                ICell CellMonth = row.CreateCell(TotalDays - 6);
+                string fullMonthName = month.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
+                CellMonth.SetCellValue(fullMonthName + "-" + month.ToString("yy"));
+                CellMonth.CellStyle = styleHeader;
+                CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 6, TotalDays));
+
+                row = excelSheet.CreateRow(1);
+                row.HeightInPoints = ((5 * excelSheet.DefaultRowHeightInPoints));
+                //excelSheet.AutoSizeColumn(1);
+
+
+                ICell cell0 = row.CreateCell(0);
+                cell0.SetCellValue("SR.NO");
+                cell0.CellStyle = style;
+                ICell cell1 = row.CreateCell(1);
+                cell1.SetCellValue("EMP_Id");
+                cell1.CellStyle = style;
+                ICell cell2 = row.CreateCell(2);
+                cell2.SetCellValue("Designation");
+                cell2.CellStyle = style;
+                ICell cell3 = row.CreateCell(3);
+                cell3.SetCellValue("NAME");
+                cell3.CellStyle = style;
+                int i = 4;
+                DateTime tmpDate = period[0];
+                while (period[1] >= tmpDate)
+                {
+                    ICell c = row.CreateCell(i);
+                    c.SetCellValue(tmpDate.Day);
+                    c.CellStyle = style;
+                    excelSheet.SetColumnWidth(i, 1000);
+                    tmpDate = tmpDate.AddDays(1);
+                    i++;
+                }
+
+                int rowCount = 2;
+                int j = 1;
+                foreach (var item in employees)
+                {
+                    row = excelSheet.CreateRow(rowCount);
+                    row.CreateCell(0).SetCellValue(j);
+                    row.HeightInPoints = (float)(1.5 * excelSheet.DefaultRowHeightInPoints);
+                    row.CreateCell(1).SetCellValue(item.EMP_Id.ToString("D5"));
+                    row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
+                    row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + " " + item.EMP_.EMP_MiddleName + " " + item.EMP_.EMP_SurName);
+
+                    excelSheet.SetColumnWidth(2, 6000);
+                    excelSheet.SetColumnWidth(3, 6000);
+
+                    int k = 4;
+                    DateTime tmp1Date = period[0];
+                    while (period[1] >= tmp1Date)
+                    {
+                        row.CreateCell(k);
+                        tmp1Date = tmp1Date.AddDays(1);
+                        k++;
+                    }
+                    rowCount++;
+                    j++;
+                }
+
+                workbook.Write(fs);
+            }
+            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            new FileInfo(Path.Combine(newPath, fileName)).Delete();
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
     }
 }

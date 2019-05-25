@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 
-<h2>WageRegister</h2>
+
 <script>
     function calculateTotal() {       
         var totalPaybleDays = $("#wageRegisterVM_WAR_TotalPaybleDays").val();
@@ -83,7 +83,7 @@
 <div class="modal-dialog modelLeftSide">
     <div class="modal-content modal-lg">
         <div class="modal-header">
-            <h4 class="modal-title"> @ViewData["Title"]</h4>
+            <h4 class="modal-title"> @ViewData["Title"] ( @ViewBag.WAG_Month )</h4>
         </div>
         <div class="modal-body">
             <div class="m-b-30">

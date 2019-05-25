@@ -752,6 +752,7 @@ namespace RMERP.Controllers
             AttendanceManager attendanceManager = new AttendanceManager(_context);
             WageProcessManager wagManager = new WageProcessManager(_context);
             Wage_Process wage = wagManager.getWageProcessById(WAG_Id);
+            ViewBag.WAG_Month = wage.WAG_Month.ToString("MMMM") + "-" + wage.WAG_Month.ToString("yyyy");
             Clients client = clientsManager.GetClientById(CLI_Id);
             ViewBag.ClientName = client.CLI_Name;
             ViewBag.CLI_Id = client.CLI_Id;

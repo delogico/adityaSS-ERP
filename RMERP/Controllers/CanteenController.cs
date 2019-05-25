@@ -26,7 +26,10 @@ namespace RMERP.Controllers
         [Breadcrumb("Update Canteen Amount", FromAction = "WageRegister", FromController = typeof(WageRegisterController))]
         public IActionResult UpdateCanteenAmount(int CRI_Id,int WAG_Id)
         {
-            WagId = WAG_Id;
+            WagId = WAG_Id;            
+            WageProcessManager wageProcessManager = new WageProcessManager(_context);
+            DateTime WAG_Month = wageProcessManager.getWageProcessById(WagId).WAG_Month;
+            ViewBag.Wag_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             CanteenManager canteenManager = new CanteenManager(_context);
             Client_Requirements client_Requirements = clientsManager.GetRequirementsById(CRI_Id);
