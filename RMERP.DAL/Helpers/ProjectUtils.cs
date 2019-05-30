@@ -112,49 +112,6 @@ namespace RMERP.DAL.Helpers
             return str;
         }
 
-        public static decimal CalculatePT(Employees emp, decimal PFsum)
-        {
-
-            if (emp.EMP_Gender == true) //Male
-            {
-                if (PFsum < 1)
-                {
-                    return 0;
-                }
-                else if (PFsum>=1 && PFsum < 75)
-                {
-                    return 17;
-                }
-                else if (PFsum >= 75 && PFsum < 10000)
-                {
-                    return 200;
-                }
-                else
-                {
-                    return 500;
-                }
-            }
-            else
-            {
-                if (PFsum < 1)
-                {
-                    return 0;
-                }
-                else if (PFsum >= 1 && PFsum < 75)
-                {
-                    return 17;
-                }
-                else if (PFsum >= 75 && PFsum < 10000)
-                {
-                    return 200;
-                }
-                else
-                {
-                    return 500;
-                }
-            }
-        }
-
         public static decimal GetGrossAmountBasedOnFormula(string CRI_Formula, Wage_Register wage_Register)
         {
             decimal sum = 0M;
