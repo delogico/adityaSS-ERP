@@ -266,14 +266,7 @@ namespace RMERP.DAL.ManagerClasses
                     WAR_PF_Calculated = Decimal.Multiply(PFsum, WAR_PF) / 100;
                     WAR_ESIC_Calculated = Decimal.Multiply(ESICsum, WAR_ESIC) / 100;
                     #endregion
-                    #region DeductionTax Calculation
-                    decimal WAR_ProffesionalTax_Calculated = 0M, WAR_RevenueDeduction_Calculated = 0M, WAR_CanteenFacility_Calculation = 0M;
-                    if (cr.CRI_ProfessionalTax == true)
-                    {
-                        WAR_ProffesionalTax_Calculated = ProjectUtils.CalculatePF(employee.EMP_, PFsum);
-                    }
-
-                    #endregion
+                  
                     wageRegisterVM.WAR_PF_Formula = cr.CRI_PF_Formula;
                     wageRegisterVM.WAR_ESIC_Formula = cr.CRI_ESIC_Formula;
                     wageRegisterVM.WAR_PF = WAR_PF;
@@ -283,6 +276,16 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.allowanceVMs = allowances;
                     //************************** ALLOWANCES CALCULATION *****************************/
                     decimal WAR_GrossTotal = WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + WAR_OverTime_Calculated + AllowancesTotal;
+
+                    #region ProfessionalTax Calculation
+                    decimal WAR_ProffesionalTax_Calculated = 0M, WAR_RevenueDeduction_Calculated = 0M, WAR_CanteenFacility_Calculation = 0M;
+                    if (cr.CRI_ProfessionalTax == true)
+                    {
+                        ProfessionalTaxCalculationManager ptcManager = new ProfessionalTaxCalculationManager(_context);
+                        WAR_ProffesionalTax_Calculated = ptcManager.GetPT((employee.EMP_.EMP_Gender?"M":"F"), WAR_GrossTotal);
+                    }
+
+                    #endregion
 
                     if (cr.CRI_RevenueDeduction == true)
                     {

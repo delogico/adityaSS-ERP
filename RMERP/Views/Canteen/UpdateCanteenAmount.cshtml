@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div>
                     @using (Html.BeginForm("UpdateAmount", "Canteen", FormMethod.Post))
                     {
@@ -48,21 +48,17 @@
                                     @for (var i = 0; i < Model.canteenVMs.Count; i++)                                    
                                         {
                                             <tr>
-                                                <td><b>@Html.DisplayFor(m=>m.canteenVMs[i].Emp_Name)</b></td>
+                                                <td width="75%"><b>@Html.DisplayFor(m=>m.canteenVMs[i].Emp_Name)</b></td>
                                                 <td>
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                @Html.HiddenFor(m => m.canteenVMs[i].CLE_Id)
-                                                                @Html.HiddenFor(m => m.canteenVMs[i].WAG_Id)
-                                                                @Html.HiddenFor(m => m.canteenVMs[i].WRC_Id) 
-                                                                @Html.HiddenFor(m => m.canteenVMs[i].CRI_Id)
-
-                                                                @Html.TextBoxFor(m => m.canteenVMs[i].WRC_Amount, new { @class = "form-control" })
-                                                                @Html.ValidationMessageFor(m => m.canteenVMs[i].WRC_Amount, "", new { @class = "text-danger" })
-                                                            </div>
-                                                        </div>
+                                                    @Html.HiddenFor(m => m.canteenVMs[i].CLE_Id)
+                                                    @Html.HiddenFor(m => m.canteenVMs[i].WAG_Id)
+                                                    @Html.HiddenFor(m => m.canteenVMs[i].WRC_Id)
+                                                    @Html.HiddenFor(m => m.canteenVMs[i].CRI_Id)
+                                                    <div class="form-group">
+                                                        @Html.TextBoxFor(m => m.canteenVMs[i].WRC_Amount, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(m => m.canteenVMs[i].WRC_Amount, "", new { @class = "text-danger" })
                                                     </div>
+
                                                 </td>
                                             </tr>
                                         }
@@ -72,7 +68,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group text-right">
-                                    <input type="submit" name="Submit Amount" value="Submit Amount" id="btnSubmit" class="btn btn-primary" />
+                                    <input type="submit" value="Save & Update in Wage Register" id="btnSubmit" class="btn btn-primary" />
                                 </div>
                             </div>
                         </div>
@@ -81,26 +77,5 @@
                 </div>
             </div>
         </div>
-        @*<div class="row">
-            <div class="col-md-12">                
-                    <div class="form-group text-right">
-                        <input type="button" onclick="UpdateCanteenAmount()" name="Submit" value="Submit" class="btn btn-warning" />
-                    </div>               
-            </div>
-        </div>*@
     </div>
 </div>
-
-
-@*<script>
-    function UpdateCanteenAmount(Emp_ID, CLE_Id, WAG_Id, WRC_Id, CRI_Id) {
-        debugger;
-        var amount = $("#WRC_Amount_" + Emp_ID).val();
-        var Url = siteUrl + "Canteen/UpdateAmount?CLE_Id=" + CLE_Id + "&WAG_Id=" + WAG_Id + "&WRC_Id=" + WRC_Id + "&CRI_Id=" + CRI_Id+"&amount=" + amount;
-        $.ajax({
-            type: "POST",
-            url: Url
-        });
-    }
-</script>*@
-

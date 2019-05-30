@@ -112,8 +112,9 @@ namespace RMERP.DAL.Helpers
             return str;
         }
 
-        public static decimal CalculatePF(Employees emp, decimal PFsum)
+        public static decimal CalculatePT(Employees emp, decimal PFsum)
         {
+
             if (emp.EMP_Gender == true) //Male
             {
                 if (PFsum < 1)
