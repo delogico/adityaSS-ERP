@@ -9,8 +9,8 @@ namespace RMERP.DAL.ViewModel
     {
         public int DES_Id { get; set; }
 
-        [Required(ErrorMessage ="Please add designation title")]
-        [Display( Name ="Designation Title")]
+        [Required(ErrorMessage ="Please add title")]
+        [Display( Name ="Title")]
         public string DES_Title { get; set; }              
     }
 }

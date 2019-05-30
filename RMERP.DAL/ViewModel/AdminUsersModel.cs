@@ -32,6 +32,11 @@ namespace RMERP.DAL.ViewModel
         public int? FRM_Id { get; set; }
         public string FrmName { get; set; }
 
+        public string ADM_FullName()
+        {
+            return string.Concat(this.ADM_FirstName +" "+this.ADM_MiddleName+ " "+this.ADM_LastName);
+        }
+
        
     }
 }

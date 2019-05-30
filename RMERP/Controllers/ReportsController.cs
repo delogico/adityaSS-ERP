@@ -34,7 +34,7 @@ namespace RMERP.Controllers
             return View(manager.PFReports(WAG_Id));
         }
 
-        public FileResult PFReportExcel(int WAG_Id)
+        public async Task<FileResult> PFReportExcel(int WAG_Id)
         {
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
@@ -66,6 +66,7 @@ namespace RMERP.Controllers
                 style.FillBackgroundColor = IndexedColors.Blue.Index;
 
                 // Style the cell with borders all around.
+                style.WrapText = true;
                 style.BorderBottom = (BorderStyle.Thin);
                 style.BottomBorderColor = (IndexedColors.Black.Index);
                 style.BorderLeft = (BorderStyle.Thin);
@@ -79,6 +80,7 @@ namespace RMERP.Controllers
                 IFont fontcell = workbook.CreateFont();
                 fontcell.Color = (IndexedColors.White.Index);
                 fontcell.IsBold = true;
+                fontcell.FontHeightInPoints = ((short)10);
                 style.SetFont(fontcell);
 
                 IRow row = excelSheet.CreateRow(0);
@@ -94,36 +96,47 @@ namespace RMERP.Controllers
                 //excelSheet.AutoSizeColumn(1);
                 ICell cell0 = row.CreateCell(0);
                 cell0.SetCellValue("UAN");
+                excelSheet.SetColumnWidth(0, (int)((18 + 0.72) * 256));
                 cell0.CellStyle = style;
                 ICell cell1 = row.CreateCell(1);
                 cell1.SetCellValue("MEMBER NAME");
+                excelSheet.SetColumnWidth(1, (int)((25 + 0.72) * 256));
                 cell1.CellStyle = style;
                 ICell cell2 = row.CreateCell(2);
                 cell2.SetCellValue("GROSS WAGES");
+                excelSheet.SetColumnWidth(2, (int)((18 + 0.72) * 256));
                 cell2.CellStyle = style;
                 ICell cell3 = row.CreateCell(3);
                 cell3.SetCellValue("EPF WAGES");
+                excelSheet.SetColumnWidth(3, (int)((18 + 0.72) * 256));
                 cell3.CellStyle = style;
                 ICell cell4 = row.CreateCell(4);
                 cell4.SetCellValue("EPS WAGES");
+                excelSheet.SetColumnWidth(4, (int)((18 + 0.72) * 256));
                 cell4.CellStyle = style;
                 ICell cell5 = row.CreateCell(5);
                 cell5.SetCellValue("EDLI WAGES");
+                excelSheet.SetColumnWidth(5, (int)((18 + 0.72) * 256));
                 cell5.CellStyle = style;
                 ICell cell6 = row.CreateCell(6);
                 cell6.SetCellValue("EPF CONTRI REMITTED");
+                excelSheet.SetColumnWidth(6, (int)((18 + 0.72) * 256));
                 cell6.CellStyle = style;
                 ICell cell7 = row.CreateCell(7);
                 cell7.SetCellValue("EPS CONTRI REMITTED");
+                excelSheet.SetColumnWidth(7, (int)((18 + 0.72) * 256));
                 cell7.CellStyle = style;
                 ICell cell8 = row.CreateCell(8);
-                cell8.SetCellValue("EPF_EPS_DIFF_REMITTED");
+                cell8.SetCellValue("EPF EPS DIFF REMITTED");
+                excelSheet.SetColumnWidth(8, (int)((18 + 0.72) * 256));
                 cell8.CellStyle = style;
                 ICell cell9 = row.CreateCell(9);
                 cell9.SetCellValue("NCP DAYS");
+                excelSheet.SetColumnWidth(9, (int)((18 + 0.72) * 256));
                 cell9.CellStyle = style;
                 ICell cell10 = row.CreateCell(10);
                 cell10.SetCellValue("REFUND OF ADVANCES");
+                excelSheet.SetColumnWidth(10, (int)((18 + 0.72) * 256));
                 cell10.CellStyle = style;
 
                 List<PFReportVM> PFReportVMs = manager.PFReports(WAG_Id);
@@ -149,7 +162,7 @@ namespace RMERP.Controllers
             }
             using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
             {
-                stream.CopyToAsync(memory);
+                await stream.CopyToAsync(memory);
             }
             memory.Position = 0;
             new FileInfo(Path.Combine(newPath, fileName)).Delete();
@@ -240,6 +253,7 @@ namespace RMERP.Controllers
 
 
                 // Style the cell with borders all around.
+                style.WrapText = true;
                 style.BorderBottom = (BorderStyle.Thin);
                 style.BottomBorderColor = (IndexedColors.Black.Index);
                 style.BorderLeft = (BorderStyle.Thin);
@@ -259,19 +273,22 @@ namespace RMERP.Controllers
                 CellHeader.SetCellValue("ESIC SALEX TAX " + WAG_Month);
                 CellHeader.CellStyle = styleHeader;
                 CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 6));
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0,5));
 
 
                 row = excelSheet.CreateRow(1);
                 ICell cell0 = row.CreateCell(0);
                 cell0.SetCellValue("IP Number");
+                excelSheet.SetColumnWidth(0, (int)((20 + 0.72) * 256));
                 cell0.CellStyle = style;
                 ICell cell1 = row.CreateCell(1);
                 cell1.SetCellValue("IP Name");
+                excelSheet.SetColumnWidth(1, (int)((25 + 0.72) * 256));
                 cell1.CellStyle = style;
                 ICell cell2 = row.CreateCell(2);
                 cell2.SetCellValue("No of Days for which wages paid/payable during the month");
                 cell2.CellStyle = style;
+                excelSheet.SetColumnWidth(2, (int)((22 + 0.72) * 256));
                 ICell cell3 = row.CreateCell(3);
                 cell3.SetCellValue("Total Monthly Wages");
                 cell3.CellStyle = style;
@@ -281,6 +298,7 @@ namespace RMERP.Controllers
                 ICell cell5 = row.CreateCell(5);
                 cell5.SetCellValue("Last Working Day");
                 cell5.CellStyle = style;
+                excelSheet.SetColumnWidth(5, (int)((22 + 0.72) * 256));
 
                 List<ESICReportVM> ESICReportVMS = manager.ESICReports(WAG_Id);
                 int rowCount = 2;
@@ -755,6 +773,367 @@ namespace RMERP.Controllers
                 
 
 
+
+                workbook.Write(fs);
+            }
+            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            new FileInfo(Path.Combine(newPath, fileName)).Delete();
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
+
+        public async Task<FileResult> PayTaxExcel(int WAG_Id)
+        {
+            ReportsManager manager = new ReportsManager(_context);
+            WageProcessManager wageProcess = new WageProcessManager(_context);
+            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+            string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
+
+            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+            string fileName = "Pay Tax_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
+            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
+            var memory = new MemoryStream();
+            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook;
+                workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("Template");
+                IFont font = workbook.CreateFont();
+                font.IsBold = true;
+                font.FontHeightInPoints = ((short)40);
+                font.FontName = ("Cambria");
+                font.Underline = FontUnderlineType.Single;
+                font.Color = IndexedColors.Brown.Index;
+
+                ICellStyle styleHeader = workbook.CreateCellStyle();
+                styleHeader.FillBackgroundColor = HSSFColor.Aqua.Index;
+                styleHeader.SetFont(font);
+
+                ICellStyle styleAmount = workbook.CreateCellStyle();
+                styleAmount.FillBackgroundColor = IndexedColors.Yellow.Index;
+                styleAmount.FillPattern = FillPattern.SolidForeground;
+                styleAmount.FillForegroundColor = IndexedColors.Yellow.Index;
+                styleAmount.BorderBottom = (BorderStyle.Thin);
+                styleAmount.BottomBorderColor = (IndexedColors.Black.Index);
+                styleAmount.BorderLeft = (BorderStyle.Thin);
+                styleAmount.LeftBorderColor = (IndexedColors.Black.Index);
+                styleAmount.BorderRight = (BorderStyle.Thin);
+                styleAmount.RightBorderColor = (IndexedColors.Black.Index);
+                styleAmount.BorderTop = (BorderStyle.Thin);
+                styleAmount.TopBorderColor = (IndexedColors.Black.Index);
+
+                // Style the cell with font color white
+                IFont fontcell = workbook.CreateFont();
+                fontcell.IsBold = true;
+
+                IFont fontClient = workbook.CreateFont();
+                fontClient.IsBold = true;
+                fontClient.FontHeightInPoints = ((short)15);
+
+                IFont fontcellSub = workbook.CreateFont();
+                fontcellSub.IsBold = true;
+                fontcellSub.FontHeightInPoints = ((short)18);
+
+                // Grey25Percent background
+                ICellStyle style = workbook.CreateCellStyle();
+                ICellStyle styleTotal = workbook.CreateCellStyle();
+                ICellStyle styleClient = workbook.CreateCellStyle();
+                ICellStyle styleSub = workbook.CreateCellStyle();
+                ICellStyle styleBorder = workbook.CreateCellStyle();
+
+                styleTotal.FillForegroundColor = IndexedColors.BrightGreen.Index;
+                styleTotal.FillPattern = FillPattern.SolidForeground;
+                styleTotal.FillBackgroundColor = IndexedColors.BrightGreen.Index;
+                styleTotal.SetFont(fontClient);
+
+                styleClient.SetFont(fontClient);
+                styleSub.SetFont(fontcellSub);
+                //#77bf2a
+
+                // Style the cell with borders all around.
+                style.WrapText = true;
+                style.VerticalAlignment = VerticalAlignment.Center;
+                style.BorderBottom = (BorderStyle.Thin);
+                style.BottomBorderColor = (IndexedColors.Black.Index);
+                style.BorderLeft = (BorderStyle.Thin);
+                style.LeftBorderColor = (IndexedColors.Black.Index);
+                style.BorderRight = (BorderStyle.Thin);
+                style.RightBorderColor = (IndexedColors.Black.Index);
+                style.BorderTop = (BorderStyle.Thin);
+                style.TopBorderColor = (IndexedColors.Black.Index);
+                style.FillForegroundColor = IndexedColors.Grey25Percent.Index;
+                style.FillPattern = FillPattern.SolidForeground;
+                style.FillBackgroundColor = HSSFColor.Grey25Percent.Index;
+                style.SetFont(fontcell);
+
+                //Border
+                styleBorder.VerticalAlignment = VerticalAlignment.Center;
+                styleBorder.BorderBottom = (BorderStyle.Thin);
+                styleBorder.BottomBorderColor = (IndexedColors.Black.Index);
+                styleBorder.BorderLeft = (BorderStyle.Thin);
+                styleBorder.LeftBorderColor = (IndexedColors.Black.Index);
+                styleBorder.BorderRight = (BorderStyle.Thin);
+                styleBorder.RightBorderColor = (IndexedColors.Black.Index);
+                styleBorder.BorderTop = (BorderStyle.Thin);
+                styleBorder.TopBorderColor = (IndexedColors.Black.Index);
+
+                IRow row = excelSheet.CreateRow(0);
+                ICell CellHeader = row.CreateCell(0);
+                CellHeader.SetCellValue("Reliable");
+                CellHeader.CellStyle = styleHeader;
+                CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 9));
+
+                IRow rowSub = excelSheet.CreateRow(1);
+                ICell CellSub = rowSub.CreateCell(0);
+                CellSub.SetCellValue("SECURITY SERVICES");
+                CellSub.CellStyle = styleSub;
+                CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 9));
+
+                IRow rowAdd1 = excelSheet.CreateRow(2);
+                ICell CellAdd1 = rowAdd1.CreateCell(0);
+                CellAdd1.SetCellValue("G-9, Malti Tower, ‘E’ Ward, Near Kiran Bungalow, Tarabai Park, Kolhapur – 416 003,");
+                CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 9));
+
+                IRow rowAdd2 = excelSheet.CreateRow(3);
+                ICell CellAdd2 = rowAdd2.CreateCell(0);
+                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : reliable.manpower@yahoo.com");
+                CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 9));
+
+                IRow rowSubHeading = excelSheet.CreateRow(4);
+                ICell CellSubHeading = rowSubHeading.CreateCell(0);
+                CellSubHeading.SetCellValue("DETAILS OF PAY TAX " + WAG_Month);
+                CellSubHeading.CellStyle = styleClient;
+                CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 9));
+
+                row = excelSheet.CreateRow(5);
+                ICell cellPTRC = row.CreateCell(0);
+                cellPTRC.SetCellValue("PTRC No - 27565016092");               
+                excelSheet.AddMergedRegion(new CellRangeAddress(5, 5, 0, 9));
+
+                row = excelSheet.CreateRow(6);
+                row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
+                ICell cell0 = row.CreateCell(0);
+                cell0.SetCellValue("SR. NO.");
+                cell0.CellStyle = style;
+                ICell cell1 = row.CreateCell(1);
+                cell1.SetCellValue("UNIT");
+                excelSheet.SetColumnWidth(1, (int)((25 + 0.72) * 256));//A
+                cell1.CellStyle = style;
+                ICell cell2 = row.CreateCell(2);
+                cell2.SetCellValue("Upto 7500");
+                cell2.CellStyle = style;
+                ICell cell3 = row.CreateCell(3);
+                cell3.SetCellValue("Upto 7500 Ladies");
+                cell3.CellStyle = style;
+                ICell cell4 = row.CreateCell(4);
+                cell4.SetCellValue("Upto 10000");
+                cell4.CellStyle = style;
+                ICell cell5 = row.CreateCell(5);
+                cell5.SetCellValue("Upto 10000 Ladies");
+                cell5.CellStyle = style;
+                ICell cell6 = row.CreateCell(6);
+                cell6.SetCellValue("Above 10000");
+                cell6.CellStyle = style;
+                ICell cell7 = row.CreateCell(7);
+                cell7.SetCellValue("Above 10000 Ladies");
+                cell7.CellStyle = style;
+                ICell cell8 = row.CreateCell(8);
+                cell8.SetCellValue("STREGNTH");
+                cell8.CellStyle = style;
+                ICell cell9 = row.CreateCell(9);
+                cell9.SetCellValue("AMOUNT");
+                cell9.CellStyle = style;
+
+                List<PayTaxReportVM> PayTaxReports = manager.PayTaxReports(WAG_Id);
+                int rowCount = 7, count = 1;
+                int UpTo7500 = 0, UpTo7500Ladies = 0, UpTo10000 = 0, UpTo10000Ladies = 0, Above10000 = 0, Above10000Ladies = 0, Strength = 0 ;
+                decimal Amount = 0M;
+                foreach (var item in PayTaxReports)
+                {
+                    row = excelSheet.CreateRow(rowCount);
+                    row.HeightInPoints = (float)(1.5 * excelSheet.DefaultRowHeightInPoints);
+                    row.CreateCell(0).SetCellValue(count);
+                    row.CreateCell(1).SetCellValue(item.CLI_Name);
+                    row.CreateCell(2).SetCellValue(item.UpTo7500);
+                    row.CreateCell(3).SetCellValue(item.UpTo7500Ladies);
+                    row.CreateCell(4).SetCellValue(item.UpTo10000);
+                    row.CreateCell(5).SetCellValue(item.UpTo10000Ladies);
+                    row.CreateCell(6).SetCellValue(item.Above10000);
+                    row.CreateCell(7).SetCellValue(item.Above10000Ladies);
+                    row.CreateCell(8).SetCellValue(item.STREGNTH());
+                    row.CreateCell(9).SetCellValue(Convert.ToDouble(item.AMOUNT()));
+                    UpTo7500 = UpTo7500 + item.UpTo7500;
+                    UpTo7500Ladies = UpTo7500Ladies + item.UpTo7500Ladies;
+                    UpTo10000 = UpTo10000 + item.UpTo10000;
+                    UpTo10000Ladies = UpTo10000Ladies + item.UpTo10000Ladies;
+                    Above10000 = Above10000 + item.Above10000;
+                    Above10000Ladies = Above10000Ladies + item.Above10000Ladies;
+                    Strength = Strength + item.STREGNTH();
+                    Amount = Amount + item.AMOUNT();
+                    rowCount++;
+                    count++;
+                }
+                row = excelSheet.CreateRow(rowCount);
+
+                ICell cellTotal = row.CreateCell(0);
+                cellTotal.SetCellValue("Total");
+                cellTotal.CellStyle = style;
+                ICell cellEmpty = row.CreateCell(1);
+                cellEmpty.CellStyle = style;
+                excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 1));
+
+                ICell cellTotal2 = row.CreateCell(2);
+                cellTotal2.SetCellValue(UpTo7500);
+                cellTotal2.CellStyle = style;
+                ICell cellTotal3 = row.CreateCell(3);
+                cellTotal3.SetCellValue(UpTo7500Ladies);
+                cellTotal3.CellStyle = style;
+                ICell cellTotal4 = row.CreateCell(4);
+                cellTotal4.SetCellValue(UpTo10000);
+                cellTotal4.CellStyle = style;
+                ICell cellTotal5 = row.CreateCell(5);
+                cellTotal5.SetCellValue(UpTo10000Ladies);
+                cellTotal5.CellStyle = style;
+                ICell cellTotal6 = row.CreateCell(6);
+                cellTotal6.SetCellValue(Above10000);
+                cellTotal6.CellStyle = style;
+                ICell cellTotal7 = row.CreateCell(7);
+                cellTotal7.SetCellValue(Above10000Ladies);
+                cellTotal7.CellStyle = style;
+                ICell cellTotal8 = row.CreateCell(8);
+                cellTotal8.SetCellValue(Strength);
+                cellTotal8.CellStyle = style;
+                ICell cellTotal9 = row.CreateCell(9);
+                cellTotal9.SetCellValue(Convert.ToDouble(Amount));
+                cellTotal9.CellStyle = style;
+
+                row = excelSheet.CreateRow(rowCount+2);
+                ICell cellSummary = row.CreateCell(1);
+                cellSummary.SetCellValue("GROSS SALARY");
+                cellSummary.CellStyle = style;               
+                ICell cellEmp = row.CreateCell(2);
+                cellEmp.SetCellValue("NO OF EMP.");
+                cellEmp.CellStyle = style;                
+                ICell cellRate = row.CreateCell(3);
+                cellRate.SetCellValue("RATE");
+                cellRate.CellStyle = style;
+                ICell cellTtl = row.CreateCell(4);
+                cellTtl.SetCellValue("TOTAL");
+                cellTtl.CellStyle = style;
+
+                row = excelSheet.CreateRow(rowCount + 3);
+                ICell cellSummary1 = row.CreateCell(1);
+                cellSummary1.SetCellValue("UP TO 7500");                
+                cellSummary1.CellStyle = styleBorder;
+                CellUtil.SetAlignment(cellSummary1, workbook, (short)HorizontalAlignment.Center);
+                ICell cellEmp1 = row.CreateCell(2);
+                cellEmp1.SetCellValue(UpTo7500);
+                cellEmp1.CellStyle = styleBorder;
+                ICell cellRate1 = row.CreateCell(3);
+                cellRate1.SetCellValue(0);
+                cellRate1.CellStyle = styleBorder;
+                ICell cellTtl1 = row.CreateCell(4);
+                cellTtl1.SetCellValue(0);
+                cellTtl1.CellStyle = styleBorder;
+
+                row = excelSheet.CreateRow(rowCount + 4);
+                ICell cellSummary2 = row.CreateCell(1);
+                cellSummary2.SetCellValue("UP TO 7500 Ladies");               
+                cellSummary2.CellStyle = style;
+                CellUtil.SetAlignment(cellSummary2, workbook, (short)HorizontalAlignment.Center);
+                ICell cellEmp2 = row.CreateCell(2);
+                cellEmp2.SetCellValue(UpTo7500Ladies);
+                cellEmp2.CellStyle = styleBorder;
+                ICell cellRate2 = row.CreateCell(3);
+                cellRate2.SetCellValue(0);
+                cellRate2.CellStyle = styleBorder;
+                ICell cellTtl2 = row.CreateCell(4);
+                cellTtl2.SetCellValue(0);
+                cellTtl2.CellStyle = styleBorder;
+
+                row = excelSheet.CreateRow(rowCount + 5);
+                ICell cellSummary3 = row.CreateCell(1);
+                cellSummary3.SetCellValue("7500 TO 10000");                
+                cellSummary3.CellStyle = styleBorder;
+                CellUtil.SetAlignment(cellSummary3, workbook, (short)HorizontalAlignment.Center);
+                ICell cellEmp3 = row.CreateCell(2);
+                cellEmp3.SetCellValue(UpTo10000);
+                cellEmp3.CellStyle = styleBorder;
+                ICell cellRate3 = row.CreateCell(3);
+                cellRate3.SetCellValue(175);
+                cellRate3.CellStyle = styleBorder;
+                ICell cellTtl3 = row.CreateCell(4);
+                cellTtl3.SetCellValue((175* UpTo10000));
+                cellTtl3.CellStyle = styleBorder;
+
+                row = excelSheet.CreateRow(rowCount + 6);
+                ICell cellSummary4 = row.CreateCell(1);
+                cellSummary4.SetCellValue("UP TO 10000 Ladies");                
+                cellSummary4.CellStyle = style;
+                CellUtil.SetAlignment(cellSummary4, workbook, (short)HorizontalAlignment.Center);
+                ICell cellEmp4 = row.CreateCell(2);
+                cellEmp4.SetCellValue(UpTo10000Ladies);
+                cellEmp4.CellStyle = styleBorder;
+                ICell cellRate4 = row.CreateCell(3);
+                cellRate4.SetCellValue(0);
+                cellRate4.CellStyle = styleBorder;
+                ICell cellTtl4 = row.CreateCell(4);
+                cellTtl4.SetCellValue(0);
+                cellTtl4.CellStyle = styleBorder;
+
+                row = excelSheet.CreateRow(rowCount + 7);
+                ICell cellSummary5 = row.CreateCell(1);
+                cellSummary5.SetCellValue("ABOVE 10000");              
+                cellSummary5.CellStyle = styleBorder;
+                CellUtil.SetAlignment(cellSummary5, workbook, (short)HorizontalAlignment.Center);
+                ICell cellEmp5 = row.CreateCell(2);
+                cellEmp5.SetCellValue(Above10000);
+                cellEmp5.CellStyle = styleBorder;
+                ICell cellRate5 = row.CreateCell(3);
+                cellRate5.SetCellValue(200);
+                cellRate5.CellStyle = styleBorder;
+                ICell cellTtl5 = row.CreateCell(4);
+                cellTtl5.SetCellValue((200* Above10000));
+                cellTtl5.CellStyle = styleBorder;
+
+                row = excelSheet.CreateRow(rowCount + 8);
+                ICell cellSummary6 = row.CreateCell(1);
+                cellSummary6.SetCellValue("ABOVE 10000 Ladies");               
+                cellSummary6.CellStyle = style;
+                CellUtil.SetAlignment(cellSummary6, workbook, (short)HorizontalAlignment.Center);
+                ICell cellEmp6 = row.CreateCell(2);
+                cellEmp6.SetCellValue(Above10000Ladies);
+                cellEmp6.CellStyle = styleBorder;
+                ICell cellRate6 = row.CreateCell(3);
+                cellRate6.SetCellValue(200);
+                cellRate6.CellStyle = styleBorder;
+                ICell cellTtl6 = row.CreateCell(4);
+                cellTtl6.SetCellValue((200 * Above10000Ladies));
+                cellTtl6.CellStyle = styleBorder;
+
+                row = excelSheet.CreateRow(rowCount + 9);
+                ICell cellSummaryFinal = row.CreateCell(1);
+                cellSummaryFinal.SetCellValue("Total");               
+                cellSummaryFinal.CellStyle = style;
+                CellUtil.SetAlignment(cellSummaryFinal, workbook, (short)HorizontalAlignment.Center);
+                ICell cellEmpFinal = row.CreateCell(2);
+                cellEmpFinal.SetCellValue(Strength);
+                cellEmpFinal.CellStyle = style;
+                ICell cellRateFinal = row.CreateCell(3);
+                cellRateFinal.SetCellValue("");
+                cellRateFinal.CellStyle = style;
+                ICell cellTtlFinal = row.CreateCell(4);
+                cellTtlFinal.SetCellValue(Convert.ToDouble(Amount));
+                cellTtlFinal.CellStyle = style;
 
                 workbook.Write(fs);
             }
