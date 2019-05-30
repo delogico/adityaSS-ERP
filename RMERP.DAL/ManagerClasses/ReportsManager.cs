@@ -159,5 +159,65 @@ namespace RMERP.DAL.ManagerClasses
             }
             return reports;
         }
+
+        public List<PayTaxReportVM> PayTaxReports(int WAG_Id)
+        {
+            List<PayTaxReportVM> reports = new List<PayTaxReportVM>();
+            WageRegisterManager registerManager = new WageRegisterManager(_context);
+            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersByWAG_Id(WAG_Id);
+            foreach (var item in wage_Registers.Select(m => new { m.CLI_Id, m.CLI_.CLI_Name }).Distinct())
+            {
+                PayTaxReportVM report = new PayTaxReportVM();
+                report.CLI_Id = item.CLI_Id;
+                report.CLI_Name = item.CLI_Name;               
+                List<Wage_Register> register = registerManager.GetWageRegisters(WAG_Id, item.CLI_Id);
+                int UpTo7500 = 0, UpTo7500Ladies = 0, UpTo10000=0, UpTo10000Ladies=0, Above10000=0, Above10000Ladies=0;
+                foreach (var emp in register)
+                {
+                    if (emp.WAR_FinalTotal > 0 && emp.WAR_FinalTotal <= 7500)
+                    {
+                        if (emp.EMP_.EMP_Gender.Equals(true)) //Male
+                        {
+                            UpTo7500++;
+                        }
+                        else
+                        {
+                            UpTo7500Ladies++;
+                        }
+                       
+                    }
+                    else if (emp.WAR_FinalTotal > 7500 && emp.WAR_FinalTotal <= 10000)
+                    {
+                        if (emp.EMP_.EMP_Gender.Equals(true)) //Male
+                        {
+                            UpTo10000++;
+                        }
+                        else
+                        {
+                            UpTo10000Ladies++;
+                        }
+                    }
+                    else if (emp.WAR_FinalTotal > 10000)
+                    {
+                        if (emp.EMP_.EMP_Gender.Equals(true)) //Male
+                        {
+                            Above10000++;
+                        }
+                        else
+                        {
+                            Above10000Ladies++;
+                        }
+                    }
+                }
+                report.UpTo7500 = UpTo7500;
+                report.UpTo7500Ladies = UpTo7500Ladies;
+                report.UpTo10000 = UpTo10000;
+                report.UpTo10000Ladies = UpTo10000Ladies;
+                report.Above10000 = Above10000;
+                report.Above10000Ladies = Above10000Ladies;
+                reports.Add(report);
+            }
+            return reports;
+        }
     }
 }

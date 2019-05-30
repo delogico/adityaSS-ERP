@@ -1,6 +1,6 @@
 ﻿@model RMERP.DAL.ViewModel.ClientContactVM
 @{
-    ViewData["Title"] = "Add-Edit Contacts";
+    ViewData["Title"] = Model.CON_Id > 0 ? @Model.CON_FullName : "Create Contact";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
     ViewBag.ButtonTitle = Model.CON_Id > 0 ? "Update Contact" : "Create Contact";
 }

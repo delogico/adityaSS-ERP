@@ -2,7 +2,8 @@
 @using static RMERP.DAL.App_Code.ProjectUtils;
 
 @{
-    ViewData["Title"] = "Add-Edit AdminUsers";
+   // ViewData["Title"] = "Add-Edit AdminUsers";
+    ViewData["Title"] = Model.ADM_Id > 0 ? @Model.ADM_FullName() : "Create AdminUsers";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 

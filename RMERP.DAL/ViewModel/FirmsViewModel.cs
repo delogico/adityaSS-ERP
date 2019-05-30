@@ -8,8 +8,8 @@ namespace RMERP.DAL.ViewModel
     public partial class FirmVM
     {        
         public int FRM_Id { get; set; }
-
-        [Required(ErrorMessage ="Please add firm name")]
+        [Display(Name ="Title")]
+        [Required(ErrorMessage ="Please add firm title")]
         public string FRM_Name { get; set; }
     }
 }
