@@ -1,0 +1,46 @@
+﻿using RMERP.DAL.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace RMERP.DAL.ManagerClasses
+{
+    public class CitiesManager
+    {
+        RMERPContext _context;
+        public CitiesManager(RMERPContext context)
+        {
+            _context = context;
+        }
+        public IEnumerable<Cities> getCityList()
+        {
+            return _context.Cities.OrderBy(m=>m.CITY_Name).ToList();
+        }  
+        public string saveEditCity(Cities cities)
+        {
+            string res = string.Empty;
+            try
+            {
+                if (cities.CITY_Id > 0)
+                {
+                    _context.Cities.Update(cities);
+                }
+                else
+                {
+                    _context.Cities.Add(cities);                   
+                }
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                res= ex.Message;
+            }
+            return res;
+        }
+        public Cities GetCity(int CITY_Id)
+        {
+            return _context.Cities.Find(CITY_Id);
+        }
+    }
+}
