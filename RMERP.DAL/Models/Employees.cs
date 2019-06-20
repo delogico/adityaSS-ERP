@@ -31,7 +31,6 @@ namespace RMERP.DAL.Models
         public string EMP_Pan_Number { get; set; }
         public string EMP_ESIC_Number { get; set; }
         public string EMP_UAN_Number { get; set; }
-        public int DEPT_Id { get; set; }
         public int EMP_EmployeeNumber_Office { get; set; }
         public string EMP_TPC_EmployeeId { get; set; }
         public DateTime EMP_RegisteredOn { get; set; }
@@ -40,7 +39,6 @@ namespace RMERP.DAL.Models
         public DateTime? EMP_InactivatedOn { get; set; }
         public int? ADM_Id_InactivatedBy { get; set; }
 
-        public Departments DEPT_ { get; set; }
         public ICollection<Attendance> Attendance { get; set; }
         public ICollection<Clients_Employees> Clients_Employees { get; set; }
         public ICollection<Employee_Advance> Employee_Advance { get; set; }

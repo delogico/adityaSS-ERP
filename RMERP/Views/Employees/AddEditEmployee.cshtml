@@ -89,13 +89,6 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.DEPT_Id, new { @class = "control-label" })
-                                        @Html.DropDownListFor(m => m.DEPT_Id, new SelectList(ViewBag.deptList, "DEPT_Id", "DEPT_Title"), "Select Department", new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.DEPT_Id, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
                                         @Html.LabelFor(m => m.EMP_FirstName, new { @class = "control-label" })
                                         @Html.TextBoxFor(m => m.EMP_FirstName, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.EMP_FirstName, "", new { @class = "text-danger" })

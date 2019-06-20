@@ -24,7 +24,6 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Client_Requirements> Client_Requirements { get; set; }
         public virtual DbSet<Clients> Clients { get; set; }
         public virtual DbSet<Clients_Employees> Clients_Employees { get; set; }
-        public virtual DbSet<Departments> Departments { get; set; }
         public virtual DbSet<Designations> Designations { get; set; }
         public virtual DbSet<Employee_Advance> Employee_Advance { get; set; }
         public virtual DbSet<Employees> Employees { get; set; }
@@ -373,16 +372,6 @@ namespace RMERP.DAL.Models
                     .HasConstraintName("FK_Clients_Employees_Employees");
             });
 
-            modelBuilder.Entity<Departments>(entity =>
-            {
-                entity.HasKey(e => e.DEPT_Id);
-
-                entity.Property(e => e.DEPT_Title)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-            });
-
             modelBuilder.Entity<Designations>(entity =>
             {
                 entity.HasKey(e => e.DES_Id);
@@ -486,11 +475,6 @@ namespace RMERP.DAL.Models
                     .IsUnicode(false)
                     .HasDefaultValueSql("('Pending')");
 
-                entity.HasOne(d => d.DEPT_)
-                    .WithMany(p => p.Employees)
-                    .HasForeignKey(d => d.DEPT_Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Employees_Departments");
             });
 
             modelBuilder.Entity<Firms>(entity =>

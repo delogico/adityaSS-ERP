@@ -41,8 +41,6 @@
                         <table class="table table-striped custom-table datatable">
                             <thead>
                                 <tr>
-
-                                    <th>Department</th>
                                     <th>Name</th>
                                     <th>DOB</th>
                                     <th>Designation</th>
@@ -56,8 +54,6 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-
-                                        <td>@item.DEPT_Title</td>
                                         <td>@item.EMP_FullName</td>
                                         <td>@DateHelper.getDateWithFormat(@item.EMP_DOB)</td>
                                         <td>@item.EMP_Designation</td>

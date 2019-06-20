@@ -42,7 +42,7 @@ namespace RMERP.DAL.ManagerClasses
         {
             try
             {
-                IEnumerable<Employees> listEmployees = _context.Employees.Include(m => m.DEPT_).OrderBy(m => m.EMP_FirstName).ToList();
+                IEnumerable<Employees> listEmployees = _context.Employees.OrderBy(m => m.EMP_FirstName).ToList();
                 return listEmployees;
             }
             catch (Exception ex)
@@ -54,7 +54,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public Employees GetEmployeeById(int EMP_Id)
         {
-            return _context.Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Include(e=>e.DEPT_).Include(e=>e.Employee_Advance).FirstOrDefault();
+            return _context.Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Include(e=>e.Employee_Advance).FirstOrDefault();
         }
         public string ActiveEmployee(int EmpId, int AdminId)
         {

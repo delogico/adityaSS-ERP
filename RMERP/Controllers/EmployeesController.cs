@@ -39,8 +39,6 @@ namespace RMERP.Controllers
         {
             EMP_Id = (EMP_Id <= 0 ? EmpId : EMP_Id);
             EmployeeManager employeeManager = new EmployeeManager(_context);
-            DepartmentManager departmentManager = new DepartmentManager(_context);
-            ViewBag.deptList = departmentManager.getDepartmentList();
             EmployeeVM employeeVM = new EmployeeVM();
             if (EMP_Id > 0)
             {

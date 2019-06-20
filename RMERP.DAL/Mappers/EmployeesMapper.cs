@@ -28,7 +28,6 @@ namespace RMERP.DAL.Mappers
             emp.EMP_Pan_Number = employee.EMP_Pan_Number;
             emp.EMP_ESIC_Number = employee.EMP_ESIC_Number;
             emp.EMP_UAN_Number = employee.EMP_UAN_Number;
-            emp.DEPT_Id = employee.DEPT_Id;
             emp.EMP_EmployeeNumber_Office = employee.EMP_EmployeeNumber_Office;
             emp.EMP_TPC_EmployeeId = employee.EMP_TPC_EmployeeId;
             emp.EMP_RegisteredOn = employee.EMP_RegisteredOn;
@@ -36,8 +35,6 @@ namespace RMERP.DAL.Mappers
             emp.EMP_IsActive = Convert.ToBoolean(employee.EMP_IsActive);
             emp.EMP_InactivatedOn = employee.EMP_InactivatedOn;
             emp.ADM_Id_InactivatedBy = employee.ADM_Id_InactivatedBy;
-            if (employee.DEPT_ != null)
-                emp.DEPT_ = employee.DEPT_;
             if (employee.Employee_Advance.Count > 0)
                 emp.advances = EmployeeAdvanceMapper.mapAdvances(employee.Employee_Advance.ToList());
             if (employee.Wage_Register_Advances.Count > 0)
@@ -73,7 +70,6 @@ namespace RMERP.DAL.Mappers
             emp.EMP_Pan_Number = employee.EMP_Pan_Number;
             emp.EMP_ESIC_Number = employee.EMP_ESIC_Number;
             emp.EMP_UAN_Number = employee.EMP_UAN_Number;
-            emp.DEPT_Id = employee.DEPT_Id;
             emp.EMP_EmployeeNumber_Office = employee.EMP_EmployeeNumber_Office;
             emp.EMP_TPC_EmployeeId = employee.EMP_TPC_EmployeeId;
             emp.EMP_RegisteredOn = employee.EMP_RegisteredOn;

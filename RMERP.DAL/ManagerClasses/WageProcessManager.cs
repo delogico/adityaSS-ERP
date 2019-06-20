@@ -16,9 +16,9 @@ namespace RMERP.DAL.ManagerClasses
         {
             _context = context;
         }
-        public IEnumerable<Wage_Process> getWageProcessList(int AdminId)
+        public IEnumerable<Wage_Process> getWageProcessList()
         {
-            IEnumerable<Wage_Process> list = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId)).Include(m => m.Attendance).Include(m=>m.Wage_Process_Clients).OrderByDescending(m=>m.WAG_RegisteredOn).ToList();
+            IEnumerable<Wage_Process> list = _context.Wage_Process.Include(m => m.Attendance).Include(m=>m.Wage_Process_Clients).OrderBy(m=>m.WAG_Month).ToList();
             return list;
         }
         public Wage_Process getWageProcessById(int WAG_Id)
