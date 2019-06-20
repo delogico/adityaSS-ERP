@@ -75,10 +75,11 @@ namespace RMERP.Controllers
             ClientsViewModel cv = new ClientsViewModel();
             cv.clientsModel = new ClientsModel();            
             cv.ParametersClientsModel = new ParametersClientsModel();
-            cv.ParametersClientsModel.clientsModel = new ClientsModel();           
+            cv.ParametersClientsModel.clientsModel = new ClientsModel();
+            Clients clients = new Clients();
+            cv.clientsModel.CLI_RegisteredOn = ProjectUtils.DateNow();
             if (id > 0)
-            {
-                Clients clients = new Clients();
+            {                
                 clients=clientsManager.GetClientById(id);
                 ClientId = id;
                 cv.clientsModel.CLI_Id= clients.CLI_Id;

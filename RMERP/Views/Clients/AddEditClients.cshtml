@@ -47,6 +47,8 @@
                         {
                             @Html.HiddenFor(m => m.clientsModel.CLI_Id)
                             @Html.HiddenFor(m => m.clientsModel.CLI_IsActive)
+                            @Html.HiddenFor(m => m.clientsModel.CLI_RegisteredOn)
+                           
                             if (Model.clientsModel.CLI_Id > 0)
                             {
                                 @Html.HiddenFor(m => m.clientsModel.FRM_Id)
