@@ -54,7 +54,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public Employees GetEmployeeById(int EMP_Id)
         {
-            return _context.Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Include(e=>e.Employee_Advance).FirstOrDefault();
+            return _context.Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Include(e=>e.Employee_Advance).Include(m=>m.Employee_Documents).FirstOrDefault();
         }
         public string ActiveEmployee(int EmpId, int AdminId)
         {

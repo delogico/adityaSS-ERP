@@ -71,10 +71,21 @@ namespace RMERP.DAL.ViewModel
 
         [Display(Name = "Employee Number")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Employee number is required")]
-        public int EMP_EmployeeNumber_Office { get; set; }
+        public int EMP_EmployeeNumber_Office { get; set; } = 0;
 
         [Display(Name = "TPC Employee ID")]
         public string EMP_TPC_EmployeeId { get; set; }
+
+        [Display(Name = "Account Name")]
+        public string EMP_Account_Name { get; set; }
+        [Display(Name = "Account Number")]
+        public string EMP_Account_Number { get; set; }
+        [Display(Name = "Bank")]
+        public string EMP_Bank { get; set; }
+        [Display(Name = "Branch")]
+        public string EMP_Branch { get; set; }
+        [Display(Name = "IFSC Code")]
+        public string EMP_Bank_IFSC { get; set; }
 
         [Required]
         public DateTime EMP_RegisteredOn { get; set; }
@@ -107,6 +118,10 @@ namespace RMERP.DAL.ViewModel
         public ICollection<Clients_Employees> Clients_Employees { get; set; }
         public List<EmployeeAdvanceVM> advances { get; set; }
         public List<WageRegisterAdvancesVM> wageRegisterAdvances { get; set; }
+
+        public EmployeeDocumentsVM employee_Document { get; set; }
+        public List<Document_Types> document_Types { get; set; }
+        public List<Employee_Documents> employee_Documents { get; set; }
     }
 }
 

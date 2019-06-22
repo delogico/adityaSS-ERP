@@ -30,7 +30,7 @@
 </ul>
 @{
     @inject IConfiguration Configuration;
-    string ImagePath = Configuration.GetSection("ImagePath").GetSection("APP_DEFAULT_LOGO_IMAGE_PATH").Value + "/" + Configuration.GetSection("ImagePath").GetSection("APP_CLIENTS_LOGO_IMAGE_PATH").Value + "/" + Model.clientsModel.CLI_Id + "/" + Model.clientsModel.CliLogoImage;
+    string ImagePath = Configuration.GetSection("DEFAULT_URL").Value + "/" + Configuration.GetSection("CLIENTS_LOGO_PATH").Value + "/" + Model.clientsModel.CLI_Id + "/" + Model.clientsModel.CliLogoImage;
     string path = (Model.clientsModel.CliLogoImage != null ? ImagePath : "/RMERP_Data/user.jpg");
 }
 <div class="tab-content">
@@ -47,105 +47,113 @@
                         {
                             @Html.HiddenFor(m => m.clientsModel.CLI_Id)
                             @Html.HiddenFor(m => m.clientsModel.CLI_IsActive)
-                            @Html.HiddenFor(m => m.clientsModel.CLI_RegisteredOn)
+                            
                            
                             if (Model.clientsModel.CLI_Id > 0)
                             {
                                 @Html.HiddenFor(m => m.clientsModel.FRM_Id)
                             }
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.FRM_Id, new { @class = "control-label" })
-                                        @Html.DropDownListFor(x => x.clientsModel.FRM_Id, new SelectList(ViewBag.firmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.FRM_Id, "", new { @class = "text-danger" })
-                                    </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.clientsModel.FRM_Id, new { @class = "control-label" })
+                                    @Html.DropDownListFor(x => x.clientsModel.FRM_Id, new SelectList(ViewBag.firmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.clientsModel.FRM_Id, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CLI_International_Domestic, new { @class = "control-label" })
-                                        <label class="radio-inline form-control ">
-                                            @foreach (var CountryRegion in Enum.GetValues(typeof(CountryRegion)))
-                                            {
-                                                <label class="radio-inline">
-                                                    @Html.RadioButtonFor(s => s.clientsModel.CLI_International_Domestic, (int)CountryRegion, (int)CountryRegion == 1 ? (object)new { @checked = true, @id = (int)CountryRegion } : new { @id = (int)CountryRegion })@CountryRegion
-                                                </label>
-                                            }
-                                        </label>
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_International_Domestic, "", new { @class = "text-danger" })
-                                    </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.clientsModel.CLI_International_Domestic, new { @class = "control-label" })
+                                    <label class="radio-inline form-control ">
+                                        @foreach (var CountryRegion in Enum.GetValues(typeof(CountryRegion)))
+                                        {
+                                            <label class="radio-inline">
+                                                @Html.RadioButtonFor(s => s.clientsModel.CLI_International_Domestic, (int)CountryRegion, (int)CountryRegion == 1 ? (object)new { @checked = true, @id = (int)CountryRegion } : new { @id = (int)CountryRegion })@CountryRegion
+                                            </label>
+                                        }
+                                    </label>
+                                    @Html.ValidationMessageFor(x => x.clientsModel.CLI_International_Domestic, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CLI_Name, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.clientsModel.CLI_Name, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Name, "", new { @class = "text-danger" })
-                                    </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.clientsModel.CLI_Name, new { @class = "control-label" })
+                                    @Html.TextBoxFor(m => m.clientsModel.CLI_Name, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.clientsModel.CLI_Name, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CLI_Address, new { @class = "control-label" })
-                                        @Html.TextAreaFor(m => m.clientsModel.CLI_Address, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Address, "", new { @class = "text-danger" })
-                                    </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.clientsModel.CLI_Address, new { @class = "control-label" })
+                                    @Html.TextAreaFor(m => m.clientsModel.CLI_Address, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.clientsModel.CLI_Address, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CITY_Id, new { @class = "control-label" })
-                                        @Html.DropDownListFor(x => x.clientsModel.CITY_Id, new SelectList(ViewBag.cityList, "CITY_Id", "CITY_Name"), "Select City", new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CITY_Id, "", new { @class = "text-danger" })
-                                    </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.clientsModel.CITY_Id, new { @class = "control-label" })
+                                    @Html.DropDownListFor(x => x.clientsModel.CITY_Id, new SelectList(ViewBag.cityList, "CITY_Id", "CITY_Name"), "Select City", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.clientsModel.CITY_Id, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CLI_Pincode, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.clientsModel.CLI_Pincode, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Pincode, "", new { @class = "text-danger" })
-                                    </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.clientsModel.CLI_Pincode, new { @class = "control-label" })
+                                    @Html.TextBoxFor(m => m.clientsModel.CLI_Pincode, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.clientsModel.CLI_Pincode, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CLI_Phone, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.clientsModel.CLI_Phone, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Phone, "", new { @class = "text-danger" })
-                                    </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.clientsModel.CLI_Phone, new { @class = "control-label" })
+                                    @Html.TextBoxFor(m => m.clientsModel.CLI_Phone, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.clientsModel.CLI_Phone, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CLI_Fax, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.clientsModel.CLI_Fax, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Fax, "", new { @class = "text-danger" })
-                                    </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.clientsModel.CLI_Fax, new { @class = "control-label" })
+                                    @Html.TextBoxFor(m => m.clientsModel.CLI_Fax, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.clientsModel.CLI_Fax, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CLI_Email, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.clientsModel.CLI_Email, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Email, "", new { @class = "text-danger" })
-                                    </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.clientsModel.CLI_Email, new { @class = "control-label" })
+                                    @Html.TextBoxFor(m => m.clientsModel.CLI_Email, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.clientsModel.CLI_Email, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.clientsModel.CLI_Email_2, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.clientsModel.CLI_Email_2, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Email_2, "", new { @class = "text-danger" })
-                                    </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.clientsModel.CLI_Email_2, new { @class = "control-label" })
+                                    @Html.TextBoxFor(m => m.clientsModel.CLI_Email_2, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => x.clientsModel.CLI_Email_2, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <div class="col-md-8">
-                                            @Html.LabelFor(m => m.clientsModel.CLI_Logo, new { @class = "control-label" })
-                                            @Html.TextBoxFor(m => m.clientsModel.CLI_Logo, new { @type = "file", @class = "form-control", @onchange = "ShowImagePreviewMain(this);" })
-                                            @Html.ValidationMessageFor(x => x.clientsModel.CLI_Logo, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-8">
+                                        @Html.LabelFor(m => m.clientsModel.CLI_Logo, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.clientsModel.CLI_Logo, new { @type = "file", @class = "form-control", @onchange = "ShowImagePreviewMain(this);" })
+                                        @Html.ValidationMessageFor(x => x.clientsModel.CLI_Logo, "", new { @class = "text-danger" })
 
-                                        </div>
-                                        <div class="col-md-4">
-                                            <img id="ClientImage" src="@path" height="80" width="80" class="img-thumbnail" />
-                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img id="ClientImage" src="@path" height="80" width="80" class="img-thumbnail" />
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.clientsModel.CLI_RegisteredOn, new { @class = "control-label" })
+                                    @Html.EditorFor(m => m.clientsModel.CLI_RegisteredOn, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(x => x.clientsModel.CLI_RegisteredOn, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                           
+                        </div>
 
                             <div class="m-t-20 text-center">
                                 <button class="btn btn-primary">@ViewBag.ButtonTitle</button>

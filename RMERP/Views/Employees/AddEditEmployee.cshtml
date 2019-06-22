@@ -1,6 +1,7 @@
 ﻿@model RMERP.DAL.ViewModel.EmployeeVM
 @using RMERP.Helpers
 @using static RMERP.DAL.App_Code.ProjectUtils;
+@using Microsoft.Extensions.Configuration;
 
 @{
     ViewData["Title"] = "Add-Edit Employee";
@@ -27,7 +28,7 @@
                 $('.nav li').not('.active').removeClass('disabled');
             }
             var tab = GetParameterValues('tab');
-            var EMP_Id = GetParameterValues('EMP_Id');           
+            var EMP_Id = GetParameterValues('EMP_Id');
             if (tab == "View") {
                 $('select', 'form').attr('disabled', true).attr('readonly', true);
                 $('input', 'form').attr('disabled', true).attr('readonly', true);
@@ -67,6 +68,7 @@
 <h3>@Model.EMP_FullName</h3>
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#AddEditEmployee">Edit data</a></li>
+    <li><a data-toggle="tab" href="#EmployeeDocuments">Employee Documents</a></li>
     <li><a data-toggle="tab" href="#EmployeeAdvance">Employee Advance</a></li>
     <li><a data-toggle="tab" href="#KitInfo">Kit Information</a></li>
 </ul>
@@ -75,9 +77,9 @@
     <div id="AddEditEmployee" class="tab-pane fade in active">
         <div class="modal-dialog modelLeftSide">
             <div class="modal-content modal-lg">
-                <div class="modal-header">
+                @*<div class="modal-header">
 
-                </div>
+                    </div>*@
                 <div class="modal-body">
                     <div class="m-b-30">
                         @using (Html.BeginForm("AddEditEmployees", "Employees", FormMethod.Post))
@@ -86,7 +88,11 @@
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             @Html.HiddenFor(m => m.EMP_Id)
                             @Html.HiddenFor(m => m.EMP_IsActive)
-                            <div class="row">
+
+                            <p class="div-title">Employee Details</p>
+                            <br />
+
+                            <div class="row pb-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.EMP_FirstName, new { @class = "control-label" })
@@ -106,20 +112,6 @@
                                         @Html.LabelFor(m => m.EMP_SurName, new { @class = "control-label" })
                                         @Html.TextBoxFor(m => m.EMP_SurName, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.EMP_SurName, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.EMP_Aadhar_Name, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_Aadhar_Name, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.EMP_Aadhar_Name, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.EMP_Aadhar_Number, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_Aadhar_Number, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.EMP_Aadhar_Number, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -194,6 +186,40 @@
                                         @Html.ValidationMessageFor(m => m.EMP_Designation, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
+
+                                @*<div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.EMP_EmployeeNumber_Office, new { @class = "control-label" })
+                                            @Html.TextBoxFor(m => m.EMP_EmployeeNumber_Office, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.EMP_EmployeeNumber_Office, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.EMP_TPC_EmployeeId, new { @class = "control-label" })
+                                            @Html.TextBoxFor(m => m.EMP_TPC_EmployeeId, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.EMP_TPC_EmployeeId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>*@
+                            </div>
+
+                            <p class="div-title">Legal Details</p>
+                            <br />
+                            <div class="row pb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.EMP_Aadhar_Name, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.EMP_Aadhar_Name, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.EMP_Aadhar_Name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.EMP_Aadhar_Number, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.EMP_Aadhar_Number, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.EMP_Aadhar_Number, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.EMP_Pan_Number, new { @class = "control-label" })
@@ -215,20 +241,46 @@
                                         @Html.ValidationMessageFor(m => m.EMP_UAN_Number, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
+                            </div>
+                            <p class="div-title">Bank Details</p>
+                            <br />
+                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.EMP_EmployeeNumber_Office, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_EmployeeNumber_Office, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.EMP_EmployeeNumber_Office, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.EMP_Account_Name, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.EMP_Account_Name, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.EMP_Account_Name, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.EMP_TPC_EmployeeId, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_TPC_EmployeeId, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.EMP_TPC_EmployeeId, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.EMP_Account_Number, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.EMP_Account_Number, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.EMP_Account_Number, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.EMP_Bank, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.EMP_Bank, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.EMP_Bank, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.EMP_Branch, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.EMP_Branch, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.EMP_Branch, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.EMP_Bank_IFSC, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.EMP_Bank_IFSC, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.EMP_Bank_IFSC, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="m-t-20 text-center">
@@ -236,6 +288,82 @@
                             </div>
                         }
 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="EmployeeDocuments" class="tab-pane fade">
+        <div>
+            <div class="content container-fluid">
+                <div class="row" style="margin-bottom: 20px;margin-left: 2px;">
+                    <div class="col-md-6" style="border: 1px solid #aaa; padding: 10px;">
+                        @using (Html.BeginForm("AddEmployeeDocuments", "Employees", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.HiddenFor(m => m.employee_Document.EMD_Id)
+                            @Html.HiddenFor(m => m.EMP_Id)
+
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <div class="col-md-3">Select File:</div>
+                                    <div class="col-md-9">
+                                        @Html.TextBoxFor(m => m.employee_Document.EMD_Document, new { @type = "file", @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.employee_Document.EMD_Document, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <div class="col-md-3">Choose Type:</div>
+                                    <div class="col-md-9">
+                                        @Html.DropDownListFor(m => m.employee_Document.DOT_Id, new SelectList(ViewBag.DocumentTypes, "DOT_Id", "DOT_Title"), "Select Type", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.employee_Document.DOT_Id, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 m-t-20 text-right">
+                                    <input class="btn btn-primary" type="submit" value="Upload Document" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped custom-table m-b-0">
+                                <thead>
+                                    <tr>
+                                        <th>Document Type</th>
+                                        <th>Title</th>
+                                        <th>Download</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.employee_Documents != null && Model.employee_Documents.Count() > 0)
+                                    {
+                                        @inject IConfiguration _configuration;
+                                        string DocumentPath = _configuration.GetSection("DEFAULT_URL").Value + "/" + _configuration.GetSection("EMPLOYEE_DOCUMENT_PATH").Value;
+                                        
+                                        @foreach (var item in Model.employee_Documents)
+                                        {
+                                            string path = DocumentPath+ "/" +item.EMD_Id+"/"+item.EMD_Name;                                            
+                                            <tr>
+                                                <td>@item.DOT_.DOT_Title</td>
+                                                <td>@item.EMD_Name </td>
+                                                <td><a href='@Url.Action("DownloadDocument","Employees",new { EMD_Id=item.EMD_Id})' title="Download"><i class="fa fa-download m-r-5"></i> Download</a></td>
+                                                <td><a href='@Url.Action("DeleteDocument","Employees",new { EMD_Id=item.EMD_Id})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Delete</a></td>
+                                            </tr>
+                                        }
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

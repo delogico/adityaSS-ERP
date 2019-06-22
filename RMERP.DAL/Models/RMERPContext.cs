@@ -25,7 +25,9 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Clients> Clients { get; set; }
         public virtual DbSet<Clients_Employees> Clients_Employees { get; set; }
         public virtual DbSet<Designations> Designations { get; set; }
+        public virtual DbSet<Document_Types> Document_Types { get; set; }
         public virtual DbSet<Employee_Advance> Employee_Advance { get; set; }
+        public virtual DbSet<Employee_Documents> Employee_Documents { get; set; }
         public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<Firms> Firms { get; set; }
         public virtual DbSet<ProfessionalTaxCalculation> ProfessionalTaxCalculation { get; set; }
@@ -382,6 +384,16 @@ namespace RMERP.DAL.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<Document_Types>(entity =>
+            {
+                entity.HasKey(e => e.DOT_Id);
+
+                entity.Property(e => e.DOT_Title)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Employee_Advance>(entity =>
             {
                 entity.HasKey(e => e.ADV_Id);
@@ -397,6 +409,32 @@ namespace RMERP.DAL.Models
                     .HasConstraintName("FK_Employee_Advance_Employees");
             });
 
+            modelBuilder.Entity<Employee_Documents>(entity =>
+            {
+                entity.HasKey(e => e.EMD_Id);
+
+                entity.Property(e => e.EMD_Name)
+                    .IsRequired()
+                    .HasMaxLength(1000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EMD_UploadedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.DOT_)
+                    .WithMany(p => p.Employee_Documents)
+                    .HasForeignKey(d => d.DOT_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Employee_Documents_Document_Types");
+
+                entity.HasOne(d => d.EMP_)
+                    .WithMany(p => p.Employee_Documents)
+                    .HasForeignKey(d => d.EMP_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Employee_Documents_Employees");
+            });
+
             modelBuilder.Entity<Employees>(entity =>
             {
                 entity.HasKey(e => e.EMP_Id);
@@ -409,8 +447,28 @@ namespace RMERP.DAL.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.EMP_Account_Name)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EMP_Account_Number)
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.EMP_Address)
                     .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EMP_Bank)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EMP_Bank_IFSC)
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EMP_Branch)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.EMP_Contact_Primary)
@@ -474,7 +532,6 @@ namespace RMERP.DAL.Models
                     .HasMaxLength(12)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('Pending')");
-
             });
 
             modelBuilder.Entity<Firms>(entity =>
