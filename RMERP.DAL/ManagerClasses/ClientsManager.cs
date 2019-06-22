@@ -63,7 +63,7 @@ namespace RMERP.DAL.ManagerClasses
             try
             {
                 clients.CLI_Att_MonthReal = true;
-                string ImagePath = Configuration.GetSection("ImagePath").GetSection("APP_DEFAULT_FILE_FOLDER_PATH").Value+"/"+ Configuration.GetSection("ImagePath").GetSection("APP_CLIENTS_LOGO_FOLDER_PATH").Value;
+                string ImagePath = Configuration.GetSection("DEFAULT_FOLDER_PATH").Value+"/"+ Configuration.GetSection("CLIENTS_LOGO_PATH").Value;
                 if (!System.IO.Directory.Exists(ImagePath + "/" + clients.CLI_Id))
                 {
                     System.IO.Directory.CreateDirectory(ImagePath + "/" + clients.CLI_Id);
@@ -118,13 +118,13 @@ namespace RMERP.DAL.ManagerClasses
             }
             return new Tuple<string, int>(res, clients.CLI_Id);
         }
-        public Tuple<string, int> saveAddEditClients1(IFormFile file, Clients clients)
+        public async Task<Tuple<string, int>> saveAddEditClients1(IFormFile file, Clients clients)
         {
             string res = string.Empty;
             try
             {
                 clients.CLI_Att_MonthReal = true;
-                string ImagePath = Configuration.GetSection("ImagePath").GetSection("APP_DEFAULT_FILE_FOLDER_PATH").Value + "/" + Configuration.GetSection("ImagePath").GetSection("APP_CLIENTS_LOGO_FOLDER_PATH").Value;
+                string ImagePath = Configuration.GetSection("DEFAULT_FOLDER_PATH").Value + "/" + Configuration.GetSection("CLIENTS_LOGO_PATH").Value;
                 if (!System.IO.Directory.Exists(ImagePath + "/" + clients.CLI_Id))
                 {
                     System.IO.Directory.CreateDirectory(ImagePath + "/" + clients.CLI_Id);
@@ -141,7 +141,7 @@ namespace RMERP.DAL.ManagerClasses
 
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
-                        file.CopyToAsync(stream);
+                       await file.CopyToAsync(stream);
                     }
                     clients.CLI_Logo = file.FileName;
                 }

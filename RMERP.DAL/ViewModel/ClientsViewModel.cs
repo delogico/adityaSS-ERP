@@ -64,7 +64,10 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "TDS rate")]
         public int CLI_TDS_Rate { get; set; }
         public int ADM_Id_RegisterBy { get; set; }
-        public DateTime CLI_RegisteredOn { get; set; }
+        [Display(Name = "Registered On")]
+        [Required(ErrorMessage = "Please select date")]
+        [DataType(DataType.Date)]
+        public DateTime CLI_RegisteredOn { get; set; } = DateTime.Now;
         public bool? CLI_IsActive { get; set; }
 
         [Display(Name = "Logo")]

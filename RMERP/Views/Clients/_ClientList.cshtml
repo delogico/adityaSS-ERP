@@ -3,7 +3,7 @@
 
 @{
     @inject IConfiguration Configuration;
-    string ImagePath = Configuration.GetSection("ImagePath").GetSection("APP_DEFAULT_LOGO_IMAGE_PATH").Value + "/" + Configuration.GetSection("ImagePath").GetSection("APP_CLIENTS_LOGO_IMAGE_PATH").Value;
+    string ImagePath = Configuration.GetSection("DEFAULT_URL").Value + "/" + Configuration.GetSection("CLIENTS_LOGO_PATH").Value;
 
 }
 
@@ -28,7 +28,7 @@
                    
                 </div>
 
-                <h4 class="user-name m-t-10 m-b-0 text-ellipsis"><a>@item.CLI_Name</a></h4>
+                <h4 class="user-name m-t-10 m-b-0"><a>@item.CLI_Name</a></h4>
                 @if (item.Client_Contacts.Where(m => m.CON_isPrimary.Equals(true)).Count() > 0)
                 {
                     <div class="small text-muted">

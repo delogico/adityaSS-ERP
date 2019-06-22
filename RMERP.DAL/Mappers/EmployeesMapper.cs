@@ -30,15 +30,25 @@ namespace RMERP.DAL.Mappers
             emp.EMP_UAN_Number = employee.EMP_UAN_Number;
             emp.EMP_EmployeeNumber_Office = employee.EMP_EmployeeNumber_Office;
             emp.EMP_TPC_EmployeeId = employee.EMP_TPC_EmployeeId;
+
+            emp.EMP_Account_Name = employee.EMP_Account_Name;
+            emp.EMP_Account_Number = employee.EMP_Account_Number;
+            emp.EMP_Bank = employee.EMP_Bank;
+            emp.EMP_Branch = employee.EMP_Branch;
+            emp.EMP_Bank_IFSC = employee.EMP_Bank_IFSC;
+
             emp.EMP_RegisteredOn = employee.EMP_RegisteredOn;
             emp.ADM_Id_RegisteredBy = employee.ADM_Id_RegisteredBy;
             emp.EMP_IsActive = Convert.ToBoolean(employee.EMP_IsActive);
             emp.EMP_InactivatedOn = employee.EMP_InactivatedOn;
             emp.ADM_Id_InactivatedBy = employee.ADM_Id_InactivatedBy;
+
             if (employee.Employee_Advance.Count > 0)
                 emp.advances = EmployeeAdvanceMapper.mapAdvances(employee.Employee_Advance.ToList());
             if (employee.Wage_Register_Advances.Count > 0)
                 emp.wageRegisterAdvances = WageRegisterAdvancesMapper.mapMeModels(employee.Wage_Register_Advances.ToList());
+            if (employee.Employee_Documents.Count > 0)
+                emp.employee_Documents = employee.Employee_Documents.ToList();
             return emp;
         }
 
@@ -72,6 +82,11 @@ namespace RMERP.DAL.Mappers
             emp.EMP_UAN_Number = employee.EMP_UAN_Number;
             emp.EMP_EmployeeNumber_Office = employee.EMP_EmployeeNumber_Office;
             emp.EMP_TPC_EmployeeId = employee.EMP_TPC_EmployeeId;
+            emp.EMP_Account_Name = employee.EMP_Account_Name;
+            emp.EMP_Account_Number = employee.EMP_Account_Number;
+            emp.EMP_Bank = employee.EMP_Bank;
+            emp.EMP_Branch = employee.EMP_Branch;
+            emp.EMP_Bank_IFSC = employee.EMP_Bank_IFSC;
             emp.EMP_RegisteredOn = employee.EMP_RegisteredOn;
             emp.ADM_Id_RegisteredBy = employee.ADM_Id_RegisteredBy;
             emp.EMP_IsActive = Convert.ToBoolean(employee.EMP_IsActive);

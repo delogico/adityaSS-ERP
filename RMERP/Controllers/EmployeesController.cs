@@ -14,6 +14,10 @@ using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using RMERP.DAL.Helpers;
+using System.IO;
+using System.Net;
 
 namespace RMERP.Controllers
 {
@@ -22,10 +26,15 @@ namespace RMERP.Controllers
     {
         private readonly RMERPContext _context;
         public IConfiguration _configuration;
-        public EmployeesController(RMERPContext context)
+        private IHostingEnvironment _hostingEnvironment;
+        private static int Employee_Id;
+        public EmployeesController(RMERPContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
+            _configuration = configuration;
+            _hostingEnvironment = hostingEnvironment;
         }
+
         [Breadcrumb("Employees")]
         public IActionResult Index()
         {
@@ -33,15 +42,18 @@ namespace RMERP.Controllers
             EmployeeManager employeeManager = new EmployeeManager(_context);
             return View(EmployeesMapper.MapEmployees(employeeManager.GetEmployees().ToList()));
         }
+
         [HttpGet]
         [Breadcrumb("Employee Info", FromAction = "Index")]
-        public ActionResult AddEditEmployee(int EMP_Id=0)
+        public ActionResult AddEditEmployee(int EMP_Id = 0)
         {
             EMP_Id = (EMP_Id <= 0 ? EmpId : EMP_Id);
             EmployeeManager employeeManager = new EmployeeManager(_context);
+            DocumentTypesManager typesManager = new DocumentTypesManager(_context);
             EmployeeVM employeeVM = new EmployeeVM();
             if (EMP_Id > 0)
             {
+                Employee_Id = EMP_Id;
                 Employees emp = employeeManager.GetEmployeeById(EMP_Id);
                 employeeVM = EmployeesMapper.MapMe(emp);
             }
@@ -49,12 +61,14 @@ namespace RMERP.Controllers
             {
                 employeeVM.EMP_IsActive = true;
             }
-            
+            ViewBag.DocumentTypes = typesManager.GetDocumentTypes();
             return View(employeeVM);
         }
+
         [HttpPost]
         public ActionResult AddEditEmployees(EmployeeVM employeeVM)
         {
+           
             string res = string.Empty;
             EmployeeManager employeeManager = new EmployeeManager(_context);
             if (ModelState.IsValid)
@@ -64,7 +78,7 @@ namespace RMERP.Controllers
                 employee = EmployeesMapper.MapMeModel(employeeVM);
                 employee.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
                 res = employeeManager.AddEditEmployee(employee);
-            }            
+            }
             if (res == string.Empty)
             {
                 return RedirectToAction("Index");
@@ -72,9 +86,9 @@ namespace RMERP.Controllers
             else
             {
                 TempData["message"] = "Employee data can not Inserted";
-                return RedirectToAction("AddEditEmployee", new { EMP_Id = employeeVM.EMP_Id});
+                return RedirectToAction("AddEditEmployee", new { EMP_Id = employeeVM.EMP_Id });
             }
-           
+
         }
 
         public ActionResult ActiveEmployee(int EMP_Id)
@@ -86,20 +100,20 @@ namespace RMERP.Controllers
             if (res != string.Empty)
             {
                 TempData["message"] = "There is some problem! Please Try Again";
-            }            
+            }
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         [Breadcrumb("Advance", FromAction = "AddEditEmployee")]
-        public ActionResult AddEditAdvance(int EMP_Id, int ADV_Id=-1)
+        public ActionResult AddEditAdvance(int EMP_Id, int ADV_Id = -1)
         {
-            EmpId = (EMP_Id <= 0 ? EmpId : EMP_Id);           
+            EmpId = (EMP_Id <= 0 ? EmpId : EMP_Id);
             EmployeeAdvanceVM employeeAdvanceVM = new EmployeeAdvanceVM();
             EmployeeManager employeeManager = new EmployeeManager(_context);
             Employee_Advance employee_Advance = new Employee_Advance();
             if (ADV_Id > 0)
-            {                
+            {
                 employee_Advance = employeeManager.GetEmployeeAdvanceById(ADV_Id);
                 employeeAdvanceVM = EmployeeAdvanceMapper.mapMe(employee_Advance);
             }
@@ -110,15 +124,16 @@ namespace RMERP.Controllers
             }
             return View(employeeAdvanceVM);
         }
+
         [HttpPost]
         public ActionResult AddEditAdvance(EmployeeAdvanceVM employeeAdvanceVM)
         {
             string res = string.Empty;
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);           
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
             EmployeeManager employeeManager = new EmployeeManager(_context);
             if (ModelState.IsValid)
             {
-                Employee_Advance employee_Advance = new Employee_Advance();               
+                Employee_Advance employee_Advance = new Employee_Advance();
                 employee_Advance = EmployeeAdvanceMapper.mapMeModel(employeeAdvanceVM);
                 employee_Advance.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
                 res = employeeManager.AddEditAdvance(employee_Advance);
@@ -127,12 +142,13 @@ namespace RMERP.Controllers
             {
                 TempData["message"] = "Advance data can not Inserted";
             }
-            
-            return RedirectToAction("AddEditEmployee",new{ EMP_Id = employeeAdvanceVM.EMP_Id,tab = "AddEditAdvance" });
+
+            return RedirectToAction("AddEditEmployee", new { EMP_Id = employeeAdvanceVM.EMP_Id, tab = "AddEditAdvance" });
         }
+
         public ActionResult DeleteAdvance(int ADV_Id, int EMP_Id)
         {
-            string res = string.Empty;            
+            string res = string.Empty;
             EmployeeManager employeeManager = new EmployeeManager(_context);
             res = employeeManager.DeleteAdvance(ADV_Id);
             if (res != string.Empty)
@@ -141,6 +157,7 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditEmployee", new { EMP_Id = EMP_Id, tab = "AddEditAdvance" });
         }
+
         [Breadcrumb("Advance Taken", FromAction = "Index", FromController = typeof(WageProcessController))]
         public ActionResult AdvanceRptForBank(DateTime WAG_Month)
         {
@@ -163,7 +180,7 @@ namespace RMERP.Controllers
         {
             AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
-            UpdateAdvanceEMI updateAdvanceEMI = new UpdateAdvanceEMI();            
+            UpdateAdvanceEMI updateAdvanceEMI = new UpdateAdvanceEMI();
             List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.NotCompletedAdvanceLst((WAG_Month)));
             List<WageRegisterAdvancesVM> wageRegisterAdvancesVMs = WageRegisterAdvancesMapper.mapMeModels(wageRegisterManager.GetWageRegisterAdvances(WAG_Month));
             updateAdvanceEMI.employeeAdvanceVMs = advancesVM;
@@ -173,19 +190,21 @@ namespace RMERP.Controllers
             ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
             return View(updateAdvanceEMI);
         }
+
         [HttpPost]
-        public ActionResult addWageRegisterAdvances(int EMP_id,int WAG_Id, decimal WAD_Amount,bool WAD_Status)
+        public ActionResult addWageRegisterAdvances(int EMP_id, int WAG_Id, decimal WAD_Amount, bool WAD_Status)
         {
             WageProcessManager wageProcess = new WageProcessManager(_context);
             AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
             ClientsManager clients = new ClientsManager(_context, _configuration);
-            DateTime WAG_Month= wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+            DateTime WAG_Month = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
             int CLI_id = clients.GetClientIDByEmpID(EMP_id, WAG_Month);
-            string res=advance.addWageRegisterAdvances(EMP_id, WAG_Id, CLI_id, WAD_Amount, WAG_Month, WAD_Status);
-            return RedirectToAction("UpdateAdvanceEMI",new { WAG_Month= WAG_Month, WAG_Id= WAG_Id });
+            string res = advance.addWageRegisterAdvances(EMP_id, WAG_Id, CLI_id, WAD_Amount, WAG_Month, WAD_Status);
+            return RedirectToAction("UpdateAdvanceEMI", new { WAG_Month = WAG_Month, WAG_Id = WAG_Id });
         }
+
         [HttpPost]
-        public ActionResult UpdateWageRegisterAdvances(int EMP_id,decimal WAD_Amount, int WAG_Id, bool WAD_Status, int WAD_Id = -1)
+        public ActionResult UpdateWageRegisterAdvances(int EMP_id, decimal WAD_Amount, int WAG_Id, bool WAD_Status, int WAD_Id = -1)
         {
             WageProcessManager wageProcess = new WageProcessManager(_context);
             ClientsManager clients = new ClientsManager(_context, _configuration);
@@ -194,6 +213,107 @@ namespace RMERP.Controllers
             string res = advance.addWageRegisterAdvances(EMP_id, WAD_Amount, WAD_Status, WAG_Month, WAD_Id);
             return RedirectToAction("UpdateAdvanceEMI", new { WAG_Month = WAG_Month, WAG_Id = WAG_Id });
         }
-            
+
+        [HttpPost]
+        public async Task<ActionResult> AddEmployeeDocuments(EmployeeVM employeeVM)
+        {
+            EmployeeDocumentManager documentManager = new EmployeeDocumentManager(_context);
+            IFormFile file = employeeVM.employee_Document.EMD_Document;
+
+            employeeVM.employee_Document.EMD_UploadedOn = ProjectUtils.DateNow();
+            employeeVM.employee_Document.EMP_Id = employeeVM.EMP_Id;
+            employeeVM.employee_Document.EMD_Name = file.FileName;
+
+            int EMD_Id= documentManager.AddEmployeeDocument(EmployeeDocumentMapper.mapMeModel(employeeVM.employee_Document));
+
+            if (EMD_Id > 0)
+            {
+                string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+                string DocumentPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("EMPLOYEE_DOCUMENT_PATH").Value;
+
+                if (!System.IO.Directory.Exists(DocumentPath+"/"+ EMD_Id))
+                {
+                    System.IO.Directory.CreateDirectory(DocumentPath + "/" + EMD_Id);
+                }               
+                if (file == null || file.Length <= 0)
+                {
+                }
+                else
+                {
+
+                    var path = Path.Combine(DocumentPath + "\\" + EMD_Id, file.FileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                       await file.CopyToAsync(stream);
+                    }
+
+                }
+
+            }
+            return RedirectToAction("AddEditEmployee", new { EMP_Id = employeeVM.EMP_Id });
+        }
+
+        public ActionResult DeleteDocument(int EMD_Id)
+        {
+            EmployeeDocumentManager documentManager = new EmployeeDocumentManager(_context);
+            string res = documentManager.DeleteEmployeeDocument(EMD_Id);
+            if (res == string.Empty)
+            {
+                string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+                string DocumentPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("EMPLOYEE_DOCUMENT_PATH").Value;
+                string[] files = System.IO.Directory.GetFiles(DocumentPath + "/" + EMD_Id);                
+                System.IO.Directory.Delete(DocumentPath + "/" + EMD_Id,true);
+            }
+            else
+            {
+                TempData["message"] = "Employee data can not deleted";
+            }
+           
+            return RedirectToAction("AddEditEmployee", new { EMP_Id = Employee_Id });
+        }
+        public async Task<FileResult> DownloadDocument(int EMD_Id)
+        {
+            EmployeeDocumentManager documentManager = new EmployeeDocumentManager(_context);
+            Employee_Documents document = documentManager.GetEmployeeDocumenyById(EMD_Id);
+          //  WebClient wc = new WebClient();
+            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+            string DocumentPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("EMPLOYEE_DOCUMENT_PATH").Value;
+            DocumentPath += "\\" + EMD_Id+"\\"+ document.EMD_Name;
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(DocumentPath, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+                 
+            return File(memory, GetContentType(DocumentPath), document.EMD_Name);
+
+        }
+        private string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
+
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+                {".txt", "text/plain"},
+                {".pdf", "application/pdf"},
+                {".doc", "application/vnd.ms-word"},
+                {".docx", "application/vnd.ms-word"},
+                {".xls", "application/vnd.ms-excel"},
+                {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},  
+                {".png", "image/png"},
+                {".jpg", "image/jpeg"},
+                {".jpeg", "image/jpeg"},
+                {".gif", "image/gif"},
+                {".csv", "text/csv"}
+            };
+        }
     }
 }

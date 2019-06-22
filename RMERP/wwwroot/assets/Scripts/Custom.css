@@ -10,4 +10,11 @@
 .btn-default.btn-on.active{background-color: #5BB75B;color: white;}
 .btn-default.btn-off.active{background-color: #DA4F49;color: white;}
 
-
+.div-title {
+    color: #565656;
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 15px;
+    border-bottom: solid;
+}
