@@ -31,7 +31,7 @@
 @{
     @inject IConfiguration Configuration;
     string ImagePath = Configuration.GetSection("DEFAULT_URL").Value + "/" + Configuration.GetSection("CLIENTS_LOGO_PATH").Value + "/" + Model.clientsModel.CLI_Id + "/" + Model.clientsModel.CliLogoImage;
-    string path = (Model.clientsModel.CliLogoImage != null ? ImagePath : "/RMERP_Data/user.jpg");
+    string path = (Model.clientsModel.CliLogoImage != null ? ImagePath : "/RMERP_Data/Images/user.jpg");
 }
 <div class="tab-content">
     <div id="ClientInfo" class="tab-pane fade in active">

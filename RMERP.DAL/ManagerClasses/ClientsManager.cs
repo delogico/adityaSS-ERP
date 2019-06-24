@@ -57,48 +57,48 @@ namespace RMERP.DAL.ManagerClasses
         //    }            
         //    return res;
         //}
-        public Tuple<string, int> saveAddEditClients(IFormFile file,Clients clients)
+        public Tuple<string, int> saveAddEditClients(Clients clients)
         {
             string res = string.Empty;
             try
             {
                 clients.CLI_Att_MonthReal = true;
-                string ImagePath = Configuration.GetSection("DEFAULT_FOLDER_PATH").Value+"/"+ Configuration.GetSection("CLIENTS_LOGO_PATH").Value;
-                if (!System.IO.Directory.Exists(ImagePath + "/" + clients.CLI_Id))
-                {
-                    System.IO.Directory.CreateDirectory(ImagePath + "/" + clients.CLI_Id);
-                }
-                else
-                {
-                    #region
+                //string ImagePath = Configuration.GetSection("DEFAULT_FOLDER_PATH").Value+"/"+ Configuration.GetSection("CLIENTS_LOGO_PATH").Value;
+                //if (!System.IO.Directory.Exists(ImagePath + "/" + clients.CLI_Id))
+                //{
+                //    System.IO.Directory.CreateDirectory(ImagePath + "/" + clients.CLI_Id);
+                //}
+                //else
+                //{
+                //    #region
                     
-                    string[] files = System.IO.Directory.GetFiles(ImagePath + "/" + clients.CLI_Id);
-                    // Copy the files and overwrite destination files if they already exist.
-                    foreach (string s in files)
-                    {
-                        // Use static Path methods to extract only the file name from the path.
-                        string fileName = System.IO.Path.GetFileName(s);
-                        System.IO.File.Delete(ImagePath + "/" + clients.CLI_Id+"/"+fileName);
-                    }
-                    #endregion
-                }
-                if (file == null || file.Length <= 0)
-                {
-                   // clients.CLI_Logo = "user.jpg";
-                }
-                else
-                {
+                //    string[] files = System.IO.Directory.GetFiles(ImagePath + "/" + clients.CLI_Id);
+                //    // Copy the files and overwrite destination files if they already exist.
+                //    foreach (string s in files)
+                //    {
+                //        // Use static Path methods to extract only the file name from the path.
+                //        string fileName = System.IO.Path.GetFileName(s);
+                //        System.IO.File.Delete(ImagePath + "/" + clients.CLI_Id+"/"+fileName);
+                //    }
+                //    #endregion
+                //}
+                //if (file == null || file.Length <= 0)
+                //{
+                //   // clients.CLI_Logo = "user.jpg";
+                //}
+                //else
+                //{
                     
-                    var path = Path.Combine(
-                          Directory.GetCurrentDirectory(), ImagePath + "/" + clients.CLI_Id,
-                          file.FileName);
+                //    var path = Path.Combine(
+                //          Directory.GetCurrentDirectory(), ImagePath + "/" + clients.CLI_Id,
+                //          file.FileName);
                  
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                         file.CopyToAsync(stream);                        
-                    }
-                    clients.CLI_Logo = file.FileName;
-                }
+                //    using (var stream = new FileStream(path, FileMode.Create))
+                //    {
+                //         file.CopyToAsync(stream);                        
+                //    }
+                //    clients.CLI_Logo = file.FileName;
+                //}
                
                 clients.CLI_IsActive = true;
                 if (clients.CLI_Id > 0)

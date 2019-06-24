@@ -152,7 +152,7 @@ namespace RMERP.Controllers
             }
         }
         [HttpPost]
-        public ActionResult AddEditClient(ClientsViewModel cv)
+        public async Task<ActionResult> AddEditClient(ClientsViewModel cv)
         {            
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             int clientID = 0;
@@ -194,7 +194,7 @@ namespace RMERP.Controllers
                 {
                     clients.CLI_Logo = cv.clientsModel.CliLogoImage;
                 }
-                 var tuple = clientsManager.saveAddEditClients(file, clients);
+                var tuple = clientsManager.saveAddEditClients(clients);
                 if (tuple.Item1 != "")
                 {
                     TempData["message"] = "Client data can not Inserted";
@@ -204,6 +204,39 @@ namespace RMERP.Controllers
                     clientID = tuple.Item2;
                     TempData["message"] = "Successfull Done!";
                 }
+                #region
+                string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+                string ImagePath = Configuration.GetSection("DEFAULT_FOLDER_PATH").Value + Configuration.GetSection("CLIENTS_LOGO_PATH").Value;
+
+                if (!System.IO.Directory.Exists(ImagePath + "/" + clientID))
+                {
+                    System.IO.Directory.CreateDirectory(ImagePath + "/" + clientID);
+                }
+                else
+                {                   
+                    string[] files = System.IO.Directory.GetFiles(ImagePath + "/" + clientID);
+                    foreach (string s in files)
+                    {
+                        string fileName = System.IO.Path.GetFileName(s);
+                        System.IO.File.Delete(ImagePath + "/" + clientID + "/" + fileName);
+                    }
+                }
+                if (file == null || file.Length <= 0)
+                {
+                }
+                else
+                {
+
+                    var path = Path.Combine(ImagePath + "\\" + clientID, file.FileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                }
+                #endregion             
+                
             }            
             return RedirectToAction("AddEditClients",new { id= clientID });
         }
