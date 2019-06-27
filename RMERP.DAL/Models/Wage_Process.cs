@@ -15,11 +15,13 @@ namespace RMERP.DAL.Models
         }
 
         public int WAG_Id { get; set; }
+        public int FRM_Id { get; set; }
         public DateTime WAG_Month { get; set; }
         public DateTime WAG_RegisteredOn { get; set; }
         public bool WAG_Status { get; set; }
         public int ADM_Id_RegisteredBy { get; set; }
 
+        public Firms FRM_ { get; set; }
         public ICollection<Attendance> Attendance { get; set; }
         public ICollection<Wage_Process_Clients> Wage_Process_Clients { get; set; }
         public ICollection<Wage_Register> Wage_Register { get; set; }

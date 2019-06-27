@@ -91,12 +91,12 @@ namespace RMERP.Controllers
 
         }
 
-        public ActionResult ActiveEmployee(int EMP_Id)
-        {
+        public ActionResult ActiveEmployee(int EMP_Id,DateTime date)
+        {            
             string res = string.Empty;
             EmployeeManager employeeManager = new EmployeeManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            res = employeeManager.ActiveEmployee(EMP_Id, sessionUtils.GetLoggedAdminID());
+            res = employeeManager.ActiveEmployee(EMP_Id, date, sessionUtils.GetLoggedAdminID());
             if (res != string.Empty)
             {
                 TempData["message"] = "There is some problem! Please Try Again";

@@ -43,7 +43,11 @@ namespace RMERP.Controllers
         [Breadcrumb("Wage Process")]
         public IActionResult Index()
         {
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);            
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            //if (sessionUtils.GetLoggedFirmID()==null)
+            //{
+            //    //Super Admin
+            //}
             DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID());
             WageProcessVM wageProcessVM = new WageProcessVM();
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
