@@ -53,7 +53,14 @@
                             <tbody>
                                 @foreach (var item in Model)
                                 {
-                                    <tr>
+                                    // style = "color:orangered;"
+                                    var style="";
+                                    var lable = "Employee Left";
+                                    if (item.EMP_IsActive.Equals(false)) {
+                                        style = "style=color:orangered;";
+                                        lable = "Employee Rejoin";
+                                    }
+                                    <tr @style>
                                         <td>@item.EMP_FullName</td>
                                         <td>@DateHelper.getDateWithFormat(@item.EMP_DOB)</td>
                                         <td>@item.EMP_Designation</td>
@@ -64,8 +71,10 @@
                                             <div class="dropdown">
                                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                 <ul class="dropdown-menu pull-right">
-                                                    <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
-                                                    <li><a href='@Url.Action("ActiveEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Active/InActive"><i class="fa fa-trash m-r-5"></i> Active/InActive</a></li>
+                                                    <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>                                                    
+                                                    <li><a href='#' title="Employee Left" onclick="onConfirmClick(@item.EMP_Id)"><i class="fa fa-trash-o m-r-5"></i>
+                                                       @lable
+                                                        </a></li>
                                                     <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-eye m-r-5"></i> View</a></li>
                                                 </ul>
                                             </div>
@@ -87,3 +96,31 @@
     </div>
 </div>
 
+<script>
+    function onConfirmClick(EMP_Id) {
+        debugger;
+            bootbox.prompt({
+                title: "Choose Date!",
+                inputType: 'date',
+           
+                callback: function (result) {   
+                    debugger;
+                    if (result != null) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employees/ActiveEmployee?EMP_Id=" + EMP_Id +"&date=" + result,
+                            contentType: 'application/json; charset=utf-8',
+                            datatype: 'json',                            
+                            type: "GET",
+                            success: function () {
+                                window.location = '@Url.Action("Index", "Employees")';
+                            }
+
+                        })
+                    }
+                    else if (result == null) {
+                    }
+                }
+            });
+        }
+</script>

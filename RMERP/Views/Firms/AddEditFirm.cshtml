@@ -38,6 +38,12 @@
                     @Html.TextBoxFor(m => m.FRM_Name, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.FRM_Name, "", new { @class = "text-danger" })
                 </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.FRM_ShortName)
+                    @Html.TextBoxFor(m => m.FRM_ShortName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.FRM_ShortName, "", new { @class = "text-danger" })
+                </div>
+
                 <div class="m-t-20 text-center">
                     <input type="submit" name="Submit Firm" id="btnSubmit" class="btn btn-primary" />
                 </div>

@@ -40,7 +40,7 @@
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td><b>@item.FRM_Name</b></td>
+                                    <td><b>@item.FRM_Name</b> (@item.FRM_ShortName)</td>
                                     <td>
                                         <a href='@Url.Action("AddEditFirm","Firms",new { FRM_Id=item.FRM_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
                                     </td>

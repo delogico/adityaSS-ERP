@@ -11,8 +11,7 @@
     {
         <script>
             $(document).ready(function () {              
-                alert('@TempData["message"]');
-                WageProcessList();
+                alert('@TempData["message"]');                
         });
         </script>
     };
@@ -20,48 +19,39 @@
         function onConfirmClick() {
             $.ajax({
                 type: "GET",
-                url: "/WageProcess/nextWageMonth/",
+                url:  '@Url.Action("nextWageMonth", "WageProcess", new { FRM_Id = ViewBag.FRM_Id })',
                 success: function (data) {
-                    bootbox.confirm({
-                        title: "Confirmation",
+                bootbox.confirm({
+                title: "Confirmation",
                         message: "Are you sure want to create wage for " + data + "?",
                         buttons: {
-                            confirm: {
-                                label: 'Yes',
+                    confirm: {
+                        label: 'Yes',
                                 className: 'btn-success'
-                            },
+                                    },
                             cancel: {
-                                label: 'No',
+                        label: 'No',
                                 className: 'btn-danger'
                             }
-                        },
+                    },
                         callback: function (result) {
-                            if (result == true) {
+                        if (result == true) {
                                 $.ajax({
-                                    type: "GET",
-                                    url: "/WageProcess/CreateNextMonthWage/",
-                                    success: function (data) {
-                                        WageProcessList();
-                                    }
-                                })
+                            type: "GET",
+                                    url:  '@Url.Action("CreateNextMonthWage", "WageProcess", new { FRM_Id = ViewBag.FRM_Id })' ,
+                                    data: "",
+                                    success: function (data) {                                       
+                                        location.reload();
+                                }
+                            })
                             }
-                            else if (result == false) {
+                                else if (result == false) {
+                                }
                             }
-                        }
-                    });
-                }
-            })
-        };
-
-        function WageProcessList() {
-            $.ajax({
-                type: "GET",
-                url: "/WageProcess/WageProcessList/",
-                success: function (data) {
-                    $('#WageProcessList').html(data);
-                }
-            })
-        };
+                });
+                    }
+                })
+        };        
     </script>
 }
     <style>

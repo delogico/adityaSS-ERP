@@ -426,6 +426,17 @@ namespace RMERP.DAL.ManagerClasses
             IEnumerable<Clients_Employees> list=_contaxt.Clients_Employees.Where(m=>m.CLI_Id.Equals(ClientId)).Include(m=>m.EMP_).Include(m=>m.DES_).ToList();
             return list;
         }
+        public IEnumerable<Clients_Employees> listActiveClientsEmployees(int ClientId,DateTime monthDate)
+        {
+            DateTime lastDate= new DateTime(monthDate.Year, monthDate.Month, 1).AddMonths(1).AddDays(-1);
+            IEnumerable<Clients_Employees> list = _contaxt.Clients_Employees
+                                                .Where(m => m.CLI_Id.Equals(ClientId)
+                                                && m.CLE_RegisteredOn.Date <= lastDate.Date 
+                                                && (m.EMP_.EMP_InactivatedOn==null || (m.EMP_.EMP_InactivatedOn!=null && (m.EMP_.EMP_InactivatedOn.Value.Date <= lastDate.Date))))
+                                                .Include(m => m.EMP_)
+                                                .Include(m => m.DES_).ToList();
+            return list;
+        }
         public IEnumerable<Clients_Employees> listClientsEmployees(int ClientId,int DES_Id)
         {
             IEnumerable<Clients_Employees> list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId) && m.DES_Id.Equals(DES_Id)).Include(m => m.EMP_).Include(m => m.DES_).ToList();
@@ -479,13 +490,23 @@ namespace RMERP.DAL.ManagerClasses
             return new Tuple<int, int>(0, 0);
         }
 
-        public List<Clients> GetActiveClientofaMonth(DateTime monthStartDate)
+        //public List<Clients> GetActiveClientofaMonth(DateTime monthStartDate)
+        //{
+        //    DateTime lastDate = new DateTime(monthStartDate.Year, monthStartDate.Month, 1).AddMonths(1).AddDays(-1);
+        //    IQueryable<Clients> cliList = from a in _contaxt.Clients
+        //                            where a.CLI_RegisteredOn.Date <= monthStartDate.Date
+        //                            && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
+        //                            select a;
+        //    return cliList.ToList();
+        //}
+        public List<Clients> GetActiveClientOfMonthByFirmId(DateTime wageDate,int FirmId)
         {
-            DateTime lastDate = new DateTime(monthStartDate.Year, monthStartDate.Month, 1).AddMonths(1).AddDays(-1);
+            DateTime lastDate = new DateTime(wageDate.Year, wageDate.Month, 1).AddMonths(1).AddDays(-1);
             IQueryable<Clients> cliList = from a in _contaxt.Clients
-                                    where a.CLI_RegisteredOn.Date <= monthStartDate.Date
-                                    && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
-                                    select a;
+                                          where a.CLI_RegisteredOn.Date <= lastDate.Date
+                                          && a.FRM_Id.Equals(FirmId)
+                                          && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
+                                          select a;
             return cliList.ToList();
         }
 

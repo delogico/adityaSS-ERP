@@ -40,48 +40,75 @@ namespace RMERP.Controllers
             wpm = new WageProcessManager(context);
             _hostingEnvironment = hostingEnvironment;
         }
-        [Breadcrumb("Wage Process")]
-        public IActionResult Index()
-        {
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);            
-            DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID());
-            WageProcessVM wageProcessVM = new WageProcessVM();
-            WageProcessManager wageProcessManager = new WageProcessManager(_context);
-            ViewBag.month = nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
-            IEnumerable<Wage_Process> wage_Processes = wpm.getWageProcessList();
-            return View(WageProcessMapper.mapMeVMs(wage_Processes, _context, _configuration));
-        }
-        public IActionResult CreateNextMonthWage()
+
+
+        [Breadcrumb("Choose Firm")]
+        public IActionResult ChooseFirm()
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            string rse = wpm.CreateNextMonthWage(sessionUtils.GetLoggedAdminID());
-            return RedirectToAction("Index");
+            if (sessionUtils.GetLoggedFirmID().HasValue)
+            {
+                return RedirectToAction("Index", new { FRM_Id = sessionUtils.GetLoggedFirmID().Value });
+            }
+            else
+            {
+                FirmsManager frmManager = new FirmsManager(_context);
+                return View(frmManager.getFirmList());
+            }
+        }
+        
+
+        [Breadcrumb("Wage Process")]
+        public IActionResult Index(int FRM_Id)
+        {
+            if (FRM_Id <= 0)
+            {
+                FRM_Id = Frm_Id;
+            }
+            else
+            {
+                Frm_Id = FRM_Id;
+            }
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID(),FRM_Id);
+            WageProcessManager wageProcessManager = new WageProcessManager(_context);
+            ViewBag.month = nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
+            ViewBag.FRM_Id = FRM_Id;
+            IEnumerable<Wage_Process> wage_Processes = wpm.getWageProcessList(FRM_Id);
+            return View(WageProcessMapper.mapMeVMs(wage_Processes, FRM_Id, _context, _configuration));
+         }
+        public IActionResult CreateNextMonthWage(int FRM_Id)
+        {
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            string rse = wpm.CreateNextMonthWage(sessionUtils.GetLoggedAdminID(), FRM_Id);
+            return RedirectToAction("Index", new { FRM_Id = FRM_Id});
         }
         public IActionResult DeleteWageProcess(int WagId)
         {
             WageProcessManager wpm = new WageProcessManager(_context);
+            int FRM_Id = wpm.getWageProcessById(WagId).FRM_Id;
             string res = wpm.DeleteWageProcess(WagId);
             if (res != string.Empty)
             {
                 TempData["message"] = "Wage Process can not Deleted";
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { FRM_Id = FRM_Id });
         }
         [HttpGet]
-        public IActionResult nextWageMonth()
+        public IActionResult nextWageMonth(int FRM_Id)
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID());
+            DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID(), FRM_Id);
             return Content(nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")));
         }
        // [Breadcrumb("WageProcess List")]
-        public ActionResult WageProcessList()
-        {
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+        //public ActionResult WageProcessList()
+        //{
+        //    SessionUtils sessionUtils = new SessionUtils(Request, Response);
 
-            var model = wpm.getWageProcessList();
-            return PartialView("_WageProcessList", model);
-        }
+        //    var model = wpm.getWageProcessList();
+        //    return PartialView("_WageProcessList", model);
+        //}
         
         public ActionResult ImportWageProcessData(UploadExcelViewModel uvm)
         {
@@ -211,7 +238,7 @@ namespace RMERP.Controllers
             {
                 TempData["message"] = "Wage Process status is not changed!";                
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { FRM_Id = wage.FRM_Id });
         }
 
     }

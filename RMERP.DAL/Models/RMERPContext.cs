@@ -542,6 +542,11 @@ namespace RMERP.DAL.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.FRM_ShortName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<ProfessionalTaxCalculation>(entity =>
@@ -569,6 +574,12 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.WAG_RegisteredOn)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.FRM_)
+                    .WithMany(p => p.Wage_Process)
+                    .HasForeignKey(d => d.FRM_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Process_Firms");
             });
 
             modelBuilder.Entity<Wage_Process_Clients>(entity =>

@@ -46,6 +46,7 @@ namespace RMERP.Controllers
             Firms firms = new Firms();
             firms.FRM_Id = firmVM.FRM_Id;
             firms.FRM_Name = firmVM.FRM_Name;
+            firms.FRM_ShortName = firmVM.FRM_ShortName;
             if (ModelState.IsValid)
             {
                 string res = firmsManager.saveEditFirm(firms);

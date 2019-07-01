@@ -56,7 +56,7 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Include(e=>e.Employee_Advance).Include(m=>m.Employee_Documents).FirstOrDefault();
         }
-        public string ActiveEmployee(int EmpId, int AdminId)
+        public string ActiveEmployee(int EmpId,DateTime date,int AdminId)
         {
             string res = string.Empty;
             Employees employees = new Employees();
@@ -65,6 +65,7 @@ namespace RMERP.DAL.ManagerClasses
                 employees = _context.Employees.Find(EmpId);
                 employees.EMP_IsActive = (employees.EMP_IsActive == false ? true : false);
                 employees.ADM_Id_InactivatedBy = AdminId;
+                employees.EMP_InactivatedOn = date;
                 _context.Employees.Update(employees);
                 _context.SaveChanges();
             }
