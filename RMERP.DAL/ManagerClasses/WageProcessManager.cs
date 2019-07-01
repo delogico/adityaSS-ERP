@@ -16,9 +16,9 @@ namespace RMERP.DAL.ManagerClasses
         {
             _context = context;
         }
-        public IEnumerable<Wage_Process> getWageProcessList()
+        public IEnumerable<Wage_Process> getWageProcessList(int FRM_Id)
         {
-            IEnumerable<Wage_Process> list = _context.Wage_Process.Include(m => m.Attendance).Include(m=>m.Wage_Process_Clients).OrderBy(m=>m.WAG_Month).ToList();
+            IEnumerable<Wage_Process> list = _context.Wage_Process.Where(m=>m.FRM_Id == FRM_Id).Include(m => m.Attendance).Include(m=>m.Wage_Process_Clients).OrderBy(m=>m.WAG_Month).ToList();
             return list;
         }
         public Wage_Process getWageProcessById(int WAG_Id)
@@ -27,13 +27,14 @@ namespace RMERP.DAL.ManagerClasses
             return wageProcess;
         }
 
-        public string CreateNextMonthWage(int AdminId)
+        public string CreateNextMonthWage(int AdminId,int FRM_Id)
         {
             string res = string.Empty;
             Wage_Process wageProcess = new Wage_Process();           
-            wageProcess.WAG_Month = nextWageMonth(AdminId);            
+            wageProcess.WAG_Month = nextWageMonth(AdminId, FRM_Id);            
             wageProcess.WAG_RegisteredOn = ProjectUtils.DateNow();
             wageProcess.ADM_Id_RegisteredBy = AdminId;
+            wageProcess.FRM_Id = FRM_Id;
             _context.Wage_Process.Add(wageProcess);
             _context.SaveChanges();
             return res;
@@ -53,12 +54,12 @@ namespace RMERP.DAL.ManagerClasses
             }
             return "";
         }
-        public DateTime nextWageMonth(int AdminId)
+        public DateTime nextWageMonth(int AdminId,int FirmId)
         {
-            int count = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId)).Count();
+            int count = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.FRM_Id.Equals(FirmId)).Count();
             if (count > 0)
             {
-                var wp = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId)).OrderByDescending(m => m.WAG_Month).First();
+                var wp = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.FRM_Id.Equals(FirmId)).OrderByDescending(m => m.WAG_Month).First();
                 return wp.WAG_Month.AddMonths(1);
             }
             else

@@ -50,7 +50,7 @@ namespace RMERP.Controllers
             AttendanceManager attManager = new AttendanceManager(_context);
             WageProcessManager wageManager = new WageProcessManager(_context);
             Wage_Process wage = wageManager.getWageProcessById(WAG_Id);
-            List<Clients> clients = clientsManager.GetActiveClientofaMonth(wage.WAG_Month);
+            List<Clients> clients = clientsManager.GetActiveClientOfMonthByFirmId(wage.WAG_Month, wage.FRM_Id);
             WageProcessClientAttendancePageVM pageVM = new WageProcessClientAttendancePageVM();
             pageVM.wageProcess = WageProcessMapper.mapMe(wage);
             pageVM.lstClient = WageProcessMapper.mapClientToAttendanceWages(clients, wage, attManager.getAttendance_Wage(WAG_Id));

@@ -14,6 +14,7 @@ namespace RMERP.DAL.Models
 
         public int FRM_Id { get; set; }
         public string FRM_Name { get; set; }
+        public string FRM_ShortName { get; set; }
 
         public ICollection<AdminUsers> AdminUsers { get; set; }
         public ICollection<Clients> Clients { get; set; }

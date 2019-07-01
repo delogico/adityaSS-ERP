@@ -14,6 +14,7 @@ namespace RMERP.DAL.Mappers
             FirmVM firmVM = new FirmVM();
             firmVM.FRM_Id = firm.FRM_Id;
             firmVM.FRM_Name = firm.FRM_Name;
+            firmVM.FRM_ShortName = firm.FRM_ShortName;
             return firmVM;
         }
 

@@ -542,6 +542,11 @@ namespace RMERP.DAL.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.FRM_ShortName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<ProfessionalTaxCalculation>(entity =>

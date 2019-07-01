@@ -1,0 +1,14 @@
+﻿@model List<RMERP.DAL.Models.Firms>
+
+@{
+    ViewData["Title"] = "Choose Firms";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+
+<div class="btn-group-vertical">
+    @foreach (var item in Model)
+    {
+        <button type="button" class="btn btn-lg btn-primary">@Html.ActionLink(item.FRM_Name, "Index", new {FRM_Id=item.FRM_Id })</button>
+    }
+
+</div>

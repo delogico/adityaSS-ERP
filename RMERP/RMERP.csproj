@@ -48,6 +48,9 @@
     <Content Update="Views\Clients\AddEditRequirement3.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\WageProcess\ChooseFirm.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>
