@@ -441,10 +441,12 @@ namespace RMERP.Controllers
             ClientEmployeeVM cvm = new ClientEmployeeVM();
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             int FRM_Id = 0;
-            if (sessionUtils.GetLoggedFirmID().HasValue)
-            {
-                FRM_Id = sessionUtils.GetLoggedFirmID().Value;
-            }
+            //if (sessionUtils.GetLoggedFirmID().HasValue)
+            //{
+            //    FRM_Id = sessionUtils.GetLoggedFirmID().Value;
+            //}
+            FRM_Id = clientsManager.GetClientById(CLI_Id).FRM_Id;
+
             DesignationManager designationManager = new DesignationManager(_context);
             IEnumerable<AssignEmployeeVM> listDesignations = designationManager.getDesignationsListInVM(CLI_Id);
             IEnumerable<EmployeeVM> listEmployee = EmployeesMapper.MapEmployees(clientsManager.getEmployeeList(CLI_Id, FRM_Id).ToList());
