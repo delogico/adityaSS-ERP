@@ -41,8 +41,8 @@
                         <table class="table table-striped custom-table datatable">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>Name</th>
-                                    <th>Firm</th>
                                     <th>DOB</th>
                                     <th>Designation</th>
                                     <th>Joining date</th>
@@ -58,14 +58,20 @@
                                     var lable = "Employee Left";
                                     if (item.EMP_IsActive.Equals(false)) {
                                         style = "style=color:orangered;";
-                                        lable = "Employee Rejoin";
+                                        lable = "Employee left";
                                     }
                                 <tr @style>
+                                    <td>@item.FRM_.FRM_ShortName</td>
                                     <td>@item.EMP_FullName</td>
-                                    <td>@item.FRM_.FRM_Name (@item.FRM_.FRM_ShortName)</td>
                                     <td>@DateHelper.getDateWithFormat(@item.EMP_DOB)</td>
                                     <td>@item.EMP_Designation</td>
-                                    <td>@DateHelper.getDateWithFormat(@item.EMP_DateOfJoining)</td>
+                                    <td>
+                                        @DateHelper.getDateWithFormat(@item.EMP_DateOfJoining)
+                                        @if (item.EMP_IsActive.Equals(false))
+                                        {
+                                            <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue?DateHelper.getDateWithFormat(item.EMP_InactivatedOn.Value):"")</div>
+                                        }
+                                    </td>
                                     <td>@item.EMP_MoF</td>
                                     <td>@item.EMP_Contact_Primary</td>
                                     <td class="text-right">
