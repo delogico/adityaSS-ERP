@@ -97,7 +97,8 @@
                                         @Html.LabelFor(m => m.FRM_Id, new { @class = "control-label" })
                                         @if (sessionUtils.GetLoggedFirmID().HasValue)
                                         {
-                                            @Html.DropDownListFor(m => m.FRM_Id, new SelectList(ViewBag.firmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control", @readonly = "readonly" })
+                                            @Html.HiddenFor(m => m.FRM_Id)
+                                            @Html.DropDownListFor(m => m.FRM_Id, new SelectList(ViewBag.firmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control", @disabled = "disabled" })
                                         }
                                         else
                                         {
