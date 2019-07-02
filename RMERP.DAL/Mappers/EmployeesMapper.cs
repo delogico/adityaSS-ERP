@@ -49,6 +49,10 @@ namespace RMERP.DAL.Mappers
                 emp.wageRegisterAdvances = WageRegisterAdvancesMapper.mapMeModels(employee.Wage_Register_Advances.ToList());
             if (employee.Employee_Documents.Count > 0)
                 emp.employee_Documents = employee.Employee_Documents.ToList();
+            if (employee.FRM_ != null)
+                emp.FRM_ = employee.FRM_;
+
+            emp.FRM_Id = employee.FRM_Id;
             return emp;
         }
 
@@ -92,6 +96,9 @@ namespace RMERP.DAL.Mappers
             emp.EMP_IsActive = Convert.ToBoolean(employee.EMP_IsActive);
             emp.EMP_InactivatedOn = employee.EMP_InactivatedOn;
             emp.ADM_Id_InactivatedBy = employee.ADM_Id_InactivatedBy;
+            emp.FRM_Id = employee.FRM_Id;
+            if (employee.FRM_!=null)
+                emp.FRM_ = employee.FRM_;
             return emp;
         }
     }

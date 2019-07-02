@@ -385,10 +385,14 @@ namespace RMERP.DAL.ManagerClasses
             return res;
         
 }
-        public IEnumerable<Employees> getEmployeeList(int CLI_Id)
+        public IEnumerable<Employees> getEmployeeList(int CLI_Id,int FRM_Id)
         {
             IEnumerable<Employees> listEmp=null;
             listEmp = _contaxt.Employees.Where(m => m.EMP_IsActive.Equals(true));
+            if (FRM_Id > 0)
+            {
+                listEmp = listEmp.Where(m => m.FRM_Id.Equals(FRM_Id));
+            }            
             if (CLI_Id > 0)
             {        
                 listEmp = from t1 in listEmp

@@ -439,9 +439,15 @@ namespace RMERP.Controllers
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             ClientEmployeeVM cvm = new ClientEmployeeVM();
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            int FRM_Id = 0;
+            if (sessionUtils.GetLoggedFirmID().HasValue)
+            {
+                FRM_Id = sessionUtils.GetLoggedFirmID().Value;
+            }
             DesignationManager designationManager = new DesignationManager(_context);
             IEnumerable<AssignEmployeeVM> listDesignations = designationManager.getDesignationsListInVM(CLI_Id);
-            IEnumerable<EmployeeVM> listEmployee = EmployeesMapper.MapEmployees(clientsManager.getEmployeeList(CLI_Id).ToList());
+            IEnumerable<EmployeeVM> listEmployee = EmployeesMapper.MapEmployees(clientsManager.getEmployeeList(CLI_Id, FRM_Id).ToList());
             ViewBag.EmployeeList = listEmployee;
             ViewBag.designationList = listDesignations;
             cvm.CLI_Id = CLI_Id;

@@ -122,6 +122,12 @@ namespace RMERP.DAL.ViewModel
         public EmployeeDocumentsVM employee_Document { get; set; }
         public List<Document_Types> document_Types { get; set; }
         public List<Employee_Documents> employee_Documents { get; set; }
+
+        [Required]
+        [Display(Name ="Select Firm")]
+        public int FRM_Id { get; set; }
+
+        public Firms FRM_ { get; set; }
     }
 }
 

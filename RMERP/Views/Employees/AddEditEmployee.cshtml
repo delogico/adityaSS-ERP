@@ -89,6 +89,26 @@
                             @Html.HiddenFor(m => m.EMP_Id)
                             @Html.HiddenFor(m => m.EMP_IsActive)
 
+                            <p class="div-title">Firm</p>
+                            <br /> SessionUtils sessionUtils = new SessionUtils(this.Context.Request, this.Context.Response);                            
+                            <div class="row pb-3">
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.FRM_Id, new { @class = "control-label" })
+                                        @if (sessionUtils.GetLoggedFirmID().HasValue)
+                                        {
+                                            @Html.DropDownListFor(m => m.FRM_Id, new SelectList(ViewBag.firmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control", @readonly = "readonly" })
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownListFor(m => m.FRM_Id, new SelectList(ViewBag.firmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control" })
+                                        }
+                                        @Html.ValidationMessageFor(m => m.FRM_Id, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                            </div>
                             <p class="div-title">Employee Details</p>
                             <br />
 
@@ -347,10 +367,10 @@
                                     {
                                         @inject IConfiguration _configuration;
                                         string DocumentPath = _configuration.GetSection("DEFAULT_URL").Value + "/" + _configuration.GetSection("EMPLOYEE_DOCUMENT_PATH").Value;
-                                        
+
                                         @foreach (var item in Model.employee_Documents)
                                         {
-                                            string path = DocumentPath+ "/" +item.EMD_Id+"/"+item.EMD_Name;                                            
+                                            string path = DocumentPath + "/" + item.EMD_Id + "/" + item.EMD_Name;
                                             <tr>
                                                 <td>@item.DOT_.DOT_Title</td>
                                                 <td>@item.EMD_Name </td>

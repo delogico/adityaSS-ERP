@@ -38,23 +38,29 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public IEnumerable<Employees> GetEmployees()
+        public IEnumerable<Employees> GetEmployees(int FRM_Id)
         {
             try
             {
-                IEnumerable<Employees> listEmployees = _context.Employees.OrderBy(m => m.EMP_FirstName).ToList();
+                IEnumerable<Employees> listEmployees = null;
+                if (FRM_Id > 0)
+                {
+                    listEmployees = _context.Employees.Where(m=>m.FRM_Id.Equals(FRM_Id)).OrderBy(m => m.EMP_FirstName).Include(m => m.FRM_).ToList();
+                }
+                else
+                {
+                    listEmployees = _context.Employees.OrderBy(m => m.EMP_FirstName).Include(m => m.FRM_).ToList();
+                }               
                 return listEmployees;
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
-
         }
         public Employees GetEmployeeById(int EMP_Id)
         {
-            return _context.Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Include(e=>e.Employee_Advance).Include(m=>m.Employee_Documents).FirstOrDefault();
+            return _context.Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Include(e=>e.Employee_Advance).Include(m=>m.Employee_Documents).Include(m=>m.FRM_).FirstOrDefault();
         }
         public string ActiveEmployee(int EmpId,DateTime date,int AdminId)
         {

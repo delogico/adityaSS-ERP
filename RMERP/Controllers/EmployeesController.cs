@@ -39,8 +39,14 @@ namespace RMERP.Controllers
         public IActionResult Index()
         {
             EmpId = 0;
+            int FRM_Id = 0;
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            if (sessionUtils.GetLoggedFirmID().HasValue)
+            {
+                FRM_Id = sessionUtils.GetLoggedFirmID().Value;
+            }
             EmployeeManager employeeManager = new EmployeeManager(_context);
-            return View(EmployeesMapper.MapEmployees(employeeManager.GetEmployees().ToList()));
+            return View(EmployeesMapper.MapEmployees(employeeManager.GetEmployees(FRM_Id).ToList()));
         }
 
         [HttpGet]
@@ -50,6 +56,11 @@ namespace RMERP.Controllers
             EMP_Id = (EMP_Id <= 0 ? EmpId : EMP_Id);
             EmployeeManager employeeManager = new EmployeeManager(_context);
             DocumentTypesManager typesManager = new DocumentTypesManager(_context);
+            FirmsManager firmsManager = new FirmsManager(_context);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            IEnumerable<Firms> listFirms = new List<Firms>();
+            listFirms = firmsManager.getFirmList();
+            ViewBag.firmList = listFirms;
             EmployeeVM employeeVM = new EmployeeVM();
             if (EMP_Id > 0)
             {
@@ -60,6 +71,10 @@ namespace RMERP.Controllers
             else
             {
                 employeeVM.EMP_IsActive = true;
+            }
+            if (sessionUtils.GetLoggedFirmID().HasValue)
+            {
+                employeeVM.FRM_Id = sessionUtils.GetLoggedFirmID().Value;
             }
             ViewBag.DocumentTypes = typesManager.GetDocumentTypes();
             return View(employeeVM);
