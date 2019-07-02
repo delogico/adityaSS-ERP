@@ -147,7 +147,8 @@ namespace RMERP.Controllers
                     /***************** CHECK DATETIME MATCH ***************************/
                     /***************** CHECK EXTRA EMPLOYEES IN EXCEL ***************************/
                     List<_EmpID> _empID = new List<_EmpID>();
-                    List<Clients_Employees> assignEmployeeList = attManager.assignEmployeeList(client.CLI_Id);
+                    //List<Clients_Employees> assignEmployeeList = attManager.assignEmployeeList(client.CLI_Id);
+                    IEnumerable<Clients_Employees> assignEmployeeList = clientsManager.listActiveClientsEmployees(client.CLI_Id, wageProcess.WAG_Month);
                     foreach (ExcelRowViewModel row in excelViewModel.excelRows)
                     {
                         Clients_Employees emp = assignEmployeeList.Where(m => m.EMP_Id.Equals(Convert.ToInt32(row.EMP_Id))).FirstOrDefault();

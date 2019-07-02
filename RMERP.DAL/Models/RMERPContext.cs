@@ -532,6 +532,12 @@ namespace RMERP.DAL.Models
                     .HasMaxLength(12)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('Pending')");
+
+                entity.HasOne(d => d.FRM_)
+                    .WithMany(p => p.Employees)
+                    .HasForeignKey(d => d.FRM_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Employees_Firms");
             });
 
             modelBuilder.Entity<Firms>(entity =>
@@ -540,7 +546,7 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.FRM_Name)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.FRM_ShortName)

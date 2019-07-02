@@ -44,7 +44,9 @@ namespace RMERP.DAL.Models
         public bool? EMP_IsActive { get; set; }
         public DateTime? EMP_InactivatedOn { get; set; }
         public int? ADM_Id_InactivatedBy { get; set; }
+        public int FRM_Id { get; set; }
 
+        public Firms FRM_ { get; set; }
         public ICollection<Attendance> Attendance { get; set; }
         public ICollection<Clients_Employees> Clients_Employees { get; set; }
         public ICollection<Employee_Advance> Employee_Advance { get; set; }

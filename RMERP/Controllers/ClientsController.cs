@@ -900,7 +900,7 @@ namespace RMERP.Controllers
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             Clients client = clientsManager.GetClientById(ClientId);
-            IEnumerable<Clients_Employees> employees = clientsManager.listClientsEmployees(ClientId);
+            IEnumerable<Clients_Employees> employees = clientsManager.listActiveClientsEmployees(ClientId, month);
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
             string fileName = "Template_" + month.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_TwoRow.xlsx";
             string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
@@ -1035,7 +1035,8 @@ namespace RMERP.Controllers
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             Clients client = clientsManager.GetClientById(ClientId);
-            IEnumerable<Clients_Employees> employees = clientsManager.listClientsEmployees(ClientId);
+            //IEnumerable<Clients_Employees> employees = clientsManager.listClientsEmployees(ClientId);
+            IEnumerable<Clients_Employees> employees = clientsManager.listActiveClientsEmployees(ClientId, month);
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
             string fileName = "Template_" + month.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_OneRow.xlsx";
             string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);

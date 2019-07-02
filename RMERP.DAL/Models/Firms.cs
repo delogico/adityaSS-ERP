@@ -9,6 +9,7 @@ namespace RMERP.DAL.Models
         {
             AdminUsers = new HashSet<AdminUsers>();
             Clients = new HashSet<Clients>();
+            Employees = new HashSet<Employees>();
             Wage_Process = new HashSet<Wage_Process>();
         }
 
@@ -18,6 +19,7 @@ namespace RMERP.DAL.Models
 
         public ICollection<AdminUsers> AdminUsers { get; set; }
         public ICollection<Clients> Clients { get; set; }
+        public ICollection<Employees> Employees { get; set; }
         public ICollection<Wage_Process> Wage_Process { get; set; }
     }
 }
