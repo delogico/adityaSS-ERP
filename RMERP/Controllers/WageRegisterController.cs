@@ -134,7 +134,8 @@ namespace RMERP.Controllers
                         excelSheet = workbook.CreateSheet(client.client.CLI_Name.ToString());
                         foreach (var item in List.Where(m => m.client.CLI_Id.Equals(client.client.CLI_Id)))
                         {
-                            var distinceDesignations = item.wageRegisterVMs.Select(q => new { q.designation.DES_Id, q.designation.DES_Title }).Distinct();                           
+                            var distinceDesignations = item.wageRegisterVMs.Select(q => new { q.designation.DES_Id, q.designation.DES_Title }).Distinct(); 
+                            
                             #region style of excel
                             ICellStyle style = workbook.CreateCellStyle();
                             ICellStyle styleDesignation = workbook.CreateCellStyle();
@@ -248,6 +249,7 @@ namespace RMERP.Controllers
                             styleTotal.SetFont(fontTotal);
 
                             #endregion
+
                             int DesCount = 0;
 
                             #region Title structure in excel

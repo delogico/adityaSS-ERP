@@ -385,23 +385,20 @@ namespace RMERP.DAL.ManagerClasses
             return res;
         
 }
-        public IEnumerable<Employees> getEmployeeList(int CLI_Id,int FRM_Id)
+
+        public IEnumerable<Employees> getActiveEmployeeList_NotAssignedYet(int CLI_Id, int FRM_Id)
         {
-            IEnumerable<Employees> listEmp=null;
-            listEmp = _contaxt.Employees.Where(m => m.EMP_IsActive.Equals(true));
-            if (FRM_Id > 0)
-            {
-                listEmp = listEmp.Where(m => m.FRM_Id.Equals(FRM_Id));
-            }            
-            if (CLI_Id > 0)
-            {        
-                listEmp = from t1 in listEmp
-                              where !(from t2 in _contaxt.Clients_Employees.Where(m=>m.CLI_Id.Equals(CLI_Id))
-                                      select t2.EMP_Id).Contains(t1.EMP_Id)
-                              select t1;
-            }                     
-            return listEmp.ToList();
+            return from t1 in _contaxt.Employees.Where(m => m.EMP_IsActive.Equals(true) && m.FRM_Id.Equals(FRM_Id) && 
+                        !(from t2 in _contaxt.Clients_Employees.Where(ce => ce.CLI_Id.Equals(CLI_Id))
+                              select t2.EMP_Id).Contains(m.EMP_Id))
+                      select t1;
         }
+
+        public IEnumerable<Employees> getEmployeeList(int FRM_Id)
+        {
+            return _contaxt.Employees.Where(m => m.FRM_Id.Equals(FRM_Id));
+        }
+
         public string ClientEmployee(Clients_Employees clientsEmployees,int AdminId)
         {
             string res = string.Empty;

@@ -7,19 +7,33 @@
 @section scripts{
     <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            debugger;
+            CLE_Id = $('#CLE_Id').val();
+            if (CLE_Id > 0) {
+                $('select', 'form').attr('disabled', true).attr('readonly', true);
+            }
+
+            $("#submit").click(function (event) {
+                $('select', 'form').attr('disabled', false).attr('readonly', false);
+                $("#frm").submit();
+            });
+        });
+    </script>
 }
-    <div class="modal-dialog modelLeftSide">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <div class="modal-content modal-lg">
-            <div class="modal-header">
-                <h4 class="modal-title">@ViewBag.ClientName</h4>
-            </div>
-            <div class="modal-body">
-                <div class="m-b-30">
-                    @using (Html.BeginForm("ClientEmployee", "Clients", FormMethod.Post))
-                    {
-                        @Html.HiddenFor(m => m.CLE_Id)
-                        @Html.HiddenFor(m => m.CLI_Id)
+<div class="modal-dialog modelLeftSide">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <div class="modal-content modal-lg">
+        <div class="modal-header">
+            <h4 class="modal-title">@ViewBag.ClientName</h4>
+        </div>
+        <div class="modal-body">
+            <div class="m-b-30">
+                @using (Html.BeginForm("ClientEmployee", "Clients", FormMethod.Post,new { @id="frm"}))
+                {
+                    @Html.HiddenFor(m => m.CLE_Id)
+                    @Html.HiddenFor(m => m.CLI_Id)
 
                     <div class="row">
                         <div class="col-md-12">
@@ -46,13 +60,17 @@
 
                     </div>
 
-                        <div class="m-t-20 text-center">
-                            <input type="submit" class="btn btn-primary" value="Save Changes" />
-                        </div>
-                    }
+                    <div class="m-t-20 text-center">
+                        <input type="submit" id="submit" class="btn btn-primary" value="Save Changes" />
+                    </div>
+                }
 
-                </div>
             </div>
         </div>
     </div>
+</div>
+
+
+
+
 

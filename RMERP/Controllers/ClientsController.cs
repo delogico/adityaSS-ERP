@@ -435,26 +435,31 @@ namespace RMERP.Controllers
 
         [HttpGet]
         [Breadcrumb("Assign Employee", FromAction = "AddEditClients")]
-        public ActionResult AddEmployee(int CLI_Id)
+        public ActionResult AddEmployee(int CLI_Id,int CLE_Id=-1)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             ClientEmployeeVM cvm = new ClientEmployeeVM();
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            int FRM_Id = 0;
-            //if (sessionUtils.GetLoggedFirmID().HasValue)
-            //{
-            //    FRM_Id = sessionUtils.GetLoggedFirmID().Value;
-            //}
-            FRM_Id = clientsManager.GetClientById(CLI_Id).FRM_Id;
-
+            int FRM_Id = clientsManager.GetClientById(CLI_Id).FRM_Id;
             DesignationManager designationManager = new DesignationManager(_context);
             IEnumerable<AssignEmployeeVM> listDesignations = designationManager.getDesignationsListInVM(CLI_Id);
-            IEnumerable<EmployeeVM> listEmployee = EmployeesMapper.MapEmployees(clientsManager.getEmployeeList(CLI_Id, FRM_Id).ToList());
+            IEnumerable<EmployeeVM> listEmployee = null;
+            if (CLE_Id > 0)
+            {
+                listEmployee = EmployeesMapper.MapEmployees(clientsManager.getEmployeeList(FRM_Id).ToList());
+                Clients_Employees clientEmployee = clientsManager.ClientEmployeeById(CLE_Id);
+                cvm.DES_Id = clientEmployee.DES_Id;
+                cvm.EMP_Id = clientEmployee.EMP_Id;
+                cvm.CLE_RegisteredOn = clientEmployee.CLE_RegisteredOn;
+            }
+            else
+            {
+                listEmployee = EmployeesMapper.MapEmployees(clientsManager.getActiveEmployeeList_NotAssignedYet(CLI_Id,FRM_Id).ToList());
+            }
+
             ViewBag.EmployeeList = listEmployee;
             ViewBag.designationList = listDesignations;
             cvm.CLI_Id = CLI_Id;
-            ClientId = CLI_Id; 
-            ViewBag.ClientName = clientsManager.GetClientById(CLI_Id).CLI_Name;
+            ViewBag.ClientName = clientsManager.GetClientById(CLI_Id).CLI_Name;            
             return View(cvm);
         }
         [HttpPost]
@@ -496,8 +501,8 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
         }
+               
         
-
         //public FileResult GenerateExcelTemplate_TwoRow()
         //{
         //    ClientsManager clientsManager = new ClientsManager(_context, Configuration);

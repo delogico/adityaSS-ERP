@@ -451,7 +451,9 @@
                                                     <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                     <ul class="dropdown-menu pull-right">
                                                         <li><a href='@Url.Action("DeleteClientEmployee","Clients",new { CLE_Id=item.CLE_Id})' title="Delete"><i class="fa fa-trash m-r-5"></i> Delete</a></li>
+                                                        <li><a href='@Url.Action("AddEmployee","Clients",new { CLI_Id=Model.clientsModel.CLI_Id, CLE_Id=item.CLE_Id})' title="Delete"><i class="fa fa-edit m-r-5"></i> Edit</a></li>
                                                     </ul>
+                                                    
                                                 </div>
                                             </td>
                                         </tr>
@@ -559,6 +561,7 @@
 
 
         $(document).ready(function () {
+            
             radioShow();
             var CLI_Id = $("#clientsModel_FRM_Id").val();
             if (CLI_Id > 0) {
