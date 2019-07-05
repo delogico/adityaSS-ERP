@@ -405,7 +405,8 @@ namespace RMERP.DAL.ManagerClasses
         public string ClientEmployee(Clients_Employees clientsEmployees,int AdminId)
         {
             string res = string.Empty;
-            clientsEmployees.CLE_RegisteredOn = ProjectUtils.DateNow();
+            if(clientsEmployees.CLE_RegisteredOn==null)
+                clientsEmployees.CLE_RegisteredOn = ProjectUtils.DateNow();
             clientsEmployees.ADM_Id_RegisteredBy = AdminId;
             try
             {

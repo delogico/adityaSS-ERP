@@ -14,8 +14,11 @@ namespace RMERP.DAL.ViewModel
         public int EMP_Id { get; set; }
         [Display(Name = "Designation")]
         [Required(ErrorMessage = "Designation is required")]
-        public int DES_Id { get; set; } 
-        public DateTime CLE_RegisteredOn { get; set; }
+        public int DES_Id { get; set; }
+        [Display(Name = "Registered On")]
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "Registeration date is required")]
+        public DateTime CLE_RegisteredOn { get; set; } = DateTime.Now;
         public int ADM_Id_RegisteredBy { get; set; }
         public string DES_Title { get; set; }
         public EmployeeVM employee { get; set; }
