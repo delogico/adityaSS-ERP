@@ -12,6 +12,7 @@ namespace RMERP.DAL.ViewModel
         public int CRI_Id { get; set; }
         public decimal WRC_Amount { get; set; }
         public int Emp_ID { get; set; }
+        public int FRM_ID { get; set; }
         public string Emp_Name { get; set; }
     }
 

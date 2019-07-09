@@ -427,14 +427,15 @@ namespace RMERP.DAL.ManagerClasses
         {
             IEnumerable<Clients_Employees> list=_contaxt.Clients_Employees.Where(m=>m.CLI_Id.Equals(ClientId)).Include(m=>m.EMP_).Include(m=>m.DES_).ToList();
             return list;
-        }
+        }        
         public IEnumerable<Clients_Employees> listActiveClientsEmployees(int ClientId,DateTime monthDate)
         {
             DateTime lastDate= new DateTime(monthDate.Year, monthDate.Month, 1).AddMonths(1).AddDays(-1);
             DateTime firstDate = new DateTime(monthDate.Year, monthDate.Month, 1);
             IEnumerable<Clients_Employees> list = _contaxt.Clients_Employees
                                                 .Where(m => m.CLI_Id.Equals(ClientId)
-                                                && m.CLE_RegisteredOn.Date <= lastDate.Date 
+                                                && m.CLE_RegisteredOn.Date <= lastDate.Date
+                                                && (m.CLE_UnassignedOn==null || m.CLE_UnassignedOn >= lastDate.Date)
                                                 && (m.EMP_.EMP_IsActive==true || (m.EMP_.EMP_IsActive==false && m.EMP_.EMP_InactivatedOn!=null && (m.EMP_.EMP_InactivatedOn.Value.Date >= firstDate.Date))))
                                                 .Include(m => m.EMP_)
                                                 .Include(m => m.DES_).ToList();
@@ -452,13 +453,15 @@ namespace RMERP.DAL.ManagerClasses
             Clients_Employees clientsEmployees = _contaxt.Clients_Employees.Find(CleId);
             return clientsEmployees;
         }
-        public string deleteClientEmployee(int id)
+        public string UnassignClientEmployee(int id,DateTime UnassignedOn,int Adm_Id)
         {
             string res = string.Empty;
             try
             {
-                var ClientEmp = _contaxt.Clients_Employees.Find(id);
-                _contaxt.Clients_Employees.Remove(ClientEmp);
+                Clients_Employees clients_Employees = _contaxt.Clients_Employees.Find(id);
+                clients_Employees.CLE_UnassignedOn = UnassignedOn;
+                clients_Employees.ADM_Id_UnassignedBy = Adm_Id;
+                _contaxt.Clients_Employees.Update(clients_Employees);
                 _contaxt.SaveChanges();
             }
             catch (Exception ex)

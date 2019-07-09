@@ -19,7 +19,11 @@ namespace RMERP.DAL.ViewModel
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Registeration date is required")]
         public DateTime CLE_RegisteredOn { get; set; } = DateTime.Now;
-        public int ADM_Id_RegisteredBy { get; set; }
+
+        public DateTime? CLE_UnassignedOn { get; set; }
+        public int? ADM_Id_UnassignedBy { get; set; }
+
+        public int ADM_Id_RegisteredBy { get; set; }       
         public string DES_Title { get; set; }
         public EmployeeVM employee { get; set; }
     }

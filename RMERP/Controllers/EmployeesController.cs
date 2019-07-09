@@ -46,7 +46,7 @@ namespace RMERP.Controllers
                 FRM_Id = sessionUtils.GetLoggedFirmID().Value;
             }
             EmployeeManager employeeManager = new EmployeeManager(_context);
-            return View(EmployeesMapper.MapEmployees(employeeManager.GetEmployees(FRM_Id).ToList()));
+            return View(EmployeesMapper.MapEmployees(employeeManager.GetEmployees(FRM_Id).ToList(), _context));
         }
 
         [HttpGet]
@@ -83,7 +83,7 @@ namespace RMERP.Controllers
         [HttpPost]
         public ActionResult AddEditEmployees(EmployeeVM employeeVM)
         {
-           
+
             string res = string.Empty;
             EmployeeManager employeeManager = new EmployeeManager(_context);
             if (ModelState.IsValid)
@@ -106,15 +106,15 @@ namespace RMERP.Controllers
 
         }
 
-        public ActionResult ActiveEmployee(int EMP_Id,DateTime date)
-        {            
-            string res = string.Empty;
+        public ActionResult ActiveEmployee(int EMP_Id, DateTime date)
+        {
+
             EmployeeManager employeeManager = new EmployeeManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            res = employeeManager.ActiveEmployee(EMP_Id, date, sessionUtils.GetLoggedAdminID());
-            if (res != string.Empty)
+            employeeManager.ActiveEmployee(EMP_Id, date, sessionUtils.GetLoggedAdminID(), out string actionMessage);
+            if (actionMessage != string.Empty)
             {
-                TempData["message"] = "There is some problem! Please Try Again";
+                TempData["message"] = actionMessage;
             }
             return RedirectToAction("Index");
         }
@@ -239,17 +239,17 @@ namespace RMERP.Controllers
             employeeVM.employee_Document.EMP_Id = employeeVM.EMP_Id;
             employeeVM.employee_Document.EMD_Name = file.FileName;
 
-            int EMD_Id= documentManager.AddEmployeeDocument(EmployeeDocumentMapper.mapMeModel(employeeVM.employee_Document));
+            int EMD_Id = documentManager.AddEmployeeDocument(EmployeeDocumentMapper.mapMeModel(employeeVM.employee_Document));
 
             if (EMD_Id > 0)
             {
                 string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
                 string DocumentPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("EMPLOYEE_DOCUMENT_PATH").Value;
 
-                if (!System.IO.Directory.Exists(DocumentPath+"/"+ EMD_Id))
+                if (!System.IO.Directory.Exists(DocumentPath + "/" + EMD_Id))
                 {
                     System.IO.Directory.CreateDirectory(DocumentPath + "/" + EMD_Id);
-                }               
+                }
                 if (file == null || file.Length <= 0)
                 {
                 }
@@ -260,7 +260,7 @@ namespace RMERP.Controllers
 
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
-                       await file.CopyToAsync(stream);
+                        await file.CopyToAsync(stream);
                     }
 
                 }
@@ -277,24 +277,24 @@ namespace RMERP.Controllers
             {
                 string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
                 string DocumentPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("EMPLOYEE_DOCUMENT_PATH").Value;
-                string[] files = System.IO.Directory.GetFiles(DocumentPath + "/" + EMD_Id);                
-                System.IO.Directory.Delete(DocumentPath + "/" + EMD_Id,true);
+                string[] files = System.IO.Directory.GetFiles(DocumentPath + "/" + EMD_Id);
+                System.IO.Directory.Delete(DocumentPath + "/" + EMD_Id, true);
             }
             else
             {
                 TempData["message"] = "Employee data can not deleted";
             }
-           
+
             return RedirectToAction("AddEditEmployee", new { EMP_Id = Employee_Id });
         }
         public async Task<FileResult> DownloadDocument(int EMD_Id)
         {
             EmployeeDocumentManager documentManager = new EmployeeDocumentManager(_context);
             Employee_Documents document = documentManager.GetEmployeeDocumenyById(EMD_Id);
-          //  WebClient wc = new WebClient();
+            //  WebClient wc = new WebClient();
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
             string DocumentPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("EMPLOYEE_DOCUMENT_PATH").Value;
-            DocumentPath += "\\" + EMD_Id+"\\"+ document.EMD_Name;
+            DocumentPath += "\\" + EMD_Id + "\\" + document.EMD_Name;
 
             var memory = new MemoryStream();
             using (var stream = new FileStream(DocumentPath, FileMode.Open))
@@ -302,7 +302,7 @@ namespace RMERP.Controllers
                 await stream.CopyToAsync(memory);
             }
             memory.Position = 0;
-                 
+
             return File(memory, GetContentType(DocumentPath), document.EMD_Name);
 
         }
@@ -322,7 +322,7 @@ namespace RMERP.Controllers
                 {".doc", "application/vnd.ms-word"},
                 {".docx", "application/vnd.ms-word"},
                 {".xls", "application/vnd.ms-excel"},
-                {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},  
+                {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
                 {".png", "image/png"},
                 {".jpg", "image/jpeg"},
                 {".jpeg", "image/jpeg"},
@@ -330,5 +330,25 @@ namespace RMERP.Controllers
                 {".csv", "text/csv"}
             };
         }
+
+        [AcceptVerbs("Get", "Post")]
+        public IActionResult CheckExistingAadhar(string EMP_Aadhar_Number)
+        {
+            EmployeeManager employeeManager = new EmployeeManager(_context);
+            bool ExistingAadhar = false;
+            try
+            {
+                ExistingAadhar = !employeeManager.CheckExistingAadhar(EMP_Aadhar_Number);
+                return Json(ExistingAadhar);
+            }
+
+            catch (Exception ex)
+            {
+                return Json(false);
+
+            }
+
+        }
+
     }
 }

@@ -355,6 +355,8 @@ namespace RMERP.DAL.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
+                entity.Property(e => e.CLE_UnassignedOn).HasColumnType("datetime");
+
                 entity.HasOne(d => d.CLI_)
                     .WithMany(p => p.Clients_Employees)
                     .HasForeignKey(d => d.CLI_Id)

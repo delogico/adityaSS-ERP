@@ -28,7 +28,7 @@
     </div>
     <div class="col-md-2">
         <h6>Wage Register:</h6>
-        <b>@Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = Model.WAG_Id })</b>
+        <b>@Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = Model.WAG_Id, FRM_Id=Model.FRM_Id })</b>
         <div style="font-size:10px;">
 
             @if (Model.WageStatus == true)

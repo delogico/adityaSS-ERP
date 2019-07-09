@@ -15,6 +15,8 @@ namespace RMERP.DAL.Models
         public int EMP_Id { get; set; }
         public int DES_Id { get; set; }
         public DateTime CLE_RegisteredOn { get; set; }
+        public DateTime? CLE_UnassignedOn { get; set; }
+        public int? ADM_Id_UnassignedBy { get; set; }
         public int ADM_Id_RegisteredBy { get; set; }
 
         public Clients CLI_ { get; set; }

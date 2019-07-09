@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RMERP.DAL.ManagerClasses;
 using RMERP.DAL.Models;
 using RMERP.DAL.ViewModel;
 
@@ -8,8 +9,9 @@ namespace RMERP.DAL.Mappers
 {
     public class EmployeesMapper
     {
-        public static EmployeeVM MapMe(Employees employee)
+        public static EmployeeVM MapMe(Employees employee, RMERPContext _context=null)
         {
+
             EmployeeVM emp = new EmployeeVM();
             emp.EMP_Id = employee.EMP_Id;
             emp.EMP_FirstName = employee.EMP_FirstName;
@@ -52,15 +54,21 @@ namespace RMERP.DAL.Mappers
             if (employee.FRM_ != null)
                 emp.FRM_ = employee.FRM_;
 
-            emp.FRM_Id = employee.FRM_Id;
+            emp.FRM_Id = employee.FRM_Id;            
+            if (_context != null)
+            {                
+                EmployeeManager employeeManager = new EmployeeManager(_context);
+                emp.IsAssigned = employeeManager.IsAssignedEmployee(emp.EMP_Id);
+            }
+            
             return emp;
         }
 
-        public static List<EmployeeVM> MapEmployees(List<Employees> employees)
+        public static List<EmployeeVM> MapEmployees(List<Employees> employees,RMERPContext _context=null)
         {
             List<EmployeeVM> lst = new List<EmployeeVM>();
             foreach (Employees employee in employees)
-                lst.Add(MapMe(employee));
+                lst.Add(MapMe(employee, _context));
             return lst;
         }
 

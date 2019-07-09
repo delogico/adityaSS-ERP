@@ -237,7 +237,15 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.EMP_Aadhar_Number, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_Aadhar_Number, new { @class = "form-control" })
+                                        @if (Model.EMP_Id > 0)
+                                        {
+                                            @Html.HiddenFor(m => m.EMP_Aadhar_Number)
+                                            @Html.TextBoxFor(m => m.EMP_Aadhar_Number, new { @class = "form-control", disabled = "disabled" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => m.EMP_Aadhar_Number, new { @class = "form-control" })
+                                        }
                                         @Html.ValidationMessageFor(m => m.EMP_Aadhar_Number, "", new { @class = "text-danger" })
                                     </div>
                                 </div>

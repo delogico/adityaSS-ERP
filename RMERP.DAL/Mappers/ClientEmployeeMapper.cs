@@ -18,7 +18,9 @@ namespace RMERP.DAL.Mappers
             clientEmployeeVM.EMP_Id = employee.EMP_Id;
             clientEmployeeVM.DES_Id = employee.DES_Id;
             clientEmployeeVM.ADM_Id_RegisteredBy = employee.ADM_Id_RegisteredBy;
-            if(employee.DES_ != null)
+            clientEmployeeVM.CLE_UnassignedOn = employee.CLE_UnassignedOn;
+            clientEmployeeVM.ADM_Id_UnassignedBy = employee.ADM_Id_UnassignedBy;
+            if (employee.DES_ != null)
                 clientEmployeeVM.DES_Title = employee.DES_.DES_Title;
             if(employee.EMP_ != null)
                 clientEmployeeVM.employee = EmployeesMapper.MapMe(employee.EMP_);

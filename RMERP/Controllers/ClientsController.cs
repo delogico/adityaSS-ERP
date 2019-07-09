@@ -146,7 +146,7 @@ namespace RMERP.Controllers
                 case "Exclude_WeeklyOff":
                     return "Exclude Weekly Off";
                 case "Reduce_Fixed_Days":
-                    return "Reduce Fixed Days";
+                    return "Fixed Days";
                 default:
                     return "";
             }
@@ -475,6 +475,7 @@ namespace RMERP.Controllers
                 clientsEmployees.EMP_Id = cvm.EMP_Id;
                 clientsEmployees.DES_Id = cvm.DES_Id;
                 clientsEmployees.CLE_RegisteredOn = cvm.CLE_RegisteredOn;
+                //clientsEmployees.CLE_UnassignedOn = cvm.CLE_UnassignedOn;
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
                 res = clientsManager.ClientEmployee(clientsEmployees, sessionUtils.GetLoggedAdminID());
                 if (res != string.Empty)
@@ -484,15 +485,16 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = cvm.CLI_Id, tab = "ClientEmployee" });
         }
-        public ActionResult DeleteClientEmployee(int CLE_Id = -1)
+        public ActionResult UnassignClientEmployee(DateTime UnassignedOn, int CLE_Id = -1)
         {
             ClientsViewModel clientsViewModel = new ClientsViewModel();
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
             if (ModelState.IsValid)
             {
                 if (CLE_Id > 0)
                 {
-                    string res = clientsManager.deleteClientEmployee(CLE_Id);
+                    string res = clientsManager.UnassignClientEmployee(CLE_Id, UnassignedOn, sessionUtils.GetLoggedAdminID());
                     if (res != string.Empty)
                     {
                         TempData["message"] = "Employee can not deleted";

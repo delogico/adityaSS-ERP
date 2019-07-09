@@ -1,4 +1,5 @@
-﻿using RMERP.DAL.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using RMERP.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -26,6 +27,8 @@ namespace RMERP.DAL.ViewModel
         public string EMP_Aadhar_Name { get; set; }
 
         [Display(Name = "Aadhar card number")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Aadhar card number is required")]
+        [Remote("CheckExistingAadhar", "Employees", ErrorMessage = "Aadhar card already exists!")]
         public string EMP_Aadhar_Number { get; set; }
 
         [Display(Name = "Date of birth")]
@@ -128,6 +131,8 @@ namespace RMERP.DAL.ViewModel
         public int FRM_Id { get; set; }
 
         public Firms FRM_ { get; set; }
+
+        public bool IsAssigned { get; set; }
     }
 }
 

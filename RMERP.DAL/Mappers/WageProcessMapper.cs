@@ -20,6 +20,7 @@ namespace RMERP.DAL.Mappers
             wageProcessVM.WAG_Id = wageProcess.WAG_Id;
             wageProcessVM.WAG_Month = wageProcess.WAG_Month;
             wageProcessVM.WageStatus = wageProcess.WAG_Status;
+            wageProcessVM.FRM_Id = wageProcess.FRM_Id;
             if (wageProcess.Attendance != null)           
                 wageProcessVM.Attendance = wageProcess.Attendance.ToList();
             if (wageProcess.Wage_Process_Clients != null)

@@ -231,7 +231,7 @@ namespace RMERP.Controllers
                 int totalPresence = 0, totalHolidays = 0;
                 Double totalExtraHours = 0;
                 DateTime tmpDate = startDate;
-                for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
+                for (int j = (row.FirstCellNum + 4); j < row.LastCellNum - 1; j++)
                 {
                     Attendance attendance = new Attendance();
                     attendance.EMP_Id = EMP_Id;

@@ -32,14 +32,15 @@ namespace RMERP.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
         [Breadcrumb("Wage Register", FromAction = "Index", FromController = typeof(WageProcessController))]
-        public ActionResult WageRegister(int WAG_Id)
+        public ActionResult WageRegister(int WAG_Id,int FRM_Id)
         {
             WAG_Id = (WAG_Id <= 0 ? WagId : WAG_Id);
+            FRM_Id = (FRM_Id <= 0 ? Frm_Id : FRM_Id);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             if (WAG_Id > 0)
             {
-                List<ClientWageRegisterVM> lst = wageRegisterManager.GenerateWageRegisterTable(WAG_Id, sessionUtils.GetLoggedAdminID());
+                List<ClientWageRegisterVM> lst = wageRegisterManager.GenerateWageRegisterTable(WAG_Id, sessionUtils.GetLoggedAdminID(), FRM_Id);
                 return View(lst);
             }
             else
@@ -52,17 +53,18 @@ namespace RMERP.Controllers
         {
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            Wage_Process wageProcess = new Wage_Process();
             if (WAG_Id > 0)
             {
                 WageProcessManager wageManager = new WageProcessManager(_context);
-                Wage_Process wageProcess = wageManager.getWageProcessById(WAG_Id);
+                wageProcess = wageManager.getWageProcessById(WAG_Id);
                 List<Wage_Register> wage_Registers = WageRegisterMapper.mapWageRegisters(wageRegisterManager.GetWageRegisterCalculated(wageProcess, Convert.ToInt32(item_CLI_Id), sessionUtils.GetLoggedAdminID()));
                 wageRegisterManager.SaveWageRegister(wage_Registers, WAG_Id, item_CLI_Id, sessionUtils.GetLoggedAdminID());
             }
-            return RedirectToAction("WageRegister", new { WAG_Id = WAG_Id });
+            return RedirectToAction("WageRegister", new { WAG_Id = WAG_Id,FRM_Id= wageProcess.FRM_Id });
         }
         [HttpPost]
-        public ActionResult ResetWageRegister(int WAG_Id, string item_CLI_Id)
+        public ActionResult ResetWageRegister(int WAG_Id, string item_CLI_Id,int FRM_Id)
         {
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             string res = wageRegisterManager.ResetWageRegister(WAG_Id, item_CLI_Id);
@@ -70,7 +72,7 @@ namespace RMERP.Controllers
             {
                 TempData["message"] = "Wage Register is not saved!";
             }
-            return RedirectToAction("WageRegister", new { WAG_Id = WAG_Id });
+            return RedirectToAction("WageRegister", new { WAG_Id = WAG_Id,FRM_Id= FRM_Id });
         }
         [Breadcrumb("Edit WageRegister", FromAction = "WageRegister")]
         public ActionResult EditWageRegister(int WAR_Id = -1)
@@ -98,18 +100,18 @@ namespace RMERP.Controllers
             {
                 TempData["message"] = "Wage Register is not updated!";
             }
-            return RedirectToAction("WageRegister", new { WAG_Id = wageRegisterVM.WAG_Id });
+            return RedirectToAction("WageRegister", new { WAG_Id = wageRegisterVM.WAG_Id,FRM_Id= wageRegisterVM.wageProcessVM.FRM_Id });
         }
 
 
-        public async Task<FileResult> WageRegisterExcel(int WAG_Id)
+        public async Task<FileResult> WageRegisterExcel(int WAG_Id,int FRM_Id)
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             List<ClientWageRegisterVM> List = new List<ClientWageRegisterVM>();
             if (WAG_Id > 0)
             {
-                List = wageRegisterManager.GenerateWageRegisterTable(WAG_Id, sessionUtils.GetLoggedAdminID());
+                List = wageRegisterManager.GenerateWageRegisterTable(WAG_Id, sessionUtils.GetLoggedAdminID(), FRM_Id);
             }
 
             ReportsManager manager = new ReportsManager(_context);
@@ -399,7 +401,7 @@ namespace RMERP.Controllers
                                 double TotalPaybleDays = 0;
                                 decimal TotalBasic = 0M, TotalDA = 0M, TotalHRA = 0M,TotalOT=0M,TotalGrossTotal=0M,TotalPF=0M,TotalESIC=0M,TotalProfTax=0m,TotalRevenue=0M,TotalCanteenFacility=0M,TotalAdvance=0M,TotalDeduct=0M,TotalFinal=0M;
                                 
-                                  List<AllowanceData> ListAllowances = new List<AllowanceData>();
+                                 // List<AllowanceData> ListAllowances = new List<AllowanceData>();
                                
                                 foreach (var employee in wageRegisters)
                                 {                                   
@@ -441,11 +443,11 @@ namespace RMERP.Controllers
                                     foreach (var all in employee.allowanceVMs)
                                     {
                                         arrAllowancesTotal[j] = arrAllowancesTotal[j] + all.WAA_Amount_Calculated;
-                                        AllowanceData allowanceData = new AllowanceData();
-                                        allowanceData.AllowanceId = all.allowanceVM.ALL_Id;
-                                        allowanceData.AllowanceName = all.allowanceVM.ALL_Alias;
-                                        allowanceData.TotalAllowance = all.WAA_Amount_Calculated;
-                                        ListAllowances.Add(allowanceData);
+                                      //  AllowanceData allowanceData = new AllowanceData();
+                                        //allowanceData.AllowanceId = all.allowanceVM.ALL_Id;
+                                       // allowanceData.AllowanceName = all.allowanceVM.ALL_Alias;
+                                      //  allowanceData.TotalAllowance = all.WAA_Amount_Calculated;
+                                      //  ListAllowances.Add(allowanceData);
                                         ICell cellEmpAll = row.CreateCell(cellAllowance+1);
                                         cellEmpAll.SetCellValue(Math.Round(all.WAA_Amount_Calculated).ToString());
                                         cellEmpAll.CellStyle = styleGrey40;
@@ -634,11 +636,6 @@ namespace RMERP.Controllers
             new FileInfo(Path.Combine(newPath, fileName)).Delete();
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
-        private class AllowanceData
-        {
-            public int AllowanceId { get; set; }
-            public string AllowanceName { get; set; }
-            public decimal TotalAllowance { get; set; }
-        }
+        
     }
 }

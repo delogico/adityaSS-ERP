@@ -24,9 +24,10 @@ namespace RMERP.Controllers
             Configuration = configuration;
         }
         [Breadcrumb("Update Canteen Amount", FromAction = "WageRegister", FromController = typeof(WageRegisterController))]
-        public IActionResult UpdateCanteenAmount(int CRI_Id,int WAG_Id)
+        public IActionResult UpdateCanteenAmount(int CRI_Id,int WAG_Id,int FRM_Id)
         {
-            WagId = WAG_Id;            
+            WagId = WAG_Id;
+            Frm_Id = FRM_Id;
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
             DateTime WAG_Month = wageProcessManager.getWageProcessById(WagId).WAG_Month;
             ViewBag.Wag_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
@@ -53,6 +54,7 @@ namespace RMERP.Controllers
                     canteenVM.CRI_Id = CRI_Id;
                     canteenVM.Emp_Name= employee.EMP_.EMP_FirstName+" "+ employee.EMP_.EMP_MiddleName+" "+employee.EMP_.EMP_SurName;
                 }
+                canteenVM.FRM_ID = FRM_Id;
                 wage_Register_Canteens.Add(canteenVM);
             }
             updateWageRegisterCanteen updateWageCanteen = new updateWageRegisterCanteen();
@@ -72,7 +74,7 @@ namespace RMERP.Controllers
             {
                 TempData["message"] = "Try Again";
             }            
-            return RedirectToAction("WageRegister", "WageRegister", new { WAG_Id= list[0].WAG_Id});
+            return RedirectToAction("WageRegister", "WageRegister", new { WAG_Id= list[0].WAG_Id,FRM_Id= list[0].FRM_ID });
         }
     }
 }

@@ -54,6 +54,7 @@
                                                     @Html.HiddenFor(m => m.canteenVMs[i].WAG_Id)
                                                     @Html.HiddenFor(m => m.canteenVMs[i].WRC_Id)
                                                     @Html.HiddenFor(m => m.canteenVMs[i].CRI_Id)
+                                                    @Html.HiddenFor(m => m.canteenVMs[i].FRM_ID)
                                                     <div class="form-group">
                                                         @Html.TextBoxFor(m => m.canteenVMs[i].WRC_Amount, new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(m => m.canteenVMs[i].WRC_Amount, "", new { @class = "text-danger" })

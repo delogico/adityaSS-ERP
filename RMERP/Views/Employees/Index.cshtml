@@ -9,7 +9,7 @@
     @if (TempData["message"] != null)
     {
         <script>
-        $(document).ready(function () {
+            $(document).ready(function () {
             alert('@TempData["message"]');
         });
         </script>
@@ -31,7 +31,8 @@
             </div>
             <div class="col-sm-4 text-right m-b-30">
                 <a class="btn btn-primary rounded" href="@Url.Action("AddEditEmployee","Employees")"><i class="fa fa-plus"></i> Add New Employee</a>
-            </div>
+            </div>           
+
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -53,43 +54,44 @@
                             </thead>
                             <tbody>
                                 @foreach (var item in Model)
-                                {
-                                    var style="";
+                                {                                    
+                                    var style = "";
                                     var lable = "Employee Left";
-                                    if (item.EMP_IsActive.Equals(false)) {
+                                    if (item.EMP_IsActive.Equals(false))
+                                    {
                                         style = "style=color:orangered;";
                                         lable = "Employee left";
                                     }
-                                <tr @style>
-                                    <td>@item.FRM_.FRM_ShortName</td>
-                                    <td>@item.EMP_FullName</td>
-                                    <td>@DateHelper.getDateWithFormat(@item.EMP_DOB)</td>
-                                    <td>@item.EMP_Designation</td>
-                                    <td>
-                                        @DateHelper.getDateWithFormat(@item.EMP_DateOfJoining)
-                                        @if (item.EMP_IsActive.Equals(false))
-                                        {
-                                            <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue?DateHelper.getDateWithFormat(item.EMP_InactivatedOn.Value):"")</div>
-                                        }
-                                    </td>
-                                    <td>@item.EMP_MoF</td>
-                                    <td>@item.EMP_Contact_Primary</td>
-                                    <td class="text-right">
-                                        <div class="dropdown">
-                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
-                                                <li>
-                                                    <a href='#' title="Employee Left" onclick="onConfirmClick(@item.EMP_Id)">
-                                                        <i class="fa fa-trash-o m-r-5"></i>
-                                                        @lable
-                                                    </a>
-                                                </li>
-                                                <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-eye m-r-5"></i> View</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    <tr @style>
+                                        <td>@item.FRM_.FRM_ShortName</td>
+                                        <td>@item.EMP_FullName</td>
+                                        <td>@DateHelper.getDateWithFormat(@item.EMP_DOB)</td>
+                                        <td>@item.EMP_Designation</td>
+                                        <td>
+                                            @DateHelper.getDateWithFormat(@item.EMP_DateOfJoining)
+                                            @if (item.EMP_IsActive.Equals(false))
+                                            {
+                                                <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue ? DateHelper.getDateWithFormat(item.EMP_InactivatedOn.Value) : "")</div>
+                                            }
+                                        </td>
+                                        <td>@item.EMP_MoF</td>
+                                        <td>@item.EMP_Contact_Primary</td>
+                                        <td class="text-right">
+                                            <div class="dropdown">
+                                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                <ul class="dropdown-menu pull-right">
+                                                    <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
+                                                    <li>
+                                                        <a href='#' title="Employee Left" onclick="onConfirmClick(@item.EMP_Id,'@item.IsAssigned')">
+                                                            <i class="fa fa-trash-o m-r-5"></i>
+                                                            @lable
+                                                        </a>
+                                                    </li>
+                                                    <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-eye m-r-5"></i> View</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 }
 
                             </tbody>
@@ -107,20 +109,22 @@
 </div>
 
 <script>
-    function onConfirmClick(EMP_Id) {
+    function onConfirmClick(EMP_Id, IsAssigned) {
         debugger;
+        if (IsAssigned=="False") {
+
             bootbox.prompt({
                 title: "Choose Date!",
                 inputType: 'date',
-           
-                callback: function (result) {   
+
+                callback: function (result) {
                     debugger;
                     if (result != null) {
                         $.ajax({
                             type: "POST",
-                            url: "/Employees/ActiveEmployee?EMP_Id=" + EMP_Id +"&date=" + result,
+                            url: "/Employees/ActiveEmployee?EMP_Id=" + EMP_Id + "&date=" + result,
                             contentType: 'application/json; charset=utf-8',
-                            datatype: 'json',                            
+                            datatype: 'json',
                             type: "GET",
                             success: function () {
                                 window.location = '@Url.Action("Index", "Employees")';
@@ -132,5 +136,8 @@
                     }
                 }
             });
+        } else {
+            alert("We can't delete this, Because it is active in some client.");
+        }
         }
 </script>

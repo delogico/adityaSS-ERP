@@ -441,7 +441,12 @@
                                 <tbody>
                                     @foreach (var item in Model.employees)
                                     {
-                                        <tr>
+                                        var style = "";                                       
+                                        if (item.CLE_UnassignedOn!=null)
+                                        {
+                                            style = "style=color:orangered;";                                           
+                                        }
+                                        <tr @style>
                                             <td><b>@item.DES_Title</b></td>
                                             <td>@item.employee.EMP_FullName</td>
                                             <td>@DateHelper.getDateWithFormat(item.CLE_RegisteredOn)</td>
@@ -450,7 +455,8 @@
                                                 <div class="dropdown">
                                                     <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                     <ul class="dropdown-menu pull-right">
-                                                        <li><a href='@Url.Action("DeleteClientEmployee","Clients",new { CLE_Id=item.CLE_Id})' title="Delete"><i class="fa fa-trash m-r-5"></i> Delete</a></li>
+                                                        @*<li><a href='@Url.Action("UnassignClientEmployee","Clients",new { CLE_Id=item.CLE_Id})' title="Unassign"><i class="fa fa-trash m-r-5"></i> Unassign</a></li>*@
+                                                        <li><a href='#' onclick="onUnassignClick(@item.CLE_Id)" title="Unassign"><i class="fa fa-trash m-r-5"></i> Unassign</a></li>
                                                         <li><a href='@Url.Action("AddEmployee","Clients",new { CLI_Id=Model.clientsModel.CLI_Id, CLE_Id=item.CLE_Id})' title="Delete"><i class="fa fa-edit m-r-5"></i> Edit</a></li>
                                                     </ul>
                                                     
@@ -748,6 +754,31 @@
                             type: "GET",
                             success: function () {
                                 window.location = '@Url.Action("GenerateExcelTemplate_OneRow", "Clients")?month='+result;
+                            }
+
+                        })
+                    }
+                    else if (result == null) {
+                    }
+                }
+            });
+        }
+        function onUnassignClick(CLE_Id) {
+            debugger;
+            bootbox.prompt({
+                title: "Choose Month!",
+                inputType: 'date',
+
+                callback: function (result) {
+                    if (result != null) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Clients/UnassignClientEmployee?UnassignedOn=" + result + "&CLE_Id=" + CLE_Id,
+                            contentType: 'application/json; charset=utf-8',
+                            datatype: 'json',                            
+                            type: "GET",
+                            success: function () {                               
+                                window.location = '@Url.Action("AddEditClients", "Clients",new { @tab = "ClientEmployee" })';                            
                             }
 
                         })

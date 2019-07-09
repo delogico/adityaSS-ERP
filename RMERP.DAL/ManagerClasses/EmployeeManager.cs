@@ -45,12 +45,12 @@ namespace RMERP.DAL.ManagerClasses
                 IEnumerable<Employees> listEmployees = null;
                 if (FRM_Id > 0)
                 {
-                    listEmployees = _context.Employees.Where(m=>m.FRM_Id.Equals(FRM_Id)).OrderBy(m => m.EMP_FirstName).Include(m => m.FRM_).ToList();
+                    listEmployees = _context.Employees.Where(m => m.FRM_Id.Equals(FRM_Id)).OrderBy(m => m.EMP_FirstName).Include(m => m.FRM_).ToList();
                 }
                 else
                 {
                     listEmployees = _context.Employees.OrderBy(m => m.EMP_FirstName).Include(m => m.FRM_).ToList();
-                }               
+                }
                 return listEmployees;
             }
             catch (Exception ex)
@@ -60,26 +60,27 @@ namespace RMERP.DAL.ManagerClasses
         }
         public Employees GetEmployeeById(int EMP_Id)
         {
-            return _context.Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Include(e=>e.Employee_Advance).Include(m=>m.Employee_Documents).Include(m=>m.FRM_).FirstOrDefault();
+            return _context.Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Include(e => e.Employee_Advance).Include(m => m.Employee_Documents).Include(m => m.FRM_).FirstOrDefault();
         }
-        public string ActiveEmployee(int EmpId,DateTime date,int AdminId)
+        public void ActiveEmployee(int EmpId, DateTime date, int AdminId, out string actionMessage)
         {
-            string res = string.Empty;
             Employees employees = new Employees();
             try
             {
                 employees = _context.Employees.Find(EmpId);
-                employees.EMP_IsActive = (employees.EMP_IsActive == false ? true : false);
-                employees.ADM_Id_InactivatedBy = AdminId;
-                employees.EMP_InactivatedOn = date;
-                _context.Employees.Update(employees);
+                  //employees.EMP_IsActive = (employees.EMP_IsActive == false ? true : false);
+                    employees.EMP_IsActive = false;
+                    employees.ADM_Id_InactivatedBy = AdminId;
+                    employees.EMP_InactivatedOn = date;
+                    _context.Employees.Update(employees);
+                    actionMessage = string.Empty;
+               
                 _context.SaveChanges();
             }
             catch (Exception ex)
             {
-                res = ex.Message;
+                actionMessage = "There is some problem! Please Try Again";
             }
-            return res;
         }
         public string AddEditAdvance(Employee_Advance employee_Advance)
         {
@@ -127,10 +128,10 @@ namespace RMERP.DAL.ManagerClasses
         public List<Employee_Advance> GetEmployee_Advances(int EMP_Id)
         {
             List<Employee_Advance> employee_Advances = new List<Employee_Advance>();
-            employee_Advances = _context.Employee_Advance.Where(m=>m.EMP_Id.Equals(EMP_Id)).Include(m=>m.EMP_).ToList();
+            employee_Advances = _context.Employee_Advance.Where(m => m.EMP_Id.Equals(EMP_Id)).Include(m => m.EMP_).ToList();
             return employee_Advances;
         }
-        
+
         //public List<UpdateAdvanceEMI> UpdateAdvanceEMIs(DateTime WAG_Month)
         //{
         //    DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
@@ -147,6 +148,17 @@ namespace RMERP.DAL.ManagerClasses
         //    }
         //    return UpdateAdvanceEMIs;
         //}
+        public bool IsAssignedEmployee(int EMP_Id)
+        {
+            List<Clients_Employees> list = _context.Clients_Employees.Where(m => m.EMP_Id.Equals(EMP_Id) && m.CLE_UnassignedOn != null).ToList();
+            return list.Count() > 0;
+        }
+
+        public bool CheckExistingAadhar(string AadharNumber)
+        {
+            return _context.Employees.Any(m => m.EMP_Aadhar_Number.Equals(AadharNumber));
+        }
 
     }
 }
+

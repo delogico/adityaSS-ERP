@@ -63,6 +63,7 @@
             }
 
             $('input[class="Allselection"]').click(function () {
+                debugger;
                 if ($(this).prop("checked") == true) {
                     $("#divReqAllow_" + this.id).show();
                     addCheckbox(this.id);
@@ -77,10 +78,11 @@
                 }
             });
 
-
+            debugger;
             var PFSelection = [];
             var ESICSelection = [];
             var OTSelection = [];
+            var OTDeductSelection = [];
             if ($("#CRI_PF_Formula").val() != "") {
                 PFSelection = $("#CRI_PF_Formula").val().split("+");
             }
@@ -88,7 +90,12 @@
                 ESICSelection = $("#CRI_ESIC_Formula").val().split("+");
             }
             if ($("#CRI_OT_Formula").val() != "") {
+                debugger;               
                 OTSelection = $("#CRI_OT_Formula").val().split("+");
+                if (($("#CRI_OT_Formula").val().includes("-"))){
+                    OTDeductSelection = $("#CRI_OT_Formula").val().split("-");
+                }
+               
             }
             $(document).on("click", "INPUT[class^=PFselection]", function (event) {
                 if ($(this).prop("checked") == true) {
@@ -109,14 +116,29 @@
                 $("#CRI_ESIC_Formula").val(ESICSelection.join("+"));
             });
             $(document).on("click", "INPUT[class^=OTselection]", function (event) {
-                if ($(this).prop("checked") == true) {
-                    OTSelection.push($(this).prop('value'));
-                }
-                else if ($(this).prop("checked") == false) {
-                    OTSelection.splice(OTSelection.indexOf($(this).prop('value')), 1)
-                }
-                $("#CRI_OT_Formula").val(OTSelection.join("+"));
+                calculateFormula();
             });
+            $(document).on("click", "INPUT[class^=OTDeductSelection]", function (event) {
+                calculateFormula();
+            });
+
+            function calculateFormula() {
+                var str = "";
+                $("INPUT[class=OTselection]")  // for all checkboxes
+                    .each(function () {  // first pass, create name mapping
+                        if (this.checked) {
+                            str = str + (str.length>0?"+":"") + this.value;
+                        }
+                    });
+                $("INPUT[class=OTDeductSelection]")  // for all checkboxes
+                    .each(function () {  // first pass, create name mapping
+                        if (this.checked) {
+                            str = str + "-" + this.value;
+                        }
+                    });
+                    
+                $("#CRI_OT_Formula").val(str);
+            }
 
 
             function addCheckbox(AllId) {
@@ -124,11 +146,13 @@
                 var container = $('#PFlist');
                 var containerEsic = $('#ESIClist');
                 var containerOT = $('#OTlist');
+                var containerDeductOT = $('#OTDeductlist');
                 var short = $("#allAllowances_" + (parseInt(id) - 1) + "__allowance_ALL_Shortform");
                 var id = 'PF_' + short.val();
                 container.append("<div class='col-md-12'><input type='checkbox' class='PFselection' id='" + id + "' value='" + short.val() + "' />" + short.val() + "</div>")
                 containerEsic.append("<div class='col-md-12'><input type='checkbox' class='ESICselection' id='" + id + "' value='" + short.val() + "' />" + short.val() + "</div>")
                 containerOT.append("<div class='col-md-12'><input type='checkbox' class='OTselection' id='" + id + "' value='" + short.val() + "' />" + short.val() + "</div>")
+                containerDeductOT.append("<div class='col-md-12'><input type='checkbox' class='OTDeductSelection' id='" + id + "' value='" + short.val() + "' />" + short.val() + "</div>")
                 //$('<input />', { type: 'checkbox', name: short.val(), class: 'ESICselection', id: 'ESIC_'+short.val(), value: short.val() }).appendTo(containerEsic);
                 //$('<div />', { 'for': 'esic' + id, id: 'lbl_' + id, text: v.val(), value: short.val() }).appendTo(containerEsic);
                 //$('<br/>', { id: 'br' + id }).appendTo(containerEsic);
@@ -472,9 +496,11 @@
                                         <div id="OTlist">
                                             @{
                                                 string[] arrOT = null;
+                                                string[] arrDeductOT = null;
                                                 if (Model.CRI_OT_Formula != null)
                                                 {
                                                     arrOT = Model.CRI_OT_Formula.Split('+');
+                                                    arrDeductOT = Model.CRI_OT_Formula.Split('-');
                                                 }
                                             }
                                             @*<div class="col-md-6">
@@ -496,61 +522,89 @@
                                                     @Html.LabelFor(m => m.CRI_OT_Formula, new { @class = "control-label" })
                                                 </label>
                                             </div>
-                                            <div class="col-md-12">
-                                                @if (arrOT != null && arrOT.Contains("BASIC"))
-                                                {
-                                                    @Html.CheckBox("OT_BASIC", new { @class = "OTselection", @value = "BASIC", @checked = "checked" })
-                                                }
-                                                else
-                                                {
-                                                    @Html.CheckBox("OT_BASIC", new { @class = "OTselection", @value = "BASIC" })
-                                                }
-                                                @Html.Raw("BASIC")
-
-                                            </div>
-                                            <div class="col-md-12">
-                                                @if (arrOT != null && arrOT.Contains("DA"))
-                                                {
-                                                    @Html.CheckBox("OT_DA", new { @class = "OTselection", @value = "DA", @checked = "checked" })
-                                                }
-                                                else
-                                                {
-                                                    @Html.CheckBox("OT_DA", new { @class = "OTselection", @value = "DA" })
-                                                }
-                                                @Html.Raw("DA")
-                                            </div>
-                                            <div class="col-md-12">
-                                                @if (arrOT != null && arrOT.Contains("HRA"))
-                                                {
-                                                    @Html.CheckBox("OT_HRA", new { @class = "OTselection", @value = "HRA", @checked = "checked" })
-                                                }
-                                                else
-                                                {
-                                                    @Html.CheckBox("OT_HRA", new { @class = "OTselection", @value = "HRA" })
-                                                }
-                                                @Html.Raw("HRA")
-                                            </div>
-
-
-
-                                            @for (var i = 0; i < Model.allAllowances.Count; i++)
-                                            {
-                                                if (Model.allAllowances[i].flagClientRequirement == true)
-                                                {
+                                            <div class="row">
+                                                <div class="col-md-6">
                                                     <div class="col-md-12">
-                                                        @if (arrOT != null && arrOT.Contains(Model.allAllowances[i].allowance.ALL_Shortform))
+                                                        @if (arrOT != null && arrOT.Contains("BASIC"))
                                                         {
-                                                            @Html.CheckBox(@Model.allAllowances[i].allowance.ALL_Shortform, new { @class = "OTselection", @value = Model.allAllowances[i].allowance.ALL_Shortform, @checked = "checked" })
+                                                            @Html.CheckBox("OT_BASIC", new { @class = "OTselection", @value = "BASIC", @checked = "checked" })
                                                         }
                                                         else
                                                         {
-                                                            @Html.CheckBox(@Model.allAllowances[i].allowance.ALL_Shortform, new { @class = "OTselection", @value = Model.allAllowances[i].allowance.ALL_Shortform })
+                                                            @Html.CheckBox("OT_BASIC", new { @class = "OTselection", @value = "BASIC" })
                                                         }
-                                                        @Html.Raw(Model.allAllowances[i].allowance.ALL_Title)
+                                                        @Html.Raw("BASIC")
 
                                                     </div>
-                                                }
-                                            }
+                                                    <div class="col-md-12">
+                                                        @if (arrOT != null && arrOT.Contains("DA"))
+                                                        {
+                                                            @Html.CheckBox("OT_DA", new { @class = "OTselection", @value = "DA", @checked = "checked" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBox("OT_DA", new { @class = "OTselection", @value = "DA" })
+                                                        }
+                                                        @Html.Raw("DA")
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        @if (arrOT != null && arrOT.Contains("HRA"))
+                                                        {
+                                                            @Html.CheckBox("OT_HRA", new { @class = "OTselection", @value = "HRA", @checked = "checked" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBox("OT_HRA", new { @class = "OTselection", @value = "HRA" })
+                                                        }
+                                                        @Html.Raw("HRA")
+                                                    </div>
+
+                                                    @for (var i = 0; i < Model.allAllowances.Count; i++)
+                                                    {
+                                                        if (Model.allAllowances[i].flagClientRequirement == true)
+                                                        {
+                                                            <div class="col-md-12">
+                                                                @if (arrOT != null && arrOT.Contains(Model.allAllowances[i].allowance.ALL_Shortform))
+                                                                {
+                                                                    @Html.CheckBox(@Model.allAllowances[i].allowance.ALL_Shortform, new { @class = "OTselection", @value = Model.allAllowances[i].allowance.ALL_Shortform, @checked = "checked" })
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.CheckBox(@Model.allAllowances[i].allowance.ALL_Shortform, new { @class = "OTselection", @value = Model.allAllowances[i].allowance.ALL_Shortform })
+                                                                }
+                                                                @Html.Raw(Model.allAllowances[i].allowance.ALL_Title)
+
+                                                            </div>
+                                                        }
+                                                    }
+                                                </div>
+                                                <div class="col-md-6" >
+                                                    <div class="col-md-12">
+                                                        @if (arrDeductOT != null && arrDeductOT.Contains("PF"))
+                                                        {
+                                                            @Html.CheckBox("OT_PF", new { @class = "OTDeductSelection", @value = "PF", @checked = "checked" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBox("OT_PF", new { @class = "OTDeductSelection", @value = "PF" })
+                                                        }
+                                                        @Html.Raw("PF")
+
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        @if (arrDeductOT != null && arrDeductOT.Contains("ESIC"))
+                                                        {
+                                                            @Html.CheckBox("OT_ESIC", new { @class = "OTDeductSelection", @value = "ESIC", @checked = "checked" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBox("OT_ESIC", new { @class = "OTDeductSelection", @value = "ESIC" })
+                                                        }
+                                                        @Html.Raw("ESIC")
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
                                         </div>
                                         <div class="col-md-6">
                                             @Html.TextBoxFor(m => m.CRI_OT_Formula, new { @class = "form-control" })
