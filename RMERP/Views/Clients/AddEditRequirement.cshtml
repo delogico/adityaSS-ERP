@@ -77,8 +77,6 @@
                     $("#flagClientRequirement" + this.id).val("false");
                 }
             });
-
-            debugger;
             var PFSelection = [];
             var ESICSelection = [];
             var OTSelection = [];
@@ -89,11 +87,14 @@
             if ($("#CRI_ESIC_Formula").val() != "") {
                 ESICSelection = $("#CRI_ESIC_Formula").val().split("+");
             }
-            if ($("#CRI_OT_Formula").val() != "") {
-                debugger;               
-                OTSelection = $("#CRI_OT_Formula").val().split("+");
-                if (($("#CRI_OT_Formula").val().includes("-"))){
-                    OTDeductSelection = $("#CRI_OT_Formula").val().split("-");
+            if ($("#CRI_OT_Formula").val() != "") {  
+                var OT_Formula = $("#CRI_OT_Formula").val();
+                             
+                if (($("#CRI_OT_Formula").val().includes("-"))) {
+                    OTSelection = OT_Formula.substring(0, OT_Formula.indexOf('-')).split("+");                   
+                    OTDeductSelection = OT_Formula.substring(OT_Formula.indexOf('-') + 1).split("-");                   
+                } else {
+                    OTSelection = OT_Formula.split("+");
                 }
                
             }
@@ -123,17 +124,18 @@
             });
 
             function calculateFormula() {
+                debugger;
                 var str = "";
                 $("INPUT[class=OTselection]")  // for all checkboxes
                     .each(function () {  // first pass, create name mapping
                         if (this.checked) {
-                            str = str + (str.length>0?"+":"") + this.value;
+                            str = str + (str.length > 0 ? "+" : "") + this.value;                           
                         }
                     });
                 $("INPUT[class=OTDeductSelection]")  // for all checkboxes
                     .each(function () {  // first pass, create name mapping
                         if (this.checked) {
-                            str = str + "-" + this.value;
+                            str = str + "-" + this.value;                           
                         }
                     });
                     
@@ -142,6 +144,7 @@
 
 
             function addCheckbox(AllId) {
+                debugger;
                 var id = parseInt(AllId);
                 var container = $('#PFlist');
                 var containerEsic = $('#ESIClist');
@@ -499,8 +502,16 @@
                                                 string[] arrDeductOT = null;
                                                 if (Model.CRI_OT_Formula != null)
                                                 {
-                                                    arrOT = Model.CRI_OT_Formula.Split('+');
-                                                    arrDeductOT = Model.CRI_OT_Formula.Split('-');
+                                                    if (Model.CRI_OT_Formula.Contains("-"))
+                                                    {
+                                                        arrOT = Model.CRI_OT_Formula.Substring(0, Model.CRI_OT_Formula.IndexOf("-")).Split('+');
+                                                        arrDeductOT = Model.CRI_OT_Formula.Substring(Model.CRI_OT_Formula.IndexOf("-") + 1).Split('-');
+                                                    }
+                                                    else
+                                                    {
+                                                        arrOT = Model.CRI_OT_Formula.Split('+');
+                                                    }
+
                                                 }
                                             }
                                             @*<div class="col-md-6">
