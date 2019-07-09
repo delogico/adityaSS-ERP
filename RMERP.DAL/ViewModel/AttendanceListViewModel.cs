@@ -44,6 +44,8 @@ namespace RMERP.DAL.ViewModel
         public DateTime ATT_Date { get; set; }
         [Display(Name = "Present")]
         public bool ATT_IsPresent { get; set; }
+        [Display(Name = "Halfday")]
+        public bool ATT_IsHalfday { get; set; }
         [Display(Name = "Paid Holiday")]
         public bool ATT_IsPaidHoliday { get; set; }
         [Display(Name = "Shift")]

@@ -446,6 +446,7 @@ namespace RMERP.DAL.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.EMP_Aadhar_Number)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 

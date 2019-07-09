@@ -17,6 +17,7 @@ namespace RMERP.DAL.ViewModel
         public int CLI_Id { get; set; }
         public DateTime ATT_Date { get; set; }
         public bool ATT_IsPresent { get; set; }
+        public bool ATT_IsHalfday { get; set; }
         public string ATT_Shift { get; set; }
         public bool ATT_IsWeeklyOff { get; set; }
         public bool ATT_IsEarnLeave { get; set; }

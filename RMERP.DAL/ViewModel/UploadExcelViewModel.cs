@@ -40,6 +40,7 @@ namespace RMERP.DAL.ViewModel
         public string EMP_Name { get; set; }
         public string Designation { get; set; }
         public int TotalPresenceDays { get; set; }
+        public int TotalHalfDays { get; set; }
         public Double TotalExtraHours { get; set; }
         public int totalWeeklyOff { get; set; }
         public int totalLeaves { get; set; }

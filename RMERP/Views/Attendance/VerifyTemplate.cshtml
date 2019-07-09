@@ -49,6 +49,7 @@ else
                                                     }
                                                 }
                                                 <th>Present Days</th>
+                                                <th>Half Days</th>
                                                 <th>Weekly Off</th>
                                                 <th>Leave Days</th>
                                                 <th>Holidays</th>
@@ -94,6 +95,17 @@ else
                                                                                     str = "<span class='present'>P</span>";
                                                                                 }
                                                                             }
+                                                                            else if (att.ATT_IsHalfday)
+                                                                            {
+                                                                                if (att.ATT_Shift != null)
+                                                                                {
+                                                                                    str = "<span class='present'>" + att.ATT_Shift + "/2</span>";
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    str = "<span class='present'>P/2</span>";
+                                                                                }
+                                                                            }
                                                                             else
                                                                             {
                                                                                 str = "<span class='absent'>A</span>";
@@ -127,6 +139,7 @@ else
                                                     }
                                                 }
                                                 <td>@item.TotalPresenceDays</td>
+                                                <td>@item.TotalHalfDays</td>
                                                 <td>@item.totalWeeklyOff</td>
                                                 <td>@item.totalLeaves</td>
                                                 <td>@item.totalHolidays</td>

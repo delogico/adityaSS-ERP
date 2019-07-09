@@ -228,10 +228,10 @@ namespace RMERP.Controllers
                 excelRow.EMP_Name = row.GetCell(3).ToString();
                 excelRow.Designation = row.GetCell(2).ToString();
                 TotEmp++;
-                int totalPresence = 0, totalHolidays = 0;
+                int totalPresence = 0, totalHolidays = 0,totalHalfdays=0;
                 Double totalExtraHours = 0;
                 DateTime tmpDate = startDate;
-                for (int j = (row.FirstCellNum + 4); j < row.LastCellNum - 1; j++)
+                for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum-1; j++)
                 {
                     Attendance attendance = new Attendance();
                     attendance.EMP_Id = EMP_Id;
@@ -242,6 +242,11 @@ namespace RMERP.Controllers
                     {
                         attendance.ATT_IsPresent = true;
                         totalPresence++;
+                    }
+                    if (row.GetCell(j).ToString().Equals("P/2"))
+                    {
+                        attendance.ATT_IsHalfday = true;
+                        totalHalfdays++;
                     }
                     if (row.GetCell(j).ToString().Equals("W/O"))
                     {
@@ -261,6 +266,7 @@ namespace RMERP.Controllers
                 excelRow.TotalPresenceDays = totalPresence;
                 excelRow.TotalExtraHours = totalExtraHours;
                 excelRow.totalHolidays = totalHolidays;
+                excelRow.TotalHalfDays = totalHalfdays;
                 rows.Add(excelRow);
             }
             excelViewModel.listAttendance = attandanceList;
@@ -307,7 +313,7 @@ namespace RMERP.Controllers
                 excelRow.EMP_Name = row.GetCell(3).ToString();
                 excelRow.Designation = row.GetCell(2).ToString();
                 TotEmp++;
-                int totalPresence = 0;
+                int totalPresence = 0,totalHalfdays=0;
                 Double totalExtraHours = 0;
                 DateTime tmpDate = startDate;
                 for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
@@ -321,6 +327,12 @@ namespace RMERP.Controllers
                     {
                         attendance.ATT_IsPresent = true;
                         totalPresence++;
+                        attendance.ATT_Shift = row.GetCell(j).ToString();
+                    }
+                    if (row.GetCell(j).ToString().Equals("G/2") || row.GetCell(j).ToString().Equals("I/2") || row.GetCell(j).ToString().Equals("II/2") || row.GetCell(j).ToString().Equals("III/2"))
+                    {
+                        attendance.ATT_IsHalfday = true;
+                        totalHalfdays++;
                         attendance.ATT_Shift = row.GetCell(j).ToString();
                     }
                     if (row.GetCell(j).ToString().Equals("W/O"))
@@ -352,6 +364,7 @@ namespace RMERP.Controllers
                 }
                 excelRow.TotalPresenceDays = totalPresence;
                 excelRow.TotalExtraHours = totalExtraHours;
+                excelRow.TotalHalfDays = totalHalfdays;
                 rows.Add(excelRow);
             }
             excelViewModel.listAttendance = attandanceList;
@@ -397,7 +410,7 @@ namespace RMERP.Controllers
                 excelRow.EMP_Name = row.GetCell(3).ToString();
                 excelRow.Designation = row.GetCell(2).ToString();
                 TotEmp++;
-                int totalPresence = 0, totalWeeklyOff = 0, totalLeaves = 0, totalHolidays = 0, totalExtraDays = 0, totalAbsentDays = 0, totalCOs = 0, totalWOPresent = 0, totalHOPresent = 0, totalPaybleDays = 0;
+                int totalPresence = 0, totalHalfdays = 0, totalWeeklyOff = 0, totalLeaves = 0, totalHolidays = 0, totalExtraDays = 0, totalAbsentDays = 0, totalCOs = 0, totalWOPresent = 0, totalHOPresent = 0, totalPaybleDays = 0;
                 Double totalExtraHours = 0;
                 DateTime tmpDate = startDate;
                 for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum-1; j++)
@@ -412,6 +425,10 @@ namespace RMERP.Controllers
                         case "P":
                             attendance.ATT_IsPresent = true;
                             totalPresence++;
+                            break;
+                        case "P/2":
+                            attendance.ATT_IsHalfday = true;
+                            totalHalfdays++;
                             break;
                         case "A":
                             attendance.ATT_IsPresent = false;
@@ -449,6 +466,7 @@ namespace RMERP.Controllers
                     attandanceList.Add(attendance);
                 }
                 excelRow.TotalPresenceDays = totalPresence;
+                excelRow.TotalHalfDays = totalHalfdays;
                 excelRow.TotalExtraHours = totalExtraHours;
                 excelRow.totalWeeklyOff = totalWeeklyOff;
                 excelRow.totalLeaves = totalLeaves;
