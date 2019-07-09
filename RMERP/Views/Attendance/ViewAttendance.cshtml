@@ -94,19 +94,19 @@
                                                             {
                                                                 str = "<span class='present'>P</span>";
                                                             }
-                                                        }
-                                                        else if (att.ATT_IsHalfday)
-                                                        {
-                                                            totHalfDays++;
-                                                            if (att.ATT_Shift != null && att.ATT_Shift.Length > 0)
+                                                            if (att.ATT_IsHalfday)
                                                             {
-                                                                str = "<span class='present'>"+att.ATT_Shift+"/2</span>";
+                                                                totHalfDays++;
+                                                                if (att.ATT_Shift != null && att.ATT_Shift.Length > 0)
+                                                                {
+                                                                    str = "<span class='present'>" + att.ATT_Shift + "/2</span>";
+                                                                }
+                                                                else
+                                                                {
+                                                                    str = "<span class='present'>P/2</span>";
+                                                                }
                                                             }
-                                                            else
-                                                            {
-                                                                str = "<span class='present'>P/2</span>";
-                                                            }
-                                                        }
+                                                        }                                                        
                                                         else if (att.ATT_IsPaidLeave)
                                                         {
                                                             totPaidHolidas++;
