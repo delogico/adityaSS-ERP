@@ -101,7 +101,7 @@ namespace RMERP.DAL.ManagerClasses
 
                     #region Paybale day counting
                     int totWorkingDays = 0, totPaidHolidas = 0, totWeekOffs = 0;
-                    double totExtraWorkingDays = 0.0;
+                    double totExtraWorkingDays = 0.0, totHalfDays=0.0;
                     
                     totWorkingDays = attendances.Where(a => a.ATT_IsPresent == true).Count() +
                                      attendances.Where(a => a.ATT_EarnedExtraDay == true).Count();
@@ -111,7 +111,8 @@ namespace RMERP.DAL.ManagerClasses
                                      attendances.Where(a => a.ATT_IsPublicHoliday == true).Count();
                     totExtraWorkingDays = WAR_ExtraWorkingHours / 8;
                     totWeekOffs = attendances.Where(a => a.ATT_IsWeeklyOff == true).Count();
-                    totalPaybleDays = totWorkingDays + totPaidHolidas;
+                    totHalfDays= attendances.Where(a => a.ATT_IsHalfday == true).Count();
+                    totalPaybleDays = totWorkingDays + totPaidHolidas+ (totHalfDays/2);
                     if (cli.CLI_Total_WorkingDays != 1)
                     {
                         totalPaybleDays = totalPaybleDays + totWeekOffs;

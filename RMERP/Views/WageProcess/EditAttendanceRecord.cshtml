@@ -92,7 +92,7 @@
                         <div class="form-group">
                             @Html.LabelFor(m => m.attendanceVM.ATT_Shift, new { @class = "control-label" })
                             @*@Html.TextBoxFor(m => m.attendanceVM.AttShift, new { @class = "form-control" })*@
-                            Choose Template :
+                            Choose Shift :
                             <label class="radio-inline form-control">
                                 @foreach (var AttendanceShift in Enum.GetValues(typeof(AttendanceShift)))
                                 {

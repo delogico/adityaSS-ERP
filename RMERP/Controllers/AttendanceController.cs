@@ -647,7 +647,7 @@ namespace RMERP.Controllers
                     else if (row.GetCell(j).ToString().Equals("G/2") || row.GetCell(j).ToString().Equals("I/2") || row.GetCell(j).ToString().Equals("II/2") || row.GetCell(j).ToString().Equals("III/2"))
                     {
                         att.ATT_IsHalfday = true;
-                        att.ATT_Shift = row.GetCell(j).ToString();
+                        att.ATT_Shift = row.GetCell(j).ToString().Split("/2")[0];
                     }
                     if (rowExtra.GetCell(j) != null)
                         if (!rowExtra.GetCell(j).ToString().Equals(""))
