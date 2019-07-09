@@ -575,6 +575,8 @@ namespace RMERP.Controllers
                         att.ATT_Date = tmpDate;
                         if (row.GetCell(j).ToString().Equals("P"))
                             att.ATT_IsPresent = true;
+                        else if (row.GetCell(j).ToString().Equals("P/2"))
+                            att.ATT_IsHalfday = true;
                         else if (row.GetCell(j).ToString().Equals("A"))
                             att.ATT_IsPresent = false;
                         att.ATT_IsPublicHoliday = secondRow.GetCell(j).ToString().Contains("PH");
@@ -642,6 +644,11 @@ namespace RMERP.Controllers
                         att.ATT_IsPresent = true;
                         att.ATT_Shift = row.GetCell(j).ToString();
                     }
+                    else if (row.GetCell(j).ToString().Equals("G/2") || row.GetCell(j).ToString().Equals("I/2") || row.GetCell(j).ToString().Equals("II/2") || row.GetCell(j).ToString().Equals("III/2"))
+                    {
+                        att.ATT_IsHalfday = true;
+                        att.ATT_Shift = row.GetCell(j).ToString();
+                    }
                     if (rowExtra.GetCell(j) != null)
                         if (!rowExtra.GetCell(j).ToString().Equals(""))
                         {
@@ -705,6 +712,9 @@ namespace RMERP.Controllers
                         {
                             case "P":
                                 att.ATT_IsPresent = true;
+                                break;
+                            case "P/2":
+                                att.ATT_IsHalfday = true;
                                 break;
                             case "A":
                                 att.ATT_IsPresent = false;

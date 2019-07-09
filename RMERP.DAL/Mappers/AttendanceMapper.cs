@@ -19,6 +19,7 @@ namespace RMERP.DAL.Mappers
             attendanceVM.CLI_Id = attendance.CLI_Id;
             attendanceVM.ATT_Date = attendance.ATT_Date;
             attendanceVM.ATT_IsPresent = attendance.ATT_IsPresent;
+            attendanceVM.ATT_IsHalfday = attendance.ATT_IsHalfday;
             attendanceVM.ATT_IsPublicHoliday = attendance.ATT_IsPublicHoliday;
             attendanceVM.ATT_Shift = attendance.ATT_Shift;
             attendanceVM.ATT_IsWeeklyOff = attendance.ATT_IsWeeklyOff;

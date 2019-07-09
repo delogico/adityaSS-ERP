@@ -190,6 +190,7 @@ namespace RMERP.Controllers
                 alvm.attendanceVM.ATT_IsEarnLeave = att.ATT_IsEarnLeave;
                 alvm.attendanceVM.ATT_IsPublicHoliday = att.ATT_IsPublicHoliday;
                 alvm.attendanceVM.ATT_IsPresent = att.ATT_IsPresent;
+                alvm.attendanceVM.ATT_IsHalfday = att.ATT_IsHalfday;
                 alvm.attendanceVM.ATT_IsWeeklyOff = att.ATT_IsWeeklyOff;
                 alvm.attendanceVM.ATT_Shift = att.ATT_Shift;
                 alvm.attendanceVM.ATT_Date = att.ATT_Date;        
@@ -212,6 +213,7 @@ namespace RMERP.Controllers
                 atta.ATT_IsEarnLeave = alvm.attendanceVM.ATT_IsEarnLeave;
                 atta.ATT_IsPublicHoliday = alvm.attendanceVM.ATT_IsPublicHoliday;
                 atta.ATT_IsPresent = alvm.attendanceVM.ATT_IsPresent;
+                atta.ATT_IsHalfday = alvm.attendanceVM.ATT_IsHalfday;
                 atta.ATT_IsWeeklyOff = alvm.attendanceVM.ATT_IsWeeklyOff;
                 atta.ATT_Date = alvm.attendanceVM.ATT_Date;
                 atta.ADM_Id_ImportedBy = alvm.attendanceVM.ADM_Id_ImportedBy;

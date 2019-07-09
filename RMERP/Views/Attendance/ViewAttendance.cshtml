@@ -41,6 +41,7 @@
                                 }
                             }
                             <th>Present Days</th>
+                            <th>Half Days</th>
                             <th>Total Week Offs</th>
                             <th>Total Paid Holidays</th>
                             <th>Total Extra Working Hours</th>
@@ -61,7 +62,7 @@
                             @{
                                 int counter1 = 0;
                                 DateTime tmpDate1 = ViewBag.startDate;
-                                int totWorkingDays = 0, totWeekOffs = 0, totPaidHolidas = 0;
+                                int totWorkingDays = 0, totWeekOffs = 0, totPaidHolidas = 0,totHalfDays=0;
                                 double totExtraWorkingDays = 0.0;
                                 double totExtraWorkingHours = 0;
                                 while (ViewBag.endDate >= tmpDate1)
@@ -93,6 +94,11 @@
                                                             {
                                                                 str = "<span class='present'>P</span>";
                                                             }
+                                                        }
+                                                        else if (att.ATT_IsHalfday)
+                                                        {
+                                                            totHalfDays++;
+                                                            str = "<span class='present'>P/2</span>";
                                                         }
                                                         else if (att.ATT_IsPaidLeave)
                                                         {
@@ -168,6 +174,7 @@
                             }
 
                             <td>@totWorkingDays</td>
+                            <td>@totHalfDays</td>
                             <td>@totWeekOffs</td>
                             <td>@totPaidHolidas</td>
                             <td>@totExtraWorkingHours</td>

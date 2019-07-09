@@ -65,6 +65,16 @@
                             @Html.ValidationMessageFor(m => m.attendanceVM.ATT_IsPresent, "", new { @class = "text-danger" })
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.attendanceVM.ATT_IsHalfday, new { @class = "control-label" })
+                            <label class="switch">
+                                @Html.CheckBoxFor(m => m.attendanceVM.ATT_IsHalfday, (Model.attendanceVM.ATT_IsHalfday == true ? (object)new { type = "checkbox", @checked = (Model.attendanceVM.ATT_IsHalfday == true ? "checked" : "") } : new { type = "checkbox" }))
+                                <span class="slider round"></span>
+                            </label>
+                            @Html.ValidationMessageFor(m => m.attendanceVM.ATT_IsHalfday, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
 
                     <div class="col-md-12">
                         <div class="form-group">
@@ -102,9 +112,9 @@
                             @Html.ValidationMessageFor(m => m.attendanceVM.ATT_ExtraHoursWorked, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                  
 
-                 
+
+
                 </div>
 
                     <div class="m-t-20 text-center">

@@ -21,7 +21,7 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                 <div class="form-group">
-                    @Html.HiddenFor(m=>m.EmpID)
+                    @Html.HiddenFor(m => m.EmpID)
                     @Html.LabelFor(m => m.EmpName)
                     @Html.TextBoxFor(m => m.EmpName, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.EmpName, "", new { @class = "text-danger" })
@@ -33,58 +33,67 @@
 
                     @Html.HiddenFor(m => m.attendancesList[i].ATT_Id)
                     @Html.HiddenFor(m => m.attendancesList[i].WAG_Id)
-                <div class="col-md-12">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            @Html.Raw("Days")
-                            @Html.TextBoxFor(m => m.attendancesList[i].ATT_Date.Date, new { @readonly = "readonly" })
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Raw("Days")
+                                @Html.TextBoxFor(m => m.attendancesList[i].ATT_Date.Date, new { @readonly = "readonly" })
 
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            @Html.Raw("Extra Hours")
-                            @Html.TextBoxFor(m => m.attendancesList[i].ATT_ExtraHoursWorked, new { style = "width:50px" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            @Html.Raw("Is Present?")
-                            <label class="switch">
-                                @Html.TextBoxFor(m => m.attendancesList[i].ATT_IsPresent, (Model.attendancesList[i].ATT_IsPresent == true ? (object)new { type = "checkbox", @checked = (Model.attendancesList[i].ATT_IsPresent == true ? "checked" : "") } : new { type = "checkbox" }))
-                                <span class="slider round"></span>
-                            </label>
-
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            @Html.Raw("Weekly Off?")
-                            <label class="switch">
-                                @Html.TextBoxFor(m => m.attendancesList[i].ATT_IsWeeklyOff, (Model.attendancesList[i].ATT_IsWeeklyOff == true ? (object)new { type = "checkbox", @checked = (Model.attendancesList[i].ATT_IsWeeklyOff == true ? "checked" : "") } : new { type = "checkbox" }))
-                                <span class="slider round"></span>
-                            </label>
-
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Raw("Extra Hours")
+                                @Html.TextBoxFor(m => m.attendancesList[i].ATT_ExtraHoursWorked, new { style = "width:50px" })
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <div class="form-group">
-                           <hr/>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Raw("Is Present?")
+                                <label class="switch">
+                                    @Html.TextBoxFor(m => m.attendancesList[i].ATT_IsPresent, (Model.attendancesList[i].ATT_IsPresent == true ? (object)new { type = "checkbox", @checked = (Model.attendancesList[i].ATT_IsPresent == true ? "checked" : "") } : new { type = "checkbox" }))
+                                    <span class="slider round"></span>
+                                </label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Raw("Half Day?")
+                                <label class="switch">
+                                    @Html.TextBoxFor(m => m.attendancesList[i].ATT_IsHalfday, (Model.attendancesList[i].ATT_IsHalfday == true ? (object)new { type = "checkbox", @checked = (Model.attendancesList[i].ATT_IsHalfday == true ? "checked" : "") } : new { type = "checkbox" }))
+                                    <span class="slider round"></span>
+                                </label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Raw("Weekly Off?")
+                                <label class="switch">
+                                    @Html.TextBoxFor(m => m.attendancesList[i].ATT_IsWeeklyOff, (Model.attendancesList[i].ATT_IsWeeklyOff == true ? (object)new { type = "checkbox", @checked = (Model.attendancesList[i].ATT_IsWeeklyOff == true ? "checked" : "") } : new { type = "checkbox" }))
+                                    <span class="slider round"></span>
+                                </label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <hr />
+                            </div>
                         </div>
                     </div>
-                </div>
-               
-                    }
+                }
 
-                    <div class="m-t-20 text-center">
-                        <input type="submit" name="Submit Firm" id="btnSubmit" class="btn btn-primary" />
-                    </div>
-                    }
+                <div class="m-t-20 text-center">
+                    <input type="submit" name="Submit Firm" id="btnSubmit" class="btn btn-primary" />
                 </div>
+            }
+        </div>
 
-                </div>
+    </div>
 </div>
 
 
