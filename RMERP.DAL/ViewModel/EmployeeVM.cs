@@ -26,9 +26,9 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Name as per aadhar card")]
         public string EMP_Aadhar_Name { get; set; }
 
-        [Display(Name = "Aadhar card number")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Aadhar card number is required")]
-        [Remote("CheckExistingAadhar", "Employees", ErrorMessage = "Aadhar card already exists!")]
+        [Display(Name = "Aadhar number")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Aadhar number is required")]
+        [Remote("CheckExistingAadhar", "Employees", ErrorMessage = "Aadhar number is already exists!",AdditionalFields ="EMP_Id")]
         public string EMP_Aadhar_Number { get; set; }
 
         [Display(Name = "Date of birth")]
@@ -61,7 +61,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Designation")]
         public string EMP_Designation { get; set; }
 
-        [Display(Name = "PanCard number")]
+        [Display(Name = "Pan number")]
         public string EMP_Pan_Number { get; set; }
 
         [Display(Name = "ESIC account number")]

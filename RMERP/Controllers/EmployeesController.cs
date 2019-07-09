@@ -331,14 +331,14 @@ namespace RMERP.Controllers
             };
         }
 
-        [AcceptVerbs("Get", "Post")]
-        public IActionResult CheckExistingAadhar(string EMP_Aadhar_Number)
+        //[AcceptVerbs("Get", "Post")]
+        public IActionResult CheckExistingAadhar(string EMP_Aadhar_Number,int EMP_Id)
         {
             EmployeeManager employeeManager = new EmployeeManager(_context);
             bool ExistingAadhar = false;
             try
             {
-                ExistingAadhar = !employeeManager.CheckExistingAadhar(EMP_Aadhar_Number);
+                ExistingAadhar = !employeeManager.CheckExistingAadhar(EMP_Aadhar_Number, EMP_Id);
                 return Json(ExistingAadhar);
             }
 

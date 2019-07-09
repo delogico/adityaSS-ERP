@@ -154,9 +154,9 @@ namespace RMERP.DAL.ManagerClasses
             return list.Count() > 0;
         }
 
-        public bool CheckExistingAadhar(string AadharNumber)
+        public bool CheckExistingAadhar(string AadharNumber,int EMP_Id)
         {
-            return _context.Employees.Any(m => m.EMP_Aadhar_Number.Equals(AadharNumber));
+            return _context.Employees.Any(m => m.EMP_Aadhar_Number.Equals(AadharNumber) && m.EMP_Id!=EMP_Id);
         }
 
     }
