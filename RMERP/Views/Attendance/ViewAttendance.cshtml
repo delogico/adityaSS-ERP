@@ -74,7 +74,7 @@
                                     {
                                         <td>
                                             <div class="row" onmouseover="mousehover(@att.ATT_Id);" onmouseout="mouseout();">
-                                                @{
+                                                @{                                                   
                                                     String str = "";
                                                     if (att.ATT_IsWeeklyOff)
                                                     {
@@ -106,7 +106,19 @@
                                                                     str = "<span class='present'>P/2</span>";
                                                                 }
                                                             }
-                                                        }                                                        
+                                                        }
+                                                        else if (att.ATT_IsHalfday)
+                                                        {
+                                                            totHalfDays++;
+                                                            if (att.ATT_Shift != null && att.ATT_Shift.Length > 0)
+                                                            {
+                                                                str = "<span class='present'>" + att.ATT_Shift + "/2</span>";
+                                                            }
+                                                            else
+                                                            {
+                                                                str = "<span class='present'>P/2</span>";
+                                                            }
+                                                        }
                                                         else if (att.ATT_IsPaidLeave)
                                                         {
                                                             totPaidHolidas++;
