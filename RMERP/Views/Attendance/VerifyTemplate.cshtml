@@ -58,6 +58,7 @@ else
                                                 <th>WO Present</th>
                                                 <th>HO Present</th>
                                                 <th>Total Extra Hours</th>
+                                                <th>Total Extra OT Days</th>
                                                 <th>Total Payble Days</th>
                                             </tr>
                                         </thead>
@@ -72,10 +73,6 @@ else
                                                     while (Model.endDate >= tmpDate1)
                                                     {
                                                         Attendance att = Model.listAttendance.Where(m => m.EMP_Id == Convert.ToInt32(item.EMP_Id) && m.ATT_Date.Equals(tmpDate1)).FirstOrDefault();
-                                                        if (att.ATT_IsEarnLeave)
-                                                        {
-                                                         
-                                                        }
                                                         if (att != null)
                                                         {
                                                             <td align="center">
@@ -164,6 +161,7 @@ else
                                                 <td>@item.totalWOPresent</td>
                                                 <td>@item.totalHOPresent</td>
                                                 <td>@item.TotalExtraHours</td>
+                                                <td>@item.TotalExtraOTDays</td>
                                                 <td>@item.totalPaybleDays</td>
                                             </tr>
                                             }

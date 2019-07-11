@@ -228,8 +228,8 @@ namespace RMERP.Controllers
                 excelRow.EMP_Name = row.GetCell(3).ToString();
                 excelRow.Designation = row.GetCell(2).ToString();
                 TotEmp++;
-                int totalPresence = 0, totalHolidays = 0, totalHalfdays = 0;
-                Double totalExtraHours = 0;
+                int totalPresence = 0, totalWeeklyOff = 0, totalLeaves = 0, totalHolidays = 0, totalAbsentDays = 0, totalCOs = 0, totalWOPresent = 0, totalHOPresent = 0;
+                Double totalExtraHours = 0, totalPaybleDays = 0, totalHalfdays = 0;
                 DateTime tmpDate = startDate;
                 for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
                 {
@@ -251,10 +251,12 @@ namespace RMERP.Controllers
                     if (row.GetCell(j).ToString().Equals("W/O"))
                     {
                         attendance.ATT_IsWeeklyOff = true;
-                        totalPresence++;
+                        totalWeeklyOff++;
                     }
                     if (secondRow.GetCell(j).ToString().Contains("PH"))
                         totalHolidays++;
+                    if (secondRow.GetCell(j).ToString().Contains("PL"))
+                        totalLeaves++;
                     if (rowExtra.GetCell(j) != null)
                         if (!rowExtra.GetCell(j).ToString().Equals(""))
                         {
@@ -264,9 +266,22 @@ namespace RMERP.Controllers
                     attandanceList.Add(attendance);
                 }
                 excelRow.TotalPresenceDays = totalPresence;
-                excelRow.TotalExtraHours = totalExtraHours;
-                excelRow.totalHolidays = totalHolidays;
                 excelRow.TotalHalfDays = totalHalfdays;
+                excelRow.TotalExtraHours = totalExtraHours;
+                excelRow.totalWeeklyOff = totalWeeklyOff;
+                excelRow.totalLeaves = totalLeaves;
+                excelRow.totalHolidays = totalHolidays;
+                //excelRow.totalExtraDays = totalExtraDays;
+                excelRow.totalAbsentDays = totalAbsentDays;
+                excelRow.totalCOs = totalCOs;
+                excelRow.totalWOPresent = totalWOPresent;
+                excelRow.totalHOPresent = totalHOPresent;                
+                double totExtraWorkingDays = (totalExtraHours / client.CLI_WorkingHours_In_Day);
+                excelRow.TotalExtraOTDays = totExtraWorkingDays;
+                totalPaybleDays = totalPresence + totalHOPresent + totalLeaves + totalHolidays + totalCOs + totExtraWorkingDays + (totalHalfdays / 2);
+                if (client.CLI_Total_WorkingDays != 1)
+                    totalPaybleDays = totalPaybleDays + totalWeeklyOff;
+                excelRow.totalPaybleDays = totalPaybleDays;
                 rows.Add(excelRow);
             }
             excelViewModel.listAttendance = attandanceList;
@@ -288,6 +303,7 @@ namespace RMERP.Controllers
             int cellCount = secondRow.LastCellNum;
             int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
             int totalPublicHolidays = 0;
+
             int TotEmp = 0;
             DateTime startDate = DateTime.Now, endDate = DateTime.Now;
             if (intStartDate > 1)
@@ -313,8 +329,8 @@ namespace RMERP.Controllers
                 excelRow.EMP_Name = row.GetCell(3).ToString();
                 excelRow.Designation = row.GetCell(2).ToString();
                 TotEmp++;
-                int totalPresence = 0, totalHalfdays = 0;
-                Double totalExtraHours = 0;
+                int totalPresence = 0,  totalWeeklyOff = 0, totalLeaves = 0, totalHolidays = 0, totalAbsentDays = 0, totalCOs = 0, totalWOPresent = 0, totalHOPresent = 0;
+                Double totalExtraHours = 0, totalPaybleDays = 0, totalHalfdays=0;
                 DateTime tmpDate = startDate;
                 for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
                 {
@@ -339,9 +355,14 @@ namespace RMERP.Controllers
                     {
                         attendance.ATT_IsWeeklyOff = true;
                         if (client.CLI_Total_WorkingDays != 1)
-                            totalPresence++;
+                            totalWeeklyOff++;
                     }
                     #region by rinku on 11 july
+                    if (row.GetCell(j).ToString().Equals("PL"))
+                    {
+                        attendance.ATT_IsPaidLeave = true;
+                        totalLeaves++;
+                    }
                     if (row.GetCell(j).ToString().Equals("EL"))
                     {
                         attendance.ATT_IsEarnLeave = true;
@@ -349,7 +370,7 @@ namespace RMERP.Controllers
                     }
                     if (row.GetCell(j).ToString().Equals("PH"))
                     {
-                        totalPresence++;
+                        totalHolidays++;
                         attendance.ATT_IsPublicHoliday = true;
                     }
                     #endregion
@@ -362,8 +383,24 @@ namespace RMERP.Controllers
                     attandanceList.Add(attendance);
                 }
                 excelRow.TotalPresenceDays = totalPresence;
-                excelRow.TotalExtraHours = totalExtraHours;
                 excelRow.TotalHalfDays = totalHalfdays;
+                excelRow.TotalExtraHours = totalExtraHours;
+                excelRow.totalWeeklyOff = totalWeeklyOff;
+                excelRow.totalLeaves = totalLeaves;
+                excelRow.totalHolidays = totalHolidays;
+                //excelRow.totalExtraDays = totalExtraDays;
+                excelRow.totalAbsentDays = totalAbsentDays;
+                excelRow.totalCOs = totalCOs;
+                excelRow.totalWOPresent = totalWOPresent;
+                excelRow.totalHOPresent = totalHOPresent;
+                double totExtraWorkingDays = (totalExtraHours / client.CLI_WorkingHours_In_Day);
+                excelRow.TotalExtraOTDays = totExtraWorkingDays;
+                totalPaybleDays = totalPresence + totalHOPresent + totalLeaves + totalHolidays + totalCOs + totExtraWorkingDays + (totalHalfdays / 2);
+                if (client.CLI_Total_WorkingDays != 1)
+                    totalPaybleDays = totalPaybleDays + totalWeeklyOff;
+                excelRow.totalPaybleDays = totalPaybleDays;
+
+                // excelRow.totalPaybleDays= totalPresence+p
                 rows.Add(excelRow);
             }
             excelViewModel.listAttendance = attandanceList;
@@ -372,6 +409,7 @@ namespace RMERP.Controllers
             excelViewModel.startDate = startDate;
             excelViewModel.endDate = endDate;
             excelViewModel.totalPublicHolidays = totalPublicHolidays;
+
             return excelViewModel;
         }
 
@@ -409,8 +447,8 @@ namespace RMERP.Controllers
                 excelRow.EMP_Name = row.GetCell(3).ToString();
                 excelRow.Designation = row.GetCell(2).ToString();
                 TotEmp++;
-                int totalPresence = 0, totalHalfdays = 0, totalWeeklyOff = 0, totalLeaves = 0, totalHolidays = 0, totalExtraDays = 0, totalAbsentDays = 0, totalCOs = 0, totalWOPresent = 0, totalHOPresent = 0, totalPaybleDays = 0;
-                Double totalExtraHours = 0;
+                int totalPresence = 0,  totalWeeklyOff = 0, totalLeaves = 0, totalHolidays = 0, totalExtraDays = 0, totalAbsentDays = 0, totalCOs = 0, totalWOPresent = 0, totalHOPresent = 0;
+                Double totalExtraHours = 0, totalPaybleDays = 0, totalHalfdays=0;
                 DateTime tmpDate = startDate;
                 for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
                 {
@@ -475,7 +513,9 @@ namespace RMERP.Controllers
                 excelRow.totalCOs = totalCOs;
                 excelRow.totalWOPresent = totalWOPresent;
                 excelRow.totalHOPresent = totalHOPresent;
-                totalPaybleDays = totalPresence + totalExtraDays + totalHOPresent + totalLeaves + totalHolidays + totalCOs;
+                double totExtraWorkingDays = (totalExtraHours / client.CLI_WorkingHours_In_Day);
+                excelRow.TotalExtraOTDays = totExtraWorkingDays;
+                totalPaybleDays = totalPresence + totalExtraDays + totalHOPresent + totalLeaves + totalHolidays + totalCOs + totExtraWorkingDays + (totalHalfdays / 2);
                 if (client.CLI_Total_WorkingDays != 1)
                     totalPaybleDays = totalPaybleDays + totalWeeklyOff;
                 excelRow.totalPaybleDays = totalPaybleDays;
@@ -578,12 +618,18 @@ namespace RMERP.Controllers
                             att.ATT_IsHalfday = true;
                         else if (row.GetCell(j).ToString().Equals("A"))
                             att.ATT_IsPresent = false;
+                        else if (row.GetCell(j).ToString().Equals("W/O"))
+                        {
+                            att.ATT_IsWeeklyOff = true;
+                            att.ATT_IsPresent = false;
+                        }
                         att.ATT_IsPublicHoliday = secondRow.GetCell(j).ToString().Contains("PH");
+                        att.ATT_IsPaidLeave = secondRow.GetCell(j).ToString().Contains("PL");
                         if (rowExtra.GetCell(j) != null)
                             if (!rowExtra.GetCell(j).ToString().Equals(""))
                                 att.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
                         att.ATT_IsEarnLeave = false;
-                        att.ATT_IsWeeklyOff = false;
+                        //att.ATT_IsWeeklyOff = false;
                         att.ATT_Shift = "";
                         att.ATT_ImportedOn = DateTime.Now;
                         att.ADM_Id_ImportedBy = sessionUtils.GetLoggedAdminID();
@@ -653,6 +699,8 @@ namespace RMERP.Controllers
                         att.ATT_IsEarnLeave = true;
                     else if (row.GetCell(j).ToString().Equals("PH"))
                         att.ATT_IsPublicHoliday = true;
+                    else if (row.GetCell(j).ToString().Equals("PL"))
+                        att.ATT_IsPaidLeave = true;
                     #endregion
                     if (rowExtra.GetCell(j) != null)
                         if (!rowExtra.GetCell(j).ToString().Equals(""))
@@ -791,7 +839,7 @@ namespace RMERP.Controllers
             ViewBag.startDate = arrDate[0];
             ViewBag.endDate = arrDate[1];
             List<AttendanceVM> list = AttendanceMapper.mapAttendances(attendanceManager.getAttendance_Wage_Client(WAG_Id, CLI_Id));
-            return View(list);
+            return View(new Tuple<List<AttendanceVM>, Clients>(list, client));
         }
 
     }
