@@ -367,6 +367,17 @@
                                                 }
                                                 @Html.Raw("HRA")
                                             </div>
+                                            <div class="col-md-12">
+                                                @if (arr != null && arr.Contains("OT"))
+                                                {
+                                                    @Html.CheckBox("pf_OT", new { @class = "PFselection", @value = "OT", @checked = "checked" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.CheckBox("pf_OT", new { @class = "PFselection", @value = "OT" })
+                                                }
+                                                @Html.Raw("OT")
+                                            </div>
 
 
                                             @for (var i = 0; i < Model.allAllowances.Count; i++)
@@ -445,6 +456,17 @@
                                                 }
                                                 @Html.Raw("HRA")
                                             </div>
+                                             <div class="col-md-12">
+                                                @if (arrEsic != null && arrEsic.Contains("OT"))
+                                                {
+                                                    @Html.CheckBox("esic_OT", new { @class = "ESICselection", @value = "OT", @checked = "checked" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.CheckBox("esic_OT", new { @class = "ESICselection", @value = "OT" })
+                                                }
+                                                @Html.Raw("OT")
+                                            </div>
 
 
 
@@ -513,14 +535,7 @@
                                                     }
 
                                                 }
-                                            }
-                                            @*<div class="col-md-6">
-                                                    <div class="form-group">
-                                                        @Html.LabelFor(m => m.CRI_OT_Rate, new { @class = "control-label" })
-                                                        @Html.TextBoxFor(m => m.CRI_OT_Rate, new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(x => x.CRI_OT_Rate, "", new { @class = "text-danger" })
-                                                    </div>
-                                                </div>*@
+                                            }                                           
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     @Html.LabelFor(m => m.CRI_OT_MultipleTimes, new { @class = "control-label" })
@@ -589,7 +604,7 @@
                                                         }
                                                     }
                                                 </div>
-                                                <div class="col-md-6" >
+                                                @*<div class="col-md-6" >
                                                     <div class="col-md-12">
                                                         @if (arrDeductOT != null && arrDeductOT.Contains("PF"))
                                                         {
@@ -613,7 +628,7 @@
                                                         }
                                                         @Html.Raw("ESIC")
                                                     </div>
-                                                </div>
+                                                </div>*@
                                             </div>
                                             
                                         </div>

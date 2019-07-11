@@ -92,8 +92,11 @@ namespace RMERP.DAL.ManagerClasses
                         case 1://   1:Excluding_WeeklyOff
                             totalWorkingDays = attendances.Where(a => a.ATT_IsWeeklyOff == false).Count();
                             break;
-                        case 2://   2:Reduce_StaticDays
+                        case 2://   2:Consider StaticDays Include WeeklyOff
                             totalWorkingDays = cli.CLI_No_Reduce_Days.Value;
+                            break;
+                        case 3://   3:Consider StaticDays Exclude WeeklyOff
+                            totalWorkingDays = cli.CLI_No_Reduce_Days.Value - attendances.Where(a => a.ATT_IsWeeklyOff == true).Count();
                             break;
                         default: break;
                     }
@@ -109,7 +112,7 @@ namespace RMERP.DAL.ManagerClasses
                                      attendances.Where(a => a.ATT_IsEarnLeave == true).Count() +
                                      attendances.Where(a => a.ATT_IsHoliday == true).Count() +
                                      attendances.Where(a => a.ATT_IsPublicHoliday == true).Count();
-                    totExtraWorkingDays = WAR_ExtraWorkingHours / 8;
+                    totExtraWorkingDays = WAR_ExtraWorkingHours / cli.CLI_WorkingHours_In_Day;
                     totWeekOffs = attendances.Where(a => a.ATT_IsWeeklyOff == true).Count();
                     totHalfDays= attendances.Where(a => a.ATT_IsHalfday == true).Count();
                     totalPaybleDays = totWorkingDays + totPaidHolidas+ (totHalfDays/2);
@@ -167,20 +170,21 @@ namespace RMERP.DAL.ManagerClasses
                         WAR_Basic_Calculated = Math.Round((Decimal.Multiply(CRI_Basic, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays);
                         decimal CalculatedBasicDa = Math.Round(Decimal.Add(WAR_Basic_Calculated, Convert.ToDecimal(CRI_DA_Calculated)));
                         CRI_HRA_Calculated = Math.Round(cr.CRI_HRA_Fixed == null ? ((CalculatedBasicDa * Convert.ToDecimal(cr.CRI_HRA_Percentage)) / 100) : ((Decimal.Multiply(cr.CRI_HRA_Fixed.Value, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays));
-                        #region START PF-ESIC CALCULATION                              
-                        decimal PFsum = Math.Round(GetAmountBasedOnFormula(cr.CRI_PF_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays));
-                        decimal ESICsum = Math.Round(GetAmountBasedOnFormula(cr.CRI_ESIC_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays));
+
+                        #region START PF-ESIC CALCULATION          
+                        decimal OTsum = Math.Round(GetAmountBasedOnFormulaOT(cr.CRI_OT_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays));
+                        if (OvertimeInDay > 0)
+                            WAR_OverTime_Calculated = Math.Round(Convert.ToDecimal(((Convert.ToDouble(OTsum) / totalPaybleDays) * OvertimeInDay) * cr.CRI_OT_MultipleTimes));
 
 
+                        decimal PFsum = Math.Round(GetAmountBasedOnFormula(cr.CRI_PF_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_OverTime_Calculated));
+                        decimal ESICsum = Math.Round(GetAmountBasedOnFormula(cr.CRI_ESIC_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_OverTime_Calculated));
+                        
                         WAR_PF = Convert.ToDecimal(cr.CRI_PF_Percentage);
                         WAR_ESIC = Convert.ToDecimal(cr.CRI_ESIC_Percentage);
                         WAR_PF_Calculated = Math.Round(Decimal.Multiply(PFsum, WAR_PF) / 100);
                         WAR_ESIC_Calculated = Math.Round(Decimal.Multiply(ESICsum, WAR_ESIC) / 100);
                         #endregion
-                        //WAR_OverTime_Calculated = (((CRI_Basic / Convert.ToDecimal(totalWorkingDays)) / 8) * Convert.ToDecimal(WAR_ExtraWorkingHours));
-                        decimal OTsum = Math.Round(GetAmountBasedOnFormulaOT(cr.CRI_OT_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_PF_Calculated, WAR_ESIC_Calculated));
-                        if (OvertimeInDay > 0)
-                            WAR_OverTime_Calculated = Math.Round(Convert.ToDecimal(((Convert.ToDouble(OTsum) / totalPaybleDays) * OvertimeInDay) * cr.CRI_OT_MultipleTimes));
 
                         wageRegisterVM.WAR_PF_Formula = cr.CRI_PF_Formula;
                         wageRegisterVM.WAR_ESIC_Formula = cr.CRI_ESIC_Formula;
@@ -278,7 +282,7 @@ namespace RMERP.DAL.ManagerClasses
             return lstRegister;
         }
 
-        public decimal GetAmountBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Client_Requirement_Allowances> All, int totalWorkingDays, double totalPaybleDays)
+        public decimal GetAmountBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Client_Requirement_Allowances> All, int totalWorkingDays, double totalPaybleDays,decimal WAR_OverTime_Calculated)
         {
             decimal sum = 0M;
             string[] arr_CRI_Formula;
@@ -298,6 +302,9 @@ namespace RMERP.DAL.ManagerClasses
                             break;
                         case "HRA":
                             sum += Convert.ToDecimal(CRI_HRA_Calculated);
+                            break;
+                        case "OT":
+                            sum += Convert.ToDecimal(WAR_OverTime_Calculated);
                             break;
                         default:
                             {
@@ -328,7 +335,7 @@ namespace RMERP.DAL.ManagerClasses
             return sum;
         }
 
-        public decimal GetAmountBasedOnFormulaOT(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Client_Requirement_Allowances> All, int totalWorkingDays, double totalPaybleDays,decimal WAR_PF_Calculated,decimal WAR_ESIC_Calculated)
+        public decimal GetAmountBasedOnFormulaOT(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Client_Requirement_Allowances> All, int totalWorkingDays, double totalPaybleDays)
         {
             decimal sum = 0M;
             string[] Add_Formula;
@@ -367,12 +374,12 @@ namespace RMERP.DAL.ManagerClasses
                         case "HRA":
                             sum += Convert.ToDecimal(CRI_HRA_Calculated);
                             break;
-                        case "PF":
-                            sum -= Convert.ToDecimal(WAR_PF_Calculated);
-                            break;
-                        case "ESIC":
-                            sum -= Convert.ToDecimal(WAR_ESIC_Calculated);
-                            break;
+                        //case "PF":
+                        //    sum -= Convert.ToDecimal(WAR_PF_Calculated);
+                        //    break;
+                        //case "ESIC":
+                        //    sum -= Convert.ToDecimal(WAR_ESIC_Calculated);
+                        //    break;
                         default:
                             {
                                 foreach (var allowance in All)

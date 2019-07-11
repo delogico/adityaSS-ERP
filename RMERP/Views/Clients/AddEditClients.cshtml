@@ -697,7 +697,7 @@
             }
         };
         function WorkingDaysMethod() {
-            if ($("#clientsModel_CLI_Total_WorkingDays").find('option:selected').val() == "2") {
+            if ($("#clientsModel_CLI_Total_WorkingDays").find('option:selected').val() == "2" || $("#clientsModel_CLI_Total_WorkingDays").find('option:selected').val() == "3") {
                 $("#divSelectMethod").show();
             } else {
                 $("#divSelectMethod").hide();
@@ -707,6 +707,8 @@
         function WorkingDays_Change(days) {
             debugger;
             if ($(days).find('option:selected').val() == "2") {
+                $("#divSelectMethod").show();
+            } else if ($(days).find('option:selected').val() == "3") {
                 $("#divSelectMethod").show();
             } else {
                 $("#divSelectMethod").hide();

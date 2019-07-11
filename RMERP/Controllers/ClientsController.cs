@@ -145,8 +145,10 @@ namespace RMERP.Controllers
                     return "Consider Real Days In Month";
                 case "Exclude_WeeklyOff":
                     return "Exclude Weekly Off";
-                case "Reduce_Fixed_Days":
-                    return "Fixed Days";
+                case "Reduce_Fixed_Days_Include_WeeklyOff":
+                    return "Fixed Days Including Weekly Off";
+                case "Reduce_Fixed_Days_Exclude_WeeklyOff":
+                    return "Fixed Days Excluding Weekly Off";
                 default:
                     return "";
             }

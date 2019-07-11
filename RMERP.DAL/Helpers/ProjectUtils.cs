@@ -39,7 +39,8 @@ namespace RMERP.DAL.Helpers
         {
             Consider_RealDays_In_Month = 0,
             Exclude_WeeklyOff = 1,
-            Reduce_Fixed_Days = 2
+            Reduce_Fixed_Days_Include_WeeklyOff = 2,
+            Reduce_Fixed_Days_Exclude_WeeklyOff = 3
         }
 
         public enum DEDUCTION_TAX
