@@ -28,18 +28,18 @@ namespace RMERP.Controllers
     {
         private readonly RMERPContext _context;
         public IConfiguration _configuration;
-        private IHostingEnvironment _hostingEnvironment;       
+        private IHostingEnvironment _hostingEnvironment;
         public AttendanceController(RMERPContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
             _configuration = configuration;
             _hostingEnvironment = hostingEnvironment;
-        }       
+        }
         public IActionResult Index()
         {
             return View();
         }
-        [Breadcrumb("Wage Attendance", FromAction = "Index",FromController = typeof(WageProcessController))]
+        [Breadcrumb("Wage Attendance", FromAction = "Index", FromController = typeof(WageProcessController))]
         public ActionResult WageAttendanceList(int WAG_Id)
         {
             if (WAG_Id <= 0)
@@ -60,7 +60,7 @@ namespace RMERP.Controllers
         public ActionResult DeleteWageClientAttendanceList(int WAG_Id, int CLI_Id)
         {
             AttendanceManager attManager = new AttendanceManager(_context);
-            attManager.deleteAllAttendanceofWageClient(WAG_Id,CLI_Id);
+            attManager.deleteAllAttendanceofWageClient(WAG_Id, CLI_Id);
             return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id });
         }
 
@@ -84,17 +84,17 @@ namespace RMERP.Controllers
         [Breadcrumb("Verify Attendance", FromAction = "UploadExcel")]
         public ActionResult VerifyTemplate(UploadExcelViewModel uvm)
         {
-           
+
             WageProcessManager wageManager = new WageProcessManager(_context);
             AttendanceManager attManager = new AttendanceManager(_context);
             EmployeeManager empManager = new EmployeeManager(_context);
-            ClientsManager clientsManager = new ClientsManager(_context, _configuration); 
+            ClientsManager clientsManager = new ClientsManager(_context, _configuration);
             Wage_Process wageProcess = wageManager.getWageProcessById(uvm.wageProcessVM.WAG_Id);
             IFormFile file = uvm.ExcelFile;
             ExcelViewModel excelViewModel = new ExcelViewModel();
             List<Employees> empListExtraInExcel = new List<Employees>();
             List<Employees> empListExtraInDb = new List<Employees>();
-            List<Attendance> attandanceList=new List<Attendance>();
+            List<Attendance> attandanceList = new List<Attendance>();
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
             StringBuilder sb = new StringBuilder();
             if (file != null)
@@ -105,7 +105,7 @@ namespace RMERP.Controllers
                     CliId = uvm.client.CLI_Id;
                     string sFileExtension = Path.GetExtension(file.FileName).ToLower();
                     ISheet sheet;
-                    string fullPath = Path.Combine(newPath, ProjectUtils.GetTempFileName()+sFileExtension);
+                    string fullPath = Path.Combine(newPath, ProjectUtils.GetTempFileName() + sFileExtension);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         file.CopyTo(stream);
@@ -129,7 +129,7 @@ namespace RMERP.Controllers
                                 excelViewModel = GetAttendance_BASIC_WithShifts(sheet, wageProcess, client);
                                 break;
                             case "2":
-                                excelViewModel = GetAttendance_OneRow_WithoutShift(sheet,wageProcess, client);
+                                excelViewModel = GetAttendance_OneRow_WithoutShift(sheet, wageProcess, client);
                                 break;
                         }
                     }
@@ -228,10 +228,10 @@ namespace RMERP.Controllers
                 excelRow.EMP_Name = row.GetCell(3).ToString();
                 excelRow.Designation = row.GetCell(2).ToString();
                 TotEmp++;
-                int totalPresence = 0, totalHolidays = 0,totalHalfdays=0;
+                int totalPresence = 0, totalHolidays = 0, totalHalfdays = 0;
                 Double totalExtraHours = 0;
                 DateTime tmpDate = startDate;
-                for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum-1; j++)
+                for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
                 {
                     Attendance attendance = new Attendance();
                     attendance.EMP_Id = EMP_Id;
@@ -313,7 +313,7 @@ namespace RMERP.Controllers
                 excelRow.EMP_Name = row.GetCell(3).ToString();
                 excelRow.Designation = row.GetCell(2).ToString();
                 TotEmp++;
-                int totalPresence = 0,totalHalfdays=0;
+                int totalPresence = 0, totalHalfdays = 0;
                 Double totalExtraHours = 0;
                 DateTime tmpDate = startDate;
                 for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
@@ -338,27 +338,26 @@ namespace RMERP.Controllers
                     if (row.GetCell(j).ToString().Equals("W/O"))
                     {
                         attendance.ATT_IsWeeklyOff = true;
-                        if(client.CLI_Total_WorkingDays != 1)
+                        if (client.CLI_Total_WorkingDays != 1)
                             totalPresence++;
                     }
+                    #region by rinku on 11 july
+                    if (row.GetCell(j).ToString().Equals("EL"))
+                    {
+                        attendance.ATT_IsEarnLeave = true;
+                        totalPresence++;
+                    }
+                    if (row.GetCell(j).ToString().Equals("PH"))
+                    {
+                        totalPresence++;
+                        attendance.ATT_IsPublicHoliday = true;
+                    }
+                    #endregion
                     if (rowExtra.GetCell(j) != null)
                         if (!rowExtra.GetCell(j).ToString().Equals(""))
                         {
-                            if (rowExtra.GetCell(j).ToString().Equals("EL"))
-                            {
-                                attendance.ATT_IsEarnLeave = true;
-                                totalPresence++;
-                            }
-                            else if (rowExtra.GetCell(j).ToString().Equals("PH"))
-                            {
-                                totalPresence++;
-                                attendance.ATT_IsPublicHoliday = true;
-                            }
-                            else
-                            {
-                                attendance.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
-                                totalExtraHours += Convert.ToDouble(rowExtra.GetCell(j).ToString());
-                            }
+                            attendance.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
+                            totalExtraHours += Convert.ToDouble(rowExtra.GetCell(j).ToString());
                         }
                     attandanceList.Add(attendance);
                 }
@@ -402,7 +401,7 @@ namespace RMERP.Controllers
             {
                 ExcelRowViewModel excelRow = new ExcelRowViewModel();
                 IRow row = sheet.GetRow(i);
-                
+
                 if (row == null) continue;
                 if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
                 excelRow.EMP_Id = row.GetCell(1).ToString();
@@ -413,7 +412,7 @@ namespace RMERP.Controllers
                 int totalPresence = 0, totalHalfdays = 0, totalWeeklyOff = 0, totalLeaves = 0, totalHolidays = 0, totalExtraDays = 0, totalAbsentDays = 0, totalCOs = 0, totalWOPresent = 0, totalHOPresent = 0, totalPaybleDays = 0;
                 Double totalExtraHours = 0;
                 DateTime tmpDate = startDate;
-                for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum-1; j++)
+                for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
                 {
                     Attendance attendance = new Attendance();
                     attendance.EMP_Id = EMP_Id;
@@ -476,7 +475,7 @@ namespace RMERP.Controllers
                 excelRow.totalCOs = totalCOs;
                 excelRow.totalWOPresent = totalWOPresent;
                 excelRow.totalHOPresent = totalHOPresent;
-                totalPaybleDays = totalPresence + totalExtraDays + totalHOPresent+ totalLeaves+totalHolidays+totalCOs;
+                totalPaybleDays = totalPresence + totalExtraDays + totalHOPresent + totalLeaves + totalHolidays + totalCOs;
                 if (client.CLI_Total_WorkingDays != 1)
                     totalPaybleDays = totalPaybleDays + totalWeeklyOff;
                 excelRow.totalPaybleDays = totalPaybleDays;
@@ -497,7 +496,7 @@ namespace RMERP.Controllers
             int WAG_Id = Convert.ToInt32(frm["WAG_Id"]);
             int CLI_Id = Convert.ToInt32(frm["CLI_Id"]);
             string strFilePath = frm["fileName"];
-            ClientsManager clientManager = new ClientsManager(_context,_configuration);
+            ClientsManager clientManager = new ClientsManager(_context, _configuration);
             WageProcessManager wageManager = new WageProcessManager(_context);
             Wage_Process wageProcess = wageManager.getWageProcessById(WAG_Id);
             Clients client = clientManager.GetClientById(CLI_Id);
@@ -523,15 +522,15 @@ namespace RMERP.Controllers
                         saveAttendance_BASIC_WithoutShifts(sheet, wageProcess, client);
                         break;
                     case "1":
-                        saveAttendance_BASIC_WithShifts(sheet,wageProcess,client);
+                        saveAttendance_BASIC_WithShifts(sheet, wageProcess, client);
                         break;
                     case "2":
-                        saveAttendance_ONEROW_WithoutShift(sheet,wageProcess,client);
+                        saveAttendance_ONEROW_WithoutShift(sheet, wageProcess, client);
                         break;
                 }
                 new FileInfo(strFilePath).Delete();
             }
-            return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id});
+            return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id });
         }
 
         public void saveAttendance_BASIC_WithoutShifts(ISheet sheet, Wage_Process wageProcess, Clients client)
@@ -649,16 +648,18 @@ namespace RMERP.Controllers
                         att.ATT_IsHalfday = true;
                         att.ATT_Shift = row.GetCell(j).ToString().Split("/2")[0];
                     }
+                    #region by rinku 11 july
+                    else if (row.GetCell(j).ToString().Equals("EL"))
+                        att.ATT_IsEarnLeave = true;
+                    else if (row.GetCell(j).ToString().Equals("PH"))
+                        att.ATT_IsPublicHoliday = true;
+                    #endregion
                     if (rowExtra.GetCell(j) != null)
                         if (!rowExtra.GetCell(j).ToString().Equals(""))
                         {
-                            if (rowExtra.GetCell(j).ToString().Equals("EL"))
-                                att.ATT_IsEarnLeave = true;
-                            else if (rowExtra.GetCell(j).ToString().Equals("PH"))
-                                att.ATT_IsPublicHoliday = true;
-                            else
-                                att.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
+                            att.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
                         }
+
                     att.ATT_ImportedOn = DateTime.Now;
                     att.ADM_Id_ImportedBy = sessionUtils.GetLoggedAdminID();
                     attManager.save(att);
@@ -792,7 +793,7 @@ namespace RMERP.Controllers
             List<AttendanceVM> list = AttendanceMapper.mapAttendances(attendanceManager.getAttendance_Wage_Client(WAG_Id, CLI_Id));
             return View(list);
         }
-        
+
     }
     public class _EmpID
     {
@@ -804,6 +805,6 @@ namespace RMERP.Controllers
             set { id = value; }
         }
     }
-   
+
 
 }

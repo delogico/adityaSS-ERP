@@ -259,3 +259,4 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/RMERP/wwwroot/RMERP_Data/20190710170133.xlsx

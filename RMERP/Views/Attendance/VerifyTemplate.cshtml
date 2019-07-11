@@ -72,6 +72,10 @@ else
                                                     while (Model.endDate >= tmpDate1)
                                                     {
                                                         Attendance att = Model.listAttendance.Where(m => m.EMP_Id == Convert.ToInt32(item.EMP_Id) && m.ATT_Date.Equals(tmpDate1)).FirstOrDefault();
+                                                        if (att.ATT_IsEarnLeave)
+                                                        {
+                                                         
+                                                        }
                                                         if (att != null)
                                                         {
                                                             <td align="center">
@@ -106,28 +110,40 @@ else
                                                                                     str = "<span class='present'>P/2</span>";
                                                                                 }
                                                                             }
+
+                                                                            #region by rinku on 11 july
+                                                                            else if (att.ATT_IsPaidLeave)
+                                                                            {
+                                                                                str = "<span class='present'>PL</span>";
+                                                                            }
+                                                                            else if (att.ATT_IsEarnLeave)
+                                                                            {
+                                                                                str = "<span class='present'>EL</span>";
+                                                                            }
+                                                                            else if (att.ATT_IsPublicHoliday)
+                                                                            {
+                                                                                str = str + " <span class='present'>PH</span>";
+                                                                            }
+                                                                            #endregion
                                                                             else
                                                                             {
                                                                                 str = "<span class='absent'>A</span>";
+                                                                            }
+                                                                            if (att.ATT_EarnedExtraDay)
+                                                                            {
+                                                                                str = str + "<span class='extra'>+1</span>";
                                                                             }
                                                                         }
                                                                         <div class="col-md-12">@Html.Raw(str)</div>
                                                                         <div class="col-md-12 font10">
                                                                             @{
-                                                                                if (att.ATT_ExtraHoursWorked == 0)
-                                                                                {
-                                                                                    if (att.ATT_IsEarnLeave)
-                                                                                    {
-                                                                                        @Html.Raw("EL");
-                                                                                    }
-                                                                                }
-                                                                                else
+                                                                                if (att.ATT_ExtraHoursWorked > 0)
                                                                                 {
                                                                                     @att.ATT_ExtraHoursWorked.ToString("#.#")
                                                                                 }
-                                                                                if (att.ATT_IsPublicHoliday)
+                                                                                else
                                                                                 {
-                                                                                    @Html.Raw("PH");
+                                                                                    @Html.Raw("&nbsp;")
                                                                                 }
                                                                             }
                                                                         </div>
