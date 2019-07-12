@@ -30,7 +30,8 @@ namespace RMERP.DAL.Models
         public string CRI_OT_Formula { get; set; }
         public decimal? CRI_OT_Rate { get; set; }
         public double? CRI_OT_MultipleTimes { get; set; }
-        public bool CRI_WageCalculationOnWeeklyOffPlus { get; set; }
+        public bool CRI_IsPayable_WeeklyOff { get; set; }
+        public bool CRI_IsPayable_PublicHoliday { get; set; }
         public DateTime CRI_RegisteredOn { get; set; }
         public bool? CRI_Active { get; set; }
         public DateTime? CRI_InactivatedOn { get; set; }

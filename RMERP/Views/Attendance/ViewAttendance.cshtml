@@ -113,21 +113,21 @@
                                                                     str = "<span class='present'>P/2</span>";
                                                                 }
                                                             }
-                                                            else if (att.ATT_IsPaidLeave)
-                                                            {
-                                                                totalLeaves++;
-                                                                str = "<span class='present'>PL</span>";
-                                                            }
+                                                            //else if (att.ATT_IsPaidLeave)
+                                                            //{
+                                                            //    totalLeaves++;
+                                                            //    str = "<span class='present'>PL</span>";
+                                                            //}
                                                             else if (att.ATT_IsEarnLeave)
                                                             {
                                                                 totWorkingDays++;
                                                                 str = "<span class='present'>EL</span>";
                                                             }
-                                                            else if (att.ATT_IsHoliday)
-                                                            {
-                                                                totalHolidays++;
-                                                                str = "<span class='present'>PH</span>";
-                                                            }
+                                                            //else if (att.ATT_IsHoliday)
+                                                            //{
+                                                            //    totalHolidays++;
+                                                            //    str = "<span class='present'>PH</span>";
+                                                            //}
                                                             else if (att.ATT_IsPublicHoliday)
                                                             {
                                                                 totalHolidays++;
@@ -137,11 +137,11 @@
                                                             {
                                                                 str = "<span class='absent'>A</span>";
                                                             }
-                                                            if (att.ATT_EarnedExtraDay)
-                                                            {
-                                                                totWorkingDays++;
-                                                                str = str + "<span class='extra'>+1</span>";
-                                                            }
+                                                            //if (att.ATT_EarnedExtraDay)
+                                                            //{
+                                                            //    totWorkingDays++;
+                                                            //    str = str + "<span class='extra'>+1</span>";
+                                                            //}
 
                                                         }
                                                     }

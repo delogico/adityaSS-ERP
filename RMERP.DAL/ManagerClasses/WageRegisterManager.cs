@@ -106,12 +106,12 @@ namespace RMERP.DAL.ManagerClasses
                     int totWorkingDays = 0, totPaidHolidas = 0, totWeekOffs = 0;
                     double totExtraWorkingDays = 0.0, totHalfDays=0.0;
                     
-                    totWorkingDays = attendances.Where(a => a.ATT_IsPresent == true).Count() +
-                                     attendances.Where(a => a.ATT_EarnedExtraDay == true).Count();
-                    totPaidHolidas = attendances.Where(a => a.ATT_IsPaidLeave == true).Count() +
-                                     attendances.Where(a => a.ATT_IsEarnLeave == true).Count() +
-                                     attendances.Where(a => a.ATT_IsHoliday == true).Count() +
-                                     attendances.Where(a => a.ATT_IsPublicHoliday == true).Count();
+                    //totWorkingDays = attendances.Where(a => a.ATT_IsPresent == true).Count() +
+                    //                 attendances.Where(a => a.ATT_EarnedExtraDay == true).Count();
+                    //totPaidHolidas = attendances.Where(a => a.ATT_IsPaidLeave == true).Count() +
+                    //                 attendances.Where(a => a.ATT_IsEarnLeave == true).Count() +
+                    //                 attendances.Where(a => a.ATT_IsHoliday == true).Count() +
+                    //                 attendances.Where(a => a.ATT_IsPublicHoliday == true).Count();
                     totExtraWorkingDays = WAR_ExtraWorkingHours / cli.CLI_WorkingHours_In_Day;
                     totWeekOffs = attendances.Where(a => a.ATT_IsWeeklyOff == true).Count();
                     totHalfDays= attendances.Where(a => a.ATT_IsHalfday == true).Count();

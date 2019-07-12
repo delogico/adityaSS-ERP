@@ -360,7 +360,7 @@ namespace RMERP.Controllers
                     #region by rinku on 11 july
                     if (row.GetCell(j).ToString().Equals("PL"))
                     {
-                        attendance.ATT_IsPaidLeave = true;
+                       // attendance.ATT_IsPaidLeave = true;
                         totalLeaves++;
                     }
                     if (row.GetCell(j).ToString().Equals("EL"))
@@ -624,7 +624,7 @@ namespace RMERP.Controllers
                             att.ATT_IsPresent = false;
                         }
                         att.ATT_IsPublicHoliday = secondRow.GetCell(j).ToString().Contains("PH");
-                        att.ATT_IsPaidLeave = secondRow.GetCell(j).ToString().Contains("PL");
+                       // att.ATT_IsPaidLeave = secondRow.GetCell(j).ToString().Contains("PL");
                         if (rowExtra.GetCell(j) != null)
                             if (!rowExtra.GetCell(j).ToString().Equals(""))
                                 att.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
@@ -700,7 +700,7 @@ namespace RMERP.Controllers
                     else if (row.GetCell(j).ToString().Equals("PH"))
                         att.ATT_IsPublicHoliday = true;
                     else if (row.GetCell(j).ToString().Equals("PL"))
-                        att.ATT_IsPaidLeave = true;
+                      //  att.ATT_IsPaidLeave = true;
                     #endregion
                     if (rowExtra.GetCell(j) != null)
                         if (!rowExtra.GetCell(j).ToString().Equals(""))
@@ -773,7 +773,7 @@ namespace RMERP.Controllers
                                 att.ATT_IsPresent = false;
                                 break;
                             case "PN":
-                                att.ATT_EarnedExtraDay = true;
+                              //  att.ATT_EarnedExtraDay = true;
                                 att.ATT_IsPresent = true;
                                 break;
                             case "CO":
@@ -793,7 +793,7 @@ namespace RMERP.Controllers
                                 break;
                             case "PL":
                                 att.ATT_IsPresent = false;
-                                att.ATT_IsPaidLeave = true;
+                             //   att.ATT_IsPaidLeave = true;
                                 break;
                             case "PW":
                                 att.ATT_IsPresent = true;
@@ -803,12 +803,12 @@ namespace RMERP.Controllers
                                 break;
                             case "HO":
                                 att.ATT_IsPresent = false;
-                                att.ATT_IsHoliday = true;
+                               // att.ATT_IsHoliday = true;
                                 break;
                             case "NC":
                                 att.ATT_NightShift = true;
                                 att.ATT_IsPresent = true;
-                                att.ATT_EarnedExtraDay = true;
+                              //  att.ATT_EarnedExtraDay = true;
                                 break;
                         }
                         att.ATT_Orignal_Row1 = row.GetCell(j).ToString();

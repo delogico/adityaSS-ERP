@@ -49,17 +49,13 @@ else
                                                     }
                                                 }
                                                 <th>Present Days</th>
-                                                <th>Half Days</th>
                                                 <th>Weekly Off</th>
+                                                <th>Public Holidays</th>
                                                 <th>Leave Days</th>
-                                                <th>Holidays</th>
-                                                <th>Extra Days</th>
-                                                <th>CO</th>
-                                                <th>WO Present</th>
-                                                <th>HO Present</th>
+                                                <th>Earn Leaves</th>
+                                                <th>Night Shifts</th>                                                
                                                 <th>Total Extra Hours</th>
-                                                <th>Total Extra OT Days</th>
-                                                <th>Total Payble Days</th>
+                                              
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -109,10 +105,10 @@ else
                                                                             }
 
                                                                             #region by rinku on 11 july
-                                                                            else if (att.ATT_IsPaidLeave)
-                                                                            {
-                                                                                str = "<span class='present'>PL</span>";
-                                                                            }
+                                                                            //else if (att.ATT_IsPaidLeave)
+                                                                            //{
+                                                                            //    str = "<span class='present'>PL</span>";
+                                                                            //}
                                                                             else if (att.ATT_IsEarnLeave)
                                                                             {
                                                                                 str = "<span class='present'>EL</span>";
@@ -126,10 +122,10 @@ else
                                                                             {
                                                                                 str = "<span class='absent'>A</span>";
                                                                             }
-                                                                            if (att.ATT_EarnedExtraDay)
-                                                                            {
-                                                                                str = str + "<span class='extra'>+1</span>";
-                                                                            }
+                                                                            //if (att.ATT_EarnedExtraDay)
+                                                                            //{
+                                                                            //    str = str + "<span class='extra'>+1</span>";
+                                                                            //}
                                                                         }
                                                                         <div class="col-md-12">@Html.Raw(str)</div>
                                                                         <div class="col-md-12 font10">

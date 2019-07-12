@@ -17,10 +17,6 @@ namespace RMERP.DAL.Models
         public string ATT_Shift { get; set; }
         public bool ATT_IsWeeklyOff { get; set; }
         public bool ATT_IsEarnLeave { get; set; }
-        public bool ATT_IsHoliday { get; set; }
-        public bool ATT_EarnedExtraDay { get; set; }
-        public bool ATT_IsCompensatoryOff { get; set; }
-        public bool ATT_IsPaidLeave { get; set; }
         public bool ATT_NightShift { get; set; }
         public string ATT_Orignal_Row1 { get; set; }
         public string ATT_Orignal_Row2 { get; set; }

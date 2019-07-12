@@ -54,6 +54,8 @@ namespace RMERP.DAL.ViewModel
         public bool ATT_IsWeeklyOff { get; set; }
         [Display(Name = "Earn Leave")]
         public bool ATT_IsEarnLeave { get; set; }
+        [Display(Name = "Night Shift")]
+        public bool ATT_IsNightShift { get; set; }
         [Display(Name = "Extra Working Hours")]
         public double ATT_ExtraHoursWorked { get; set; }
         [Display(Name = "Imported On")]

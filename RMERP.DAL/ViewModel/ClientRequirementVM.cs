@@ -55,9 +55,10 @@ namespace RMERP.DAL.ViewModel
         public decimal? CRI_OT_Rate { get; set; }
         [Display(Name = "OT Payment")]
         public double? CRI_OT_MultipleTimes { get; set; }
-        [Display(Name = "Wage calculation on weekly off")]
-        [Required(ErrorMessage = "Please select")]
-        public bool CRI_WageCalculationOnWeeklyOffPlus { get; set; }
+        [Display(Name = "Weekly off is payable?")]
+        public bool CRI_IsPayable_WeeklyOff { get; set; }
+        [Display(Name = "Public holiday is payable?")]
+        public bool CRI_IsPayable_PublicHoliday { get; set; }
         [Required]
         public DateTime CRI_RegisteredOn { get; set; }
         [Required]

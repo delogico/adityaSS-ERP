@@ -266,51 +266,60 @@
                                         @Html.TextBoxFor(m => m.CRI_HRA_Fixed, new { @class = "form-control", style = "display:" + (@Model.HRAselection == true ? "block" : "none") })
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-md-offset-6"></div>
+                               
+                                    <div class="col-md-6">
+                                        @Html.CheckBoxFor(m => m.CRI_IsPayable_WeeklyOff)
+                                        @Html.LabelFor(m => m.CRI_IsPayable_WeeklyOff, new { @class = "control-label" })
+                                    </div>
 
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            @for (var i = 0; i < Model.allAllowances.Count; i++)
-                                            {
-                                                <div class="col-md-12">
-                                                    <label>
-                                                        @Html.CheckBoxFor(m => m.allAllowances[i].flagClientRequirement, new { @class = "Allselection", @id = Model.allAllowances[i].ALL_Id })&nbsp;@Model.allAllowances[i].allowance.ALL_Title
+                                    <div class="col-md-6">
+                                        @Html.CheckBoxFor(m => m.CRI_IsPayable_PublicHoliday)
+                                        @Html.LabelFor(m => m.CRI_IsPayable_PublicHoliday, new { @class = "control-label" })
+                                    </div>
 
-                                                        @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Title, new { @Value = Model.allAllowances[i].allowance.ALL_Title })
-                                                        @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Shortform, new { @Value = Model.allAllowances[i].allowance.ALL_Shortform })
-                                                    </label>
-                                                    @Html.HiddenFor(m => m.allAllowances[i].ALL_Id)
-                                                    @Html.HiddenFor(m => m.allAllowances[i].flagClientRequirement, new { @id = "flagClientRequirement" + Model.allAllowances[i].ALL_Id })
-                                                    <div id="divReqAllow_@Model.allAllowances[i].ALL_Id" style="display:@(Model.allAllowances[i].flagClientRequirement ? "block" : "none")">
-                                                        <div class="col-md-12">
-                                                            <div class="col-md-6">
-                                                                <div class="col-md-12">
-                                                                    <div class="col-md-10">
-                                                                        @Html.TextBoxFor(m => m.allAllowances[i].CRA_Amount, new { @class = "form-control" })
-                                                                        @Html.ValidationMessageFor(m => m.allAllowances[i].CRA_Amount, "", new { @class = "text-danger" })
-                                                                    </div>
-                                                                    <div class="col-md-2">
-                                                                        @Html.Raw("INR")
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                @for (var i = 0; i < Model.allAllowances.Count; i++)
+                                                {
+                                                    <div class="col-md-12">
+                                                        <label>
+                                                            @Html.CheckBoxFor(m => m.allAllowances[i].flagClientRequirement, new { @class = "Allselection", @id = Model.allAllowances[i].ALL_Id })&nbsp;@Model.allAllowances[i].allowance.ALL_Title
+
+                                                            @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Title, new { @Value = Model.allAllowances[i].allowance.ALL_Title })
+                                                            @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Shortform, new { @Value = Model.allAllowances[i].allowance.ALL_Shortform })
+                                                        </label>
+                                                        @Html.HiddenFor(m => m.allAllowances[i].ALL_Id)
+                                                        @Html.HiddenFor(m => m.allAllowances[i].flagClientRequirement, new { @id = "flagClientRequirement" + Model.allAllowances[i].ALL_Id })
+                                                        <div id="divReqAllow_@Model.allAllowances[i].ALL_Id" style="display:@(Model.allAllowances[i].flagClientRequirement ? "block" : "none")">
+                                                            <div class="col-md-12">
+                                                                <div class="col-md-6">
+                                                                    <div class="col-md-12">
+                                                                        <div class="col-md-10">
+                                                                            @Html.TextBoxFor(m => m.allAllowances[i].CRA_Amount, new { @class = "form-control" })
+                                                                            @Html.ValidationMessageFor(m => m.allAllowances[i].CRA_Amount, "", new { @class = "text-danger" })
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            @Html.Raw("INR")
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-6" id="rdo_@Model.allAllowances[i].ALL_Id">
-                                                                @{string id = i + "radioTrue";}
-                                                                @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, false, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Full Amount", new { @for = id })
-                                                                @{id = i + "radioFalse";}
-                                                                @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, true, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Daywise Calculation", new { @for = id })
-                                                                @Html.ValidationMessageFor(x => x.allAllowances[i].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
+                                                                <div class="col-md-6" id="rdo_@Model.allAllowances[i].ALL_Id">
+                                                                    @{string id = i + "radioTrue";}
+                                                                    @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, false, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Full Amount", new { @for = id })
+                                                                    @{id = i + "radioFalse";}
+                                                                    @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, true, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Daywise Calculation", new { @for = id })
+                                                                    @Html.ValidationMessageFor(x => x.allAllowances[i].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            }
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         <div id="Deduction" class="tab-pane">
                             <div class="row">
                                 <div class="col-md-6">

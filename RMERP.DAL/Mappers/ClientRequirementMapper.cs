@@ -27,7 +27,8 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_OT_Formula = requirement.CRI_OT_Formula;
             clientRequirementVM.CRI_OT_Rate = requirement.CRI_OT_Rate;
             clientRequirementVM.CRI_OT_MultipleTimes = requirement.CRI_OT_MultipleTimes;
-            clientRequirementVM.CRI_WageCalculationOnWeeklyOffPlus = requirement.CRI_WageCalculationOnWeeklyOffPlus;
+            clientRequirementVM.CRI_IsPayable_WeeklyOff = requirement.CRI_IsPayable_WeeklyOff;
+            clientRequirementVM.CRI_IsPayable_PublicHoliday = requirement.CRI_IsPayable_PublicHoliday;
             clientRequirementVM.CRI_Active = requirement.CRI_Active;
             clientRequirementVM.CRI_InactivatedOn = requirement.CRI_InactivatedOn;
             clientRequirementVM.CRI_RegisteredOn = requirement.CRI_RegisteredOn;
@@ -64,7 +65,8 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_OT_Formula = requirementVM.CRI_OT_Formula;
             requirement.CRI_OT_Rate = requirementVM.CRI_OT_Rate;
             requirement.CRI_OT_MultipleTimes = requirementVM.CRI_OT_MultipleTimes;
-            requirement.CRI_WageCalculationOnWeeklyOffPlus = requirementVM.CRI_WageCalculationOnWeeklyOffPlus;
+            requirement.CRI_IsPayable_WeeklyOff = requirementVM.CRI_IsPayable_WeeklyOff;
+            requirement.CRI_IsPayable_PublicHoliday = requirementVM.CRI_IsPayable_PublicHoliday;
             requirement.CRI_Active = requirementVM.CRI_Active;
             requirement.CRI_InactivatedOn = requirementVM.CRI_InactivatedOn;
             requirement.CRI_RegisteredOn = requirementVM.CRI_RegisteredOn;
