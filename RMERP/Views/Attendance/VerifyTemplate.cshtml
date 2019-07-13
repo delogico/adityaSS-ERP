@@ -29,38 +29,38 @@ else
                 </div>
             </div>
             <div class="modal-body">
-                    <div class="content container-fluid">
-                        <div class="row">
-                            <div class="col-md-12">
+                <div class="content container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
 
-                                <div class="table-responsive">
-                                    <table class="table table-striped font11" style="width: 100%;">
-                                        <thead>
-                                            <tr>
-                                                <th>Id</th>
-                                                <th>Employee</th>
-                                                @{
-                                                    DateTime tmpDate = Model.startDate;
+                            <div class="table-responsive">
+                                <table class="table table-striped font11" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Employee</th>
+                                            @{
+                                                DateTime tmpDate = Model.startDate;
 
-                                                    while (Model.endDate >= tmpDate)
-                                                    {
-                                                        <th> @tmpDate.Day</th>
-                                                        tmpDate = tmpDate.AddDays(1);
-                                                    }
+                                                while (Model.endDate >= tmpDate)
+                                                {
+                                                    <th> @tmpDate.Day</th>
+                                                    tmpDate = tmpDate.AddDays(1);
                                                 }
-                                                <th>Present Days</th>
-                                                <th>Weekly Off</th>
-                                                <th>Public Holidays</th>
-                                                <th>Leave Days</th>
-                                                <th>Earn Leaves</th>
-                                                <th>Night Shifts</th>                                                
-                                                <th>Total Extra Hours</th>
-                                              
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.excelRows)
-                                            {
+                                            }
+                                            <th>Present Days</th>
+                                            <th>Weekly Off</th>
+                                            <th>Public Holidays</th>
+                                            <th>Earn Leaves</th>
+                                            <th>Night Shifts</th>
+                                            <th>Total Extra Hours</th>
+                                            @*<th>Total Paybale Days</th>*@
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.excelRows)
+                                        {
                                             <tr>
                                                 <td>@item.EMP_Id</td>
                                                 <td><b>@item.EMP_Name</b><br />@item.Designation</td>
@@ -75,24 +75,10 @@ else
                                                                 <div class="row">
                                                                     @{
                                                                         String str = "";
-                                                                        if (att.ATT_IsWeeklyOff)
+                                                                        String strSecondrow = "";                                                       
+                                                                        if (att.ATT_IsPresent)
                                                                         {
-                                                                            str = "<span class='weekoff'>W/O</span>";
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            if (att.ATT_IsPresent)
-                                                                            {
-                                                                                if (att.ATT_Shift != null)
-                                                                                {
-                                                                                    str = "<span class='present'>" + att.ATT_Shift + "</span>";
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    str = "<span class='present'>P</span>";
-                                                                                }
-                                                                            }
-                                                                            else if (att.ATT_IsHalfday)
+                                                                            if (att.ATT_IsHalfday)
                                                                             {
                                                                                 if (att.ATT_Shift != null)
                                                                                 {
@@ -103,31 +89,47 @@ else
                                                                                     str = "<span class='present'>P/2</span>";
                                                                                 }
                                                                             }
-
-                                                                            #region by rinku on 11 july
-                                                                            //else if (att.ATT_IsPaidLeave)
-                                                                            //{
-                                                                            //    str = "<span class='present'>PL</span>";
-                                                                            //}
-                                                                            else if (att.ATT_IsEarnLeave)
-                                                                            {
-                                                                                str = "<span class='present'>EL</span>";
-                                                                            }
-                                                                            else if (att.ATT_IsPublicHoliday)
-                                                                            {
-                                                                                str = str + " <span class='present'>PH</span>";
-                                                                            }
-                                                                            #endregion
                                                                             else
                                                                             {
-                                                                                str = "<span class='absent'>A</span>";
+                                                                                if (att.ATT_Shift != null)
+                                                                                {
+                                                                                    str = "<span class='present'>" + att.ATT_Shift + "</span>";
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    str = "<span class='present'>P</span>";
+                                                                                }
                                                                             }
-                                                                            //if (att.ATT_EarnedExtraDay)
-                                                                            //{
-                                                                            //    str = str + "<span class='extra'>+1</span>";
-                                                                            //}
+
                                                                         }
+                                                                        else
+                                                                        {
+                                                                            str = "<span class='absent'>A</span>";
+                                                                        }
+
                                                                         <div class="col-md-12">@Html.Raw(str)</div>
+                                                                        if (att.ATT_IsPublicHoliday)
+                                                                        {
+                                                                            strSecondrow = " <span class='present'>PH</span>";
+                                                                        }
+                                                                        else if (att.ATT_IsEarnLeave)
+                                                                        {
+                                                                            strSecondrow = "<span class='present'>EL</span>";
+                                                                        }
+                                                                        else if (att.ATT_IsWeeklyOff)
+                                                                        {
+                                                                            strSecondrow = " <span class='present'>WO</span>";
+                                                                        }                                                                        
+                                                                        <div class="col-md-12">
+                                                                            @if (strSecondrow != "")
+                                                                            {
+                                                                                @Html.Raw(strSecondrow)
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @Html.Raw("&nbsp;")
+                                                                            }
+                                                                        </div>
                                                                         <div class="col-md-12 font10">
                                                                             @{
                                                                                 if (att.ATT_ExtraHoursWorked > 0)
@@ -138,6 +140,10 @@ else
                                                                                 {
                                                                                     @Html.Raw("&nbsp;")
                                                                                 }
+                                                                                if (att.ATT_NightShift)
+                                                                                {
+                                                                                    @Html.Raw(" <i class='fa fa-moon-o'></i>")
+                                                                                }
                                                                             }
                                                                         </div>
                                                                     }
@@ -147,99 +153,94 @@ else
                                                         tmpDate1 = tmpDate1.AddDays(1);
                                                     }
                                                 }
-                                                <td>@item.TotalPresenceDays</td>
-                                                <td>@item.TotalHalfDays</td>
+                                                <td>@item.totalPresenceDays</td>
                                                 <td>@item.totalWeeklyOff</td>
-                                                <td>@item.totalLeaves</td>
                                                 <td>@item.totalHolidays</td>
-                                                <td>@item.totalExtraDays</td>
-                                                <td>@item.totalCOs</td>
-                                                <td>@item.totalWOPresent</td>
-                                                <td>@item.totalHOPresent</td>
+                                                <td>@item.TotalEarnLeave</td>
+                                                <td>@item.TotalNightshift</td>
                                                 <td>@item.TotalExtraHours</td>
-                                                <td>@item.TotalExtraOTDays</td>
-                                                <td>@item.totalPaybleDays</td>
+                                                @*<td>@item.totalPaybleDays</td>*@
                                             </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-
-
-                                @if (Model.empListExtraInExcel.Count() > 0 || Model.EmpListExtraInDb.Count() > 0 || Model.datePeriod == false)
-                                {
-                                    <br />
-                                    <div class="row well well-lg" style="color:red;">
-                                        <div class="col-md-12">
-                                            <h4 class="modal-title">Match with client's Requirement</h4>
-                                            <hr />
-                                            <ul>
-                                                @if (Model.empListExtraInExcel.Count() > 0)
-                                                {
-                                                    <li>
-                                                        <b>We have found this employees which is/are not assign to Client:</b><br />Solution: Go to client Employees secion and Assign First
-                                                        <ul>
-                                                            @foreach (var item in Model.empListExtraInExcel)
-                                                            {
-                                                                <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
-                                                            }
-                                                        </ul>
-                                                    </li>
-                                                }
-                                                @if (Model.EmpListExtraInDb.Count() > 0)
-                                                {
-                                                    <li>
-                                                        <b>We have found this missing employees which is/are assigned to Client:</b><br />
-                                                        Solution: Re-verify Excel sheet you choosed.
-                                                        <ul>
-                                                            @foreach (var item in Model.EmpListExtraInDb)
-                                                            {
-                                                                <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
-                                                            }
-                                                        </ul>
-                                                    </li>
-                                                }
-
-                                                @if (Model.datePeriod == false)
-                                                {
-                                                    <li>
-                                                        <b>We have found date period of excel is not match with client parameter.</b><br />
-                                                        Solution: Check Client parameter and excel sheet again.
-                                                    </li>
-                                                }
-
-                                            </ul>
-
-
-                                        </div>
-
-                                    </div>
-                                }
-
-                                @using (Html.BeginForm("ImportExcel", "Attendance", FormMethod.Post))
-                                {
-                                    @Html.HiddenFor(m => m.WAG_Id)
-                                    @Html.HiddenFor(m => m.CLI_Id)
-                                    @Html.HiddenFor(m => m.fileName)
-                                    @Html.HiddenFor(m => m.Template)
-                                    <div class="m-t-20 text-center">
-                                        @if (Model.btnExportToDatabase == false)
-                                        {
-                                            <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" disabled />
                                         }
-                                        else
-                                        {
-                                            <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" />
-                                        }
-
-                                    </div>
-                                }
+                                    </tbody>
+                                </table>
                             </div>
+
+
+                            @if (Model.empListExtraInExcel.Count() > 0 || Model.EmpListExtraInDb.Count() > 0 || Model.datePeriod == false)
+                            {
+                                <br />
+                                <div class="row well well-lg" style="color:red;">
+                                    <div class="col-md-12">
+                                        <h4 class="modal-title">Match with client's Requirement</h4>
+                                        <hr />
+                                        <ul>
+                                            @if (Model.empListExtraInExcel.Count() > 0)
+                                            {
+                                                <li>
+                                                    <b>We have found this employees which is/are not assign to Client:</b><br />Solution: Go to client Employees secion and Assign First
+                                                    <ul>
+                                                        @foreach (var item in Model.empListExtraInExcel)
+                                                        {
+                                                            <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            }
+                                            @if (Model.EmpListExtraInDb.Count() > 0)
+                                            {
+                                                <li>
+                                                    <b>We have found this missing employees which is/are assigned to Client:</b><br />
+                                                    Solution: Re-verify Excel sheet you choosed.
+                                                    <ul>
+                                                        @foreach (var item in Model.EmpListExtraInDb)
+                                                        {
+                                                            <li> @item.EMP_FirstName @item.EMP_MiddleName @item.EMP_SurName</li>
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            }
+
+                                            @if (Model.datePeriod == false)
+                                            {
+                                                <li>
+                                                    <b>We have found date period of excel is not match with client parameter.</b><br />
+                                                    Solution: Check Client parameter and excel sheet again.
+                                                </li>
+                                            }
+
+                                        </ul>
+
+
+                                    </div>
+
+                                </div>
+                            }
+
+                            @using (Html.BeginForm("ImportExcel", "Attendance", FormMethod.Post))
+                            {
+                                @Html.HiddenFor(m => m.WAG_Id)
+                                @Html.HiddenFor(m => m.CLI_Id)
+                                @Html.HiddenFor(m => m.fileName)
+                                @Html.HiddenFor(m => m.Template)
+                                <div class="m-t-20 text-center">
+                                    @if (Model.btnExportToDatabase == false)
+                                    {
+                                        <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" disabled />
+                                    }
+                                    else
+                                    {
+                                        <input type="submit" value="Export To Database" name="Export" id="btnSubmit" class="btn btn-success" />
+                                    }
+
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    
+    </div>
+
 }
 

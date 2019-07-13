@@ -39,18 +39,12 @@ namespace RMERP.DAL.ViewModel
         public string EMP_Id { get; set; }
         public string EMP_Name { get; set; }
         public string Designation { get; set; }
-        public int TotalPresenceDays { get; set; }
-        public Double TotalHalfDays { get; set; }
-        public Double TotalExtraHours { get; set; }
-        public Double TotalExtraOTDays { get; set; }
+        public double totalPresenceDays { get; set; }
         public int totalWeeklyOff { get; set; }
-        public int totalLeaves { get; set; }
         public int totalHolidays { get; set; }
-        public double totalExtraDays { get; set; }
-        public int totalAbsentDays { get; set; }
-        public int totalCOs { get; set; }
-        public int totalWOPresent { get; set; }
-        public int totalHOPresent { get; set; }
+        public double TotalEarnLeave { get; set; }
+        public Double TotalNightshift { get; set; }
+        public Double TotalExtraHours { get; set; }       
         public double totalPaybleDays { get; set; }
     }
         
