@@ -78,8 +78,7 @@ namespace RMERP.DAL.ManagerClasses
                     int totalWorkingDays = 0;
                     double totalPaybleDays = 0;
                     decimal CRI_Basic = 0M, WAR_Basic_Calculated = 0M, BasicDa = 0M, WAR_OverTime_Calculated = 0M, WAR_PF, WAR_PF_Calculated = 0M, WAR_ESIC = 0M, WAR_ESIC_Calculated = 0M;
-                    decimal CRI_DA = 0M, CRI_DA_Calculated = 0M, CRI_HRA = 0M, CRI_HRA_Calculated = 0M;
-                    double WAR_ExtraWorkingHours = attendances.Sum(m => m.ATT_ExtraHoursWorked);
+                    decimal CRI_DA = 0M, CRI_DA_Calculated = 0M, CRI_HRA = 0M, CRI_HRA_Calculated = 0M;                    
 
                     #region Total working day calculation
                     Clients cli = clientsManager.GetClientById(CLI_Id);
@@ -92,33 +91,38 @@ namespace RMERP.DAL.ManagerClasses
                         case 1://   1:Excluding_WeeklyOff
                             totalWorkingDays = attendances.Where(a => a.ATT_IsWeeklyOff == false).Count();
                             break;
-                        case 2://   2:Consider StaticDays Include WeeklyOff
+                        case 2://   2:Consider StaticDays 
                             totalWorkingDays = cli.CLI_No_Reduce_Days.Value;
-                            break;
-                        case 3://   3:Consider StaticDays Exclude WeeklyOff
-                            totalWorkingDays = cli.CLI_No_Reduce_Days.Value - attendances.Where(a => a.ATT_IsWeeklyOff == true).Count();
-                            break;
+                            break;                       
                         default: break;
                     }
                     #endregion
 
                     #region Paybale day counting
-                    int totWorkingDays = 0, totPaidHolidas = 0, totWeekOffs = 0;
-                    double totExtraWorkingDays = 0.0, totHalfDays=0.0;
-                    
-                    //totWorkingDays = attendances.Where(a => a.ATT_IsPresent == true).Count() +
-                    //                 attendances.Where(a => a.ATT_EarnedExtraDay == true).Count();
-                    //totPaidHolidas = attendances.Where(a => a.ATT_IsPaidLeave == true).Count() +
-                    //                 attendances.Where(a => a.ATT_IsEarnLeave == true).Count() +
-                    //                 attendances.Where(a => a.ATT_IsHoliday == true).Count() +
-                    //                 attendances.Where(a => a.ATT_IsPublicHoliday == true).Count();
+                   
+                    int totWeekOffs = 0, totalPublicHoliday = 0, totEarnLeave = 0, totNightShift = 0;
+                    double totPresentDays = 0, totHalfDays = 0, totExtraWorkingDays=0, WAR_ExtraWorkingHours=0;
+
+                    totPresentDays = attendances.Where(a => a.ATT_IsPresent == true).Count();                                                       
+                    totEarnLeave = attendances.Where(a => a.ATT_IsEarnLeave == true).Count();
+                    totNightShift = attendances.Where(a => a.ATT_NightShift == true).Count();                   
+                    totHalfDays = attendances.Where(a => a.ATT_IsHalfday == true).Count();
+
+                    WAR_ExtraWorkingHours = attendances.Sum(m => m.ATT_ExtraHoursWorked);
                     totExtraWorkingDays = WAR_ExtraWorkingHours / cli.CLI_WorkingHours_In_Day;
+
                     totWeekOffs = attendances.Where(a => a.ATT_IsWeeklyOff == true).Count();
-                    totHalfDays= attendances.Where(a => a.ATT_IsHalfday == true).Count();
-                    totalPaybleDays = totWorkingDays + totPaidHolidas+ (totHalfDays/2);
-                    if (cli.CLI_Total_WorkingDays != 1)
-                    {
+                    totalPublicHoliday = attendances.Where(a => a.ATT_IsPublicHoliday == true).Count();
+
+                    totalPaybleDays = (totPresentDays- totHalfDays) + (totHalfDays/2) + totEarnLeave;
+
+                    if (cr.CRI_IsPayable_WeeklyOff)
+                    {                        
                         totalPaybleDays = totalPaybleDays + totWeekOffs;
+                    }
+                    if (cr.CRI_IsPayable_PublicHoliday)
+                    {
+                        totalPaybleDays = totalPaybleDays + totalPublicHoliday;
                     }
 
                     #endregion
