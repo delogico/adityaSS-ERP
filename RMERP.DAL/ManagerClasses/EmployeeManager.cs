@@ -159,6 +159,37 @@ namespace RMERP.DAL.ManagerClasses
             return _context.Employees.Any(m => m.EMP_Aadhar_Number.Equals(AadharNumber) && m.EMP_Id!=EMP_Id);
         }
 
+        public List<Employees> SearchEmployees(int FRM_Id, bool EMP_UAN_Number, bool EMP_ESIC_Number)
+        {
+            List<Employees> list = new List<Employees>();
+           
+            if (FRM_Id > 0)
+            {
+                list = _context.Employees.Where(m => m.FRM_Id.Equals(FRM_Id)).Include(m => m.FRM_).ToList();
+            }
+            else
+            {
+                list = _context.Employees.Include(m => m.FRM_).ToList();
+            }
+            if(EMP_UAN_Number==true)
+            {
+                list = list.Where(m => m.EMP_UAN_Number == null || m.EMP_UAN_Number == "").ToList();                
+            }
+            //else
+            //{
+            //    list = list.Where(m => m.EMP_UAN_Number != null && m.EMP_UAN_Number != "").ToList();
+            //}            
+            if (EMP_ESIC_Number == true)
+            {
+                list = list.Where(m => m.EMP_ESIC_Number == null || m.EMP_ESIC_Number == "").ToList();              
+            }
+            //else
+            //{
+            //    list = list.Where(m => m.EMP_ESIC_Number != null && m.EMP_ESIC_Number != "").ToList();
+            //}
+            return list;
+        }
+
     }
 }
 

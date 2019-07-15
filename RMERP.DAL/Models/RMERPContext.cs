@@ -493,7 +493,6 @@ namespace RMERP.DAL.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.EMP_ESIC_Number)
-                    .IsRequired()
                     .HasMaxLength(10)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('Pending')");
@@ -531,7 +530,6 @@ namespace RMERP.DAL.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.EMP_UAN_Number)
-                    .IsRequired()
                     .HasMaxLength(12)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('Pending')");

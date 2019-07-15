@@ -45,8 +45,28 @@ namespace RMERP.Controllers
             {
                 FRM_Id = sessionUtils.GetLoggedFirmID().Value;
             }
+            FirmsManager firmsManager = new FirmsManager(_context);
+            ViewBag.FirmList = firmsManager.getFirmList();
+
             EmployeeManager employeeManager = new EmployeeManager(_context);
-            return View(EmployeesMapper.MapEmployees(employeeManager.GetEmployees(FRM_Id).ToList(), _context));
+            return View(new Tuple<IEnumerable<EmployeeVM>, int>(EmployeesMapper.MapEmployees(employeeManager.GetEmployees(FRM_Id).ToList(), _context), FRM_Id));
+
+
+        }
+        [HttpPost]
+        public IActionResult SearchEmployee(int FRM_Id, bool EMP_UAN_Number, bool EMP_ESIC_Number)
+        {
+            EmployeeManager employeeManager = new EmployeeManager(_context);
+            List<EmployeeVM> listVM = EmployeesMapper.MapEmployees(employeeManager.SearchEmployees(FRM_Id, EMP_UAN_Number, EMP_ESIC_Number));
+            FirmsManager firmsManager = new FirmsManager(_context);
+            ViewBag.FirmList = firmsManager.getFirmList();
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            int Firm_Id=0;
+            if (sessionUtils.GetLoggedFirmID().HasValue)
+            {
+                Firm_Id = sessionUtils.GetLoggedFirmID().Value;
+            }
+            return View("Index", new Tuple<IEnumerable<EmployeeVM>, int>(listVM, Firm_Id));
         }
 
         [HttpGet]
@@ -332,7 +352,7 @@ namespace RMERP.Controllers
         }
 
         //[AcceptVerbs("Get", "Post")]
-        public IActionResult CheckExistingAadhar(string EMP_Aadhar_Number,int EMP_Id)
+        public IActionResult CheckExistingAadhar(string EMP_Aadhar_Number, int EMP_Id)
         {
             EmployeeManager employeeManager = new EmployeeManager(_context);
             bool ExistingAadhar = false;
