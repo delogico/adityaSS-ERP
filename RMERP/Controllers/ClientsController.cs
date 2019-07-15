@@ -215,28 +215,27 @@ namespace RMERP.Controllers
                 else
                 {                   
                     string[] files = System.IO.Directory.GetFiles(ImagePath + "/" + clientID);
-                    foreach (string s in files)
+                    if (file != null)
                     {
-                        string fileName = System.IO.Path.GetFileName(s);
-                        System.IO.File.Delete(ImagePath + "/" + clientID + "/" + fileName);
-                    }
+                        foreach (string s in files)
+                        {
+                            string fileName = System.IO.Path.GetFileName(s);
+                            System.IO.File.Delete(ImagePath + "/" + clientID + "/" + fileName);
+                        }
+                    }                    
                 }
                 if (file == null || file.Length <= 0)
                 {
                 }
                 else
                 {
-
                     var path = Path.Combine(ImagePath + "\\" + clientID, file.FileName);
-
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
                         await file.CopyToAsync(stream);
                     }
-
                 }
-                #endregion             
-                
+                #endregion            
             }            
             return RedirectToAction("AddEditClients",new { id= clientID });
         }
