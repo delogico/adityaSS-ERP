@@ -349,8 +349,12 @@ namespace RMERP.Controllers
                     if (rowExtra.GetCell(j) != null)
                         if (!rowExtra.GetCell(j).ToString().Equals(""))
                         {
-                            attendance.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
-                            totalExtraHours += Convert.ToDouble(rowExtra.GetCell(j).ToString());
+                            if (double.TryParse(rowExtra.GetCell(j).ToString(), out double value))
+                            {                               
+                                attendance.ATT_ExtraHoursWorked = value;
+                                totalExtraHours += value;
+                            }
+                           
                         }
                     attandanceList.Add(attendance);
                 }
@@ -569,12 +573,16 @@ namespace RMERP.Controllers
                             attendance.ATT_IsPublicHoliday = true;
                             totalPublicHoliday++;
                             break;
-                    }
+                    }                   
                     if (rowExtra.GetCell(j) != null)
                         if (!rowExtra.GetCell(j).ToString().Equals(""))
                         {
-                            attendance.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
-                            totalExtraHours += Convert.ToDouble(rowExtra.GetCell(j).ToString());
+                            if (double.TryParse(rowExtra.GetCell(j).ToString(), out double value))
+                            {
+                                attendance.ATT_ExtraHoursWorked = value;
+                                totalExtraHours += value;
+                            }
+
                         }
                     attandanceList.Add(attendance);
                 }
@@ -644,7 +652,7 @@ namespace RMERP.Controllers
                 TotEmp++;
                 int totalWeeklyOff = 0, totalPublicHoliday = 0, totalEarnLeave = 0, totalNightShift = 0;
                 double totalHalfdays = 0, totalPresence = 0;
-                DateTime tmpDate = startDate;                
+                DateTime tmpDate = startDate;
 
                 for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
                 {
@@ -664,7 +672,7 @@ namespace RMERP.Controllers
                             case "P":
                                 attendance.ATT_IsPresent = true;
                                 totalPresence++;
-                                break;                                                      
+                                break;
                             case "A":
                                 attendance.ATT_IsPresent = false;
                                 break;
@@ -784,7 +792,7 @@ namespace RMERP.Controllers
                     }
                     attandanceList.Add(attendance);
                 }
-                
+
                 excelRow.totalPresenceDays = totalPresence + (totalHalfdays / 2) - totalHalfdays;
                 excelRow.totalWeeklyOff = totalWeeklyOff;
                 excelRow.totalHolidays = totalPublicHoliday;
@@ -984,12 +992,18 @@ namespace RMERP.Controllers
                                 break;
                         }
                         att.ATT_Orignal_Row1 = row.GetCell(j).ToString();
+                       
                         if (rowExtra.GetCell(j) != null)
                             if (!rowExtra.GetCell(j).ToString().Equals(""))
                             {
                                 att.ATT_Orignal_Row2 = rowExtra.GetCell(j).ToString();
-                                att.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
+                                if (double.TryParse(rowExtra.GetCell(j).ToString(), out double value))
+                                {                                   
+                                    att.ATT_ExtraHoursWorked = value;
+                                }
+
                             }
+
                         att.ATT_ImportedOn = DateTime.Now;
                         att.ADM_Id_ImportedBy = sessionUtils.GetLoggedAdminID();
                         attManager.save(att);
@@ -1181,7 +1195,11 @@ namespace RMERP.Controllers
                         if (!rowExtra.GetCell(j).ToString().Equals(""))
                         {
                             att.ATT_Orignal_Row2 = rowExtra.GetCell(j).ToString();
-                            att.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
+                            if (double.TryParse(rowExtra.GetCell(j).ToString(), out double value))
+                            {
+                                att.ATT_ExtraHoursWorked = value;
+                            }
+
                         }
 
                     att.ATT_ImportedOn = DateTime.Now;
@@ -1331,7 +1349,7 @@ namespace RMERP.Controllers
                                     break;
                             }
                         }
-                       
+
 
                         att.ATT_Orignal_Row1 = row.GetCell(j).ToString();
                         att.ATT_Orignal_Row2 = "";
