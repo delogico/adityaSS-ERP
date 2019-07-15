@@ -286,7 +286,7 @@ namespace RMERP.Controllers
                 }
 
             }
-            return RedirectToAction("AddEditEmployee", new { EMP_Id = employeeVM.EMP_Id });
+            return RedirectToAction("AddEditEmployee", new { EMP_Id = employeeVM.EMP_Id, tab = "AddEditDocuments" });
         }
 
         public ActionResult DeleteDocument(int EMD_Id)

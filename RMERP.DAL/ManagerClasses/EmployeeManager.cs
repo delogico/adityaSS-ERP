@@ -85,7 +85,6 @@ namespace RMERP.DAL.ManagerClasses
         public string AddEditAdvance(Employee_Advance employee_Advance)
         {
             string res = string.Empty;
-            employee_Advance.ADV_RegisteredOn = ProjectUtils.DateNow();
             try
             {
                 if (employee_Advance.ADV_Id > 0)
@@ -93,7 +92,11 @@ namespace RMERP.DAL.ManagerClasses
                     _context.Employee_Advance.Update(employee_Advance);
                 }
                 else
+                {
+                    employee_Advance.ADV_RegisteredOn = ProjectUtils.DateNow();
                     _context.Employee_Advance.Add(employee_Advance);
+                }
+                   
 
                 _context.SaveChanges();
             }
