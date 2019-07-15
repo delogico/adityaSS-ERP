@@ -29,20 +29,29 @@
             <div class="col-sm-8">
                 <h4 class="page-title">@ViewData["Title"]</h4>
             </div>
-            <div class="col-sm-4 text-right m-b-30">
+            <div class="col-sm-4 text-right">
                 <a class="btn btn-primary rounded" href="@Url.Action("AddEditEmployee","Employees")"><i class="fa fa-plus"></i> Add New Employee</a>
-            </div>
-
+            </div>           
         </div>
         <div class="row">
-            <div class="col-sm-6" style="border: solid;border-width: 1px; margin: 12px;padding: 15px;border-color: #d4d4d4;">
+            <div class="col-sm-10">               
+            </div>
+            <div class="col-sm-2 text-right m-b-10">
+                <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+                <a class="text-right btn-link" data-toggle="collapse" href="#collapseAdvanceSearch" role="button" aria-expanded="false" aria-controls="AdvanceSearch">Advance Search</a>
+            </div>           
+        </div>
+        <div class="row collapse" id="collapseAdvanceSearch">
+            <div class="col-md-8">
+            </div>
+            <div class="col-md-4 well">
                 @using (Html.BeginForm("SearchEmployee", "Employees", FormMethod.Post))
                 {
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="form-group">                               
+                            <div class="form-group">
                                 @if (Model.Item2 > 0)
-                                {                                    
+                                {
                                     @Html.Hidden("FRM_Id", Model.Item2)
                                     @Html.DropDownList("FRM_Id", new SelectList(ViewBag.FirmList, "FRM_Id", "FRM_Name", Model.Item2), "Select Firm", new { @class = "form-control", disabled = "disabled" })
                                 }
@@ -69,7 +78,6 @@
                     </div>
                 }
             </div>
-
         </div>
         <div class="row">
             <div class="col-md-12">
