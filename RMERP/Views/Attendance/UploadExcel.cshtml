@@ -57,79 +57,67 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th></th>
                                     <th>Description</th>
+                                    <th>Payable</th>
                                 </tr>
                             </thead>
                             <tr>
-                                <td>P</td>
-                                <td>Present</td>
-                                <td>Is Present</td>
+                                <td>A</td>
+                                <td>Not <span>Is Present</span></td>
+                                <td>No</td>
                             </tr>
                             <tr>
-                                <td>PL= EL(or E/L) = CO</td>
-                                <td>Paid Leave / Earn Leave / Compensatory off</td>
-                                <td>Is Absent + Is Payble</td>
+                                <td>P = I/II/III/G</td>
+                                <td><span>Is Present</span></td>
+                                <td>Yes</td>
                             </tr>
                             <tr>
-                                <td>WO</td>
-                                <td>Weekly off</td>
-                                <td> Is Absent + Is Weeklyoff + Is Payable(WO is paybale or not is depends on client requirement)</td>
+                                <td>PL= EL(or E/L) = CO</td>                               
+                                <td>Not <span>Is Present</span></td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>WO or W/O</td>
+                                <td>Not <span>Is Present</span> + Is Weeklyoff</td>
+                                <td>Depends on client requirement</td>
                             </tr>
                             <tr>
                                 <td>PW</td>
-                                <td>Present on weekly off</td>
-                                <td>Is Present + Is Weeklyoff + Is Payable(If WO is payable, then total leave is counted as 2 otherwise counted as 2)</td>
-                            </tr>                           
+                                <td>Is Present + Is Weeklyoff</td>
+                                <td>Yes + Depends on client requirement</td>
+                            </tr>
                             <tr>
                                 <td>HO = PF = NH</td>
-                                <td>Holiday / Public Holiday / National holiday</td>
-                                <td>Is Absent + Is Holiday +  Is Payable(HO is paybale or not is depends on client requirement)</td>
+                                <td>Not <span>Is Present</span> + Is Holiday</td>
+                                <td>Depends on client requirement</td>
                             </tr>
                             <tr>
                                 <td>PO = PN</td>
-                                <td>Present on holiday / Present on national holiday</td>
-                                <td>Is Present + Is Holiday + Is Payable(If HO is payable, then total leave is counted as 2 otherwise counted as 1)</td>
-                            </tr> 
-                            <tr>
-                                <td>HF = P/2 </td>
-                                <td>Half day</td>
-                                <td>Is Present + Is Halfday (HF or P/2 is allowed in only without shift excel template (Leave counted as 0.5))</td>
+                                <td>Is Present + Is Holiday</td>
+                                <td>Yes + Depends on client requirement</td>
                             </tr>
                             <tr>
-                                <td>A</td>
-                                <td>Absent</td>
-                                <td>Is Absent</td>
+                                <td>HF = P/2 = I/2 = II/2 = III/2 = G/2</td>
+                                <td>Is Present + Is Halfday</td>
+                                <td>0.5 Day</td>
                             </tr>
                             <tr>
                                 <td>CP</td>
-                                <td>Present on night shift</td>
                                 <td>Is Present + Is Nightshift</td>
+                                <td>Yes</td>
                             </tr>
                             <tr>
                                 <td>NC</td>
-                                <td>Night shift on national holiday</td>
-                                <td>Is Present+ Is Nightshift + Is Holiday (If HO is payable, then total leave is counted as 2 otherwise counted as 1)</td>
+                                <td>Is Present + Is Nightshift + Is Holiday</td>
+                                <td>Yes + Depends on client requirement</td>
                             </tr>
                             <tr>
                                 <td>CW</td>
-                                <td>Night shift on wekkly day off</td>
-                                <td>Is Present+ Is Nightshift + Is Weeklyoff (If WO is payable, then total leave is counted as 2 otherwise counted as 1)</td>
-                            </tr>                          
-                           
-                            <tr>
-                                <td>I or II or III or G</td>
-                                <td>Shift</td>
-                                <td>Is Present ( Allowed in only shiftwise excel template)</td>
+                                <td>Is Present+ Is Nightshift + Is Weeklyoff</td>
+                                <td>Yes + Depends on client requirement</td>
                             </tr>
-                            <tr>
-                                <td>I/2 or II/2 or III/2 or G/2</td>
-                                <td>Half day in shift</td>
-                                <td>Is Present + Is Halfday (Allowed in only shiftwise excel template)</td>
-                            </tr>                            
                         </table>                       
                     </div>
-
                     
                 </div>
                 }
