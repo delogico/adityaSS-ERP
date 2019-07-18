@@ -270,6 +270,11 @@ namespace RMERP.Controllers
                             attendance.ATT_IsEarnLeave = true;
                             totalEarnLeave++;
                             break;
+                        case "C/O":
+                            attendance.ATT_IsPresent = false;
+                            attendance.ATT_IsEarnLeave = true;
+                            totalEarnLeave++;
+                            break;
                         case "HO":
                             attendance.ATT_IsPresent = false;
                             attendance.ATT_IsPublicHoliday = true;
@@ -473,6 +478,11 @@ namespace RMERP.Controllers
                             totalPresence++;
                             break;
                         case "CO":
+                            attendance.ATT_IsPresent = false;
+                            attendance.ATT_IsEarnLeave = true;
+                            totalEarnLeave++;
+                            break;
+                        case "C/O":
                             attendance.ATT_IsPresent = false;
                             attendance.ATT_IsEarnLeave = true;
                             totalEarnLeave++;
@@ -714,6 +724,11 @@ namespace RMERP.Controllers
                                 attendance.ATT_IsEarnLeave = true;
                                 totalEarnLeave++;
                                 break;
+                            case "C/O":
+                                attendance.ATT_IsPresent = false;
+                                attendance.ATT_IsEarnLeave = true;
+                                totalEarnLeave++;
+                                break;
                             case "HO":
                                 attendance.ATT_IsPresent = false;
                                 attendance.ATT_IsPublicHoliday = true;
@@ -937,6 +952,10 @@ namespace RMERP.Controllers
                                 att.ATT_IsPresent = false;
                                 att.ATT_IsEarnLeave = true;
                                 break;
+                            case "C/O":
+                                att.ATT_IsPresent = false;
+                                att.ATT_IsEarnLeave = true;
+                                break;
                             case "HO":
                                 att.ATT_IsPresent = false;
                                 att.ATT_IsPublicHoliday = true;
@@ -1119,6 +1138,10 @@ namespace RMERP.Controllers
                             att.ATT_IsPresent = false;
                             att.ATT_IsEarnLeave = true;
                             break;
+                        case "C/O":
+                            att.ATT_IsPresent = false;
+                            att.ATT_IsEarnLeave = true;
+                            break;
                         case "HO":
                             att.ATT_IsPresent = false;
                             att.ATT_IsPublicHoliday = true;
@@ -1291,6 +1314,10 @@ namespace RMERP.Controllers
                                     att.ATT_IsWeeklyOff = true;
                                     break;
                                 case "CO":
+                                    att.ATT_IsPresent = false;
+                                    att.ATT_IsEarnLeave = true;
+                                    break;
+                                case "C/O":
                                     att.ATT_IsPresent = false;
                                     att.ATT_IsEarnLeave = true;
                                     break;
