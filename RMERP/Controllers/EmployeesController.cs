@@ -354,6 +354,7 @@ namespace RMERP.Controllers
         //[AcceptVerbs("Get", "Post")]
         public IActionResult CheckExistingAadhar(string EMP_Aadhar_Number, int EMP_Id)
         {
+            EMP_Aadhar_Number=EMP_Aadhar_Number.Trim().Replace(@"\", string.Empty);
             EmployeeManager employeeManager = new EmployeeManager(_context);
             bool ExistingAadhar = false;
             try
