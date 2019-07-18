@@ -146,7 +146,7 @@ namespace RMERP.DAL.ManagerClasses
                         {
                             WAD_Amt = g.Sum(n => n.WAD_Amount)
                         });
-                        totalEMI = Math.Round(EMI.Select(g => g.WAD_Amt).First());
+                        totalEMI = Math.Round(EMI.Select(g => g.WAD_Amt).FirstOrDefault());
                     }
                     wageRegisterVM.WAR_Advance_Amount = totalEMI;
                     #endregion
