@@ -93,7 +93,7 @@ namespace RMERP.DAL.ManagerClasses
                 }
                 else
                 {
-                    employee_Advance.ADV_RegisteredOn = ProjectUtils.DateNow();
+                    //employee_Advance.ADV_RegisteredOn = ProjectUtils.DateNow();
                     _context.Employee_Advance.Add(employee_Advance);
                 }
                    
