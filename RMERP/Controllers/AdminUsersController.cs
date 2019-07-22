@@ -29,6 +29,20 @@ namespace RMERP.Controllers
         [DefaultBreadcrumb("Dashboard")]
         public IActionResult DashBoard()
         {
+            ClientsManager clientsManager = new ClientsManager(_context);
+            EmployeeManager employeeManager = new EmployeeManager(_context);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            if (sessionUtils.GetLoggedFirmID().HasValue)
+            {
+                int FRM_Id = sessionUtils.GetLoggedFirmID().Value;
+                ViewBag.clients = clientsManager.GetTotalClient(FRM_Id);
+                ViewBag.employees = employeeManager.GetTotalEmployees(FRM_Id);
+            }
+            else
+            {
+                ViewBag.clients = clientsManager.GetTotalClient();
+                ViewBag.employees = employeeManager.GetTotalEmployees();
+            }          
             return View();
         }
         [AllowAnonymous]

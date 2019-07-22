@@ -51,6 +51,15 @@ namespace RMERP.Controllers
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             cvm.Listclients = clientsManager.listClients(IsActive,sessionUtils.GetLoggedFirmID());            
             ViewBag.List = cvm.Listclients;
+            ViewBag.clients = clientsManager.GetTotalClient();
+            if (sessionUtils.GetLoggedFirmID().HasValue)
+            {
+               int FRM_Id = sessionUtils.GetLoggedFirmID().Value;
+                ViewBag.totalClients = clientsManager.GetTotalClient(FRM_Id);
+            }
+            else{
+                ViewBag.totalClients = clientsManager.GetTotalClient();
+            }
             return View(cvm);
         }
         [HttpGet]

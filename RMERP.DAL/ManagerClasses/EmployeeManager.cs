@@ -193,6 +193,15 @@ namespace RMERP.DAL.ManagerClasses
             return list;
         }
 
+        public int GetTotalEmployees()
+        {
+            return _context.Employees.Where(m => m.EMP_IsActive.Equals(true)).Count();
+        }
+        public int GetTotalEmployees(int FRM_ID)
+        {
+            return _context.Employees.Where(m => m.EMP_IsActive.Equals(true) && m.FRM_Id.Equals(FRM_ID)).Count();
+        }
+
     }
 }
 

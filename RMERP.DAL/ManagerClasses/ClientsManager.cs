@@ -17,7 +17,7 @@ namespace RMERP.DAL.ManagerClasses
         RMERPContext _contaxt;
         public IConfiguration Configuration;
         private static int CRI_Id;
-        public ClientsManager(RMERPContext contaxt, IConfiguration configuration)
+        public ClientsManager(RMERPContext contaxt, IConfiguration configuration=null)
         {
             _contaxt = contaxt;
             Configuration = configuration;
@@ -509,6 +509,15 @@ namespace RMERP.DAL.ManagerClasses
             if (_contaxt.Clients_Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Count() > 0)
                 CLI_Id = _contaxt.Clients_Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).First().CLI_Id;
             return CLI_Id;
+        }
+
+        public int GetTotalClient()
+        {
+            return _contaxt.Clients.Where(m => m.CLI_IsActive.Equals(true)).Count();
+        }
+        public int GetTotalClient(int FRM_ID)
+        {
+            return _contaxt.Clients.Where(m => m.CLI_IsActive.Equals(true) && m.FRM_Id.Equals(FRM_ID)).Count();
         }
     }
 }
