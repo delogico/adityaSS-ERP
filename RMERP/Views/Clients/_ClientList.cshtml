@@ -29,7 +29,7 @@
 
                 </div>
 
-                <h4 class="user-name m-t-10 m-b-0"><a>@item.CLI_Name</a></h4>
+                <h4 class="user-name m-t-10 m-b-0" style="min-height: 45px;"><a>@item.CLI_Name</a></h4>
                 @if (item.Client_Contacts.Where(m => m.CON_isPrimary.Equals(true)).Count() > 0)
                 {
                     <div class="small text-muted">
@@ -41,10 +41,7 @@
                 {
                     <div class="small text-muted"> No Primary Contact Person</div>
                 }
-                @*<h5 class="user-name m-t-10 m-b-0 text-ellipsis"><a>Barry Cuda</a></h5>
-        <div class="small text-muted">CEO</div>*@
                 <a href="@Url.Action("AddEditClients","Clients",new { @id=item.CLI_Id})" class="btn btn-default btn-sm m-t-10">Edit</a>
-                @*<a href="client-profile.html" class="btn btn-default btn-sm m-t-10">View Profile</a>*@
             </div>
         </div>
     }
