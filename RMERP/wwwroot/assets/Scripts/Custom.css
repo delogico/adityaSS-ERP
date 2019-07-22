@@ -18,3 +18,11 @@
     margin-top: 15px;
     border-bottom: solid;
 }
+
+.total-client {
+    border: solid 1px;
+    padding: 5px;
+    margin-left: 10px;
+    border-color: green;
+    color: green;
+}
