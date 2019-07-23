@@ -35,14 +35,14 @@ namespace RMERP.DAL.ManagerClasses
             return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
         }
 
-        public List<ClientWageRegisterVM> GenerateWageRegisterTable(int WAG_Id, int AdminID,int FRM_Id)
+        public List<ClientWageRegisterVM> GenerateWageRegisterTable(int WAG_Id, int AdminID, int FRM_Id)
         {
             List<ClientWageRegisterVM> lst = new List<ClientWageRegisterVM>();
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);
             WageProcessManager wageManager = new WageProcessManager(_context);
             Wage_Process wageProcess = wageManager.getWageProcessById(WAG_Id);
             //List<Clients> lstCli = clientsManager.GetActiveClientForAttandanceReg(wageProcess.WAG_Month);
-            List<Clients> lstCli = clientsManager.GetActiveClientOfMonthByFirmId(wageProcess.WAG_Month, FRM_Id);            
+            List<Clients> lstCli = clientsManager.GetActiveClientOfMonthByFirmId(wageProcess.WAG_Month, FRM_Id);
             foreach (Clients client in lstCli)
             {
                 ClientWageRegisterVM clientWageRegisterVM = new ClientWageRegisterVM();
@@ -94,19 +94,19 @@ namespace RMERP.DAL.ManagerClasses
                             break;
                         case 2://   2:Consider StaticDays 
                             totalWorkingDays = cli.CLI_No_Reduce_Days.Value;
-                            break;                       
+                            break;
                         default: break;
                     }
                     #endregion
 
                     #region Paybale day counting
-                   
-                    int totWeekOffs = 0, totalPublicHoliday = 0, totEarnLeave = 0, totNightShift = 0,totAbsent=0;
-                    double totPresentDays = 0, totHalfDays = 0, totExtraWorkingDays=0, WAR_ExtraWorkingHours=0;
 
-                    totPresentDays = attendances.Where(a => a.ATT_IsPresent == true).Count();                                                       
+                    int totWeekOffs = 0, totalPublicHoliday = 0, totEarnLeave = 0, totNightShift = 0, totAbsent = 0;
+                    double totPresentDays = 0, totHalfDays = 0, totExtraWorkingDays = 0, WAR_ExtraWorkingHours = 0;
+
+                    totPresentDays = attendances.Where(a => a.ATT_IsPresent == true).Count();
                     totEarnLeave = attendances.Where(a => a.ATT_IsEarnLeave == true).Count();
-                    totNightShift = attendances.Where(a => a.ATT_NightShift == true).Count();                   
+                    totNightShift = attendances.Where(a => a.ATT_NightShift == true).Count();
                     totHalfDays = attendances.Where(a => a.ATT_IsHalfday == true).Count();
 
                     WAR_ExtraWorkingHours = attendances.Sum(m => m.ATT_ExtraHoursWorked);
@@ -115,17 +115,20 @@ namespace RMERP.DAL.ManagerClasses
                     totWeekOffs = attendances.Where(a => a.ATT_IsWeeklyOff == true).Count();
                     totalPublicHoliday = attendances.Where(a => a.ATT_IsPublicHoliday == true).Count();
 
-                    totalPaybleDays = (totPresentDays- totHalfDays) + (totHalfDays/2) + totEarnLeave;
+                    totalPaybleDays = (totPresentDays - totHalfDays) + (totHalfDays / 2) + totEarnLeave;
 
                     if (cr.CRI_IsPayable_WeeklyOff)
-                    {                        
+                    {
                         totalPaybleDays = totalPaybleDays + totWeekOffs;
                     }
                     if (cr.CRI_IsPayable_PublicHoliday)
                     {
                         totalPaybleDays = totalPaybleDays + totalPublicHoliday;
                     }
-
+                    if (cr.CRI_OT_Calculate_Payableday)
+                    {
+                        totalPaybleDays = totalPaybleDays + totExtraWorkingDays;
+                    }
                     totAbsent = attendances.Where(m => m.ATT_IsPresent.Equals(false) && m.ATT_IsEarnLeave.Equals(false) && m.ATT_IsPublicHoliday.Equals(false) && m.ATT_IsWeeklyOff.Equals(false)).Count();
                     #endregion
                     WageRegisterVM wageRegisterVM = new WageRegisterVM();
@@ -174,15 +177,25 @@ namespace RMERP.DAL.ManagerClasses
                         decimal CalculatedBasicDa = Math.Round(Decimal.Add(WAR_Basic_Calculated, Convert.ToDecimal(CRI_DA_Calculated)));
                         CRI_HRA_Calculated = Math.Round(cr.CRI_HRA_Fixed == null ? ((CalculatedBasicDa * Convert.ToDecimal(cr.CRI_HRA_Percentage)) / 100) : ((Decimal.Multiply(cr.CRI_HRA_Fixed.Value, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays));
 
-                        #region START PF-ESIC CALCULATION          
-                        decimal OTsum = Math.Round(GetAmountBasedOnFormulaOT(cr.CRI_OT_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays));
+                        #region START PF-ESIC -OT CALCULATION  
                         if (OvertimeInDay > 0)
-                            WAR_OverTime_Calculated = Math.Round(Convert.ToDecimal(((Convert.ToDouble(OTsum) / totalPaybleDays) * OvertimeInDay) * cr.CRI_OT_MultipleTimes));
-
-
+                        {
+                            if (!cr.CRI_OT_Calculate_Payableday)
+                            {
+                                if (cr.CRI_OT_Fixed_PerHour > 0)
+                                {
+                                    WAR_OverTime_Calculated = Convert.ToDecimal(WAR_ExtraWorkingHours) * cr.CRI_OT_Fixed_PerHour.Value;
+                                }
+                                else if (cr.CRI_OT_Formula != null)
+                                {
+                                    decimal OTsum = Math.Round(GetAmountBasedOnFormulaOT(cr.CRI_OT_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays));
+                                    WAR_OverTime_Calculated = Math.Round(Convert.ToDecimal(((Convert.ToDouble(OTsum) / totalPaybleDays) * OvertimeInDay) * cr.CRI_OT_MultipleTimes));
+                                }
+                            }
+                        }
                         decimal PFsum = Math.Round(GetAmountBasedOnFormula(cr.CRI_PF_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_OverTime_Calculated));
                         decimal ESICsum = Math.Round(GetAmountBasedOnFormula(cr.CRI_ESIC_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_OverTime_Calculated));
-                        
+
                         WAR_PF = Convert.ToDecimal(cr.CRI_PF_Percentage);
                         WAR_ESIC = Convert.ToDecimal(cr.CRI_ESIC_Percentage);
                         WAR_PF_Calculated = Math.Round(Decimal.Multiply(PFsum, WAR_PF) / 100);
@@ -203,7 +216,7 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.WAR_OverTime_Payment = Convert.ToInt16(cr.CRI_OT_MultipleTimes);
                     wageRegisterVM.WAR_Basic_Calculated = WAR_Basic_Calculated;
                     wageRegisterVM.WAR_HRA_Calculated = CRI_HRA_Calculated;
-                   
+
 
                     //************************** ALLOWANCES CALCULATION *****************************//
                     List<WageRegisterAllowanceVM> allowances = new List<WageRegisterAllowanceVM>();
@@ -236,7 +249,7 @@ namespace RMERP.DAL.ManagerClasses
 
                     if (cr.CRI_Attendance_Allowance)
                     {
-                        if(totAbsent <= cr.CRI_Attendance_Allowance_MaximumDays)
+                        if (totAbsent <= cr.CRI_Attendance_Allowance_MaximumDays)
                         {
                             WAR_Attendance_Allowance_Calculated = cr.CRI_Attendance_Allowance_Rate.Value;
                         }
@@ -266,7 +279,7 @@ namespace RMERP.DAL.ManagerClasses
                     if (cr.CRI_ProfessionalTax == true)
                     {
                         ProfessionalTaxCalculationManager ptcManager = new ProfessionalTaxCalculationManager(_context);
-                        WAR_ProffesionalTax_Calculated = Math.Round(ptcManager.GetPT((employee.EMP_.EMP_Gender?"M":"F"), WAR_GrossTotal));
+                        WAR_ProffesionalTax_Calculated = Math.Round(ptcManager.GetPT((employee.EMP_.EMP_Gender ? "M" : "F"), WAR_GrossTotal));
                     }
 
                     #endregion
@@ -306,7 +319,7 @@ namespace RMERP.DAL.ManagerClasses
             return lstRegister;
         }
 
-        public decimal GetAmountBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Client_Requirement_Allowances> All, int totalWorkingDays, double totalPaybleDays,decimal WAR_OverTime_Calculated)
+        public decimal GetAmountBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Client_Requirement_Allowances> All, int totalWorkingDays, double totalPaybleDays, decimal WAR_OverTime_Calculated)
         {
             decimal sum = 0M;
             string[] arr_CRI_Formula;
@@ -366,7 +379,7 @@ namespace RMERP.DAL.ManagerClasses
             string[] Deduct_Formula;
 
             var List_CRI_Formula = new List<string>();
-           
+
             if (CRI_Formula != null)
             {
                 string[] arr_CRI_Formula;
@@ -378,13 +391,13 @@ namespace RMERP.DAL.ManagerClasses
                     Deduct_Formula = Deduct.Split("-");
                     List_CRI_Formula.AddRange(Add_Formula);
                     List_CRI_Formula.AddRange(Deduct_Formula);
-                   arr_CRI_Formula = List_CRI_Formula.ToArray();
+                    arr_CRI_Formula = List_CRI_Formula.ToArray();
                 }
                 else
                 {
-                   arr_CRI_Formula = CRI_Formula.Split("+");
-                }               
-               
+                    arr_CRI_Formula = CRI_Formula.Split("+");
+                }
+
                 foreach (string item in arr_CRI_Formula)
                 {
                     switch (item)
