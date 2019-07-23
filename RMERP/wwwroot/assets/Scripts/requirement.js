@@ -37,7 +37,7 @@
                             message: 'DA is required'
                         }
                     }
-                },
+                },               
                 CRI_Total: {
                     feedbackIcons: false,
                     validators: {

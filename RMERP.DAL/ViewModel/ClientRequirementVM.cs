@@ -94,7 +94,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Consider OT differently")]
         public bool CRI_OT_Calculate_Differently { get; set; } = true;
         [Display(Name = "Consider fixed amount per hour")]
-        //[Required(ErrorMessage = "Please enter amount")]
+       // [Required(ErrorMessage = "Please enter amount")]
         public decimal? CRI_OT_Fixed_PerHour { get; set; } = 0;
         //[Display(Name = "Calculate by formula")]
         //public bool CRI_OT_Calculate_By_Formula { get; set; }

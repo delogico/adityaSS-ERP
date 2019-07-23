@@ -166,7 +166,7 @@
         $("input[id='rdo_OT_Differently']").click(function () {
             $("#divOTdifferently").show();
             $("#divByFormula").hide();
-            $("#div_OT_Per_Hr").hide();
+            $("#div_OT_Per_Hr").show();
         });
         $("input[id='rdo_OT_Fixed_Amount']").click(function () {
             $("#divOTdifferently").show();
@@ -353,6 +353,10 @@
                                                     </div>
                                                 </div>
                                             }
+
+
+
+                                                <hr style="border: 1px solid;margin:5px;">
                                             <div class="col-md-12">
                                                 <label>
                                                     @Html.CheckBoxFor(m => m.CRI_OutStation_Allowance, new { @id = "chkOutStation" })
@@ -373,7 +377,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>                                           
                                             <div class="col-md-12">
                                                 <label>
                                                     @Html.CheckBoxFor(m => m.CRI_Attendance_Allowance, new { @id = "chkAttendance" })
@@ -382,7 +386,7 @@
                                                 <div id="divAttendance" style="display:@(Model.CRI_Attendance_Allowance ? "block" : "none")">
                                                     <div class="col-md-12">
                                                         <div class="col-md-10">
-                                                            Pay @Html.TextBoxFor(m => m.CRI_Attendance_Allowance_Rate) INR if maximum  @Html.TextBoxFor(m => m.CRI_Attendance_Allowance_MaximumDays) days off.
+                                                            Pay @Html.TextBoxFor(m => m.CRI_Attendance_Allowance_Rate, new { @class = "client-textbox" }) INR if maximum  @Html.TextBoxFor(m => m.CRI_Attendance_Allowance_MaximumDays, new { @class = "client-textbox" }) days off.
                                                         </div>
                                                     </div>
                                                 </div>
@@ -608,7 +612,7 @@
                                 </div>
                                 @{
                                     string style = (Model.CRI_OT_Calculate_Payableday == false ? "block" : "none");
-                                    string styleAmount = (Model.CRI_OT_Fixed_PerHour > 0 ? "block" : "none");
+                                    string styleAmount= (Model.CRI_OT_Fixed_PerHour > 0 ? "block" : "none");
                                     string styleFormula = (Model.CRI_OT_Fixed_PerHour > 0 ? "none" : "block");
                                 }
                                 <div id="divOTdifferently" style="display:@style">
@@ -618,7 +622,7 @@
                                             @Html.LabelFor(m => m.CRI_OT_Fixed_PerHour, new { @class = "control-label" })
                                         </div>
                                         <div id="div_OT_Per_Hr" style="display:@styleAmount">
-                                            <div class="col-md-10">
+                                            <div class="col-md-10" style="padding-left: 50px;">
                                                 @Html.TextBoxFor(m => m.CRI_OT_Fixed_PerHour, new { @class = "form-control" })
                                             </div>
                                             <div class="col-md-2">
@@ -631,7 +635,7 @@
                                                 @Html.Label("Calculate by formula")
                                             </div>
                                         </div>
-                                        <div class="col-md-12" id="divByFormula" style="display:@styleFormula">
+                                        <div class="col-md-12" id="divByFormula" style="padding-left: 40px;display:@styleFormula">
                                             <div class="form-group">
                                                 <div id="OTlist">
                                                     @{
