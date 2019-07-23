@@ -27,6 +27,8 @@ namespace RMERP.DAL.Models
         public bool CRI_ProfessionalTax { get; set; }
         public bool CRI_RevenueDeduction { get; set; }
         public bool CRI_CanteenFacility { get; set; }
+        public bool CRI_OT_Calculate_Payableday { get; set; }
+        public decimal? CRI_OT_Fixed_PerHour { get; set; }
         public string CRI_OT_Formula { get; set; }
         public decimal? CRI_OT_Rate { get; set; }
         public double? CRI_OT_MultipleTimes { get; set; }
@@ -36,6 +38,11 @@ namespace RMERP.DAL.Models
         public bool? CRI_Active { get; set; }
         public DateTime? CRI_InactivatedOn { get; set; }
         public int? ADM_Id_InactivatedBy { get; set; }
+        public bool CRI_OutStation_Allowance { get; set; }
+        public decimal? CRI_OutStation_Allowance_Rate { get; set; }
+        public bool CRI_Attendance_Allowance { get; set; }
+        public int? CRI_Attendance_Allowance_MaximumDays { get; set; }
+        public decimal? CRI_Attendance_Allowance_Rate { get; set; }
 
         public Clients CLI_ { get; set; }
         public Designations DES_ { get; set; }

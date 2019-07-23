@@ -39,6 +39,20 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_RevenueDeduction =requirement.CRI_RevenueDeduction;
             clientRequirementVM.CRI_CanteenFacility = requirement.CRI_CanteenFacility;
 
+            clientRequirementVM.CRI_OT_Calculate_Payableday = requirement.CRI_OT_Calculate_Payableday;
+            clientRequirementVM.CRI_OT_Fixed_PerHour = requirement.CRI_OT_Fixed_PerHour;
+
+            clientRequirementVM.CRI_OutStation_Allowance = requirement.CRI_OutStation_Allowance;
+            clientRequirementVM.CRI_OutStation_Allowance_Rate = requirement.CRI_OutStation_Allowance_Rate;
+            clientRequirementVM.CRI_Attendance_Allowance = requirement.CRI_Attendance_Allowance;
+            clientRequirementVM.CRI_Attendance_Allowance_Rate = requirement.CRI_Attendance_Allowance_Rate;
+            clientRequirementVM.CRI_Attendance_Allowance_MaximumDays = requirement.CRI_Attendance_Allowance_MaximumDays;
+
+            if (requirement.CRI_OT_Fixed_PerHour > 0)
+            {
+                clientRequirementVM.CRI_OT_Calculate_Differently = true;
+            }        
+
             if (requirement.CLI_ != null)
                 clientRequirementVM.CLI_Name = requirement.CLI_.CLI_Name;
 
@@ -76,6 +90,16 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_ProfessionalTax = requirementVM.CRI_ProfessionalTax;
             requirement.CRI_RevenueDeduction = requirementVM.CRI_RevenueDeduction;
             requirement.CRI_CanteenFacility = requirementVM.CRI_CanteenFacility;
+
+            requirement.CRI_OT_Calculate_Payableday = requirementVM.CRI_OT_Calculate_Payableday;
+            requirement.CRI_OT_Fixed_PerHour = requirementVM.CRI_OT_Fixed_PerHour;
+
+            requirement.CRI_OutStation_Allowance = requirementVM.CRI_OutStation_Allowance;
+            requirement.CRI_OutStation_Allowance_Rate = requirementVM.CRI_OutStation_Allowance_Rate;
+            requirement.CRI_Attendance_Allowance = requirementVM.CRI_Attendance_Allowance;
+            requirement.CRI_Attendance_Allowance_Rate = requirementVM.CRI_Attendance_Allowance_Rate;
+            requirement.CRI_Attendance_Allowance_MaximumDays = requirementVM.CRI_Attendance_Allowance_MaximumDays;
+
 
             if (requirementVM.HRAselection ==true)
                 requirement.CRI_HRA_Fixed = requirementVM.CRI_HRA_Fixed;

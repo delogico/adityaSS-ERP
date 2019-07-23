@@ -80,6 +80,26 @@ namespace RMERP.DAL.ViewModel
         public bool HRA_ESICselection { get; set; }
 
         public List<ClientReqAllowanceVM> allAllowances { get; set; }
-       
+
+        [Display(Name = "Out station allowance")]
+        public bool CRI_OutStation_Allowance { get; set; }
+        public decimal? CRI_OutStation_Allowance_Rate { get; set; }
+        [Display(Name = "Attendance allowance")]
+        public bool CRI_Attendance_Allowance { get; set; }
+        public int? CRI_Attendance_Allowance_MaximumDays { get; set; }
+        public decimal? CRI_Attendance_Allowance_Rate { get; set; }
+
+        [Display(Name = "Consider OT by adding it in payable days")]
+        public bool CRI_OT_Calculate_Payableday { get; set; } = true;
+        [Display(Name = "Consider OT differently")]
+        public bool CRI_OT_Calculate_Differently { get; set; } = true;
+        [Display(Name = "Consider fixed amount per hour")]
+        //[Required(ErrorMessage = "Please enter amount")]
+        public decimal? CRI_OT_Fixed_PerHour { get; set; } = 0;
+        //[Display(Name = "Calculate by formula")]
+        //public bool CRI_OT_Calculate_By_Formula { get; set; }
+
+
+
     }
 }

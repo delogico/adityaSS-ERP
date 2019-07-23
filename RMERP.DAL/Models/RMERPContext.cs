@@ -230,6 +230,8 @@ namespace RMERP.DAL.Models
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
 
+                entity.Property(e => e.CRI_Attendance_Allowance_Rate).HasColumnType("decimal(9, 2)");
+
                 entity.Property(e => e.CRI_Basic).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.CRI_DA).HasColumnType("decimal(9, 2)");
@@ -244,9 +246,13 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.CRI_InactivatedOn).HasColumnType("datetime");
 
+                entity.Property(e => e.CRI_OT_Fixed_PerHour).HasColumnType("decimal(9, 2)");
+
                 entity.Property(e => e.CRI_OT_Formula).HasMaxLength(200);
 
                 entity.Property(e => e.CRI_OT_Rate).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.CRI_OutStation_Allowance_Rate).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.CRI_PF_Formula).HasMaxLength(200);
 

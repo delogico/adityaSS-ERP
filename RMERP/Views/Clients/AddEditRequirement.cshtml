@@ -3,8 +3,6 @@
 @using static RMERP.DAL.Helpers.ProjectUtils;
 @using RMERP.DAL.Models;
 @using RMERP.DAL.ViewModel;
-
-
 @{
     ViewData["Title"] = "Client Requirement Detail";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
@@ -25,8 +23,6 @@
 @section scripts{
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.js"></script>
-
-
     @if (Model.CRI_Id > 0)
     {
         <script src="~/assets/Scripts/requirement_Edit.js"></script>
@@ -35,10 +31,6 @@
     {
         <script src="~/assets/Scripts/requirement.js"></script>
     }
-
-
-
-
     <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 
@@ -61,6 +53,7 @@
                 $('input', 'form').attr('disabled', true).attr('readonly', true);
                 $('button', 'form').attr('disabled', true).attr('readonly', true);
             }
+
 
             $('input[class="Allselection"]').click(function () {
                 debugger;
@@ -87,16 +80,16 @@
             if ($("#CRI_ESIC_Formula").val() != "") {
                 ESICSelection = $("#CRI_ESIC_Formula").val().split("+");
             }
-            if ($("#CRI_OT_Formula").val() != "") {  
+            if ($("#CRI_OT_Formula").val() != "") {
                 var OT_Formula = $("#CRI_OT_Formula").val();
-                             
+
                 if (($("#CRI_OT_Formula").val().includes("-"))) {
-                    OTSelection = OT_Formula.substring(0, OT_Formula.indexOf('-')).split("+");                   
-                    OTDeductSelection = OT_Formula.substring(OT_Formula.indexOf('-') + 1).split("-");                   
+                    OTSelection = OT_Formula.substring(0, OT_Formula.indexOf('-')).split("+");
+                    OTDeductSelection = OT_Formula.substring(OT_Formula.indexOf('-') + 1).split("-");
                 } else {
                     OTSelection = OT_Formula.split("+");
                 }
-               
+
             }
             $(document).on("click", "INPUT[class^=PFselection]", function (event) {
                 if ($(this).prop("checked") == true) {
@@ -124,21 +117,20 @@
             });
 
             function calculateFormula() {
-                debugger;
                 var str = "";
                 $("INPUT[class=OTselection]")  // for all checkboxes
                     .each(function () {  // first pass, create name mapping
                         if (this.checked) {
-                            str = str + (str.length > 0 ? "+" : "") + this.value;                           
+                            str = str + (str.length > 0 ? "+" : "") + this.value;
                         }
                     });
                 $("INPUT[class=OTDeductSelection]")  // for all checkboxes
                     .each(function () {  // first pass, create name mapping
                         if (this.checked) {
-                            str = str + "-" + this.value;                           
+                            str = str + "-" + this.value;
                         }
                     });
-                    
+
                 $("#CRI_OT_Formula").val(str);
             }
 
@@ -162,6 +154,50 @@
 
             }
         });
+        $("input[id='rdo_OT_Payable']").click(function () {
+            // var value = $(this).filter(':checked').val();
+            //if ($(this).prop("checked") == true) {
+            //    alert($(this).prop('value'));
+            //}
+            $("#divOTdifferently").hide();
+            $("#divByFormula").hide();
+            $("#div_OT_Per_Hr").hide();
+        });
+        $("input[id='rdo_OT_Differently']").click(function () {
+            $("#divOTdifferently").show();
+            $("#divByFormula").hide();
+            $("#div_OT_Per_Hr").hide();
+        });
+        $("input[id='rdo_OT_Fixed_Amount']").click(function () {
+            $("#divOTdifferently").show();
+            $("#divByFormula").hide();
+            $("#div_OT_Per_Hr").show();
+
+        });
+        $("input[id='rdo_OT_By_Formula']").click(function () {
+            $("#divOTdifferently").show();
+            $("#divByFormula").show();
+            $("#div_OT_Per_Hr").hide();
+
+        });
+        $('input[id="chkOutStation"]').click(function () {
+            debugger;
+            if ($(this).prop("checked") == true) {
+                $("#divOutStaion").show();
+            }
+            else if ($(this).prop("checked") == false) {
+                $("#divOutStaion").hide();
+            }
+        });
+        $('input[id="chkAttendance"]').click(function () {
+            debugger;
+            if ($(this).prop("checked") == true) {
+                $("#divAttendance").show();
+            }
+            else if ($(this).prop("checked") == false) {
+                $("#divAttendance").hide();
+            }
+        });
         $('.HRAselection').change(function () {
             var value = $(this).filter(':checked').val();
             if (value == "True") {
@@ -181,7 +217,9 @@
     {
         <script>
             $(document).ready(function () {
-            alert('@TempData["message"]');
+                alert('@TempData["message"]');
+
+
         });
         </script>
     };
@@ -266,60 +304,94 @@
                                         @Html.TextBoxFor(m => m.CRI_HRA_Fixed, new { @class = "form-control", style = "display:" + (@Model.HRAselection == true ? "block" : "none") })
                                     </div>
                                 </div>
-                               
-                                    <div class="col-md-6">
-                                        @Html.CheckBoxFor(m => m.CRI_IsPayable_WeeklyOff)
-                                        @Html.LabelFor(m => m.CRI_IsPayable_WeeklyOff, new { @class = "control-label" })
-                                    </div>
 
-                                    <div class="col-md-6">
-                                        @Html.CheckBoxFor(m => m.CRI_IsPayable_PublicHoliday)
-                                        @Html.LabelFor(m => m.CRI_IsPayable_PublicHoliday, new { @class = "control-label" })
-                                    </div>
+                                <div class="col-md-6">
+                                    @Html.CheckBoxFor(m => m.CRI_IsPayable_WeeklyOff)
+                                    @Html.LabelFor(m => m.CRI_IsPayable_WeeklyOff, new { @class = "control-label" })
+                                </div>
 
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                @for (var i = 0; i < Model.allAllowances.Count; i++)
-                                                {
-                                                    <div class="col-md-12">
-                                                        <label>
-                                                            @Html.CheckBoxFor(m => m.allAllowances[i].flagClientRequirement, new { @class = "Allselection", @id = Model.allAllowances[i].ALL_Id })&nbsp;@Model.allAllowances[i].allowance.ALL_Title
+                                <div class="col-md-6">
+                                    @Html.CheckBoxFor(m => m.CRI_IsPayable_PublicHoliday)
+                                    @Html.LabelFor(m => m.CRI_IsPayable_PublicHoliday, new { @class = "control-label" })
+                                </div>
 
-                                                            @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Title, new { @Value = Model.allAllowances[i].allowance.ALL_Title })
-                                                            @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Shortform, new { @Value = Model.allAllowances[i].allowance.ALL_Shortform })
-                                                        </label>
-                                                        @Html.HiddenFor(m => m.allAllowances[i].ALL_Id)
-                                                        @Html.HiddenFor(m => m.allAllowances[i].flagClientRequirement, new { @id = "flagClientRequirement" + Model.allAllowances[i].ALL_Id })
-                                                        <div id="divReqAllow_@Model.allAllowances[i].ALL_Id" style="display:@(Model.allAllowances[i].flagClientRequirement ? "block" : "none")">
-                                                            <div class="col-md-12">
-                                                                <div class="col-md-6">
-                                                                    <div class="col-md-12">
-                                                                        <div class="col-md-10">
-                                                                            @Html.TextBoxFor(m => m.allAllowances[i].CRA_Amount, new { @class = "form-control" })
-                                                                            @Html.ValidationMessageFor(m => m.allAllowances[i].CRA_Amount, "", new { @class = "text-danger" })
-                                                                        </div>
-                                                                        <div class="col-md-2">
-                                                                            @Html.Raw("INR")
-                                                                        </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            @for (var i = 0; i < Model.allAllowances.Count; i++)
+                                            {
+                                                <div class="col-md-12">
+                                                    <label>
+                                                        @Html.CheckBoxFor(m => m.allAllowances[i].flagClientRequirement, new { @class = "Allselection", @id = Model.allAllowances[i].ALL_Id })&nbsp;@Model.allAllowances[i].allowance.ALL_Title
+
+                                                        @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Title, new { @Value = Model.allAllowances[i].allowance.ALL_Title })
+                                                        @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Shortform, new { @Value = Model.allAllowances[i].allowance.ALL_Shortform })
+                                                    </label>
+                                                    @Html.HiddenFor(m => m.allAllowances[i].ALL_Id)
+                                                    @Html.HiddenFor(m => m.allAllowances[i].flagClientRequirement, new { @id = "flagClientRequirement" + Model.allAllowances[i].ALL_Id })
+                                                    <div id="divReqAllow_@Model.allAllowances[i].ALL_Id" style="display:@(Model.allAllowances[i].flagClientRequirement ? "block" : "none")">
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-6">
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-10">
+                                                                        @Html.TextBoxFor(m => m.allAllowances[i].CRA_Amount, new { @class = "form-control" })
+                                                                        @Html.ValidationMessageFor(m => m.allAllowances[i].CRA_Amount, "", new { @class = "text-danger" })
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        @Html.Raw("INR")
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-6" id="rdo_@Model.allAllowances[i].ALL_Id">
-                                                                    @{string id = i + "radioTrue";}
-                                                                    @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, false, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Full Amount", new { @for = id })
-                                                                    @{id = i + "radioFalse";}
-                                                                    @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, true, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Daywise Calculation", new { @for = id })
-                                                                    @Html.ValidationMessageFor(x => x.allAllowances[i].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
+                                                            </div>
+                                                            <div class="col-md-6" id="rdo_@Model.allAllowances[i].ALL_Id">
+                                                                @{string id = i + "radioTrue";}
+                                                                @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, false, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Full Amount", new { @for = id })
+                                                                @{id = i + "radioFalse";}
+                                                                @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, true, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Daywise Calculation", new { @for = id })
+                                                                @Html.ValidationMessageFor(x => x.allAllowances[i].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="col-md-12">
+                                                <label>
+                                                    @Html.CheckBoxFor(m => m.CRI_OutStation_Allowance, new { @id = "chkOutStation" })
+                                                    &nbsp;@Html.LabelFor(m => m.CRI_OutStation_Allowance)
+                                                </label>
+                                                <div id="divOutStaion" style="display:@(Model.CRI_OutStation_Allowance ? "block" : "none")">
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-6">
+                                                            <div class="col-md-12">
+                                                                <div class="col-md-10">
+                                                                    @Html.TextBoxFor(m => m.CRI_OutStation_Allowance_Rate, new { @class = "form-control" })
+                                                                    @Html.ValidationMessageFor(m => m.CRI_OutStation_Allowance_Rate, "", new { @class = "text-danger" })
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    @Html.Raw("INR/Hr")
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                }
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label>
+                                                    @Html.CheckBoxFor(m => m.CRI_Attendance_Allowance, new { @id = "chkAttendance" })
+                                                    &nbsp;@Html.LabelFor(m => m.CRI_Attendance_Allowance)
+                                                </label>
+                                                <div id="divAttendance" style="display:@(Model.CRI_Attendance_Allowance ? "block" : "none")">
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-10">
+                                                            Pay @Html.TextBoxFor(m => m.CRI_Attendance_Allowance_Rate) INR if maximum  @Html.TextBoxFor(m => m.CRI_Attendance_Allowance_MaximumDays) days off.
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         <div id="Deduction" class="tab-pane">
                             <div class="row">
                                 <div class="col-md-6">
@@ -331,7 +403,6 @@
                                                 {
                                                     arr = Model.CRI_PF_Formula.Split('+');
                                                 }
-
                                             }
                                             <div class="col-md-12">
                                                 @Html.LabelFor(m => m.CRI_PF_Percentage, new { @class = "control-label" })
@@ -465,7 +536,7 @@
                                                 }
                                                 @Html.Raw("HRA")
                                             </div>
-                                             <div class="col-md-12">
+                                            <div class="col-md-12">
                                                 @if (arrEsic != null && arrEsic.Contains("OT"))
                                                 {
                                                     @Html.CheckBox("esic_OT", new { @class = "ESICselection", @value = "OT", @checked = "checked" })
@@ -523,130 +594,166 @@
                         </div>
                         <div id="OverTime" class="tab-pane">
                             <div class="row">
-
-                                <div class="col-md-12">
+                                <div class="col-md-10">
                                     <div class="form-group">
-
-                                        <div id="OTlist">
-                                            @{
-                                                string[] arrOT = null;
-                                                string[] arrDeductOT = null;
-                                                if (Model.CRI_OT_Formula != null)
-                                                {
-                                                    if (Model.CRI_OT_Formula.Contains("-"))
-                                                    {
-                                                        arrOT = Model.CRI_OT_Formula.Substring(0, Model.CRI_OT_Formula.IndexOf("-")).Split('+');
-                                                        arrDeductOT = Model.CRI_OT_Formula.Substring(Model.CRI_OT_Formula.IndexOf("-") + 1).Split('-');
-                                                    }
-                                                    else
-                                                    {
-                                                        arrOT = Model.CRI_OT_Formula.Split('+');
-                                                    }
-
-                                                }
-                                            }                                           
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    @Html.LabelFor(m => m.CRI_OT_MultipleTimes, new { @class = "control-label" })
-                                                    @Html.DropDownListFor(m => m.CRI_OT_MultipleTimes, Enumerable.Range(1, 3).Select(i => new SelectListItem { Text = i.ToString() + " Times", Value = i.ToString() }), new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(x => x.CRI_OT_MultipleTimes, "", new { @class = "text-danger" })
-                                                </div>
+                                        @Html.RadioButtonFor(m => m.CRI_OT_Calculate_Payableday, true, htmlAttributes: new { @id = "rdo_OT_Payable" })
+                                        @Html.LabelFor(m => m.CRI_OT_Calculate_Payableday, new { @class = "control-label" })
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        @Html.RadioButtonFor(m => m.CRI_OT_Calculate_Payableday, false, htmlAttributes: new { @id = "rdo_OT_Differently" })
+                                        @Html.Label("Consider OT differently")
+                                    </div>
+                                </div>
+                                @{
+                                    string style = (Model.CRI_OT_Calculate_Payableday == false ? "block" : "none");
+                                    string styleAmount = (Model.CRI_OT_Fixed_PerHour > 0 ? "block" : "none");
+                                    string styleFormula = (Model.CRI_OT_Fixed_PerHour > 0 ? "none" : "block");
+                                }
+                                <div id="divOTdifferently" style="display:@style">
+                                    <div class="col-md-8" style="padding-left: 40px;">
+                                        <div class="col-md-12">
+                                            @Html.RadioButtonFor(m => m.CRI_OT_Calculate_Differently, true, htmlAttributes: new { @id = "rdo_OT_Fixed_Amount" })
+                                            @Html.LabelFor(m => m.CRI_OT_Fixed_PerHour, new { @class = "control-label" })
+                                        </div>
+                                        <div id="div_OT_Per_Hr" style="display:@styleAmount">
+                                            <div class="col-md-10">
+                                                @Html.TextBoxFor(m => m.CRI_OT_Fixed_PerHour, new { @class = "form-control" })
                                             </div>
-                                            <div class="col-md-12" style="padding-top: 20px;">
-                                                <label>
-                                                    @Html.LabelFor(m => m.CRI_OT_Formula, new { @class = "control-label" })
-                                                </label>
+                                            <div class="col-md-2">
+                                                INR/hr
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="col-md-12">
-                                                        @if (arrOT != null && arrOT.Contains("BASIC"))
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                @Html.RadioButtonFor(m => m.CRI_OT_Calculate_Differently, false, htmlAttributes: new { @id = "rdo_OT_By_Formula" })
+                                                @Html.Label("Calculate by formula")
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" id="divByFormula" style="display:@styleFormula">
+                                            <div class="form-group">
+                                                <div id="OTlist">
+                                                    @{
+                                                        string[] arrOT = null;
+                                                        string[] arrDeductOT = null;
+                                                        if (Model.CRI_OT_Formula != null)
                                                         {
-                                                            @Html.CheckBox("OT_BASIC", new { @class = "OTselection", @value = "BASIC", @checked = "checked" })
+                                                            if (Model.CRI_OT_Formula.Contains("-"))
+                                                            {
+                                                                arrOT = Model.CRI_OT_Formula.Substring(0, Model.CRI_OT_Formula.IndexOf("-")).Split('+');
+                                                                arrDeductOT = Model.CRI_OT_Formula.Substring(Model.CRI_OT_Formula.IndexOf("-") + 1).Split('-');
+                                                            }
+                                                            else
+                                                            {
+                                                                arrOT = Model.CRI_OT_Formula.Split('+');
+                                                            }
                                                         }
-                                                        else
-                                                        {
-                                                            @Html.CheckBox("OT_BASIC", new { @class = "OTselection", @value = "BASIC" })
-                                                        }
-                                                        @Html.Raw("BASIC")
-
+                                                    }
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(m => m.CRI_OT_MultipleTimes, new { @class = "control-label" })
+                                                            @Html.DropDownListFor(m => m.CRI_OT_MultipleTimes, Enumerable.Range(1, 3).Select(i => new SelectListItem { Text = i.ToString() + " Times", Value = i.ToString() }), new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(x => x.CRI_OT_MultipleTimes, "", new { @class = "text-danger" })
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-12">
-                                                        @if (arrOT != null && arrOT.Contains("DA"))
-                                                        {
-                                                            @Html.CheckBox("OT_DA", new { @class = "OTselection", @value = "DA", @checked = "checked" })
-                                                        }
-                                                        else
-                                                        {
-                                                            @Html.CheckBox("OT_DA", new { @class = "OTselection", @value = "DA" })
-                                                        }
-                                                        @Html.Raw("DA")
+                                                    <div class="col-md-12" style="padding-top: 20px;">
+                                                        <label>
+                                                            @Html.LabelFor(m => m.CRI_OT_Formula, new { @class = "control-label" })
+                                                        </label>
                                                     </div>
-                                                    <div class="col-md-12">
-                                                        @if (arrOT != null && arrOT.Contains("HRA"))
-                                                        {
-                                                            @Html.CheckBox("OT_HRA", new { @class = "OTselection", @value = "HRA", @checked = "checked" })
-                                                        }
-                                                        else
-                                                        {
-                                                            @Html.CheckBox("OT_HRA", new { @class = "OTselection", @value = "HRA" })
-                                                        }
-                                                        @Html.Raw("HRA")
-                                                    </div>
-
-                                                    @for (var i = 0; i < Model.allAllowances.Count; i++)
-                                                    {
-                                                        if (Model.allAllowances[i].flagClientRequirement == true)
-                                                        {
+                                                    <div class="row">
+                                                        <div class="col-md-6">
                                                             <div class="col-md-12">
-                                                                @if (arrOT != null && arrOT.Contains(Model.allAllowances[i].allowance.ALL_Shortform))
+                                                                @if (arrOT != null && arrOT.Contains("BASIC"))
                                                                 {
-                                                                    @Html.CheckBox(@Model.allAllowances[i].allowance.ALL_Shortform, new { @class = "OTselection", @value = Model.allAllowances[i].allowance.ALL_Shortform, @checked = "checked" })
+                                                                    @Html.CheckBox("OT_BASIC", new { @class = "OTselection", @value = "BASIC", @checked = "checked" })
                                                                 }
                                                                 else
                                                                 {
-                                                                    @Html.CheckBox(@Model.allAllowances[i].allowance.ALL_Shortform, new { @class = "OTselection", @value = Model.allAllowances[i].allowance.ALL_Shortform })
+                                                                    @Html.CheckBox("OT_BASIC", new { @class = "OTselection", @value = "BASIC" })
                                                                 }
-                                                                @Html.Raw(Model.allAllowances[i].allowance.ALL_Title)
+                                                                @Html.Raw("BASIC")
 
                                                             </div>
-                                                        }
-                                                    }
+                                                            <div class="col-md-12">
+                                                                @if (arrOT != null && arrOT.Contains("DA"))
+                                                                {
+                                                                    @Html.CheckBox("OT_DA", new { @class = "OTselection", @value = "DA", @checked = "checked" })
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.CheckBox("OT_DA", new { @class = "OTselection", @value = "DA" })
+                                                                }
+                                                                @Html.Raw("DA")
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                @if (arrOT != null && arrOT.Contains("HRA"))
+                                                                {
+                                                                    @Html.CheckBox("OT_HRA", new { @class = "OTselection", @value = "HRA", @checked = "checked" })
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.CheckBox("OT_HRA", new { @class = "OTselection", @value = "HRA" })
+                                                                }
+                                                                @Html.Raw("HRA")
+                                                            </div>
+
+                                                            @for (var i = 0; i < Model.allAllowances.Count; i++)
+                                                            {
+                                                                if (Model.allAllowances[i].flagClientRequirement == true)
+                                                                {
+                                                                    <div class="col-md-12">
+                                                                        @if (arrOT != null && arrOT.Contains(Model.allAllowances[i].allowance.ALL_Shortform))
+                                                                        {
+                                                                            @Html.CheckBox(@Model.allAllowances[i].allowance.ALL_Shortform, new { @class = "OTselection", @value = Model.allAllowances[i].allowance.ALL_Shortform, @checked = "checked" })
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @Html.CheckBox(@Model.allAllowances[i].allowance.ALL_Shortform, new { @class = "OTselection", @value = Model.allAllowances[i].allowance.ALL_Shortform })
+                                                                        }
+                                                                        @Html.Raw(Model.allAllowances[i].allowance.ALL_Title)
+
+                                                                    </div>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        @*<div class="col-md-6" >
+                                                                <div class="col-md-12">
+                                                                    @if (arrDeductOT != null && arrDeductOT.Contains("PF"))
+                                                                    {
+                                                                        @Html.CheckBox("OT_PF", new { @class = "OTDeductSelection", @value = "PF", @checked = "checked" })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.CheckBox("OT_PF", new { @class = "OTDeductSelection", @value = "PF" })
+                                                                    }
+                                                                    @Html.Raw("PF")
+
+                                                                </div>
+                                                                <div class="col-md-12">
+                                                                    @if (arrDeductOT != null && arrDeductOT.Contains("ESIC"))
+                                                                    {
+                                                                        @Html.CheckBox("OT_ESIC", new { @class = "OTDeductSelection", @value = "ESIC", @checked = "checked" })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.CheckBox("OT_ESIC", new { @class = "OTDeductSelection", @value = "ESIC" })
+                                                                    }
+                                                                    @Html.Raw("ESIC")
+                                                                </div>
+                                                            </div>*@
+                                                    </div>
+
                                                 </div>
-                                                @*<div class="col-md-6" >
-                                                    <div class="col-md-12">
-                                                        @if (arrDeductOT != null && arrDeductOT.Contains("PF"))
-                                                        {
-                                                            @Html.CheckBox("OT_PF", new { @class = "OTDeductSelection", @value = "PF", @checked = "checked" })
-                                                        }
-                                                        else
-                                                        {
-                                                            @Html.CheckBox("OT_PF", new { @class = "OTDeductSelection", @value = "PF" })
-                                                        }
-                                                        @Html.Raw("PF")
-
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        @if (arrDeductOT != null && arrDeductOT.Contains("ESIC"))
-                                                        {
-                                                            @Html.CheckBox("OT_ESIC", new { @class = "OTDeductSelection", @value = "ESIC", @checked = "checked" })
-                                                        }
-                                                        else
-                                                        {
-                                                            @Html.CheckBox("OT_ESIC", new { @class = "OTDeductSelection", @value = "ESIC" })
-                                                        }
-                                                        @Html.Raw("ESIC")
-                                                    </div>
-                                                </div>*@
+                                                <div class="col-md-6">
+                                                    @Html.TextBoxFor(m => m.CRI_OT_Formula, new { @class = "form-control" })
+                                                </div>
                                             </div>
-                                            
                                         </div>
-                                        <div class="col-md-6">
-                                            @Html.TextBoxFor(m => m.CRI_OT_Formula, new { @class = "form-control" })
-                                        </div>
-
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

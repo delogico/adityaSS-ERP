@@ -369,8 +369,6 @@ namespace RMERP.Controllers
             }
            
             clientRequirement.allAllowances = AllowanceMapper.mapMeAllowancesWithClientReq(AllowanceManager.GetAllowanceList(), listClientReqAllowances);
-
-
             ViewBag.ADList = designationManager.getRemainingDesignationsList(CLI_Id).Select(m => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = Convert.ToString(m.DES_Id), Text = m.DES_Title });
             
 
@@ -387,7 +385,20 @@ namespace RMERP.Controllers
 
             if (ModelState.IsValid)
             {
-                cr= ClientRequirementMapper.mapMeModel(clientRequirementVM);
+                if (!clientRequirementVM.CRI_OT_Calculate_Payableday && !clientRequirementVM.CRI_OT_Calculate_Differently)
+                {
+                    clientRequirementVM.CRI_OT_Fixed_PerHour = 0;
+                }
+                if (!clientRequirementVM.CRI_Attendance_Allowance)
+                {
+                    clientRequirementVM.CRI_Attendance_Allowance_Rate = 0;
+                    clientRequirementVM.CRI_Attendance_Allowance_MaximumDays = 0;
+                }
+                if (!clientRequirementVM.CRI_OutStation_Allowance)
+                {
+                    clientRequirementVM.CRI_OutStation_Allowance_Rate = 0;                    
+                }
+                cr = ClientRequirementMapper.mapMeModel(clientRequirementVM);                
                 res = clientsManager.AddEditRequirement(cr, lst,sessionUtils.GetLoggedAdminID());
             }
             if (res != "")
