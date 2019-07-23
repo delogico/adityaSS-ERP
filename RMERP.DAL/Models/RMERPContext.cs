@@ -37,6 +37,7 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Wage_Register_Advances> Wage_Register_Advances { get; set; }
         public virtual DbSet<Wage_Register_Allowances> Wage_Register_Allowances { get; set; }
         public virtual DbSet<Wage_Register_Canteen> Wage_Register_Canteen { get; set; }
+        public virtual DbSet<Wage_Register_Outstation> Wage_Register_Outstation { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -620,6 +621,8 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.WAR_Advance_Amount).HasColumnType("decimal(9, 2)");
 
+                entity.Property(e => e.WAR_Attendance_Allowance_Calculated).HasColumnType("decimal(9, 2)");
+
                 entity.Property(e => e.WAR_Basic).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_Basic_Calculated).HasColumnType("decimal(9, 2)");
@@ -647,6 +650,8 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.WAR_HRA_Calculated).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_LastModifiedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.WAR_OutStation_Allowance_Calculated).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_OverTime_Calculated).HasColumnType("decimal(9, 2)");
 
@@ -754,6 +759,23 @@ namespace RMERP.DAL.Models
                     .HasForeignKey(d => d.WAG_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Wage_Register_Canteen_Wage_Process");
+            });
+
+            modelBuilder.Entity<Wage_Register_Outstation>(entity =>
+            {
+                entity.HasKey(e => e.WRO_Id);
+
+                entity.HasOne(d => d.CLE_)
+                    .WithMany(p => p.Wage_Register_Outstation)
+                    .HasForeignKey(d => d.CLE_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Outstation_Clients_Employees");
+
+                entity.HasOne(d => d.WAG_)
+                    .WithMany(p => p.Wage_Register_Outstation)
+                    .HasForeignKey(d => d.WAG_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Outstation_Wage_Process");
             });
         }
     }

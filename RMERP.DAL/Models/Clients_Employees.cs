@@ -8,6 +8,7 @@ namespace RMERP.DAL.Models
         public Clients_Employees()
         {
             Wage_Register_Canteen = new HashSet<Wage_Register_Canteen>();
+            Wage_Register_Outstation = new HashSet<Wage_Register_Outstation>();
         }
 
         public int CLE_Id { get; set; }
@@ -23,5 +24,6 @@ namespace RMERP.DAL.Models
         public Designations DES_ { get; set; }
         public Employees EMP_ { get; set; }
         public ICollection<Wage_Register_Canteen> Wage_Register_Canteen { get; set; }
+        public ICollection<Wage_Register_Outstation> Wage_Register_Outstation { get; set; }
     }
 }

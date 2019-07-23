@@ -43,6 +43,10 @@ namespace RMERP.DAL.Mappers
                 wageRegisterVM.WAR_RevenueDeduction_Calculated = wageRegister.WAR_RevenueDeduction_Calculated;
             if (wageRegister.WAR_CanteenFacility_Calculation != null)
                 wageRegisterVM.WAR_CanteenFacility_Calculation = wageRegister.WAR_CanteenFacility_Calculation;
+            if (wageRegister.WAR_OutStation_Allowance_Calculated != null)
+                wageRegisterVM.WAR_OutStation_Allowance_Calculated = wageRegister.WAR_OutStation_Allowance_Calculated.Value;
+            if (wageRegister.WAR_Attendance_Allowance_Calculated != null)
+                wageRegisterVM.WAR_Attendance_Allowance_Calculated = wageRegister.WAR_Attendance_Allowance_Calculated.Value;
 
             if (wageRegister.WAR_Advance_Amount != null)
                 wageRegisterVM.WAR_Advance_Amount = wageRegister.WAR_Advance_Amount.Value;
@@ -108,6 +112,10 @@ namespace RMERP.DAL.Mappers
                 wageRegister.CRI_ = ClientRequirementMapper.mapMeModel(wageRegisterVM.clientRequirementVM);
             if (wageRegisterVM.allowanceVMs != null)
                 wageRegister.Wage_Register_Allowances = mapWageAllowancesList(wageRegisterVM.allowanceVMs);
+
+            wageRegister.WAR_Attendance_Allowance_Calculated = wageRegisterVM.WAR_Attendance_Allowance_Calculated;
+            wageRegister.WAR_OutStation_Allowance_Calculated = wageRegisterVM.WAR_OutStation_Allowance_Calculated;
+
             return wageRegister;
         }
 

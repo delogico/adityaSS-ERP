@@ -110,13 +110,19 @@
                         {
                             @if (item.wageProcessClientVM == null && item.wageProcessVM.WageStatus == false)
                             {
-                                @Html.ActionLink("Update canteen Amount", "UpdateCanteenAmount", "Canteen", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id,FRM_Id=wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded" });
+                                @Html.ActionLink("Update canteen Amount", "UpdateCanteenAmount", "Canteen", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id, FRM_Id = wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded" });
+                            }
+                        }
+                        &nbsp;
+                        @if (clientRequirement.CRI_OutStation_Allowance == true)
+                        {
+                            @if (item.wageProcessClientVM == null && item.wageProcessVM.WageStatus == false)
+                            {
+                                @Html.ActionLink("Update Outstation Hours", "UpdateOutstationHours", "Outstation", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id, FRM_Id = wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded" });
                             }
                         }
                     </div>
                 </div>
-
-
                 <div class="table-responsive">
                     <table class="table table-border">
                         <thead style="font-weight:500">
@@ -133,6 +139,15 @@
                                 @foreach (var all in wageRegisters[0].allowanceVMs)
                                 {
                                     <td class="lightgray">@all.allowanceVM.ALL_Alias</td>
+                                }
+                                @if (clientRequirement.CRI_OutStation_Allowance == true)
+                                {
+                                    <td class="lightgray">Outstaion Allowance</td>
+                                }
+
+                                @if (clientRequirement.CRI_Attendance_Allowance == true)
+                                {
+                                    <td class="lightgray">Attendance Allowance</td>
                                 }
                                 <td class="lightgray">OT Amount</td>
                                 <td class="lightgray">Gross Total</td>
@@ -199,6 +214,14 @@
                                             }
                                             <td class="lightgray"><span title="@str">@Math.Round(all.WAA_Amount_Calculated)</span></td>
                                         }
+                                    }
+                                    @if (clientRequirement.CRI_OutStation_Allowance == true)
+                                    {
+                                        <td class="lightgray">@Math.Round(employee.WAR_OutStation_Allowance_Calculated)</td>
+                                    }
+                                    @if (clientRequirement.CRI_Attendance_Allowance == true)
+                                    {
+                                        <td class="lightgray">@Math.Round(employee.WAR_Attendance_Allowance_Calculated)</td>
                                     }
                                     <td class="lightgray">@Math.Round(employee.WAR_OverTime_Calculated)</td>
                                     <td class="lightgray">@Math.Round(employee.WAR_GrossTotal)</td>
