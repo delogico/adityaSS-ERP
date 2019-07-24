@@ -19,11 +19,20 @@
     .has-error .form-control {
         border-color: darkorange;
     }
-    .other-allowance{
-        margin-left:30px;
+
+    .other-allowance {
+        margin-left: 30px;
     }
-    .other-allowance label {
-        font-weight: normal !important;
+
+        .other-allowance label {
+            font-weight: normal !important;
+        }
+
+    .manualError {
+        color: red;
+        font-size: 12px;
+        margin-bottom: 7px;
+        margin-top: 7px;
     }
 </style>
 @section scripts{
@@ -61,8 +70,7 @@
             }
 
 
-            $('input[class="Allselection"]').click(function () {
-                debugger;
+            $('input[class="Allselection"]').click(function () {               
                 if ($(this).prop("checked") == true) {
                     $("#divReqAllow_" + this.id).show();
                     addCheckbox(this.id);
@@ -141,8 +149,7 @@
             }
 
 
-            function addCheckbox(AllId) {
-                debugger;
+            function addCheckbox(AllId) {               
                 var id = parseInt(AllId);
                 var container = $('#PFlist');
                 var containerEsic = $('#ESIClist');
@@ -160,34 +167,36 @@
 
             }
         });
-        $("input[id='rdo_OT_Payable']").click(function () {
-            // var value = $(this).filter(':checked').val();
-            //if ($(this).prop("checked") == true) {
-            //    alert($(this).prop('value'));
-            //}
+        $("input[id='rdo_OT_Payable']").click(function () {         
             $("#divOTdifferently").hide();
             $("#divByFormula").hide();
             $("#div_OT_Per_Hr").hide();
+            $('#rdo_OT_Payable').val("True");            
         });
-        $("input[id='rdo_OT_Differently']").click(function () {
+        $("input[id='rdo_OT_Differently']").click(function () {        
             $("#divOTdifferently").show();
             $("#divByFormula").hide();
             $("#div_OT_Per_Hr").show();
+            $('#rdo_OT_Payable').val("False");
         });
         $("input[id='rdo_OT_Fixed_Amount']").click(function () {
             $("#divOTdifferently").show();
             $("#divByFormula").hide();
             $("#div_OT_Per_Hr").show();
+            $('#rdo_OT_Payable').val("False");
+            $('#rdo_OT_Fixed_Amount').val("True");
 
         });
-        $("input[id='rdo_OT_By_Formula']").click(function () {
+        $("input[id='rdo_OT_By_Formula']").click(function () { 
             $("#divOTdifferently").show();
             $("#divByFormula").show();
             $("#div_OT_Per_Hr").hide();
+            $('#rdo_OT_Payable').val("False");
+            $('#rdo_OT_Fixed_Amount').val("False");
+
 
         });
         $('input[id="chkOutStation"]').click(function () {
-            debugger;
             if ($(this).prop("checked") == true) {
                 $("#divOutStaion").show();
             }
@@ -196,7 +205,6 @@
             }
         });
         $('input[id="chkAttendance"]').click(function () {
-            debugger;
             if ($(this).prop("checked") == true) {
                 $("#divAttendance").show();
             }
@@ -215,7 +223,24 @@
                 $("#CRI_HRA_Fixed").hide();
             }
         });
+        $(".btnSave").click(function () {
+            var isCheckedPayable = $('#rdo_OT_Payable').prop('checked');
+            if (isCheckedPayable == false) {
+                var isCheckedFixed = $('#rdo_OT_Fixed_Amount').prop('checked');
+                if (isCheckedFixed == false) {
+                    if ($("#CRI_OT_Formula").val() == "") {
+                        $(".errorFormula").html("Formula required");
+                        return false;
+                    }
+                } else {
+                    if ($("#CRI_OT_Fixed_PerHour").val() == "" || $("#CRI_OT_Fixed_PerHour").val() <= 0) {
+                        $(".errorAmount").html("Amount required");
+                        return false;
+                    }
+                }
 
+            }
+        });
     </script>
 
 
@@ -224,8 +249,6 @@
         <script>
             $(document).ready(function () {
                 alert('@TempData["message"]');
-
-
         });
         </script>
     };
@@ -326,7 +349,7 @@
                                 <div class="col-md-12">
                                     <label>
                                         @Html.CheckBoxFor(m => m.CRI_OutStation_Allowance, new { @id = "chkOutStation" })
-                                        &nbsp;@Html.LabelFor(m => m.CRI_OutStation_Allowance,new { @for= "chkOutStation"})
+                                        &nbsp;@Html.LabelFor(m => m.CRI_OutStation_Allowance, new { @for = "chkOutStation" })
                                     </label>
                                     <div id="divOutStaion" style="display:@(Model.CRI_OutStation_Allowance ? "block" : "none")">
                                         <div class="col-md-12">
@@ -347,7 +370,7 @@
                                 <div class="col-md-12">
                                     <label>
                                         @Html.CheckBoxFor(m => m.CRI_Attendance_Allowance, new { @id = "chkAttendance" })
-                                        &nbsp;@Html.LabelFor(m => m.CRI_Attendance_Allowance,new { @for= "chkAttendance"})
+                                        &nbsp;@Html.LabelFor(m => m.CRI_Attendance_Allowance, new { @for = "chkAttendance" })
                                     </label>
                                     <div id="divAttendance" style="display:@(Model.CRI_Attendance_Allowance ? "block" : "none")">
                                         <div class="col-md-12">
@@ -616,7 +639,7 @@
                                 </div>
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        @Html.RadioButtonFor(m => m.CRI_OT_Calculate_Payableday, false, htmlAttributes: new { @id = "rdo_OT_Differently" })
+                                        @Html.RadioButtonFor(m => m.CRI_OT_Calculate_Payableday, false, htmlAttributes: new { @id = "rdo_OT_Differently", @class = "OT_Differently" })
                                         @Html.Label("", "Calculate Over Time differently", new { @for = "rdo_OT_Differently" })
                                     </div>
                                 </div>
@@ -629,11 +652,14 @@
                                     <div class="col-md-8" style="padding-left: 40px;">
                                         <div class="col-md-12">
                                             @Html.RadioButtonFor(m => m.CRI_OT_Calculate_Differently, true, htmlAttributes: new { @id = "rdo_OT_Fixed_Amount" })
-                                            @Html.LabelFor(m => m.CRI_OT_Fixed_PerHour, new { @class = "control-label",@for= "rdo_OT_Fixed_Amount" })
+                                            @Html.LabelFor(m => m.CRI_OT_Fixed_PerHour, new { @class = "control-label", @for = "rdo_OT_Fixed_Amount" })
                                         </div>
                                         <div id="div_OT_Per_Hr" style="display:@styleAmount">
                                             <div class="col-md-10" style="padding-left: 50px;">
-                                                @Html.TextBoxFor(m => m.CRI_OT_Fixed_PerHour, new { @class = "form-control" })
+                                                <div class="form-group">
+                                                    @Html.TextBoxFor(m => m.CRI_OT_Fixed_PerHour, new { @class = "form-control" })
+                                                    <p class="errorAmount manualError"></p>
+                                                </div>
                                             </div>
                                             <div class="col-md-2">
                                                 INR/hr
@@ -642,7 +668,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 @Html.RadioButtonFor(m => m.CRI_OT_Calculate_Differently, false, htmlAttributes: new { @id = "rdo_OT_By_Formula" })
-                                                @Html.Label("","Calculate by formula", new { @for= "rdo_OT_By_Formula" })
+                                                @Html.Label("", "Calculate by formula", new { @for = "rdo_OT_By_Formula" })
                                             </div>
                                         </div>
                                         <div class="col-md-12" id="divByFormula" style="padding-left: 40px;display:@styleFormula">
@@ -761,7 +787,10 @@
 
                                                 </div>
                                                 <div class="col-md-6">
-                                                    @Html.TextBoxFor(m => m.CRI_OT_Formula, new { @class = "form-control" })
+                                                    <div class="form-group">
+                                                        @Html.TextBoxFor(m => m.CRI_OT_Formula, new { @class = "form-control" })
+                                                        <p class="errorFormula manualError"></p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -773,7 +802,7 @@
                     </div>
 
                     <div class="m-t-20 text-center">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary btnSave">Save</button>
                     </div>
                 }
 
