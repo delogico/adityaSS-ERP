@@ -16,9 +16,9 @@ namespace RMERP.DAL.ManagerClasses
         {
             _context = context;
         }
-        public List<Employee_Advance> AdvanceRptForBank(DateTime WAG_Month)
+        public List<Employee_Advance> AdvanceRptForBank(DateTime WAG_Month,int FRM_Id)
         {
-            List<Employee_Advance> employee_Advances = _context.Employee_Advance.Include(m => m.EMP_).Where(m => m.ADV_RegisteredOn.Month.Equals(WAG_Month.Month)).ToList();
+            List<Employee_Advance> employee_Advances = _context.Employee_Advance.Include(m => m.EMP_).Where(m => m.ADV_RegisteredOn.Month.Equals(WAG_Month.Month) && m.EMP_.FRM_Id.Equals(FRM_Id)).ToList();
             return employee_Advances;
         }
         public List<Employee_Advance> NotCompletedAdvanceLst(DateTime WAG_Month,int FRM_Id)

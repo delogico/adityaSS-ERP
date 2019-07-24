@@ -194,10 +194,10 @@ namespace RMERP.Controllers
         }
 
         [Breadcrumb("Advance Taken", FromAction = "Index", FromController = typeof(WageProcessController))]
-        public ActionResult AdvanceRptForBank(DateTime WAG_Month)
+        public ActionResult AdvanceRptForBank(DateTime WAG_Month,int FRM_Id)
         {
             AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
-            List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.AdvanceRptForBank((WAG_Month)));
+            List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.AdvanceRptForBank(WAG_Month, FRM_Id));
             ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
             return View(advancesVM);
         }
