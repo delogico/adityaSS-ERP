@@ -47,12 +47,11 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_Attendance_Allowance = requirement.CRI_Attendance_Allowance;
             clientRequirementVM.CRI_Attendance_Allowance_Rate = requirement.CRI_Attendance_Allowance_Rate;
             clientRequirementVM.CRI_Attendance_Allowance_MaximumDays = requirement.CRI_Attendance_Allowance_MaximumDays;
-
-            if (requirement.CRI_OT_Fixed_PerHour > 0)
+            if(clientRequirementVM.CRI_OT_Formula!=null)
             {
-                clientRequirementVM.CRI_OT_Calculate_Differently = true;
-            }        
-
+                clientRequirementVM.CRI_OT_Calculate_Differently = false;
+            }
+            
             if (requirement.CLI_ != null)
                 clientRequirementVM.CLI_Name = requirement.CLI_.CLI_Name;
 

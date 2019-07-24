@@ -19,6 +19,12 @@
     .has-error .form-control {
         border-color: darkorange;
     }
+    .other-allowance{
+        margin-left:30px;
+    }
+    .other-allowance label {
+        font-weight: normal !important;
+    }
 </style>
 @section scripts{
 
@@ -314,8 +320,50 @@
                                     @Html.CheckBoxFor(m => m.CRI_IsPayable_PublicHoliday)
                                     @Html.LabelFor(m => m.CRI_IsPayable_PublicHoliday, new { @class = "control-label" })
                                 </div>
-
                                 <div class="col-md-12">
+                                    <hr />
+                                </div>
+                                <div class="col-md-12">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.CRI_OutStation_Allowance, new { @id = "chkOutStation" })
+                                        &nbsp;@Html.LabelFor(m => m.CRI_OutStation_Allowance,new { @for= "chkOutStation"})
+                                    </label>
+                                    <div id="divOutStaion" style="display:@(Model.CRI_OutStation_Allowance ? "block" : "none")">
+                                        <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <div class="col-md-12">
+                                                    <div class="col-md-10">
+                                                        @Html.TextBoxFor(m => m.CRI_OutStation_Allowance_Rate, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(m => m.CRI_OutStation_Allowance_Rate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        @Html.Raw("INR/Hr")
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.CRI_Attendance_Allowance, new { @id = "chkAttendance" })
+                                        &nbsp;@Html.LabelFor(m => m.CRI_Attendance_Allowance,new { @for= "chkAttendance"})
+                                    </label>
+                                    <div id="divAttendance" style="display:@(Model.CRI_Attendance_Allowance ? "block" : "none")">
+                                        <div class="col-md-12">
+                                            <div class="col-md-10">
+                                                Pay @Html.TextBoxFor(m => m.CRI_Attendance_Allowance_Rate, new { @class = "client-textbox" }) INR if maximum  @Html.TextBoxFor(m => m.CRI_Attendance_Allowance_MaximumDays, new { @class = "client-textbox" }) days off.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <hr />
+                                </div>
+                                <div class="col-md-12">
+                                    <b>Other Allowances</b>
+                                </div>
+                                <div class="col-md-12 other-allowance">
                                     <div class="form-group">
                                         <div class="row">
                                             @for (var i = 0; i < Model.allAllowances.Count; i++)
@@ -353,44 +401,6 @@
                                                     </div>
                                                 </div>
                                             }
-
-
-
-                                                <hr style="border: 1px solid;margin:5px;">
-                                            <div class="col-md-12">
-                                                <label>
-                                                    @Html.CheckBoxFor(m => m.CRI_OutStation_Allowance, new { @id = "chkOutStation" })
-                                                    &nbsp;@Html.LabelFor(m => m.CRI_OutStation_Allowance)
-                                                </label>
-                                                <div id="divOutStaion" style="display:@(Model.CRI_OutStation_Allowance ? "block" : "none")">
-                                                    <div class="col-md-12">
-                                                        <div class="col-md-6">
-                                                            <div class="col-md-12">
-                                                                <div class="col-md-10">
-                                                                    @Html.TextBoxFor(m => m.CRI_OutStation_Allowance_Rate, new { @class = "form-control" })
-                                                                    @Html.ValidationMessageFor(m => m.CRI_OutStation_Allowance_Rate, "", new { @class = "text-danger" })
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    @Html.Raw("INR/Hr")
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>                                           
-                                            <div class="col-md-12">
-                                                <label>
-                                                    @Html.CheckBoxFor(m => m.CRI_Attendance_Allowance, new { @id = "chkAttendance" })
-                                                    &nbsp;@Html.LabelFor(m => m.CRI_Attendance_Allowance)
-                                                </label>
-                                                <div id="divAttendance" style="display:@(Model.CRI_Attendance_Allowance ? "block" : "none")">
-                                                    <div class="col-md-12">
-                                                        <div class="col-md-10">
-                                                            Pay @Html.TextBoxFor(m => m.CRI_Attendance_Allowance_Rate, new { @class = "client-textbox" }) INR if maximum  @Html.TextBoxFor(m => m.CRI_Attendance_Allowance_MaximumDays, new { @class = "client-textbox" }) days off.
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -607,19 +617,19 @@
                                 <div class="col-md-10">
                                     <div class="form-group">
                                         @Html.RadioButtonFor(m => m.CRI_OT_Calculate_Payableday, false, htmlAttributes: new { @id = "rdo_OT_Differently" })
-                                        @Html.Label("Consider OT differently")
+                                        @Html.Label("", "Calculate Over Time differently", new { @for = "rdo_OT_Differently" })
                                     </div>
                                 </div>
                                 @{
                                     string style = (Model.CRI_OT_Calculate_Payableday == false ? "block" : "none");
-                                    string styleAmount= (Model.CRI_OT_Fixed_PerHour > 0 ? "block" : "none");
+                                    string styleAmount = (Model.CRI_OT_Fixed_PerHour > 0 ? "block" : "none");
                                     string styleFormula = (Model.CRI_OT_Fixed_PerHour > 0 ? "none" : "block");
                                 }
                                 <div id="divOTdifferently" style="display:@style">
                                     <div class="col-md-8" style="padding-left: 40px;">
                                         <div class="col-md-12">
                                             @Html.RadioButtonFor(m => m.CRI_OT_Calculate_Differently, true, htmlAttributes: new { @id = "rdo_OT_Fixed_Amount" })
-                                            @Html.LabelFor(m => m.CRI_OT_Fixed_PerHour, new { @class = "control-label" })
+                                            @Html.LabelFor(m => m.CRI_OT_Fixed_PerHour, new { @class = "control-label",@for= "rdo_OT_Fixed_Amount" })
                                         </div>
                                         <div id="div_OT_Per_Hr" style="display:@styleAmount">
                                             <div class="col-md-10" style="padding-left: 50px;">
@@ -632,7 +642,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 @Html.RadioButtonFor(m => m.CRI_OT_Calculate_Differently, false, htmlAttributes: new { @id = "rdo_OT_By_Formula" })
-                                                @Html.Label("Calculate by formula")
+                                                @Html.Label("","Calculate by formula", new { @for= "rdo_OT_By_Formula" })
                                             </div>
                                         </div>
                                         <div class="col-md-12" id="divByFormula" style="padding-left: 40px;display:@styleFormula">

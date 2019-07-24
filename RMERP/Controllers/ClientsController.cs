@@ -385,9 +385,21 @@ namespace RMERP.Controllers
 
             if (ModelState.IsValid)
             {
-                if (!clientRequirementVM.CRI_OT_Calculate_Payableday && !clientRequirementVM.CRI_OT_Calculate_Differently)
+                if (clientRequirementVM.CRI_OT_Calculate_Payableday)
                 {
                     clientRequirementVM.CRI_OT_Fixed_PerHour = 0;
+                    clientRequirementVM.CRI_OT_Formula = null;
+                }
+                if (!clientRequirementVM.CRI_OT_Calculate_Payableday)
+                {
+                    if(clientRequirementVM.CRI_OT_Fixed_PerHour > 0 && clientRequirementVM.CRI_OT_Calculate_Differently)
+                    {
+                        clientRequirementVM.CRI_OT_Formula = null;
+                    }
+                    else if (!clientRequirementVM.CRI_OT_Calculate_Differently)
+                    {
+                        clientRequirementVM.CRI_OT_Fixed_PerHour = 0;
+                    }                                    
                 }
                 if (!clientRequirementVM.CRI_Attendance_Allowance)
                 {
