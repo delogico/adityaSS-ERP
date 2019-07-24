@@ -34,9 +34,8 @@ namespace RMERP.DAL.ManagerClasses
                     _contaxt.Clients.Update(clients);
                 }
                 else
-                {
-                    //clients.CLI_Logo = clientsModel.CliLogoImage;
-                    clients.CLI_RegisteredOn = ProjectUtils.DateNow();
+                {                    
+                   // clients.CLI_RegisteredOn = ProjectUtils.DateNow();
                     _contaxt.Clients.Add(clients);
                 }
                 _contaxt.SaveChanges();
