@@ -211,12 +211,12 @@ namespace RMERP.Controllers
         //}
 
         [Breadcrumb("Advance EMI", FromAction = "Index", FromController = typeof(WageProcessController))]
-        public ActionResult UpdateAdvanceEMI(DateTime WAG_Month, int WAG_Id)
+        public ActionResult UpdateAdvanceEMI(DateTime WAG_Month, int WAG_Id, int FRM_Id)
         {
             AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             UpdateAdvanceEMI updateAdvanceEMI = new UpdateAdvanceEMI();
-            List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.NotCompletedAdvanceLst((WAG_Month)));
+            List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.NotCompletedAdvanceLst(WAG_Month,FRM_Id));
             List<WageRegisterAdvancesVM> wageRegisterAdvancesVMs = WageRegisterAdvancesMapper.mapMeModels(wageRegisterManager.GetWageRegisterAdvances(WAG_Month));
             updateAdvanceEMI.employeeAdvanceVMs = advancesVM;
             updateAdvanceEMI.wageRegisterAdvancesVMs = wageRegisterAdvancesVMs;
