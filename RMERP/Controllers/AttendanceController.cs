@@ -238,7 +238,7 @@ namespace RMERP.Controllers
                     attendance.ATT_Date = tmpDate;
                     tmpDate = tmpDate.AddDays(1);
 
-                    switch (row.GetCell(j).ToString())
+                    switch (row.GetCell(j).ToString().Replace(" ", ""))
                     {
                         case "P":
                             attendance.ATT_IsPresent = true;
@@ -434,7 +434,7 @@ namespace RMERP.Controllers
                     //    attendance.ATT_Shift = row.GetCell(j).ToString();
                     //}
 
-                    switch (row.GetCell(j).ToString())
+                    switch (row.GetCell(j).ToString().Replace(" ", ""))
                     {
                         case ("G"):
                             attendance.ATT_IsPresent = true;
@@ -692,7 +692,7 @@ namespace RMERP.Controllers
                     }
                     else
                     {
-                        switch (row.GetCell(j).ToString())
+                        switch (row.GetCell(j).ToString().Replace(" ",""))
                         {
                             case "P":
                                 attendance.ATT_IsPresent = true;
@@ -712,7 +712,7 @@ namespace RMERP.Controllers
                                 attendance.ATT_IsPresent = false;
                                 attendance.ATT_IsWeeklyOff = true;
                                 totalWeeklyOff++;
-                                break;
+                                break;                           
                             case "PW":
                                 attendance.ATT_IsPresent = true;
                                 attendance.ATT_IsWeeklyOff = true;
@@ -909,25 +909,8 @@ namespace RMERP.Controllers
                         att.CLI_Id = client.CLI_Id;
                         att.DES_Id = designationManager.getDesignationIdForAttandance(client.CLI_Id, EMP_Id);
                         att.ATT_Date = tmpDate;
-                        //if (row.GetCell(j).ToString().Equals("P"))
-                        //    att.ATT_IsPresent = true;
-                        //else if (row.GetCell(j).ToString().Equals("P/2"))
-                        //    att.ATT_IsHalfday = true;
-                        //else if (row.GetCell(j).ToString().Equals("A"))
-                        //    att.ATT_IsPresent = false;
-                        //else if (row.GetCell(j).ToString().Equals("W/O"))
-                        //{
-                        //    att.ATT_IsWeeklyOff = true;
-                        //    att.ATT_IsPresent = false;
-                        //}
-                        //att.ATT_IsPublicHoliday = secondRow.GetCell(j).ToString().Contains("PH");
-                        //// att.ATT_IsPaidLeave = secondRow.GetCell(j).ToString().Contains("PL");
-                        //if (rowExtra.GetCell(j) != null)
-                        //    if (!rowExtra.GetCell(j).ToString().Equals(""))
-                        //        att.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
-                        //att.ATT_IsEarnLeave = false;
-                        ////att.ATT_IsWeeklyOff = false;                     
-                        switch (row.GetCell(j).ToString())
+                                          
+                        switch (row.GetCell(j).ToString().Replace(" ", ""))
                         {
                             case "P":
                                 att.ATT_IsPresent = true;
@@ -1068,39 +1051,9 @@ namespace RMERP.Controllers
                     att.WAG_Id = wageProcess.WAG_Id;
                     att.CLI_Id = client.CLI_Id;
                     att.DES_Id = designationManager.getDesignationIdForAttandance(client.CLI_Id, EMP_Id);
-                    att.ATT_Date = tmpDate;
-                    //if (row.GetCell(j).ToString().Equals("A"))
-                    //    att.ATT_IsPresent = false;
-                    //else if (row.GetCell(j).ToString().Equals("W/O"))
-                    //{
-                    //    att.ATT_IsWeeklyOff = true;
-                    //    att.ATT_IsPresent = false;
-                    //}
-                    //else if (row.GetCell(j).ToString().Equals("G") || row.GetCell(j).ToString().Equals("I") || row.GetCell(j).ToString().Equals("II") || row.GetCell(j).ToString().Equals("III"))
-                    //{
-                    //    att.ATT_IsPresent = true;
-                    //    att.ATT_Shift = row.GetCell(j).ToString();
-                    //}
-                    //else if (row.GetCell(j).ToString().Equals("G/2") || row.GetCell(j).ToString().Equals("I/2") || row.GetCell(j).ToString().Equals("II/2") || row.GetCell(j).ToString().Equals("III/2"))
-                    //{
-                    //    att.ATT_IsHalfday = true;
-                    //    att.ATT_Shift = row.GetCell(j).ToString().Split("/2")[0];
-                    //}
-                    //#region by rinku 11 july
-                    //else if (row.GetCell(j).ToString().Equals("EL"))
-                    //    att.ATT_IsEarnLeave = true;
-                    //else if (row.GetCell(j).ToString().Equals("PH"))
-                    //    att.ATT_IsPublicHoliday = true;
-                    //else if (row.GetCell(j).ToString().Equals("PL"))
-                    //    //  att.ATT_IsPaidLeave = true;
-                    //    #endregion
-                    //    if (rowExtra.GetCell(j) != null)
-                    //        if (!rowExtra.GetCell(j).ToString().Equals(""))
-                    //        {
-                    //            att.ATT_ExtraHoursWorked = Convert.ToDouble(rowExtra.GetCell(j).ToString());
-                    //        }
+                    att.ATT_Date = tmpDate;                    
 
-                    switch (row.GetCell(j).ToString())
+                    switch (row.GetCell(j).ToString().Replace(" ", ""))
                     {
                         case ("G"):
                             att.ATT_IsPresent = true;
@@ -1292,7 +1245,7 @@ namespace RMERP.Controllers
                         }
                         else
                         {
-                            switch (row.GetCell(j).ToString())
+                            switch (row.GetCell(j).ToString().Replace(" ", ""))
                             {
                                 case "P":
                                     att.ATT_IsPresent = true;
