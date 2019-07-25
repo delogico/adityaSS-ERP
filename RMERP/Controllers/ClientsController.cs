@@ -125,7 +125,7 @@ namespace RMERP.Controllers
                 cv.clientsModel.CliLogoImage = clients.CLI_Logo;
                 cv.contacts = ClientContactMapper.mapContacts(clientsManager.GetClientContactsListById(id).ToList());
                 cv.requirements = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsofClient(id, true).ToList());
-                cv.employees = ClientEmployeeMapper.mapEmployees(clientsManager.listClientsEmployees(id).ToList());
+                cv.employees = ClientEmployeeMapper.mapEmployees(clientsManager.listClientsEmployees(id).ToList(), _context);
             }
 
             IEnumerable<ProjectUtils.Total_WorkingDyas_In_Month> WorkingDays = Enum.GetValues(typeof(ProjectUtils.Total_WorkingDyas_In_Month))
@@ -535,7 +535,17 @@ namespace RMERP.Controllers
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
         }
                
-        
+        public ActionResult DeleteAssignEmployee(int CLE_Id)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            string res = clientsManager.DeleteAssignEmployee(CLE_Id);
+            if (res != string.Empty)
+            {
+                TempData["message"] = "Assign employee can not deleted!";
+            }
+            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
+        }
+
         //public FileResult GenerateExcelTemplate_TwoRow()
         //{
         //    ClientsManager clientsManager = new ClientsManager(_context, Configuration);

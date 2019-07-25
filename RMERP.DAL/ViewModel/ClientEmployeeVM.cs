@@ -26,5 +26,7 @@ namespace RMERP.DAL.ViewModel
         public int ADM_Id_RegisteredBy { get; set; }       
         public string DES_Title { get; set; }
         public EmployeeVM employee { get; set; }
+
+        public bool IsEmployeeWagedForClient { get; set; }
     }
 }

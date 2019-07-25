@@ -17,25 +17,25 @@ namespace RMERP.DAL.ManagerClasses
         RMERPContext _contaxt;
         public IConfiguration Configuration;
         private static int CRI_Id;
-        public ClientsManager(RMERPContext contaxt, IConfiguration configuration=null)
+        public ClientsManager(RMERPContext contaxt, IConfiguration configuration = null)
         {
             _contaxt = contaxt;
             Configuration = configuration;
-        }        
+        }
         public Tuple<string, int> saveAddEditClients(Clients clients)
         {
             string res = string.Empty;
             try
             {
-                clients.CLI_Att_MonthReal = true;               
+                clients.CLI_Att_MonthReal = true;
                 clients.CLI_IsActive = true;
                 if (clients.CLI_Id > 0)
                 {
                     _contaxt.Clients.Update(clients);
                 }
                 else
-                {                    
-                   // clients.CLI_RegisteredOn = ProjectUtils.DateNow();
+                {
+                    // clients.CLI_RegisteredOn = ProjectUtils.DateNow();
                     _contaxt.Clients.Add(clients);
                 }
                 _contaxt.SaveChanges();
@@ -517,6 +517,35 @@ namespace RMERP.DAL.ManagerClasses
         public int GetTotalClient(int FRM_ID)
         {
             return _contaxt.Clients.Where(m => m.CLI_IsActive.Equals(true) && m.FRM_Id.Equals(FRM_ID)).Count();
+        }
+
+        public bool IsEmployeeWagedForClient(int EMP_Id, int CLI_Id, int DES_Id)
+        {
+            int count = _contaxt.Attendance.Where(m => m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id) && m.DES_Id.Equals(DES_Id)).Count();
+            if (count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public string DeleteAssignEmployee(int CLE_Id)
+        {
+            string res = string.Empty;            
+            try
+            {
+                var employee = _contaxt.Clients_Employees.Find(CLE_Id);
+                _contaxt.Clients_Employees.Remove(employee);
+                _contaxt.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                res = ex.Message;
+            }
+            return res;
         }
     }
 }
