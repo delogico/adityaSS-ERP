@@ -9,17 +9,21 @@
     <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            debugger;
             CLE_Id = $('#CLE_Id').val();
             if (CLE_Id > 0) {
                 $('select', 'form').attr('disabled', true).attr('readonly', true);
             }
-
+            $('.selectpicker').selectpicker({
+                liveSearch: true,
+                showSubtext: true
+            });
             $("#submit").click(function (event) {
                 $('select', 'form').attr('disabled', false).attr('readonly', false);
                 $("#frm").submit();
             });
         });
+
+
     </script>
 }
 <div class="modal-dialog modelLeftSide">
@@ -30,7 +34,7 @@
         </div>
         <div class="modal-body">
             <div class="m-b-30">
-                @using (Html.BeginForm("ClientEmployee", "Clients", FormMethod.Post,new { @id="frm"}))
+                @using (Html.BeginForm("ClientEmployee", "Clients", FormMethod.Post, new { @id = "frm" }))
                 {
                     @Html.HiddenFor(m => m.CLE_Id)
                     @Html.HiddenFor(m => m.CLI_Id)
@@ -39,14 +43,23 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.EMP_Id, new { @class = "control-label" })
-                                @Html.DropDownListFor(x => x.EMP_Id, new SelectList(ViewBag.EmployeeList, "EMP_Id", "EMP_FullName"), "Select Employee", new { @class = "form-control" })
+                                @Html.DropDownListFor(x => x.EMP_Id, new SelectList(ViewBag.EmployeeList, "EMP_Id", "EMP_FullName"), "Select Employee", new { @class = "form-control selectpicker",
+                               onchange = "this.form.submit();",
+                               data_show_subtext = "true",
+                               data_live_search = "true"
+                           })
                                 @Html.ValidationMessageFor(x => x.EMP_Id, "", new { @class = "text-danger" })
+
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.DES_Id, new { @class = "control-label" })
-                                @Html.DropDownListFor(x => x.DES_Id, new SelectList(ViewBag.designationList, "DES_Id", "DES_Title"), "Select Designation", new { @class = "form-control" })
+                                @Html.DropDownListFor(x => x.DES_Id, new SelectList(ViewBag.designationList, "DES_Id", "DES_Title"), "Select Designation", new { @class = "form-control selectpicker" ,
+                               onchange = "this.form.submit();",
+                               data_show_subtext = "true",
+                               data_live_search = "true"
+                           })
                                 @Html.ValidationMessageFor(x => x.DES_Id, "", new { @class = "text-danger" })
                             </div>
                         </div>
