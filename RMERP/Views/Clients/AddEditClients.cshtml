@@ -14,7 +14,7 @@
 
 <style>
     .modal-dialog {
-        padding-top:50px;
+        padding-top: 50px;
     }
 </style>
 <div class="col-sm-12">
@@ -58,7 +58,15 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.clientsModel.FRM_Id, new { @class = "control-label" })
-                                        @Html.DropDownListFor(x => x.clientsModel.FRM_Id, new SelectList(ViewBag.firmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control" })
+                                        @if (Model.clientsModel.FRM_Id <= 0)
+                                        {
+                                            @Html.DropDownListFor(x => x.clientsModel.FRM_Id, new SelectList(ViewBag.firmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control" })
+                                        }
+                                        else if (Model.clientsModel.FRM_Id > 0)
+                                        {
+                                            @Html.DropDownListFor(x => x.clientsModel.FRM_Id, new SelectList(ViewBag.firmList, "FRM_Id", "FRM_Name", Model.clientsModel.FRM_Id), "Select Firm", new { @class = "form-control", disabled = "disabled" })
+                                            @Html.HiddenFor(m => m.clientsModel.FRM_Id)
+                                        }
                                         @Html.ValidationMessageFor(x => x.clientsModel.FRM_Id, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -350,17 +358,17 @@
                                         </div><div class="col-md-6"> </div>
                                     </div>
                                     @*<div id="divSelectMethod" class="row">*@
-                                        <div id="divSelectMethod" class="col-md-12">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    @Html.LabelFor(m => m.clientsModel.CLI_No_Reduce_Days)
-                                                    @Html.TextBoxFor(m => m.clientsModel.CLI_No_Reduce_Days, new { @class = "form-control" })
-                                                    @Html.ValidationMessageFor(x => x.clientsModel.CLI_No_Reduce_Days, "", new { @class = "text-danger" })
-                                                </div>
+                                    <div id="divSelectMethod" class="col-md-12">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.clientsModel.CLI_No_Reduce_Days)
+                                                @Html.TextBoxFor(m => m.clientsModel.CLI_No_Reduce_Days, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(x => x.clientsModel.CLI_No_Reduce_Days, "", new { @class = "text-danger" })
                                             </div>
-                                            <div class="col-md-6"> </div>
                                         </div>
-                                        @*<div class="form-group col-sm-6"></div>*@
+                                        <div class="col-md-6"> </div>
+                                    </div>
+                                    @*<div class="form-group col-sm-6"></div>*@
                                     @*</div>*@
                                     <div class="col-md-12">
                                         <div class="col-md-6">
@@ -369,8 +377,8 @@
                                                 @Html.TextBoxFor(m => m.clientsModel.CLI_WorkingHours_In_Day, new { @class = "form-control" })
                                                 @Html.ValidationMessageFor(x => x.clientsModel.CLI_WorkingHours_In_Day, "", new { @class = "text-danger" })
                                             </div>
-                                            </div><div class="col-md-6"> </div>
-                                        </div>
+                                        </div><div class="col-md-6"> </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -441,10 +449,10 @@
                                 <tbody>
                                     @foreach (var item in Model.employees)
                                     {
-                                        var style = "";                                       
-                                        if (item.CLE_UnassignedOn!=null)
+                                        var style = "";
+                                        if (item.CLE_UnassignedOn != null)
                                         {
-                                            style = "style=color:orangered;";                                           
+                                            style = "style=color:orangered;";
                                         }
                                         <tr @style>
                                             <td><b>@item.DES_Title</b></td>
@@ -463,7 +471,7 @@
                                                             <li><a href='@Url.Action("DeleteAssignEmployee","Clients",new {CLE_Id=item.CLE_Id})' title="Delete"><i class="fa fa-remove m-r-5"></i> Delete </a></li>
                                                         }
                                                     </ul>
-                                                    
+
                                                 </div>
                                             </td>
                                         </tr>
@@ -498,10 +506,10 @@
                     <ul class="dropdown-menu pull-right">
                         <li><a href='#' title="Generate Excel Template / Double rows" onclick="onConfirmClick()"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Double Rows</a></li>
                         <li><a href='#' title="Generate Excel Template / Single row" onclick="onConfirmClickSingle()"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Single Row</a></li>
-                        
+
                         @*<li><a href='@Url.Action( "GenerateExcelTemplate_TwoRow","Clients")' title="Generate Excel Template / Double rows"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Double Rows</a></li>
-                        <li><a href='@Url.Action( "GenerateExcelTemplate_OneRow","Clients")' title="Generate Excel Template / Single Row"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Single Row</a></li>*@
-                                              
+                            <li><a href='@Url.Action( "GenerateExcelTemplate_OneRow","Clients")' title="Generate Excel Template / Single Row"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Single Row</a></li>*@
+
 
                     </ul>
                 </div>
@@ -521,7 +529,7 @@
 
                         </p>
                         <div class="m-t-20">
-                            <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>                            
+                            <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
                             <button id="btnSubmit" type="submit" class="btn btn-danger"></button>
                         </div>
                     </div>
@@ -571,7 +579,7 @@
 
 
         $(document).ready(function () {
-            
+
             radioShow();
             var CLI_Id = $("#clientsModel_FRM_Id").val();
             if (CLI_Id > 0) {
@@ -718,20 +726,20 @@
                 $("#divSelectMethod").hide();
                 $("#clientsModel_CLI_No_Reduce_Days").val(0);
             }
-        }       
+        }
         function onConfirmClick() {
             bootbox.prompt({
                 title: "Choose Month!",
                 inputType: 'date',
-           
-                callback: function (result) {   
+
+                callback: function (result) {
                     debugger;
                     if (result != null) {
                         $.ajax({
                             type: "POST",
                             url: "/Clients/GenerateExcelTemplate_TwoRow?month=" + result,
                             contentType: 'application/json; charset=utf-8',
-                            datatype: 'json',                            
+                            datatype: 'json',
                             type: "GET",
                             success: function () {
                                 window.location = '@Url.Action("GenerateExcelTemplate_TwoRow", "Clients")?month='+result;
@@ -756,7 +764,7 @@
                             type: "POST",
                             url: "/Clients/GenerateExcelTemplate_OneRow?month=" + result,
                             contentType: 'application/json; charset=utf-8',
-                            datatype: 'json',                            
+                            datatype: 'json',
                             type: "GET",
                             success: function () {
                                 window.location = '@Url.Action("GenerateExcelTemplate_OneRow", "Clients")?month='+result;
@@ -781,10 +789,10 @@
                             type: "POST",
                             url: "/Clients/UnassignClientEmployee?UnassignedOn=" + result + "&CLE_Id=" + CLE_Id,
                             contentType: 'application/json; charset=utf-8',
-                            datatype: 'json',                            
+                            datatype: 'json',
                             type: "GET",
-                            success: function () {                               
-                                window.location = '@Url.Action("AddEditClients", "Clients",new { @tab = "ClientEmployee" })';                            
+                            success: function () {
+                                window.location = '@Url.Action("AddEditClients", "Clients",new { @tab = "ClientEmployee" })';
                             }
 
                         })

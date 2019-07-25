@@ -77,7 +77,12 @@ namespace RMERP.Controllers
         {
             ClientId = (id <= 0 ? ClientId : id);
             id = ClientId;
-
+            int FRM_Id = 0;
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            if (sessionUtils.GetLoggedFirmID().HasValue)
+            {
+                FRM_Id = sessionUtils.GetLoggedFirmID().Value;
+            }
             AdminUserManager adminUserManager = new AdminUserManager(_context);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             FirmsManager firmsManager = new FirmsManager(_context);
@@ -87,6 +92,7 @@ namespace RMERP.Controllers
             cv.ParametersClientsModel.clientsModel = new ClientsModel();
             Clients clients = new Clients();
             cv.clientsModel.CLI_RegisteredOn = ProjectUtils.DateNow();
+            cv.clientsModel.FRM_Id = FRM_Id;
             if (id > 0)
             {                
                 clients=clientsManager.GetClientById(id);
