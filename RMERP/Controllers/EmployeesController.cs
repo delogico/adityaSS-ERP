@@ -197,8 +197,10 @@ namespace RMERP.Controllers
         public ActionResult AdvanceRptForBank(DateTime WAG_Month,int FRM_Id)
         {
             AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
+            FirmsManager firmsManager = new FirmsManager(_context);
             List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.AdvanceRptForBank(WAG_Month, FRM_Id));
             ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
+            ViewBag.FRM_Name = firmsManager.GetFirm(FRM_Id).FRM_ShortName;
             return View(advancesVM);
         }
         //[Breadcrumb("Advance EMI", FromAction = "Index", FromController = typeof(WageProcessController))]
@@ -215,6 +217,7 @@ namespace RMERP.Controllers
         {
             AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
+            FirmsManager firmsManager = new FirmsManager(_context);
             UpdateAdvanceEMI updateAdvanceEMI = new UpdateAdvanceEMI();
             List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.NotCompletedAdvanceLst(WAG_Month,FRM_Id));
             List<WageRegisterAdvancesVM> wageRegisterAdvancesVMs = WageRegisterAdvancesMapper.mapMeModels(wageRegisterManager.GetWageRegisterAdvances(WAG_Month));
@@ -222,6 +225,7 @@ namespace RMERP.Controllers
             updateAdvanceEMI.wageRegisterAdvancesVMs = wageRegisterAdvancesVMs;
             updateAdvanceEMI.WAG_Month = WAG_Month;
             updateAdvanceEMI.WAG_Id = WAG_Id;
+            updateAdvanceEMI.FRM_Name = firmsManager.GetFirm(FRM_Id).FRM_ShortName;
             ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
             return View(updateAdvanceEMI);
         }

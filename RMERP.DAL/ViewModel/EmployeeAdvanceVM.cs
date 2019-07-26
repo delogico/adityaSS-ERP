@@ -32,6 +32,7 @@ namespace RMERP.DAL.ViewModel
         public int EMP_Id { get; set; }     
         public DateTime WAG_Month { get; set; }
         public int WAG_Id { get; set; }
+        public string FRM_Name { get; set; }
         public List<EmployeeAdvanceVM> employeeAdvanceVMs { get; set; }
         public List<WageRegisterAdvancesVM> wageRegisterAdvancesVMs { get; set; }       
     }
