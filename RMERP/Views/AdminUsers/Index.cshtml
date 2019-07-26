@@ -5,7 +5,9 @@
     ViewData["Title"] = "Admin Users List";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
+@section Breadcrumbs{
+    <li class="breadcrumb-item">Admin Users</li>
+}
 @section scripts{
     @if (TempData["message"] != null)
     {
@@ -43,8 +45,8 @@
                             <thead>
                                 <tr>
                                     <th>Firm</th>
-                                    <th>Name</th>                                   
-                                    <th>Email</th>                                    
+                                    <th>Name</th>
+                                    <th>Email</th>
                                     <th>Password</th>
                                     <th>Mobile</th>
                                     <th class="text-right"></th>
@@ -53,24 +55,24 @@
                             <tbody>
                                 @foreach (var item in Model)
                                 {
-                                <tr>
-                                    <td>@(item.FRM_Id.HasValue ? item.FRM_.FRM_Name: "Super Admin")</td>
-                                    <td>@item.ADM_FirstName @item.ADM_MiddleName @item.ADM_LastName</td>
-                                   
-                                    <td>@item.ADM_EmailId</td>
-                                    <td>@item.ADM_Password</td>
-                                    <td>@item.ADM_Mobile</td>
+                                    <tr>
+                                        <td>@(item.FRM_Id.HasValue ? item.FRM_.FRM_Name : "Super Admin")</td>
+                                        <td>@item.ADM_FirstName @item.ADM_MiddleName @item.ADM_LastName</td>
 
-                                    <td class="text-right">
-                                        <div class="dropdown">
-                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li><a href='@Url.Action("AddEditAdminUsers","AdminUsers",new { AdminId=item.ADM_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
-                                                <li><a href='@Url.Action("DeleteAdminUsers","AdminUsers",new { AdminId=item.ADM_Id})' title="Delete"><i class="fa fa-trash m-r-5"></i> Delete </a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        <td>@item.ADM_EmailId</td>
+                                        <td>@item.ADM_Password</td>
+                                        <td>@item.ADM_Mobile</td>
+
+                                        <td class="text-right">
+                                            <div class="dropdown">
+                                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                <ul class="dropdown-menu pull-right">
+                                                    <li><a href='@Url.Action("AddEditAdminUsers","AdminUsers",new { AdminId=item.ADM_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
+                                                    <li><a href='@Url.Action("DeleteAdminUsers","AdminUsers",new { AdminId=item.ADM_Id})' title="Delete"><i class="fa fa-trash m-r-5"></i> Delete </a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 }
 
                             </tbody>

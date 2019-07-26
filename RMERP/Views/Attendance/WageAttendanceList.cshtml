@@ -5,14 +5,17 @@
     ViewData["Title"] = "Attendance status";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.wageProcess.FRM_Id })</li>
+    <li class="breadcrumb-item">Wage Attendance</li>
+}
 <div>
     <div class="content container-fluid">
-        <div class="row">           
+        <div class="row">
             <div class="col-sm-8">
-                <h3 class="page-title">@ViewData["Title"]  (@Model.wageProcess.FRM_Title : @Model.wageProcess.WAG_Full_Month() )</h3>               
+                <h3 class="page-title">@ViewData["Title"]  (@Model.wageProcess.FRM_Title : @Model.wageProcess.WAG_Full_Month() )</h3>
             </div>
-           
+
         </div>
         <div class="row">
             <div class="col-md-12">

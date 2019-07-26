@@ -3,7 +3,9 @@
     ViewData["Title"] = "Designations";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
+@section Breadcrumbs{
+<li class="breadcrumb-item">Designations</li>
+}
 
 @section scripts{
     @if (TempData["message"] != null)
@@ -38,8 +40,8 @@
                 <div>
                     <table class="table table-striped custom-table datatable">
                         <thead>
-                            <tr>                                
-                                <th>Designation</th>                                
+                            <tr>
+                                <th>Designation</th>
                                 <th></th>
                             </tr>
                         </thead>

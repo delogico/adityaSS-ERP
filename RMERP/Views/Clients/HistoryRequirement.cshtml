@@ -4,7 +4,11 @@
     ViewData["Title"] = "History of Requirement";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Clients", "Index", "Clients")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Client Info", "AddEditClients", "Clients", new { id = 1 })</li>
+    <li class="breadcrumb-item">Requirement History</li>
+}
 <div class="col-sm-8">
     <h4 class="page-title">@ViewBag.CLI_Name</h4>
     <p>Designation - <b>@ViewBag.DES_Title</b></p>

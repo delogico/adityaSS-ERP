@@ -20,13 +20,13 @@ namespace RMERP.Controllers
         {
             _context = context;
         }
-        [Breadcrumb("Designations")]
+       
         public IActionResult Index()
         {
             DesignationManager designationManager = new DesignationManager(_context);
             return View(DesignationMapper.mapDesignations(designationManager.getDesignationsList().ToList()));
         }
-        [Breadcrumb("Add-Edit Designation", FromAction = "Index")]
+      
         public ActionResult AddEditDesignation(int DES_Id = 0)
         {
             DesignationManager designationManager = new DesignationManager(_context);
@@ -37,6 +37,7 @@ namespace RMERP.Controllers
             }
             return View(vm);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddEditDesignation(DesignationVM designationVM)

@@ -72,7 +72,7 @@ namespace RMERP.DAL.Helpers
         {
             return DateTime.Now.ToString("yyyyMMddHHmmss");
         }
-        public static int WagId, CliId, ClientId, EmpId, Frm_Id;
+       // public static int WagId, CliId, ClientId, EmpId, Frm_Id;
 
         public static string GetTooltipBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<WageRegisterAllowanceVM> All)
         {

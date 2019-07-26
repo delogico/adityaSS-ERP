@@ -3,8 +3,9 @@
     ViewData["Title"] = "Our Firms";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
-
+@section Breadcrumbs{
+<li class="breadcrumb-item">Firms</li>
+}
 @section scripts{
     @if (TempData["message"] != null)
     {
@@ -15,13 +16,14 @@
         </script>
     };
 
-}<style>
+}
+<style>
     .modal-dialog {
         transform: translate(0, -50%);
         top: 30%;
         margin: 0 auto;
     }
-    </style>
+</style>
 <div>
     <div class="content container-fluid">
         <div class="row">

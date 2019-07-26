@@ -4,7 +4,9 @@
     ViewData["Title"] = "Employees";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
+@section Breadcrumbs{    
+    <li class="breadcrumb-item">Employees</li>
+}
 @section scripts{
     @if (TempData["message"] != null)
     {
@@ -31,15 +33,15 @@
             </div>
             <div class="col-sm-4 text-right">
                 <a class="btn btn-primary rounded" href="@Url.Action("AddEditEmployee","Employees")"><i class="fa fa-plus"></i> Add New Employee</a>
-            </div>           
+            </div>
         </div>
         <div class="row">
-            <div class="col-sm-10">               
+            <div class="col-sm-10">
             </div>
             <div class="col-sm-2 text-right m-b-10">
                 <i class="fa fa-hand-o-right" aria-hidden="true"></i>
                 <a class="text-right btn-link" data-toggle="collapse" href="#collapseAdvanceSearch" role="button" aria-expanded="false" aria-controls="AdvanceSearch">Advance Search</a>
-            </div>           
+            </div>
         </div>
         <div class="row collapse" id="collapseAdvanceSearch">
             <div class="col-md-8">

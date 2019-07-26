@@ -128,7 +128,12 @@
             <div class="content container-fluid">
 
                 <div class="row">
-                    <breadcrumb></breadcrumb>
+                    @*<breadcrumb></breadcrumb>*@
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">@Html.ActionLink("DashBoard", "DashBoard", "AdminUsers")</li>
+                        @RenderSection("Breadcrumbs", required: false)
+                    </ol>
+                   
                     @RenderBody()
                 </div>
 

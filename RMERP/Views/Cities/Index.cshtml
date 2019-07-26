@@ -1,57 +1,58 @@
 ﻿@model List<RMERP.DAL.ViewModel.CitiesVM>
-    @{
-        ViewData["Title"] = "City";
-        Layout = "~/Views/Shared/_RMLayout.cshtml";
-    }
-
-
-    @section scripts{
-        @if (TempData["message"] != null)
-        {
-            <script>
+@{
+    ViewData["Title"] = "City";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+@section Breadcrumbs{
+    <li class="breadcrumb-item">City</li>
+}
+@section scripts{
+    @if (TempData["message"] != null)
+    {
+        <script>
             $(document).ready(function () {
             alert('@TempData["message"]');
         });
-            </script>
-        };
+        </script>
+    };
 
+}
+<style>
+    .modal-dialog {
+        transform: translate(0, -50%);
+        top: 30%;
+        margin: 0 auto;
     }
-    <style>
-        .modal-dialog {
-            transform: translate(0, -50%);
-            top: 30%;
-            margin: 0 auto;
-        }
-    </style>
-    <div>
-        <div class="content container-fluid">
-            <div class="row">
-                <div class="col-sm-8">
-                    <h4 class="page-title">@ViewData["Title"]</h4>
-                </div>
-                <div class="col-sm-4 text-right m-b-30">
-                    <a class="btn btn-primary rounded" href="@Url.Action("AddEditCity","Cities")"><i class="fa fa-plus"></i> Add New City</a>
-                </div>
+</style>
+<div>
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <h4 class="page-title">@ViewData["Title"]</h4>
             </div>
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="table-responsive">
-                        <table class="table table-striped custom-table m-b-0">
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td><b>@item.CITY_Name</b></td>
-                                        <td>
-                                            <a href='@Url.Action("AddEditCity","Cities",new { CITY_Id=item.CITY_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="col-sm-4 text-right m-b-30">
+                <a class="btn btn-primary rounded" href="@Url.Action("AddEditCity","Cities")"><i class="fa fa-plus"></i> Add New City</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="table-responsive">
+                    <table class="table table-striped custom-table m-b-0">
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td><b>@item.CITY_Name</b></td>
+                                    <td>
+                                        <a href='@Url.Action("AddEditCity","Cities",new { CITY_Id=item.CITY_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+</div>
 

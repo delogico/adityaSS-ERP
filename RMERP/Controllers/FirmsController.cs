@@ -21,13 +21,13 @@ namespace RMERP.Controllers
         {
             _context = context;
         }
-        [Breadcrumb("Firms")]
+        
         public IActionResult Index()
         {
             FirmsManager firmsManager = new FirmsManager(_context);            
             return View(FirmMapper.mapFirms(firmsManager.getFirmList().ToList()));
         }
-        [Breadcrumb("Firm Info", FromAction = "Index")]
+        
         public ActionResult AddEditFirm(int FRM_Id=0)
         {
             FirmsManager firmsManager = new FirmsManager(_context);
@@ -38,6 +38,7 @@ namespace RMERP.Controllers
             }            
             return View(vm);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddEditFirms(FirmVM firmVM)

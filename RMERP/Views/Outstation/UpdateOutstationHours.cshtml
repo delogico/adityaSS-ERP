@@ -3,7 +3,11 @@
     ViewData["Title"] = "Update Outstation Amount";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess",new { FRM_Id = Model.outstationVMs[0].FRM_ID })</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = Model.outstationVMs[0].WAG_Id, FRM_Id = Model.outstationVMs[0].FRM_ID })</li>
+    <li class="breadcrumb-item">Update Outstation Hours</li>
+}
 @section scripts{
     @if (TempData["message"] != null)
     {

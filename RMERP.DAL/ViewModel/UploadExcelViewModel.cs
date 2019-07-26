@@ -24,6 +24,7 @@ namespace RMERP.DAL.ViewModel
         public string fileName { get; set; }
         public int WAG_Id { get; set; }
         public int CLI_Id { get; set; }
+        public int FRM_Id { get; set; }
 
         public List<Employees> empListExtraInExcel { get; set; }
         public List<Employees> EmpListExtraInDb { get; set; }

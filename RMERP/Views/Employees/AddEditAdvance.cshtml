@@ -3,7 +3,11 @@
     ViewData["Title"] = "Add-Edit Advance";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Employees", "Index", "Employees")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Employee Info", "AddEditEmployee", "Employees",new { EMP_Id =Model.EMP_Id})</li>    
+    <li class="breadcrumb-item">Advance</li>
+}
 @section scripts{
 
     @if (TempData["message"] != null)
@@ -32,31 +36,31 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.HiddenFor(m => m.ADV_Id)
                 @Html.HiddenFor(m => m.EMP_Id)
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.ADV_Amount)
-                        @Html.TextBoxFor(m => m.ADV_Amount, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.ADV_Amount, "", new { @class = "text-danger" })
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ADV_Amount)
+                            @Html.TextBoxFor(m => m.ADV_Amount, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ADV_Amount, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ADV_RegisteredOn)
+                            @Html.EditorFor(m => m.ADV_RegisteredOn, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ADV_RegisteredOn, "", new { @class = "text-danger" })
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.ADV_RegisteredOn)
-                        @Html.EditorFor(m => m.ADV_RegisteredOn, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ADV_RegisteredOn, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
                 <div class="form-group">
 
-                   
-                   
+
+
                 </div>
                 <div class="m-t-20 text-center">
                     <input type="submit" name="Submit Advance" id="btnSubmit" class="btn btn-primary" />
                 </div>
             }
         </div>
-            </div>
+    </div>
 </div>

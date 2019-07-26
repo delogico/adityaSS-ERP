@@ -29,23 +29,21 @@ namespace RMERP.Controllers
         private readonly RMERPContext _context;
         public IConfiguration _configuration;
         private IHostingEnvironment _hostingEnvironment;
+
         public AttendanceController(RMERPContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
             _configuration = configuration;
             _hostingEnvironment = hostingEnvironment;
         }
+
         public IActionResult Index()
         {
             return View();
         }
-        [Breadcrumb("Wage Attendance", FromAction = "Index", FromController = typeof(WageProcessController))]
+        
         public ActionResult WageAttendanceList(int WAG_Id)
         {
-            if (WAG_Id <= 0)
-            {
-                WAG_Id = WagId;
-            }
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);
             AttendanceManager attManager = new AttendanceManager(_context);
             WageProcessManager wageManager = new WageProcessManager(_context);
@@ -63,13 +61,9 @@ namespace RMERP.Controllers
             attManager.deleteAllAttendanceofWageClient(WAG_Id, CLI_Id);
             return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id });
         }
-
-        [Breadcrumb("Upload Attendance Excel", FromAction = "WageAttendanceList")]
+       
         public ActionResult UploadExcel(int WAG_Id, int CLI_Id)
         {
-            WAG_Id = (WAG_Id <= 0 ? WagId : WAG_Id);
-            WagId = WAG_Id;
-            CLI_Id = (CLI_Id <= 0 ? CliId : CLI_Id);
             ClientsManager clientManager = new ClientsManager(_context, _configuration);
             WageProcessManager wageManager = new WageProcessManager(_context);
             Wage_Process wageProcess = wageManager.getWageProcessById(WAG_Id);
@@ -80,11 +74,9 @@ namespace RMERP.Controllers
             return View(upvm);
         }
 
-        [HttpPost]
-        [Breadcrumb("Verify Attendance", FromAction = "UploadExcel")]
+        [HttpPost]        
         public ActionResult VerifyTemplate(UploadExcelViewModel uvm)
         {
-
             WageProcessManager wageManager = new WageProcessManager(_context);
             AttendanceManager attManager = new AttendanceManager(_context);
             EmployeeManager empManager = new EmployeeManager(_context);
@@ -96,13 +88,13 @@ namespace RMERP.Controllers
             List<Employees> empListExtraInDb = new List<Employees>();
             List<Attendance> attandanceList = new List<Attendance>();
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();            
             if (file != null)
             {
                 if (file.Length > 0)
                 {
                     Clients client = clientsManager.GetClientById(uvm.client.CLI_Id);
-                    CliId = uvm.client.CLI_Id;
+                    //CliId = uvm.client.CLI_Id;
                     string sFileExtension = Path.GetExtension(file.FileName).ToLower();
                     ISheet sheet;
                     string fullPath = Path.Combine(newPath, ProjectUtils.GetTempFileName() + sFileExtension);
@@ -136,8 +128,7 @@ namespace RMERP.Controllers
                     excelViewModel.fileName = fullPath;
                     excelViewModel.Template = uvm.Template;
                     excelViewModel.WAG_Id = uvm.wageProcessVM.WAG_Id;
-                    excelViewModel.CLI_Id = uvm.client.CLI_Id;
-
+                    excelViewModel.CLI_Id = uvm.client.CLI_Id;                    
                     /***************** CHECK DATETIME MATCH ***************************/
                     DateTime[] arr = DateHelper.getStartEndDatePeriodForAttendance(client, wageProcess.WAG_Month);
                     if (excelViewModel.startDate.Date != arr[0].Date || excelViewModel.endDate.Date != arr[1].Date)
@@ -183,6 +174,7 @@ namespace RMERP.Controllers
                     /***************** CHECK EMPLOYEES REMAINING EXCEL ***************************/
                 }
             }
+            excelViewModel.FRM_Id = uvm.wageProcessVM.FRM_Id;
             return View(excelViewModel);
         }
 
@@ -827,6 +819,7 @@ namespace RMERP.Controllers
             excelViewModel.totalPublicHolidays = totalPublicHolidays;
             return excelViewModel;
         }
+
         [HttpPost]
         public ActionResult ImportExcel(IFormCollection frm)
         {
@@ -1341,11 +1334,10 @@ namespace RMERP.Controllers
                 }
             }
         }
-        [HttpGet]
-        [Breadcrumb("View Attendance", FromAction = "WageAttendanceList")]
+
+        [HttpGet]        
         public ActionResult ViewAttendance(int WAG_Id, int CLI_Id)
-        {
-            WagId = WAG_Id;
+        {           
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);
             AttendanceManager attendanceManager = new AttendanceManager(_context);
             WageProcessManager wagManager = new WageProcessManager(_context);
@@ -1373,6 +1365,4 @@ namespace RMERP.Controllers
             set { id = value; }
         }
     }
-
-
 }

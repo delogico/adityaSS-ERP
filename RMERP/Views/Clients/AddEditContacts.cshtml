@@ -4,6 +4,11 @@
     Layout = "~/Views/Shared/_RMLayout.cshtml";
     ViewBag.ButtonTitle = Model.CON_Id > 0 ? "Update Contact" : "Create Contact";
 }
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Clients", "Index", "Clients")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Client Info", "AddEditClients", "Clients",new { id= Model.CLI_Id})</li>
+    <li class="breadcrumb-item">Add-Edit Contact</li>
+}
 @section scripts{
     <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>

@@ -5,7 +5,11 @@
     ViewData["Title"] = "Verify Excel File";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id})</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Upload Attendance Excel", "UploadExcel", "Attendance", new { WAG_Id = Model.WAG_Id,CLI_Id=Model.CLI_Id})</li>
+    <li class="breadcrumb-item">Verify Attendance</li>
+}
 @if (Model == null)
 {
     <h4>No data to display</h4>
@@ -75,7 +79,7 @@ else
                                                                 <div class="row">
                                                                     @{
                                                                         String str = "";
-                                                                        String strSecondrow = "";                                                       
+                                                                        String strSecondrow = "";
                                                                         if (att.ATT_IsPresent)
                                                                         {
                                                                             if (att.ATT_IsHalfday)
@@ -119,7 +123,7 @@ else
                                                                         else if (att.ATT_IsWeeklyOff)
                                                                         {
                                                                             strSecondrow = " <span class='present'>WO</span>";
-                                                                        }                                                                        
+                                                                        }
                                                                         <div class="col-md-12">
                                                                             @if (strSecondrow != "")
                                                                             {

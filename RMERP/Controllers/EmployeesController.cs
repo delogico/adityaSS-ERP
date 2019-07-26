@@ -34,11 +34,9 @@ namespace RMERP.Controllers
             _configuration = configuration;
             _hostingEnvironment = hostingEnvironment;
         }
-
-        [Breadcrumb("Employees")]
+        
         public IActionResult Index()
         {
-            EmpId = 0;
             int FRM_Id = 0;
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             if (sessionUtils.GetLoggedFirmID().HasValue)
@@ -69,11 +67,9 @@ namespace RMERP.Controllers
             return View("Index", new Tuple<IEnumerable<EmployeeVM>, int>(listVM, Firm_Id));
         }
 
-        [HttpGet]
-        [Breadcrumb("Employee Info", FromAction = "Index")]
+        [HttpGet]        
         public ActionResult AddEditEmployee(int EMP_Id = 0)
-        {
-            EMP_Id = (EMP_Id <= 0 ? EmpId : EMP_Id);
+        {          
             EmployeeManager employeeManager = new EmployeeManager(_context);
             DocumentTypesManager typesManager = new DocumentTypesManager(_context);
             FirmsManager firmsManager = new FirmsManager(_context);
@@ -128,7 +124,6 @@ namespace RMERP.Controllers
 
         public ActionResult ActiveEmployee(int EMP_Id, DateTime date)
         {
-
             EmployeeManager employeeManager = new EmployeeManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             employeeManager.ActiveEmployee(EMP_Id, date, sessionUtils.GetLoggedAdminID(), out string actionMessage);
@@ -139,11 +134,9 @@ namespace RMERP.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        [Breadcrumb("Advance", FromAction = "AddEditEmployee")]
+        [HttpGet]        
         public ActionResult AddEditAdvance(int EMP_Id, int ADV_Id = -1)
         {
-            EmpId = (EMP_Id <= 0 ? EmpId : EMP_Id);
             EmployeeAdvanceVM employeeAdvanceVM = new EmployeeAdvanceVM();
             EmployeeManager employeeManager = new EmployeeManager(_context);
             Employee_Advance employee_Advance = new Employee_Advance();
@@ -192,8 +185,7 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditEmployee", new { EMP_Id = EMP_Id, tab = "AddEditAdvance" });
         }
-
-        [Breadcrumb("Advance Taken", FromAction = "Index", FromController = typeof(WageProcessController))]
+        
         public ActionResult AdvanceRptForBank(DateTime WAG_Month,int FRM_Id)
         {
             AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
@@ -201,18 +193,10 @@ namespace RMERP.Controllers
             List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.AdvanceRptForBank(WAG_Month, FRM_Id));
             ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
             ViewBag.FRM_Name = firmsManager.GetFirm(FRM_Id).FRM_ShortName;
+            ViewBag.FRM_Id = FRM_Id;
             return View(advancesVM);
-        }
-        //[Breadcrumb("Advance EMI", FromAction = "Index", FromController = typeof(WageProcessController))]
-        //public ActionResult NotCompletedAdvanceLst(DateTime WAG_Month,int WAG_Id)
-        //{
-        //    AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
-        //    List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.NotCompletedAdvanceLst((WAG_Month)));
-        //    ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
-        //    return View(advancesVM);
-        //}
-
-        [Breadcrumb("Advance EMI", FromAction = "Index", FromController = typeof(WageProcessController))]
+        }        
+        
         public ActionResult UpdateAdvanceEMI(DateTime WAG_Month, int WAG_Id, int FRM_Id)
         {
             AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
@@ -227,6 +211,7 @@ namespace RMERP.Controllers
             updateAdvanceEMI.WAG_Id = WAG_Id;
             updateAdvanceEMI.FRM_Name = firmsManager.GetFirm(FRM_Id).FRM_ShortName;
             ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
+            ViewBag.FRM_Id = FRM_Id;
             return View(updateAdvanceEMI);
         }
 
@@ -366,7 +351,6 @@ namespace RMERP.Controllers
                 ExistingAadhar = !employeeManager.CheckExistingAadhar(EMP_Aadhar_Number, EMP_Id);
                 return Json(ExistingAadhar);
             }
-
             catch (Exception ex)
             {
                 return Json(false);

@@ -4,18 +4,23 @@
     ViewData["Title"] = "Upload Excel";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.wageProcessVM.FRM_Id })</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = Model.wageProcessVM.WAG_Id })</li>
+    <li class="breadcrumb-item">Upload Attendance Excel</li>
+}
 <div class="modal-dialog modelLeftSide">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <div class="modal-content modal-lg" style="width: 250%">
-            <div class="modal-header">
-                <h4 class="modal-title">Upload Attendance</h4>
-            </div>
-            <div class="modal-body">
-                @using (Html.BeginForm("VerifyTemplate", "Attendance", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    @Html.HiddenFor(m => m.wageProcessVM.WAG_Id)
-                    @Html.HiddenFor(m => m.client.CLI_Id)
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <div class="modal-content modal-lg" style="width: 250%">
+        <div class="modal-header">
+            <h4 class="modal-title">Upload Attendance</h4>
+        </div>
+        <div class="modal-body">
+            @using (Html.BeginForm("VerifyTemplate", "Attendance", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(m => m.wageProcessVM.WAG_Id)
+                @Html.HiddenFor(m => m.wageProcessVM.FRM_Id)
+                @Html.HiddenFor(m => m.client.CLI_Id)
 
                 <div class="row">
                     <div class="col-md-4">
@@ -72,7 +77,7 @@
                                 <td>Yes</td>
                             </tr>
                             <tr>
-                                <td>PL= EL(or E/L) = CO(or C/O)</td>                               
+                                <td>PL= EL(or E/L) = CO(or C/O)</td>
                                 <td>Not <span>Is Present</span></td>
                                 <td>Yes</td>
                             </tr>
@@ -116,11 +121,11 @@
                                 <td>Is Present+ Is Nightshift + Is Weeklyoff</td>
                                 <td>Yes + Depends on client requirement</td>
                             </tr>
-                        </table>                       
+                        </table>
                     </div>
-                    
+
                 </div>
-                }
-            </div>
+            }
         </div>
     </div>
+</div>

@@ -4,7 +4,12 @@
     ViewData["Title"] = "Edit AttendanceRecord";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id })</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = Model.attendanceVM.WAG_Id })</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Upload Attendance Excel", "UploadExcel", "Attendance", new { WAG_Id = Model.attendanceVM.WAG_Id,CLI_Id=Model.attendanceVM.CLI_Id })</li>
+    <li class="breadcrumb-item">Edit Attendance Record</li>
+}
 <div class="modal-dialog">
     <div class="modal-content modal-md">
         <div class="modal-header">
@@ -59,7 +64,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(m => m.attendanceVM.ATT_IsPresent, new { @class = "control-label" })
                                 <label class="switch">
-                                    @Html.CheckBoxFor(m => m.attendanceVM.ATT_IsPresent, (Model.attendanceVM.ATT_IsPresent == true ? (object)new { type = "checkbox", @checked = (Model.attendanceVM.ATT_IsPresent == true ? "checked" : "") } : new { type = "checkbox",id="chkPresent" }))
+                                    @Html.CheckBoxFor(m => m.attendanceVM.ATT_IsPresent, (Model.attendanceVM.ATT_IsPresent == true ? (object)new { type = "checkbox", @checked = (Model.attendanceVM.ATT_IsPresent == true ? "checked" : "") } : new { type = "checkbox", id = "chkPresent" }))
                                     <span class="slider round"></span>
                                 </label>
                                 @Html.ValidationMessageFor(m => m.attendanceVM.ATT_IsPresent, "", new { @class = "text-danger" })
@@ -194,12 +199,12 @@
             $(document).on("click", "INPUT[id^=chkHalfday]", function (event) {
                 if ($(this).prop("checked") == true) {
                     $("#attendanceVM_ATT_IsPresent").prop("checked", false);
-                }            
+                }
             });
             $(document).on("click", "INPUT[id^=chkPresent]", function (event) {
                 if ($(this).prop("checked") == true) {
                     $("#attendanceVM_ATT_IsHalfday").prop("checked", false);
-                }               
+                }
             });
         });
     </script>

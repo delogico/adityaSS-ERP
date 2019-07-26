@@ -3,9 +3,10 @@
     ViewData["Title"] = "Firm";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
-
-
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Firms", "Index", "Firms")</li>
+    <li class="breadcrumb-item">Firm Info</li>
+}
 @section scripts{
 
     @if (TempData["message"] != null)

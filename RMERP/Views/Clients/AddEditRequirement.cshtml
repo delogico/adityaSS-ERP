@@ -35,6 +35,11 @@
         margin-top: 7px;
     }
 </style>
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Clients", "Index", "Clients")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Client Info", "AddEditClients", "Clients", new { id = Model.CLI_Id })</li>    
+    <li class="breadcrumb-item">Add-Edit Requirement</li>
+}
 @section scripts{
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.js"></script>
@@ -70,7 +75,7 @@
             }
 
 
-            $('input[class="Allselection"]').click(function () {               
+            $('input[class="Allselection"]').click(function () {
                 if ($(this).prop("checked") == true) {
                     $("#divReqAllow_" + this.id).show();
                     addCheckbox(this.id);
@@ -149,7 +154,7 @@
             }
 
 
-            function addCheckbox(AllId) {               
+            function addCheckbox(AllId) {
                 var id = parseInt(AllId);
                 var container = $('#PFlist');
                 var containerEsic = $('#ESIClist');
@@ -167,13 +172,13 @@
 
             }
         });
-        $("input[id='rdo_OT_Payable']").click(function () {         
+        $("input[id='rdo_OT_Payable']").click(function () {
             $("#divOTdifferently").hide();
             $("#divByFormula").hide();
             $("#div_OT_Per_Hr").hide();
-            $('#rdo_OT_Payable').val("True");            
+            $('#rdo_OT_Payable').val("True");
         });
-        $("input[id='rdo_OT_Differently']").click(function () {        
+        $("input[id='rdo_OT_Differently']").click(function () {
             $("#divOTdifferently").show();
             $("#divByFormula").hide();
             $("#div_OT_Per_Hr").show();
@@ -187,7 +192,7 @@
             $('#rdo_OT_Fixed_Amount').val("True");
 
         });
-        $("input[id='rdo_OT_By_Formula']").click(function () { 
+        $("input[id='rdo_OT_By_Formula']").click(function () {
             $("#divOTdifferently").show();
             $("#divByFormula").show();
             $("#div_OT_Per_Hr").hide();

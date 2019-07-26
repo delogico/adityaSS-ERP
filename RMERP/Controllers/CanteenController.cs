@@ -17,19 +17,18 @@ namespace RMERP.Controllers
     public class CanteenController : Controller
     {
         private readonly RMERPContext _context;
-        public IConfiguration Configuration;   
+        public IConfiguration Configuration;
+
         public CanteenController(RMERPContext context, IConfiguration configuration)
         {
             _context = context;
             Configuration = configuration;
         }
-        [Breadcrumb("Update Canteen Amount", FromAction = "WageRegister", FromController = typeof(WageRegisterController))]
-        public IActionResult UpdateCanteenAmount(int CRI_Id,int WAG_Id,int FRM_Id)
+
+        public IActionResult UpdateCanteenAmount(int CRI_Id, int WAG_Id, int FRM_Id)
         {
-            WagId = WAG_Id;
-            Frm_Id = FRM_Id;
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
-            DateTime WAG_Month = wageProcessManager.getWageProcessById(WagId).WAG_Month;
+            DateTime WAG_Month = wageProcessManager.getWageProcessById(WAG_Id).WAG_Month;
             ViewBag.Wag_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             CanteenManager canteenManager = new CanteenManager(_context);
@@ -40,11 +39,11 @@ namespace RMERP.Controllers
             {
                 Wage_Register_Canteen canteen = new Wage_Register_Canteen();
                 Wage_Register_CanteenVM canteenVM = new Wage_Register_CanteenVM();
-                canteen = canteenManager.GetCanteenByCLE(WAG_Id,employee.CLE_Id,employee.CLI_Id);
-                if (canteen!=null)
+                canteen = canteenManager.GetCanteenByCLE(WAG_Id, employee.CLE_Id, employee.CLI_Id);
+                if (canteen != null)
                 {
                     canteen = canteenManager.GetCanteenById(canteen.WRC_Id);
-                    canteenVM = wageRegisterCanteenMapper.mapMe(canteen, CRI_Id);                    
+                    canteenVM = wageRegisterCanteenMapper.mapMe(canteen, CRI_Id);
                 }
                 else
                 {
@@ -52,7 +51,7 @@ namespace RMERP.Controllers
                     canteenVM.WAG_Id = WAG_Id;
                     canteenVM.Emp_ID = employee.EMP_Id;
                     canteenVM.CRI_Id = CRI_Id;
-                    canteenVM.Emp_Name= employee.EMP_.EMP_FirstName+" "+ employee.EMP_.EMP_MiddleName+" "+employee.EMP_.EMP_SurName;
+                    canteenVM.Emp_Name = employee.EMP_.EMP_FirstName + " " + employee.EMP_.EMP_MiddleName + " " + employee.EMP_.EMP_SurName;
                 }
                 canteenVM.FRM_ID = FRM_Id;
                 wage_Register_Canteens.Add(canteenVM);
@@ -62,19 +61,19 @@ namespace RMERP.Controllers
             return View(updateWageCanteen);
         }
 
-       [HttpPost]
+        [HttpPost]
         public ActionResult UpdateAmount(updateWageRegisterCanteen updateWageCanteen)
         {
             CanteenManager canteenManager = new CanteenManager(_context);
             List<Wage_Register_Canteen> canteens = new List<Wage_Register_Canteen>();
             List<Wage_Register_CanteenVM> list = updateWageCanteen.canteenVMs;
-            canteens= wageRegisterCanteenMapper.mapMeModels(list);
-            string res= canteenManager.UpdateAmount(canteens);
+            canteens = wageRegisterCanteenMapper.mapMeModels(list);
+            string res = canteenManager.UpdateAmount(canteens);
             if (res != string.Empty)
             {
                 TempData["message"] = "Try Again";
-            }            
-            return RedirectToAction("WageRegister", "WageRegister", new { WAG_Id= list[0].WAG_Id,FRM_Id= list[0].FRM_ID });
+            }
+            return RedirectToAction("WageRegister", "WageRegister", new { WAG_Id = list[0].WAG_Id, FRM_Id = list[0].FRM_ID });
         }
     }
 }

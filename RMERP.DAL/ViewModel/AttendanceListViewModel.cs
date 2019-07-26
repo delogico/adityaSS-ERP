@@ -8,7 +8,7 @@ namespace RMERP.DAL.ViewModel
 {
     public class AttendanceListViewModel
     {
-        public int EmpID { get; set; }
+        public int EmpID { get; set; }        
         public string EmpName { get; set; }
         public string EmpDesignation { get; set; }
         public string WorkingHours { get; set; }
@@ -18,7 +18,7 @@ namespace RMERP.DAL.ViewModel
         public List<Attendance> attendancesList { get; set; }
         public Attendance attendanceModel { get; set; }
         public UserData userData { get; set; }
-        
+        public int FRM_Id { get; set; }
     }
     public class UserData
     {

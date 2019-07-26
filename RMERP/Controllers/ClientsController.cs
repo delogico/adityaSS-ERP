@@ -41,8 +41,8 @@ namespace RMERP.Controllers
             Configuration = configuration;
             _hostingEnvironment = hostingEnvironment;
         }
+
         [HttpGet]
-        [Breadcrumb("Clients")]
         public IActionResult Index(bool IsActive = true)
         {
             ClientId = -1;
@@ -63,6 +63,7 @@ namespace RMERP.Controllers
             }
             return View(cvm);
         }
+
         [HttpGet]
         public IActionResult GetClientList(bool IsActive = true, string Client = "")
         {
@@ -72,8 +73,8 @@ namespace RMERP.Controllers
             ViewBag.ActiveClient = "IsActive";
             return PartialView("_ClientList", listClient);
         }
+
         [HttpGet]
-        [Breadcrumb("Client Info", FromAction = "Index")]
         public ActionResult AddEditClients(int id = -1)
         {
             ClientId = (id <= 0 ? ClientId : id);
@@ -153,6 +154,7 @@ namespace RMERP.Controllers
 
             return View(cv);
         }
+
         public string GetFullEnumString(string action)
         {
             switch (action)
@@ -167,6 +169,7 @@ namespace RMERP.Controllers
                     return "";
             }
         }
+
         [HttpPost]
         public async Task<ActionResult> AddEditClient(ClientsViewModel cv)
         {
@@ -255,8 +258,8 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = clientID });
         }
-        [HttpGet]
-        [Breadcrumb("Add-Edit Contact", FromAction = "AddEditClients")]
+
+        [HttpGet]        
         public ActionResult AddEditContacts(int CLI_Id, int CON_Id = -1)
         {
             ClientContactVM contactVM = new ClientContactVM();
@@ -284,6 +287,7 @@ namespace RMERP.Controllers
 
             return View(contactVM);
         }
+
         [HttpPost]
         public ActionResult AddEditContacts(ClientContactVM contactVM)
         {
@@ -314,6 +318,7 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ContactInfo" });
         }
+
         public ActionResult DeleteContact(int id = -1)
         {
             ClientsViewModel clientsViewModel = new ClientsViewModel();
@@ -331,6 +336,7 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ContactInfo" });
         }
+
         [HttpPost]
         public string InActiveClient(int ClientID, string Active)
         {
@@ -351,8 +357,8 @@ namespace RMERP.Controllers
             return res;
             // return RedirectToAction("Index","Clients",true);
         }
-        [HttpGet]
-        [Breadcrumb("Add-Edit Requirement", FromAction = "AddEditClients")]
+
+        [HttpGet]        
         public ActionResult AddEditRequirement(int CLI_Id, int CRI_Id = -1)
         {
             ClientId = CLI_Id;
@@ -382,6 +388,7 @@ namespace RMERP.Controllers
 
             return View(clientRequirement);
         }
+
         [HttpPost]
         public ActionResult AddEditRequirement(ClientRequirementVM clientRequirementVM)
         {
@@ -428,7 +435,7 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
         }
-        [Breadcrumb("Requirement History", FromAction = "AddEditClients")]
+                
         public ActionResult HistoryRequirement(int DES_Id, int CLI_Id)
         {
             ClientId = CLI_Id;
@@ -484,8 +491,7 @@ namespace RMERP.Controllers
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "Parameters" });
         }
 
-        [HttpGet]
-        [Breadcrumb("Assign Employee", FromAction = "AddEditClients")]
+        [HttpGet]        
         public ActionResult AddEmployee(int CLI_Id, int CLE_Id = -1)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
@@ -513,6 +519,7 @@ namespace RMERP.Controllers
             ViewBag.ClientName = clientsManager.GetClientById(CLI_Id).CLI_Name;
             return View(cvm);
         }
+
         [HttpPost]
         public ActionResult ClientEmployee(ClientEmployeeVM cvm)
         {
@@ -536,6 +543,7 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = cvm.CLI_Id, tab = "ClientEmployee" });
         }
+
         public ActionResult UnassignClientEmployee(DateTime UnassignedOn, int CLE_Id = -1)
         {
             ClientsViewModel clientsViewModel = new ClientsViewModel();
@@ -971,7 +979,6 @@ namespace RMERP.Controllers
             memory.Position = 0;
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sFileName);
         }
-
 
         public async Task<FileResult> GenerateExcelTemplate_TwoRow(DateTime month)
         {

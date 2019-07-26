@@ -21,13 +21,13 @@ namespace RMERP.Controllers
         {
             _context = context;
         }
-        [Breadcrumb("City")]
+
         public IActionResult Index()
         {
             CitiesManager citiesManager = new CitiesManager(_context);            
             return View(CitiesMapper.mapCities(citiesManager.getCityList().ToList()));
         }
-        [Breadcrumb("City Info", FromAction = "Index")]
+
         public ActionResult AddEditCity(int CITY_Id=0)
         {
             CitiesManager citiesManager = new CitiesManager(_context);
@@ -38,6 +38,7 @@ namespace RMERP.Controllers
             }            
             return View(vm);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddEditCity(CitiesVM citiesVM)

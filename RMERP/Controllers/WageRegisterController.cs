@@ -31,11 +31,9 @@ namespace RMERP.Controllers
             _context = context;
             _hostingEnvironment = hostingEnvironment;
         }
-        [Breadcrumb("Wage Register", FromAction = "Index", FromController = typeof(WageProcessController))]
+        
         public ActionResult WageRegister(int WAG_Id,int FRM_Id)
         {
-            WAG_Id = (WAG_Id <= 0 ? WagId : WAG_Id);
-            FRM_Id = (FRM_Id <= 0 ? Frm_Id : FRM_Id);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             if (WAG_Id > 0)
@@ -48,6 +46,7 @@ namespace RMERP.Controllers
                 return null;
             }
         }
+
         [HttpPost]
         public ActionResult SaveWageRegister(int WAG_Id, string item_CLI_Id)
         {
@@ -63,6 +62,7 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("WageRegister", new { WAG_Id = WAG_Id,FRM_Id= wageProcess.FRM_Id });
         }
+
         [HttpPost]
         public ActionResult ResetWageRegister(int WAG_Id, string item_CLI_Id,int FRM_Id)
         {
@@ -74,35 +74,36 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("WageRegister", new { WAG_Id = WAG_Id,FRM_Id= FRM_Id });
         }
-        [Breadcrumb("Edit WageRegister", FromAction = "WageRegister")]
-        public ActionResult EditWageRegister(int WAR_Id = -1)
+        
+        public ActionResult EditWageRegister(int WAR_Id = -1,int FRM_Id=-1)
         {
             EditWageRegisterVM editWageRegisterVM = new EditWageRegisterVM();
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             editWageRegisterVM.wageRegisterVM = WageRegisterMapper.mapMe(wageRegisterManager.GetWage_RegisterByID(WAR_Id));
-            WagId = editWageRegisterVM.wageRegisterVM.WAG_Id;
+            int WAG_Id = editWageRegisterVM.wageRegisterVM.WAG_Id;
 
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
-            DateTime WAG_Month = wageProcessManager.getWageProcessById(WagId).WAG_Month;
+            DateTime WAG_Month = wageProcessManager.getWageProcessById(WAG_Id).WAG_Month;
             ViewBag.Wag_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
 
             editWageRegisterVM.wage_Register_Allowances = wageRegisterManager.GetWage_Register_Allowances(WAR_Id);
+            editWageRegisterVM.FRM_Id = FRM_Id;
             return View(editWageRegisterVM);
         }
+
         [HttpPost]
-        public ActionResult EditWageRegister(WageRegisterVM wageRegisterVM)
+        public ActionResult EditWageRegister(EditWageRegisterVM editWageRegisterVM)
         {
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            wageRegisterVM.ADM_LastModifiedBy = sessionUtils.GetLoggedAdminID();
-            string res = wageRegisterManager.UpdateWageRegister(WageRegisterMapper.mapMe(wageRegisterVM));
+            editWageRegisterVM.wageRegisterVM.ADM_LastModifiedBy = sessionUtils.GetLoggedAdminID();
+            string res = wageRegisterManager.UpdateWageRegister(WageRegisterMapper.mapMe(editWageRegisterVM.wageRegisterVM));
             if (res != string.Empty)
             {
                 TempData["message"] = "Wage Register is not updated!";
             }
-            return RedirectToAction("WageRegister", new { WAG_Id = wageRegisterVM.WAG_Id,FRM_Id= wageRegisterVM.wageProcessVM.FRM_Id });
+            return RedirectToAction("WageRegister", new { WAG_Id = editWageRegisterVM.wageRegisterVM.WAG_Id,FRM_Id= editWageRegisterVM.FRM_Id });
         }
-
 
         public async Task<FileResult> WageRegisterExcel(int WAG_Id,int FRM_Id)
         {

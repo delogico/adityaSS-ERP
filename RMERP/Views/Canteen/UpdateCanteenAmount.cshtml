@@ -3,7 +3,11 @@
     ViewData["Title"] = "Update Canteen Amount";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess",new { FRM_Id = Model.canteenVMs[0].FRM_ID })</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Register", "WageRegister", "WageRegister",new { WAG_Id =Model.canteenVMs[0].WAG_Id,FRM_Id=Model.canteenVMs[0].FRM_ID})</li>
+    <li class="breadcrumb-item">Update Canteen Amount</li>
+}
 @section scripts{
     @if (TempData["message"] != null)
     {
@@ -45,26 +49,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                    @for (var i = 0; i < Model.canteenVMs.Count; i++)                                    
-                                        {
-                                            <tr>
-                                                <td width="75%"><b>@Html.DisplayFor(m=>m.canteenVMs[i].Emp_Name)</b></td>
-                                                <td>
-                                                    @Html.HiddenFor(m => m.canteenVMs[i].CLE_Id)
-                                                    @Html.HiddenFor(m => m.canteenVMs[i].WAG_Id)
-                                                    @Html.HiddenFor(m => m.canteenVMs[i].WRC_Id)
-                                                    @Html.HiddenFor(m => m.canteenVMs[i].CRI_Id)
-                                                    @Html.HiddenFor(m => m.canteenVMs[i].FRM_ID)
-                                                    <div class="form-group">
-                                                        @Html.TextBoxFor(m => m.canteenVMs[i].WRC_Amount, new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(m => m.canteenVMs[i].WRC_Amount, "", new { @class = "text-danger" })
-                                                    </div>
+                                @for (var i = 0; i < Model.canteenVMs.Count; i++)
+                                {
+                                    <tr>
+                                        <td width="75%"><b>@Html.DisplayFor(m => m.canteenVMs[i].Emp_Name)</b></td>
+                                        <td>
+                                            @Html.HiddenFor(m => m.canteenVMs[i].CLE_Id)
+                                            @Html.HiddenFor(m => m.canteenVMs[i].WAG_Id)
+                                            @Html.HiddenFor(m => m.canteenVMs[i].WRC_Id)
+                                            @Html.HiddenFor(m => m.canteenVMs[i].CRI_Id)
+                                            @Html.HiddenFor(m => m.canteenVMs[i].FRM_ID)
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(m => m.canteenVMs[i].WRC_Amount, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.canteenVMs[i].WRC_Amount, "", new { @class = "text-danger" })
+                                            </div>
 
-                                                </td>
-                                            </tr>
-                                        }
+                                        </td>
+                                    </tr>
+                                }
 
-                                    </tbody>
+                            </tbody>
                         </table>
                         <div class="row">
                             <div class="col-md-12">

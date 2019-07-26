@@ -7,7 +7,7 @@
 
 
 <script>
-    function calculateTotal() {       
+    function calculateTotal() {
         var totalPaybleDays = $("#wageRegisterVM_WAR_TotalPaybleDays").val();
         var totalWorkingDays = $("#wageRegisterVM_WAR_TotalWorkingDays").val();
         if (totalPaybleDays > totalWorkingDays) {
@@ -19,12 +19,12 @@
         var CRI_HRA = $("#wageRegisterVM_WAR_HRA").val();
         var WAR_PF = $("#wageRegisterVM_WAR_PF").val();
         var WAR_ESIC = $("#wageRegisterVM_WAR_ESIC").val();
-        
-        
-        var BasicDa = parseInt(CRI_Basic) + parseInt(CRI_DA);      
-        
-        var Percentage = document.getElementById("Percentage").checked; 
-        var Fixed = document.getElementById("Fixed").checked;          
+
+
+        var BasicDa = parseInt(CRI_Basic) + parseInt(CRI_DA);
+
+        var Percentage = document.getElementById("Percentage").checked;
+        var Fixed = document.getElementById("Fixed").checked;
 
         var CRI_HRA_Calculated = 0, WAR_Basic_Calculated = 0, WAR_OverTime_Calculated = 0, CRI_DA_Calculated=0;
         if (totalWorkingDays != 0) {
@@ -38,7 +38,7 @@
         var AllowancesTotal = 0;
 
         for (var i = 0; i < @Model.wage_Register_Allowances.Count(); i++) {
-           
+
             var CRA_Dayswise = document.getElementById("CRA_Dayswise["+i+"]").checked;
             var CRA_Full = document.getElementById("CRA_Full[" + i + "]").checked;
 
@@ -47,8 +47,8 @@
             var WAA_Amount_Calculated = 0;
 
             if (totalWorkingDays != 0)
-                fullAmt = (WAA_Amount * totalPaybleDays) / totalWorkingDays;   
-            
+                fullAmt = (WAA_Amount * totalPaybleDays) / totalWorkingDays;
+
             if (CRA_Dayswise == true && CRA_Full == false)
             {
                 WAA_Amount_Calculated = fullAmt.toFixed(2);
@@ -62,12 +62,12 @@
                 AllowancesTotal = parseInt(AllowancesTotal) + parseInt(WAA_Amount);
                 var d = parseInt(WAA_Amount_Calculated);
                 $("#wage_Register_Allowances_" + i + "__WAA_Amount_Calculated").val(d.toFixed(2));
-            }            
-            
+            }
+
         }
         var WAR_GrossTotal = WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + WAR_OverTime_Calculated + AllowancesTotal;
         var WAR_FinalTotal = WAR_GrossTotal - (WAR_PF_Calculated + WAR_ESIC_Calculated);
-        
+
         $("#wageRegisterVM_WAR_DA_Calculated").val(CRI_DA_Calculated.toFixed(2));
         $("#wageRegisterVM_WAR_HRA_Calculated").val(CRI_HRA_Calculated.toFixed(2));
         $("#wageRegisterVM_WAR_Basic_Calculated").val(WAR_Basic_Calculated.toFixed(2));
@@ -79,7 +79,11 @@
         $("#wageRegisterVM_WAR_FinalTotal").val(WAR_FinalTotal.toFixed(2));
     }
 </script>
-
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess",new { FRM_Id =Model.FRM_Id})</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = Model.wageRegisterVM.WAG_Id,FRM_Id= Model.FRM_Id })</li>
+    <li class="breadcrumb-item">Edit WageRegister</li>
+}
 <div class="modal-dialog modelLeftSide">
     <div class="modal-content modal-lg">
         <div class="modal-header">
@@ -92,11 +96,12 @@
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.HiddenFor(m => m.wageRegisterVM.WAR_Id)
-                    @Html.HiddenFor(m => m.wageRegisterVM.WAG_Id)      
+                    @Html.HiddenFor(m => m.wageRegisterVM.WAG_Id)
                     @Html.HiddenFor(m => m.wageRegisterVM.CLI_Id)
                     @Html.HiddenFor(m => m.wageRegisterVM.CRI_Id)
-                    @Html.HiddenFor(m => m.wageRegisterVM.EMP_Id)                                                                                                                                                                                                   
-                   
+                    @Html.HiddenFor(m => m.wageRegisterVM.EMP_Id)
+                    @Html.HiddenFor(m => m.FRM_Id)
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -210,7 +215,7 @@
                             {
                                 <div class="col-md-12">
                                     @Html.Label(Model.wage_Register_Allowances[i].CRA_.ALL_.ALL_Title)
-                                    @Html.RadioButtonFor(m => Model.wage_Register_Allowances[i].CRA_.CRA_DayswiseOrFull, true, new { @id = "CRA_Dayswise[" + @i + "]", @checked = "checked", @style = "margin: 0px 0 0" ,onclick = "calculateTotal()" }) Dayswise Calculation
+                                    @Html.RadioButtonFor(m => Model.wage_Register_Allowances[i].CRA_.CRA_DayswiseOrFull, true, new { @id = "CRA_Dayswise[" + @i + "]", @checked = "checked", @style = "margin: 0px 0 0", onclick = "calculateTotal()" }) Dayswise Calculation
                                     @Html.RadioButtonFor(m => Model.wage_Register_Allowances[i].CRA_.CRA_DayswiseOrFull, false, new { @id = "CRA_Full[" + @i + "]", @style = "margin: 0px 0 0", onclick = "calculateTotal()" })  Full Amount
                                     <div class="form-group">
                                         <div class="col-md-6">

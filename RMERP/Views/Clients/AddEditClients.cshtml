@@ -3,7 +3,6 @@
 @using RMERP.Helpers;
 @using Microsoft.Extensions.Configuration;
 
-
 @{
     ViewData["Title"] = "Add-Edit Clients";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
@@ -11,7 +10,10 @@
     ViewBag.ClientName = Model.clientsModel.CLI_Id > 0 ? Model.clientsModel.CLI_Name : "Create-Edit Client";
 
 }
-
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Clients", "Index", "Clients")</li>
+    <li class="breadcrumb-item">Client Info</li>
+}
 <style>
     .modal-dialog {
         padding-top: 50px;

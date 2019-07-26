@@ -42,8 +42,6 @@ namespace RMERP.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
-
-        [Breadcrumb("Choose Firm")]
         public IActionResult ChooseFirm()
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
@@ -58,18 +56,8 @@ namespace RMERP.Controllers
             }
         }
 
-
-        [Breadcrumb("Wage Process")]
         public IActionResult Index(int FRM_Id)
-        {
-            if (FRM_Id <= 0)
-            {
-                FRM_Id = Frm_Id;
-            }
-            else
-            {
-                Frm_Id = FRM_Id;
-            }
+        {            
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID(), FRM_Id);
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
@@ -80,12 +68,14 @@ namespace RMERP.Controllers
             IEnumerable<Wage_Process> wage_Processes = wpm.getWageProcessList(FRM_Id);
             return View(WageProcessMapper.mapMeVMs(wage_Processes, firmsManager.GetFirm(FRM_Id), _context, _configuration));
         }
+
         public IActionResult CreateNextMonthWage(int FRM_Id)
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             string rse = wpm.CreateNextMonthWage(sessionUtils.GetLoggedAdminID(), FRM_Id);
             return RedirectToAction("Index", new { FRM_Id = FRM_Id });
         }
+
         public IActionResult DeleteWageProcess(int WagId)
         {
             WageProcessManager wpm = new WageProcessManager(_context);
@@ -97,6 +87,7 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("Index", new { FRM_Id = FRM_Id });
         }
+
         [HttpGet]
         public IActionResult nextWageMonth(int FRM_Id)
         {
@@ -104,14 +95,6 @@ namespace RMERP.Controllers
             DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID(), FRM_Id);
             return Content(nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")));
         }
-        // [Breadcrumb("WageProcess List")]
-        //public ActionResult WageProcessList()
-        //{
-        //    SessionUtils sessionUtils = new SessionUtils(Request, Response);
-
-        //    var model = wpm.getWageProcessList();
-        //    return PartialView("_WageProcessList", model);
-        //}
 
         public ActionResult ImportWageProcessData(UploadExcelViewModel uvm)
         {
@@ -172,10 +155,10 @@ namespace RMERP.Controllers
             return this.Content(sb.ToString());
         }
 
-        [Breadcrumb("Edit Attendance Record", FromAction = "UploadExcel", FromController = typeof(AttendanceController))]
         public ActionResult EditAttendanceRecord(int attID)
         {
             AttendanceListViewModel alvm = new AttendanceListViewModel();
+            WageProcessManager wageProcessManager = new WageProcessManager(_context);
             alvm.attendanceVM = new AttendanceVM();
 
             Attendance att = new Attendance();
@@ -183,7 +166,7 @@ namespace RMERP.Controllers
             {
 
                 att = wpm.GetAttendanceById(attID);
-                CliId = att.CLI_Id;
+               // CliId = att.CLI_Id;
                 alvm.attendanceVM.ATT_Id = attID;
                 alvm.attendanceVM.DES_Id = att.DES_Id;
                 alvm.attendanceVM.CLI_Id = att.CLI_Id;
@@ -206,9 +189,12 @@ namespace RMERP.Controllers
                 alvm.attendanceVM.ATT_Date = att.ATT_Date;
                 alvm.attendanceVM.ADM_Id_ImportedBy = att.ADM_Id_ImportedBy;
                 alvm.attendanceVM.ATT_ExtraHoursWorked = att.ATT_ExtraHoursWorked;
+                alvm.FRM_Id = wageProcessManager.getWageProcessById(alvm.attendanceVM.WAG_Id).FRM_Id;
             }
+            
             return View(alvm);
         }
+
         [HttpPost]
         public ActionResult EditAttendanceRecord(AttendanceListViewModel alvm)
         {
@@ -217,7 +203,7 @@ namespace RMERP.Controllers
 
             if (ModelState.IsValid)
             {
-                CliId = atta.CLI_Id;
+                //CliId = atta.CLI_Id;
                 atta.ATT_Id = alvm.attendanceVM.ATT_Id;
                 atta.ATT_ImportedOn = alvm.attendanceVM.ATT_ImportedOn;
                 atta.ATT_IsEarnLeave = alvm.attendanceVM.ATT_IsEarnLeave;
@@ -247,6 +233,7 @@ namespace RMERP.Controllers
 
             return RedirectToAction("ViewAttendance", "Attendance", new { WAG_Id = alvm.attendanceVM.WAG_Id, CLI_Id = alvm.attendanceVM.CLI_Id });
         }
+
         public ActionResult WageRegisterStatus(int WAG_Id)
         {
             string res = string.Empty;

@@ -4,6 +4,10 @@
     ViewData["Title"] = "Advance Report For Bank";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
+@section Breadcrumbs{
+<li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = ViewBag.FRM_Id })</li>
+    <li class="breadcrumb-item">Advance Taken</li>
+}
 @section scripts{
     @if (TempData["message"] != null)
     {
@@ -46,11 +50,11 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                            <tr>
-                                <td>@item.EmployeeName</td>
-                                <td>@item.ADV_Amount</td>
-                                <td>@DateHelper.getDateWithFormat(item.ADV_RegisteredOn)</td>
-                            </tr>
+                                <tr>
+                                    <td>@item.EmployeeName</td>
+                                    <td>@item.ADV_Amount</td>
+                                    <td>@DateHelper.getDateWithFormat(item.ADV_RegisteredOn)</td>
+                                </tr>
                             }
                         </tbody>
                     </table>

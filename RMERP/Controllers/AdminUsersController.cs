@@ -25,8 +25,8 @@ namespace RMERP.Controllers
         public AdminUsersController(RMERPContext context)
         {
             _context = context;
-        }
-        [DefaultBreadcrumb("Dashboard")]
+        }      
+
         public IActionResult DashBoard()
         {
             ClientsManager clientsManager = new ClientsManager(_context);
@@ -45,11 +45,13 @@ namespace RMERP.Controllers
             }          
             return View();
         }
+
         [AllowAnonymous]
         public ActionResult Login()
         {
             return View();
         }        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
@@ -73,20 +75,21 @@ namespace RMERP.Controllers
             return View();
 
         }
+
         public IActionResult Logout()
         {
             var login = HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "AdminUsers");
-        }
-        [Breadcrumb("Admin Users")]
+        }     
+
         public IActionResult Index()
         {
             AdminUsersManager adminUsersManager = new AdminUsersManager(_context);
             IEnumerable<AdminUsers> AdminUsersList = adminUsersManager.GetAdminUsers();
             return View(AdminUsersList);
         }
-        [HttpGet]
-        [Breadcrumb("Add-Edit AdminUsers", FromAction = "Index")]
+
+        [HttpGet]      
         public ActionResult AddEditAdminUsers(int AdminId)
         {
             AdminUsersManager adminUsersManager = new AdminUsersManager(_context);
@@ -108,6 +111,7 @@ namespace RMERP.Controllers
             }         
             return View(adminUsersModel);
         }
+
         [HttpPost]
         public ActionResult AddEditAdminUsers(AdminUsersModel adminUsersModel)
         {
