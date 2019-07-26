@@ -28,7 +28,7 @@ namespace RMERP.Controllers
 {
     [Authorize]
     public class ClientsController : Controller
-    { 
+    {
         private readonly RMERPContext _context;
         public IConfiguration Configuration;
         public static int ClientId;
@@ -43,37 +43,38 @@ namespace RMERP.Controllers
         }
         [HttpGet]
         [Breadcrumb("Clients")]
-        public IActionResult Index(bool IsActive=true)
+        public IActionResult Index(bool IsActive = true)
         {
             ClientId = -1;
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             ClientsViewModel cvm = new ClientsViewModel();
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            cvm.Listclients = clientsManager.listClients(IsActive,sessionUtils.GetLoggedFirmID());            
+            cvm.Listclients = clientsManager.listClients(IsActive, sessionUtils.GetLoggedFirmID());
             ViewBag.List = cvm.Listclients;
             ViewBag.clients = clientsManager.GetTotalClient();
             if (sessionUtils.GetLoggedFirmID().HasValue)
             {
-               int FRM_Id = sessionUtils.GetLoggedFirmID().Value;
+                int FRM_Id = sessionUtils.GetLoggedFirmID().Value;
                 ViewBag.totalClients = clientsManager.GetTotalClient(FRM_Id);
             }
-            else{
+            else
+            {
                 ViewBag.totalClients = clientsManager.GetTotalClient();
             }
             return View(cvm);
         }
         [HttpGet]
-        public IActionResult GetClientList(bool IsActive = true,string Client="")
+        public IActionResult GetClientList(bool IsActive = true, string Client = "")
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            SessionUtils sessionUtils = new SessionUtils(Request,Response);
-            IEnumerable<Clients> listClient = clientsManager.listClients(IsActive,sessionUtils.GetLoggedFirmID(), Client);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            IEnumerable<Clients> listClient = clientsManager.listClients(IsActive, sessionUtils.GetLoggedFirmID(), Client);
             ViewBag.ActiveClient = "IsActive";
             return PartialView("_ClientList", listClient);
         }
         [HttpGet]
         [Breadcrumb("Client Info", FromAction = "Index")]
-        public ActionResult AddEditClients(int id=-1)
+        public ActionResult AddEditClients(int id = -1)
         {
             ClientId = (id <= 0 ? ClientId : id);
             id = ClientId;
@@ -87,17 +88,17 @@ namespace RMERP.Controllers
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             FirmsManager firmsManager = new FirmsManager(_context);
             ClientsViewModel cv = new ClientsViewModel();
-            cv.clientsModel = new ClientsModel();            
+            cv.clientsModel = new ClientsModel();
             cv.ParametersClientsModel = new ParametersClientsModel();
             cv.ParametersClientsModel.clientsModel = new ClientsModel();
             Clients clients = new Clients();
             cv.clientsModel.CLI_RegisteredOn = ProjectUtils.DateNow();
             cv.clientsModel.FRM_Id = FRM_Id;
             if (id > 0)
-            {                
-                clients=clientsManager.GetClientById(id);
+            {
+                clients = clientsManager.GetClientById(id);
                 ClientId = id;
-                cv.clientsModel.CLI_Id= clients.CLI_Id;
+                cv.clientsModel.CLI_Id = clients.CLI_Id;
                 cv.clientsModel.CLI_IsActive = clients.CLI_IsActive;
                 cv.clientsModel.FRM_Id = clients.FRM_Id;
                 cv.clientsModel.CLI_Name = clients.CLI_Name;
@@ -137,19 +138,19 @@ namespace RMERP.Controllers
             IEnumerable<ProjectUtils.Total_WorkingDyas_In_Month> WorkingDays = Enum.GetValues(typeof(ProjectUtils.Total_WorkingDyas_In_Month))
                                                        .Cast<ProjectUtils.Total_WorkingDyas_In_Month>();
             ViewBag.TotalWorkingDays = from action in WorkingDays
-                                select new SelectListItem
-                                {
-                                    Text = GetFullEnumString(action.ToString()),
-                                    Value = ((int)action).ToString()
-                                };           
+                                       select new SelectListItem
+                                       {
+                                           Text = GetFullEnumString(action.ToString()),
+                                           Value = ((int)action).ToString()
+                                       };
             IEnumerable<Firms> listFirms = new List<Firms>();
-            List<Cities> listCity = new List<Cities>();          
-           
+            List<Cities> listCity = new List<Cities>();
+
             listFirms = firmsManager.getFirmList();
             listCity = adminUserManager.getCityList();
             ViewBag.firmList = listFirms;
             ViewBag.cityList = listCity;
-           
+
             return View(cv);
         }
         public string GetFullEnumString(string action)
@@ -161,14 +162,14 @@ namespace RMERP.Controllers
                 case "Exclude_WeeklyOff":
                     return "Exclude Weekly Off";
                 case "Reduce_Fixed_Days":
-                    return "Fixed Days";                
+                    return "Fixed Days";
                 default:
                     return "";
             }
         }
         [HttpPost]
         public async Task<ActionResult> AddEditClient(ClientsViewModel cv)
-        {            
+        {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             int clientID = 0;
             if (ModelState.IsValid)
@@ -192,9 +193,9 @@ namespace RMERP.Controllers
                 clients.CLI_GST_Number = "";
                 clients.CLI_GST_Rate = 0;
                 clients.CLI_HSN_Code = "";
-                clients.CLI_TDS_Rate =0;
+                clients.CLI_TDS_Rate = 0;
 
-                clients.CLI_Total_WorkingDays = cv.clientsModel.CLI_Total_WorkingDays;                
+                clients.CLI_Total_WorkingDays = cv.clientsModel.CLI_Total_WorkingDays;
                 clients.CLI_No_Reduce_Days = cv.clientsModel.CLI_No_Reduce_Days;
                 clients.CLI_WorkingHours_In_Day = cv.clientsModel.CLI_WorkingHours_In_Day;
 
@@ -228,7 +229,7 @@ namespace RMERP.Controllers
                     System.IO.Directory.CreateDirectory(ImagePath + "/" + clientID);
                 }
                 else
-                {                   
+                {
                     string[] files = System.IO.Directory.GetFiles(ImagePath + "/" + clientID);
                     if (file != null)
                     {
@@ -237,7 +238,7 @@ namespace RMERP.Controllers
                             string fileName = System.IO.Path.GetFileName(s);
                             System.IO.File.Delete(ImagePath + "/" + clientID + "/" + fileName);
                         }
-                    }                    
+                    }
                 }
                 if (file == null || file.Length <= 0)
                 {
@@ -251,25 +252,26 @@ namespace RMERP.Controllers
                     }
                 }
                 #endregion            
-            }            
-            return RedirectToAction("AddEditClients",new { id= clientID });
+            }
+            return RedirectToAction("AddEditClients", new { id = clientID });
         }
         [HttpGet]
         [Breadcrumb("Add-Edit Contact", FromAction = "AddEditClients")]
-        public ActionResult AddEditContacts(int CLI_Id, int CON_Id=-1)
+        public ActionResult AddEditContacts(int CLI_Id, int CON_Id = -1)
         {
             ClientContactVM contactVM = new ClientContactVM();
-            if (CLI_Id>0)
+            if (CLI_Id > 0)
             {
                 ClientId = CLI_Id;
                 ClientsManager clientsManager = new ClientsManager(_context, Configuration);
                 Clients clients = clientsManager.GetClientById(CLI_Id);
                 ViewBag.ClientName = clients.CLI_Name;
                 if (CON_Id > 0)
-                {                                           
+                {
                     Client_Contacts contact = clientsManager.GetClientContactsById(CON_Id);
                     contactVM = ClientContactMapper.mapMe(contact);
-                }else
+                }
+                else
                 {
                     contactVM = new ClientContactVM();
                     contactVM.CON_Id = 0;
@@ -277,9 +279,9 @@ namespace RMERP.Controllers
                     contactVM.CON_RegisteredOn = ProjectUtils.DateNow();
                     SessionUtils sessionUtils = new SessionUtils(Request, Response);
                     contactVM.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
-                                   }
+                }
             }
-           
+
             return View(contactVM);
         }
         [HttpPost]
@@ -308,11 +310,11 @@ namespace RMERP.Controllers
                         TempData["message"] = "Contacts data can not Inserted";
                         return RedirectToAction("AddEditContacts", "Clients");
                     }
-                }                
+                }
             }
-            return RedirectToAction("AddEditClients",new { id = ClientId,tab= "ContactInfo" });
+            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ContactInfo" });
         }
-        public ActionResult DeleteContact(int id=-1)
+        public ActionResult DeleteContact(int id = -1)
         {
             ClientsViewModel clientsViewModel = new ClientsViewModel();
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
@@ -320,17 +322,17 @@ namespace RMERP.Controllers
             {
                 if (id > 0)
                 {
-                  string res=  clientsManager.deleteContacts(id);
-                    if(res != string.Empty)
+                    string res = clientsManager.deleteContacts(id);
+                    if (res != string.Empty)
                     {
                         TempData["message"] = "Contacts data can not Deleted";
                     }
-                }                
+                }
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ContactInfo" });
         }
         [HttpPost]
-        public string InActiveClient(int ClientID,string Active)
+        public string InActiveClient(int ClientID, string Active)
         {
             string res = string.Empty;
             ClientsViewModel clientsViewModel = new ClientsViewModel();
@@ -339,19 +341,19 @@ namespace RMERP.Controllers
             {
                 if (ClientID > 0)
                 {
-                        res = clientsManager.InActiveClient(ClientID, Convert.ToInt32(Request.Cookies["AdminID"]), Active);
-                        if (res != string.Empty)
-                        {
-                            TempData["message"] = "Client data can not Deleted";
-                        }                                  
+                    res = clientsManager.InActiveClient(ClientID, Convert.ToInt32(Request.Cookies["AdminID"]), Active);
+                    if (res != string.Empty)
+                    {
+                        TempData["message"] = "Client data can not Deleted";
+                    }
                 }
             }
             return res;
-           // return RedirectToAction("Index","Clients",true);
+            // return RedirectToAction("Index","Clients",true);
         }
         [HttpGet]
         [Breadcrumb("Add-Edit Requirement", FromAction = "AddEditClients")]
-        public ActionResult AddEditRequirement(int CLI_Id, int CRI_Id =-1)
+        public ActionResult AddEditRequirement(int CLI_Id, int CRI_Id = -1)
         {
             ClientId = CLI_Id;
             DesignationManager designationManager = new DesignationManager(_context);
@@ -363,7 +365,7 @@ namespace RMERP.Controllers
             List<Client_Requirement_Allowances> listClientReqAllowances = new List<Client_Requirement_Allowances>();
             if (CRI_Id > 0)
             {
-                clientRequirement=ClientRequirementMapper.mapMe(clientsManager.GetRequirementsById(CRI_Id));
+                clientRequirement = ClientRequirementMapper.mapMe(clientsManager.GetRequirementsById(CRI_Id));
                 listClientReqAllowances = AllowanceManager.GetClient_Requirement_AllowanceList(CRI_Id);
             }
             else
@@ -373,13 +375,13 @@ namespace RMERP.Controllers
                 clientRequirement.CLI_Id = CLI_Id;
                 clientRequirement.CRI_Active = true;
             }
-           
+
             clientRequirement.allAllowances = AllowanceMapper.mapMeAllowancesWithClientReq(AllowanceManager.GetAllowanceList(), listClientReqAllowances);
             ViewBag.ADList = designationManager.getRemainingDesignationsList(CLI_Id).Select(m => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = Convert.ToString(m.DES_Id), Text = m.DES_Title });
-            
+
 
             return View(clientRequirement);
-        }       
+        }
         [HttpPost]
         public ActionResult AddEditRequirement(ClientRequirementVM clientRequirementVM)
         {
@@ -398,14 +400,14 @@ namespace RMERP.Controllers
                 }
                 if (!clientRequirementVM.CRI_OT_Calculate_Payableday)
                 {
-                    if(clientRequirementVM.CRI_OT_Fixed_PerHour > 0 && clientRequirementVM.CRI_OT_Calculate_Differently)
+                    if (clientRequirementVM.CRI_OT_Fixed_PerHour > 0 && clientRequirementVM.CRI_OT_Calculate_Differently)
                     {
                         clientRequirementVM.CRI_OT_Formula = null;
                     }
                     else if (!clientRequirementVM.CRI_OT_Calculate_Differently)
                     {
                         clientRequirementVM.CRI_OT_Fixed_PerHour = 0;
-                    }                                    
+                    }
                 }
                 if (!clientRequirementVM.CRI_Attendance_Allowance)
                 {
@@ -414,10 +416,10 @@ namespace RMERP.Controllers
                 }
                 if (!clientRequirementVM.CRI_OutStation_Allowance)
                 {
-                    clientRequirementVM.CRI_OutStation_Allowance_Rate = 0;                    
+                    clientRequirementVM.CRI_OutStation_Allowance_Rate = 0;
                 }
-                cr = ClientRequirementMapper.mapMeModel(clientRequirementVM);                
-                res = clientsManager.AddEditRequirement(cr, lst,sessionUtils.GetLoggedAdminID());
+                cr = ClientRequirementMapper.mapMeModel(clientRequirementVM);
+                res = clientsManager.AddEditRequirement(cr, lst, sessionUtils.GetLoggedAdminID());
             }
             if (res != "")
             {
@@ -427,15 +429,27 @@ namespace RMERP.Controllers
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
         }
         [Breadcrumb("Requirement History", FromAction = "AddEditClients")]
-        public ActionResult HistoryRequirement(int DES_Id,int CLI_Id)
+        public ActionResult HistoryRequirement(int DES_Id, int CLI_Id)
         {
-            ClientId = CLI_Id; 
+            ClientId = CLI_Id;
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             DesignationManager designationManager = new DesignationManager(_context);
             List<ClientRequirementVM> lst = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsList(DES_Id, CLI_Id, false).ToList());
             ViewBag.DES_Title = designationManager.GetDesignationsById(DES_Id);
             ViewBag.CLI_Name = clientsManager.GetClientById(CLI_Id).CLI_Name;
             return View(lst);
+        }
+
+        public ActionResult InactiveRequirement(int CRI_Id)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            string res = clientsManager.InactiveRequirement(CRI_Id, sessionUtils.GetLoggedAdminID());
+            if (res != string.Empty)
+            {
+                TempData["message"] = "Requirement can not deleted! Please remove assigned employees of this requirement.";
+            }
+            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
         }
 
         [HttpPost]
@@ -453,7 +467,7 @@ namespace RMERP.Controllers
                 clients.CLI_Total_WorkingDays = cvm.clientsModel.CLI_Total_WorkingDays;
                 clients.CLI_No_Reduce_Days = cvm.clientsModel.CLI_No_Reduce_Days;
                 clients.CLI_WorkingHours_In_Day = cvm.clientsModel.CLI_WorkingHours_In_Day;
-                if (cvm.ParametersClientsModel.CLI_Att_MonthReal ==true)
+                if (cvm.ParametersClientsModel.CLI_Att_MonthReal == true)
                 {
                     clients.CLI_Att_MonthReal = true;
                     clients.CLI_Att_Month_Start = null;
@@ -472,7 +486,7 @@ namespace RMERP.Controllers
 
         [HttpGet]
         [Breadcrumb("Assign Employee", FromAction = "AddEditClients")]
-        public ActionResult AddEmployee(int CLI_Id,int CLE_Id=-1)
+        public ActionResult AddEmployee(int CLI_Id, int CLE_Id = -1)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             ClientEmployeeVM cvm = new ClientEmployeeVM();
@@ -490,13 +504,13 @@ namespace RMERP.Controllers
             }
             else
             {
-                listEmployee = EmployeesMapper.MapEmployees(clientsManager.getActiveEmployeeList_NotAssignedYet(CLI_Id,FRM_Id).ToList());
+                listEmployee = EmployeesMapper.MapEmployees(clientsManager.getActiveEmployeeList_NotAssignedYet(CLI_Id, FRM_Id).ToList());
             }
 
             ViewBag.EmployeeList = listEmployee;
             ViewBag.designationList = listDesignations;
             cvm.CLI_Id = CLI_Id;
-            ViewBag.ClientName = clientsManager.GetClientById(CLI_Id).CLI_Name;            
+            ViewBag.ClientName = clientsManager.GetClientById(CLI_Id).CLI_Name;
             return View(cvm);
         }
         [HttpPost]
@@ -540,7 +554,7 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
         }
-               
+
         public ActionResult DeleteAssignEmployee(int CLE_Id)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
@@ -911,7 +925,7 @@ namespace RMERP.Controllers
                 ICell celly = row.CreateCell(i + 1);
                 celly.SetCellValue("FULL OT(HRS.)");
                 celly.CellStyle = style;
-                excelSheet.AutoSizeColumn(i+1);
+                excelSheet.AutoSizeColumn(i + 1);
 
                 int rowCount = 2;
                 int j = 1;

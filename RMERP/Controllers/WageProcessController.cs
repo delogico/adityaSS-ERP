@@ -76,6 +76,7 @@ namespace RMERP.Controllers
             FirmsManager firmsManager = new FirmsManager(_context);
             ViewBag.month = nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
             ViewBag.FRM_Id = FRM_Id;
+            ViewBag.FRM_Name = firmsManager.GetFirm(FRM_Id).FRM_ShortName;
             IEnumerable<Wage_Process> wage_Processes = wpm.getWageProcessList(FRM_Id);
             return View(WageProcessMapper.mapMeVMs(wage_Processes, firmsManager.GetFirm(FRM_Id), _context, _configuration));
         }

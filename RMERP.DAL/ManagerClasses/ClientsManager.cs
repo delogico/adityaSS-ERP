@@ -547,5 +547,44 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
+
+        public string InactiveRequirement(int CRI_Id,int ADM_Id)
+        {
+            string res = string.Empty;
+            try
+            {
+                Client_Requirements requirement = _contaxt.Client_Requirements.Find(CRI_Id);
+                if (!IsAssignedEmployee(requirement.CLI_Id, requirement.DES_Id))
+                {
+                    List<Client_Requirement_Allowances> requirement_Allowances = _contaxt.Client_Requirement_Allowances.Where(m => m.CRI_Id.Equals(CRI_Id)).ToList();
+                    if (requirement_Allowances.Count() > 0)
+                    {
+                        _contaxt.Client_Requirement_Allowances.RemoveRange(requirement_Allowances);
+                        _contaxt.SaveChanges();
+                    }
+                    
+                    requirement.CRI_Active = false;
+                    requirement.CRI_InactivatedOn = ProjectUtils.DateNow();
+                    requirement.ADM_Id_InactivatedBy = ADM_Id;
+                    _contaxt.SaveChanges();
+                }
+                else
+                {
+                    res = "Requirement can not deleted! Please remove assigned employees of this requirement.";
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                res = "Requirement can not deleted!";
+            }            
+            return res;
+        }
+        private bool IsAssignedEmployee(int CLI_Id,int DES_Id)
+        {
+            int count = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(CLI_Id) && m.DES_Id.Equals(DES_Id)).Count();
+            return (count>0);
+        }
+        
     }
 }
