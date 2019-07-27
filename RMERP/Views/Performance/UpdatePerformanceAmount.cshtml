@@ -1,0 +1,86 @@
+﻿@model RMERP.DAL.ViewModel.updateWageRegisterPerformance
+@{
+    ViewData["Title"] = "Update Performance Amount";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.PerformanceVMs[0].FRM_ID })</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = Model.PerformanceVMs[0].WAG_Id, FRM_Id = Model.PerformanceVMs[0].FRM_ID })</li>
+    <li class="breadcrumb-item">Update Performance Hours</li>
+}
+@section scripts{
+    @if (TempData["message"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+            alert('@TempData["message"]');
+        });
+        </script>
+    };
+}
+<style>
+    .modal-dialog {
+        transform: translate(0, -50%);
+        top: 30%;
+        margin: 0 auto;
+    }
+</style>
+<div>
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <h4 class="page-title">@ViewData["Title"] ( @ViewBag.Wag_Month )</h4>
+            </div>
+            <div class="col-sm-4 text-right m-b-30">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div>
+                    @using (Html.BeginForm("UpdateAmount", "Performance", FormMethod.Post))
+                    {
+                        <table class="table table-striped custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Amount</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (var i = 0; i < Model.PerformanceVMs.Count; i++)
+                                {
+                                    <tr>
+                                        <td width="75%"><b>@Html.DisplayFor(m => m.PerformanceVMs[i].Emp_Name)</b></td>
+                                        <td>
+                                            @Html.HiddenFor(m => m.PerformanceVMs[i].CLE_Id)
+                                            @Html.HiddenFor(m => m.PerformanceVMs[i].WAG_Id)
+                                            @Html.HiddenFor(m => m.PerformanceVMs[i].WRP_Id)
+                                            @Html.HiddenFor(m => m.PerformanceVMs[i].CRI_Id)
+                                            @Html.HiddenFor(m => m.PerformanceVMs[i].FRM_ID)
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(m => m.PerformanceVMs[i].WRP_Amount, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.PerformanceVMs[i].WRP_Amount, "", new { @class = "text-danger" })
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group text-right">
+                                    <input type="submit" value="Save & Update in Wage Register" id="btnSubmit" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -69,6 +69,7 @@ namespace RMERP.DAL.ManagerClasses
             AttendanceManager attManager = new AttendanceManager(_context);
             CanteenManager canteenManager = new CanteenManager(_context);
             OutstationManager outstationManager = new OutstationManager(_context);
+            PerformanceManager performanceManager = new PerformanceManager(_context);
             IEnumerable<Clients_Employees> clientsEmployees = clientsManager.listActiveClientsEmployees(CLI_Id, wageProcess.WAG_Month);
             foreach (Clients_Employees employee in clientsEmployees)
             {
@@ -80,7 +81,8 @@ namespace RMERP.DAL.ManagerClasses
                     double totalPaybleDays = 0;
                     decimal CRI_Basic = 0M, WAR_Basic_Calculated = 0M, BasicDa = 0M, WAR_OverTime_Calculated = 0M, WAR_PF, WAR_PF_Calculated = 0M, WAR_ESIC = 0M, WAR_ESIC_Calculated = 0M;
                     decimal CRI_DA = 0M, CRI_DA_Calculated = 0M, CRI_HRA = 0M, CRI_HRA_Calculated = 0M;
-                    decimal WAR_Attendance_Allowance_Calculated = 0M, WAR_Outstation_Allowance_Calculated = 0M;
+                    decimal WAR_Attendance_Allowance_Calculated = 0M, WAR_Outstation_Allowance_Calculated = 0M, WAR_Performance_Allowance_Calculated = 0M, WAR_Nightshift_Allowance_Calculated=0M;
+
                     #region Total working day calculation
                     Clients cli = clientsManager.GetClientById(CLI_Id);
                     int days = attendances.Count();
@@ -102,7 +104,7 @@ namespace RMERP.DAL.ManagerClasses
                     #region Paybale day counting
 
                     int totWeekOffs = 0, totalPublicHoliday = 0, totEarnLeave = 0, totNightShift = 0, totAbsent = 0;
-                    double totPresentDays = 0, totHalfDays = 0, totExtraWorkingDays = 0, WAR_ExtraWorkingHours = 0;
+                    double totPresentDays = 0, totHalfDays = 0, totExtraWorkingDays = 0, WAR_ExtraWorkingHours = 0,totNighthours=0;
 
                     totPresentDays = attendances.Where(a => a.ATT_IsPresent == true).Count();
                     totEarnLeave = attendances.Where(a => a.ATT_IsEarnLeave == true).Count();
@@ -114,6 +116,7 @@ namespace RMERP.DAL.ManagerClasses
 
                     totWeekOffs = attendances.Where(a => a.ATT_IsWeeklyOff == true).Count();
                     totalPublicHoliday = attendances.Where(a => a.ATT_IsPublicHoliday == true).Count();
+                    totNighthours = totNightShift * cli.CLI_WorkingHours_In_Day;
 
                     totalPaybleDays = (totPresentDays - totHalfDays) + (totHalfDays / 2) + totEarnLeave;
 
@@ -131,6 +134,7 @@ namespace RMERP.DAL.ManagerClasses
                     }
                     totAbsent = attendances.Where(m => m.ATT_IsPresent.Equals(false) && m.ATT_IsEarnLeave.Equals(false) && m.ATT_IsPublicHoliday.Equals(false) && m.ATT_IsWeeklyOff.Equals(false)).Count();
                     #endregion
+
                     WageRegisterVM wageRegisterVM = new WageRegisterVM();
                     wageRegisterVM.CLE_Id = employee.CLE_Id;
                     wageRegisterVM.WAG_Id = wageProcess.WAG_Id;
@@ -269,10 +273,30 @@ namespace RMERP.DAL.ManagerClasses
                             wageRegisterVM.WAR_CanteenFacility_Calculation = "-";
                         }
                     }
+                    if (cr.CRI_Nightshift_Allowance)
+                    {
+                        WAR_Nightshift_Allowance_Calculated =Convert.ToDecimal(Convert.ToDouble(cr.CRI_Nightshift_Allowance_Rate.Value) * totNighthours);
+                        wageRegisterVM.WAR_Nightshift_Allowance_Calculated = WAR_Nightshift_Allowance_Calculated;
+                    }
+                    if (cr.CRI_Performance_Allowance)
+                    {
+                        Wage_Register_Performance performance = new Wage_Register_Performance();
+                        performance = performanceManager.GetPerformanceByCLE(wageProcess.WAG_Id, employee.CLE_Id, employee.CLI_Id);
+                        if (performance != null)
+                        {
+                            WAR_Performance_Allowance_Calculated = performance.WRP_Amount;
+                            wageRegisterVM.WRP_Id = performance.WRP_Id;
+                            wageRegisterVM.WAR_Performance_Allowance_Calculated = WAR_Performance_Allowance_Calculated;
+                        }
+                        else
+                        {
+                            wageRegisterVM.WAR_Performance_Allowance_Calculated = 0;
+                        }
+                    }
                     wageRegisterVM.WAR_Attendance_Allowance_Calculated = WAR_Attendance_Allowance_Calculated;
                     wageRegisterVM.allowanceVMs = allowances;
                     //************************** ALLOWANCES CALCULATION *****************************/
-                    decimal WAR_GrossTotal = Math.Round(WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + WAR_OverTime_Calculated + AllowancesTotal + WAR_Outstation_Allowance_Calculated + WAR_Attendance_Allowance_Calculated);
+                    decimal WAR_GrossTotal = Math.Round(WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + WAR_OverTime_Calculated + AllowancesTotal + WAR_Outstation_Allowance_Calculated+ WAR_Nightshift_Allowance_Calculated+ WAR_Performance_Allowance_Calculated + WAR_Attendance_Allowance_Calculated);
 
                     #region ProfessionalTax Calculation
                     decimal WAR_ProffesionalTax_Calculated = 0M, WAR_RevenueDeduction_Calculated = 0M, WAR_CanteenFacility_Calculation = 0M;

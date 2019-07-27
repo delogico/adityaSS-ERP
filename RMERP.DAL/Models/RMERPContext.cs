@@ -38,6 +38,7 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Wage_Register_Allowances> Wage_Register_Allowances { get; set; }
         public virtual DbSet<Wage_Register_Canteen> Wage_Register_Canteen { get; set; }
         public virtual DbSet<Wage_Register_Outstation> Wage_Register_Outstation { get; set; }
+        public virtual DbSet<Wage_Register_Performance> Wage_Register_Performance { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -246,6 +247,8 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.CRI_HRA_Fixed).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.CRI_InactivatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.CRI_Nightshift_Allowance_Rate).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.CRI_OT_Fixed_PerHour).HasColumnType("decimal(9, 2)");
 
@@ -651,6 +654,8 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.WAR_LastModifiedOn).HasColumnType("datetime");
 
+                entity.Property(e => e.WAR_Nightshift_Allowance_Calculated).HasColumnType("decimal(9, 2)");
+
                 entity.Property(e => e.WAR_OutStation_Allowance_Calculated).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_OverTime_Calculated).HasColumnType("decimal(9, 2)");
@@ -664,6 +669,8 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.WAR_PF_Calculated).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_PF_Formula).HasMaxLength(200);
+
+                entity.Property(e => e.WAR_Performance_Allowance_Calculated).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_ProffesionalTax_Calculated)
                     .HasMaxLength(10)
@@ -776,6 +783,25 @@ namespace RMERP.DAL.Models
                     .HasForeignKey(d => d.WAG_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Wage_Register_Outstation_Wage_Process");
+            });
+
+            modelBuilder.Entity<Wage_Register_Performance>(entity =>
+            {
+                entity.HasKey(e => e.WRP_Id);
+
+                entity.Property(e => e.WRP_Amount).HasColumnType("decimal(9, 2)");
+
+                entity.HasOne(d => d.CLE_)
+                    .WithMany(p => p.Wage_Register_Performance)
+                    .HasForeignKey(d => d.CLE_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Performance_Clients_Employees");
+
+                entity.HasOne(d => d.WAG_)
+                    .WithMany(p => p.Wage_Register_Performance)
+                    .HasForeignKey(d => d.WAG_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Performance_Wage_Process");
             });
         }
     }

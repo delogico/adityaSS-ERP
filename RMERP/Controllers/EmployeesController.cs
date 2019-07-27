@@ -216,7 +216,7 @@ namespace RMERP.Controllers
         }
 
         [HttpPost]
-        public ActionResult addWageRegisterAdvances(int EMP_id, int WAG_Id, decimal WAD_Amount, bool WAD_Status)
+        public ActionResult addWageRegisterAdvances(int EMP_id, int WAG_Id, decimal WAD_Amount, bool WAD_Status,int FRM_Id)
         {
             WageProcessManager wageProcess = new WageProcessManager(_context);
             AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
@@ -224,18 +224,18 @@ namespace RMERP.Controllers
             DateTime WAG_Month = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
             int CLI_id = clients.GetClientIDByEmpID(EMP_id, WAG_Month);
             string res = advance.addWageRegisterAdvances(EMP_id, WAG_Id, CLI_id, WAD_Amount, WAG_Month, WAD_Status);
-            return RedirectToAction("UpdateAdvanceEMI", new { WAG_Month = WAG_Month, WAG_Id = WAG_Id });
+            return RedirectToAction("UpdateAdvanceEMI", new { WAG_Month = WAG_Month, WAG_Id = WAG_Id , FRM_Id = FRM_Id });
         }
 
         [HttpPost]
-        public ActionResult UpdateWageRegisterAdvances(int EMP_id, decimal WAD_Amount, int WAG_Id, bool WAD_Status, int WAD_Id = -1)
+        public ActionResult UpdateWageRegisterAdvances(int EMP_id, decimal WAD_Amount, int WAG_Id, bool WAD_Status, int WAD_Id = -1,int FRM_Id=-1)
         {
             WageProcessManager wageProcess = new WageProcessManager(_context);
             ClientsManager clients = new ClientsManager(_context, _configuration);
             AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
             DateTime WAG_Month = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
             string res = advance.addWageRegisterAdvances(EMP_id, WAD_Amount, WAD_Status, WAG_Month, WAD_Id);
-            return RedirectToAction("UpdateAdvanceEMI", new { WAG_Month = WAG_Month, WAG_Id = WAG_Id });
+            return RedirectToAction("UpdateAdvanceEMI", new { WAG_Month = WAG_Month, WAG_Id = WAG_Id , FRM_Id = FRM_Id });
         }
 
         [HttpPost]

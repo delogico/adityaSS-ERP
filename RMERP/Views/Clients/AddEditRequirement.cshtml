@@ -209,6 +209,14 @@
                 $("#divOutStaion").hide();
             }
         });
+        $('input[id="chkNightshift"]').click(function () {
+            if ($(this).prop("checked") == true) {
+                $("#divNightshift").show();
+            }
+            else if ($(this).prop("checked") == false) {
+                $("#divNightshift").hide();
+            }
+        });
         $('input[id="chkAttendance"]').click(function () {
             if ($(this).prop("checked") == true) {
                 $("#divAttendance").show();
@@ -384,6 +392,31 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.CRI_Nightshift_Allowance, new { @id = "chkNightshift" })
+                                        &nbsp;@Html.LabelFor(m => m.CRI_Nightshift_Allowance, new { @for = "chkNightshift" })
+                                    </label>
+                                    <div id="divNightshift" style="display:@(Model.CRI_Nightshift_Allowance ? "block" : "none")">
+                                        <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <div class="col-md-12">
+                                                    <div class="col-md-10">
+                                                        @Html.TextBoxFor(m => m.CRI_Nightshift_Allowance_Rate, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(m => m.CRI_Nightshift_Allowance_Rate, "", new { @class = "text-danger" })
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        @Html.Raw("INR/Hr")
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    @Html.CheckBoxFor(m => m.CRI_Performance_Allowance)
+                                    @Html.LabelFor(m => m.CRI_Performance_Allowance, new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-12">
                                     <hr />

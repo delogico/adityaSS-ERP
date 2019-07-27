@@ -425,6 +425,10 @@ namespace RMERP.Controllers
                 {
                     clientRequirementVM.CRI_OutStation_Allowance_Rate = 0;
                 }
+                if (!clientRequirementVM.CRI_Nightshift_Allowance)
+                {
+                    clientRequirementVM.CRI_Nightshift_Allowance_Rate = 0;
+                }
                 cr = ClientRequirementMapper.mapMeModel(clientRequirementVM);
                 res = clientsManager.AddEditRequirement(cr, lst, sessionUtils.GetLoggedAdminID());
             }

@@ -93,13 +93,16 @@ namespace RMERP.DAL.ViewModel
         public bool CRI_OT_Calculate_Payableday { get; set; } = true;
         [Display(Name = "Consider OT differently")]
         public bool CRI_OT_Calculate_Differently { get; set; } = true;
-        [Display(Name = "Consider fixed amount per hour")]
-       // [Required(ErrorMessage = "Please enter amount")]
+        [Display(Name = "Consider fixed amount per hour")]       
         public decimal? CRI_OT_Fixed_PerHour { get; set; } = 0;
         [Display(Name = "Calculate by formula")]
         public bool CRI_OT_Calculate_By_Formula { get; set; }
 
-
+        [Display(Name = "Performance allowance")]
+        public bool CRI_Performance_Allowance { get; set; }
+        [Display(Name = "Nightshift allowance")]
+        public bool CRI_Nightshift_Allowance { get; set; }
+        public decimal? CRI_Nightshift_Allowance_Rate { get; set; }
 
     }
 }

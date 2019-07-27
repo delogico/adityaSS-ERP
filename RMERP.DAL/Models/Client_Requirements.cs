@@ -43,6 +43,9 @@ namespace RMERP.DAL.Models
         public bool CRI_Attendance_Allowance { get; set; }
         public int? CRI_Attendance_Allowance_MaximumDays { get; set; }
         public decimal? CRI_Attendance_Allowance_Rate { get; set; }
+        public bool CRI_Performance_Allowance { get; set; }
+        public bool CRI_Nightshift_Allowance { get; set; }
+        public decimal? CRI_Nightshift_Allowance_Rate { get; set; }
 
         public Clients CLI_ { get; set; }
         public Designations DES_ { get; set; }

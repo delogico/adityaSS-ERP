@@ -25,6 +25,7 @@ namespace RMERP.DAL.ViewModel
         public int WAG_Id { get; set; }
         public int WRC_Id { get; set; }
         public int WRO_Id { get; set; }
+        public int WRP_Id { get; set; }
 
         public int CLE_Id { get; set; }
 
@@ -104,6 +105,11 @@ namespace RMERP.DAL.ViewModel
         public decimal WAR_OutStation_Allowance_Calculated { get; set; }
         [Display(Name = "Attendance Allowance")]
         public decimal WAR_Attendance_Allowance_Calculated { get; set; }
+
+        [Display(Name = "Performance Allowance")]
+        public decimal WAR_Performance_Allowance_Calculated { get; set; }
+        [Display(Name = "Calculated Nightshift")]
+        public decimal WAR_Nightshift_Allowance_Calculated { get; set; }
     }
 
 

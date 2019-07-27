@@ -13,6 +13,7 @@ namespace RMERP.DAL.Models
             Wage_Register_Advances = new HashSet<Wage_Register_Advances>();
             Wage_Register_Canteen = new HashSet<Wage_Register_Canteen>();
             Wage_Register_Outstation = new HashSet<Wage_Register_Outstation>();
+            Wage_Register_Performance = new HashSet<Wage_Register_Performance>();
         }
 
         public int WAG_Id { get; set; }
@@ -29,5 +30,6 @@ namespace RMERP.DAL.Models
         public ICollection<Wage_Register_Advances> Wage_Register_Advances { get; set; }
         public ICollection<Wage_Register_Canteen> Wage_Register_Canteen { get; set; }
         public ICollection<Wage_Register_Outstation> Wage_Register_Outstation { get; set; }
+        public ICollection<Wage_Register_Performance> Wage_Register_Performance { get; set; }
     }
 }

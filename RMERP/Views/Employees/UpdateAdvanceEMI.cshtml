@@ -30,14 +30,14 @@
                 $("#amt_" + id).html(RemaimigAmt);
                 $("#Ramt_" + id).html("<b>"+RemaimigAmt+"</b>");
                 var Cheked = $("#WAD_Status" + id).prop("checked");
-                var Url = siteUrl + "Employees/addWageRegisterAdvances?EMP_id=" + id + "&WAG_Id=" +@Model.WAG_Id+"&WAD_Amount=" + advance + "&WAD_Status=" + Cheked;
+                var Url = siteUrl + "Employees/addWageRegisterAdvances?EMP_id=" + id + "&WAG_Id=" +@Model.WAG_Id+"&WAD_Amount=" + advance + "&WAD_Status=" + Cheked + "&FRM_Id=" + @ViewBag.FRM_Id;
                 $.ajax({
                     type: "POST",
                     url: Url
                 });
 
             }
-        };
+        }; @ViewBag.FRM_Id
 
         function EditAmt(total, id, WAD_Id) {
             debugger;
@@ -51,7 +51,7 @@
                 $("#amt_" + id).html(RemaimigAmt);
                 $("#Ramt_" + id).html("<b>"+RemaimigAmt+"</b>");
                 var Cheked = $("#WAD_Status" + id).prop("checked");
-                var Url = siteUrl + "Employees/UpdateWageRegisterAdvances?EMP_id=" + id + "&WAG_Id=" +@Model.WAG_Id+"&WAD_Amount=" + parseInt(advance) + "&WAD_Status=" + Cheked + "&WAD_Id=" + WAD_Id;
+                var Url = siteUrl + "Employees/UpdateWageRegisterAdvances?EMP_id=" + id + "&WAG_Id=" +@Model.WAG_Id+"&WAD_Amount=" + parseInt(advance) + "&WAD_Status=" + Cheked + "&WAD_Id=" + WAD_Id +"&FRM_Id="+ @ViewBag.FRM_Id;
                 $.ajax({
                     type: "POST",
                     url: Url
