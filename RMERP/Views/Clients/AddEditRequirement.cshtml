@@ -76,6 +76,7 @@
 
 
             $('input[class="Allselection"]').click(function () {
+                debugger;
                 if ($(this).prop("checked") == true) {
                     $("#divReqAllow_" + this.id).show();
                     addCheckbox(this.id);
@@ -120,6 +121,7 @@
                 $("#CRI_PF_Formula").val(PFSelection.join("+"));
             });
             $(document).on("click", "INPUT[class^=ESICselection]", function (event) {
+                debugger;
                 if ($(this).prop("checked") == true) {
                     ESICSelection.push($(this).prop('value'));
                 }
@@ -155,22 +157,21 @@
 
 
             function addCheckbox(AllId) {
+                debugger;
                 var id = parseInt(AllId);
                 var container = $('#PFlist');
                 var containerEsic = $('#ESIClist');
                 var containerOT = $('#OTlist');
                 var containerDeductOT = $('#OTDeductlist');
                 var short = $("#allAllowances_" + (parseInt(id) - 1) + "__allowance_ALL_Shortform");
+                var all = $("#allAllowances_" + (parseInt(id) - 1) + "__allowance_ALL_Title");                
                 var id = 'PF_' + short.val();
-                container.append("<div class='col-md-12'><input type='checkbox' class='PFselection' id='" + id + "' value='" + short.val() + "' />" + short.val() + "</div>")
-                containerEsic.append("<div class='col-md-12'><input type='checkbox' class='ESICselection' id='" + id + "' value='" + short.val() + "' />" + short.val() + "</div>")
-                containerOT.append("<div class='col-md-12'><input type='checkbox' class='OTselection' id='" + id + "' value='" + short.val() + "' />" + short.val() + "</div>")
-                containerDeductOT.append("<div class='col-md-12'><input type='checkbox' class='OTDeductSelection' id='" + id + "' value='" + short.val() + "' />" + short.val() + "</div>")
-                //$('<input />', { type: 'checkbox', name: short.val(), class: 'ESICselection', id: 'ESIC_'+short.val(), value: short.val() }).appendTo(containerEsic);
-                //$('<div />', { 'for': 'esic' + id, id: 'lbl_' + id, text: v.val(), value: short.val() }).appendTo(containerEsic);
-                //$('<br/>', { id: 'br' + id }).appendTo(containerEsic);
-
+                container.append("<div class='col-md-12'><input type='checkbox' class='PFselection' id='" + id + "' value='" + short.val() + "' />" + all.val() + "</div>")
+                containerEsic.append("<div class='col-md-12'><input type='checkbox' class='ESICselection' id='" + id + "' value='" + short.val() + "' />" + all.val() + "</div>")
+                containerOT.append("<div class='col-md-12'><input type='checkbox' class='OTselection' id='" + id + "' value='" + short.val() + "' />" + all.val() + "</div>")
+                containerDeductOT.append("<div class='col-md-12'><input type='checkbox' class='OTDeductSelection' id='" + id + "' value='" + short.val() + "' />" + all.val() + "</div>")              
             }
+            
         });
         $("input[id='rdo_OT_Payable']").click(function () {
             $("#divOTdifferently").hide();
@@ -198,33 +199,83 @@
             $("#div_OT_Per_Hr").hide();
             $('#rdo_OT_Payable').val("False");
             $('#rdo_OT_Fixed_Amount').val("False");
-
-
         });
         $('input[id="chkOutStation"]').click(function () {
+            debugger;
             if ($(this).prop("checked") == true) {
                 $("#divOutStaion").show();
+                var name = "OSL";
+                addCheckboxNewAllowance(name);
+                $("#CRI_OutStation_Allowance").val("true");
             }
             else if ($(this).prop("checked") == false) {
                 $("#divOutStaion").hide();
+                $("#CRI_OutStation_Allowance").val("false");
             }
         });
         $('input[id="chkNightshift"]').click(function () {
+            debugger;
             if ($(this).prop("checked") == true) {
                 $("#divNightshift").show();
+                var name = "NSL";
+                addCheckboxNewAllowance(name);
+                $("#CRI_Nightshift_Allowance").val("true");
             }
             else if ($(this).prop("checked") == false) {
                 $("#divNightshift").hide();
+                $("#CRI_Nightshift_Allowance").val("false");
             }
         });
         $('input[id="chkAttendance"]').click(function () {
             if ($(this).prop("checked") == true) {
                 $("#divAttendance").show();
+                var name = "AAL";
+                addCheckboxNewAllowance(name);
+                $("#CRI_Attendance_Allowance").val("true");
             }
             else if ($(this).prop("checked") == false) {
                 $("#divAttendance").hide();
+                $("#CRI_Attendance_Allowance").val("false");
             }
         });
+        $('input[id="chkPerformance"]').click(function () {
+            if ($(this).prop("checked") == true) {   
+                var name = "PAL";
+                addCheckboxNewAllowance(name);
+                $("#CRI_Performance_Allowance").val("true");
+            }
+            else if ($(this).prop("checked") == false) {              
+                $("#CRI_Performance_Allowance").val("false");
+            }
+        });        
+        function addCheckboxNewAllowance(allowance) {           
+            var container = $('#PFlist');
+            var containerEsic = $('#ESIClist');
+            var containerOT = $('#OTlist');
+            var containerDeductOT = $('#OTDeductlist');           
+            container.append("<div class='col-md-12'><input type='checkbox' class='PFselection' id='" + allowance + "' value='" + allowance + "' />" + allowanceName(allowance) + "</div>")
+            containerEsic.append("<div class='col-md-12'><input type='checkbox' class='ESICselection' id='" + allowance + "' value='" + allowance + "' />" + allowanceName(allowance) + "</div>")
+            containerOT.append("<div class='col-md-12'><input type='checkbox' class='OTselection' id='" + allowance + "' value='" + allowance + "' />" + allowanceName(allowance) + "</div>")
+            containerDeductOT.append("<div class='col-md-12'><input type='checkbox' class='OTDeductSelection' id='" + allowance + "' value='" + allowance + "' />" + allowanceName(allowance) + "</div>")
+        }
+        function allowanceName(shortName) {
+            switch (shortName) {
+                case "OSL":
+                    return "Out station Allowance";
+                    break;
+                case "AAL":
+                    return "Attendance Allowance";
+                    break;
+                case "NSL":
+                    return "Nightshift Allowance";
+                    break;
+                case "PAL":
+                    return "Performance Allowance";
+                    break;
+                default:
+                    return "";
+            }
+        }
         $('.HRAselection').change(function () {
             var value = $(this).filter(':checked').val();
             if (value == "True") {
@@ -415,8 +466,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    @Html.CheckBoxFor(m => m.CRI_Performance_Allowance)
-                                    @Html.LabelFor(m => m.CRI_Performance_Allowance, new { @class = "control-label" })
+                                    @Html.CheckBoxFor(m => m.CRI_Performance_Allowance, new { @id = "chkPerformance" })
+                                    @Html.LabelFor(m => m.CRI_Performance_Allowance, new { @class = "control-label", @for = "chkPerformance" })
                                 </div>
                                 <div class="col-md-12">
                                     <hr />
@@ -534,6 +585,62 @@
                                                 @Html.Raw("OT")
                                             </div>
 
+                                            @if (Model.CRI_OutStation_Allowance == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arr != null && arr.Contains("OSL"))
+                                                    {
+                                                        @Html.CheckBox("pf_OutStation", new { @class = "PFselection", @value = "OSL", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("pf_OutStation", new { @class = "PFselection", @value = "OSL" })
+                                                    }
+                                                    @Html.Raw("OutStation Allowance")
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Attendance_Allowance == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arr != null && arr.Contains("AAL"))
+                                                    {
+                                                        @Html.CheckBox("pf_Attendance", new { @class = "PFselection", @value = "AAL", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("pf_Attendance", new { @class = "PFselection", @value = "AAL" })
+                                                    }
+                                                    @Html.Raw("Attendance Allowance")
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Nightshift_Allowance == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arr != null && arr.Contains("NSL"))
+                                                    {
+                                                        @Html.CheckBox("pf_Nightshift", new { @class = "PFselection", @value = "NSL", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("pf_Nightshift", new { @class = "PFselection", @value = "NSL" })
+                                                    }
+                                                    @Html.Raw("Nightshift Allowance")
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Performance_Allowance == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arr != null && arr.Contains("Performance"))
+                                                    {
+                                                        @Html.CheckBox("pf_Performance", new { @class = "PFselection", @value = "PAL", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("pf_Performance", new { @class = "PFselection", @value = "PAL" })
+                                                    }
+                                                    @Html.Raw("Performance Allowance")
+                                                </div>
+                                            }
 
                                             @for (var i = 0; i < Model.allAllowances.Count; i++)
                                             {
@@ -552,6 +659,7 @@
                                                     </div>
                                                 }
                                             }
+
                                         </div>
 
                                         @Html.TextBoxFor(m => m.CRI_PF_Formula, new { @class = "form-control" })
@@ -623,7 +731,62 @@
                                                 @Html.Raw("OT")
                                             </div>
 
-
+                                            @if (Model.CRI_OutStation_Allowance == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arrEsic != null && arrEsic.Contains("OSL"))
+                                                    {
+                                                        @Html.CheckBox("esic_OutStation", new { @class = "ESICselection", @value = "OSL", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("esic_OutStation", new { @class = "ESICselection", @value = "OSL" })
+                                                    }
+                                                    @Html.Raw("OutStation Allowance")
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Attendance_Allowance == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arrEsic != null && arrEsic.Contains("AAL"))
+                                                    {
+                                                        @Html.CheckBox("esic_Attendance", new { @class = "ESICselection", @value = "AAL", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("esic_Attendance", new { @class = "ESICselection", @value = "AAL" })
+                                                    }
+                                                    @Html.Raw("Attendance Allowance")
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Nightshift_Allowance == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arrEsic != null && arrEsic.Contains("NSL"))
+                                                    {
+                                                        @Html.CheckBox("esic_Nightshift", new { @class = "ESICselection", @value = "NSL", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("esic_Nightshift", new { @class = "ESICselection", @value = "NSL" })
+                                                    }
+                                                    @Html.Raw("Nightshift Allowance")
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Performance_Allowance == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arrEsic != null && arrEsic.Contains("PAL"))
+                                                    {
+                                                        @Html.CheckBox("esic_Performance", new { @class = "ESICselection", @value = "PAL", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("esic_Performance", new { @class = "ESICselection", @value = "PAL" })
+                                                    }
+                                                    @Html.Raw("Performance Allowance")
+                                                </div>
+                                            }
 
                                             @for (var i = 0; i < Model.allAllowances.Count; i++)
                                             {
@@ -741,7 +904,7 @@
                                                         </label>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-10">
                                                             <div class="col-md-12">
                                                                 @if (arrOT != null && arrOT.Contains("BASIC"))
                                                                 {
@@ -776,6 +939,62 @@
                                                                 }
                                                                 @Html.Raw("HRA")
                                                             </div>
+                                                            @if (Model.CRI_OutStation_Allowance == true)
+                                                            {
+                                                                <div class="col-md-12">
+                                                                    @if (arrOT != null && arrOT.Contains("OSL"))
+                                                                    {
+                                                                        @Html.CheckBox("esic_OutStation", new { @class = "OTselection", @value = "OSL", @checked = "checked" })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.CheckBox("esic_OutStation", new { @class = "OTselection", @value = "OSL" })
+                                                                    }
+                                                                    @Html.Raw("OutStation Allowance")
+                                                                </div>
+                                                            }
+                                                            @if (Model.CRI_Attendance_Allowance == true)
+                                                            {
+                                                                <div class="col-md-12">
+                                                                    @if (arrOT != null && arrOT.Contains("AAL"))
+                                                                    {
+                                                                        @Html.CheckBox("esic_Attendance", new { @class = "OTselection", @value = "AAL", @checked = "checked" })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.CheckBox("esic_Attendance", new { @class = "OTselection", @value = "AAL" })
+                                                                    }
+                                                                    @Html.Raw("Attendance Allowance")
+                                                                </div>
+                                                            }
+                                                            @if (Model.CRI_Nightshift_Allowance == true)
+                                                            {
+                                                                <div class="col-md-12">
+                                                                    @if (arrOT != null && arrOT.Contains("NSL"))
+                                                                    {
+                                                                        @Html.CheckBox("esic_Nightshift", new { @class = "OTselection", @value = "NSL", @checked = "checked" })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.CheckBox("esic_Nightshift", new { @class = "OTselection", @value = "NSL" })
+                                                                    }
+                                                                    @Html.Raw("Nightshift Allowance")
+                                                                </div>
+                                                            }
+                                                            @if (Model.CRI_Performance_Allowance == true)
+                                                            {
+                                                                <div class="col-md-12">
+                                                                    @if (arrOT != null && arrOT.Contains("PAL"))
+                                                                    {
+                                                                        @Html.CheckBox("esic_Performance", new { @class = "ESICselection", @value = "PAL", @checked = "checked" })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.CheckBox("esic_Performance", new { @class = "ESICselection", @value = "PAL" })
+                                                                    }
+                                                                    @Html.Raw("Performance Allowance")
+                                                                </div>
+                                                            }
 
                                                             @for (var i = 0; i < Model.allAllowances.Count; i++)
                                                             {
@@ -795,32 +1014,7 @@
                                                                     </div>
                                                                 }
                                                             }
-                                                        </div>
-                                                        @*<div class="col-md-6" >
-                                                                <div class="col-md-12">
-                                                                    @if (arrDeductOT != null && arrDeductOT.Contains("PF"))
-                                                                    {
-                                                                        @Html.CheckBox("OT_PF", new { @class = "OTDeductSelection", @value = "PF", @checked = "checked" })
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        @Html.CheckBox("OT_PF", new { @class = "OTDeductSelection", @value = "PF" })
-                                                                    }
-                                                                    @Html.Raw("PF")
-
-                                                                </div>
-                                                                <div class="col-md-12">
-                                                                    @if (arrDeductOT != null && arrDeductOT.Contains("ESIC"))
-                                                                    {
-                                                                        @Html.CheckBox("OT_ESIC", new { @class = "OTDeductSelection", @value = "ESIC", @checked = "checked" })
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        @Html.CheckBox("OT_ESIC", new { @class = "OTDeductSelection", @value = "ESIC" })
-                                                                    }
-                                                                    @Html.Raw("ESIC")
-                                                                </div>
-                                                            </div>*@
+                                                        </div>                                                       
                                                     </div>
 
                                                 </div>
