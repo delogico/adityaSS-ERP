@@ -304,6 +304,21 @@ namespace RMERP.DAL.ManagerClasses
                 client.CLI_Total_WorkingDays = clients.CLI_Total_WorkingDays;
                 client.CLI_No_Reduce_Days = clients.CLI_No_Reduce_Days;
                 client.CLI_WorkingHours_In_Day = clients.CLI_WorkingHours_In_Day;
+
+                client.CLI_Invoicing_Name = clients.CLI_Invoicing_Name;
+                client.CLI_Invoicing_Address = clients.CLI_Invoicing_Address;
+                client.CLI_Invoicing_City = clients.CLI_Invoicing_City;
+                client.CLI_Invoicing_ZipCode = clients.CLI_Invoicing_ZipCode;
+                client.CLI_Invoicing_Location = clients.CLI_Invoicing_Location;
+                client.CLI_IsIGST = clients.CLI_IsIGST;
+                client.CLI_IGST = clients.CLI_IGST;
+                client.CLI_IsCGST = clients.CLI_IsCGST;
+                client.CLI_CGST = clients.CLI_CGST;
+                client.CLI_IsSGST = clients.CLI_IsSGST;
+                client.CLI_SGST = clients.CLI_SGST;
+                client.CLI_GST_Info = clients.CLI_GST_Info;
+                client.CLI_Place_Of_Supply = clients.CLI_Place_Of_Supply;
+
                 _contaxt.Clients.Update(client);
                 _contaxt.SaveChanges();
             }

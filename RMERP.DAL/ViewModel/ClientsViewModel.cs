@@ -83,6 +83,30 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Number of working hours in a Day ")]
         [Required(ErrorMessage = "Add Working Hours")]
         public int CLI_WorkingHours_In_Day { get; set; } = 8;
+
+        [Display(Name = "Invoicing name")]       
+        public string CLI_Invoicing_Name { get; set; }
+        [Display(Name = "Address")]
+        public string CLI_Invoicing_Address { get; set; }
+        [Display(Name = "City")]       
+        public string CLI_Invoicing_City { get; set; }
+        [Display(Name = "Zipcode")]
+        public int CLI_Invoicing_ZipCode { get; set; }
+        [Display(Name = "Location")]
+        public string CLI_Invoicing_Location { get; set; }
+        [Display(Name = "IGST(%)")]
+        public bool CLI_IsIGST { get; set; }
+        public double CLI_IGST { get; set; }
+        [Display(Name = "CGST(%)")]
+        public bool CLI_IsCGST { get; set; }
+        public double CLI_CGST { get; set; }
+        [Display(Name = "SGST(%)")]
+        public bool CLI_IsSGST { get; set; }
+        public double CLI_SGST { get; set; }
+        [Display(Name = "GST Info")]
+        public string CLI_GST_Info { get; set; }
+        [Display(Name = "Place of supply")]
+        public string CLI_Place_Of_Supply { get; set; }
     }
     public class ParametersClientsModel
     {

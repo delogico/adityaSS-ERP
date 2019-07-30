@@ -105,7 +105,7 @@ namespace RMERP.Controllers
                 cv.clientsModel.CLI_Name = clients.CLI_Name;
                 cv.clientsModel.CLI_International_Domestic = clients.CLI_International_Domestic;
                 cv.clientsModel.CLI_Address = clients.CLI_Address;
-                cv.clientsModel.CITY_Id = clients.CITY_Id;
+              //  cv.clientsModel.CITY_Id = clients.CITY_Id;
                 cv.clientsModel.CLI_Pincode = clients.CLI_Pincode;
                 cv.clientsModel.CLI_Phone = clients.CLI_Phone;
                 cv.clientsModel.CLI_Fax = clients.CLI_Fax;
@@ -122,6 +122,28 @@ namespace RMERP.Controllers
                 cv.ParametersClientsModel.CLI_Att_Month_Start = clients.CLI_Att_Month_Start;
                 cv.ParametersClientsModel.CLI_Att_Month_End = clients.CLI_Att_Month_End;
                 cv.ParametersClientsModel.CLI_Att_MonthReal = clients.CLI_Att_MonthReal;
+
+                cv.ParametersClientsModel.clientsModel.CLI_Invoicing_Name = clients.CLI_Invoicing_Name;
+                cv.ParametersClientsModel.clientsModel.CLI_Invoicing_Address = clients.CLI_Invoicing_Address;
+                cv.ParametersClientsModel.clientsModel.CLI_Invoicing_City = clients.CLI_Invoicing_City;
+                if(clients.CLI_Invoicing_ZipCode!=null)
+                    cv.ParametersClientsModel.clientsModel.CLI_Invoicing_ZipCode = clients.CLI_Invoicing_ZipCode.Value;
+                cv.ParametersClientsModel.clientsModel.CLI_Invoicing_Location = clients.CLI_Invoicing_Location;
+                if (clients.CLI_IsIGST != null)
+                    cv.ParametersClientsModel.clientsModel.CLI_IsIGST = clients.CLI_IsIGST.Value;
+                if (clients.CLI_IGST != null)
+                    cv.ParametersClientsModel.clientsModel.CLI_IGST = clients.CLI_IGST.Value;
+                if (clients.CLI_IsCGST != null)
+                    cv.ParametersClientsModel.clientsModel.CLI_IsCGST = clients.CLI_IsCGST.Value;
+                if (clients.CLI_CGST != null)
+                    cv.ParametersClientsModel.clientsModel.CLI_CGST = clients.CLI_CGST.Value;
+                if (clients.CLI_IsSGST != null)
+                    cv.ParametersClientsModel.clientsModel.CLI_IsSGST = clients.CLI_IsSGST.Value;
+                if (clients.CLI_SGST != null)
+                    cv.ParametersClientsModel.clientsModel.CLI_SGST = clients.CLI_SGST.Value;
+                cv.ParametersClientsModel.clientsModel.CLI_GST_Info = clients.CLI_GST_Info;
+                cv.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply = clients.CLI_Place_Of_Supply;
+
 
                 cv.clientsModel.CLI_GST_Number = "";
                 cv.clientsModel.CLI_GST_Rate = 0;
@@ -186,7 +208,7 @@ namespace RMERP.Controllers
                 clients.CLI_Name = cv.clientsModel.CLI_Name;
                 clients.CLI_International_Domestic = cv.clientsModel.CLI_International_Domestic;
                 clients.CLI_Address = cv.clientsModel.CLI_Address;
-                clients.CITY_Id = cv.clientsModel.CITY_Id;
+              //  clients.CITY_Id = cv.clientsModel.CITY_Id;
                 clients.CLI_Pincode = cv.clientsModel.CLI_Pincode;
                 clients.CLI_Phone = cv.clientsModel.CLI_Phone;
                 clients.CLI_Fax = cv.clientsModel.CLI_Fax;
@@ -259,7 +281,7 @@ namespace RMERP.Controllers
             return RedirectToAction("AddEditClients", new { id = clientID });
         }
 
-        [HttpGet]        
+        [HttpGet]
         public ActionResult AddEditContacts(int CLI_Id, int CON_Id = -1)
         {
             ClientContactVM contactVM = new ClientContactVM();
@@ -358,7 +380,7 @@ namespace RMERP.Controllers
             // return RedirectToAction("Index","Clients",true);
         }
 
-        [HttpGet]        
+        [HttpGet]
         public ActionResult AddEditRequirement(int CLI_Id, int CRI_Id = -1)
         {
             ClientId = CLI_Id;
@@ -439,7 +461,7 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
         }
-                
+
         public ActionResult HistoryRequirement(int DES_Id, int CLI_Id)
         {
             ClientId = CLI_Id;
@@ -478,6 +500,33 @@ namespace RMERP.Controllers
                 clients.CLI_Total_WorkingDays = cvm.clientsModel.CLI_Total_WorkingDays;
                 clients.CLI_No_Reduce_Days = cvm.clientsModel.CLI_No_Reduce_Days;
                 clients.CLI_WorkingHours_In_Day = cvm.clientsModel.CLI_WorkingHours_In_Day;
+
+                clients.CLI_Invoicing_Name = cvm.ParametersClientsModel.clientsModel.CLI_Invoicing_Name;
+                clients.CLI_Invoicing_Address = cvm.ParametersClientsModel.clientsModel.CLI_Invoicing_Address;
+                clients.CLI_Invoicing_City = cvm.ParametersClientsModel.clientsModel.CLI_Invoicing_City;
+                clients.CLI_Invoicing_ZipCode = cvm.ParametersClientsModel.clientsModel.CLI_Invoicing_ZipCode;
+                clients.CLI_Invoicing_Location = cvm.ParametersClientsModel.clientsModel.CLI_Invoicing_Location;
+                clients.CLI_IsIGST = cvm.ParametersClientsModel.clientsModel.CLI_IsIGST;
+                clients.CLI_IGST = cvm.ParametersClientsModel.clientsModel.CLI_IGST;
+                if (!cvm.ParametersClientsModel.clientsModel.CLI_IsIGST)
+                {
+                    clients.CLI_IGST = 0;
+                }               
+                clients.CLI_IsCGST = cvm.ParametersClientsModel.clientsModel.CLI_IsCGST;
+                clients.CLI_CGST = cvm.ParametersClientsModel.clientsModel.CLI_CGST;
+                if (!cvm.ParametersClientsModel.clientsModel.CLI_IsCGST)
+                {
+                    clients.CLI_CGST = 0;
+                }                
+                clients.CLI_IsSGST = cvm.ParametersClientsModel.clientsModel.CLI_IsSGST;
+                clients.CLI_SGST = cvm.ParametersClientsModel.clientsModel.CLI_SGST;
+                if (!cvm.ParametersClientsModel.clientsModel.CLI_IsSGST)
+                {
+                    clients.CLI_SGST = 0;
+                }
+                clients.CLI_GST_Info = cvm.ParametersClientsModel.clientsModel.CLI_GST_Info;
+                clients.CLI_Place_Of_Supply = cvm.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply;
+
                 if (cvm.ParametersClientsModel.CLI_Att_MonthReal == true)
                 {
                     clients.CLI_Att_MonthReal = true;
@@ -490,12 +539,16 @@ namespace RMERP.Controllers
                     clients.CLI_Att_Month_Start = cvm.ParametersClientsModel.CLI_Att_Month_Start;
                     clients.CLI_Att_Month_End = cvm.ParametersClientsModel.CLI_Att_Month_End;
                 }
-                clientsManager.UpdateParameters(clients);
+                string res= clientsManager.UpdateParameters(clients);
+                if (res != string.Empty)
+                {
+                    TempData["message"] = "data can not updated";                   
+                }
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "Parameters" });
         }
 
-        [HttpGet]        
+        [HttpGet]
         public ActionResult AddEmployee(int CLI_Id, int CLE_Id = -1)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);

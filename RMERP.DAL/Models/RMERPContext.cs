@@ -161,6 +161,8 @@ namespace RMERP.DAL.Models
             {
                 entity.HasKey(e => e.CITY_Id);
 
+                entity.Property(e => e.CITY_Id).ValueGeneratedNever();
+
                 entity.Property(e => e.CITY_Name)
                     .IsRequired()
                     .HasMaxLength(100)
@@ -303,6 +305,8 @@ namespace RMERP.DAL.Models
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CLI_GST_Info).IsUnicode(false);
+
                 entity.Property(e => e.CLI_GST_Number)
                     .HasMaxLength(20)
                     .IsUnicode(false);
@@ -312,6 +316,20 @@ namespace RMERP.DAL.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.CLI_InActivatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.CLI_Invoicing_Address).IsUnicode(false);
+
+                entity.Property(e => e.CLI_Invoicing_City)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CLI_Invoicing_Location)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CLI_Invoicing_Name)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.CLI_IsActive)
                     .IsRequired()
@@ -333,6 +351,10 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.CLI_Pincode)
                     .IsRequired()
                     .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CLI_Place_Of_Supply)
+                    .HasMaxLength(200)
                     .IsUnicode(false);
 
                 entity.Property(e => e.CLI_RegisteredOn)
@@ -554,6 +576,34 @@ namespace RMERP.DAL.Models
             modelBuilder.Entity<Firms>(entity =>
             {
                 entity.HasKey(e => e.FRM_Id);
+
+                entity.Property(e => e.FRM_AccountNumber)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FRM_Address1).IsUnicode(false);
+
+                entity.Property(e => e.FRM_Address2).IsUnicode(false);
+
+                entity.Property(e => e.FRM_BankName)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FRM_Email)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FRM_GST_No)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FRM_IFSC_Code)
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FRM_InvoicingName)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.FRM_Name)
                     .IsRequired()

@@ -16,7 +16,7 @@ namespace RMERP.DAL.ManagerClasses
         public IEnumerable<Cities> getCityList()
         {
             return _context.Cities.OrderBy(m=>m.CITY_Name).ToList();
-        }  
+        }
         public string saveEditCity(Cities cities)
         {
             string res = string.Empty;
@@ -28,13 +28,13 @@ namespace RMERP.DAL.ManagerClasses
                 }
                 else
                 {
-                    _context.Cities.Add(cities);                   
+                    _context.Cities.Add(cities);
                 }
                 _context.SaveChanges();
             }
             catch (Exception ex)
             {
-                res= ex.Message;
+                res = ex.Message;
             }
             return res;
         }

@@ -42,6 +42,19 @@ namespace RMERP.DAL.Models
         public byte CLI_Total_WorkingDays { get; set; }
         public int? CLI_No_Reduce_Days { get; set; }
         public int CLI_WorkingHours_In_Day { get; set; }
+        public string CLI_Invoicing_Name { get; set; }
+        public string CLI_Invoicing_Address { get; set; }
+        public string CLI_Invoicing_City { get; set; }
+        public int? CLI_Invoicing_ZipCode { get; set; }
+        public string CLI_Invoicing_Location { get; set; }
+        public bool? CLI_IsIGST { get; set; }
+        public double? CLI_IGST { get; set; }
+        public bool? CLI_IsCGST { get; set; }
+        public double? CLI_CGST { get; set; }
+        public bool? CLI_IsSGST { get; set; }
+        public double? CLI_SGST { get; set; }
+        public string CLI_GST_Info { get; set; }
+        public string CLI_Place_Of_Supply { get; set; }
 
         public Cities CITY_ { get; set; }
         public Firms FRM_ { get; set; }

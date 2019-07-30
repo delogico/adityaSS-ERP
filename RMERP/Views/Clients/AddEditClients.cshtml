@@ -298,7 +298,6 @@
     <div id="Parameters" class="tab-pane fade">
         @using (Html.BeginForm("Parameters", "Clients", FormMethod.Post))
         {
-
             <div class="content container-fluid">
                 <div class="card-box m-b-0">
                     <div class="row">
@@ -394,19 +393,137 @@
                         <div class="col-md-12">
                             <div class="profile-view">
                                 <h4 class="page-title">Invoicing Parameters</h4>
+                                @*<div class="row">
+                                        <div class="form-group col-sm-6">
+                                            @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number)
+                                            @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Rate)
+                                            @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Rate, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Rate, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_HSN_Code)
+                                            @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_HSN_Code, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_HSN_Code, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_TDS_Rate)
+                                            @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_TDS_Rate, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_TDS_Rate, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>*@
+
                                 <div class="row">
+                                    <div class="form-group col-sm-10">
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Name)
+                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Name, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Name, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Address)
+                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Address, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Address, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_City)
+                                        @*@Html.DropDownListFor(x => x.clientsModel.CLI_Invoicing_City, new SelectList(ViewBag.cityList, "CITY_Id", "CITY_Name"), "Select City", new { @class = "form-control" })*@
+                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_City, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_City, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_ZipCode)
+                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_ZipCode, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_ZipCode, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Location)
+                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Location, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Location, "", new { @class = "text-danger" })
+                                    </div>
                                     <div class="form-group col-sm-6">
                                         @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number)
                                         @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="form-group col-sm-6">
-                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Rate)
-                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Rate, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Rate, "", new { @class = "text-danger" })
+                                    @*<div class="form-group col-sm-2">
+                                            @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsIGST, new { @id = "chkIsIGST" })
+                                            &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsIGST, new { @for = "chkIsIGST" })
+                                            <div id="divIGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsIGST ? "block" : "none")">
+                                                @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IGST, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_IGST, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-2">
+                                            @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsCGST, new { @id = "chkIsCGST" })
+                                            &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsCGST, new { @for = "chkIsCGST" })
+                                            <div id="divCGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsCGST ? "block" : "none")">
+                                                @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_CGST, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_CGST, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-2">
+                                            @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsSGST, new { @id = "chkIsSGST" })
+                                            &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsSGST, new { @for = "chkIsSGST" })
+                                            <div id="divSGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsSGST ? "block" : "none")">
+                                                @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_SGST, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_SGST, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>*@
+                                    <div class="form-group col-sm-2">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-6">
+                                                    @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsIGST, new { @id = "chkIsIGST" })
+                                                    &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsIGST, new { @for = "chkIsIGST" })
+                                                </div>
+                                                <div class="form-group col-sm-6">
+                                                    <div id="divIGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsIGST ? "block" : "none")">
+                                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IGST, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_IGST, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-6">
+                                                    @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsCGST, new { @id = "chkIsCGST" })
+                                                    &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsCGST, new { @for = "chkIsCGST" })
+                                                </div>
+                                                <div class="form-group col-sm-6">
+                                                    <div id="divCGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsCGST ? "block" : "none")">
+                                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_CGST, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_CGST, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-6">
+                                                    @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsSGST, new { @id = "chkIsSGST" })
+                                                    &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsSGST, new { @for = "chkIsSGST" })
+                                                </div>
+                                                <div class="form-group col-sm-6">
+                                                    <div id="divSGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsSGST ? "block" : "none")">
+                                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_SGST, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_SGST, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
+                                    <div class="form-group col-sm-10">
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Info)
+                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Info, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Info, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply)
+                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply, "", new { @class = "text-danger" })
+                                    </div>
                                     <div class="form-group col-sm-6">
                                         @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_HSN_Code)
                                         @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_HSN_Code, new { @class = "form-control" })
@@ -418,6 +535,7 @@
                                         @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_TDS_Rate, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
+
                                 <div class="m-t-20 text-center">
                                     <input type="submit" class="btn btn-primary" value="Save Changes" />
                                 </div>
@@ -805,6 +923,37 @@
                 }
             });
         }
+
+        $('input[id="chkIsIGST"]').click(function () {
+            if ($(this).prop("checked") == true) {
+                $("#divIGST").show();
+                $("#chkIsIGST").val("true");
+            }
+            else if ($(this).prop("checked") == false) {
+                $("#divIGST").hide();
+                $("#chkIsIGST").val("false");
+            }
+        });
+        $('input[id="chkIsCGST"]').click(function () {
+            if ($(this).prop("checked") == true) {
+                $("#divCGST").show();
+                $("#chkIsCGST").val("true");
+            }
+            else if ($(this).prop("checked") == false) {
+                $("#divCGST").hide();
+                $("#chkIsCGST").val("false");
+            }
+        });
+        $('input[id="chkIsSGST"]').click(function () {
+            if ($(this).prop("checked") == true) {
+                $("#divSGST").show();
+                $("#chkIsSGST").val("true");
+            }
+            else if ($(this).prop("checked") == false) {
+                $("#divSGST").hide();
+                $("#chkIsSGST").val("false");
+            }
+        });
     </script>
 }
 
