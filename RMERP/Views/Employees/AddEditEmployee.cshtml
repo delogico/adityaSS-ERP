@@ -436,12 +436,22 @@
                                     {
                                         @foreach (var item in Model.advances)
                                         {
-                                            <tr>
-                                                <td>@item.ADV_Amount </td>
-                                                <td>@DateHelper.getDateWithFormat(@item.ADV_RegisteredOn) </td>
-                                                <td><a href='@Url.Action("AddEditAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit Amount</a></td>
-                                                <td><a href='@Url.Action("DeleteAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Remove</a></td>
-                                            </tr>
+                                    <tr>
+                                        <td>@item.ADV_Amount </td>
+                                        <td>@DateHelper.getDateWithFormat(@item.ADV_RegisteredOn) </td>
+
+                                        @if (Model.wageRegisterAdvances == null)
+                                        {
+                                            <td><a href='@Url.Action("AddEditAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit Amount</a></td>
+                                            <td><a href='@Url.Action("DeleteAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Remove</a></td>
+                                        }
+                                        else
+                                        {
+                                            <td><a href='#' title="Edit" onclick="return alert('Please first delete advance installment of this employee!')"><i class="fa fa-pencil m-r-5"></i> Edit Amount</a></td>
+                                            <td><a href='#' title="Delete" onclick="return alert('Please first delete advance installment of this employee!');"><i class="fa fa-trash m-r-5"></i> Remove</a></td>
+
+                                        }
+                                    </tr>
                                         }
                                     }
 
