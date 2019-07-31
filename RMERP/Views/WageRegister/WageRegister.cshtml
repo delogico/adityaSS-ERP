@@ -207,8 +207,8 @@
                                 <td class="gainsboro">@DateHelper.getDateWithFormat(employee.employeeVM.EMP_DateOfJoining)</td>
                                 <td class="gainsboro">@employee.WAR_TotalWorkingDays</td>
                                 <td class="gainsboro">@employee.WAR_TotalPaybleDays</td>
-                                <td class="lightgray"><span title="(@(employee.WAR_Basic) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays ">@(Math.Round(employee.WAR_Basic_Calculated))</span></td>
-                                <td class="lightgray"><span title="(@(employee.WAR_DA) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays">@(Math.Round(employee.WAR_DA_Calculated))</span></td>
+                                <td class="lightgray"><span title="(@(employee.WAR_Basic) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays ">@(Math.Round(employee.WAR_Basic_Calculated, MidpointRounding.AwayFromZero))</span></td>
+                                <td class="lightgray"><span title="(@(employee.WAR_DA) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays">@(Math.Round(employee.WAR_DA_Calculated, MidpointRounding.AwayFromZero))</span></td>
                                 @{
                                     string str1 = "";
                                     if (employee.clientRequirementVM.CRI_HRA_Fixed.ToString() == "")
@@ -220,7 +220,7 @@
                                         str1 = "(" + employee.WAR_HRA + "/" + employee.WAR_TotalWorkingDays + ")*" + employee.WAR_TotalPaybleDays;
                                     }
                                 }
-                                <td class="lightgray"><span title="@str1">@Math.Round(employee.WAR_HRA_Calculated)</span></td>
+                                <td class="lightgray"><span title="@str1">@Math.Round(employee.WAR_HRA_Calculated, MidpointRounding.AwayFromZero)</span></td>
                                 @{
                                     foreach (var all in employee.allowanceVMs)
                                     {
@@ -233,46 +233,46 @@
                                         {
                                             str = "Fixed " + all.WAA_Amount;
                                         }
-                                        <td class="lightgray"><span title="@str">@Math.Round(all.WAA_Amount_Calculated)</span></td>
+                                        <td class="lightgray"><span title="@str">@Math.Round(all.WAA_Amount_Calculated, MidpointRounding.AwayFromZero)</span></td>
                                     }
                                 }
                                 @if (clientRequirement.CRI_OutStation_Allowance == true)
                                 {
-                                    <td class="lightgray">@Math.Round(employee.WAR_OutStation_Allowance_Calculated)</td>
+                                    <td class="lightgray">@Math.Round(employee.WAR_OutStation_Allowance_Calculated, MidpointRounding.AwayFromZero)</td>
                                 }
                                 @if (clientRequirement.CRI_Attendance_Allowance == true)
                                 {
-                                    <td class="lightgray">@Math.Round(employee.WAR_Attendance_Allowance_Calculated)</td>
+                                    <td class="lightgray">@Math.Round(employee.WAR_Attendance_Allowance_Calculated, MidpointRounding.AwayFromZero)</td>
                                 }
                                 @if (clientRequirement.CRI_Nightshift_Allowance == true)
                                 {
-                                    <td class="lightgray">@Math.Round(employee.WAR_Nightshift_Allowance_Calculated)</td>
+                                    <td class="lightgray">@Math.Round(employee.WAR_Nightshift_Allowance_Calculated, MidpointRounding.AwayFromZero)</td>
                                 }
                                 @if (clientRequirement.CRI_Performance_Allowance == true)
                                 {
-                                    <td class="lightgray">@Math.Round(employee.WAR_Performance_Allowance_Calculated)</td>
+                                    <td class="lightgray">@Math.Round(employee.WAR_Performance_Allowance_Calculated, MidpointRounding.AwayFromZero)</td>
                                 }
                                 @if (!clientRequirement.CRI_OT_Calculate_Payableday)
                                 {
-                                    <td class="lightgray">@Math.Round(employee.WAR_OverTime_Calculated)</td>
+                                    <td class="lightgray">@Math.Round(employee.WAR_OverTime_Calculated, MidpointRounding.AwayFromZero)</td>
                                 }
-                                <td class="lightgray">@Math.Round(employee.WAR_GrossTotal)</td>
+                                <td class="lightgray">@Math.Round(employee.WAR_GrossTotal, MidpointRounding.AwayFromZero)</td>
                                 @{
                                     string toolPF = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_PF_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
                                     toolPF = "(" + toolPF + ")*" + employee.WAR_PF + "%";
                                 }
-                                <td class="silver"><span title="@toolPF">@Math.Round(employee.WAR_PF_Calculated)</span></td>
+                                <td class="silver"><span title="@toolPF">@Math.Round(employee.WAR_PF_Calculated, MidpointRounding.AwayFromZero)</span></td>
                                 @{
                                     string toolESIC = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_ESIC_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
                                     toolESIC = "(" + toolESIC + ")*" + employee.WAR_ESIC + "%";
                                 }
-                                <td class="silver"><span title="@toolESIC">@Math.Round(employee.WAR_ESIC_Calculated)</span></td>
+                                <td class="silver"><span title="@toolESIC">@Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero)</span></td>
 
                                 @if (clientRequirement.CRI_ProfessionalTax == true)
                                 {
                                     <td class="silver">
                                         <span title="toolESIC">
-                                            @Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated))
+                                            @Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated), MidpointRounding.AwayFromZero)
                                         </span>
                                     </td>
                                 }
@@ -297,22 +297,22 @@
 
 
                                 }
-                                <td class="silver">@Math.Round(employee.WAR_Advance_Amount)</td>
+                                <td class="silver">@Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero)</td>
                                 @{
-                                    decimal DeductTotal = @Math.Round(employee.WAR_PF_Calculated) + @Math.Round(employee.WAR_ESIC_Calculated) + @Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated))
-                                    + @Math.Round(employee.WAR_Advance_Amount);
+                                    decimal DeductTotal = @Math.Round(employee.WAR_PF_Calculated) + @Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero) + @Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated),MidpointRounding.AwayFromZero)
+                                    + @Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero);
                                     if (employee.WAR_RevenueDeduction_Calculated != "-")
                                     {
-                                        DeductTotal += @Math.Round(Convert.ToDecimal(employee.WAR_RevenueDeduction_Calculated));
+                                        DeductTotal += @Math.Round(Convert.ToDecimal(employee.WAR_RevenueDeduction_Calculated), MidpointRounding.AwayFromZero);
                                     }
                                     if (employee.WAR_CanteenFacility_Calculation != "-")
                                     {
-                                        DeductTotal += @Math.Round(Convert.ToDecimal(employee.WAR_CanteenFacility_Calculation));
+                                        DeductTotal += @Math.Round(Convert.ToDecimal(employee.WAR_CanteenFacility_Calculation), MidpointRounding.AwayFromZero);
                                     }
 
                                 }
                                 <td class="silver">@DeductTotal</td>
-                                <td class="gray">@Math.Round(employee.WAR_FinalTotal)</td>
+                                <td class="gray">@Math.Round(employee.WAR_FinalTotal, MidpointRounding.AwayFromZero)</td>
 
                                 @if (item.wageProcessClientVM != null && item.wageProcessVM.WageStatus == false)
                                 {

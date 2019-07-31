@@ -41,7 +41,6 @@ namespace RMERP.DAL.ManagerClasses
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);
             WageProcessManager wageManager = new WageProcessManager(_context);
             Wage_Process wageProcess = wageManager.getWageProcessById(WAG_Id);
-            //List<Clients> lstCli = clientsManager.GetActiveClientForAttandanceReg(wageProcess.WAG_Month);
             List<Clients> lstCli = clientsManager.GetActiveClientOfMonthByFirmId(wageProcess.WAG_Month, FRM_Id);
             foreach (Clients client in lstCli)
             {
@@ -152,7 +151,7 @@ namespace RMERP.DAL.ManagerClasses
                         {
                             WAD_Amt = g.Sum(n => n.WAD_Amount)
                         });
-                        totalEMI = Math.Round(EMI.Select(g => g.WAD_Amt).FirstOrDefault());
+                        totalEMI = Math.Round(EMI.Select(g => g.WAD_Amt).FirstOrDefault(),MidpointRounding.AwayFromZero);
                     }
                     wageRegisterVM.WAR_Advance_Amount = totalEMI;
                     #endregion
@@ -207,11 +206,11 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.WAR_TotalPaybleDays = totalPaybleDays;
                     wageRegisterVM.WAR_ExtraWorkingHours = WAR_ExtraWorkingHours;
 
-                    CRI_Basic = Math.Round(cr.CRI_Basic.Value);
-                    CRI_DA = Math.Round(Convert.ToDecimal(cr.CRI_DA));
-                    BasicDa = Math.Round((Decimal.Add(CRI_Basic, Convert.ToDecimal(cr.CRI_DA))));
+                    CRI_Basic = Math.Round(cr.CRI_Basic.Value, MidpointRounding.AwayFromZero);
+                    CRI_DA = Math.Round(Convert.ToDecimal(cr.CRI_DA), MidpointRounding.AwayFromZero);
+                    BasicDa = Math.Round(Decimal.Add(CRI_Basic, Convert.ToDecimal(cr.CRI_DA)), MidpointRounding.AwayFromZero);
 
-                    CRI_HRA = Math.Round(cr.CRI_HRA_Fixed == null ? Convert.ToDecimal(cr.CRI_HRA_Percentage.Value) : cr.CRI_HRA_Fixed.Value);
+                    CRI_HRA = Math.Round(cr.CRI_HRA_Fixed == null ? Convert.ToDecimal(cr.CRI_HRA_Percentage.Value) : cr.CRI_HRA_Fixed.Value, MidpointRounding.AwayFromZero);
 
                     wageRegisterVM.WAR_Basic = CRI_Basic;
                     wageRegisterVM.WAR_HRA = CRI_HRA;
@@ -221,11 +220,11 @@ namespace RMERP.DAL.ManagerClasses
                     {
                         double OvertimeInDay = WAR_ExtraWorkingHours / Convert.ToDouble(cli.CLI_WorkingHours_In_Day);
 
-                        CRI_DA_Calculated = Math.Round((CRI_DA * Convert.ToDecimal(totalPaybleDays)) / totalWorkingDays);
-                        WAR_Basic_Calculated = Math.Round((Decimal.Multiply(CRI_Basic, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays);
-                        decimal CalculatedBasicDa = Math.Round(Decimal.Add(WAR_Basic_Calculated, Convert.ToDecimal(CRI_DA_Calculated)));
-                        CRI_HRA_Calculated = Math.Round(cr.CRI_HRA_Fixed == null ? ((CalculatedBasicDa * Convert.ToDecimal(cr.CRI_HRA_Percentage)) / 100) : ((Decimal.Multiply(cr.CRI_HRA_Fixed.Value, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays));
-
+                        CRI_DA_Calculated = Math.Round(Math.Round(CRI_DA * Convert.ToDecimal(totalPaybleDays), MidpointRounding.AwayFromZero) / totalWorkingDays, MidpointRounding.AwayFromZero);
+                        WAR_Basic_Calculated = Math.Round(Math.Round((Decimal.Multiply(CRI_Basic, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays, MidpointRounding.AwayFromZero), MidpointRounding.AwayFromZero);
+                        decimal CalculatedBasicDa = Math.Round(Decimal.Add(WAR_Basic_Calculated, Convert.ToDecimal(CRI_DA_Calculated)), MidpointRounding.AwayFromZero);
+                        CRI_HRA_Calculated = (cr.CRI_HRA_Fixed == null ? Math.Round((Math.Round(CalculatedBasicDa * Convert.ToDecimal(cr.CRI_HRA_Percentage))) / 100, MidpointRounding.AwayFromZero) : Math.Round((Decimal.Multiply(cr.CRI_HRA_Fixed.Value, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays, MidpointRounding.AwayFromZero));
+                      
                         #region START PF-ESIC -OT CALCULATION  
                         if (OvertimeInDay > 0)
                         {
@@ -237,18 +236,30 @@ namespace RMERP.DAL.ManagerClasses
                                 }
                                 else if (cr.CRI_OT_Formula != null)
                                 {
-                                    decimal OTsum = Math.Round(GetAmountBasedOnFormulaOT(cr.CRI_OT_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_Outstation_Allowance_Calculated, WAR_Attendance_Allowance_Calculated, WAR_Nightshift_Allowance_Calculated, WAR_Performance_Allowance_Calculated));
-                                    WAR_OverTime_Calculated = Math.Round(Convert.ToDecimal(((Convert.ToDouble(OTsum) / totalPaybleDays) * OvertimeInDay) * cr.CRI_OT_MultipleTimes));
+                                    decimal OTsum = Math.Round(GetAmountBasedOnFormulaOT(cr.CRI_OT_Formula, WAR_Basic_Calculated, CRI_DA_Calculated,
+                                        CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_Outstation_Allowance_Calculated, 
+                                        WAR_Attendance_Allowance_Calculated, WAR_Nightshift_Allowance_Calculated, WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
+
+                                    WAR_OverTime_Calculated = Math.Round(Convert.ToDecimal(((Convert.ToDouble(OTsum) / totalPaybleDays) * OvertimeInDay) * cr.CRI_OT_MultipleTimes), MidpointRounding.AwayFromZero);
                                 }
                             }
                         }
-                        decimal PFsum = Math.Round(GetAmountBasedOnFormula(cr.CRI_PF_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_OverTime_Calculated,WAR_Outstation_Allowance_Calculated, WAR_Attendance_Allowance_Calculated,WAR_Nightshift_Allowance_Calculated,WAR_Performance_Allowance_Calculated));
-                        decimal ESICsum = Math.Round(GetAmountBasedOnFormula(cr.CRI_ESIC_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_OverTime_Calculated, WAR_Outstation_Allowance_Calculated, WAR_Attendance_Allowance_Calculated, WAR_Nightshift_Allowance_Calculated, WAR_Performance_Allowance_Calculated));
+                        decimal PFsum = Math.Round(GetAmountBasedOnFormula(
+                            cr.CRI_PF_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, 
+                            cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, 
+                            WAR_OverTime_Calculated,WAR_Outstation_Allowance_Calculated, WAR_Attendance_Allowance_Calculated,
+                            WAR_Nightshift_Allowance_Calculated,WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
+
+                        decimal ESICsum = Math.Round(GetAmountBasedOnFormula(
+                            cr.CRI_ESIC_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, 
+                            cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_OverTime_Calculated, 
+                            WAR_Outstation_Allowance_Calculated, WAR_Attendance_Allowance_Calculated, WAR_Nightshift_Allowance_Calculated, 
+                            WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
 
                         WAR_PF = Convert.ToDecimal(cr.CRI_PF_Percentage);
                         WAR_ESIC = Convert.ToDecimal(cr.CRI_ESIC_Percentage);
-                        WAR_PF_Calculated = Math.Round(Decimal.Multiply(PFsum, WAR_PF) / 100);
-                        WAR_ESIC_Calculated = Math.Round(Decimal.Multiply(ESICsum, WAR_ESIC) / 100);
+                        WAR_PF_Calculated = Math.Round(Decimal.Multiply(PFsum, WAR_PF) / 100, MidpointRounding.AwayFromZero);
+                        WAR_ESIC_Calculated = Math.Round(Decimal.Multiply(ESICsum, WAR_ESIC) / 100, MidpointRounding.AwayFromZero);
                         #endregion
 
                         wageRegisterVM.WAR_PF_Formula = cr.CRI_PF_Formula;
@@ -281,7 +292,7 @@ namespace RMERP.DAL.ManagerClasses
                         decimal amount = allowance.CRA_Amount;
                         decimal fullAmt = 0M;
                         if (totalWorkingDays != 0)
-                            fullAmt = Math.Round((Decimal.Multiply(allowance.CRA_Amount, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays);
+                            fullAmt = Math.Round((Decimal.Multiply(allowance.CRA_Amount, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays, MidpointRounding.AwayFromZero);
 
                         if (allowance.CRA_DayswiseOrFull)
                         {
@@ -299,14 +310,16 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.WAR_Attendance_Allowance_Calculated = WAR_Attendance_Allowance_Calculated;
                     wageRegisterVM.allowanceVMs = allowances;
                     //************************** ALLOWANCES CALCULATION *****************************/
-                    decimal WAR_GrossTotal = Math.Round(WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + WAR_OverTime_Calculated + AllowancesTotal + WAR_Outstation_Allowance_Calculated+ WAR_Nightshift_Allowance_Calculated+ WAR_Performance_Allowance_Calculated + WAR_Attendance_Allowance_Calculated);
+                    decimal WAR_GrossTotal = Math.Round(WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + WAR_OverTime_Calculated + 
+                                                        AllowancesTotal + WAR_Outstation_Allowance_Calculated+ WAR_Nightshift_Allowance_Calculated+ 
+                                                        WAR_Performance_Allowance_Calculated + WAR_Attendance_Allowance_Calculated, MidpointRounding.AwayFromZero);
 
                     #region ProfessionalTax Calculation
                     decimal WAR_ProffesionalTax_Calculated = 0M, WAR_RevenueDeduction_Calculated = 0M, WAR_CanteenFacility_Calculation = 0M;
                     if (cr.CRI_ProfessionalTax == true)
                     {
                         ProfessionalTaxCalculationManager ptcManager = new ProfessionalTaxCalculationManager(_context);
-                        WAR_ProffesionalTax_Calculated = Math.Round(ptcManager.GetPT((employee.EMP_.EMP_Gender ? "M" : "F"), WAR_GrossTotal));
+                        WAR_ProffesionalTax_Calculated = Math.Round(ptcManager.GetPT((employee.EMP_.EMP_Gender ? "M" : "F"), WAR_GrossTotal), MidpointRounding.AwayFromZero);
                     }
                     #endregion
 
@@ -320,7 +333,7 @@ namespace RMERP.DAL.ManagerClasses
                         canteen = canteenManager.GetCanteenByCLE(wageProcess.WAG_Id, employee.CLE_Id, employee.CLI_Id);
                         if (canteen != null)
                         {
-                            WAR_CanteenFacility_Calculation = Math.Round(canteen.WRC_Amount);
+                            WAR_CanteenFacility_Calculation = Math.Round(canteen.WRC_Amount, MidpointRounding.AwayFromZero);
                             wageRegisterVM.WRC_Id = canteen.WRC_Id;
                             wageRegisterVM.WAR_CanteenFacility_Calculation = WAR_CanteenFacility_Calculation.ToString();
                         }
@@ -333,7 +346,7 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.WAR_ProffesionalTax_Calculated = WAR_ProffesionalTax_Calculated.ToString();
                     wageRegisterVM.WAR_RevenueDeduction_Calculated = WAR_RevenueDeduction_Calculated.ToString();
 
-                    decimal WAR_FinalTotal = Math.Round(WAR_GrossTotal - (WAR_PF_Calculated + WAR_ESIC_Calculated + totalEMI + WAR_ProffesionalTax_Calculated + WAR_RevenueDeduction_Calculated + WAR_CanteenFacility_Calculation));
+                    decimal WAR_FinalTotal = Math.Round(WAR_GrossTotal - (WAR_PF_Calculated + WAR_ESIC_Calculated + totalEMI + WAR_ProffesionalTax_Calculated + WAR_RevenueDeduction_Calculated + WAR_CanteenFacility_Calculation), MidpointRounding.AwayFromZero);
                     wageRegisterVM.WAR_GrossTotal = WAR_GrossTotal;
                     wageRegisterVM.WAR_FinalTotal = WAR_FinalTotal;
                     wageRegisterVM.WAR_DA = CRI_DA;

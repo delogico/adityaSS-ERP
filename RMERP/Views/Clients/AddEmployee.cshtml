@@ -5,7 +5,7 @@
 }
 @section Breadcrumbs{
     <li class="breadcrumb-item">@Html.ActionLink("Clients", "Index", "Clients")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Client Info", "AddEditClients", "Clients", new { id = 1 })</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Client Info", "AddEditClients", "Clients", new { id = Model.CLI_Id })</li>
     <li class="breadcrumb-item">Assign Employee</li>
 }
 @section scripts{

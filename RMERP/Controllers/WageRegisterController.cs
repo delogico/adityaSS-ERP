@@ -460,16 +460,16 @@ namespace RMERP.Controllers
                                     cellEmp5.CellStyle = styleGrey25;
                                     TotalPaybleDays = TotalPaybleDays + employee.WAR_TotalPaybleDays;
                                     ICell cellEmp6 = row.CreateCell(6);
-                                    cellEmp6.SetCellValue(Math.Round(employee.WAR_Basic_Calculated).ToString());
+                                    cellEmp6.SetCellValue(Math.Round(employee.WAR_Basic_Calculated, MidpointRounding.AwayFromZero).ToString());
                                     cellEmp6.CellStyle = styleGrey40;
-                                    TotalBasic = TotalBasic + Math.Round(employee.WAR_Basic_Calculated);
+                                    TotalBasic = TotalBasic + Math.Round(employee.WAR_Basic_Calculated, MidpointRounding.AwayFromZero);
                                     ICell cellEmp7 = row.CreateCell(7);
-                                    cellEmp7.SetCellValue(Math.Round(employee.WAR_DA_Calculated).ToString());
+                                    cellEmp7.SetCellValue(Math.Round(employee.WAR_DA_Calculated, MidpointRounding.AwayFromZero).ToString());
                                     cellEmp7.CellStyle = styleGrey40;
-                                    TotalDA = TotalDA + Math.Round(employee.WAR_DA_Calculated);
+                                    TotalDA = TotalDA + Math.Round(employee.WAR_DA_Calculated, MidpointRounding.AwayFromZero);
                                     ICell cellEmp8 = row.CreateCell(8);
-                                    cellEmp8.SetCellValue(Math.Round(employee.WAR_HRA_Calculated).ToString());
-                                    TotalHRA = TotalHRA + Math.Round(employee.WAR_HRA_Calculated);
+                                    cellEmp8.SetCellValue(Math.Round(employee.WAR_HRA_Calculated, MidpointRounding.AwayFromZero).ToString());
+                                    TotalHRA = TotalHRA + Math.Round(employee.WAR_HRA_Calculated, MidpointRounding.AwayFromZero);
                                     cellEmp8.CellStyle = styleGrey40;
                                     int cellAllowance = 8;
                                     int j = 0;
@@ -477,7 +477,7 @@ namespace RMERP.Controllers
                                     {
                                         arrAllowancesTotal[j] = arrAllowancesTotal[j] + all.WAA_Amount_Calculated;                                        
                                         ICell cellEmpAll = row.CreateCell(cellAllowance + 1);
-                                        cellEmpAll.SetCellValue(Math.Round(all.WAA_Amount_Calculated).ToString());
+                                        cellEmpAll.SetCellValue(Math.Round(all.WAA_Amount_Calculated, MidpointRounding.AwayFromZero).ToString());
                                         cellEmpAll.CellStyle = styleGrey40;
                                         cellAllowance++;
                                         j++;
@@ -488,7 +488,7 @@ namespace RMERP.Controllers
                                     if (clientRequirement.CRI_OutStation_Allowance == true)
                                     {
                                         ICell cellOutstation = row.CreateCell(cellNxt);
-                                        cellOutstation.SetCellValue(Math.Round(employee.WAR_OutStation_Allowance_Calculated).ToString());
+                                        cellOutstation.SetCellValue(Math.Round(employee.WAR_OutStation_Allowance_Calculated, MidpointRounding.AwayFromZero).ToString());
                                         TotalOutStation = TotalOutStation + Math.Round(employee.WAR_OutStation_Allowance_Calculated);
                                         cellOutstation.CellStyle = styleGrey40;
                                         cellNxt = cellNxt + 1;
@@ -496,47 +496,47 @@ namespace RMERP.Controllers
                                     if (clientRequirement.CRI_Attendance_Allowance == true)
                                     {
                                         ICell cellAttendance= row.CreateCell(cellNxt);
-                                        cellAttendance.SetCellValue(Math.Round(employee.WAR_Attendance_Allowance_Calculated).ToString());
-                                        TotalAttendance = TotalAttendance + Math.Round(employee.WAR_Attendance_Allowance_Calculated);
+                                        cellAttendance.SetCellValue(Math.Round(employee.WAR_Attendance_Allowance_Calculated, MidpointRounding.AwayFromZero).ToString());
+                                        TotalAttendance = TotalAttendance + Math.Round(employee.WAR_Attendance_Allowance_Calculated, MidpointRounding.AwayFromZero);
                                         cellAttendance.CellStyle = styleGrey40;
                                         cellNxt = cellNxt + 1;
                                     }
                                     if (clientRequirement.CRI_Nightshift_Allowance == true)
                                     {
                                         ICell cellNightshift = row.CreateCell(cellNxt);
-                                        cellNightshift.SetCellValue(Math.Round(employee.WAR_Nightshift_Allowance_Calculated).ToString());
-                                        TotalNightshift = TotalNightshift + Math.Round(employee.WAR_Nightshift_Allowance_Calculated);
+                                        cellNightshift.SetCellValue(Math.Round(employee.WAR_Nightshift_Allowance_Calculated, MidpointRounding.AwayFromZero).ToString());
+                                        TotalNightshift = TotalNightshift + Math.Round(employee.WAR_Nightshift_Allowance_Calculated, MidpointRounding.AwayFromZero);
                                         cellNightshift.CellStyle = styleGrey40;
                                         cellNxt = cellNxt + 1;
                                     }
                                     if (clientRequirement.CRI_Performance_Allowance == true)
                                     {
                                         ICell cellPerformance = row.CreateCell(cellNxt);
-                                        cellPerformance.SetCellValue(Math.Round(employee.WAR_Performance_Allowance_Calculated).ToString());
-                                        TotalPerformance = TotalPerformance + Math.Round(employee.WAR_Performance_Allowance_Calculated);
+                                        cellPerformance.SetCellValue(Math.Round(employee.WAR_Performance_Allowance_Calculated, MidpointRounding.AwayFromZero).ToString());
+                                        TotalPerformance = TotalPerformance + Math.Round(employee.WAR_Performance_Allowance_Calculated, MidpointRounding.AwayFromZero);
                                         cellPerformance.CellStyle = styleGrey40;
                                         cellNxt = cellNxt + 1;
                                     }
                                     if (!clientRequirement.CRI_OT_Calculate_Payableday)
                                     {
                                         ICell cellEmp10 = row.CreateCell(cellNxt);
-                                        cellEmp10.SetCellValue(Math.Round(employee.WAR_OverTime_Calculated).ToString());
-                                        TotalOT = TotalOT + Math.Round(employee.WAR_OverTime_Calculated);
+                                        cellEmp10.SetCellValue(Math.Round(employee.WAR_OverTime_Calculated, MidpointRounding.AwayFromZero).ToString());
+                                        TotalOT = TotalOT + Math.Round(employee.WAR_OverTime_Calculated, MidpointRounding.AwayFromZero);
                                         cellEmp10.CellStyle = styleGrey40;
                                         cellNxt = cellNxt + 1;
                                     }
                                     #endregion                                    
                                     ICell cellEmp11 = row.CreateCell(cellNxt);
-                                    cellEmp11.SetCellValue(Math.Round(employee.WAR_GrossTotal).ToString());
-                                    TotalGrossTotal = TotalGrossTotal + Math.Round(employee.WAR_GrossTotal);
+                                    cellEmp11.SetCellValue(Math.Round(employee.WAR_GrossTotal, MidpointRounding.AwayFromZero).ToString());
+                                    TotalGrossTotal = TotalGrossTotal + Math.Round(employee.WAR_GrossTotal, MidpointRounding.AwayFromZero);
                                     cellEmp11.CellStyle = styleGrey40;
                                     ICell cellEmp12 = row.CreateCell(cellNxt + 1);
-                                    cellEmp12.SetCellValue(Math.Round(employee.WAR_PF_Calculated).ToString());
-                                    TotalPF = TotalPF + Math.Round(employee.WAR_PF_Calculated);
+                                    cellEmp12.SetCellValue(Math.Round(employee.WAR_PF_Calculated, MidpointRounding.AwayFromZero).ToString());
+                                    TotalPF = TotalPF + Math.Round(employee.WAR_PF_Calculated, MidpointRounding.AwayFromZero);
                                     cellEmp12.CellStyle = styleGrey50;
                                     ICell cellEmp13 = row.CreateCell(cellNxt + 2);
-                                    cellEmp13.SetCellValue(Math.Round(employee.WAR_ESIC_Calculated).ToString());
-                                    TotalESIC = TotalESIC + Math.Round(employee.WAR_ESIC_Calculated);
+                                    cellEmp13.SetCellValue(Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero).ToString());
+                                    TotalESIC = TotalESIC + Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero);
                                     cellEmp13.CellStyle = styleGrey50;
                                     int cellNxt1 = cellNxt + 2;
                                     if (clientRequirement.CRI_ProfessionalTax == true)
@@ -568,29 +568,29 @@ namespace RMERP.Controllers
                                     int cellNext2 = cellNxt1 + 1;
 
                                     #region Total Deduction
-                                    decimal DeductTotal = @Math.Round(employee.WAR_PF_Calculated) + @Math.Round(employee.WAR_ESIC_Calculated) + @Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated))
-                                        + @Math.Round(employee.WAR_Advance_Amount);
+                                    decimal DeductTotal = Math.Round(employee.WAR_PF_Calculated, MidpointRounding.AwayFromZero) + Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero) + Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated), MidpointRounding.AwayFromZero)
+                                        + Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero);
                                     if (employee.WAR_RevenueDeduction_Calculated != "-")
                                     {
-                                        DeductTotal += @Math.Round(Convert.ToDecimal(employee.WAR_RevenueDeduction_Calculated));
+                                        DeductTotal += Math.Round(Convert.ToDecimal(employee.WAR_RevenueDeduction_Calculated), MidpointRounding.AwayFromZero);
                                     }
                                     if (employee.WAR_CanteenFacility_Calculation != "-")
                                     {
-                                        DeductTotal += @Math.Round(Convert.ToDecimal(employee.WAR_CanteenFacility_Calculation));
+                                        DeductTotal += Math.Round(Convert.ToDecimal(employee.WAR_CanteenFacility_Calculation), MidpointRounding.AwayFromZero);
                                     }
                                     #endregion
 
                                     ICell cellEmp14 = row.CreateCell(cellNext2);
-                                    cellEmp14.SetCellValue(Math.Round(employee.WAR_Advance_Amount).ToString());
-                                    TotalAdvance = TotalAdvance + Math.Round(employee.WAR_Advance_Amount);
+                                    cellEmp14.SetCellValue(Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero).ToString());
+                                    TotalAdvance = TotalAdvance + Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero);
                                     cellEmp14.CellStyle = styleGrey50;
                                     ICell cellEmp15 = row.CreateCell(cellNext2 + 1);
                                     cellEmp15.SetCellValue(DeductTotal.ToString());
                                     cellEmp15.CellStyle = styleGrey50;
                                     TotalDeduct = TotalDeduct + DeductTotal;
                                     ICell cellEmp16 = row.CreateCell(cellNext2 + 2);
-                                    cellEmp16.SetCellValue(Math.Round(employee.WAR_FinalTotal).ToString());
-                                    TotalFinal = TotalFinal + Math.Round(employee.WAR_FinalTotal);
+                                    cellEmp16.SetCellValue(Math.Round(employee.WAR_FinalTotal, MidpointRounding.AwayFromZero).ToString());
+                                    TotalFinal = TotalFinal + Math.Round(employee.WAR_FinalTotal, MidpointRounding.AwayFromZero);
                                     cellEmp16.CellStyle = styleGrey80;
                                     #endregion
                                     DesCount++;
@@ -616,13 +616,13 @@ namespace RMERP.Controllers
                                 cellTot1.SetCellValue(TotalPaybleDays.ToString());
                                 cellTot1.CellStyle = styleGrey25;
                                 ICell cellTot2 = row.CreateCell(totalCount + 2);
-                                cellTot2.SetCellValue(Math.Round(TotalBasic).ToString());
+                                cellTot2.SetCellValue(Math.Round(TotalBasic, MidpointRounding.AwayFromZero).ToString());
                                 cellTot2.CellStyle = styleGrey40;
                                 ICell cellTot3 = row.CreateCell(totalCount + 3);
-                                cellTot3.SetCellValue(Math.Round(TotalDA).ToString());
+                                cellTot3.SetCellValue(Math.Round(TotalDA, MidpointRounding.AwayFromZero).ToString());
                                 cellTot3.CellStyle = styleGrey40;
                                 ICell cellTot4 = row.CreateCell(totalCount + 4);
-                                cellTot4.SetCellValue(Math.Round(TotalHRA).ToString());
+                                cellTot4.SetCellValue(Math.Round(TotalHRA, MidpointRounding.AwayFromZero).ToString());
                                 cellTot4.CellStyle = styleGrey40;
                               
                                 int k = 0;
@@ -630,7 +630,7 @@ namespace RMERP.Controllers
                                 foreach (var all in wageRegisters[0].allowanceVMs)
                                 {
                                     ICell cellEmpAll = row.CreateCell(cellAllow + 1);
-                                    cellEmpAll.SetCellValue(Math.Round(arrAllowancesTotal[k]).ToString());
+                                    cellEmpAll.SetCellValue(Math.Round(arrAllowancesTotal[k], MidpointRounding.AwayFromZero).ToString());
                                     cellEmpAll.CellStyle = styleGrey40;
                                     cellAllow++;
                                     k++;
@@ -643,45 +643,45 @@ namespace RMERP.Controllers
                                     totalCount = totalCount + 1;
                                     ICell cellTotOutstation = row.CreateCell(totalCount);
                                     cellTotOutstation.CellStyle = styleGrey40;
-                                    cellTotOutstation.SetCellValue(Math.Round(TotalOutStation).ToString());
+                                    cellTotOutstation.SetCellValue(Math.Round(TotalOutStation, MidpointRounding.AwayFromZero).ToString());
                                 }
                                 if (clientRequirement.CRI_Attendance_Allowance == true)
                                 {
                                     totalCount = totalCount + 1;
                                     ICell cellTotAttendance = row.CreateCell(totalCount);
                                     cellTotAttendance.CellStyle = styleGrey40;
-                                    cellTotAttendance.SetCellValue(Math.Round(TotalAttendance).ToString());
+                                    cellTotAttendance.SetCellValue(Math.Round(TotalAttendance, MidpointRounding.AwayFromZero).ToString());
                                 }
                                 if (clientRequirement.CRI_Nightshift_Allowance == true)
                                 {
                                     totalCount = totalCount + 1;
                                     ICell cellTotNightshift = row.CreateCell(totalCount);
                                     cellTotNightshift.CellStyle = styleGrey40;
-                                    cellTotNightshift.SetCellValue(Math.Round(TotalNightshift).ToString());
+                                    cellTotNightshift.SetCellValue(Math.Round(TotalNightshift, MidpointRounding.AwayFromZero).ToString());
                                 }
                                 if (clientRequirement.CRI_Performance_Allowance == true)
                                 {
                                     totalCount = totalCount + 1;
                                     ICell cellTotPerformance = row.CreateCell(totalCount);
                                     cellTotPerformance.CellStyle = styleGrey40;
-                                    cellTotPerformance.SetCellValue(Math.Round(TotalPerformance).ToString());
+                                    cellTotPerformance.SetCellValue(Math.Round(TotalPerformance, MidpointRounding.AwayFromZero).ToString());
                                 }
                                 if (!clientRequirement.CRI_OT_Calculate_Payableday)
                                 {
                                     ICell cellTot5 = row.CreateCell(totalCount + 1);
                                     cellTot5.CellStyle = styleGrey40;
-                                    cellTot5.SetCellValue(Math.Round(TotalOT).ToString());
+                                    cellTot5.SetCellValue(Math.Round(TotalOT, MidpointRounding.AwayFromZero).ToString());
                                 }
                                 #endregion
                                 
                                 ICell cellTot6 = row.CreateCell(totalCount + 2);
-                                cellTot6.SetCellValue(Math.Round(TotalGrossTotal).ToString());
+                                cellTot6.SetCellValue(Math.Round(TotalGrossTotal, MidpointRounding.AwayFromZero).ToString());
                                 cellTot6.CellStyle = styleGrey40;
                                 ICell cellTot7 = row.CreateCell(totalCount + 3);
-                                cellTot7.SetCellValue(Math.Round(TotalPF).ToString());
+                                cellTot7.SetCellValue(Math.Round(TotalPF, MidpointRounding.AwayFromZero).ToString());
                                 cellTot7.CellStyle = styleGrey50;
                                 ICell cellTot8 = row.CreateCell(totalCount + 4);
-                                cellTot8.SetCellValue(Math.Round(TotalESIC).ToString());
+                                cellTot8.SetCellValue(Math.Round(TotalESIC, MidpointRounding.AwayFromZero).ToString());
                                 cellTot8.CellStyle = styleGrey50;
 
                                 int totalCount1 = totalCount + 4;
@@ -689,32 +689,32 @@ namespace RMERP.Controllers
                                 {
                                     totalCount1 = totalCount1 + 1;
                                     ICell cellTot9 = row.CreateCell(totalCount1);
-                                    cellTot9.SetCellValue(Math.Round(TotalProfTax).ToString());
+                                    cellTot9.SetCellValue(Math.Round(TotalProfTax, MidpointRounding.AwayFromZero).ToString());
                                     cellTot9.CellStyle = styleGrey50;
                                 }
                                 if (clientRequirement.CRI_RevenueDeduction == true)
                                 {
                                     totalCount1 = totalCount1 + 1;
                                     ICell cellTot10 = row.CreateCell(totalCount1);
-                                    cellTot10.SetCellValue(Math.Round(TotalRevenue).ToString());
+                                    cellTot10.SetCellValue(Math.Round(TotalRevenue, MidpointRounding.AwayFromZero).ToString());
                                     cellTot10.CellStyle = styleGrey50;
                                 }
                                 if (clientRequirement.CRI_CanteenFacility == true)
                                 {
                                     totalCount1 = totalCount1 + 1;
                                     ICell cellTot11 = row.CreateCell(totalCount1);
-                                    cellTot11.SetCellValue(Math.Round(TotalCanteenFacility).ToString());
+                                    cellTot11.SetCellValue(Math.Round(TotalCanteenFacility, MidpointRounding.AwayFromZero).ToString());
                                     cellTot11.CellStyle = styleGrey50;
                                 }
 
                                 ICell cellTot12 = row.CreateCell(totalCount1 + 1);
-                                cellTot12.SetCellValue(Math.Round(TotalAdvance).ToString());
+                                cellTot12.SetCellValue(Math.Round(TotalAdvance, MidpointRounding.AwayFromZero).ToString());
                                 cellTot12.CellStyle = styleGrey50;
                                 ICell cellTot13 = row.CreateCell(totalCount1 + 2);
-                                cellTot13.SetCellValue(Math.Round(TotalDeduct).ToString());
+                                cellTot13.SetCellValue(Math.Round(TotalDeduct, MidpointRounding.AwayFromZero).ToString());
                                 cellTot13.CellStyle = styleGrey50;
                                 ICell cellTot14 = row.CreateCell(totalCount1 + 3);
-                                cellTot14.SetCellValue(Math.Round(TotalFinal).ToString());
+                                cellTot14.SetCellValue(Math.Round(TotalFinal, MidpointRounding.AwayFromZero).ToString());
                                 cellTot14.CellStyle = styleGrey80;
                                 #endregion
 
