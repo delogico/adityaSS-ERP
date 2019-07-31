@@ -668,23 +668,24 @@ namespace RMERP.Controllers
                                 }
                                 if (!clientRequirement.CRI_OT_Calculate_Payableday)
                                 {
-                                    ICell cellTot5 = row.CreateCell(totalCount + 1);
+                                    totalCount = totalCount + 1;
+                                    ICell cellTot5 = row.CreateCell(totalCount);
                                     cellTot5.CellStyle = styleGrey40;
                                     cellTot5.SetCellValue(Math.Round(TotalOT, MidpointRounding.AwayFromZero).ToString());
                                 }
                                 #endregion
                                 
-                                ICell cellTot6 = row.CreateCell(totalCount + 2);
+                                ICell cellTot6 = row.CreateCell(totalCount + 1);
                                 cellTot6.SetCellValue(Math.Round(TotalGrossTotal, MidpointRounding.AwayFromZero).ToString());
                                 cellTot6.CellStyle = styleGrey40;
-                                ICell cellTot7 = row.CreateCell(totalCount + 3);
+                                ICell cellTot7 = row.CreateCell(totalCount + 2);
                                 cellTot7.SetCellValue(Math.Round(TotalPF, MidpointRounding.AwayFromZero).ToString());
                                 cellTot7.CellStyle = styleGrey50;
-                                ICell cellTot8 = row.CreateCell(totalCount + 4);
+                                ICell cellTot8 = row.CreateCell(totalCount + 3);
                                 cellTot8.SetCellValue(Math.Round(TotalESIC, MidpointRounding.AwayFromZero).ToString());
                                 cellTot8.CellStyle = styleGrey50;
 
-                                int totalCount1 = totalCount + 4;
+                                int totalCount1 = totalCount + 3;
                                 if (clientRequirement.CRI_ProfessionalTax == true)
                                 {
                                     totalCount1 = totalCount1 + 1;
