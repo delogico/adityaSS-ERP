@@ -9,6 +9,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace RMERP.DAL.ManagerClasses
 {
@@ -534,9 +535,10 @@ namespace RMERP.DAL.ManagerClasses
             return _contaxt.Clients.Where(m => m.CLI_IsActive.Equals(true) && m.FRM_Id.Equals(FRM_ID)).Count();
         }
 
-        public bool IsEmployeeWagedForClient(int EMP_Id, int CLI_Id, int DES_Id)
+        public bool IsEmployeeWagedForClient(int EMP_Id, int CLI_Id,int DES_Id)
         {
-            int count = _contaxt.Attendance.Where(m => m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id) && m.DES_Id.Equals(DES_Id)).Count();
+            // int count = _contaxt.Attendance.Where(m => m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id) && m.DES_Id.Equals(DES_Id)).Count();
+            int count = _contaxt.Wage_Register.Where(m => m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id)).Count();
             if (count > 0)
             {
                 return true;
@@ -547,11 +549,32 @@ namespace RMERP.DAL.ManagerClasses
             }
         }
 
-        public string DeleteAssignEmployee(int CLE_Id)
+        public string DeleteAssignEmployee(int CLE_Id,int CLI_Id, int EMP_Id,int DES_Id)
         {
             string res = string.Empty;            
             try
             {
+                List<Wage_Register_Canteen> canteen = _contaxt.Wage_Register_Canteen.Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
+                if (canteen.Count()>0)
+                {
+                    _contaxt.Wage_Register_Canteen.RemoveRange(canteen);                   
+                }
+                List<Wage_Register_Outstation> outstation = _contaxt.Wage_Register_Outstation.Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
+                if (outstation.Count()>0)
+                {
+                    _contaxt.Wage_Register_Outstation.RemoveRange(outstation);                   
+                }
+                List<Wage_Register_Performance> performance = _contaxt.Wage_Register_Performance.Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
+                if (performance.Count()>0)
+                {
+                    _contaxt.Wage_Register_Performance.RemoveRange(performance);                   
+                }
+                List<Attendance> attendance = _contaxt.Attendance.Where(m => m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id) && m.DES_Id.Equals(DES_Id)).ToList();
+                if (attendance.Count()>0)
+                {
+                    _contaxt.Attendance.RemoveRange(attendance);                   
+                }
+
                 var employee = _contaxt.Clients_Employees.Find(CLE_Id);
                 _contaxt.Clients_Employees.Remove(employee);
                 _contaxt.SaveChanges();
@@ -593,6 +616,65 @@ namespace RMERP.DAL.ManagerClasses
             int count = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(CLI_Id) && m.DES_Id.Equals(DES_Id) && m.CLE_UnassignedOn==null).Count();
             return (count>0);
         }
-        
+
+        public string GetAssignEmployeeDependancy(int CLE_Id,int CLI_Id,int EMP_Id,int DES_Id)
+        {
+            string res = string.Empty;
+            List<Wage_Register_Canteen> register_Canteens = _contaxt.Wage_Register_Canteen.Include(m => m.WAG_).Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
+            if (register_Canteens.Count() > 0)
+            {
+                string WAG_Month = string.Empty;
+                foreach (var month in register_Canteens)
+                {
+                    WAG_Month += month.WAG_.WAG_Month.ToString("MMMM") + "-" + month.WAG_.WAG_Month.ToString("yyyy");
+                    WAG_Month += ",";
+                }
+
+                res += "<p> Employee's Canteen record is available for <b>" + WAG_Month.Remove(WAG_Month.Length - 1) + "</b></p> <br/>";
+            }
+            List<Wage_Register_Outstation> register_Outstations = _contaxt.Wage_Register_Outstation.Include(m => m.WAG_).Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
+            if (register_Outstations.Count() > 0)
+            {
+                string WAG_Month = string.Empty;
+                foreach (var month in register_Outstations)
+                {
+                    WAG_Month += month.WAG_.WAG_Month.ToString("MMMM") + "-" + month.WAG_.WAG_Month.ToString("yyyy");
+                    WAG_Month += ",";
+                }
+
+                res += "<p> Employee's  outstation hours record is available for <b>" + WAG_Month.Remove(WAG_Month.Length - 1) + "</b></p> <br/>";
+            }
+            List<Wage_Register_Performance> register_Performances = _contaxt.Wage_Register_Performance.Include(m => m.WAG_).Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
+            if (register_Performances.Count() > 0)
+            {
+                string WAG_Month = string.Empty;
+                foreach (var month in register_Performances)
+                {
+                    WAG_Month += month.WAG_.WAG_Month.ToString("MMMM") + "-" + month.WAG_.WAG_Month.ToString("yyyy");
+                    WAG_Month += ",";
+                }
+
+                res += "<p> Employee's performance record is available for <b>" + WAG_Month.Remove(WAG_Month.Length - 1) + "</b></p> <br/>";
+            }
+
+            List<Attendance> attendance = new List<Attendance>();
+            attendance = _contaxt.Attendance.Include(m=>m.WAG_).Where(m => m.EMP_Id.Equals(EMP_Id) && m.CLI_Id.Equals(CLI_Id) && m.DES_Id.Equals(DES_Id)).ToList();
+            if (attendance.Count() > 0)
+            {
+                string WAG_Month = string.Empty;
+                foreach (var month in attendance.GroupBy(m => m.WAG_Id).Select(g => new { WAG_ = g.Select(m => m.WAG_) }))
+                {
+                    DateTime WAGMonth = month.WAG_.Select(m => m.WAG_Month).FirstOrDefault();
+                    WAG_Month += WAGMonth.ToString("MMMM") + "-" + WAGMonth.ToString("yyyy");
+                    WAG_Month += ",";
+                }
+                res += "<p> Employee's Attendance record is available for <b>" + WAG_Month.Remove(WAG_Month.Length - 1) + "</b></p> <br/>";
+            }
+            
+            return res;
+        }
+
+
+
     }
 }

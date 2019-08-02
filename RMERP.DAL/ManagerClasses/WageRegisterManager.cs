@@ -259,7 +259,7 @@ namespace RMERP.DAL.ManagerClasses
                         WAR_PF = Convert.ToDecimal(cr.CRI_PF_Percentage);
                         WAR_ESIC = Convert.ToDecimal(cr.CRI_ESIC_Percentage);
                         WAR_PF_Calculated = Math.Round(Decimal.Multiply(PFsum, WAR_PF) / 100, MidpointRounding.AwayFromZero);
-                        WAR_ESIC_Calculated = Math.Round(Decimal.Multiply(ESICsum, WAR_ESIC) / 100, MidpointRounding.AwayFromZero);
+                        WAR_ESIC_Calculated = Math.Ceiling(Decimal.Multiply(ESICsum, WAR_ESIC) / 100);
                         #endregion
 
                         wageRegisterVM.WAR_PF_Formula = cr.CRI_PF_Formula;
@@ -319,7 +319,8 @@ namespace RMERP.DAL.ManagerClasses
                     if (cr.CRI_ProfessionalTax == true)
                     {
                         ProfessionalTaxCalculationManager ptcManager = new ProfessionalTaxCalculationManager(_context);
-                        WAR_ProffesionalTax_Calculated = Math.Round(ptcManager.GetPT((employee.EMP_.EMP_Gender ? "M" : "F"), WAR_GrossTotal), MidpointRounding.AwayFromZero);
+                        
+                        WAR_ProffesionalTax_Calculated = Math.Round(ptcManager.GetPT((employee.EMP_.EMP_Gender ? "M" : "F"), WAR_GrossTotal), MidpointRounding.AwayFromZero);                        
                     }
                     #endregion
 

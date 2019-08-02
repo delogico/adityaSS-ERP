@@ -620,10 +620,10 @@ namespace RMERP.Controllers
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
         }
 
-        public ActionResult DeleteAssignEmployee(int CLE_Id)
+        public ActionResult DeleteAssignEmployee(int CLE_Id,int CLI_ID,int EMP_Id, int DES_Id)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            string res = clientsManager.DeleteAssignEmployee(CLE_Id);
+            string res = clientsManager.DeleteAssignEmployee(CLE_Id, CLI_ID, EMP_Id, DES_Id);
             if (res != string.Empty)
             {
                 TempData["message"] = "Assign employee can not deleted!";
@@ -1297,6 +1297,13 @@ namespace RMERP.Controllers
             memory.Position = 0;
             new FileInfo(Path.Combine(newPath, fileName)).Delete();
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
+
+        public ActionResult GetAssignEmployeeDependancy(int CLE_Id,int CLI_Id,int EMP_Id,int DES_Id)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            string res = clientsManager.GetAssignEmployeeDependancy(CLE_Id, CLI_Id, EMP_Id, DES_Id);
+            return Content(res);
         }
     }
 }

@@ -450,7 +450,7 @@
                                         @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number, "", new { @class = "text-danger" })
                                     </div>
-                                    
+
                                     <div class="form-group col-sm-2">
                                         <div class="row">
                                             <div class="col-sm-12">
@@ -566,8 +566,9 @@
                                                         <li><a href='@Url.Action("AddEmployee","Clients",new { CLI_Id=Model.clientsModel.CLI_Id, CLE_Id=item.CLE_Id})' title="Edit"><i class="fa fa-edit m-r-5"></i> Edit</a></li>
                                                         @if (!item.IsEmployeeWagedForClient && item.CLE_UnassignedOn == null)
                                                         {
-                                                            <li><a href='@Url.Action("DeleteAssignEmployee","Clients",new {CLE_Id=item.CLE_Id})' title="Delete"><i class="fa fa-remove m-r-5"></i> Delete </a></li>
-                                                        }
+                                                            @*<li><a href='@Url.Action("DeleteAssignEmployee","Clients",new {CLE_Id=item.CLE_Id})' title="Delete"><i class="fa fa-remove m-r-5"></i> Delete </a></li>*@
+                                                            <li><a href='#' onclick="onDeleteEmployeeClick(@item.CLE_Id,@item.CLI_Id,@item.EMP_Id,@item.DES_Id)" title="Delete"><i class="fa fa-remove m-r-5"></i> Delete</a></li>
+                                                        }                                                        
                                                     </ul>
 
                                                 </div>
@@ -876,7 +877,6 @@
             });
         }
         function onUnassignClick(CLE_Id) {
-            debugger;
             bootbox.prompt({
                 title: "Choose Month!",
                 inputType: 'date',
@@ -899,6 +899,46 @@
                     }
                 }
             });
+        }
+
+        function onDeleteEmployeeClick(CLE_Id,CLI_Id,EMP_Id,DES_Id) {
+
+            $.ajax({
+                url: "/Clients/GetAssignEmployeeDependancy?CLE_Id=" + CLE_Id + "&CLI_Id=" + CLI_Id + "&EMP_Id=" + EMP_Id + "&DES_Id=" + DES_Id,
+                            contentType: 'application/json; charset=utf-8',
+                            datatype: 'json',
+                            type: "GET",
+                            success: function (res) {
+                               var dialog = bootbox.dialog({
+                              // title: 'Are you sure you want to delete?',
+                                   message: "<h4>Are you sure you want to delete?</h4><br/>" + res,
+                                size: 'large',
+                                buttons: {
+                                    cancel: {
+                                        label: "Cancel!",
+                                        className: 'btn-danger',                                       
+                                    },
+                                    ok: {
+                                        label: "Yes!",
+                                        className: 'btn-info',
+                                        callback: function () {                                            
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Clients/DeleteAssignEmployee?CLE_Id=" + CLE_Id + "&CLI_Id=" + CLI_Id + "&EMP_Id=" + EMP_Id + "&DES_Id=" + DES_Id,
+                                                contentType: 'application/json; charset=utf-8',
+                                                datatype: 'json',
+                                                type: "GET",
+                                                success: function () {
+                                                    window.location = '@Url.Action("AddEditClients", "Clients",new { @tab = "ClientEmployee" })';
+                                                }
+
+                                            })
+                                        }
+                                    }
+                                }
+                             });
+                            }
+                        })
         }
 
         $('input[id="chkIsIGST"]').click(function () {
