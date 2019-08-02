@@ -59,39 +59,38 @@
         <div class="raw">
             <div class="col-md-6">
                 <ul style="font-size:10px;padding-left: 10px !important;">
-                    @if (Model.WageStatus == true)
-                    {
-                        @*<li>@Html.ActionLink("PF Report", "PFReport", "Reports", new { WAG_Id = Model.WAG_Id })</li>*@
+                    @*@if (Model.WageStatus == true)
+                    {*@
                         <li><a href='@Url.Action( "PFReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-excel-o m-r-5"></i>PF Report.xlsx</a></li>
                         <li><a href='@Url.Action( "PFReportText","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-text-o m-r-5"></i>PF Report.txt</a></li>
 
                         <li><a href='@Url.Action( "ESICReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Report.xlsx</a></li>
 
 
-                    }
+                    @*}
                     else
                     {
                         <li><i class="fa fa-file-excel-o m-r-5"></i>PF Report.xlsx</li>
                         <li><i class="fa fa-file-text-o m-r-5"></i>PF Report.txt</li>
                         <li><i class="fa fa-file-excel-o m-r-5"></i>ESIC Report.xlsx</li>
-                    }
+                    }*@
 
 
                 </ul>
             </div>
             <div class="col-md-6">
                 <ul style="font-size:10px;padding-left: 10px !important;">
-                    @if (Model.WageStatus == true)
-                    {
+                    @*@if (Model.WageStatus == true)
+                    {*@
                         <li><a href='@Url.Action( "NEFT_BankReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="NEFT/Bank Report"><i class="fa fa-file-excel-o m-r-5"></i>NEFT/Bank Report.xlsx</a></li>
                         <li><a href='@Url.Action( "MLWF_ContributionExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="MLWF CONTRIBUTION Report"><i class="fa fa-file-excel-o m-r-5"></i>MLWF CONTRIBUTION Report.xlsx</a></li>
                         <li><a href='@Url.Action( "PayTaxExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PAY TAX Report"><i class="fa fa-file-excel-o m-r-5"></i>PAY TAX Report.xlsx</a></li>
-                    }
+                    @*}
                     else
                     {
                         <li>NEFT/Bank Report</li>
                         <li>ESIC Report</li>
-                    }
+                    }*@
 
                 </ul>
             </div>
