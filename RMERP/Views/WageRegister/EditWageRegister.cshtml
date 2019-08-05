@@ -28,9 +28,10 @@
 
         var CRI_HRA_Calculated = 0, WAR_Basic_Calculated = 0, WAR_OverTime_Calculated = 0, CRI_DA_Calculated=0;
         if (totalWorkingDays != 0) {
-            CRI_DA_Calculated = (CRI_DA * totalPaybleDays) / totalWorkingDays;
-            CRI_HRA_Calculated = (Percentage == true ? ((BasicDa * CRI_HRA) / 100) : ((CRI_HRA * totalPaybleDays) / totalPaybleDays));
-            WAR_Basic_Calculated = (CRI_Basic*totalPaybleDays) / totalWorkingDays;
+            CRI_DA_Calculated = (CRI_DA * totalPaybleDays) / totalWorkingDays;           
+            WAR_Basic_Calculated = (CRI_Basic * totalPaybleDays) / totalWorkingDays;
+            var BasicDaCalculated = parseInt(CRI_Basic) + parseInt(CRI_DA);
+            CRI_HRA_Calculated = (Percentage == true ? ((BasicDaCalculated * CRI_HRA) / 100) : ((CRI_HRA * totalPaybleDays) / totalPaybleDays));
             WAR_OverTime_Calculated = ((CRI_Basic / totalWorkingDays) / 8) * WAR_ExtraWorkingHours;
         }
         var WAR_PF_Calculated = (BasicDa * WAR_PF) / 100;
@@ -127,7 +128,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, new { @class = "form-control", @readonly = true })
+                                @*@Html.TextBoxFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, new { @class = "form-control", @readonly = true })*@
+                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, new { @class = "form-control"})
                                 @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -141,7 +143,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.wageRegisterVM.WAR_Basic_Calculated, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_Basic_Calculated, new { @class = "form-control", @readonly = true })
+                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_Basic_Calculated, new { @class = "form-control"})
                                 @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_Basic_Calculated, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -155,7 +157,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.wageRegisterVM.WAR_DA_Calculated, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_DA_Calculated, new { @class = "form-control", @readonly = true })
+                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_DA_Calculated, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_DA_Calculated, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -171,14 +173,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.wageRegisterVM.WAR_HRA_Calculated, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_HRA_Calculated, new { @class = "form-control", @readonly = true })
+                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_HRA_Calculated, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_HRA_Calculated, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.wageRegisterVM.WAR_GrossTotal, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_GrossTotal, new { @class = "form-control", @readonly = true })
+                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_GrossTotal, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_GrossTotal, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -192,7 +194,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.wageRegisterVM.WAR_PF_Calculated, new { @class = "control-label" })
-                                @Html.EditorFor(m => m.wageRegisterVM.WAR_PF_Calculated, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                @Html.EditorFor(m => m.wageRegisterVM.WAR_PF_Calculated, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_PF_Calculated, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -206,7 +208,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, new { @class = "control-label" })
-                                @Html.EditorFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                @Html.EditorFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, new { htmlAttributes = new { @class = "form-control"} })
                                 @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -223,7 +225,7 @@
                                             @Html.ValidationMessageFor(m => Model.wage_Register_Allowances[i].WAA_Amount, "", new { @class = "text-danger" })
                                         </div>
                                         <div class="col-md-6">
-                                            @Html.EditorFor(m => Model.wage_Register_Allowances[i].WAA_Amount_Calculated, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                            @Html.EditorFor(m => Model.wage_Register_Allowances[i].WAA_Amount_Calculated, new { htmlAttributes = new { @class = "form-control"} })
                                             @Html.ValidationMessageFor(m => Model.wage_Register_Allowances[i].WAA_Amount_Calculated, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
@@ -233,7 +235,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.wageRegisterVM.WAR_FinalTotal, new { @class = "control-label" })
-                                @Html.EditorFor(m => m.wageRegisterVM.WAR_FinalTotal, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                @Html.EditorFor(m => m.wageRegisterVM.WAR_FinalTotal, new { htmlAttributes = new { @class = "form-control"} })
                                 @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_FinalTotal, "", new { @class = "text-danger" })
                             </div>
                         </div>
