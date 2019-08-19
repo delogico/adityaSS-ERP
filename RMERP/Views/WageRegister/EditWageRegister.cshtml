@@ -30,7 +30,7 @@
         if (totalWorkingDays != 0) {
             CRI_DA_Calculated = (CRI_DA * totalPaybleDays) / totalWorkingDays;           
             WAR_Basic_Calculated = (CRI_Basic * totalPaybleDays) / totalWorkingDays;
-            var BasicDaCalculated = parseInt(CRI_Basic) + parseInt(CRI_DA);
+            var BasicDaCalculated = parseInt(WAR_Basic_Calculated) + parseInt(CRI_DA_Calculated);
             CRI_HRA_Calculated = (Percentage == true ? ((BasicDaCalculated * CRI_HRA) / 100) : ((CRI_HRA * totalPaybleDays) / totalPaybleDays));
             WAR_OverTime_Calculated = ((CRI_Basic / totalWorkingDays) / 8) * WAR_ExtraWorkingHours;
         }
