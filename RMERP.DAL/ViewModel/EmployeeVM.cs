@@ -131,6 +131,39 @@ namespace RMERP.DAL.ViewModel
         public Firms FRM_ { get; set; }
 
         public bool IsAssigned { get; set; }
+
+        [Display(Name = "Payment Type")]
+        [Required(ErrorMessage = "Payment type is required.")]
+        public int EMP_Payment_Type { get; set; }
+
+        [Display(Name = "Bank Type")]
+        [Required(ErrorMessage = "Bank type is required.")]
+        public int EMP_Is_IDBI_Other { get; set; }
+
+    }
+
+    public class EmployeePaymentVM
+    {
+        public int EMP_Id { get; set; }
+
+        [Display(Name = "Account Name")]
+        public string EMP_Account_Name { get; set; }
+        [Display(Name = "Account Number")]
+        public string EMP_Account_Number { get; set; }
+        [Display(Name = "Bank")]
+        public string EMP_Bank { get; set; }
+        [Display(Name = "Branch")]
+        public string EMP_Branch { get; set; }
+        [Display(Name = "IFSC Code")]
+        public string EMP_Bank_IFSC { get; set; }
+
+        [Display(Name = "Payment Type")]
+        [Required(ErrorMessage = "Payment type is required.")]
+        public int EMP_Payment_Type { get; set; }
+
+        [Display(Name = "Bank Type")]
+        [Required(ErrorMessage = "Bank type is required.")]
+        public int EMP_Is_IDBI_Other { get; set; }
     }
 }
 

@@ -49,6 +49,17 @@ namespace RMERP.DAL.Helpers
             Canteen_Facility = 2
         }
 
+        public enum PAYMENT_TYPE
+        {
+            Bank_Account = 0,
+            Cheque_Cash = 1           
+        }
+        public enum PAYMENT_BANK_TYPE
+        {
+            IDBI_To_IDBI = 0,
+            IDBI_To_Others = 1
+        }
+
         public static DateTime DateNow()
         {
             DateTime utcTime = DateTime.UtcNow;

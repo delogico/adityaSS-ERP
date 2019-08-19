@@ -60,7 +60,9 @@ namespace RMERP.DAL.Mappers
                 EmployeeManager employeeManager = new EmployeeManager(_context);
                 emp.IsAssigned = employeeManager.IsAssignedEmployee(emp.EMP_Id);
             }
-            
+            emp.EMP_Payment_Type = employee.EMP_Payment_Type;
+            emp.EMP_Is_IDBI_Other = employee.EMP_Is_IDBI_Other;
+
             return emp;
         }
 
@@ -107,6 +109,8 @@ namespace RMERP.DAL.Mappers
             emp.FRM_Id = employee.FRM_Id;
             if (employee.FRM_!=null)
                 emp.FRM_ = employee.FRM_;
+            emp.EMP_Payment_Type = employee.EMP_Payment_Type;
+            emp.EMP_Is_IDBI_Other = employee.EMP_Is_IDBI_Other;
             return emp;
         }
     }

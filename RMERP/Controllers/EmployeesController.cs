@@ -77,7 +77,7 @@ namespace RMERP.Controllers
             IEnumerable<Firms> listFirms = new List<Firms>();
             listFirms = firmsManager.getFirmList();
             ViewBag.firmList = listFirms;
-            EmployeeVM employeeVM = new EmployeeVM();
+            EmployeeVM employeeVM = new EmployeeVM();           
             if (EMP_Id > 0)
             {
                 Employee_Id = EMP_Id;
@@ -94,19 +94,19 @@ namespace RMERP.Controllers
             }
             ViewBag.DocumentTypes = typesManager.GetDocumentTypes();
             return View(employeeVM);
-        }
+        }      
 
         [HttpPost]
         public ActionResult AddEditEmployees(EmployeeVM employeeVM)
         {
-
             string res = string.Empty;
             EmployeeManager employeeManager = new EmployeeManager(_context);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);            
             if (ModelState.IsValid)
             {
-                SessionUtils sessionUtils = new SessionUtils(Request, Response);
-                Employees employee = new Employees();
+                Employees employee = new Employees();               
                 employee = EmployeesMapper.MapMeModel(employeeVM);
+                employee.EMP_Payment_Type = (int)PAYMENT_TYPE.Cheque_Cash;
                 employee.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
                 res = employeeManager.AddEditEmployee(employee);
             }
@@ -118,6 +118,49 @@ namespace RMERP.Controllers
             {
                 TempData["message"] = "Employee data can not Inserted";
                 return RedirectToAction("AddEditEmployee", new { EMP_Id = employeeVM.EMP_Id });
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult AddEditEmployeesPaymentInfo(EmployeePaymentVM employeePaymentVM)
+        {
+            string res = string.Empty;
+            EmployeeManager employeeManager = new EmployeeManager(_context);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            if (ModelState.IsValid)
+            {
+                Employees employee = employeeManager.GetEmployeeById(employeePaymentVM.EMP_Id);
+                employee.EMP_Payment_Type = employeePaymentVM.EMP_Payment_Type;
+                employee.EMP_Is_IDBI_Other = employeePaymentVM.EMP_Is_IDBI_Other;
+                if (employeePaymentVM.EMP_Payment_Type == (int)PAYMENT_TYPE.Cheque_Cash)
+                {
+                    employee.EMP_Bank = null;
+                    employee.EMP_Account_Name = null;
+                    employee.EMP_Account_Number = null;
+                    employee.EMP_Branch = null;
+                    employee.EMP_Bank_IFSC = null;
+                    employee.EMP_Is_IDBI_Other = (int)PAYMENT_BANK_TYPE.IDBI_To_IDBI;
+                }
+                else
+                {
+                    employee.EMP_Bank = employeePaymentVM.EMP_Bank;
+                    employee.EMP_Account_Name = employeePaymentVM.EMP_Account_Name;
+                    employee.EMP_Account_Number = employeePaymentVM.EMP_Account_Number;
+                    employee.EMP_Branch = employeePaymentVM.EMP_Branch;
+                    employee.EMP_Bank_IFSC = employeePaymentVM.EMP_Bank_IFSC;
+                }
+                employee.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
+                res = employeeManager.AddEditEmployee(employee);
+            }
+            if (res == string.Empty)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["message"] = "Employee payment data can not Inserted";
+                return RedirectToAction("AddEditEmployee", new { EMP_Id = employeePaymentVM.EMP_Id });
             }
 
         }
