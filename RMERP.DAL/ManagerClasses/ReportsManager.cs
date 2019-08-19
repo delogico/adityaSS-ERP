@@ -6,6 +6,7 @@ using System.Text;
 using RMERP.DAL.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using RMERP.DAL.Helpers;
+using static RMERP.DAL.Helpers.ProjectUtils;
 
 namespace RMERP.DAL.ManagerClasses
 {    
@@ -110,16 +111,16 @@ namespace RMERP.DAL.ManagerClasses
                 bankReportVM.CLI_Name = cli.CLI_Name;
                 List<Wage_Register> register = registerManager.GetWageRegisters(WAG_Id,cli.CLI_Id);
                 List<NEFTBank_EMP_ReportVM> rptEmployees = new List<NEFTBank_EMP_ReportVM>();
-                foreach(var wage in register)
+                foreach (var wage in register)
                 {
                     NEFTBank_EMP_ReportVM rptEmployee = new NEFTBank_EMP_ReportVM();
                     rptEmployee.EMP_FirstName = wage.EMP_.EMP_FirstName;
                     rptEmployee.EMP_MiddleName = wage.EMP_.EMP_MiddleName;
                     rptEmployee.EMP_SurName = wage.EMP_.EMP_SurName;
                     rptEmployee.EMP_Account_Number = "";
-                    rptEmployee.CURRENCY_CODE = "INR";
-                    rptEmployee.PART_TRAN_TYPE = "C";
-                    rptEmployee.TRANSACTION_AMOUNT = wage.WAR_FinalTotal;
+                    rptEmployee.CURRENCY_CODE = "-";
+                    rptEmployee.PART_TRAN_TYPE = "-";
+                    rptEmployee.TRANSACTION_AMOUNT = wage.WAR_FinalTotal; 
                     DateTime WAG_Month = wage_Registers.First().WAG_.WAG_Month;
                     rptEmployee.TRANSACTION_PARTICULARS = "Salary " + WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
                     rptEmployees.Add(rptEmployee);
@@ -218,6 +219,58 @@ namespace RMERP.DAL.ManagerClasses
                 reports.Add(report);
             }
             return reports;
+        }
+
+        public List<BankReportVM> IDBI_TO_IDBI_BankReports(int WAG_Id)
+        {
+            List<BankReportVM> bankReportVMs = new List<BankReportVM>();
+            WageRegisterManager registerManager = new WageRegisterManager(_context);
+            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersForIDBI_To_IDBI(WAG_Id);
+                      
+            foreach (var item in wage_Registers)
+            {
+                BankReportVM bankReport = new BankReportVM();
+                bankReport.EMP_FirstName = item.EMP_.EMP_FirstName;
+                bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
+                bankReport.EMP_SurName = item.EMP_.EMP_SurName;
+                bankReport.EMP_ACCOUNT_NUMBER = item.EMP_.EMP_Account_Number;
+                bankReport.EMP_CURRENCY_CODE = "-";
+                bankReport.EMP_SERVICE_OUTLET = "-";
+                bankReport.EMP_PART_TRAN_TYPE = "-";
+                bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;    
+                DateTime WAG_Month = wage_Registers.First().WAG_.WAG_Month;
+                bankReport.EMP_TRANSACTION_PARTICULARS = "Salary " + WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
+                bankReportVMs.Add(bankReport);
+            }
+            return bankReportVMs;
+        }
+
+        public List<BankReportVM> IDBI_TO_Other_BankReports(int WAG_Id)
+        {
+            List<BankReportVM> bankReportVMs = new List<BankReportVM>();
+            WageRegisterManager registerManager = new WageRegisterManager(_context);
+            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersForIDBI_To_IDBI(WAG_Id);
+
+            foreach (var item in wage_Registers)
+            {
+                BankReportVM bankReport = new BankReportVM();
+                bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
+                bankReport.ACCOUNT_SENDER_NUMBER = "-";
+                bankReport.ACCOUNT_IFSC_CODE = item.EMP_.EMP_Bank_IFSC;
+                bankReport.ACCOUNT_RECEIVERS_NUMBER = item.EMP_.EMP_Account_Number;
+                bankReport.ACCOUNT_TYPE = "-";
+
+                bankReport.EMP_FirstName = item.EMP_.EMP_FirstName;
+                bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
+                bankReport.EMP_SurName = item.EMP_.EMP_SurName;
+                
+                bankReport.EMP_ADDRESS = item.EMP_.EMP_Address;
+                bankReport.MESSAGE = "SALARY";
+                bankReport.ORIGINETOR = "RELIABLE";
+               
+                bankReportVMs.Add(bankReport);
+            }
+            return bankReportVMs;
         }
     }
 }

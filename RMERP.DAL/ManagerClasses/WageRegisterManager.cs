@@ -8,6 +8,7 @@ using RMERP.DAL.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static RMERP.DAL.Helpers.ProjectUtils;
 
 namespace RMERP.DAL.ManagerClasses
 {
@@ -611,6 +612,18 @@ namespace RMERP.DAL.ManagerClasses
             return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id && r.EMP_Id == EMP_Id).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
         }
 
+        public List<Wage_Register> GetWageRegistersForIDBI_To_IDBI(int WAG_Id)
+        {
+            return _context.Wage_Register.Where(m => m.WAG_Id == WAG_Id && m.EMP_.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && m.EMP_.EMP_Is_IDBI_Other.Equals((int)PAYMENT_BANK_TYPE.IDBI_To_IDBI)).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
+        }
+        public List<Wage_Register> GetWageRegistersForIDBI_To_Other(int WAG_Id)
+        {
+            return _context.Wage_Register.Where(m => m.WAG_Id == WAG_Id && m.EMP_.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && m.EMP_.EMP_Is_IDBI_Other.Equals((int)PAYMENT_BANK_TYPE.IDBI_To_Others)).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
+        }
+        public List<Wage_Register> GetWageRegistersForChequeCash(int WAG_Id)
+        {
+            return _context.Wage_Register.Where(m => m.WAG_Id == WAG_Id && m.EMP_.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Cheque_Cash)).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
+        }
 
     }
 }

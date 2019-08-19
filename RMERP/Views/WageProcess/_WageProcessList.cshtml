@@ -7,7 +7,7 @@
     </div>
     <div class="col-md-2">
         <h6>Attendance:</h6>
-        <b>@Html.ActionLink("Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = Model.WAG_Id})</b>
+        <b>@Html.ActionLink("Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = Model.WAG_Id })</b>
         <div style="font-size:10px;">
             @if (Model.ImportedClients() == Model.ActiveClients)
             {
@@ -28,7 +28,7 @@
     </div>
     <div class="col-md-2">
         <h6>Wage Register:</h6>
-        <b>@Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = Model.WAG_Id, FRM_Id=Model.FRM_Id })</b>
+        <b>@Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = Model.WAG_Id, FRM_Id = Model.FRM_Id })</b>
         <div style="font-size:10px;">
 
             @if (Model.WageStatus == true)
@@ -57,53 +57,44 @@
         <h6>Reports:</h6>
 
         <div class="raw">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <ul style="font-size:10px;padding-left: 10px !important;">
-                    @*@if (Model.WageStatus == true)
-                    {*@
-                        <li><a href='@Url.Action( "PFReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-excel-o m-r-5"></i>PF Report.xlsx</a></li>
-                        <li><a href='@Url.Action( "PFReportText","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-text-o m-r-5"></i>PF Report.txt</a></li>
-
-                        <li><a href='@Url.Action( "ESICReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Report.xlsx</a></li>
-
-
-                    @*}
-                    else
-                    {
-                        <li><i class="fa fa-file-excel-o m-r-5"></i>PF Report.xlsx</li>
-                        <li><i class="fa fa-file-text-o m-r-5"></i>PF Report.txt</li>
-                        <li><i class="fa fa-file-excel-o m-r-5"></i>ESIC Report.xlsx</li>
-                    }*@
-
-
+                    <li><a href='@Url.Action( "PFReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-excel-o m-r-5"></i>PF Report.xlsx</a></li>
+                    <li><a href='@Url.Action( "PFReportText","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-text-o m-r-5"></i>PF Report.txt</a></li>
+                    <li><a href='@Url.Action( "ESICReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Report.xlsx</a></li>
                 </ul>
             </div>
-            <div class="col-md-6">
-                <ul style="font-size:10px;padding-left: 10px !important;">
-                    @*@if (Model.WageStatus == true)
-                    {*@
-                        <li><a href='@Url.Action( "NEFT_BankReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="NEFT/Bank Report"><i class="fa fa-file-excel-o m-r-5"></i>NEFT/Bank Report.xlsx</a></li>
-                        <li><a href='@Url.Action( "MLWF_ContributionExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="MLWF CONTRIBUTION Report"><i class="fa fa-file-excel-o m-r-5"></i>MLWF CONTRIBUTION Report.xlsx</a></li>
-                        <li><a href='@Url.Action( "PayTaxExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PAY TAX Report"><i class="fa fa-file-excel-o m-r-5"></i>PAY TAX Report.xlsx</a></li>
-                    @*}
-                    else
-                    {
-                        <li>NEFT/Bank Report</li>
-                        <li>ESIC Report</li>
-                    }*@
-
+            <div class="col-md-4">
+                <ul style="font-size:10px;padding-left: 10px !important;">                    
+                    <li><a href='@Url.Action( "MLWF_ContributionExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="MLWF CONTRIBUTION Report"><i class="fa fa-file-excel-o m-r-5"></i>MLWF CONTRIBUTION Report.xlsx</a></li>
+                    <li><a href='@Url.Action( "PayTaxExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PAY TAX Report"><i class="fa fa-file-excel-o m-r-5"></i>PAY TAX Report.xlsx</a></li>
                 </ul>
+            </div>
+            <div class="col-md-4">
+                <ul style="font-size:10px;padding-left: 10px !important;">
+                    <li>
+                        <div class="dropdown">
+                            <a href="#" style="font-size:10px;color:#009ce7;" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-file-excel-o m-r-5"></i>Bank Reports</a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "NEFT_BankReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="Company Wise Transfer Report"><i class="fa fa-file-excel-o m-r-5"></i>Company Wise Transfer Report.xlsx</a></li>
+                                <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "IDBI_To_IDBI_BankReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="IDBI Bank To IDBI Bank Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI Bank To IDBI Bank Report.xlsx</a></li>
+                                <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "IDBI_To_Other_BankReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="IDBI Bank To Others Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI Bank To Others Report.xlsx</a></li>
+                                <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "CHEQUE_CASH_BankReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="CHEQUE/CASH Report"><i class="fa fa-file-excel-o m-r-5"></i>CHEQUE/CASH Report.xlsx</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                   </ul>
             </div>
         </div>
     </div>
 </div>
 
 @*<script type="text/javascript">
-    $(document).ready(function () {
-        debugger;
-        if ($("#WageStatus").val() == false) {
+        $(document).ready(function () {
             debugger;
-            $("#PFReport").attr("disabled", true)
-        }
-    });
-</script>*@
+            if ($("#WageStatus").val() == false) {
+                debugger;
+                $("#PFReport").attr("disabled", true)
+            }
+        });
+    </script>*@
