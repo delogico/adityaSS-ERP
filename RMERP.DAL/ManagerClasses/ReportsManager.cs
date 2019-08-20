@@ -249,7 +249,7 @@ namespace RMERP.DAL.ManagerClasses
         {
             List<BankReportVM> bankReportVMs = new List<BankReportVM>();
             WageRegisterManager registerManager = new WageRegisterManager(_context);
-            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersForIDBI_To_IDBI(WAG_Id);
+            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersForIDBI_To_Other(WAG_Id);
 
             foreach (var item in wage_Registers)
             {
@@ -272,5 +272,25 @@ namespace RMERP.DAL.ManagerClasses
             }
             return bankReportVMs;
         }
-    }
+
+        public List<BankReportVM> ChequeCash_BankReports(int WAG_Id)
+        {
+            List<BankReportVM> bankReportVMs = new List<BankReportVM>();
+            WageRegisterManager registerManager = new WageRegisterManager(_context);
+            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersForChequeCash(WAG_Id);
+
+            foreach (var item in wage_Registers)
+            {
+                BankReportVM bankReport = new BankReportVM();               
+
+                bankReport.EMP_FirstName = item.EMP_.EMP_FirstName;
+                bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
+                bankReport.EMP_SurName = item.EMP_.EMP_SurName;
+                bankReport.EMP_ADDRESS = item.EMP_.EMP_Address;
+                bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
+                bankReportVMs.Add(bankReport);
+            }
+            return bankReportVMs;
+        }
+    }   
 }
