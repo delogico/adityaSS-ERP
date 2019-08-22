@@ -2289,5 +2289,280 @@ namespace RMERP.Controllers
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
 
+        public async Task<FileResult> Client_Wise_PF_Details_Excel(int WAG_Id)
+        {
+            ReportsManager manager = new ReportsManager(_context);
+            WageProcessManager wageProcess = new WageProcessManager(_context);
+            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+            string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
+
+            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+            string fileName = "Client_Wise_PF_Report_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
+            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
+            var memory = new MemoryStream();
+            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook;
+                workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("Template");
+                
+                IFont fontcell = workbook.CreateFont();
+                fontcell.IsBold = true;
+
+                IFont fontcellSub = workbook.CreateFont();
+                fontcellSub.IsBold = true;
+                fontcellSub.FontHeightInPoints = ((short)18);
+                                
+                ICellStyle style = workbook.CreateCellStyle();
+                ICellStyle styleTotal = workbook.CreateCellStyle();
+                ICellStyle styleClient = workbook.CreateCellStyle();
+                ICellStyle styleSub = workbook.CreateCellStyle();
+
+                styleTotal.SetFont(fontcell);
+                styleClient.SetFont(fontcell);
+                styleSub.SetFont(fontcellSub);
+               
+                style.WrapText = true;
+                style.VerticalAlignment = VerticalAlignment.Center;
+                style.BorderBottom = (BorderStyle.Thin);
+                style.BottomBorderColor = (IndexedColors.Black.Index);
+                style.BorderLeft = (BorderStyle.Thin);
+                style.LeftBorderColor = (IndexedColors.Black.Index);
+                style.BorderRight = (BorderStyle.Thin);
+                style.RightBorderColor = (IndexedColors.Black.Index);
+                style.BorderTop = (BorderStyle.Thin);
+                style.TopBorderColor = (IndexedColors.Black.Index);
+                style.FillForegroundColor = IndexedColors.Grey25Percent.Index;
+                style.FillPattern = FillPattern.SolidForeground;
+                style.FillBackgroundColor = HSSFColor.Grey25Percent.Index;
+                style.SetFont(fontcell);
+
+                IRow row = excelSheet.CreateRow(0);          
+                ICell CellSub = row.CreateCell(0);
+                CellSub.SetCellValue("RELIABLE SECURITY SERVICES ");
+                CellSub.CellStyle = styleSub;
+                CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 6));
+
+                IRow rowAdd1 = excelSheet.CreateRow(1);
+                ICell CellAdd1 = rowAdd1.CreateCell(0);
+                CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR 416 003.");
+                CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));              
+
+                IRow rowSubHeading = excelSheet.CreateRow(2);
+                ICell CellSubHeading = rowSubHeading.CreateCell(0);
+                CellSubHeading.SetCellValue("LIST OF P.F. CONTRIBUTION OF EMPLOYEES FOR THE MONTH OF " + WAG_Month);
+                CellSubHeading.CellStyle = styleClient;
+                CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 6));
+
+                row = excelSheet.CreateRow(3);
+                row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
+                ICell cell0 = row.CreateCell(0);
+                cell0.SetCellValue("NAME OF COMPANY");
+                excelSheet.SetColumnWidth(0, (int)((35 + 0.72) * 256));
+                cell0.CellStyle = style;
+                ICell cell1 = row.CreateCell(1);
+                cell1.SetCellValue("STRENGTH");
+                excelSheet.SetColumnWidth(1, (int)((22 + 0.72) * 256));
+                cell1.CellStyle = style;
+                ICell cell2 = row.CreateCell(2);
+                cell2.SetCellValue("PF APPLICABLE \r\n  SALARY / \r\n  BASIC+DA");
+                excelSheet.SetColumnWidth(2, (int)((15 + 0.72) * 256));
+                cell2.CellStyle = style;
+                ICell cell3 = row.CreateCell(3);
+                cell3.SetCellValue("EMPLOYEE CONT.");
+                excelSheet.SetColumnWidth(3, (int)((15 + 0.72) * 256));
+                cell3.CellStyle = style;
+                ICell cell4 = row.CreateCell(4);
+                cell4.SetCellValue("EMPLOYER CONT.");
+                excelSheet.SetColumnWidth(4, (int)((15 + 0.72) * 256));
+                cell4.CellStyle = style;
+                ICell cell5 = row.CreateCell(5);
+                cell5.SetCellValue("TOTAL CONT.");
+                excelSheet.SetColumnWidth(5, (int)((15 + 0.72) * 256));
+                cell5.CellStyle = style;
+                ICell cell6 = row.CreateCell(6);
+                cell6.SetCellValue("REMARKS");
+                excelSheet.SetColumnWidth(6, (int)((15 + 0.72) * 256));
+                cell6.CellStyle = style;
+
+                List<PFClientReportVM> reportVM = manager.Client_Wise_PF_Details_Excel(WAG_Id);
+                int rowCount = 4, srNo = 1;
+                decimal TOT_STRENGTH = 0M, TOT_APPLICABLE_SALARY = 0M, TOT_EMPLOYEE_CONT = 0M, TOT_EMPLOYER_CONT = 0M, TOT_CONT = 0M;
+                foreach (var item in reportVM)
+                {
+                    row = excelSheet.CreateRow(rowCount);
+                    row.HeightInPoints = (float)(1.2 * excelSheet.DefaultRowHeightInPoints);
+                    row.CreateCell(0).SetCellValue(item.COMPANY_NAME);
+                    row.CreateCell(1).SetCellValue(Convert.ToString(item.STRENGTH));
+                    row.CreateCell(2).SetCellValue(Convert.ToString(item.PF_APPLICABLE_SALARY));
+                    row.CreateCell(3).SetCellValue(Convert.ToString(item.EMPLOYEE_CONTRIBUTION));
+                    row.CreateCell(4).SetCellValue(Convert.ToString(item.EMPLOYER_CONTRIBUTION));
+                    row.CreateCell(5).SetCellValue(Convert.ToString(item.TOTAL_CONTRIBUTION));
+                    row.CreateCell(6).SetCellValue(item.REMARKS);
+
+                    TOT_STRENGTH = TOT_STRENGTH + item.STRENGTH;
+                    TOT_APPLICABLE_SALARY = TOT_APPLICABLE_SALARY + item.PF_APPLICABLE_SALARY;
+                    TOT_EMPLOYEE_CONT = TOT_EMPLOYEE_CONT + item.EMPLOYEE_CONTRIBUTION;
+                    TOT_EMPLOYER_CONT = TOT_EMPLOYER_CONT + item.EMPLOYER_CONTRIBUTION;
+                    TOT_CONT = TOT_CONT + item.TOTAL_CONTRIBUTION;
+                    rowCount++;
+                    srNo++;
+                }
+                row = excelSheet.CreateRow(rowCount);
+                row.HeightInPoints = (float)(1.3 * excelSheet.DefaultRowHeightInPoints);
+                ICell cellTotal = row.CreateCell(0);
+                cellTotal.SetCellValue("TOTAL");
+                cellTotal.CellStyle = styleTotal;
+                CellUtil.SetAlignment(cellTotal, workbook, (short)HorizontalAlignment.Center);
+
+                ICell cellTOT_STRENGTH = row.CreateCell(1);
+                cellTOT_STRENGTH.SetCellValue(Convert.ToString(TOT_STRENGTH));
+                cellTOT_STRENGTH.CellStyle = styleTotal;
+
+                ICell cellTOT_APPLICABLE_SALARY = row.CreateCell(2);
+                cellTOT_APPLICABLE_SALARY.SetCellValue(Convert.ToString(TOT_APPLICABLE_SALARY));
+                cellTOT_APPLICABLE_SALARY.CellStyle = styleTotal;
+
+                ICell cellTOT_EMPLOYEE_CONT = row.CreateCell(3);
+                cellTOT_EMPLOYEE_CONT.SetCellValue(Convert.ToString(TOT_EMPLOYEE_CONT));
+                cellTOT_EMPLOYEE_CONT.CellStyle = styleTotal;
+
+                ICell cellTOT_EMPLOYER_CONT = row.CreateCell(4);
+                cellTOT_EMPLOYER_CONT.SetCellValue(Convert.ToString(TOT_EMPLOYER_CONT));
+                cellTOT_EMPLOYER_CONT.CellStyle = styleTotal;
+
+                ICell cellTOT_CONT = row.CreateCell(4);
+                cellTOT_CONT.SetCellValue(Convert.ToString(TOT_CONT));
+                cellTOT_CONT.CellStyle = styleTotal;
+
+                workbook.Write(fs);
+            }
+            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            new FileInfo(Path.Combine(newPath, fileName)).Delete();
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
+
+        public async Task<FileResult> Employees_Pending_For_Registration_Excel(int WAG_Id)
+        {
+            ReportsManager manager = new ReportsManager(_context);
+            WageProcessManager wageProcess = new WageProcessManager(_context);
+            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+            string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
+
+            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+            string fileName = "Employees_Pending_For_Registration_Report_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
+            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
+            var memory = new MemoryStream();
+            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook;
+                workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("Template");
+                
+                IFont fontcell = workbook.CreateFont();
+                fontcell.IsBold = true;                
+                IFont fontcellSub = workbook.CreateFont();
+                fontcellSub.IsBold = true;
+                fontcellSub.FontHeightInPoints = ((short)18);
+                               
+                ICellStyle style = workbook.CreateCellStyle();               
+                ICellStyle styleClient = workbook.CreateCellStyle();
+                ICellStyle styleSub = workbook.CreateCellStyle();
+
+              
+                styleClient.SetFont(fontcell);
+                styleSub.SetFont(fontcellSub);
+                
+                style.WrapText = true;
+                style.VerticalAlignment = VerticalAlignment.Center;
+                style.BorderBottom = (BorderStyle.Thin);
+                style.BottomBorderColor = (IndexedColors.Black.Index);
+                style.BorderLeft = (BorderStyle.Thin);
+                style.LeftBorderColor = (IndexedColors.Black.Index);
+                style.BorderRight = (BorderStyle.Thin);
+                style.RightBorderColor = (IndexedColors.Black.Index);
+                style.BorderTop = (BorderStyle.Thin);
+                style.TopBorderColor = (IndexedColors.Black.Index);
+                style.FillForegroundColor = IndexedColors.Grey25Percent.Index;
+                style.FillPattern = FillPattern.SolidForeground;
+                style.FillBackgroundColor = HSSFColor.Grey25Percent.Index;
+                style.SetFont(fontcell);
+
+                IRow row = excelSheet.CreateRow(0);
+                ICell CellSub = row.CreateCell(0);
+                CellSub.SetCellValue("RELIABLE SECURITY SERVICES ");
+                CellSub.CellStyle = styleSub;
+                CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 4));
+
+                IRow rowAdd1 = excelSheet.CreateRow(1);
+                ICell CellAdd1 = rowAdd1.CreateCell(0);
+                CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR 416 003.");
+                CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 4));
+
+                IRow rowSubHeading = excelSheet.CreateRow(2);
+                ICell CellSubHeading = rowSubHeading.CreateCell(0);
+                CellSubHeading.SetCellValue("LIST OF P.F. EMPLOYEES PENDING FOR REGISTRATION THE MONTH OF " + WAG_Month);
+                CellSubHeading.CellStyle = styleClient;
+                CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 4));
+
+                row = excelSheet.CreateRow(3);
+                row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
+                ICell cell0 = row.CreateCell(0);
+                cell0.SetCellValue("SR.NO");
+                cell0.CellStyle = style;
+                ICell cell1 = row.CreateCell(1);
+                cell1.SetCellValue("NAME OF COMPANY");
+                excelSheet.SetColumnWidth(1, (int)((35 + 0.72) * 256));
+                cell1.CellStyle = style;
+                ICell cell2 = row.CreateCell(2);
+                cell2.SetCellValue("NAME OF EMPLOYEE");
+                excelSheet.SetColumnWidth(2, (int)((35 + 0.72) * 256));
+                cell2.CellStyle = style;
+                ICell cell3 = row.CreateCell(3);
+                cell3.SetCellValue("PENDING \r\nREGISTRAION \r\nSINCE");
+                excelSheet.SetColumnWidth(3, (int)((15 + 0.72) * 256));
+                cell3.CellStyle = style;
+                ICell cell4 = row.CreateCell(4);
+                cell4.SetCellValue("REMARK FOR \r\nPENING UAN \r\nREGISTRATION");
+                excelSheet.SetColumnWidth(4, (int)((15 + 0.72) * 256));
+                cell4.CellStyle = style;                
+
+                List<PFClientReportVM> reportVM = manager.Employees_Pending_For_Registration(WAG_Id);
+                int rowCount = 4, srNo = 1;               
+                foreach (var item in reportVM)
+                {
+                    row = excelSheet.CreateRow(rowCount);
+                    row.HeightInPoints = (float)(1.4 * excelSheet.DefaultRowHeightInPoints);
+                    row.CreateCell(0).SetCellValue(Convert.ToString(srNo));
+                    row.CreateCell(1).SetCellValue(Convert.ToString(item.COMPANY_NAME));
+                    row.CreateCell(2).SetCellValue(Convert.ToString(item.EMP_FullName));
+                    row.CreateCell(3).SetCellValue(Convert.ToString(item.PENDING_REGISTRAION_SINCE));
+                    row.CreateCell(4).SetCellValue(Convert.ToString(item.REMARKS));                    
+                    rowCount++;
+                    srNo++;
+                }
+                workbook.Write(fs);
+            }
+            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            new FileInfo(Path.Combine(newPath, fileName)).Delete();
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
+
     }
 }

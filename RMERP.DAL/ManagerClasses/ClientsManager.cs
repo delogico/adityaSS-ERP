@@ -450,6 +450,7 @@ namespace RMERP.DAL.ManagerClasses
         //                            select a;
         //    return cliList.ToList();
         //}
+
         public List<Clients> GetActiveClientOfMonthByFirmId(DateTime wageDate, int FirmId)
         {
             DateTime lastDate = new DateTime(wageDate.Year, wageDate.Month, 1).AddMonths(1).AddDays(-1);

@@ -96,6 +96,17 @@
                         </div>
                     </li>
                 </ul>
+                <ul style="font-size:10px;padding-left: 10px !important;">
+                    <li>
+                        <div class="dropdown">
+                            <a href="#" style="font-size:10px;color:#009ce7;" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-file-excel-o m-r-5"></i>PF Reports</a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "Client_Wise_PF_Details_Excel","Reports",new { WAG_Id = Model.WAG_Id })' title="Client wise PF Details Report"><i class="fa fa-file-excel-o m-r-5"></i>Client Wise PF Details.xlsx</a></li>
+                                <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "Employees_Pending_For_Registration_Excel","Reports",new { WAG_Id = Model.WAG_Id })' title="Employees Pending For Registration Report"><i class="fa fa-file-excel-o m-r-5"></i>Employees Pending For Registration Report.xlsx</a></li>                               
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

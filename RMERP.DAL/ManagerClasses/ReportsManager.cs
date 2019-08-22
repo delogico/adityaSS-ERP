@@ -7,6 +7,7 @@ using RMERP.DAL.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using RMERP.DAL.Helpers;
 using static RMERP.DAL.Helpers.ProjectUtils;
+using Microsoft.EntityFrameworkCore;
 
 namespace RMERP.DAL.ManagerClasses
 {
@@ -391,6 +392,62 @@ namespace RMERP.DAL.ManagerClasses
             List<Employee_Advance> employee_Advances = advanceWageRegisterManager.CHEQUE_CASH_AdvanceRpt(WAG_Month, FRM_Id);
             return employee_Advances;
         }
-      
+
+        public List<PFClientReportVM> Client_Wise_PF_Details_Excel(int WAG_Id)
+        {
+            WageRegisterManager wageManager = new WageRegisterManager(_context);
+            List<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);
+            List<PFClientReportVM> reportVMs = new List<PFClientReportVM>();
+
+            var PFClientList = wage_Registers.Select(m => new {
+                m.CLI_Id,
+                m.CLI_.CLI_Name               
+            }).Distinct();
+
+            List<Wage_Register> wage_Register = new List<Wage_Register>();
+            foreach (var client in PFClientList)
+            {
+                PFClientReportVM pFClient = new PFClientReportVM();
+                wage_Register = wage_Registers.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
+                pFClient.COMPANY_NAME = client.CLI_Name;
+                pFClient.STRENGTH = wage_Register.Select(m => m.EMP_Id).Count();
+                pFClient.PF_APPLICABLE_SALARY = wage_Register.Select(m=>m.WAR_Basic_Calculated).Sum()+ wage_Register.Select(m => m.WAR_DA_Calculated).Sum();
+                pFClient.EMPLOYEE_CONTRIBUTION = 0;
+                pFClient.EMPLOYER_CONTRIBUTION = 0;
+                pFClient.TOTAL_CONTRIBUTION = 0;
+                pFClient.REMARKS = "-";
+                reportVMs.Add(pFClient);
+            }
+            return reportVMs;
+        }
+
+        public List<PFClientReportVM> Employees_Pending_For_Registration(int WAG_Id)
+        {
+            WageRegisterManager wageManager = new WageRegisterManager(_context);
+            List <Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id).Where(m=>m.EMP_.EMP_UAN_Number.Equals(null) || m.EMP_.EMP_UAN_Number.Equals("Pending") || m.EMP_.EMP_UAN_Number.Equals("")).ToList();
+            var PFClientList = wage_Registers.Select(m => new {
+                m.CLI_Id,
+                m.CLI_.CLI_Name,
+                m.EMP_.EMP_FirstName,
+                m.EMP_.EMP_MiddleName,
+                m.EMP_.EMP_SurName ,
+                m.EMP_.EMP_RegisteredOn
+            }).Distinct();
+            List<PFClientReportVM> reportVMs = new List<PFClientReportVM>();
+            foreach(var item in PFClientList)
+            {
+                PFClientReportVM pFClient = new PFClientReportVM();
+                pFClient.COMPANY_NAME = item.CLI_Name;
+                pFClient.EMP_FirstName = item.EMP_FirstName;
+                pFClient.EMP_MiddleName = item.EMP_MiddleName;
+                pFClient.EMP_SurName = item.EMP_SurName;
+                pFClient.PENDING_REGISTRAION_SINCE = Convert.ToString(item.EMP_RegisteredOn);
+                pFClient.REMARKS = "-";
+                reportVMs.Add(pFClient);
+            }
+            return reportVMs;
+        }
+
+
     }
 }

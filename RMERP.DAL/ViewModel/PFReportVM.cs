@@ -49,4 +49,28 @@ namespace RMERP.DAL.ViewModel
             }
         }
     }
+
+    public class PFClientReportVM
+    {
+        public string COMPANY_NAME { get; set; }
+        public int STRENGTH { get; set; }
+        public decimal PF_APPLICABLE_SALARY { get; set; }
+        public decimal EMPLOYEE_CONTRIBUTION { get; set; }
+        public decimal EMPLOYER_CONTRIBUTION { get; set; }
+        public decimal TOTAL_CONTRIBUTION { get; set; }        
+        public string REMARKS { get; set; }
+
+        public string EMP_FirstName { get; set; }
+        public string EMP_MiddleName { get; set; }
+        public string EMP_SurName { get; set; }
+        public string EMP_FullName
+        {
+            get
+            {
+                return string.Concat(EMP_FirstName + " " + EMP_MiddleName + " " + EMP_SurName);
+            }
+        }
+
+        public string PENDING_REGISTRAION_SINCE { get; set; }
+    }
 }
