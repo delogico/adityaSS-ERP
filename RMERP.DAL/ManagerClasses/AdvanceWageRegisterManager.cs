@@ -8,7 +8,7 @@ using RMERP.DAL.Helpers;
 
 namespace RMERP.DAL.ManagerClasses
 {
-    
+
     public class AdvanceWageRegisterManager
     {
         RMERPContext _context;
@@ -16,12 +16,12 @@ namespace RMERP.DAL.ManagerClasses
         {
             _context = context;
         }
-        public List<Employee_Advance> AdvanceRptForBank(DateTime WAG_Month,int FRM_Id)
+        public List<Employee_Advance> AdvanceRptForBank(DateTime WAG_Month, int FRM_Id)
         {
             List<Employee_Advance> employee_Advances = _context.Employee_Advance.Include(m => m.EMP_).Where(m => m.ADV_RegisteredOn.Month.Equals(WAG_Month.Month) && m.EMP_.FRM_Id.Equals(FRM_Id)).ToList();
             return employee_Advances;
         }
-        public List<Employee_Advance> NotCompletedAdvanceLst(DateTime WAG_Month,int FRM_Id)
+        public List<Employee_Advance> NotCompletedAdvanceLst(DateTime WAG_Month, int FRM_Id)
         {
             DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
             List<Employee_Advance> employee_Advances = _context.Employee_Advance.Include(m => m.EMP_)
@@ -41,7 +41,7 @@ namespace RMERP.DAL.ManagerClasses
                 wra.EMP_Id = EMP_id;
                 wra.WAD_Amount = WAD_Amount;
                 wra.WAD_Status = WAD_Status;
-               
+
                 _context.Wage_Register_Advances.Add(wra);
                 if (WAD_Status == true)
                 {
@@ -57,7 +57,7 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public string addWageRegisterAdvances(int EMP_id,decimal WAD_Amount,bool WAD_Status, DateTime WAG_Month, int WAD_Id)
+        public string addWageRegisterAdvances(int EMP_id, decimal WAD_Amount, bool WAD_Status, DateTime WAG_Month, int WAD_Id)
         {
             string res = "";
             try
@@ -73,7 +73,7 @@ namespace RMERP.DAL.ManagerClasses
                 {
                     wra.WAD_ClosedOn = ProjectUtils.DateNow();
                     List<Employee_Advance> employee_Advances = _context.Employee_Advance.Where(m => m.EMP_Id.Equals(EMP_id) && m.ADV_RegisteredOn.Month.Equals(WAG_Month.Month)).ToList();
-                    employee_Advances.ForEach(m => m.ADV_Status =true);
+                    employee_Advances.ForEach(m => m.ADV_Status = true);
                 }
                 _context.SaveChanges();
             }
@@ -82,6 +82,50 @@ namespace RMERP.DAL.ManagerClasses
                 res = ex.Message;
             }
             return res;
+        }
+
+        public List<Employee_Advance> IDBI_TO_IDBI_AdvanceRpt(DateTime WAG_Month, int FRM_Id)
+        {
+            DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
+            DateTime startDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1);            
+
+            List<Employee_Advance> result = _context.Employee_Advance.Include(m => m.EMP_).Where(m => m.ADV_RegisteredOn.Date <= lastDate.Date && m.ADV_RegisteredOn.Date >= startDate.Date && m.EMP_.FRM_Id.Equals(FRM_Id) && m.EMP_.EMP_Payment_Type.Equals((int)ProjectUtils.PAYMENT_TYPE.Bank_Account) && m.EMP_.EMP_Is_IDBI_Other.Equals((int)ProjectUtils.PAYMENT_BANK_TYPE.IDBI_To_IDBI))
+                                            .GroupBy(l => l.EMP_Id)
+                                            .Select(cl => new Employee_Advance
+                                            {
+                                                EMP_Id = cl.First().EMP_Id,
+                                                ADV_Amount = cl.Sum(c => c.ADV_Amount),  
+                                                EMP_=cl.First().EMP_
+                                            }).ToList();
+            return result;
+        }
+        public List<Employee_Advance> IDBI_TO_Other_AdvanceRpt(DateTime WAG_Month, int FRM_Id)
+        {
+            DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
+            DateTime startDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1);
+            List<Employee_Advance> result = _context.Employee_Advance.Include(m => m.EMP_).Where(m => m.ADV_RegisteredOn.Date <= lastDate.Date && m.ADV_RegisteredOn.Date >= startDate.Date && m.EMP_.FRM_Id.Equals(FRM_Id) && m.EMP_.EMP_Payment_Type.Equals((int)ProjectUtils.PAYMENT_TYPE.Bank_Account) && m.EMP_.EMP_Is_IDBI_Other.Equals((int)ProjectUtils.PAYMENT_BANK_TYPE.IDBI_To_Others))
+                                            .GroupBy(l => l.EMP_Id)
+                                            .Select(cl => new Employee_Advance
+                                            {
+                                                EMP_Id = cl.First().EMP_Id,
+                                                ADV_Amount = cl.Sum(c => c.ADV_Amount),
+                                                EMP_ = cl.First().EMP_
+                                            }).ToList();
+            return result;
+        }
+        public List<Employee_Advance> CHEQUE_CASH_AdvanceRpt(DateTime WAG_Month, int FRM_Id)
+        {
+            DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
+            DateTime startDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1);
+            List<Employee_Advance> result = _context.Employee_Advance.Include(m => m.EMP_).Where(m => m.ADV_RegisteredOn.Date <= lastDate.Date && m.ADV_RegisteredOn.Date >= startDate.Date && m.EMP_.FRM_Id.Equals(FRM_Id) && m.EMP_.EMP_Payment_Type.Equals((int)ProjectUtils.PAYMENT_TYPE.Cheque_Cash))
+                                            .GroupBy(l => l.EMP_Id)
+                                            .Select(cl => new Employee_Advance
+                                            {
+                                                EMP_Id = cl.First().EMP_Id,
+                                                ADV_Amount = cl.Sum(c => c.ADV_Amount),
+                                                EMP_ = cl.First().EMP_
+                                            }).ToList();
+            return result;
         }
     }
 }

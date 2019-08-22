@@ -151,6 +151,7 @@ namespace RMERP.DAL.ManagerClasses
         //    }
         //    return UpdateAdvanceEMIs;
         //}
+
         public bool IsAssignedEmployee(int EMP_Id)
         {
             List<Clients_Employees> list = _context.Clients_Employees.Where(m => m.EMP_Id.Equals(EMP_Id) && m.CLE_UnassignedOn != null).ToList();
@@ -197,6 +198,7 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Employees.Where(m => m.EMP_IsActive.Equals(true)).Count();
         }
+
         public int GetTotalEmployees(int FRM_ID)
         {
             return _context.Employees.Where(m => m.EMP_IsActive.Equals(true) && m.FRM_Id.Equals(FRM_ID)).Count();

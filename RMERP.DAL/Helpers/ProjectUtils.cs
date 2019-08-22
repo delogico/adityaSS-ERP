@@ -4,6 +4,8 @@ using System.IO;
 using System.Collections.Generic;
 using RMERP.DAL.ViewModel;
 using RMERP.DAL.Models;
+using System.Reflection;
+
 namespace RMERP.DAL.Helpers
 {
     public static class ProjectUtils
@@ -51,12 +53,16 @@ namespace RMERP.DAL.Helpers
 
         public enum PAYMENT_TYPE
         {
+            [StringValue("Bank Account")]
             Bank_Account = 0,
+            [StringValue("Cheque/Cash")]
             Cheque_Cash = 1           
         }
         public enum PAYMENT_BANK_TYPE
         {
+            [StringValue("IDBI To IDBI")]
             IDBI_To_IDBI = 0,
+            [StringValue("IDBI To Other")]
             IDBI_To_Others = 1
         }
 
@@ -172,6 +178,22 @@ namespace RMERP.DAL.Helpers
                 }
             }
             return sum;            
+        }
+
+        public static string GetStringValue(Enum value)
+        {
+            // Get the type
+            Type type = value.GetType();
+
+            // Get fieldinfo for this type
+            FieldInfo fieldInfo = type.GetField(value.ToString());
+
+            // Get the stringvalue attributes
+            StringValueAttribute[] attribs = fieldInfo.GetCustomAttributes(
+                typeof(StringValueAttribute), false) as StringValueAttribute[];
+
+            // Return the first if there was a match.
+            return attribs.Length > 0 ? attribs[0].StringValue : null;
         }
     }
 }

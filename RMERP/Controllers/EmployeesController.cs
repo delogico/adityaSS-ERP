@@ -107,6 +107,7 @@ namespace RMERP.Controllers
                 Employees employee = new Employees();               
                 employee = EmployeesMapper.MapMeModel(employeeVM);
                 employee.EMP_Payment_Type = (int)PAYMENT_TYPE.Cheque_Cash;
+                employee.EMP_Is_IDBI_Other = (int)PAYMENT_BANK_TYPE.IDBI_To_Others;
                 employee.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
                 res = employeeManager.AddEditEmployee(employee);
             }
@@ -130,7 +131,7 @@ namespace RMERP.Controllers
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             if (ModelState.IsValid)
             {
-                Employees employee = employeeManager.GetEmployeeById(employeePaymentVM.EMP_Id);
+                Employees employee = employeeManager.GetEmployeeById(employeePaymentVM.EMP_Id);                
                 employee.EMP_Payment_Type = employeePaymentVM.EMP_Payment_Type;
                 employee.EMP_Is_IDBI_Other = employeePaymentVM.EMP_Is_IDBI_Other;
                 if (employeePaymentVM.EMP_Payment_Type == (int)PAYMENT_TYPE.Cheque_Cash)
@@ -149,6 +150,10 @@ namespace RMERP.Controllers
                     employee.EMP_Account_Number = employeePaymentVM.EMP_Account_Number;
                     employee.EMP_Branch = employeePaymentVM.EMP_Branch;
                     employee.EMP_Bank_IFSC = employeePaymentVM.EMP_Bank_IFSC;
+                }
+                if (employeePaymentVM.EMP_Is_IDBI_Other == (int)PAYMENT_BANK_TYPE.IDBI_To_IDBI)
+                {
+                    employee.EMP_Bank = "IDBI BANK";
                 }
                 employee.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
                 res = employeeManager.AddEditEmployee(employee);

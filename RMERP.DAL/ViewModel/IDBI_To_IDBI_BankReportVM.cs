@@ -34,6 +34,10 @@ namespace RMERP.DAL.ViewModel
         public string MESSAGE { get; set; }
         public string ORIGINETOR { get; set; }
 
+
+        public string COMPANY_NAME { get; set; }
+
         public string CHEQUE_CASH { get; set; }
     }
+
 }

@@ -68,15 +68,22 @@
             }
         };
 
-        function PAYMENT_TYPE(payment) {
-            debugger;
+        function PAYMENT_TYPE(payment) {           
             if (payment.value == "0") { //Bank Account
                 $(".divBankType").show();
             } else {
                 $(".divBankType").hide();
             }
+        };
+        function PAYMENT_BANK_TYPE(bankType) {            
+            if (bankType.value == "0") { //IDBI BANK  Account
+                $("#EMP_Bank").val("IDBI BANK");
+                $("#EMP_Bank").prop("disabled", true);
+            } else {
+                $("#EMP_Bank").val("");
+                $("#EMP_Bank").prop("disabled", false);
+            }
         }
-
     </script>
     @if (TempData["message"] != null)
     {
@@ -230,22 +237,7 @@
                                         @Html.TextBoxFor(m => m.EMP_Designation, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.EMP_Designation, "", new { @class = "text-danger" })
                                     </div>
-                                </div>
-
-                                @*<div class="col-md-6">
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.EMP_EmployeeNumber_Office, new { @class = "control-label" })
-                        @Html.TextBoxFor(m => m.EMP_EmployeeNumber_Office, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.EMP_EmployeeNumber_Office, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.EMP_TPC_EmployeeId, new { @class = "control-label" })
-                        @Html.TextBoxFor(m => m.EMP_TPC_EmployeeId, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.EMP_TPC_EmployeeId, "", new { @class = "text-danger" })
-                    </div>
-                </div>*@
+                                </div>                                
                             </div>
 
                             <p class="div-title">Legal Details</p>
@@ -287,74 +279,6 @@
                                     </div>
                                 </div>
                             </div>
-                            @*<p class="div-title">Payment Type</p>
-                            <br />
-                            <div class="row col-md-12">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.EMP_Payment_Type, new { @class = "control-label" })
-                                    <label class="radio-inline form-control ">
-                                        @foreach (var PAYMENT_TYPE in Enum.GetValues(typeof(PAYMENT_TYPE)))
-                                        {
-                                            <label class="radio-inline">
-                                                @Html.RadioButtonFor(s => s.EMP_Payment_Type, (int)PAYMENT_TYPE, (int)PAYMENT_TYPE == 0 ? (object)new { @checked = true, @id = (int)PAYMENT_TYPE, onclick = "PAYMENT_TYPE(this)" } : new { @id = (int)PAYMENT_TYPE, onclick = "PAYMENT_TYPE(this)" })@PAYMENT_TYPE
-                                            </label>
-                                        }
-                                    </label>
-                                    @Html.ValidationMessageFor(x => x.EMP_Payment_Type, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                            <div class="row divBankType">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.EMP_Is_IDBI_Other, new { @class = "control-label" })
-                                        <label class="radio-inline form-control ">
-                                            @foreach (var PAYMENT_BANK_TYPE in Enum.GetValues(typeof(PAYMENT_BANK_TYPE)))
-                                            {
-                                                <label class="radio-inline">
-                                                    @Html.RadioButtonFor(s => s.EMP_Is_IDBI_Other, (int)PAYMENT_BANK_TYPE, (int)PAYMENT_BANK_TYPE == 0 ? (object)new { @checked = true, @id = (int)PAYMENT_BANK_TYPE, onclick = "PAYMENT_BANK_TYPE(this)" } : new { @id = (int)PAYMENT_BANK_TYPE, onclick = "PAYMENT_BANK_TYPE(this)" })@PAYMENT_BANK_TYPE
-                                                </label>
-                                            }
-                                        </label>
-                                        @Html.ValidationMessageFor(x => x.EMP_Is_IDBI_Other, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.EMP_Account_Name, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_Account_Name, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.EMP_Account_Name, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.EMP_Account_Number, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_Account_Number, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.EMP_Account_Number, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.EMP_Bank, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_Bank, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.EMP_Bank, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.EMP_Branch, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_Branch, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.EMP_Branch, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.EMP_Bank_IFSC, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_Bank_IFSC, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.EMP_Bank_IFSC, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-
-                            </div>*@
                             
                             <div class="m-t-20 text-center">
                                 <input type="submit" name="Save" id="btnSubmit" class="btn btn-primary" />
@@ -514,10 +438,10 @@
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.EMP_Payment_Type, new { @class = "control-label" })
                                     <label class="radio-inline form-control ">
-                                        @foreach (var PAYMENT_TYPE in Enum.GetValues(typeof(PAYMENT_TYPE)))
+                                        @foreach (var PAYMENT_TYPE in Enum.GetValues(typeof(PAYMENT_TYPE)).Cast<PAYMENT_TYPE>())
                                         {
                                             <label class="radio-inline">
-                                                @Html.RadioButtonFor(s => s.EMP_Payment_Type, (int)PAYMENT_TYPE, (int)PAYMENT_TYPE == 0 ? (object)new { @checked = true, @id = (int)PAYMENT_TYPE, onclick = "PAYMENT_TYPE(this)" } : new { @id = (int)PAYMENT_TYPE, onclick = "PAYMENT_TYPE(this)" })@PAYMENT_TYPE
+                                                @Html.RadioButtonFor(s => s.EMP_Payment_Type, (int)PAYMENT_TYPE, (int)PAYMENT_TYPE == 0 ? (object)new { @checked = true, @id = (int)PAYMENT_TYPE, onclick = "PAYMENT_TYPE(this)" } : new { @id = (int)PAYMENT_TYPE, onclick = "PAYMENT_TYPE(this)" })@GetStringValue(PAYMENT_TYPE)
                                             </label>
                                         }
                                     </label>
@@ -529,11 +453,11 @@
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.EMP_Is_IDBI_Other, new { @class = "control-label" })
                                         <label class="radio-inline form-control ">
-                                            @foreach (var PAYMENT_BANK_TYPE in Enum.GetValues(typeof(PAYMENT_BANK_TYPE)))
+                                            @foreach (var PAYMENT_BANK_TYPE in Enum.GetValues(typeof(PAYMENT_BANK_TYPE)).Cast<PAYMENT_BANK_TYPE>())
                                             {
-                                                <label class="radio-inline">
-                                                    @Html.RadioButtonFor(s => s.EMP_Is_IDBI_Other, (int)PAYMENT_BANK_TYPE, (int)PAYMENT_BANK_TYPE == 0 ? (object)new { @checked = true, @id = (int)PAYMENT_BANK_TYPE, onclick = "PAYMENT_BANK_TYPE(this)" } : new { @id = (int)PAYMENT_BANK_TYPE, onclick = "PAYMENT_BANK_TYPE(this)" })@PAYMENT_BANK_TYPE
-                                                </label>
+                                            <label class="radio-inline">
+                                                @Html.RadioButtonFor(s => s.EMP_Is_IDBI_Other, (int)PAYMENT_BANK_TYPE, (int)PAYMENT_BANK_TYPE == 0 ? (object)new { @checked = true, @id = (int)PAYMENT_BANK_TYPE, onclick = "PAYMENT_BANK_TYPE(this)" } : new { @id = (int)PAYMENT_BANK_TYPE, onclick = "PAYMENT_BANK_TYPE(this)" })@GetStringValue(PAYMENT_BANK_TYPE)
+                                            </label>
                                             }
                                         </label>
                                         @Html.ValidationMessageFor(x => x.EMP_Is_IDBI_Other, "", new { @class = "text-danger" })
@@ -554,9 +478,16 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group">                                       
                                         @Html.LabelFor(m => m.EMP_Bank, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_Bank, new { @class = "form-control" })
+                                        @if (Model.EMP_Bank == "IDBI BANK" || Model.EMP_Bank == "IDBI BANK LTD")
+                                        {
+                                            @Html.TextBoxFor(m => m.EMP_Bank, new { @class = "form-control", disabled = "disabled" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => m.EMP_Bank, new { @class = "form-control" })
+                                        }
                                         @Html.ValidationMessageFor(m => m.EMP_Bank, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
