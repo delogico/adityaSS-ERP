@@ -29,6 +29,7 @@ namespace RMERP.Controllers
             _context = context;
             _hostingEnvironment = hostingEnvironment;
         }
+
         public IActionResult PFReport(int WAG_Id)
         {
             ReportsManager manager = new ReportsManager(_context);
@@ -2671,6 +2672,7 @@ namespace RMERP.Controllers
             ClientSelectionVM clientSelectionVM = new ClientSelectionVM();
             List<Clients> clients = wageRegisterManager.GetWageRegisters(WAG_Id).Where(m => m.WAG_.FRM_Id.Equals(FRM_Id)).Select(m => m.CLI_).Distinct().ToList();
             clientSelectionVM.selectionVMs = ClientSelectionMapper.mapMe(clients, WAG_Id);
+            clientSelectionVM.PF_Report = ((int)ProjectUtils.PF_REPORT_TYPE.Client_Wise_PF_Details_Excel).ToString();
             return View(clientSelectionVM);            
         }
 
