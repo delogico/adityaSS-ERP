@@ -56,7 +56,7 @@ namespace RMERP.DAL.Helpers
             [StringValue("Bank Account")]
             Bank_Account = 0,
             [StringValue("Cheque/Cash")]
-            Cheque_Cash = 1           
+            Cheque_Cash = 1
         }
         public enum PAYMENT_BANK_TYPE
         {
@@ -65,7 +65,19 @@ namespace RMERP.DAL.Helpers
             [StringValue("IDBI To Other")]
             IDBI_To_Others = 1
         }
-
+        public enum PF_REPORT_TYPE
+        {
+            [StringValue("Client Wise PF contribution Details.xlsx")]
+            Client_Wise_PF_Details_Excel = 0,
+            [StringValue("PF Employees Pending For Registration.xlsx")]
+            Employees_Pending_For_Registration_Excel = 1,
+            [StringValue("PF EXCEL.xlsx")]
+            Employee_PF_Excel = 2,
+            [StringValue("LIST OF EMPLOYEE ABOVE 58.xlsx")]
+            PF_Report_Above_58 =3,
+            [StringValue("PF Report.txt")]
+            PF_Report_Text =4
+        }
         public static DateTime DateNow()
         {
             DateTime utcTime = DateTime.UtcNow;
@@ -89,7 +101,7 @@ namespace RMERP.DAL.Helpers
         {
             return DateTime.Now.ToString("yyyyMMddHHmmss");
         }
-       // public static int WagId, CliId, ClientId, EmpId, Frm_Id;
+        // public static int WagId, CliId, ClientId, EmpId, Frm_Id;
 
         public static string GetTooltipBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<WageRegisterAllowanceVM> All)
         {
@@ -177,7 +189,7 @@ namespace RMERP.DAL.Helpers
                     }
                 }
             }
-            return sum;            
+            return sum;
         }
 
         public static string GetStringValue(Enum value)
@@ -195,5 +207,153 @@ namespace RMERP.DAL.Helpers
             // Return the first if there was a match.
             return attribs.Length > 0 ? attribs[0].StringValue : null;
         }
+
+        public static decimal GetAmountBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Client_Requirement_Allowances> All, double totalWorkingDays, double totalPaybleDays, decimal WAR_OverTime_Calculated, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated)
+        {
+            decimal sum = 0M;
+            string[] arr_CRI_Formula;
+
+            if (CRI_Formula != null)
+            {
+                arr_CRI_Formula = CRI_Formula.Split("+");
+                foreach (string item in arr_CRI_Formula)
+                {
+                    switch (item)
+                    {
+                        case "BASIC":
+                            sum += Convert.ToDecimal(WAR_Basic_Calculated);
+                            break;
+                        case "DA":
+                            sum += Convert.ToDecimal(CRI_DA_Calculated);
+                            break;
+                        case "HRA":
+                            sum += Convert.ToDecimal(CRI_HRA_Calculated);
+                            break;
+                        case "OT":
+                            sum += Convert.ToDecimal(WAR_OverTime_Calculated);
+                            break;
+                        case "OSL":
+                            sum += Convert.ToDecimal(WAR_Outstation_Allowance_Calculated);
+                            break;
+                        case "AAL":
+                            sum += Convert.ToDecimal(WAR_Attendance_Allowance_Calculated);
+                            break;
+                        case "NSL":
+                            sum += Convert.ToDecimal(WAR_Nightshift_Allowance_Calculated);
+                            break;
+                        case "PAL":
+                            sum += Convert.ToDecimal(WAR_Performance_Allowance_Calculated);
+                            break;
+                        default:
+                            {
+                                foreach (var allowance in All)
+                                {
+                                    if (allowance.ALL_.ALL_Shortform == item)
+                                    {
+                                        decimal amount = allowance.CRA_Amount;
+                                        decimal fullAmt = 0M;
+                                        if (totalWorkingDays != 0)
+                                            fullAmt = (Decimal.Multiply(amount, Convert.ToDecimal(totalPaybleDays))) / Convert.ToDecimal(totalWorkingDays);
+
+                                        if (allowance.CRA_DayswiseOrFull)
+                                        {
+                                            sum += fullAmt;
+                                        }
+                                        else
+                                        {
+                                            sum += amount;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return sum;
+        }
+
+        public static decimal GetAmountBasedOnFormulaOT(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Client_Requirement_Allowances> All, int totalWorkingDays, double totalPaybleDays, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated)
+        {
+            decimal sum = 0M;
+            string[] Add_Formula;
+            string[] Deduct_Formula;
+
+            var List_CRI_Formula = new List<string>();
+
+            if (CRI_Formula != null)
+            {
+                string[] arr_CRI_Formula;
+                if (CRI_Formula.Contains("-"))
+                {
+                    string Add = CRI_Formula.Substring(0, CRI_Formula.IndexOf("-"));
+                    string Deduct = CRI_Formula.Substring(CRI_Formula.IndexOf("-") + 1);
+                    Add_Formula = Add.Split("+");
+                    Deduct_Formula = Deduct.Split("-");
+                    List_CRI_Formula.AddRange(Add_Formula);
+                    List_CRI_Formula.AddRange(Deduct_Formula);
+                    arr_CRI_Formula = List_CRI_Formula.ToArray();
+                }
+                else
+                {
+                    arr_CRI_Formula = CRI_Formula.Split("+");
+                }
+
+                foreach (string item in arr_CRI_Formula)
+                {
+                    switch (item)
+                    {
+                        case "BASIC":
+                            sum += Convert.ToDecimal(WAR_Basic_Calculated);
+                            break;
+                        case "DA":
+                            sum += Convert.ToDecimal(CRI_DA_Calculated);
+                            break;
+                        case "HRA":
+                            sum += Convert.ToDecimal(CRI_HRA_Calculated);
+                            break;
+                        case "OSL":
+                            sum += Convert.ToDecimal(WAR_Outstation_Allowance_Calculated);
+                            break;
+                        case "AAL":
+                            sum += Convert.ToDecimal(WAR_Attendance_Allowance_Calculated);
+                            break;
+                        case "NSL":
+                            sum += Convert.ToDecimal(WAR_Nightshift_Allowance_Calculated);
+                            break;
+                        case "PAL":
+                            sum += Convert.ToDecimal(WAR_Performance_Allowance_Calculated);
+                            break;
+                        default:
+                            {
+                                foreach (var allowance in All)
+                                {
+                                    if (allowance.ALL_.ALL_Shortform == item)
+                                    {
+                                        decimal amount = allowance.CRA_Amount;
+                                        decimal fullAmt = 0M;
+                                        if (totalWorkingDays != 0)
+                                            fullAmt = (Decimal.Multiply(amount, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays;
+
+                                        if (allowance.CRA_DayswiseOrFull)
+                                        {
+                                            sum += fullAmt;
+                                        }
+                                        else
+                                        {
+                                            sum += amount;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+
+            return sum;
+        }
+
+
     }
 }

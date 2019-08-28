@@ -104,8 +104,7 @@ namespace RMERP.Controllers
                 cv.clientsModel.FRM_Id = clients.FRM_Id;
                 cv.clientsModel.CLI_Name = clients.CLI_Name;
                 cv.clientsModel.CLI_International_Domestic = clients.CLI_International_Domestic;
-                cv.clientsModel.CLI_Address = clients.CLI_Address;
-              //  cv.clientsModel.CITY_Id = clients.CITY_Id;
+                cv.clientsModel.CLI_Address = clients.CLI_Address;             
                 cv.clientsModel.CLI_Pincode = clients.CLI_Pincode;
                 cv.clientsModel.CLI_Phone = clients.CLI_Phone;
                 cv.clientsModel.CLI_Fax = clients.CLI_Fax;
@@ -153,6 +152,11 @@ namespace RMERP.Controllers
                 cv.clientsModel.ADM_Id_RegisterBy = clients.ADM_Id_RegisterBy;
                 cv.clientsModel.CLI_RegisteredOn = clients.CLI_RegisteredOn;
                 cv.clientsModel.CliLogoImage = clients.CLI_Logo;
+
+                cv.clientsModel.CLI_Employer_Cont_Rate = clients.CLI_Employer_Cont_Rate;
+                cv.clientsModel.CLI_EPF_Rate = clients.CLI_EPF_Rate;
+                cv.clientsModel.CLI_EPS_Rate = clients.CLI_EPS_Rate;
+
                 cv.contacts = ClientContactMapper.mapContacts(clientsManager.GetClientContactsListById(id).ToList());
                 cv.requirements = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsofClient(id, true).ToList());
                 cv.employees = ClientEmployeeMapper.mapEmployees(clientsManager.listClientsEmployees(id).ToList(), _context);
@@ -226,6 +230,10 @@ namespace RMERP.Controllers
 
                 clients.ADM_Id_RegisterBy = cv.clientsModel.ADM_Id_RegisterBy;
                 clients.CLI_RegisteredOn = cv.clientsModel.CLI_RegisteredOn;
+
+                clients.CLI_Employer_Cont_Rate = cv.clientsModel.CLI_Employer_Cont_Rate;
+                clients.CLI_EPF_Rate = cv.clientsModel.CLI_EPF_Rate;
+                clients.CLI_EPS_Rate = cv.clientsModel.CLI_EPS_Rate;
 
                 if (cv.clientsModel.CLI_Logo != null)
                 {
@@ -539,6 +547,9 @@ namespace RMERP.Controllers
                     clients.CLI_Att_Month_Start = cvm.ParametersClientsModel.CLI_Att_Month_Start;
                     clients.CLI_Att_Month_End = cvm.ParametersClientsModel.CLI_Att_Month_End;
                 }
+                clients.CLI_Employer_Cont_Rate = cvm.clientsModel.CLI_Employer_Cont_Rate;
+                clients.CLI_EPF_Rate = cvm.clientsModel.CLI_EPF_Rate;
+                clients.CLI_EPS_Rate = cvm.clientsModel.CLI_EPS_Rate;
                 string res= clientsManager.UpdateParameters(clients);
                 if (res != string.Empty)
                 {

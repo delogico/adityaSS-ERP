@@ -294,17 +294,17 @@ namespace RMERP.DAL.ManagerClasses
             return bankReportVMs;
         }
 
-        public List<BankReportVM> IDBI_TO_IDBI_AdvanceReports(int WAG_Id,int FRM_Id)
+        public List<BankReportVM> IDBI_TO_IDBI_AdvanceReports(int WAG_Id, int FRM_Id)
         {
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
             Wage_Process wage_Process = wageProcessManager.getWageProcessById(WAG_Id);
             DateTime WAG_Month = wage_Process.WAG_Month;
             List<BankReportVM> advanceBankReportVMs = new List<BankReportVM>();
-            List<Employee_Advance> employee_Advances = this.GetIDBI_TO_IDBIEmployeeAdvances(WAG_Month,FRM_Id);
-           
+            List<Employee_Advance> employee_Advances = this.GetIDBI_TO_IDBIEmployeeAdvances(WAG_Month, FRM_Id);
+
             foreach (var item in employee_Advances)
-            
-{
+
+            {
                 BankReportVM bankReportVM = new BankReportVM();
                 bankReportVM.EMP_FirstName = item.EMP_.EMP_FirstName;
                 bankReportVM.EMP_MiddleName = item.EMP_.EMP_MiddleName;
@@ -314,14 +314,14 @@ namespace RMERP.DAL.ManagerClasses
                 bankReportVM.EMP_SERVICE_OUTLET = "-";
                 bankReportVM.EMP_PART_TRAN_TYPE = "-";
                 bankReportVM.EMP_TRANSACTION_AMOUNT = item.ADV_Amount;
-               
+
                 bankReportVM.EMP_TRANSACTION_PARTICULARS = "Advance " + WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
                 advanceBankReportVMs.Add(bankReportVM);
             }
             return advanceBankReportVMs;
         }
 
-        public List<BankReportVM> IDBI_TO_Other_AdvanceReports(int WAG_Id,int FRM_Id)
+        public List<BankReportVM> IDBI_TO_Other_AdvanceReports(int WAG_Id, int FRM_Id)
         {
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
             Wage_Process wage_Process = wageProcessManager.getWageProcessById(WAG_Id);
@@ -355,8 +355,8 @@ namespace RMERP.DAL.ManagerClasses
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
             Wage_Process wage_Process = wageProcessManager.getWageProcessById(WAG_Id);
             DateTime WAG_Month = wage_Process.WAG_Month;
-            List<BankReportVM> bankReportVMs = new List<BankReportVM>();            
-            List<Employee_Advance> employee_Advances = this.GetCheque_CashEmployeeAdvances(WAG_Month,FRM_Id);
+            List<BankReportVM> bankReportVMs = new List<BankReportVM>();
+            List<Employee_Advance> employee_Advances = this.GetCheque_CashEmployeeAdvances(WAG_Month, FRM_Id);
 
             foreach (var item in employee_Advances)
             {
@@ -393,17 +393,32 @@ namespace RMERP.DAL.ManagerClasses
             return employee_Advances;
         }
 
-        public List<PFClientReportVM> Client_Wise_PF_Details_Excel(int WAG_Id)
+        public List<PFClientReportVM> Client_Wise_PF_Details_Excel(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
         {
             WageRegisterManager wageManager = new WageRegisterManager(_context);
             List<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);
+            dynamic PFClientList = null;
+            if (IsSelected == false)
+            {
+                PFClientList = wage_Registers.Select(m => new
+                {
+                    m.CLI_Id,
+                    m.CLI_.CLI_Name,
+                }).Distinct();
+            }
+            else
+            {
+                int[] CLI_Ids = selectionVMs.Select(m => m.CLI_Id).ToArray();
+                var wage = from wageReg in wage_Registers
+                           where CLI_Ids.Contains(wageReg.CLI_Id)
+                           select wageReg;
+                PFClientList = wage.Select(m => new
+                {
+                    m.CLI_Id,
+                    m.CLI_.CLI_Name,
+                }).Distinct();
+            }
             List<PFClientReportVM> reportVMs = new List<PFClientReportVM>();
-
-            var PFClientList = wage_Registers.Select(m => new {
-                m.CLI_Id,
-                m.CLI_.CLI_Name               
-            }).Distinct();
-
             List<Wage_Register> wage_Register = new List<Wage_Register>();
             foreach (var client in PFClientList)
             {
@@ -411,30 +426,73 @@ namespace RMERP.DAL.ManagerClasses
                 wage_Register = wage_Registers.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
                 pFClient.COMPANY_NAME = client.CLI_Name;
                 pFClient.STRENGTH = wage_Register.Select(m => m.EMP_Id).Count();
-                pFClient.PF_APPLICABLE_SALARY = wage_Register.Select(m=>m.WAR_Basic_Calculated).Sum()+ wage_Register.Select(m => m.WAR_DA_Calculated).Sum();
-                pFClient.EMPLOYEE_CONTRIBUTION = 0;
-                pFClient.EMPLOYER_CONTRIBUTION = 0;
-                pFClient.TOTAL_CONTRIBUTION = 0;
+                decimal ApplicableSalary = 0M, EMPLOYEE_CONTRIBUTION = 0M, EMPLOYER_CONTRIBUTION = 0M;
+                foreach (var item in wage_Register)
+                {
+                    List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
+                    ApplicableSalary =Math.Round(GetAmountBasedOnFormula(
+                        item.WAR_PF_Formula,
+                        item.WAR_Basic_Calculated,
+                        item.WAR_DA_Calculated,
+                        item.WAR_HRA_Calculated, All,
+                        item.WAR_TotalWorkingDays,
+                        item.WAR_TotalPaybleDays,
+                        item.WAR_OverTime_Calculated,
+                        (item.WAR_OutStation_Allowance_Calculated != null ? item.WAR_OutStation_Allowance_Calculated.Value : 0),
+                        (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
+                        (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
+                        (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0)),MidpointRounding.AwayFromZero);
+                    EMPLOYEE_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION + (ApplicableSalary * item.WAR_PF) / 100,MidpointRounding.AwayFromZero);
+                    EMPLOYER_CONTRIBUTION = Math.Round(EMPLOYER_CONTRIBUTION + (ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_Employer_Cont_Rate)) / 100,MidpointRounding.AwayFromZero);
+                    ApplicableSalary = Math.Round(ApplicableSalary + ApplicableSalary,MidpointRounding.AwayFromZero);
+                }
+                pFClient.PF_APPLICABLE_SALARY = Math.Round(ApplicableSalary,MidpointRounding.AwayFromZero);                
+                pFClient.EMPLOYEE_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION,MidpointRounding.AwayFromZero);
+                pFClient.EMPLOYER_CONTRIBUTION = Math.Round(EMPLOYER_CONTRIBUTION,MidpointRounding.AwayFromZero);
+                pFClient.TOTAL_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION + EMPLOYER_CONTRIBUTION,MidpointRounding.AwayFromZero);
                 pFClient.REMARKS = "-";
                 reportVMs.Add(pFClient);
             }
             return reportVMs;
         }
 
-        public List<PFClientReportVM> Employees_Pending_For_Registration(int WAG_Id)
+        public List<PFClientReportVM> Employees_Pending_For_Registration(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
         {
             WageRegisterManager wageManager = new WageRegisterManager(_context);
-            List <Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id).Where(m=>m.EMP_.EMP_UAN_Number.Equals(null) || m.EMP_.EMP_UAN_Number.Equals("Pending") || m.EMP_.EMP_UAN_Number.Equals("")).ToList();
-            var PFClientList = wage_Registers.Select(m => new {
-                m.CLI_Id,
-                m.CLI_.CLI_Name,
-                m.EMP_.EMP_FirstName,
-                m.EMP_.EMP_MiddleName,
-                m.EMP_.EMP_SurName ,
-                m.EMP_.EMP_RegisteredOn
-            }).Distinct();
             List<PFClientReportVM> reportVMs = new List<PFClientReportVM>();
-            foreach(var item in PFClientList)
+            List<Wage_Register> wage_Registers = wageManager.GetWageRegisters(WAG_Id).Where(m => m.EMP_.EMP_UAN_Number == null || m.EMP_.EMP_UAN_Number.Equals("Pending") || m.EMP_.EMP_UAN_Number.Equals("")).ToList();
+            dynamic PFClientList = null;
+            if (IsSelected == false)
+            {
+                PFClientList = wage_Registers.Select(m => new
+                {
+                    m.CLI_Id,
+                    m.CLI_.CLI_Name,
+                    m.EMP_.EMP_FirstName,
+                    m.EMP_.EMP_MiddleName,
+                    m.EMP_.EMP_SurName,
+                    m.EMP_.EMP_RegisteredOn,
+                    m.EMP_.EMP_UAN_Remark
+                }).Distinct();
+            }
+            else
+            {
+                int[] CLI_Ids = selectionVMs.Select(m => m.CLI_Id).ToArray();
+                var wage = from wageReg in wage_Registers
+                           where CLI_Ids.Contains(wageReg.CLI_Id)
+                           select wageReg;
+                PFClientList = wage.Select(m => new
+                {
+                    m.CLI_Id,
+                    m.CLI_.CLI_Name,
+                    m.EMP_.EMP_FirstName,
+                    m.EMP_.EMP_MiddleName,
+                    m.EMP_.EMP_SurName,
+                    m.EMP_.EMP_RegisteredOn,
+                    m.EMP_.EMP_UAN_Remark
+                }).Distinct();
+            }
+            foreach (var item in PFClientList)
             {
                 PFClientReportVM pFClient = new PFClientReportVM();
                 pFClient.COMPANY_NAME = item.CLI_Name;
@@ -442,12 +500,102 @@ namespace RMERP.DAL.ManagerClasses
                 pFClient.EMP_MiddleName = item.EMP_MiddleName;
                 pFClient.EMP_SurName = item.EMP_SurName;
                 pFClient.PENDING_REGISTRAION_SINCE = Convert.ToString(item.EMP_RegisteredOn);
-                pFClient.REMARKS = "-";
+                pFClient.REMARKS = item.EMP_UAN_Remark;
                 reportVMs.Add(pFClient);
             }
             return reportVMs;
         }
 
+        public List<PFClientReportVM> Employees_PF_Excel(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
+        {
+            WageRegisterManager wageManager = new WageRegisterManager(_context);
+            List<PFClientReportVM> reportVMs = new List<PFClientReportVM>();
+            IEnumerable<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id).Where(m => m.EMP_.EMP_UAN_Number != null && m.EMP_.EMP_UAN_Number != "Pending" && m.EMP_.EMP_UAN_Number != "").ToList();
+           
+            if (IsSelected == true)
+            {
+                int[] CLI_Ids = selectionVMs.Select(m => m.CLI_Id).ToArray();
+                wage_Registers = from wageReg in wage_Registers
+                                 where CLI_Ids.Contains(wageReg.CLI_Id)
+                                 select wageReg;
+            }                       
+            foreach (var item in wage_Registers)
+            {
+                List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
+                decimal ApplicableSalary = Math.Round(GetAmountBasedOnFormula(
+                            item.WAR_PF_Formula,
+                            item.WAR_Basic_Calculated,
+                            item.WAR_DA_Calculated,
+                            item.WAR_HRA_Calculated, All,
+                            item.WAR_TotalWorkingDays,
+                            item.WAR_TotalPaybleDays,
+                            item.WAR_OverTime_Calculated,
+                            (item.WAR_OutStation_Allowance_Calculated != null ? item.WAR_OutStation_Allowance_Calculated.Value : 0),
+                            (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
+                            (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
+                            (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0)),MidpointRounding.AwayFromZero);
+                decimal EPF_CONTRIBUTION =Math.Round((ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPF_Rate)) / 100,MidpointRounding.AwayFromZero);
+                decimal EPS_CONTRIBUTION = Math.Round((ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPS_Rate)) / 100,MidpointRounding.AwayFromZero);
+                PFClientReportVM pFClient = new PFClientReportVM();
+                pFClient.EMP_Id = item.EMP_Id;
+                pFClient.UAN_Number = item.EMP_.EMP_UAN_Number;
+                pFClient.EMP_FirstName = item.EMP_.EMP_FirstName;
+                pFClient.EMP_MiddleName = item.EMP_.EMP_MiddleName;
+                pFClient.EMP_SurName = item.EMP_.EMP_SurName;
+                pFClient.PF_APPLICABLE_SALARY = Math.Round(ApplicableSalary, MidpointRounding.AwayFromZero);
+                pFClient.EPF_CONTRIBUTION = Math.Round(EPF_CONTRIBUTION,MidpointRounding.AwayFromZero);
+                pFClient.EPS_CONTRIBUTION =Math.Round(EPS_CONTRIBUTION,MidpointRounding.AwayFromZero);
+                pFClient.NCP1 = 0;
+                pFClient.NCP2 = 0;
+                reportVMs.Add(pFClient);
+            }
+            return reportVMs;
+        }
 
+        public List<PFClientReportVM> Client_Wise_PF_Above58_Excel(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
+        {
+            WageRegisterManager wageManager = new WageRegisterManager(_context);
+            DateTime Above57YearDate = DateTime.Today.AddYears(-58);
+            IEnumerable<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id).Where(m => m.EMP_.EMP_UAN_Number != null && m.EMP_.EMP_UAN_Number != "Pending" && m.EMP_.EMP_UAN_Number != "" && m.EMP_.EMP_DOB <= Above57YearDate).ToList();
+            List<PFClientReportVM> reportVMs = new List<PFClientReportVM>();           
+            if (IsSelected == true)
+            {
+                int[] CLI_Ids = selectionVMs.Select(m => m.CLI_Id).ToArray();
+                wage_Registers = from wageReg in wage_Registers
+                           where CLI_Ids.Contains(wageReg.CLI_Id)
+                           select wageReg;               
+            }           
+            foreach (var item in wage_Registers)
+            {
+                List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
+                decimal ApplicableSalary =Math.Round(GetAmountBasedOnFormula(
+                            item.WAR_PF_Formula,
+                            item.WAR_Basic_Calculated,
+                            item.WAR_DA_Calculated,
+                            item.WAR_HRA_Calculated, All,
+                            item.WAR_TotalWorkingDays,
+                            item.WAR_TotalPaybleDays,
+                            item.WAR_OverTime_Calculated,
+                            (item.WAR_OutStation_Allowance_Calculated != null ? item.WAR_OutStation_Allowance_Calculated.Value : 0),
+                            (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
+                            (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
+                            (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0)),MidpointRounding.AwayFromZero);
+                decimal EMPLOYEE_CONTRIBUTION = Math.Round((ApplicableSalary * item.WAR_PF) / 100,MidpointRounding.AwayFromZero);
+                decimal EMPLOYER_CONTRIBUTION =Math.Round((ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_Employer_Cont_Rate)) / 100,MidpointRounding.AwayFromZero);
+                PFClientReportVM pFClient = new PFClientReportVM();
+                pFClient.COMPANY_NAME = item.CLI_.CLI_Name;
+                pFClient.EMP_FirstName = item.EMP_.EMP_FirstName;
+                pFClient.EMP_MiddleName = item.EMP_.EMP_MiddleName;
+                pFClient.EMP_SurName = item.EMP_.EMP_SurName;
+                pFClient.STRENGTH = 1;
+                pFClient.PF_APPLICABLE_SALARY =Math.Round(ApplicableSalary,MidpointRounding.AwayFromZero);
+                pFClient.EMPLOYEE_CONTRIBUTION =Math.Round(EMPLOYEE_CONTRIBUTION,MidpointRounding.AwayFromZero);
+                pFClient.EMPLOYER_CONTRIBUTION =Math.Round(EMPLOYER_CONTRIBUTION,MidpointRounding.AwayFromZero);
+                pFClient.TOTAL_CONTRIBUTION =Math.Round(EMPLOYEE_CONTRIBUTION + EMPLOYER_CONTRIBUTION);
+                pFClient.REMARKS = "-";
+                reportVMs.Add(pFClient);
+            }
+            return reportVMs;
+        }
     }
 }

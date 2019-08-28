@@ -60,6 +60,7 @@ namespace RMERP.DAL.ViewModel
         public decimal TOTAL_CONTRIBUTION { get; set; }        
         public string REMARKS { get; set; }
 
+        public int EMP_Id { get; set; }
         public string EMP_FirstName { get; set; }
         public string EMP_MiddleName { get; set; }
         public string EMP_SurName { get; set; }
@@ -72,5 +73,19 @@ namespace RMERP.DAL.ViewModel
         }
 
         public string PENDING_REGISTRAION_SINCE { get; set; }
+
+        public string UAN_Number { get; set; }
+        public decimal EPF_CONTRIBUTION { get; set; }
+        public decimal EPS_CONTRIBUTION { get; set; }
+        public decimal DIFF_EPF_EPS
+        {
+            get
+            {
+                return (EPF_CONTRIBUTION - EPS_CONTRIBUTION);
+                
+            }
+        }
+        public int NCP1 { get; set; }
+        public int NCP2 { get; set; }
     }
 }

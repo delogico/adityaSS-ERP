@@ -38,3 +38,23 @@
     background-image: none;
     border: 1px solid #ccc;
 }
+.client-selection-model {
+    padding-bottom: 10px;
+}
+
+.reports-selection {
+    cursor: pointer;
+    font-size: 10px;
+    color: #009ce7!important;
+}
+.check-client {
+    cursor: pointer;    
+    font-weight:normal!important;
+}
+.report-type {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 14px;
+}
+
+

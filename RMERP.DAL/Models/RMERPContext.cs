@@ -566,6 +566,10 @@ namespace RMERP.DAL.Models
                     .IsUnicode(false)
                     .HasDefaultValueSql("('Pending')");
 
+                entity.Property(e => e.EMP_UAN_Remark)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
                 entity.HasOne(d => d.FRM_)
                     .WithMany(p => p.Employees)
                     .HasForeignKey(d => d.FRM_Id)

@@ -320,6 +320,10 @@ namespace RMERP.DAL.ManagerClasses
                 client.CLI_GST_Info = clients.CLI_GST_Info;
                 client.CLI_Place_Of_Supply = clients.CLI_Place_Of_Supply;
 
+                client.CLI_Employer_Cont_Rate = clients.CLI_Employer_Cont_Rate;
+                client.CLI_EPF_Rate = clients.CLI_EPF_Rate;
+                client.CLI_EPS_Rate = clients.CLI_EPS_Rate;
+
                 _contaxt.Clients.Update(client);
                 _contaxt.SaveChanges();
             }
@@ -676,6 +680,15 @@ namespace RMERP.DAL.ManagerClasses
         }
 
 
-
+        public List<Clients> GetActiveClientByFirmId(DateTime wageDate, int FirmId)
+        {
+            DateTime lastDate = new DateTime(wageDate.Year, wageDate.Month, 1).AddMonths(1).AddDays(-1);
+            IQueryable<Clients> cliList = from a in _contaxt.Clients
+                                          where a.CLI_RegisteredOn.Date <= lastDate.Date
+                                          && a.FRM_Id.Equals(FirmId)
+                                          && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
+                                          select a;
+            return cliList.ToList();
+        }
     }
 }

@@ -66,6 +66,11 @@ namespace RMERP.Controllers
             ViewBag.FRM_Id = FRM_Id;
             ViewBag.FRM_Name = firmsManager.GetFirm(FRM_Id).FRM_ShortName;
             IEnumerable<Wage_Process> wage_Processes = wpm.getWageProcessList(FRM_Id);
+
+            //WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
+            //List<Clients> clients = wageRegisterManager.GetWageRegisters(WAG_Id).Where(m => m.WAG_.FRM_Id.Equals(FRM_Id)).Select(m => m.).Distinct().ToList();
+            //return View(new Tuple<IEnumerable<WageProcessVM>, List<Clients>>(WageProcessMapper.mapMeVMs(wage_Processes, firmsManager.GetFirm(FRM_Id), _context, _configuration), clients));
+
             return View(WageProcessMapper.mapMeVMs(wage_Processes, firmsManager.GetFirm(FRM_Id), _context, _configuration));
         }
 

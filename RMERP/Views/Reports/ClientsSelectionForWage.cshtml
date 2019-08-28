@@ -1,0 +1,84 @@
+﻿@model RMERP.DAL.ViewModel.ClientSelectionVM
+@using static RMERP.DAL.Helpers.ProjectUtils;
+@{
+    ViewData["Title"] = "Clients Selection";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+<style>
+    .modal-dialog {
+        transform: translate(0, -50%);
+        top: 30%;
+        margin: 0 auto;
+    }
+</style>
+@section scripts{
+    <script>
+        $("#checkAll").click(function () {
+            $(".check").prop('checked', $(this).prop('checked'));
+        });
+    </script>
+}
+<div>
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <h4 class="page-title">@ViewData["Title"]</h4>
+            </div>
+            <div class="col-sm-4 text-right m-b-30">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10">
+                <div>
+                    @using (Html.BeginForm("PF_Reports", "Reports", FormMethod.Post))
+                    {
+                        <div class="row well well-lg">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" class="check" id="checkAll"> <strong>Select All</strong>
+                                </label>
+                            </div>
+                            @for (var i = 0; i < Model.selectionVMs.Count; i++)
+                            {
+                                <div class="col-sm-6 client-selection-model">
+                                    @Html.HiddenFor(m => Model.selectionVMs[i].WAG_Id)
+                                    @Html.HiddenFor(m => Model.selectionVMs[i].CLI_Id)
+                                    @Html.HiddenFor(m => Model.selectionVMs[i].CLI_Name)
+                                    <label class="check-client">
+                                        @Html.CheckBoxFor(m => Model.selectionVMs[i].IsSelect, new { id = Model.selectionVMs[i].CLI_Id, @class = "check" })
+                                        @Html.DisplayFor(m => Model.selectionVMs[i].CLI_Name, new { @class = "form-control" })
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                      @Html.LabelFor(m => m.PF_Report, new { @class = "control-label" })<br/>
+                                    <label class="radio-inline well well-sm ">
+                                        @foreach (var PF_REPORT_TYPE in Enum.GetValues(typeof(PF_REPORT_TYPE)).Cast<PF_REPORT_TYPE>())
+                                        {
+                                            <label class="radio-inline report-type">
+                                                @Html.RadioButtonFor(s => s.PF_Report, (int)PF_REPORT_TYPE, new { @class = "control-label" })<strong>@GetStringValue(PF_REPORT_TYPE)</strong>
+                                            </label><br />
+                                        }
+                                    </label>
+                                    @Html.ValidationMessageFor(x => x.PF_Report, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="form-group text-center">
+                                    <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

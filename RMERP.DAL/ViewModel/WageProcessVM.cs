@@ -48,6 +48,7 @@ namespace RMERP.DAL.ViewModel
         public int totEmpTakeAdvance { get; set; }
         public int FRM_Id { get; set; }
         public string FRM_Title { get; set; }
+        public List<Clients> clients { get; set; }
     }
     
     public class WageProcessClientAttendancePageVM
