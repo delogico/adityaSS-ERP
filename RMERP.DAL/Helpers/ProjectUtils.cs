@@ -78,6 +78,17 @@ namespace RMERP.DAL.Helpers
             [StringValue("PF Report.txt")]
             PF_Report_Text =4
         }
+        public enum BANK_REPORT_TYPE
+        {
+            [StringValue("Company Wise Transfer Report.xlsx")]
+            Company_Wise_Transfer_Report = 0,
+            [StringValue("IDBI Bank To IDBI Bank Report.xlsx")]
+            IDBI_Bank_To_IDBI_Bank_Report = 1,
+            [StringValue("IDBI Bank To Others Report.xlsx")]
+            IDBI_Bank_To_Others_Report = 2,
+            [StringValue("CHEQUE/CASH Report.xlsx")]
+            CHEQUE_CASH_Report = 3         
+        }
         public static DateTime DateNow()
         {
             DateTime utcTime = DateTime.UtcNow;

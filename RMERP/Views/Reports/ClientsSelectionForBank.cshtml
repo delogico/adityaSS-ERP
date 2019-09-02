@@ -1,9 +1,15 @@
 ﻿@model RMERP.DAL.ViewModel.ClientSelectionVM
+
 @using static RMERP.DAL.Helpers.ProjectUtils;
 @{
-    ViewData["Title"] = "Clients Selection";
-    Layout = "~/Views/Shared/_RMLayout.cshtml";
+    ViewData["Title"] = "Bank Reports";
+Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id })</li>
+    <li class="breadcrumb-item">Bank Reports</li>
+}
+
 <style>
     .modal-dialog {
         transform: translate(0, -50%);
@@ -12,7 +18,13 @@
     }
 </style>
 @section scripts{
+
     <script>
+        $(document).ready(function () {
+            debugger;
+            $("#checkAll").prop('checked', $(this).prop('checked'));
+            $(".check").prop('checked', true);
+        });
         $("#checkAll").click(function () {
             $(".check").prop('checked', $(this).prop('checked'));
         });
@@ -31,12 +43,13 @@
         <div class="row">
             <div class="col-md-10">
                 <div>
-                    @using (Html.BeginForm("PF_Reports", "Reports", FormMethod.Post))
+                    @Html.Label("Select Client")<br />
+                    @using (Html.BeginForm("Bank_Reports", "Reports", FormMethod.Post))
                     {
                         <div class="row well well-lg">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" class="check" id="checkAll"> <strong>Select All</strong>
+                                    <input type="checkbox" class="check" id="checkAll"> <strong>Select All Clients</strong>
                                 </label>
                             </div>
                             @for (var i = 0; i < Model.selectionVMs.Count; i++)
@@ -51,27 +64,27 @@
                                     </label>
                                 </div>
                             }
-                        </div>
+                        </div>                       
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="form-group">
-                                      @Html.LabelFor(m => m.PF_Report, new { @class = "control-label" })<br/>
+                                    @Html.LabelFor(m => m.Report, new { @class = "control-label" })<br />
                                     <label class="radio-inline well well-sm ">
-                                        @foreach (var PF_REPORT_TYPE in Enum.GetValues(typeof(PF_REPORT_TYPE)).Cast<PF_REPORT_TYPE>())
+                                        @foreach (var BANK_REPORT_TYPE in Enum.GetValues(typeof(BANK_REPORT_TYPE)).Cast<BANK_REPORT_TYPE>())
                                         {
                                             <label class="radio-inline report-type">
-                                                @Html.RadioButtonFor(s => s.PF_Report, (int)PF_REPORT_TYPE, new { @class = "control-label" })<strong>@GetStringValue(PF_REPORT_TYPE)</strong>
+                                                @Html.RadioButtonFor(s => s.Report, (int)BANK_REPORT_TYPE, new { @class = "control-label" })@GetStringValue(BANK_REPORT_TYPE)
                                             </label><br />
                                         }
                                     </label>
-                                    @Html.ValidationMessageFor(x => x.PF_Report, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(x => x.Report, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="form-group text-center">
-                                    <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" />
+                                    <input type="submit" value="Generate Report" id="btnSubmit" class="btn btn-primary" />
                                 </div>
                             </div>
                         </div>

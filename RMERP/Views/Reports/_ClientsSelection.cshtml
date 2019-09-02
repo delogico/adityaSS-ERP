@@ -1,53 +1,75 @@
-﻿@*@model List<RMERP.DAL.ViewModel.ClientSelectionVM>
+﻿@model List<RMERP.DAL.ViewModel.SelectionVM>
 
-<div class="modal fade" id="myModalSelection">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <a href="#" class="close" data-dismiss="modal">&times;</a>                
-                <h3 class="modal-title">Select Clients</h3>
+    <div class="row well well-lg">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" class="check" id="checkAll"> <strong>Select All Clients</strong>
+            </label>
+        </div>
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            <div class="col-sm-6 client-selection-model">
+                @Html.HiddenFor(m => Model[i].WAG_Id)
+                @Html.HiddenFor(m => Model[i].CLI_Id)
+                @Html.HiddenFor(m => Model[i].CLI_Name)
+                <label class="check-client">
+                    @Html.CheckBoxFor(m => Model[i].IsSelect, new { id = Model[i].CLI_Id, @class = "check" })
+                    @Html.DisplayFor(m => Model[i].CLI_Name, new { @class = "form-control" })
+                </label>
             </div>
-            <div class="modal-body" id="divSelection">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" class="check" id="checkAll"> <strong>Select All</strong> 
-                    </label>
-                </div>
-                @using (Html.BeginForm("Employee_PF_Excel", "Reports", FormMethod.Post))
-                {
-                    <div class="row">
-                        @for (var i = 0; i < Model.Count; i++)
+        }
+    </div>
+
+    @*@model List<RMERP.DAL.ViewModel.ClientSelectionVM>
+
+        <div class="modal fade" id="myModalSelection">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a href="#" class="close" data-dismiss="modal">&times;</a>
+                        <h3 class="modal-title">Select Clients</h3>
+                    </div>
+                    <div class="modal-body" id="divSelection">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" class="check" id="checkAll"> <strong>Select All</strong>
+                            </label>
+                        </div>
+                        @using (Html.BeginForm("Employee_PF_Excel", "Reports", FormMethod.Post))
                         {
-                            <div>
-                                <div class="col-sm-6 client-selection-model">
-                                    @Html.HiddenFor(m => Model[i].WAG_Id)
-                                    @Html.HiddenFor(m => Model[i].CLI_Id)
-                                    @Html.HiddenFor(m => Model[i].CLI_Name)
-                                    @Html.CheckBoxFor(m => Model[i].IsSelect, new { id = Model[i].CLI_Id, @class = "check" })
-                                    @Html.DisplayFor(m => Model[i].CLI_Name, new { @class = "form-control" })
+                            <div class="row">
+                                @for (var i = 0; i < Model.Count; i++)
+                                {
+                                    <div>
+                                        <div class="col-sm-6 client-selection-model">
+                                            @Html.HiddenFor(m => Model[i].WAG_Id)
+                                            @Html.HiddenFor(m => Model[i].CLI_Id)
+                                            @Html.HiddenFor(m => Model[i].CLI_Name)
+                                            @Html.CheckBoxFor(m => Model[i].IsSelect, new { id = Model[i].CLI_Id, @class = "check" })
+                                            @Html.DisplayFor(m => Model[i].CLI_Name, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group text-right">
+                                        <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" />
+                                    </div>
                                 </div>
                             </div>
                         }
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group text-right">
-                                <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" />
-                            </div>
-                        </div>
                     </div>
-                }
-
+                </div>
             </div>
         </div>
-    </div>
-</div>
-@section scripts{
-    <script>
-        $("#checkAll").click(function () {
-            debugger;
-            $(".check").prop('checked', $(this).prop('checked'));
-        });
-    </script>
-}*@
+        @section scripts{
+            <script>
+                $("#checkAll").click(function () {
+                    debugger;
+                    $(".check").prop('checked', $(this).prop('checked'));
+                });
+            </script>
+        }*@

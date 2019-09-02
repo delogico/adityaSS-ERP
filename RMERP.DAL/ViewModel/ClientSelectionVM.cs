@@ -9,8 +9,9 @@ namespace RMERP.DAL.ViewModel
     public class ClientSelectionVM
     {
         public List<SelectionVM> selectionVMs { get; set; }  
-        [Display(Name ="PF Report Type")]
-        public string PF_Report { get; set; }
+        [Display(Name ="Report Type")]
+        public string Report { get; set; }
+        public int FRM_Id { get; set; }
     }
     public class SelectionVM
     {
