@@ -95,6 +95,9 @@ namespace RMERP.Controllers
         public ActionResult EditWageRegister(EditWageRegisterVM editWageRegisterVM)
         {
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
+
+            Wage_Register wageRegister = wageRegisterManager.GetWage_RegisterByID(editWageRegisterVM.wageRegisterVM.WAR_Id);
+
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             editWageRegisterVM.wageRegisterVM.ADM_LastModifiedBy = sessionUtils.GetLoggedAdminID();
             string res = wageRegisterManager.UpdateWageRegister(WageRegisterMapper.mapMe(editWageRegisterVM.wageRegisterVM));
@@ -540,10 +543,10 @@ namespace RMERP.Controllers
                                     cellEmp13.CellStyle = styleGrey50;
                                     int cellNxt1 = cellNxt + 2;
                                     if (clientRequirement.CRI_ProfessionalTax == true)
-                                    {
+                                    {                                        
                                         cellNxt1 = cellNxt1 + 1;
                                         ICell cellEmpTax = row.CreateCell(cellNxt1);
-                                        cellEmpTax.SetCellValue(employee.WAR_ProffesionalTax_Calculated.ToString());
+                                        cellEmpTax.SetCellValue(Convert.ToString(employee.WAR_ProffesionalTax_Calculated));
                                         TotalProfTax = TotalProfTax + Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated);
                                         cellEmpTax.CellStyle = styleGrey50;
                                     }

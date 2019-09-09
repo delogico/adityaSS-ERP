@@ -58,9 +58,10 @@
 
         <div class="raw">
             <div class="col-md-4">
-                <ul style="font-size:10px;padding-left: 10px !important;">                   
+                <ul style="font-size:10px;padding-left: 10px !important;">
                     <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForPF","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees PF Report"><i class="fa fa-file-excel-o m-r-5"></i>PF Reports</a></li>
-                    <li><a href='@Url.Action( "ESICReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Report.xlsx</a></li>
+                    @*<li><a href='@Url.Action( "ESICReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PF Report"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Report.xlsx</a></li>*@
+                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForBank","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees Bank Report"><i class="fa fa-file-excel-o m-r-5"></i>Bank Reports</a></li>
                 </ul>
             </div>
             <div class="col-md-4">
@@ -70,22 +71,17 @@
                 </ul>
             </div>
             <div class="col-md-4">
-                @*<ul style="font-size:10px;padding-left: 10px !important;">
+                <ul style="font-size:10px;padding-left: 10px !important;">
                         <li>
                             <div class="dropdown">
-                                <a href="#" style="font-size:10px;color:#009ce7;" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-file-excel-o m-r-5"></i>Bank Reports</a>
+                                <a href="#" style="font-size:10px;color:#009ce7;" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Report</a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "NEFT_BankReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="Company Wise Transfer Report"><i class="fa fa-file-excel-o m-r-5"></i>Company Wise Transfer Report.xlsx</a></li>
-                                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "IDBI_To_IDBI_BankReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="IDBI Bank To IDBI Bank Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI Bank To IDBI Bank Report.xlsx</a></li>
-                                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "IDBI_To_Other_BankReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="IDBI Bank To Others Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI Bank To Others Report.xlsx</a></li>
-                                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "CHEQUE_CASH_BankReportExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="CHEQUE/CASH Report"><i class="fa fa-file-excel-o m-r-5"></i>CHEQUE/CASH Report.xlsx</a></li>
+                                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "Client_Wise_ESIC_Excel","Reports",new { WAG_Id = Model.WAG_Id })' title="Client Wise ESIC Report"><i class="fa fa-file-excel-o m-r-5"></i>Client Wise ESIC Report.xlsx</a></li>
+                                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "Employee_Wise_Esic_Details_Excel","Reports",new { WAG_Id = Model.WAG_Id })' title="Employee Wise Esic Details"><i class="fa fa-file-excel-o m-r-5"></i>Employee Wise Esic Details.xlsx</a></li>
                                 </ul>
                             </div>
                         </li>
-                    </ul>*@
-                <ul style="font-size:10px;padding-left: 10px !important;">
-                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForBank","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees Bank Report"><i class="fa fa-file-excel-o m-r-5"></i>Bank Reports</a></li>
-                </ul>
+                    </ul>               
                 <ul style="font-size:10px;padding-left: 10px !important;">
                     <li>
                         <div class="dropdown">

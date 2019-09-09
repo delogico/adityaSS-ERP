@@ -5,6 +5,12 @@ using System.Text;
 
 namespace RMERP.DAL.ViewModel
 {
+    public class ESICReportEmpWiseVM
+    {
+        public string NAME_OF_COMPANY { get; set; }
+        public List<ESICReportVM> ESICReportVMs { get; set; }        
+    }   
+
     public class ESICReportVM
     {
         [Display(Name = "IP Number")]
@@ -28,5 +34,15 @@ namespace RMERP.DAL.ViewModel
         public string ReasonCode { get; set; }
         [Display(Name = "Last Working Day")]
         public DateTime LastWorkingDay { get; set; }
+
+        public string NAME_OF_COMPANY { get; set; }
+        public int NO_OF_EMPLOYEE { get; set; }
+        public decimal TOTAL_WAGES { get; set; }
+        public decimal EMPLOYEES_CONTRIBUTION { get; set; }
+        public decimal EMPLOYERS_CONTRIBUTION { get; set; }
+        public decimal TOTAL_CONTRIBUTION { get; set; }
+
+       
     }
+
 }

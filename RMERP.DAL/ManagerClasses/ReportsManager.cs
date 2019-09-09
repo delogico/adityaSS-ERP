@@ -24,7 +24,7 @@ namespace RMERP.DAL.ManagerClasses
             employees = _context.Wage_Register.Where(m => m.WAG_Id.Equals(WAG_Id)).Select(m => m.EMP_).Distinct().ToList();
             return employees;
         }
-
+        
         public List<PFReportVM> PFReports(int WAG_Id)
         {
             List<PFReportVM> reports = new List<PFReportVM>();
@@ -69,68 +69,72 @@ namespace RMERP.DAL.ManagerClasses
             return reports;
         }
 
-        public List<ESICReportVM> ESICReports(int WAG_Id)
-        {
-            List<ESICReportVM> reports = new List<ESICReportVM>();
-            List<Employees> employees = GetActiveEmployeesOfMonth(WAG_Id);
-            foreach (var emp in employees)
-            {
-                WageRegisterManager registerManager = new WageRegisterManager(_context);
-                List<Wage_Register> wage_Registers = registerManager.GetWageRegistersByEmpId(WAG_Id, emp.EMP_Id);
-                ESICReportVM ESICreport = new ESICReportVM();
-                decimal TotalMonthlyWages = 0M;
-                double PayableDays = 0;
-                foreach (var register in wage_Registers)
-                {
-                    TotalMonthlyWages = ProjectUtils.GetGrossAmountBasedOnFormula(register.WAR_ESIC_Formula, register);
-                    PayableDays += register.WAR_TotalPaybleDays;
-                }
-                //ESICreport.ReasonCode = "";
-                ESICreport.TotalMonthlyWages = TotalMonthlyWages;
-                ESICreport.PayableDays = PayableDays;
-                ESICreport.LastWorkingDay = DateTime.Now;
-                ESICreport.EMP_FirstName = emp.EMP_FirstName;
-                ESICreport.EMP_MiddleName = emp.EMP_MiddleName;
-                ESICreport.EMP_SurName = emp.EMP_SurName;
-                ESICreport.IP_Number = emp.EMP_ESIC_Number;
-                reports.Add(ESICreport);
-            }
-            return reports;
-        }
-
-        //public List<NEFT_BankReportVM> NEFT_BankReports(int WAG_Id)
+        //public List<ESICReportVM> ESICReports(int WAG_Id)
         //{
-        //    List<NEFT_BankReportVM> reports = new List<NEFT_BankReportVM>();
-        //    //List<Employees> employees = GetActiveEmployeesOfMonth(WAG_Id);
-        //    WageRegisterManager registerManager = new WageRegisterManager(_context);
-        //    List<Wage_Register> wage_Registers = registerManager.GetWageRegistersByWAG_Id(WAG_Id);
-
-        //    foreach (var cli in wage_Registers.Select(m => new { m.CLI_Id, m.CLI_.CLI_Name }).Distinct())
+        //    List<ESICReportVM> reports = new List<ESICReportVM>();
+        //    List<Employees> employees = GetActiveEmployeesOfMonth(WAG_Id);
+        //    foreach (var emp in employees)
         //    {
-        //        NEFT_BankReportVM bankReportVM = new NEFT_BankReportVM();
-        //        bankReportVM.CLI_Id = cli.CLI_Id;
-        //        bankReportVM.CLI_Name = cli.CLI_Name;
-        //        List<Wage_Register> register = registerManager.GetWageRegisters(WAG_Id, cli.CLI_Id);
-        //        List<NEFTBank_EMP_ReportVM> rptEmployees = new List<NEFTBank_EMP_ReportVM>();
-        //        foreach (var wage in register)
+        //        WageRegisterManager registerManager = new WageRegisterManager(_context);
+        //        List<Wage_Register> wage_Registers = registerManager.GetWageRegistersByEmpId(WAG_Id, emp.EMP_Id);
+        //        ESICReportVM ESICreport = new ESICReportVM();
+        //        decimal TotalMonthlyWages = 0M;
+        //        double PayableDays = 0;
+        //        foreach (var register in wage_Registers)
         //        {
-        //            NEFTBank_EMP_ReportVM rptEmployee = new NEFTBank_EMP_ReportVM();
-        //            rptEmployee.EMP_FirstName = wage.EMP_.EMP_FirstName;
-        //            rptEmployee.EMP_MiddleName = wage.EMP_.EMP_MiddleName;
-        //            rptEmployee.EMP_SurName = wage.EMP_.EMP_SurName;
-        //            rptEmployee.EMP_Account_Number = "";
-        //            rptEmployee.CURRENCY_CODE = "-";
-        //            rptEmployee.PART_TRAN_TYPE = "-";
-        //            rptEmployee.TRANSACTION_AMOUNT = wage.WAR_FinalTotal;
-        //            DateTime WAG_Month = wage_Registers.First().WAG_.WAG_Month;
-        //            rptEmployee.TRANSACTION_PARTICULARS = "Salary " + WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
-        //            rptEmployees.Add(rptEmployee);
+        //            TotalMonthlyWages = ProjectUtils.GetGrossAmountBasedOnFormula(register.WAR_ESIC_Formula, register);
+        //            PayableDays += register.WAR_TotalPaybleDays;
         //        }
-        //        bankReportVM.NEFTBank_EMP_ReportVMs = rptEmployees;
-        //        reports.Add(bankReportVM);
+        //        //ESICreport.ReasonCode = "";
+        //        ESICreport.TotalMonthlyWages = TotalMonthlyWages;
+        //        ESICreport.PayableDays = PayableDays;
+        //        ESICreport.LastWorkingDay = DateTime.Now;
+        //        ESICreport.EMP_FirstName = emp.EMP_FirstName;
+        //        ESICreport.EMP_MiddleName = emp.EMP_MiddleName;
+        //        ESICreport.EMP_SurName = emp.EMP_SurName;
+        //        ESICreport.IP_Number = emp.EMP_ESIC_Number;
+        //        reports.Add(ESICreport);
         //    }
         //    return reports;
         //}
+
+        public List<ESICReportEmpWiseVM> ESICReportEmpWise(int WAG_Id)
+        {
+            List<ESICReportEmpWiseVM> reports = new List<ESICReportEmpWiseVM>();
+            WageRegisterManager wageManager = new WageRegisterManager(_context);            
+            List<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);
+            dynamic ESICclientList = wage_Registers.Select(m => new
+            {
+                m.CLI_Id,
+                m.CLI_.CLI_Name,
+            }).Distinct();
+            List<Wage_Register> wage_Register = new List<Wage_Register>();
+            foreach (var client in ESICclientList)
+            {
+                wage_Register = wage_Registers.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
+                ESICReportEmpWiseVM ESICReport = new ESICReportEmpWiseVM();
+                ESICReport.NAME_OF_COMPANY = client.CLI_Name;
+                //decimal TotalMonthlyWages = 0M;               
+                List<ESICReportVM> reportVMs = new List<ESICReportVM>();
+                foreach (var register in wage_Register)
+                {
+                    ESICReportVM reportVM = new ESICReportVM();
+                    decimal TotalMonthlyWages = ProjectUtils.GetGrossAmountBasedOnFormula(register.WAR_ESIC_Formula, register);                   
+                    reportVM.TotalMonthlyWages = Math.Round(TotalMonthlyWages,MidpointRounding.AwayFromZero);
+                    reportVM.PayableDays = register.WAR_TotalPaybleDays;
+
+                    reportVM.LastWorkingDay = DateTime.Now;
+                    reportVM.EMP_FirstName = register.EMP_.EMP_FirstName;
+                    reportVM.EMP_MiddleName = register.EMP_.EMP_MiddleName;
+                    reportVM.EMP_SurName = register.EMP_.EMP_SurName;
+                    reportVM.IP_Number = register.EMP_.EMP_ESIC_Number;
+                    reportVMs.Add(reportVM);
+                }
+                ESICReport.ESICReportVMs = reportVMs;
+                reports.Add(ESICReport);
+            }
+            return reports;
+        }
 
         public List<MLWF_ContributionVM> MLWF_ContributionReports(int WAG_Id)
         {
@@ -221,78 +225,6 @@ namespace RMERP.DAL.ManagerClasses
             }
             return reports;
         }
-
-        //public List<BankReportVM> IDBI_TO_IDBI_BankReports(int WAG_Id)
-        //{
-        //    List<BankReportVM> bankReportVMs = new List<BankReportVM>();
-        //    WageRegisterManager registerManager = new WageRegisterManager(_context);
-        //    List<Wage_Register> wage_Registers = registerManager.GetWageRegistersForIDBI_To_IDBI(WAG_Id);
-
-        //    foreach (var item in wage_Registers)
-        //    {
-        //        BankReportVM bankReport = new BankReportVM();
-        //        bankReport.EMP_FirstName = item.EMP_.EMP_FirstName;
-        //        bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
-        //        bankReport.EMP_SurName = item.EMP_.EMP_SurName;
-        //        bankReport.EMP_ACCOUNT_NUMBER = item.EMP_.EMP_Account_Number;
-        //        bankReport.EMP_CURRENCY_CODE = "-";
-        //        bankReport.EMP_SERVICE_OUTLET = "-";
-        //        bankReport.EMP_PART_TRAN_TYPE = "-";
-        //        bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
-        //        DateTime WAG_Month = wage_Registers.First().WAG_.WAG_Month;
-        //        bankReport.EMP_TRANSACTION_PARTICULARS = "Salary " + WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
-        //        bankReportVMs.Add(bankReport);
-        //    }
-        //    return bankReportVMs;
-        //}
-
-        //public List<BankReportVM> IDBI_TO_Other_BankReports(int WAG_Id)
-        //{
-        //    List<BankReportVM> bankReportVMs = new List<BankReportVM>();
-        //    WageRegisterManager registerManager = new WageRegisterManager(_context);
-        //    List<Wage_Register> wage_Registers = registerManager.GetWageRegistersForIDBI_To_Other(WAG_Id);
-
-        //    foreach (var item in wage_Registers)
-        //    {
-        //        BankReportVM bankReport = new BankReportVM();
-        //        bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
-        //        bankReport.ACCOUNT_SENDER_NUMBER = "-";
-        //        bankReport.ACCOUNT_IFSC_CODE = item.EMP_.EMP_Bank_IFSC;
-        //        bankReport.ACCOUNT_RECEIVERS_NUMBER = item.EMP_.EMP_Account_Number;
-        //        bankReport.ACCOUNT_TYPE = "-";
-
-        //        bankReport.EMP_FirstName = item.EMP_.EMP_FirstName;
-        //        bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
-        //        bankReport.EMP_SurName = item.EMP_.EMP_SurName;
-
-        //        bankReport.EMP_ADDRESS = item.EMP_.EMP_Address;
-        //        bankReport.MESSAGE = "SALARY";
-        //        bankReport.ORIGINETOR = "RELIABLE";
-
-        //        bankReportVMs.Add(bankReport);
-        //    }
-        //    return bankReportVMs;
-        //}
-
-        //public List<BankReportVM> ChequeCash_BankReports(int WAG_Id)
-        //{
-        //    List<BankReportVM> bankReportVMs = new List<BankReportVM>();
-        //    WageRegisterManager registerManager = new WageRegisterManager(_context);
-        //    List<Wage_Register> wage_Registers = registerManager.GetWageRegistersForChequeCash(WAG_Id);
-
-        //    foreach (var item in wage_Registers)
-        //    {
-        //        BankReportVM bankReport = new BankReportVM();
-
-        //        bankReport.EMP_FirstName = item.EMP_.EMP_FirstName;
-        //        bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
-        //        bankReport.EMP_SurName = item.EMP_.EMP_SurName;
-        //        bankReport.EMP_ADDRESS = item.EMP_.EMP_Address;
-        //        bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
-        //        bankReportVMs.Add(bankReport);
-        //    }
-        //    return bankReportVMs;
-        //}
 
         public List<BankReportVM> IDBI_TO_IDBI_AdvanceReports(int WAG_Id, int FRM_Id)
         {
@@ -656,13 +588,13 @@ namespace RMERP.DAL.ManagerClasses
             List<BankReportVM> bankReportVMs = new List<BankReportVM>();
             WageRegisterManager registerManager = new WageRegisterManager(_context);
             IEnumerable<Wage_Register> wage_Registers = registerManager.GetWageRegistersForIDBI_To_IDBI(WAG_Id);
-                       
+
             if (IsSelected == true)
             {
-                int[] CLI_Ids = selectionVMs.Select(m => m.CLI_Id).ToArray();                
+                int[] CLI_Ids = selectionVMs.Select(m => m.CLI_Id).ToArray();
                 wage_Registers = from wageReg in wage_Registers
-                                where CLI_Ids.Contains(wageReg.CLI_Id)
-                                select wageReg;
+                                 where CLI_Ids.Contains(wageReg.CLI_Id)
+                                 select wageReg;
             }
             foreach (var item in wage_Registers)
             {
@@ -741,5 +673,55 @@ namespace RMERP.DAL.ManagerClasses
             }
             return bankReportVMs;
         }
+
+        #region ESIC
+        public List<ESICReportVM> Client_Wise_ESIC(int WAG_Id)
+        {
+            List<ESICReportVM> reportVMs = new List<ESICReportVM>();
+            WageRegisterManager wageManager = new WageRegisterManager(_context);
+            List<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);
+            dynamic ESICList = null;
+            ESICList = wage_Registers.Select(m => new
+            {
+                m.CLI_Id,
+                m.CLI_.CLI_Name,
+            }).Distinct();
+            List<Wage_Register> wage_Register = new List<Wage_Register>();
+            foreach (var client in ESICList)
+            {
+                ESICReportVM reportVM = new ESICReportVM();
+                wage_Register = wage_Registers.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
+                reportVM.NAME_OF_COMPANY = client.CLI_Name;
+                reportVM.NO_OF_EMPLOYEE = wage_Register.Select(m => m.EMP_Id).Count();
+                decimal TOTAL_WAGES = 0M, EMPLOYEES_CONTRIBUTION = 0M, EMPLOYERS_CONTRIBUTION = 0M, TOTAL_CONTRIBUTION=0M;
+                foreach (var item in wage_Register)
+                {
+                    List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
+                    decimal AppSalary = GetAmountBasedOnFormula(
+                        item.WAR_ESIC_Formula,
+                        item.WAR_Basic_Calculated,
+                        item.WAR_DA_Calculated,
+                        item.WAR_HRA_Calculated, All,
+                        item.WAR_TotalWorkingDays,
+                        item.WAR_TotalPaybleDays,
+                        item.WAR_OverTime_Calculated,
+                        (item.WAR_OutStation_Allowance_Calculated != null ? item.WAR_OutStation_Allowance_Calculated.Value : 0),
+                        (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
+                        (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
+                        (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
+                    EMPLOYEES_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION + (AppSalary * item.WAR_ESIC) / 100, MidpointRounding.AwayFromZero);
+                    EMPLOYERS_CONTRIBUTION = Math.Round(EMPLOYERS_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.CLI_.CLI_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
+                    TOTAL_CONTRIBUTION = TOTAL_CONTRIBUTION+ (EMPLOYEES_CONTRIBUTION + EMPLOYERS_CONTRIBUTION);
+                    TOTAL_WAGES = Math.Round(AppSalary + TOTAL_WAGES, MidpointRounding.AwayFromZero);
+                }
+                reportVM.TOTAL_WAGES = TOTAL_WAGES;
+                reportVM.EMPLOYEES_CONTRIBUTION = EMPLOYEES_CONTRIBUTION;
+                reportVM.EMPLOYERS_CONTRIBUTION = EMPLOYERS_CONTRIBUTION;
+                reportVM.TOTAL_CONTRIBUTION = TOTAL_CONTRIBUTION;
+                reportVMs.Add(reportVM);
+            }
+            return reportVMs;
+        }
+        #endregion
     }
 }
