@@ -47,6 +47,14 @@ namespace RMERP.Controllers
             ViewBag.FirmList = firmsManager.getFirmList();
 
             EmployeeManager employeeManager = new EmployeeManager(_context);
+            IEnumerable<EMPLOYEE_LEFT_REASON_CODE> REASON_CODE = Enum.GetValues(typeof(EMPLOYEE_LEFT_REASON_CODE))
+                                                       .Cast<EMPLOYEE_LEFT_REASON_CODE>();
+            ViewBag.Reason_Code = from action in REASON_CODE
+                                       select new SelectListItem
+                                       {
+                                           Text = ProjectUtils.GetStringValue(action),
+                                           Value = ((int)action).ToString()
+                                       };
             return View(new Tuple<IEnumerable<EmployeeVM>, int>(EmployeesMapper.MapEmployees(employeeManager.GetEmployees(FRM_Id).ToList(), _context), FRM_Id));
 
 
@@ -170,17 +178,30 @@ namespace RMERP.Controllers
 
         }
 
-        public ActionResult ActiveEmployee(int EMP_Id, DateTime date)
+        //public ActionResult ActiveEmployee(int EMP_Id, DateTime date)
+        //{
+        //    EmployeeManager employeeManager = new EmployeeManager(_context);
+        //    SessionUtils sessionUtils = new SessionUtils(Request, Response);
+        //    employeeManager.ActiveEmployee(EMP_Id, date, sessionUtils.GetLoggedAdminID(), out string actionMessage);
+        //    if (actionMessage != string.Empty)
+        //    {
+        //        TempData["message"] = actionMessage;
+        //    }
+        //    return RedirectToAction("Index");
+        //}
+
+        public ActionResult LeftEmployee(int EMP_Id,DateTime EMP_Left_Date, int EMP_Reason_Code)
         {
             EmployeeManager employeeManager = new EmployeeManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            employeeManager.ActiveEmployee(EMP_Id, date, sessionUtils.GetLoggedAdminID(), out string actionMessage);
+            employeeManager.ActiveEmployee(EMP_Id, EMP_Reason_Code, EMP_Left_Date, sessionUtils.GetLoggedAdminID(), out string actionMessage);
             if (actionMessage != string.Empty)
             {
                 TempData["message"] = actionMessage;
             }
             return RedirectToAction("Index");
         }
+
 
         [HttpGet]        
         public ActionResult AddEditAdvance(int EMP_Id, int ADV_Id = -1)

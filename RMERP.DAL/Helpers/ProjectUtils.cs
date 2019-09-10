@@ -98,7 +98,40 @@ namespace RMERP.DAL.Helpers
             IDBI_Bank_To_Others_Report = 2,
             [StringValue("CHEQUE/CASH Report.xlsx")]
             CHEQUE_CASH_Report = 3         
+        } 
+
+        public enum EMPLOYEE_LEFT_REASON_CODE
+        {
+            [StringValue("Without Reason")]
+            Without_Reason =0,
+            [StringValue("On Leave")]
+            On_Leave =1,
+            [StringValue("Left Service")]
+            Left_Service =2,
+            [StringValue("Retired")]
+            Retired =3,
+            [StringValue("Out of Coverage")]
+            Out_Of_Coverage =4,
+            [StringValue("Expired")]
+            Expired =5,
+            [StringValue("Non Implemented area")]
+            Non_Implemented_Area =6,
+            [StringValue("Compliance by Immediate Employer")]
+            Compliance_By_Immediate_Employer =7,
+            [StringValue("Suspension of work")]
+            Suspension_Of_Work =8,
+            [StringValue("Strike/Lockout")]
+            Strike_Lockout =9,
+            [StringValue("Retrenchment")]
+            Retrenchment =10,
+            [StringValue("No Work")]
+            No_Work =11,
+            [StringValue("Doesnt Belong To This Employer")]
+            Doesnt_Belong_To_This_Employer =12,
+            [StringValue("Duplicate IP")]
+            Duplicate_IP =13
         }
+
         public static DateTime DateNow()
         {
             DateTime utcTime = DateTime.UtcNow;

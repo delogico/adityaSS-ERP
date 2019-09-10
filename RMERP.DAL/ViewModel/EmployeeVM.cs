@@ -146,6 +146,9 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "ESIC Remark")]
         public string EMP_ESIC_Remark { get; set; }
 
+        [Display(Name = "Reason")]
+        public int EMP_ReasonCode { get; set; }
+
     }
 
     public class EmployeePaymentVM

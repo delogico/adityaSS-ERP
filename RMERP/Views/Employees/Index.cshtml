@@ -1,10 +1,11 @@
 ﻿@model Tuple<IEnumerable<RMERP.DAL.ViewModel.EmployeeVM>, int>
-@using RMERP.Helpers
+@using RMERP.Helpers;
+@using RMERP.DAL.Helpers;
 @{
     ViewData["Title"] = "Employees";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-@section Breadcrumbs{    
+@section Breadcrumbs{
     <li class="breadcrumb-item">Employees</li>
 }
 @section scripts{
@@ -16,7 +17,13 @@
         });
         </script>
     };
-
+    <script>
+        $(document).on("click", ".empModal", function () {
+            debugger;
+            var EMP_Id = $(this).data('id');
+            $(".modal-body #EMP_Id").val(EMP_Id);
+        });
+    </script>
 }
 <style>
     .modal-dialog {
@@ -118,7 +125,7 @@
                                             @DateHelper.getDateWithFormat(@item.EMP_DateOfJoining)
                                             @if (item.EMP_IsActive.Equals(false))
                                             {
-                                                <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue ? DateHelper.getDateWithFormat(item.EMP_InactivatedOn.Value) : "")</div>
+                                            <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue ? DateHelper.getDateWithFormat(item.EMP_InactivatedOn.Value) : "") (@ProjectUtils.GetStringValue((ProjectUtils.EMPLOYEE_LEFT_REASON_CODE)item.EMP_ReasonCode))</div>                                                
                                             }
                                         </td>
                                         <td>@item.EMP_MoF</td>
@@ -128,12 +135,13 @@
                                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                 <ul class="dropdown-menu pull-right">
                                                     <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
-                                                    <li>
-                                                        <a href='#' title="Employee Left" onclick="onConfirmClick(@item.EMP_Id,'@item.IsAssigned')">
-                                                            <i class="fa fa-trash-o m-r-5"></i>
-                                                            @lable
-                                                        </a>
-                                                    </li>
+                                                    @*<li>
+                                                            <a href='#' title="Employee Left" onclick="onConfirmClick(@item.EMP_Id,'@item.IsAssigned')">
+                                                                <i class="fa fa-trash-o m-r-5"></i>
+                                                                @lable
+                                                            </a>
+                                                        </li>*@
+                                                    <li><a class="empModal" style="cursor:pointer" title="Employee Left" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empModal"><i class="fa fa-trash-o m-r-5"></i>Employee Left</a></li>
                                                     <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-eye m-r-5"></i> View</a></li>
                                                 </ul>
                                             </div>
@@ -165,25 +173,24 @@
                 <h4 class="modal-title">Notification</h4>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("ActiveEmployee", "Employees", FormMethod.Post))
+                @using (Html.BeginForm("LeftEmployee", "Employees", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <input type="hidden" name="USR_Id" id="USR_Id" value="" />
-
+                    <input type="hidden" name="EMP_Id" id="EMP_Id" value="" />
                     <div class="form-group">
-                        @Html.Label("Title")
-                        @Html.TextBox("NOT_Title", "", new { @class = "form-control" })
-                        @Html.ValidationMessage("NOT_Title", "", new { @class = "text-danger" })
+                        @Html.Label("Choose Date")
+                        @Html.TextBox("EMP_Left_Date", "", new { @class = "form-control", @type = "date" })
+                        @Html.ValidationMessage("EMP_Left_Date", "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
-                        @Html.Label("Message")
-                        @Html.TextBox("NOT_Message", "", new { @class = "form-control" })
-                        @Html.ValidationMessage("NOT_Message", "", new { @class = "text-danger" })
+                        @Html.Label("Choose Reason")
+                        @Html.DropDownList("EMP_Reason_Code", new SelectList(ViewBag.Reason_Code, "Value", "Text"), "Select Reason", new { @class = "form-control" })
+                        @Html.ValidationMessage("EMP_Reason_Code", "", new { @class = "text-danger" })
                     </div>
 
                     <div class="m-t-20 text-center">
-                        <input type="submit" name="Send" id="btnSubmit" class="btn btn-primary" />
+                        <input type="submit" name="Submit" id="btnSubmit" class="btn btn-primary" />
                     </div>
                 }
             </div>
@@ -194,14 +201,14 @@
 
 <script>
     function onConfirmClick(EMP_Id, IsAssigned) {
-    
+
         if (IsAssigned=="False") {
 
             bootbox.prompt({
                 title: "Choose Date!",
                 inputType: 'date',
 
-                callback: function (result) {                   
+                callback: function (result) {
                     if (result != null) {
                         $.ajax({
                             type: "POST",
