@@ -140,8 +140,11 @@ namespace RMERP.DAL.ViewModel
         [Required(ErrorMessage = "Bank type is required.")]
         public int EMP_Is_IDBI_Other { get; set; }
 
-        [Display(Name = "Remark")]
+        [Display(Name = "UAN Remark")]
         public string EMP_UAN_Remark { get; set; }
+
+        [Display(Name = "ESIC Remark")]
+        public string EMP_ESIC_Remark { get; set; }
 
     }
 

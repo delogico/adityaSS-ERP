@@ -243,7 +243,7 @@
                             <p class="div-title">Legal Details</p>
                             <br />
                             <div class="row pb-3">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.EMP_Aadhar_Name, new { @class = "control-label" })
                                         @Html.TextBoxFor(m => m.EMP_Aadhar_Name, new { @class = "form-control" })
@@ -269,6 +269,13 @@
                                         @Html.LabelFor(m => m.EMP_ESIC_Number, new { @class = "control-label" })
                                         @Html.TextBoxFor(m => m.EMP_ESIC_Number, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.EMP_ESIC_Number, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.EMP_ESIC_Remark, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.EMP_ESIC_Remark, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.EMP_ESIC_Remark, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="col-md-6">

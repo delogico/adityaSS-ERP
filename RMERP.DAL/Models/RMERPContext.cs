@@ -529,6 +529,10 @@ namespace RMERP.DAL.Models
                     .IsUnicode(false)
                     .HasDefaultValueSql("('Pending')");
 
+                entity.Property(e => e.EMP_ESIC_Remark)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.EMP_FirstName)
                     .IsRequired()
                     .HasMaxLength(100)

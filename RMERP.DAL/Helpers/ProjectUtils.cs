@@ -78,6 +78,16 @@ namespace RMERP.DAL.Helpers
             [StringValue("PF Report.txt")]
             PF_Report_Text =4
         }
+        public enum ESIC_REPORT_TYPE
+        {
+            [StringValue("Client Wise ESIC Details.xlsx")]
+            Client_Wise_ESIC_Excel = 0,
+            [StringValue("Employee Wise ESIC Details.xlsx")]
+            Employee_Wise_Esic_Details_Excel = 1,
+            [StringValue("ESIC Employees Pending For Registration.xlsx")]
+            ESIC_Employees_Pending_For_Registration_Excel = 2
+            
+        }
         public enum BANK_REPORT_TYPE
         {
             [StringValue("Company Wise Transfer Report.xlsx")]
@@ -365,6 +375,18 @@ namespace RMERP.DAL.Helpers
             return sum;
         }
 
-
+        public static int intRoundFigure(double value=12.5)
+        {
+            int val = 0;            
+            if (value % 1 <= 0.5)
+            {
+                val = (int)value;
+            }
+            else
+            {
+                val = (int)value +1;
+            }
+            return val;
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace RMERP.DAL.ManagerClasses
             employees = _context.Wage_Register.Where(m => m.WAG_Id.Equals(WAG_Id)).Select(m => m.EMP_).Distinct().ToList();
             return employees;
         }
-        
+
         public List<PFReportVM> PFReports(int WAG_Id)
         {
             List<PFReportVM> reports = new List<PFReportVM>();
@@ -96,45 +96,7 @@ namespace RMERP.DAL.ManagerClasses
         //        reports.Add(ESICreport);
         //    }
         //    return reports;
-        //}
-
-        public List<ESICReportEmpWiseVM> ESICReportEmpWise(int WAG_Id)
-        {
-            List<ESICReportEmpWiseVM> reports = new List<ESICReportEmpWiseVM>();
-            WageRegisterManager wageManager = new WageRegisterManager(_context);            
-            List<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);
-            dynamic ESICclientList = wage_Registers.Select(m => new
-            {
-                m.CLI_Id,
-                m.CLI_.CLI_Name,
-            }).Distinct();
-            List<Wage_Register> wage_Register = new List<Wage_Register>();
-            foreach (var client in ESICclientList)
-            {
-                wage_Register = wage_Registers.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
-                ESICReportEmpWiseVM ESICReport = new ESICReportEmpWiseVM();
-                ESICReport.NAME_OF_COMPANY = client.CLI_Name;
-                //decimal TotalMonthlyWages = 0M;               
-                List<ESICReportVM> reportVMs = new List<ESICReportVM>();
-                foreach (var register in wage_Register)
-                {
-                    ESICReportVM reportVM = new ESICReportVM();
-                    decimal TotalMonthlyWages = ProjectUtils.GetGrossAmountBasedOnFormula(register.WAR_ESIC_Formula, register);                   
-                    reportVM.TotalMonthlyWages = Math.Round(TotalMonthlyWages,MidpointRounding.AwayFromZero);
-                    reportVM.PayableDays = register.WAR_TotalPaybleDays;
-
-                    reportVM.LastWorkingDay = DateTime.Now;
-                    reportVM.EMP_FirstName = register.EMP_.EMP_FirstName;
-                    reportVM.EMP_MiddleName = register.EMP_.EMP_MiddleName;
-                    reportVM.EMP_SurName = register.EMP_.EMP_SurName;
-                    reportVM.IP_Number = register.EMP_.EMP_ESIC_Number;
-                    reportVMs.Add(reportVM);
-                }
-                ESICReport.ESICReportVMs = reportVMs;
-                reports.Add(ESICReport);
-            }
-            return reports;
-        }
+        //}      
 
         public List<MLWF_ContributionVM> MLWF_ContributionReports(int WAG_Id)
         {
@@ -431,7 +393,7 @@ namespace RMERP.DAL.ManagerClasses
                 pFClient.EMP_FirstName = item.EMP_FirstName;
                 pFClient.EMP_MiddleName = item.EMP_MiddleName;
                 pFClient.EMP_SurName = item.EMP_SurName;
-                pFClient.PENDING_REGISTRAION_SINCE = Convert.ToString(item.EMP_RegisteredOn);
+                pFClient.PENDING_REGISTRAION_SINCE = item.EMP_RegisteredOn.ToShortDateString();
                 pFClient.REMARKS = item.EMP_UAN_Remark;
                 reportVMs.Add(pFClient);
             }
@@ -675,25 +637,41 @@ namespace RMERP.DAL.ManagerClasses
         }
 
         #region ESIC
-        public List<ESICReportVM> Client_Wise_ESIC(int WAG_Id)
+        public List<ESICReportVM> Client_Wise_ESIC(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
         {
-            List<ESICReportVM> reportVMs = new List<ESICReportVM>();
             WageRegisterManager wageManager = new WageRegisterManager(_context);
             List<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);
-            dynamic ESICList = null;
-            ESICList = wage_Registers.Select(m => new
+            dynamic ESICClientList = null;
+            if (IsSelected == true)
             {
-                m.CLI_Id,
-                m.CLI_.CLI_Name,
-            }).Distinct();
+                int[] CLI_Ids = selectionVMs.Select(m => m.CLI_Id).ToArray();
+                var wage = from wageReg in wage_Registers
+                           where CLI_Ids.Contains(wageReg.CLI_Id)
+                           select wageReg;
+                ESICClientList = wage.Select(m => new
+                {
+                    m.CLI_Id,
+                    m.CLI_.CLI_Name,
+                }).Distinct();
+            }
+            else
+            {
+                ESICClientList = wage_Registers.Select(m => new
+                {
+                    m.CLI_Id,
+                    m.CLI_.CLI_Name,
+                }).Distinct();
+            }
+
+            List<ESICReportVM> reportVMs = new List<ESICReportVM>();                     
             List<Wage_Register> wage_Register = new List<Wage_Register>();
-            foreach (var client in ESICList)
+            foreach (var client in ESICClientList)
             {
                 ESICReportVM reportVM = new ESICReportVM();
                 wage_Register = wage_Registers.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
                 reportVM.NAME_OF_COMPANY = client.CLI_Name;
                 reportVM.NO_OF_EMPLOYEE = wage_Register.Select(m => m.EMP_Id).Count();
-                decimal TOTAL_WAGES = 0M, EMPLOYEES_CONTRIBUTION = 0M, EMPLOYERS_CONTRIBUTION = 0M, TOTAL_CONTRIBUTION=0M;
+                decimal TOTAL_WAGES = 0M, EMPLOYEES_CONTRIBUTION = 0M, EMPLOYERS_CONTRIBUTION = 0M, TOTAL_CONTRIBUTION = 0M;
                 foreach (var item in wage_Register)
                 {
                     List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
@@ -711,7 +689,7 @@ namespace RMERP.DAL.ManagerClasses
                         (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
                     EMPLOYEES_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION + (AppSalary * item.WAR_ESIC) / 100, MidpointRounding.AwayFromZero);
                     EMPLOYERS_CONTRIBUTION = Math.Round(EMPLOYERS_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.CLI_.CLI_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
-                    TOTAL_CONTRIBUTION = TOTAL_CONTRIBUTION+ (EMPLOYEES_CONTRIBUTION + EMPLOYERS_CONTRIBUTION);
+                    TOTAL_CONTRIBUTION = TOTAL_CONTRIBUTION + (EMPLOYEES_CONTRIBUTION + EMPLOYERS_CONTRIBUTION);
                     TOTAL_WAGES = Math.Round(AppSalary + TOTAL_WAGES, MidpointRounding.AwayFromZero);
                 }
                 reportVM.TOTAL_WAGES = TOTAL_WAGES;
@@ -721,6 +699,155 @@ namespace RMERP.DAL.ManagerClasses
                 reportVMs.Add(reportVM);
             }
             return reportVMs;
+        }
+
+        public List<ESICReportEmpWiseVM> ESICReportEmpWise(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
+        {
+            WageRegisterManager wageManager = new WageRegisterManager(_context);
+            List<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);
+            dynamic ESICClientList = null;
+            if (IsSelected == true)
+            {
+                int[] CLI_Ids = selectionVMs.Select(m => m.CLI_Id).ToArray();
+                var wage = from wageReg in wage_Registers
+                           where CLI_Ids.Contains(wageReg.CLI_Id)
+                           select wageReg;
+                ESICClientList = wage.Select(m => new
+                {
+                    m.CLI_Id,
+                    m.CLI_.CLI_Name,
+                }).Distinct();
+            }
+            else
+            {
+                ESICClientList = wage_Registers.Select(m => new
+                {
+                    m.CLI_Id,
+                    m.CLI_.CLI_Name,
+                }).Distinct();
+            }
+
+            List<ESICReportEmpWiseVM> reports = new List<ESICReportEmpWiseVM>();           
+            List<Wage_Register> wage_Register = new List<Wage_Register>();
+            foreach (var client in ESICClientList)
+            {
+                wage_Register = wage_Registers.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
+                ESICReportEmpWiseVM ESICReport = new ESICReportEmpWiseVM();
+                ESICReport.NAME_OF_COMPANY = client.CLI_Name;
+                //decimal TotalMonthlyWages = 0M;               
+                List<ESICReportVM> reportVMs = new List<ESICReportVM>();
+                foreach (var register in wage_Register)
+                {
+                    ESICReportVM reportVM = new ESICReportVM();
+                    decimal TotalMonthlyWages = ProjectUtils.GetGrossAmountBasedOnFormula(register.WAR_ESIC_Formula, register);
+                    reportVM.TotalMonthlyWages = Math.Round(TotalMonthlyWages, MidpointRounding.AwayFromZero);
+                    double PayableDays = register.WAR_TotalPaybleDays;
+                    if (register.WAR_TotalPaybleDays > 27)
+                    {
+                        PayableDays = 27;
+                    }
+                    reportVM.PayableDays = ProjectUtils.intRoundFigure(PayableDays);
+                    reportVM.LastWorkingDay = "-";
+                    reportVM.EMP_FirstName = register.EMP_.EMP_FirstName;
+                    reportVM.EMP_MiddleName = register.EMP_.EMP_MiddleName;
+                    reportVM.EMP_SurName = register.EMP_.EMP_SurName;
+                    reportVM.IP_Number = register.EMP_.EMP_ESIC_Number;
+                    reportVMs.Add(reportVM);
+                }
+                ESICReport.ESICReportVMs = reportVMs;
+                reports.Add(ESICReport);
+            }
+            //#region Left Employees
+            //IEnumerable<Employees> employees = GetLeftEmployeesOfPrevMonth(wage_Registers[0].WAG_.WAG_Month);
+            //dynamic LeftclientList = employees.Select(m => new
+            //{
+            //    m.CLI_Id,
+            //    m.CLI_.CLI_Name,
+            //}).Distinct();
+            //foreach (var client in LeftclientList)
+            //{
+            //    ESICReportEmpWiseVM ESICReport = new ESICReportEmpWiseVM();
+            //    ESICReport.NAME_OF_COMPANY = client.CLI_Name;
+            //    List<ESICReportVM> reportVMs = new List<ESICReportVM>();
+            //    List<Clients_Employees> lstemp = employees.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
+            //    foreach (Clients_Employees emp in lstemp)
+            //    {
+            //        ESICReportVM reportVM = new ESICReportVM();
+            //        reportVM.TotalMonthlyWages = 0;
+            //        reportVM.PayableDays = 0;
+
+            //        reportVM.LastWorkingDay = emp.CLE_UnassignedOn.Value.ToShortDateString();
+            //        reportVM.EMP_FirstName = emp.EMP_.EMP_FirstName;
+            //        reportVM.EMP_MiddleName = emp.EMP_.EMP_MiddleName;
+            //        reportVM.EMP_SurName = emp.EMP_.EMP_SurName;
+            //        reportVM.IP_Number = emp.EMP_.EMP_ESIC_Number;
+            //        reportVM.ReasonCode = "2";
+            //        reportVMs.Add(reportVM);
+            //    }
+            //    ESICReport.ESICReportVMs = reportVMs;
+            //    reports.Add(ESICReport);
+            //}
+            //#endregion
+            return reports;
+        }
+
+        public List<ESICReportVM> ESIC_Employees_Pending_For_Registration(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
+        {
+            WageRegisterManager wageManager = new WageRegisterManager(_context);
+            List<ESICReportVM> reportVMs = new List<ESICReportVM>();
+            List<Wage_Register> wage_Registers = wageManager.GetWageRegisters(WAG_Id).Where(m => m.EMP_.EMP_ESIC_Number == null || m.EMP_.EMP_ESIC_Number.Equals("Pending") || m.EMP_.EMP_ESIC_Number.Equals("")).ToList();
+            dynamic ESICClientList = null;
+            if (IsSelected == true)
+            {
+                int[] CLI_Ids = selectionVMs.Select(m => m.CLI_Id).ToArray();
+                var wage = from wageReg in wage_Registers
+                           where CLI_Ids.Contains(wageReg.CLI_Id)
+                           select wageReg;
+                ESICClientList = wage.Select(m => new
+                {
+                    m.CLI_Id,
+                    m.CLI_.CLI_Name,
+                    m.EMP_.EMP_FirstName,
+                    m.EMP_.EMP_MiddleName,
+                    m.EMP_.EMP_SurName,
+                    m.EMP_.EMP_RegisteredOn,
+                    m.EMP_.EMP_ESIC_Remark
+                }).Distinct();
+            }
+            else
+            {
+                ESICClientList = wage_Registers.Select(m => new
+                {
+                    m.CLI_Id,
+                    m.CLI_.CLI_Name,
+                    m.EMP_.EMP_FirstName,
+                    m.EMP_.EMP_MiddleName,
+                    m.EMP_.EMP_SurName,
+                    m.EMP_.EMP_RegisteredOn,
+                    m.EMP_.EMP_ESIC_Remark
+                }).Distinct();
+            }
+            foreach (var item in ESICClientList)
+            {
+                ESICReportVM ESICClient = new ESICReportVM();
+                ESICClient.NAME_OF_COMPANY = item.CLI_Name;
+                ESICClient.EMP_FirstName = item.EMP_FirstName;
+                ESICClient.EMP_MiddleName = item.EMP_MiddleName;
+                ESICClient.EMP_SurName = item.EMP_SurName;
+                ESICClient.PENDING_REGISTRAION_SINCE = item.EMP_RegisteredOn.ToShortDateString();
+                ESICClient.REMARKS = item.EMP_ESIC_Remark;
+                reportVMs.Add(ESICClient);
+            }
+            return reportVMs;
+        }
+
+        public List<Employees> GetLeftEmployeesOfPrevMonth(DateTime Wag_Month)
+        {
+            DateTime date = Wag_Month.AddMonths(-1);
+            DateTime PrevMonthDate = new DateTime(date.Year, date.Month, 1);
+            DateTime LastMonthDate = new DateTime(Wag_Month.Year, Wag_Month.Month, 1).AddMonths(1).AddDays(-1);
+            List<Employees> emp = _context.Employees.Where(m => m.EMP_InactivatedOn.Value.Date < LastMonthDate.Date && m.EMP_InactivatedOn >= PrevMonthDate).ToList();
+            return emp;
         }
         #endregion
     }

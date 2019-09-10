@@ -48,6 +48,8 @@ namespace RMERP.DAL.Models
         public int EMP_Payment_Type { get; set; }
         public int EMP_Is_IDBI_Other { get; set; }
         public string EMP_UAN_Remark { get; set; }
+        public string EMP_ESIC_Remark { get; set; }
+        public int? EMP_ReasonCode { get; set; }
 
         public Firms FRM_ { get; set; }
         public ICollection<Attendance> Attendance { get; set; }

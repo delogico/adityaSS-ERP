@@ -64,6 +64,7 @@ namespace RMERP.DAL.Mappers
             emp.EMP_Is_IDBI_Other = employee.EMP_Is_IDBI_Other;
 
             emp.EMP_UAN_Remark = employee.EMP_UAN_Remark;
+            emp.EMP_ESIC_Remark = employee.EMP_ESIC_Remark;
 
             return emp;
         }
@@ -114,6 +115,7 @@ namespace RMERP.DAL.Mappers
             emp.EMP_Payment_Type = employee.EMP_Payment_Type;
             emp.EMP_Is_IDBI_Other = employee.EMP_Is_IDBI_Other;
             emp.EMP_UAN_Remark = employee.EMP_UAN_Remark;
+            emp.EMP_ESIC_Remark = employee.EMP_ESIC_Remark;
             return emp;
         }
     }

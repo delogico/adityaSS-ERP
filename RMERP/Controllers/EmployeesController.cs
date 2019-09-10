@@ -399,7 +399,7 @@ namespace RMERP.Controllers
                 ExistingAadhar = !employeeManager.CheckExistingAadhar(EMP_Aadhar_Number, EMP_Id);
                 return Json(ExistingAadhar);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Json(false);
 

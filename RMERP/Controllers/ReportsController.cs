@@ -1524,7 +1524,7 @@ namespace RMERP.Controllers
                         Client_Wise_PF_Details_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "1":
-                        fileName = "Employees_Pending_For_Registration_Report_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
+                        fileName = "PF_Employees_Pending_For_Registration_Report_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
                         Employees_Pending_For_Registration_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
@@ -2966,17 +2966,78 @@ namespace RMERP.Controllers
         #endregion
 
         #region ESIC Reports
-        public async Task<FileResult> Client_Wise_ESIC_Excel(int WAG_Id)
+        public ActionResult ClientsSelectionForESIC(int WAG_Id, int FRM_Id)
         {
-            ReportsManager manager = new ReportsManager(_context);
+            WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
+            ClientSelectionVM clientSelectionVM = new ClientSelectionVM();
+            List<Clients> clients = wageRegisterManager.GetWageRegisters(WAG_Id).Where(m => m.WAG_.FRM_Id.Equals(FRM_Id)).Select(m => m.CLI_).Distinct().ToList();
+            clientSelectionVM.selectionVMs = ClientSelectionMapper.mapMe(clients, WAG_Id);
+            clientSelectionVM.Report = ((int)ProjectUtils.ESIC_REPORT_TYPE.Client_Wise_ESIC_Excel).ToString();
+            clientSelectionVM.FRM_Id = FRM_Id;
+            return View(clientSelectionVM);
+        }
+
+        public async Task<FileResult> ESIC_Reports(ClientSelectionVM clientSelectionVM)
+        {
+            string report = clientSelectionVM.Report;
+
             WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
-            string WAG_Month = wageMonth.ToString("MMMM") + "_" + wageMonth.ToString("yyyy");
+            DateTime wageMonth = wageProcess.getWageProcessById(clientSelectionVM.selectionVMs[0].WAG_Id).WAG_Month;
+            string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
-            string fileName = "Client_Wise_ESIC_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";           
-            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
             var memory = new MemoryStream();
+
+            string fileName = "";
+            FileInfo file;
+            try
+            {
+                switch (clientSelectionVM.Report)
+                {
+                    case "0": //Client_Wise_ESIC_Excel
+                        fileName = "Client_Wise_ESIC_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
+                        file = new FileInfo(Path.Combine(newPath, fileName));
+                        Client_Wise_PF_Details_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        break;
+                    case "1": //Employee_Wise_Esic_Details_Excel
+                        fileName = "Employee_Wise_ESIC_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
+                        file = new FileInfo(Path.Combine(newPath, fileName));
+                        Employee_Wise_Esic_Details_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        break;
+                    case "2": //ESIC_Employees_Pending_For_Registration_Excel
+                        fileName = "EISC_Employees_Pending_For_Registration_Report_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
+                        file = new FileInfo(Path.Combine(newPath, fileName));
+                        ESIC_Employees_Pending_For_Registration_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        break;                    
+                    default: break;
+                }
+
+                using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+                memory.Position = 0;
+                new FileInfo(Path.Combine(newPath, fileName)).Delete();
+
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = "Try Again";
+            }
+            if (clientSelectionVM.Report == ((int)ProjectUtils.PF_REPORT_TYPE.PF_Report_Text).ToString())
+            {
+                return File(memory, "application/rtf", fileName);
+            }
+            else
+            {
+                return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+        }
+
+        public void Client_Wise_ESIC_Excel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        {
+            bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
+            ReportsManager manager = new ReportsManager(_context);            
             using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
             {
                 IWorkbook workbook;
@@ -3085,8 +3146,8 @@ namespace RMERP.Controllers
                 cell6.SetCellValue("TOTAL \r\n CONTRIBUTION");
                 cell6.CellStyle = style;
                 excelSheet.SetColumnWidth(6, (int)((15 + 0.72) * 256));
-
-                List<ESICReportVM> ESICReportVMS = manager.Client_Wise_ESIC(WAG_Id);
+              ;
+                List<ESICReportVM> ESICReportVMS = manager.Client_Wise_ESIC(WAG_Id, selectionVMs.Where(m => m.IsSelect.Equals(true)).ToList(), IsSelected);
                 int rowCount = 4,SrNo=0, NO_OF_EMPLOYEE = 0;
                 decimal TOTAL_WAGES=0M,EMPLOYEES_CONTRIBUTION = 0M, EMPLOYERS_CONTRIBUTION = 0M, TOTAL_CONTRIBUTION = 0M;
                 foreach (var item in ESICReportVMS)
@@ -3140,28 +3201,13 @@ namespace RMERP.Controllers
                 cellTot5.CellStyle = style;
 
                 workbook.Write(fs);
-            }
-            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
-            {
-                await stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
-            new FileInfo(Path.Combine(newPath, fileName)).Delete();
-            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }            
         }
 
-        public async Task<FileResult> Employee_Wise_Esic_Details_Excel(int WAG_Id)
+        public void Employee_Wise_Esic_Details_Excel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
-            ReportsManager manager = new ReportsManager(_context);
-            WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
-            string WAG_Month = wageMonth.ToString("MMMM") + "_" + wageMonth.ToString("yyyy");
-
-            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
-            string fileName = "Template_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + "_Employee Wise Esic Details.xlsx";
-            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
-            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
-            var memory = new MemoryStream();
+            bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
+            ReportsManager manager = new ReportsManager(_context);            
             using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
             {
                 IWorkbook workbook;
@@ -3249,7 +3295,7 @@ namespace RMERP.Controllers
                 cell5.CellStyle = style;
                 excelSheet.SetColumnWidth(5, (int)((22 + 0.72) * 256));
 
-                List<ESICReportEmpWiseVM> ESICReportEmpWiseVMs = manager.ESICReportEmpWise(WAG_Id);
+                List<ESICReportEmpWiseVM> ESICReportEmpWiseVMs = manager.ESICReportEmpWise(WAG_Id, selectionVMs.Where(m => m.IsSelect.Equals(true)).ToList(), IsSelected);
                 int rowCount = 1;
                 foreach (var item in ESICReportEmpWiseVMs)
                 {
@@ -3272,23 +3318,118 @@ namespace RMERP.Controllers
                         cell_3.CellStyle = styleAmount;
 
                         ICell cell_5 = row.CreateCell(5);
-                        IDataFormat dataFormatCustom = workbook.CreateDataFormat();
-                        cell_5.CellStyle.DataFormat = dataFormatCustom.GetFormat("yyyy-MM-dd");
+                       // IDataFormat dataFormatCustom = workbook.CreateDataFormat();
+                      //  cell_5.CellStyle.DataFormat = dataFormatCustom.GetFormat("yyyy-MM-dd");
 
                         row.CreateCell(4).SetCellValue(emp.ReasonCode);
-                        cell_5.SetCellValue(Convert.ToDateTime(emp.LastWorkingDay) + "");                        
+                        cell_5.SetCellValue(emp.LastWorkingDay);                        
                     }                   
                     rowCount++;
                 }
                 workbook.Write(fs);
-            }
-            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
+            }            
+        }
+
+        public void ESIC_Employees_Pending_For_Registration_Excel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        {
+            bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
+            ReportsManager manager = new ReportsManager(_context);
+            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
             {
-                await stream.CopyToAsync(memory);
+                IWorkbook workbook;
+                workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("ESIC. CON");
+                #region single client
+                IFont fontcell = workbook.CreateFont();
+                fontcell.IsBold = true;
+                IFont fontcellSub = workbook.CreateFont();
+                fontcellSub.IsBold = true;
+                fontcellSub.FontHeightInPoints = ((short)18);
+
+                ICellStyle style = workbook.CreateCellStyle();
+                ICellStyle styleClient = workbook.CreateCellStyle();
+                ICellStyle styleSub = workbook.CreateCellStyle();
+
+
+                styleClient.SetFont(fontcell);
+                styleSub.SetFont(fontcellSub);
+
+                style.WrapText = true;
+                style.VerticalAlignment = VerticalAlignment.Center;
+                style.BorderBottom = (BorderStyle.Thin);
+                style.BottomBorderColor = (IndexedColors.Black.Index);
+                style.BorderLeft = (BorderStyle.Thin);
+                style.LeftBorderColor = (IndexedColors.Black.Index);
+                style.BorderRight = (BorderStyle.Thin);
+                style.RightBorderColor = (IndexedColors.Black.Index);
+                style.BorderTop = (BorderStyle.Thin);
+                style.TopBorderColor = (IndexedColors.Black.Index);
+                style.FillForegroundColor = IndexedColors.Grey25Percent.Index;
+                style.FillPattern = FillPattern.SolidForeground;
+                style.FillBackgroundColor = HSSFColor.Grey25Percent.Index;
+                style.SetFont(fontcell);
+
+                IRow row = excelSheet.CreateRow(0);
+                ICell CellSub = row.CreateCell(0);
+                CellSub.SetCellValue("RELIABLE SECURITY SERVICES ");
+                CellSub.CellStyle = styleSub;
+                CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 4));
+
+                IRow rowAdd1 = excelSheet.CreateRow(1);
+                ICell CellAdd1 = rowAdd1.CreateCell(0);
+                CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR 416 003.");
+                CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 4));
+
+                IRow rowSubHeading = excelSheet.CreateRow(2);
+                ICell CellSubHeading = rowSubHeading.CreateCell(0);
+                CellSubHeading.SetCellValue("LIST OF ESIC EMPLOYEES PENDING FOR REGISTRATION THE MONTH OF " + WAG_Month);
+                CellSubHeading.CellStyle = styleClient;
+                CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 4));
+
+                row = excelSheet.CreateRow(3);
+                row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
+                ICell cell0 = row.CreateCell(0);
+                cell0.SetCellValue("SR.NO");
+                cell0.CellStyle = style;
+                ICell cell1 = row.CreateCell(1);
+                cell1.SetCellValue("NAME OF COMPANY");
+                excelSheet.SetColumnWidth(1, (int)((35 + 0.72) * 256));
+                cell1.CellStyle = style;
+                ICell cell2 = row.CreateCell(2);
+                cell2.SetCellValue("NAME OF EMPLOYEE");
+                excelSheet.SetColumnWidth(2, (int)((35 + 0.72) * 256));
+                cell2.CellStyle = style;
+                ICell cell3 = row.CreateCell(3);
+                cell3.SetCellValue("PENDING \r\nREGISTRAION \r\nSINCE");
+                excelSheet.SetColumnWidth(3, (int)((30 + 0.72) * 256));
+                cell3.CellStyle = style;
+                ICell cell4 = row.CreateCell(4);
+                cell4.SetCellValue("REMARK FOR \r\nPENING ESIC \r\nREGISTRATION");
+                excelSheet.SetColumnWidth(4, (int)((30 + 0.72) * 256));
+                cell4.CellStyle = style;
+
+                List<ESICReportVM> reportVM = manager.ESIC_Employees_Pending_For_Registration(WAG_Id, selectionVMs.Where(m => m.IsSelect.Equals(true)).ToList(), IsSelected);
+                int rowCount = 4, srNo = 1;
+                foreach (var item in reportVM)
+                {
+                    row = excelSheet.CreateRow(rowCount);
+                    row.HeightInPoints = (float)(1.4 * excelSheet.DefaultRowHeightInPoints);
+                    row.CreateCell(0).SetCellValue(Convert.ToString(srNo));
+                    row.CreateCell(1).SetCellValue(Convert.ToString(item.NAME_OF_COMPANY));
+                    row.CreateCell(2).SetCellValue(Convert.ToString(item.IP_Name));
+                    row.CreateCell(3).SetCellValue(Convert.ToString(item.PENDING_REGISTRAION_SINCE));
+                    row.CreateCell(4).SetCellValue(item.REMARKS);
+                    rowCount++;
+                    srNo++;
+                }
+                #endregion
+
+                workbook.Write(fs);
             }
-            memory.Position = 0;
-            new FileInfo(Path.Combine(newPath, fileName)).Delete();
-            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+
         }
 
         #endregion

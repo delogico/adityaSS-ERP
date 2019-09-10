@@ -27,13 +27,13 @@ namespace RMERP.DAL.ViewModel
             }
         }
         [Display(Name = "No of Days for which wages paid/payable during the month")]
-        public double PayableDays { get; set; }
+        public int PayableDays { get; set; }
         [Display(Name = "Total Monthly Wages")]
         public decimal TotalMonthlyWages { get; set; }
         [Display(Name = "Reason Code For Zero Working Days")]
         public string ReasonCode { get; set; }
-        [Display(Name = "Last Working Day")]
-        public DateTime LastWorkingDay { get; set; }
+        [Display(Name = "Last Working Day")]        
+        public string LastWorkingDay { get; set; }
 
         public string NAME_OF_COMPANY { get; set; }
         public int NO_OF_EMPLOYEE { get; set; }
@@ -42,7 +42,10 @@ namespace RMERP.DAL.ViewModel
         public decimal EMPLOYERS_CONTRIBUTION { get; set; }
         public decimal TOTAL_CONTRIBUTION { get; set; }
 
-       
+        public string PENDING_REGISTRAION_SINCE { get; set; }
+        public string REMARKS { get; set; }
+
+
     }
 
 }
