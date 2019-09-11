@@ -140,7 +140,7 @@ namespace RMERP.Controllers
                         excelSheet = workbook.CreateSheet(client.client.CLI_Name.ToString());
                         foreach (var item in List.Where(m => m.client.CLI_Id.Equals(client.client.CLI_Id)))
                         {
-                            var distinceDesignations = item.wageRegisterVMs.Select(q => new { q.designation.DES_Id, q.designation.DES_Title }).Distinct();
+                            var distinceDesignations = item.wageRegisterVMs.Select(q => new { q.designation.DES_Id, q.designation.DES_Title,q.designation.DES_Exclude_LWF }).Distinct();
 
                             #region style of excel
                             ICellStyle style = workbook.CreateCellStyle();
@@ -426,10 +426,21 @@ namespace RMERP.Controllers
                                 cell14.SetCellValue("Advance Installment");
                                 excelSheet.SetColumnWidth(cellNext1, (int)((25 + 0.72) * 140));
                                 cell14.CellStyle = styleGrey50;
-                                ICell cell15 = row.CreateCell(cellNext1 + 1);
+
+                                int cellLWFNext = cellNext1 + 1;
+                                if (!dd.DES_Exclude_LWF)
+                                {                                   
+                                    ICell cell_LWF = row.CreateCell(cellLWFNext);
+                                    cell_LWF.SetCellValue("MLWF Deduction");
+                                    excelSheet.SetColumnWidth(cellLWFNext, (int)((25 + 0.72) * 140));
+                                    cell_LWF.CellStyle = styleGrey50;
+                                    cellLWFNext = cellLWFNext + 1;
+                                }                                
+
+                                ICell cell15 = row.CreateCell(cellLWFNext);
                                 cell15.SetCellValue("Deduct Total");
                                 cell15.CellStyle = styleGrey50;
-                                ICell cell16 = row.CreateCell(cellNext1 + 2);
+                                ICell cell16 = row.CreateCell(cellLWFNext + 1);
                                 cell16.SetCellValue("Final Amount");
                                 cell16.CellStyle = styleGrey80;
                                 #endregion
@@ -437,7 +448,7 @@ namespace RMERP.Controllers
                                 DesCount = DesCount + 2;
                                 double TotalPaybleDays = 0;
                                 decimal TotalBasic = 0M, TotalDA = 0M, TotalHRA = 0M, TotalOT = 0M, TotalGrossTotal = 0M, TotalPF = 0M, TotalESIC = 0M, TotalProfTax = 0m, TotalRevenue = 0M, TotalCanteenFacility = 0M, TotalAdvance = 0M, TotalDeduct = 0M, TotalFinal = 0M;
-                                decimal TotalOutStation = 0M, TotalAttendance = 0M, TotalNightshift = 0M, TotalPerformance = 0M;
+                                decimal TotalOutStation = 0M, TotalAttendance = 0M, TotalNightshift = 0M, TotalPerformance = 0M, TotalLWF=0M;
                                
                                 foreach (var employee in wageRegisters)
                                 {
@@ -567,12 +578,28 @@ namespace RMERP.Controllers
                                         if (employee.WAR_CanteenFacility_Calculation != "-")
                                             TotalCanteenFacility = TotalCanteenFacility + Convert.ToDecimal(employee.WAR_CanteenFacility_Calculation);
                                         cellCanteen.CellStyle = styleGrey50;
+                                    }                                   
+
+                                    ICell cellEmp14 = row.CreateCell(cellNxt1+1);
+                                    cellEmp14.SetCellValue(Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero).ToString());
+                                    TotalAdvance = TotalAdvance + Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero);
+                                    cellEmp14.CellStyle = styleGrey50;
+
+                                    int cellNext2 = cellNxt1 + 2;
+                                    //TotalLWF                                    
+                                    if (!dd.DES_Exclude_LWF)
+                                    {
+                                        ICell cell_LWF = row.CreateCell(cellNext2);
+                                        cell_LWF.SetCellValue(Convert.ToString(Math.Round(employee.WAR_LWF_Deduction_Calculated, MidpointRounding.AwayFromZero).ToString()));
+                                        excelSheet.SetColumnWidth(cellNext2, (int)((25 + 0.72) * 140));
+                                        cell_LWF.CellStyle = styleGrey50;
+                                        TotalLWF = TotalLWF + Convert.ToDecimal(employee.WAR_LWF_Deduction_Calculated);
+                                        cellNext2 = cellNext2 + 1;
                                     }
-                                    int cellNext2 = cellNxt1 + 1;
 
                                     #region Total Deduction
                                     decimal DeductTotal = Math.Round(employee.WAR_PF_Calculated, MidpointRounding.AwayFromZero) + Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero) + Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated), MidpointRounding.AwayFromZero)
-                                        + Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero);
+                                        + Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero) + Math.Round(employee.WAR_LWF_Deduction_Calculated, MidpointRounding.AwayFromZero);
                                     if (employee.WAR_RevenueDeduction_Calculated != "-")
                                     {
                                         DeductTotal += Math.Round(Convert.ToDecimal(employee.WAR_RevenueDeduction_Calculated), MidpointRounding.AwayFromZero);
@@ -582,16 +609,12 @@ namespace RMERP.Controllers
                                         DeductTotal += Math.Round(Convert.ToDecimal(employee.WAR_CanteenFacility_Calculation), MidpointRounding.AwayFromZero);
                                     }
                                     #endregion
-
-                                    ICell cellEmp14 = row.CreateCell(cellNext2);
-                                    cellEmp14.SetCellValue(Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero).ToString());
-                                    TotalAdvance = TotalAdvance + Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero);
-                                    cellEmp14.CellStyle = styleGrey50;
-                                    ICell cellEmp15 = row.CreateCell(cellNext2 + 1);
+                                   
+                                    ICell cellEmp15 = row.CreateCell(cellNext2);
                                     cellEmp15.SetCellValue(DeductTotal.ToString());
                                     cellEmp15.CellStyle = styleGrey50;
                                     TotalDeduct = TotalDeduct + DeductTotal;
-                                    ICell cellEmp16 = row.CreateCell(cellNext2 + 2);
+                                    ICell cellEmp16 = row.CreateCell(cellNext2 + 1);
                                     cellEmp16.SetCellValue(Math.Round(employee.WAR_FinalTotal, MidpointRounding.AwayFromZero).ToString());
                                     TotalFinal = TotalFinal + Math.Round(employee.WAR_FinalTotal, MidpointRounding.AwayFromZero);
                                     cellEmp16.CellStyle = styleGrey80;
@@ -689,21 +712,21 @@ namespace RMERP.Controllers
                                 cellTot8.CellStyle = styleGrey50;
 
                                 int totalCount1 = totalCount + 3;
-                                if (clientRequirement.CRI_ProfessionalTax == true)
+                                if (clientRequirement.CRI_ProfessionalTax)
                                 {
                                     totalCount1 = totalCount1 + 1;
                                     ICell cellTot9 = row.CreateCell(totalCount1);
                                     cellTot9.SetCellValue(Math.Round(TotalProfTax, MidpointRounding.AwayFromZero).ToString());
                                     cellTot9.CellStyle = styleGrey50;
                                 }
-                                if (clientRequirement.CRI_RevenueDeduction == true)
+                                if (clientRequirement.CRI_RevenueDeduction)
                                 {
                                     totalCount1 = totalCount1 + 1;
                                     ICell cellTot10 = row.CreateCell(totalCount1);
                                     cellTot10.SetCellValue(Math.Round(TotalRevenue, MidpointRounding.AwayFromZero).ToString());
                                     cellTot10.CellStyle = styleGrey50;
                                 }
-                                if (clientRequirement.CRI_CanteenFacility == true)
+                                if (clientRequirement.CRI_CanteenFacility)
                                 {
                                     totalCount1 = totalCount1 + 1;
                                     ICell cellTot11 = row.CreateCell(totalCount1);
@@ -714,10 +737,20 @@ namespace RMERP.Controllers
                                 ICell cellTot12 = row.CreateCell(totalCount1 + 1);
                                 cellTot12.SetCellValue(Math.Round(TotalAdvance, MidpointRounding.AwayFromZero).ToString());
                                 cellTot12.CellStyle = styleGrey50;
-                                ICell cellTot13 = row.CreateCell(totalCount1 + 2);
+
+                                int TotCount = totalCount1 + 2;
+                                if (!dd.DES_Exclude_LWF)
+                                {
+                                    ICell cellTotLWF = row.CreateCell(TotCount);
+                                    cellTotLWF.SetCellValue(Math.Round(TotalLWF, MidpointRounding.AwayFromZero).ToString());
+                                    cellTotLWF.CellStyle = styleGrey50;
+                                    TotCount = TotCount + 1;
+                                }
+
+                                ICell cellTot13 = row.CreateCell(TotCount);
                                 cellTot13.SetCellValue(Math.Round(TotalDeduct, MidpointRounding.AwayFromZero).ToString());
                                 cellTot13.CellStyle = styleGrey50;
-                                ICell cellTot14 = row.CreateCell(totalCount1 + 3);
+                                ICell cellTot14 = row.CreateCell(TotCount + 1);
                                 cellTot14.SetCellValue(Math.Round(TotalFinal, MidpointRounding.AwayFromZero).ToString());
                                 cellTot14.CellStyle = styleGrey80;
                                 #endregion

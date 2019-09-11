@@ -1,4 +1,5 @@
 ﻿@model RMERP.DAL.ViewModel.WageProcessVM
+@using RMERP.DAL.Helpers;
 
 <div class="row wage_raw">
     <div class="col-md-2">
@@ -62,16 +63,17 @@
                     <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForPF","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees PF Report"><i class="fa fa-file-excel-o m-r-5"></i>PF Reports</a></li>
                     <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForESIC","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees ESIC Report"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Reports</a></li>
                     <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForBank","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees Bank Report"><i class="fa fa-file-excel-o m-r-5"></i>Bank Reports</a></li>
-                    @if (Model.WAG_Month.Month.Equals(6) || Model.WAG_Month.Month.Equals(12) || Model.WAG_Month.Month.Equals(4))
-                    {
-                        <li><a href='@Url.Action( "Labour_WelfareFund_Excel","Reports",new { WAG_Id = Model.WAG_Id })' title="Labour Welfare Fund Report"><i class="fa fa-file-excel-o m-r-5"></i>Labour Welfare Fund Report.xlsx</a></li>
-                    }
+                   
                 </ul>
             </div>
             <div class="col-md-4">
                 <ul style="font-size:10px;padding-left: 10px !important;">
-                    <li><a href='@Url.Action( "MLWF_ContributionExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="MLWF CONTRIBUTION Report"><i class="fa fa-file-excel-o m-r-5"></i>MLWF CONTRIBUTION Report.xlsx</a></li>
-                    <li><a href='@Url.Action( "PayTaxExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PAY TAX Report"><i class="fa fa-file-excel-o m-r-5"></i>PAY TAX Report.xlsx</a></li>                    
+                    @*<li><a href='@Url.Action( "MLWF_ContributionExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="MLWF CONTRIBUTION Report"><i class="fa fa-file-excel-o m-r-5"></i>MLWF CONTRIBUTION Report.xlsx</a></li>*@
+                    @if (Model.WAG_Month.Month.Equals((int)ProjectUtils.Month.June) || Model.WAG_Month.Month.Equals((int)ProjectUtils.Month.December))
+                    {
+                        <li><a href='@Url.Action( "Labour_WelfareFund_Excel","Reports",new { WAG_Id = Model.WAG_Id })' title="MLWF CONTRIBUTION Report"><i class="fa fa-file-excel-o m-r-5"></i>MLWF CONTRIBUTION.xlsx</a></li>
+                    }
+                    <li><a href='@Url.Action( "PayTaxExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PAY TAX Report"><i class="fa fa-file-excel-o m-r-5"></i>PAY TAX Report.xlsx</a></li>
                 </ul>
             </div>
             <div class="col-md-4">

@@ -69,51 +69,21 @@ namespace RMERP.DAL.ManagerClasses
             return reports;
         }
 
-        //public List<ESICReportVM> ESICReports(int WAG_Id)
-        //{
-        //    List<ESICReportVM> reports = new List<ESICReportVM>();
-        //    List<Employees> employees = GetActiveEmployeesOfMonth(WAG_Id);
-        //    foreach (var emp in employees)
-        //    {
-        //        WageRegisterManager registerManager = new WageRegisterManager(_context);
-        //        List<Wage_Register> wage_Registers = registerManager.GetWageRegistersByEmpId(WAG_Id, emp.EMP_Id);
-        //        ESICReportVM ESICreport = new ESICReportVM();
-        //        decimal TotalMonthlyWages = 0M;
-        //        double PayableDays = 0;
-        //        foreach (var register in wage_Registers)
-        //        {
-        //            TotalMonthlyWages = ProjectUtils.GetGrossAmountBasedOnFormula(register.WAR_ESIC_Formula, register);
-        //            PayableDays += register.WAR_TotalPaybleDays;
-        //        }
-        //        //ESICreport.ReasonCode = "";
-        //        ESICreport.TotalMonthlyWages = TotalMonthlyWages;
-        //        ESICreport.PayableDays = PayableDays;
-        //        ESICreport.LastWorkingDay = DateTime.Now;
-        //        ESICreport.EMP_FirstName = emp.EMP_FirstName;
-        //        ESICreport.EMP_MiddleName = emp.EMP_MiddleName;
-        //        ESICreport.EMP_SurName = emp.EMP_SurName;
-        //        ESICreport.IP_Number = emp.EMP_ESIC_Number;
-        //        reports.Add(ESICreport);
-        //    }
-        //    return reports;
-        //}      
-
         public List<MLWF_ContributionVM> MLWF_ContributionReports(int WAG_Id)
         {
             List<MLWF_ContributionVM> reports = new List<MLWF_ContributionVM>();
             WageRegisterManager registerManager = new WageRegisterManager(_context);
-            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersBySelectedDES(WAG_Id);
+            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersByLWF(WAG_Id);
             foreach (var item in wage_Registers.Select(m => new { m.CLI_Id, m.CLI_.CLI_Name }).Distinct())
             {
                 MLWF_ContributionVM report = new MLWF_ContributionVM();
                 report.CLI_Id = item.CLI_Id;
-                report.CLI_Name = item.CLI_Name;
-                // List<Wage_Register> register = registerManager.GetWageRegisters(WAG_Id, item.CLI_Id);
+                report.CLI_Name = item.CLI_Name;               
                 List<Wage_Register> register = wage_Registers.Where(m => m.CLI_Id.Equals(item.CLI_Id)).ToList();
                 int EMP_BELOW_3K = 0, EMP_ABOVE_3K = 0;
                 foreach (var emp in register)
                 {
-                    if (emp.WAR_GrossTotal > 0 && emp.WAR_FinalTotal < 3000)
+                    if (emp.WAR_GrossTotal > 0 && emp.WAR_GrossTotal < 3000)
                     {
                         EMP_BELOW_3K++;
                     }

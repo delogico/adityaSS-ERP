@@ -710,6 +710,8 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.WAR_HRA_Calculated).HasColumnType("decimal(9, 2)");
 
+                entity.Property(e => e.WAR_LWF_Deduction_Calculated).HasColumnType("decimal(9, 2)");
+
                 entity.Property(e => e.WAR_LastModifiedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.WAR_Nightshift_Allowance_Calculated).HasColumnType("decimal(9, 2)");

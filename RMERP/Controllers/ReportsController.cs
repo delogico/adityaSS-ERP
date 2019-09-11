@@ -36,178 +36,178 @@ namespace RMERP.Controllers
             return View(manager.PFReports(WAG_Id));
         }
 
-        public async Task<FileResult> PFReportExcel(int WAG_Id)
-        {
-            ReportsManager manager = new ReportsManager(_context);
-            WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
-            string WAG_Month = wageMonth.ToString("MMMM") + "_" + wageMonth.ToString("yyyy");
+        //public async Task<FileResult> PFReportExcel(int WAG_Id)
+        //{
+        //    ReportsManager manager = new ReportsManager(_context);
+        //    WageProcessManager wageProcess = new WageProcessManager(_context);
+        //    DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+        //    string WAG_Month = wageMonth.ToString("MMMM") + "_" + wageMonth.ToString("yyyy");
 
-            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
-            string fileName = "Template_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + "_PFReport.xlsx";
-            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
-            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
-            var memory = new MemoryStream();
-            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
-            {
-                IWorkbook workbook;
-                workbook = new XSSFWorkbook();
-                ISheet excelSheet = workbook.CreateSheet("Template");
-                IFont font = workbook.CreateFont();
-                font.IsBold = true;
-                font.FontHeightInPoints = ((short)24);
-                font.FontName = ("Cambria");
-                ICellStyle styleHeader = workbook.CreateCellStyle();
-                styleHeader.FillBackgroundColor = HSSFColor.BlueGrey.Index;
-                styleHeader.SetFont(font);
+        //    string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+        //    string fileName = "Template_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + "_PFReport.xlsx";
+        //    string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
+        //    FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
+        //    var memory = new MemoryStream();
+        //    using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+        //    {
+        //        IWorkbook workbook;
+        //        workbook = new XSSFWorkbook();
+        //        ISheet excelSheet = workbook.CreateSheet("Template");
+        //        IFont font = workbook.CreateFont();
+        //        font.IsBold = true;
+        //        font.FontHeightInPoints = ((short)24);
+        //        font.FontName = ("Cambria");
+        //        ICellStyle styleHeader = workbook.CreateCellStyle();
+        //        styleHeader.FillBackgroundColor = HSSFColor.BlueGrey.Index;
+        //        styleHeader.SetFont(font);
 
-                // Grey25Percent background
-                ICellStyle style = workbook.CreateCellStyle();
-                style.FillForegroundColor = IndexedColors.Blue.Index;
-                style.FillPattern = FillPattern.SolidForeground;
-                style.FillBackgroundColor = IndexedColors.Blue.Index;
+        //        // Grey25Percent background
+        //        ICellStyle style = workbook.CreateCellStyle();
+        //        style.FillForegroundColor = IndexedColors.Blue.Index;
+        //        style.FillPattern = FillPattern.SolidForeground;
+        //        style.FillBackgroundColor = IndexedColors.Blue.Index;
 
-                // Style the cell with borders all around.
-                style.WrapText = true;
-                style.BorderBottom = (BorderStyle.Thin);
-                style.BottomBorderColor = (IndexedColors.Black.Index);
-                style.BorderLeft = (BorderStyle.Thin);
-                style.LeftBorderColor = (IndexedColors.Black.Index);
-                style.BorderRight = (BorderStyle.Thin);
-                style.RightBorderColor = (IndexedColors.Black.Index);
-                style.BorderTop = (BorderStyle.Thin);
-                style.TopBorderColor = (IndexedColors.Black.Index);
+        //        // Style the cell with borders all around.
+        //        style.WrapText = true;
+        //        style.BorderBottom = (BorderStyle.Thin);
+        //        style.BottomBorderColor = (IndexedColors.Black.Index);
+        //        style.BorderLeft = (BorderStyle.Thin);
+        //        style.LeftBorderColor = (IndexedColors.Black.Index);
+        //        style.BorderRight = (BorderStyle.Thin);
+        //        style.RightBorderColor = (IndexedColors.Black.Index);
+        //        style.BorderTop = (BorderStyle.Thin);
+        //        style.TopBorderColor = (IndexedColors.Black.Index);
 
-                // Style the cell with font color white
-                IFont fontcell = workbook.CreateFont();
-                fontcell.Color = (IndexedColors.White.Index);
-                fontcell.IsBold = true;
-                fontcell.FontHeightInPoints = ((short)10);
-                style.SetFont(fontcell);
+        //        // Style the cell with font color white
+        //        IFont fontcell = workbook.CreateFont();
+        //        fontcell.Color = (IndexedColors.White.Index);
+        //        fontcell.IsBold = true;
+        //        fontcell.FontHeightInPoints = ((short)10);
+        //        style.SetFont(fontcell);
 
-                IRow row = excelSheet.CreateRow(0);
-                ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue("PF SALEX TAX " + WAG_Month);
-                CellHeader.CellStyle = styleHeader;
-                CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 10));
+        //        IRow row = excelSheet.CreateRow(0);
+        //        ICell CellHeader = row.CreateCell(0);
+        //        CellHeader.SetCellValue("PF SALEX TAX " + WAG_Month);
+        //        CellHeader.CellStyle = styleHeader;
+        //        CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 10));
 
 
-                row = excelSheet.CreateRow(1);
-                //row.HeightInPoints = ((5 * excelSheet.DefaultRowHeightInPoints));                
-                //excelSheet.AutoSizeColumn(1);
-                ICell cell0 = row.CreateCell(0);
-                cell0.SetCellValue("UAN");
-                excelSheet.SetColumnWidth(0, (int)((18 + 0.72) * 256));
-                cell0.CellStyle = style;
-                ICell cell1 = row.CreateCell(1);
-                cell1.SetCellValue("MEMBER NAME");
-                excelSheet.SetColumnWidth(1, (int)((25 + 0.72) * 256));
-                cell1.CellStyle = style;
-                ICell cell2 = row.CreateCell(2);
-                cell2.SetCellValue("GROSS WAGES");
-                excelSheet.SetColumnWidth(2, (int)((18 + 0.72) * 256));
-                cell2.CellStyle = style;
-                ICell cell3 = row.CreateCell(3);
-                cell3.SetCellValue("EPF WAGES");
-                excelSheet.SetColumnWidth(3, (int)((18 + 0.72) * 256));
-                cell3.CellStyle = style;
-                ICell cell4 = row.CreateCell(4);
-                cell4.SetCellValue("EPS WAGES");
-                excelSheet.SetColumnWidth(4, (int)((18 + 0.72) * 256));
-                cell4.CellStyle = style;
-                ICell cell5 = row.CreateCell(5);
-                cell5.SetCellValue("EDLI WAGES");
-                excelSheet.SetColumnWidth(5, (int)((18 + 0.72) * 256));
-                cell5.CellStyle = style;
-                ICell cell6 = row.CreateCell(6);
-                cell6.SetCellValue("EPF CONTRI REMITTED");
-                excelSheet.SetColumnWidth(6, (int)((18 + 0.72) * 256));
-                cell6.CellStyle = style;
-                ICell cell7 = row.CreateCell(7);
-                cell7.SetCellValue("EPS CONTRI REMITTED");
-                excelSheet.SetColumnWidth(7, (int)((18 + 0.72) * 256));
-                cell7.CellStyle = style;
-                ICell cell8 = row.CreateCell(8);
-                cell8.SetCellValue("EPF EPS DIFF REMITTED");
-                excelSheet.SetColumnWidth(8, (int)((18 + 0.72) * 256));
-                cell8.CellStyle = style;
-                ICell cell9 = row.CreateCell(9);
-                cell9.SetCellValue("NCP DAYS");
-                excelSheet.SetColumnWidth(9, (int)((18 + 0.72) * 256));
-                cell9.CellStyle = style;
-                ICell cell10 = row.CreateCell(10);
-                cell10.SetCellValue("REFUND OF ADVANCES");
-                excelSheet.SetColumnWidth(10, (int)((18 + 0.72) * 256));
-                cell10.CellStyle = style;
+        //        row = excelSheet.CreateRow(1);
+        //        //row.HeightInPoints = ((5 * excelSheet.DefaultRowHeightInPoints));                
+        //        //excelSheet.AutoSizeColumn(1);
+        //        ICell cell0 = row.CreateCell(0);
+        //        cell0.SetCellValue("UAN");
+        //        excelSheet.SetColumnWidth(0, (int)((18 + 0.72) * 256));
+        //        cell0.CellStyle = style;
+        //        ICell cell1 = row.CreateCell(1);
+        //        cell1.SetCellValue("MEMBER NAME");
+        //        excelSheet.SetColumnWidth(1, (int)((25 + 0.72) * 256));
+        //        cell1.CellStyle = style;
+        //        ICell cell2 = row.CreateCell(2);
+        //        cell2.SetCellValue("GROSS WAGES");
+        //        excelSheet.SetColumnWidth(2, (int)((18 + 0.72) * 256));
+        //        cell2.CellStyle = style;
+        //        ICell cell3 = row.CreateCell(3);
+        //        cell3.SetCellValue("EPF WAGES");
+        //        excelSheet.SetColumnWidth(3, (int)((18 + 0.72) * 256));
+        //        cell3.CellStyle = style;
+        //        ICell cell4 = row.CreateCell(4);
+        //        cell4.SetCellValue("EPS WAGES");
+        //        excelSheet.SetColumnWidth(4, (int)((18 + 0.72) * 256));
+        //        cell4.CellStyle = style;
+        //        ICell cell5 = row.CreateCell(5);
+        //        cell5.SetCellValue("EDLI WAGES");
+        //        excelSheet.SetColumnWidth(5, (int)((18 + 0.72) * 256));
+        //        cell5.CellStyle = style;
+        //        ICell cell6 = row.CreateCell(6);
+        //        cell6.SetCellValue("EPF CONTRI REMITTED");
+        //        excelSheet.SetColumnWidth(6, (int)((18 + 0.72) * 256));
+        //        cell6.CellStyle = style;
+        //        ICell cell7 = row.CreateCell(7);
+        //        cell7.SetCellValue("EPS CONTRI REMITTED");
+        //        excelSheet.SetColumnWidth(7, (int)((18 + 0.72) * 256));
+        //        cell7.CellStyle = style;
+        //        ICell cell8 = row.CreateCell(8);
+        //        cell8.SetCellValue("EPF EPS DIFF REMITTED");
+        //        excelSheet.SetColumnWidth(8, (int)((18 + 0.72) * 256));
+        //        cell8.CellStyle = style;
+        //        ICell cell9 = row.CreateCell(9);
+        //        cell9.SetCellValue("NCP DAYS");
+        //        excelSheet.SetColumnWidth(9, (int)((18 + 0.72) * 256));
+        //        cell9.CellStyle = style;
+        //        ICell cell10 = row.CreateCell(10);
+        //        cell10.SetCellValue("REFUND OF ADVANCES");
+        //        excelSheet.SetColumnWidth(10, (int)((18 + 0.72) * 256));
+        //        cell10.CellStyle = style;
 
-                List<PFReportVM> PFReportVMs = manager.PFReports(WAG_Id);
-                int rowCount = 2;
-                foreach (var item in PFReportVMs)
-                {
-                    row = excelSheet.CreateRow(rowCount);
-                    row.HeightInPoints = (float)(1.5 * excelSheet.DefaultRowHeightInPoints);
-                    row.CreateCell(0).SetCellValue(item.EMP_UAN_Number);
-                    row.CreateCell(1).SetCellValue(item.EMP_FullName);
-                    row.CreateCell(2).SetCellValue(Convert.ToDouble(item.GrossWages));
-                    row.CreateCell(3).SetCellValue(Convert.ToDouble(item.EPFWages));
-                    row.CreateCell(4).SetCellValue(Convert.ToDouble(item.EPSWages));
-                    row.CreateCell(5).SetCellValue(Convert.ToDouble(item.EDLIWages));
-                    row.CreateCell(6).SetCellValue(Convert.ToDouble(item.EPF_CONTRI_REMITTED));
-                    row.CreateCell(7).SetCellValue(Convert.ToDouble(item.EPS_CONTRI_REMITTED));
-                    row.CreateCell(8).SetCellValue(Convert.ToDouble(item.EPF_EPS_DIFF_REMITTED));
-                    row.CreateCell(9).SetCellValue(Convert.ToDouble(item.NCP_DAYS));
-                    row.CreateCell(10).SetCellValue(Convert.ToDouble(item.REFUND_OF_ADVANCES));
-                    rowCount++;
-                }
-                workbook.Write(fs);
-            }
-            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
-            {
-                await stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
-            new FileInfo(Path.Combine(newPath, fileName)).Delete();
-            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-        }
+        //        List<PFReportVM> PFReportVMs = manager.PFReports(WAG_Id);
+        //        int rowCount = 2;
+        //        foreach (var item in PFReportVMs)
+        //        {
+        //            row = excelSheet.CreateRow(rowCount);
+        //            row.HeightInPoints = (float)(1.5 * excelSheet.DefaultRowHeightInPoints);
+        //            row.CreateCell(0).SetCellValue(item.EMP_UAN_Number);
+        //            row.CreateCell(1).SetCellValue(item.EMP_FullName);
+        //            row.CreateCell(2).SetCellValue(Convert.ToDouble(item.GrossWages));
+        //            row.CreateCell(3).SetCellValue(Convert.ToDouble(item.EPFWages));
+        //            row.CreateCell(4).SetCellValue(Convert.ToDouble(item.EPSWages));
+        //            row.CreateCell(5).SetCellValue(Convert.ToDouble(item.EDLIWages));
+        //            row.CreateCell(6).SetCellValue(Convert.ToDouble(item.EPF_CONTRI_REMITTED));
+        //            row.CreateCell(7).SetCellValue(Convert.ToDouble(item.EPS_CONTRI_REMITTED));
+        //            row.CreateCell(8).SetCellValue(Convert.ToDouble(item.EPF_EPS_DIFF_REMITTED));
+        //            row.CreateCell(9).SetCellValue(Convert.ToDouble(item.NCP_DAYS));
+        //            row.CreateCell(10).SetCellValue(Convert.ToDouble(item.REFUND_OF_ADVANCES));
+        //            rowCount++;
+        //        }
+        //        workbook.Write(fs);
+        //    }
+        //    using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
+        //    {
+        //        await stream.CopyToAsync(memory);
+        //    }
+        //    memory.Position = 0;
+        //    new FileInfo(Path.Combine(newPath, fileName)).Delete();
+        //    return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        //}
 
-        public async Task<FileResult> PFReportText(int WAG_Id)
-        {
-            ReportsManager manager = new ReportsManager(_context);
-            WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
-            string WAG_Month = wageMonth.ToString("MMMM") + "_" + wageMonth.ToString("yyyy");
+        //public async Task<FileResult> PFReportText(int WAG_Id)
+        //{
+        //    ReportsManager manager = new ReportsManager(_context);
+        //    WageProcessManager wageProcess = new WageProcessManager(_context);
+        //    DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+        //    string WAG_Month = wageMonth.ToString("MMMM") + "_" + wageMonth.ToString("yyyy");
 
-            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
-            string fileName = "PF_SALEX_TAX_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + "_PFReport.txt";
-            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
-            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
-            var memory = new MemoryStream();
-            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
-            {
-                List<PFReportVM> PFReportVMs = manager.PFReports(WAG_Id);
-                int rowCount = 2;
-                foreach (var item in PFReportVMs)
-                {
-                    Byte[] title = new UTF8Encoding(true).GetBytes(item.EMP_UAN_Number + "#~#" + item.EMP_FullName + "#~#" + item.GrossWages + "#~#" + item.EPFWages + "#~#" + item.EPSWages + "#~#" + item.EDLIWages);
-                    fs.Write(title, 0, title.Length);
-                    byte[] br = new UTF8Encoding(true).GetBytes(item.EPF_CONTRI_REMITTED + "#~#" + item.EPS_CONTRI_REMITTED + "#~#" + item.EPF_EPS_DIFF_REMITTED + "#~#");
-                    fs.Write(br, 0, br.Length);
-                    byte[] author = new UTF8Encoding(true).GetBytes(item.NCP_DAYS + "#~#" + item.REFUND_OF_ADVANCES);
-                    fs.Write(author, 0, author.Length);
-                    byte[] br2 = new UTF8Encoding(true).GetBytes("\r\n");
-                    fs.Write(br2, 0, br2.Length);
-                    rowCount++;
-                }
-            }
-            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
-            {
-                await stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
-            new FileInfo(Path.Combine(newPath, fileName)).Delete();
-            return File(memory, "application/rtf", fileName);
-        }
+        //    string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+        //    string fileName = "PF_SALEX_TAX_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + "_PFReport.txt";
+        //    string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
+        //    FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
+        //    var memory = new MemoryStream();
+        //    using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+        //    {
+        //        List<PFReportVM> PFReportVMs = manager.PFReports(WAG_Id);
+        //        int rowCount = 2;
+        //        foreach (var item in PFReportVMs)
+        //        {
+        //            Byte[] title = new UTF8Encoding(true).GetBytes(item.EMP_UAN_Number + "#~#" + item.EMP_FullName + "#~#" + item.GrossWages + "#~#" + item.EPFWages + "#~#" + item.EPSWages + "#~#" + item.EDLIWages);
+        //            fs.Write(title, 0, title.Length);
+        //            byte[] br = new UTF8Encoding(true).GetBytes(item.EPF_CONTRI_REMITTED + "#~#" + item.EPS_CONTRI_REMITTED + "#~#" + item.EPF_EPS_DIFF_REMITTED + "#~#");
+        //            fs.Write(br, 0, br.Length);
+        //            byte[] author = new UTF8Encoding(true).GetBytes(item.NCP_DAYS + "#~#" + item.REFUND_OF_ADVANCES);
+        //            fs.Write(author, 0, author.Length);
+        //            byte[] br2 = new UTF8Encoding(true).GetBytes("\r\n");
+        //            fs.Write(br2, 0, br2.Length);
+        //            rowCount++;
+        //        }
+        //    }
+        //    using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
+        //    {
+        //        await stream.CopyToAsync(memory);
+        //    }
+        //    memory.Position = 0;
+        //    new FileInfo(Path.Combine(newPath, fileName)).Delete();
+        //    return File(memory, "application/rtf", fileName);
+        //}
 
         //public async Task<FileResult> ESICReportExcel(int WAG_Id)
         //{
@@ -369,227 +369,227 @@ namespace RMERP.Controllers
         //    return File(memory, "application/rtf", fileName);
         //}               
 
-        public async Task<FileResult> MLWF_ContributionExcel(int WAG_Id)
-        {
-            ReportsManager manager = new ReportsManager(_context);
-            WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
-            string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
+        //public async Task<FileResult> MLWF_ContributionExcel(int WAG_Id)
+        //{
+        //    ReportsManager manager = new ReportsManager(_context);
+        //    WageProcessManager wageProcess = new WageProcessManager(_context);
+        //    DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+        //    string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
-            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
-            string fileName = "MLWF CONTRIBUTION " + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
-            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
-            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
-            var memory = new MemoryStream();
-            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
-            {
-                IWorkbook workbook;
-                workbook = new XSSFWorkbook();
-                ISheet excelSheet = workbook.CreateSheet("Template");
-                IFont font = workbook.CreateFont();
-                font.IsBold = true;
-                font.FontHeightInPoints = ((short)25);
-                font.FontName = ("Cambria");
-                font.Underline = FontUnderlineType.Single;
+        //    string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+        //    string fileName = "MLWF CONTRIBUTION " + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
+        //    string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
+        //    FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
+        //    var memory = new MemoryStream();
+        //    using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+        //    {
+        //        IWorkbook workbook;
+        //        workbook = new XSSFWorkbook();
+        //        ISheet excelSheet = workbook.CreateSheet("Template");
+        //        IFont font = workbook.CreateFont();
+        //        font.IsBold = true;
+        //        font.FontHeightInPoints = ((short)25);
+        //        font.FontName = ("Cambria");
+        //        font.Underline = FontUnderlineType.Single;
 
-                ICellStyle styleHeader = workbook.CreateCellStyle();
-                styleHeader.SetFont(font);                
+        //        ICellStyle styleHeader = workbook.CreateCellStyle();
+        //        styleHeader.SetFont(font);                
 
-                // Style the cell with font color white
-                IFont fontcell = workbook.CreateFont();
-                fontcell.IsBold = true;             
-                ICellStyle style = workbook.CreateCellStyle();
-                ICellStyle styleBold = workbook.CreateCellStyle();
-                style.WrapText = true;
-                styleBold.SetFont(fontcell);
+        //        // Style the cell with font color white
+        //        IFont fontcell = workbook.CreateFont();
+        //        fontcell.IsBold = true;             
+        //        ICellStyle style = workbook.CreateCellStyle();
+        //        ICellStyle styleBold = workbook.CreateCellStyle();
+        //        style.WrapText = true;
+        //        styleBold.SetFont(fontcell);
 
-                style.VerticalAlignment = VerticalAlignment.Center;
-                styleBold.VerticalAlignment = VerticalAlignment.Center;
-                //#77bf2a
+        //        style.VerticalAlignment = VerticalAlignment.Center;
+        //        styleBold.VerticalAlignment = VerticalAlignment.Center;
+        //        //#77bf2a
 
-                // Style the cell with borders all around.
-                style.BorderBottom = (BorderStyle.Thin);
-                style.BottomBorderColor = (IndexedColors.Black.Index);
-                style.BorderLeft = (BorderStyle.Thin);
-                style.LeftBorderColor = (IndexedColors.Black.Index);
-                style.BorderRight = (BorderStyle.Thin);
-                style.RightBorderColor = (IndexedColors.Black.Index);
-                style.BorderTop = (BorderStyle.Thin);
-                style.TopBorderColor = (IndexedColors.Black.Index);
-                style.SetFont(fontcell);
+        //        // Style the cell with borders all around.
+        //        style.BorderBottom = (BorderStyle.Thin);
+        //        style.BottomBorderColor = (IndexedColors.Black.Index);
+        //        style.BorderLeft = (BorderStyle.Thin);
+        //        style.LeftBorderColor = (IndexedColors.Black.Index);
+        //        style.BorderRight = (BorderStyle.Thin);
+        //        style.RightBorderColor = (IndexedColors.Black.Index);
+        //        style.BorderTop = (BorderStyle.Thin);
+        //        style.TopBorderColor = (IndexedColors.Black.Index);
+        //        style.SetFont(fontcell);
 
-                IRow row = excelSheet.CreateRow(0);
-                ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue("RELIABLE SECURITY SERVICES");
-                CellHeader.CellStyle = styleHeader;
-                CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 7));
-
-
-                IRow rowAdd1 = excelSheet.CreateRow(1);
-                ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR");
-                CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 7));
+        //        IRow row = excelSheet.CreateRow(0);
+        //        ICell CellHeader = row.CreateCell(0);
+        //        CellHeader.SetCellValue("RELIABLE SECURITY SERVICES");
+        //        CellHeader.CellStyle = styleHeader;
+        //        CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 7));
 
 
-                IRow rowSubHeading = excelSheet.CreateRow(2);
-                ICell CellSubHeading = rowSubHeading.CreateCell(0);
-                CellSubHeading.SetCellValue("DETAILS OF MLWF CONTRIBUTION FOR THE MONTH OF " + WAG_Month);
-                CellSubHeading.CellStyle = styleBold;
-                CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 7));
+        //        IRow rowAdd1 = excelSheet.CreateRow(1);
+        //        ICell CellAdd1 = rowAdd1.CreateCell(0);
+        //        CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR");
+        //        CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 7));
 
 
-                row = excelSheet.CreateRow(3);
-                row.HeightInPoints = (float)(4 * excelSheet.DefaultRowHeightInPoints);
-                ICell cell0 = row.CreateCell(0);
-                cell0.SetCellValue("SR. NO.");
-                cell0.CellStyle = style;
-                excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 0, 0));
-                ICell cell1 = row.CreateCell(1);
-                cell1.SetCellValue("NAME OF COMPANY");
-                excelSheet.SetColumnWidth(1, (int)((25 + 0.72) * 256));//A
-                cell1.CellStyle = style;
-                excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 1, 1));
-                ICell cell2 = row.CreateCell(2);
-                cell2.SetCellValue("NO. OF EMP. \r\n BELOW 3000/-");
-                cell2.CellStyle = style;
-                excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 2, 2));
-                ICell cell3 = row.CreateCell(3);
-                cell3.SetCellValue("NO. OF EMP. \r\n ABOVE 3000/-");
-                cell3.CellStyle = style;
-                excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 3, 3));
-                ICell cell4 = row.CreateCell(4);
-                cell4.SetCellValue("EMP. CONTR.\r\n BELOW 3000/-");
-                cell4.CellStyle = style;
-                ICell cell5 = row.CreateCell(5);
-                cell5.SetCellValue("EMP. CONTR. \r\n ABOVE 3000/-");
-                cell5.CellStyle = style;
-                ICell cell6 = row.CreateCell(6);
-                cell6.SetCellValue("EMPLOYER CONTR. \r\n BELOW 3000/-");
-                cell6.CellStyle = style;
-                ICell cell7 = row.CreateCell(7);
-                cell7.SetCellValue("EMPLOYER CONTR. \r\n ABOVE 3000/-");
-                cell7.CellStyle = style;
-
-                row = excelSheet.CreateRow(4);
-
-                ICell cell44 = row.CreateCell(4);
-                cell44.SetCellValue("RS. 6/-");
-                CellUtil.SetAlignment(cell44, workbook, (short)HorizontalAlignment.Center);
-                cell44.CellStyle = style;
-                ICell cell55 = row.CreateCell(5);
-                CellUtil.SetAlignment(cell55, workbook, (short)HorizontalAlignment.Center);
-                cell55.SetCellValue("RS. 12/-");
-                cell55.CellStyle = style;
-                ICell cell66 = row.CreateCell(6);
-                CellUtil.SetAlignment(cell66, workbook, (short)HorizontalAlignment.Center);
-                cell66.SetCellValue("RS. 18/-");
-                cell66.CellStyle = style;
-                ICell cell77 = row.CreateCell(7);
-                CellUtil.SetAlignment(cell77, workbook, (short)HorizontalAlignment.Center);
-                cell77.SetCellValue("RS. 36/-");
-                cell77.CellStyle = style;
-
-                List<MLWF_ContributionVM> MLWF_ContributionReports = manager.MLWF_ContributionReports(WAG_Id);
-                int rowCount = 5;
-                int srNo = 1;
-                int EMP_BELOW_3K = 0, EMP_ABOVE_3K = 0;
-                decimal EMP_CONTR_BELOW_3K = 0M, EMP_CONTR_ABOVE_3K = 0M, EMPLOYER_CONTR_BELOW_3K = 0M, EMPLOYER_CONTR_ABOVE_3K = 0M;
-                foreach (var item in MLWF_ContributionReports)
-                {
-                    row = excelSheet.CreateRow(rowCount);
-                    row.CreateCell(0).SetCellValue(srNo++);
-                    row.CreateCell(1).SetCellValue(item.CLI_Name);
-                    row.CreateCell(2).SetCellValue(item.EMP_BELOW_3K);
-                    row.CreateCell(3).SetCellValue(item.EMP_ABOVE_3K);
-                    row.CreateCell(4).SetCellValue(Convert.ToString(item.EMP_CONTR_BELOW_3K()));
-                    row.CreateCell(5).SetCellValue(Convert.ToString(item.EMP_CONTR_ABOVE_3K()));
-                    row.CreateCell(6).SetCellValue(Convert.ToString(item.EMPLOYER_CONTR_BELOW_3K()));
-                    row.CreateCell(7).SetCellValue(Convert.ToString(item.EMPLOYER_CONTR_ABOVE_3K()));
-
-                    EMP_BELOW_3K = EMP_BELOW_3K + item.EMP_BELOW_3K;
-                    EMP_ABOVE_3K = EMP_ABOVE_3K + item.EMP_ABOVE_3K;
-                    EMP_CONTR_BELOW_3K = EMP_CONTR_BELOW_3K + (item.EMP_CONTR_BELOW_3K());
-                    EMP_CONTR_ABOVE_3K = EMP_CONTR_ABOVE_3K + (item.EMP_CONTR_ABOVE_3K());
-                    EMPLOYER_CONTR_BELOW_3K = EMPLOYER_CONTR_BELOW_3K + (item.EMPLOYER_CONTR_BELOW_3K());
-                    EMPLOYER_CONTR_ABOVE_3K= EMPLOYER_CONTR_ABOVE_3K + (item.EMPLOYER_CONTR_ABOVE_3K());
-
-                    rowCount++;
-                }
-
-                row = excelSheet.CreateRow(rowCount);
-                ICell cellTotal = row.CreateCell(0);
-                cellTotal.SetCellValue("TOTAL");
-                cellTotal.CellStyle = styleBold;
-                CellUtil.SetAlignment(cellTotal, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount+2, 0, 1));
-
-                ICell cellTotal2 = row.CreateCell(2);
-                cellTotal2.SetCellValue(EMP_BELOW_3K);
-                cellTotal2.CellStyle = styleBold;
-
-                ICell cellTotal3 = row.CreateCell(3);
-                cellTotal3.SetCellValue(EMP_ABOVE_3K);
-                cellTotal3.CellStyle = styleBold;
-
-                ICell cellTotal4 = row.CreateCell(4);
-                cellTotal4.SetCellValue(Convert.ToString(EMP_CONTR_BELOW_3K));
-                cellTotal4.CellStyle = styleBold;
-
-                ICell cellTotal5 = row.CreateCell(5);
-                cellTotal5.SetCellValue(Convert.ToString(EMP_CONTR_ABOVE_3K));
-                cellTotal5.CellStyle = styleBold;
-
-                ICell cellTotal6 = row.CreateCell(6);
-                cellTotal6.SetCellValue(Convert.ToString(EMPLOYER_CONTR_BELOW_3K));
-                cellTotal6.CellStyle = styleBold;
-
-                ICell cellTotal7 = row.CreateCell(7);
-                cellTotal7.SetCellValue(Convert.ToString(EMPLOYER_CONTR_ABOVE_3K));
-                cellTotal7.CellStyle = styleBold;
-
-                row = excelSheet.CreateRow(rowCount+1);
-                ICell cellTotalEmp = row.CreateCell(2);
-                cellTotalEmp.SetCellValue(EMP_BELOW_3K + EMP_ABOVE_3K);
-                cellTotalEmp.CellStyle = styleBold;
-                CellUtil.SetAlignment(cellTotalEmp, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(rowCount + 1, rowCount + 2, 2, 3));
-
-                ICell cellEmpCont = row.CreateCell(4);
-                cellEmpCont.SetCellValue(Convert.ToString(EMP_CONTR_BELOW_3K + EMP_CONTR_ABOVE_3K));
-                cellEmpCont.CellStyle = styleBold;
-                CellUtil.SetAlignment(cellEmpCont, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(rowCount + 1, rowCount + 1, 4, 5));
+        //        IRow rowSubHeading = excelSheet.CreateRow(2);
+        //        ICell CellSubHeading = rowSubHeading.CreateCell(0);
+        //        CellSubHeading.SetCellValue("DETAILS OF MLWF CONTRIBUTION FOR THE MONTH OF " + WAG_Month);
+        //        CellSubHeading.CellStyle = styleBold;
+        //        CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 7));
 
 
-                ICell cellEmployerCont = row.CreateCell(6);
-                cellEmployerCont.SetCellValue(Convert.ToString(EMPLOYER_CONTR_BELOW_3K + EMPLOYER_CONTR_ABOVE_3K));
-                cellEmployerCont.CellStyle = styleBold;
-                CellUtil.SetAlignment(cellEmployerCont, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(rowCount + 1, rowCount + 1, 6, 7));
+        //        row = excelSheet.CreateRow(3);
+        //        row.HeightInPoints = (float)(4 * excelSheet.DefaultRowHeightInPoints);
+        //        ICell cell0 = row.CreateCell(0);
+        //        cell0.SetCellValue("SR. NO.");
+        //        cell0.CellStyle = style;
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 0, 0));
+        //        ICell cell1 = row.CreateCell(1);
+        //        cell1.SetCellValue("NAME OF COMPANY");
+        //        excelSheet.SetColumnWidth(1, (int)((25 + 0.72) * 256));//A
+        //        cell1.CellStyle = style;
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 1, 1));
+        //        ICell cell2 = row.CreateCell(2);
+        //        cell2.SetCellValue("NO. OF EMP. \r\n BELOW 3000/-");
+        //        cell2.CellStyle = style;
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 2, 2));
+        //        ICell cell3 = row.CreateCell(3);
+        //        cell3.SetCellValue("NO. OF EMP. \r\n ABOVE 3000/-");
+        //        cell3.CellStyle = style;
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 3, 3));
+        //        ICell cell4 = row.CreateCell(4);
+        //        cell4.SetCellValue("EMP. CONTR.\r\n BELOW 3000/-");
+        //        cell4.CellStyle = style;
+        //        ICell cell5 = row.CreateCell(5);
+        //        cell5.SetCellValue("EMP. CONTR. \r\n ABOVE 3000/-");
+        //        cell5.CellStyle = style;
+        //        ICell cell6 = row.CreateCell(6);
+        //        cell6.SetCellValue("EMPLOYER CONTR. \r\n BELOW 3000/-");
+        //        cell6.CellStyle = style;
+        //        ICell cell7 = row.CreateCell(7);
+        //        cell7.SetCellValue("EMPLOYER CONTR. \r\n ABOVE 3000/-");
+        //        cell7.CellStyle = style;
 
-                row = excelSheet.CreateRow(rowCount + 2);
-                ICell cellFinal = row.CreateCell(4);
-                cellFinal.SetCellValue(Convert.ToString(EMP_CONTR_BELOW_3K + EMP_CONTR_ABOVE_3K + EMPLOYER_CONTR_BELOW_3K + EMPLOYER_CONTR_ABOVE_3K));
-                cellFinal.CellStyle = styleBold;
-                CellUtil.SetAlignment(cellFinal, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(rowCount + 2, rowCount + 2, 4, 7));
+        //        row = excelSheet.CreateRow(4);
+
+        //        ICell cell44 = row.CreateCell(4);
+        //        cell44.SetCellValue("RS. 6/-");
+        //        CellUtil.SetAlignment(cell44, workbook, (short)HorizontalAlignment.Center);
+        //        cell44.CellStyle = style;
+        //        ICell cell55 = row.CreateCell(5);
+        //        CellUtil.SetAlignment(cell55, workbook, (short)HorizontalAlignment.Center);
+        //        cell55.SetCellValue("RS. 12/-");
+        //        cell55.CellStyle = style;
+        //        ICell cell66 = row.CreateCell(6);
+        //        CellUtil.SetAlignment(cell66, workbook, (short)HorizontalAlignment.Center);
+        //        cell66.SetCellValue("RS. 18/-");
+        //        cell66.CellStyle = style;
+        //        ICell cell77 = row.CreateCell(7);
+        //        CellUtil.SetAlignment(cell77, workbook, (short)HorizontalAlignment.Center);
+        //        cell77.SetCellValue("RS. 36/-");
+        //        cell77.CellStyle = style;
+
+        //        List<MLWF_ContributionVM> MLWF_ContributionReports = manager.MLWF_ContributionReports(WAG_Id);
+        //        int rowCount = 5;
+        //        int srNo = 1;
+        //        int EMP_BELOW_3K = 0, EMP_ABOVE_3K = 0;
+        //        decimal EMP_CONTR_BELOW_3K = 0M, EMP_CONTR_ABOVE_3K = 0M, EMPLOYER_CONTR_BELOW_3K = 0M, EMPLOYER_CONTR_ABOVE_3K = 0M;
+        //        foreach (var item in MLWF_ContributionReports)
+        //        {
+        //            row = excelSheet.CreateRow(rowCount);
+        //            row.CreateCell(0).SetCellValue(srNo++);
+        //            row.CreateCell(1).SetCellValue(item.CLI_Name);
+        //            row.CreateCell(2).SetCellValue(item.EMP_BELOW_3K);
+        //            row.CreateCell(3).SetCellValue(item.EMP_ABOVE_3K);
+        //            row.CreateCell(4).SetCellValue(Convert.ToString(item.EMP_CONTR_BELOW_3K()));
+        //            row.CreateCell(5).SetCellValue(Convert.ToString(item.EMP_CONTR_ABOVE_3K()));
+        //            row.CreateCell(6).SetCellValue(Convert.ToString(item.EMPLOYER_CONTR_BELOW_3K()));
+        //            row.CreateCell(7).SetCellValue(Convert.ToString(item.EMPLOYER_CONTR_ABOVE_3K()));
+
+        //            EMP_BELOW_3K = EMP_BELOW_3K + item.EMP_BELOW_3K;
+        //            EMP_ABOVE_3K = EMP_ABOVE_3K + item.EMP_ABOVE_3K;
+        //            EMP_CONTR_BELOW_3K = EMP_CONTR_BELOW_3K + (item.EMP_CONTR_BELOW_3K());
+        //            EMP_CONTR_ABOVE_3K = EMP_CONTR_ABOVE_3K + (item.EMP_CONTR_ABOVE_3K());
+        //            EMPLOYER_CONTR_BELOW_3K = EMPLOYER_CONTR_BELOW_3K + (item.EMPLOYER_CONTR_BELOW_3K());
+        //            EMPLOYER_CONTR_ABOVE_3K= EMPLOYER_CONTR_ABOVE_3K + (item.EMPLOYER_CONTR_ABOVE_3K());
+
+        //            rowCount++;
+        //        }
+
+        //        row = excelSheet.CreateRow(rowCount);
+        //        ICell cellTotal = row.CreateCell(0);
+        //        cellTotal.SetCellValue("TOTAL");
+        //        cellTotal.CellStyle = styleBold;
+        //        CellUtil.SetAlignment(cellTotal, workbook, (short)HorizontalAlignment.Center);
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount+2, 0, 1));
+
+        //        ICell cellTotal2 = row.CreateCell(2);
+        //        cellTotal2.SetCellValue(EMP_BELOW_3K);
+        //        cellTotal2.CellStyle = styleBold;
+
+        //        ICell cellTotal3 = row.CreateCell(3);
+        //        cellTotal3.SetCellValue(EMP_ABOVE_3K);
+        //        cellTotal3.CellStyle = styleBold;
+
+        //        ICell cellTotal4 = row.CreateCell(4);
+        //        cellTotal4.SetCellValue(Convert.ToString(EMP_CONTR_BELOW_3K));
+        //        cellTotal4.CellStyle = styleBold;
+
+        //        ICell cellTotal5 = row.CreateCell(5);
+        //        cellTotal5.SetCellValue(Convert.ToString(EMP_CONTR_ABOVE_3K));
+        //        cellTotal5.CellStyle = styleBold;
+
+        //        ICell cellTotal6 = row.CreateCell(6);
+        //        cellTotal6.SetCellValue(Convert.ToString(EMPLOYER_CONTR_BELOW_3K));
+        //        cellTotal6.CellStyle = styleBold;
+
+        //        ICell cellTotal7 = row.CreateCell(7);
+        //        cellTotal7.SetCellValue(Convert.ToString(EMPLOYER_CONTR_ABOVE_3K));
+        //        cellTotal7.CellStyle = styleBold;
+
+        //        row = excelSheet.CreateRow(rowCount+1);
+        //        ICell cellTotalEmp = row.CreateCell(2);
+        //        cellTotalEmp.SetCellValue(EMP_BELOW_3K + EMP_ABOVE_3K);
+        //        cellTotalEmp.CellStyle = styleBold;
+        //        CellUtil.SetAlignment(cellTotalEmp, workbook, (short)HorizontalAlignment.Center);
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(rowCount + 1, rowCount + 2, 2, 3));
+
+        //        ICell cellEmpCont = row.CreateCell(4);
+        //        cellEmpCont.SetCellValue(Convert.ToString(EMP_CONTR_BELOW_3K + EMP_CONTR_ABOVE_3K));
+        //        cellEmpCont.CellStyle = styleBold;
+        //        CellUtil.SetAlignment(cellEmpCont, workbook, (short)HorizontalAlignment.Center);
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(rowCount + 1, rowCount + 1, 4, 5));
+
+
+        //        ICell cellEmployerCont = row.CreateCell(6);
+        //        cellEmployerCont.SetCellValue(Convert.ToString(EMPLOYER_CONTR_BELOW_3K + EMPLOYER_CONTR_ABOVE_3K));
+        //        cellEmployerCont.CellStyle = styleBold;
+        //        CellUtil.SetAlignment(cellEmployerCont, workbook, (short)HorizontalAlignment.Center);
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(rowCount + 1, rowCount + 1, 6, 7));
+
+        //        row = excelSheet.CreateRow(rowCount + 2);
+        //        ICell cellFinal = row.CreateCell(4);
+        //        cellFinal.SetCellValue(Convert.ToString(EMP_CONTR_BELOW_3K + EMP_CONTR_ABOVE_3K + EMPLOYER_CONTR_BELOW_3K + EMPLOYER_CONTR_ABOVE_3K));
+        //        cellFinal.CellStyle = styleBold;
+        //        CellUtil.SetAlignment(cellFinal, workbook, (short)HorizontalAlignment.Center);
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(rowCount + 2, rowCount + 2, 4, 7));
                 
 
 
 
-                workbook.Write(fs);
-            }
-            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
-            {
-                await stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
-            new FileInfo(Path.Combine(newPath, fileName)).Delete();
-            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-        }
+        //        workbook.Write(fs);
+        //    }
+        //    using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
+        //    {
+        //        await stream.CopyToAsync(memory);
+        //    }
+        //    memory.Position = 0;
+        //    new FileInfo(Path.Combine(newPath, fileName)).Delete();
+        //    return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        //}
 
         public async Task<FileResult> PayTaxExcel(int WAG_Id)
         {
@@ -1577,7 +1577,7 @@ namespace RMERP.Controllers
                 IWorkbook workbook;
                 workbook = new XSSFWorkbook();
                 #region single client
-                ISheet excelSheet = workbook.CreateSheet("P.F. CON");
+                ISheet excelSheet = workbook.CreateSheet("ESIC CON");
 
                 IFont fontcell = workbook.CreateFont();
                 fontcell.IsBold = true;
@@ -1625,7 +1625,7 @@ namespace RMERP.Controllers
 
                 IRow rowSubHeading = excelSheet.CreateRow(2);
                 ICell CellSubHeading = rowSubHeading.CreateCell(0);
-                CellSubHeading.SetCellValue("LIST OF P.F. CONTRIBUTION OF EMPLOYEES FOR THE MONTH OF " + WAG_Month);
+                CellSubHeading.SetCellValue("LIST OF ESIC CONTRIBUTION OF EMPLOYEES FOR THE MONTH OF " + WAG_Month);
                 CellSubHeading.CellStyle = styleClient;
                 CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 6));
@@ -1641,7 +1641,7 @@ namespace RMERP.Controllers
                 excelSheet.SetColumnWidth(1, (int)((22 + 0.72) * 256));
                 cell1.CellStyle = style;
                 ICell cell2 = row.CreateCell(2);
-                cell2.SetCellValue("PF APPLICABLE \r\n  SALARY / \r\n  BASIC+DA");
+                cell2.SetCellValue("ESIC APPLICABLE \r\n  SALARY / \r\n  BASIC+DA");
                 excelSheet.SetColumnWidth(2, (int)((15 + 0.72) * 256));
                 cell2.CellStyle = style;
                 ICell cell3 = row.CreateCell(3);
@@ -3021,7 +3021,7 @@ namespace RMERP.Controllers
                 new FileInfo(Path.Combine(newPath, fileName)).Delete();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 TempData["message"] = "Try Again";
             }
@@ -3170,11 +3170,7 @@ namespace RMERP.Controllers
                     EMPLOYERS_CONTRIBUTION = EMPLOYERS_CONTRIBUTION + item.EMPLOYERS_CONTRIBUTION;
                     TOTAL_CONTRIBUTION = TOTAL_CONTRIBUTION + item.TOTAL_CONTRIBUTION;
                 }
-                //row = excelSheet.CreateRow(rowCount+1);
-                //row.CreateCell(0).SetCellValue("TOTAL");
-                //excelSheet.AddMergedRegion(new CellRangeAddress(rowCount + 1, rowCount + 1, 0, 1));
-                //row.CreateCell(2).SetCellValue(NO_OF_EMPLOYEE);
-
+               
                 row = excelSheet.CreateRow(rowCount);
                 ICell cellTot0 = row.CreateCell(0);
                 cellTot0.SetCellValue("TOTAL");
@@ -3265,12 +3261,6 @@ namespace RMERP.Controllers
                 style.SetFont(fontcell);
 
                 IRow row = excelSheet.CreateRow(0);
-                //ICell CellHeader = row.CreateCell(0);
-                //CellHeader.SetCellValue("ESIC SALEX TAX " + WAG_Month);
-                //CellHeader.CellStyle = styleHeader;
-                //CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-                //excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 5));
-
 
                 //row = excelSheet.CreateRow(1);
                 ICell cell0 = row.CreateCell(0);
@@ -3319,9 +3309,7 @@ namespace RMERP.Controllers
                         cell_3.CellStyle = styleAmount;
 
                         ICell cell_5 = row.CreateCell(5);
-                       // IDataFormat dataFormatCustom = workbook.CreateDataFormat();
-                      //  cell_5.CellStyle.DataFormat = dataFormatCustom.GetFormat("yyyy-MM-dd");
-
+                       
                         row.CreateCell(4).SetCellValue(emp.ReasonCode);
                         cell_5.SetCellValue(emp.LastWorkingDay);                        
                     }                   
@@ -3436,6 +3424,7 @@ namespace RMERP.Controllers
         #endregion
 
         #region Labour WelfareFund
+
         public async Task<FileResult> Labour_WelfareFund_Excel(int WAG_Id)
         {
             ReportsManager manager = new ReportsManager(_context);
@@ -3692,6 +3681,7 @@ namespace RMERP.Controllers
             new FileInfo(Path.Combine(newPath, fileName)).Delete();
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
+
         #endregion
     }
 

@@ -35,7 +35,7 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).ThenInclude(m=>m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
         }
-        public List<Wage_Register> GetWageRegistersBySelectedDES(int WAG_Id)
+        public List<Wage_Register> GetWageRegistersByLWF(int WAG_Id)
         {
             return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id && r.CRI_.DES_.DES_Exclude_LWF.Equals(false)).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).ThenInclude(m => m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
         }
@@ -88,7 +88,7 @@ namespace RMERP.DAL.ManagerClasses
                     Client_Requirements cr = clientsManager.getActiveClientRequirement(CLI_Id, employee.DES_.DES_Id);
                     int totalWorkingDays = 0;
                     double totalPaybleDays = 0;
-                    decimal CRI_Basic = 0M, WAR_Basic_Calculated = 0M, BasicDa = 0M, WAR_OverTime_Calculated = 0M, WAR_PF, WAR_PF_Calculated = 0M, WAR_ESIC = 0M, WAR_ESIC_Calculated = 0M;
+                    decimal CRI_Basic = 0M, WAR_Basic_Calculated = 0M, BasicDa = 0M, WAR_OverTime_Calculated = 0M, WAR_PF, WAR_PF_Calculated = 0M, WAR_ESIC = 0M, WAR_ESIC_Calculated = 0M, WAR_LWF_Deduction_Calculated = 0M;
                     decimal CRI_DA = 0M, CRI_DA_Calculated = 0M, CRI_HRA = 0M, CRI_HRA_Calculated = 0M;
                     decimal WAR_Attendance_Allowance_Calculated = 0M, WAR_Outstation_Allowance_Calculated = 0M, WAR_Performance_Allowance_Calculated = 0M, WAR_Nightshift_Allowance_Calculated=0M;
 
@@ -164,7 +164,7 @@ namespace RMERP.DAL.ManagerClasses
                         totalEMI = Math.Round(EMI.Select(g => g.WAD_Amt).FirstOrDefault(),MidpointRounding.AwayFromZero);
                     }
                     wageRegisterVM.WAR_Advance_Amount = totalEMI;
-                    #endregion
+                    #endregion                  
 
                     #region New Allowances
                     if (cr.CRI_Attendance_Allowance)
@@ -334,6 +334,25 @@ namespace RMERP.DAL.ManagerClasses
                     }
                     #endregion
 
+                    #region LWF Calculation   
+                    if (wageProcess.WAG_Month.Month==(int)Month.June || wageProcess.WAG_Month.Month == (int)Month.December)
+                    {
+                        if (!employee.DES_.DES_Exclude_LWF)
+                        {
+                            if (WAR_GrossTotal > 0 && WAR_GrossTotal < 3000)
+                            {
+                                WAR_LWF_Deduction_Calculated = 6; //Rs.6
+                            }
+                            else if (WAR_GrossTotal >= 3000)
+                            {
+                                WAR_LWF_Deduction_Calculated = 12;  //Rs.12
+                            }
+                        }
+                    }
+                    
+                    wageRegisterVM.WAR_LWF_Deduction_Calculated = WAR_LWF_Deduction_Calculated;
+                    #endregion
+
                     if (cr.CRI_RevenueDeduction == true)
                     {
                         WAR_RevenueDeduction_Calculated = 1;
@@ -357,7 +376,7 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.WAR_ProffesionalTax_Calculated = WAR_ProffesionalTax_Calculated.ToString();
                     wageRegisterVM.WAR_RevenueDeduction_Calculated = WAR_RevenueDeduction_Calculated.ToString();
 
-                    decimal WAR_FinalTotal = Math.Round(WAR_GrossTotal - (WAR_PF_Calculated + WAR_ESIC_Calculated + totalEMI + WAR_ProffesionalTax_Calculated + WAR_RevenueDeduction_Calculated + WAR_CanteenFacility_Calculation), MidpointRounding.AwayFromZero);
+                    decimal WAR_FinalTotal = Math.Round(WAR_GrossTotal - (WAR_PF_Calculated + WAR_ESIC_Calculated + totalEMI + WAR_ProffesionalTax_Calculated + WAR_RevenueDeduction_Calculated + WAR_CanteenFacility_Calculation+ WAR_LWF_Deduction_Calculated), MidpointRounding.AwayFromZero);
                     wageRegisterVM.WAR_GrossTotal = WAR_GrossTotal;
                     wageRegisterVM.WAR_FinalTotal = WAR_FinalTotal;
                     wageRegisterVM.WAR_DA = CRI_DA;

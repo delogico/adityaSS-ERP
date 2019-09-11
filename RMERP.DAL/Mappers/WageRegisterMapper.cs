@@ -37,6 +37,8 @@ namespace RMERP.DAL.Mappers
             wageRegisterVM.WAR_TotalPaybleDays = wageRegister.WAR_TotalPaybleDays;
             wageRegisterVM.WAR_TotalWorkingDays = wageRegister.WAR_TotalWorkingDays;
 
+            if (wageRegister.WAR_LWF_Deduction_Calculated != null)
+                wageRegisterVM.WAR_LWF_Deduction_Calculated = wageRegister.WAR_LWF_Deduction_Calculated.Value;
             if (wageRegister.WAR_ProffesionalTax_Calculated != null)
                 wageRegisterVM.WAR_ProffesionalTax_Calculated = wageRegister.WAR_ProffesionalTax_Calculated;
             if (wageRegister.WAR_RevenueDeduction_Calculated != null)
@@ -104,8 +106,7 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_RevenueDeduction_Calculated = wageRegisterVM.WAR_RevenueDeduction_Calculated;
             wageRegister.WAR_CanteenFacility_Calculation = wageRegisterVM.WAR_CanteenFacility_Calculation;
 
-            if (wageRegisterVM.WAR_Advance_Amount != null)
-                wageRegister.WAR_Advance_Amount = wageRegisterVM.WAR_Advance_Amount;
+            wageRegister.WAR_Advance_Amount = wageRegisterVM.WAR_Advance_Amount;
             if (wageRegisterVM.employeeVM != null)
                 wageRegister.EMP_ = EmployeesMapper.MapMeModel(wageRegisterVM.employeeVM);
             if (wageRegisterVM.clientRequirementVM != null)
@@ -115,6 +116,8 @@ namespace RMERP.DAL.Mappers
 
             wageRegister.WAR_Attendance_Allowance_Calculated = wageRegisterVM.WAR_Attendance_Allowance_Calculated;
             wageRegister.WAR_OutStation_Allowance_Calculated = wageRegisterVM.WAR_OutStation_Allowance_Calculated;
+
+            wageRegister.WAR_LWF_Deduction_Calculated = wageRegisterVM.WAR_LWF_Deduction_Calculated;
 
             return wageRegister;
         }
@@ -153,7 +156,7 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_ProffesionalTax_Calculated = wageRegisterVM.WAR_ProffesionalTax_Calculated;
             wageRegister.WAR_RevenueDeduction_Calculated = wageRegisterVM.WAR_RevenueDeduction_Calculated;
             wageRegister.WAR_CanteenFacility_Calculation = wageRegisterVM.WAR_CanteenFacility_Calculation;
-
+          
             //if (wageRegisterVM.WAR_Advance_Amount != null)
             //    wageRegister.WAR_Advance_Amount = wageRegisterVM.WAR_Advance_Amount;
             //if (wageRegisterVM.employeeVM != null)
@@ -165,7 +168,7 @@ namespace RMERP.DAL.Mappers
 
             wageRegister.WAR_Attendance_Allowance_Calculated = wageRegisterVM.WAR_Attendance_Allowance_Calculated;
             wageRegister.WAR_OutStation_Allowance_Calculated = wageRegisterVM.WAR_OutStation_Allowance_Calculated;
-
+            wageRegister.WAR_LWF_Deduction_Calculated = wageRegisterVM.WAR_LWF_Deduction_Calculated;
             return wageRegister;
         }
 
