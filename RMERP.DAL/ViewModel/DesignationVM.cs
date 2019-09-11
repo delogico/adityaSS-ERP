@@ -11,7 +11,9 @@ namespace RMERP.DAL.ViewModel
 
         [Required(ErrorMessage ="Please add title")]
         [Display( Name ="Title")]
-        public string DES_Title { get; set; }              
+        public string DES_Title { get; set; }
+        [Display(Name = "Exclude LWF ?")]
+        public bool DES_Exclude_LWF { get; set; }
     }
 }
 

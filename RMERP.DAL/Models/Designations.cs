@@ -14,6 +14,7 @@ namespace RMERP.DAL.Models
 
         public int DES_Id { get; set; }
         public string DES_Title { get; set; }
+        public bool DES_Exclude_LWF { get; set; }
 
         public ICollection<Attendance> Attendance { get; set; }
         public ICollection<Client_Requirements> Client_Requirements { get; set; }

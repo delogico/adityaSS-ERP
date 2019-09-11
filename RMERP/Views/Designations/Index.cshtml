@@ -42,18 +42,29 @@
                         <thead>
                             <tr>
                                 <th>Designation</th>
+                                <th>Exclude LWF</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td><b>@item.DES_Title</b></td>
-                                    <td>
-                                        <a href='@Url.Action("AddEditDesignation","Designations",new { DES_Id=item.DES_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td><b>@item.DES_Title</b></td>
+                                @if (item.DES_Exclude_LWF == true)
+                                {
+                                <td>
+                                    <i class="fa fa-check text-success"></i>
+                                </td>
+                                }
+                                else
+                                {
+                                    <td><i class="fa fa-times text-danger"></i></td>
+                                }                                                              
+                                <td>
+                                    <a href='@Url.Action("AddEditDesignation","Designations",new { DES_Id=item.DES_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     </table>

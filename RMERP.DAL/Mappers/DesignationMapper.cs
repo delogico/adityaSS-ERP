@@ -14,6 +14,7 @@ namespace RMERP.DAL.Mappers
             DesignationVM designationVM = new DesignationVM();
             designationVM.DES_Id = designations.DES_Id;
             designationVM.DES_Title = designations.DES_Title;
+            designationVM.DES_Exclude_LWF = designations.DES_Exclude_LWF;
             return designationVM;
         }
         public static Designations mapMeModel(DesignationVM designations)
@@ -21,6 +22,7 @@ namespace RMERP.DAL.Mappers
             Designations designation = new Designations();
             designation.DES_Id = designations.DES_Id;
             designation.DES_Title = designations.DES_Title;
+            designation.DES_Exclude_LWF = designations.DES_Exclude_LWF;
             return designation;
         }
         public static List<DesignationVM> mapDesignations(List<Designations> designations)

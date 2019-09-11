@@ -1707,7 +1707,7 @@ namespace RMERP.Controllers
                 cellTOT_EMPLOYER_CONT.SetCellValue(Convert.ToString(TOT_EMPLOYER_CONT));
                 cellTOT_EMPLOYER_CONT.CellStyle = styleTotal;
 
-                ICell cellTOT_CONT = row.CreateCell(4);
+                ICell cellTOT_CONT = row.CreateCell(5);
                 cellTOT_CONT.SetCellValue(Convert.ToString(TOT_CONT));
                 cellTOT_CONT.CellStyle = styleTotal;
                 #endregion
@@ -2966,6 +2966,7 @@ namespace RMERP.Controllers
         #endregion
 
         #region ESIC Reports
+
         public ActionResult ClientsSelectionForESIC(int WAG_Id, int FRM_Id)
         {
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
@@ -3432,6 +3433,265 @@ namespace RMERP.Controllers
 
         }
 
+        #endregion
+
+        #region Labour WelfareFund
+        public async Task<FileResult> Labour_WelfareFund_Excel(int WAG_Id)
+        {
+            ReportsManager manager = new ReportsManager(_context);
+            WageProcessManager wageProcess = new WageProcessManager(_context);
+            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+            string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
+
+            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+            string fileName = "MLWF CONTRIBUTION " + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
+            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
+            var memory = new MemoryStream();
+            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook;
+                workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("Template");
+                IFont font = workbook.CreateFont();
+                font.IsBold = true;
+                font.FontHeightInPoints = ((short)25);
+                font.FontName = ("Cambria");
+                font.Underline = FontUnderlineType.Single;
+
+                ICellStyle styleHeader = workbook.CreateCellStyle();
+                styleHeader.SetFont(font);
+
+                // Style the cell with font color white
+                IFont fontcell = workbook.CreateFont();
+                fontcell.IsBold = true;
+                ICellStyle style = workbook.CreateCellStyle();
+                ICellStyle styleBold = workbook.CreateCellStyle();
+                ICellStyle Defaultstyle = workbook.CreateCellStyle();
+                style.WrapText = true;
+                Defaultstyle.WrapText = true;
+                styleBold.SetFont(fontcell);
+
+                style.VerticalAlignment = VerticalAlignment.Center;
+                styleBold.VerticalAlignment = VerticalAlignment.Center;
+                //#77bf2a
+
+                // Style the cell with borders all around.
+                style.BorderBottom = (BorderStyle.Thin);
+                style.BottomBorderColor = (IndexedColors.Black.Index);
+                style.BorderLeft = (BorderStyle.Thin);
+                style.LeftBorderColor = (IndexedColors.Black.Index);
+                style.BorderRight = (BorderStyle.Thin);
+                style.RightBorderColor = (IndexedColors.Black.Index);
+                style.BorderTop = (BorderStyle.Thin);
+                style.TopBorderColor = (IndexedColors.Black.Index);
+                style.SetFont(fontcell);
+
+                IRow row = excelSheet.CreateRow(0);
+                ICell CellHeader = row.CreateCell(0);
+                CellHeader.SetCellValue("RELIABLE SECURITY SERVICES");
+                CellHeader.CellStyle = styleHeader;
+                CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 7));
+
+
+                IRow rowAdd1 = excelSheet.CreateRow(1);
+                ICell CellAdd1 = rowAdd1.CreateCell(0);
+                CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR");
+                CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 7));
+
+
+                IRow rowSubHeading = excelSheet.CreateRow(2);
+                ICell CellSubHeading = rowSubHeading.CreateCell(0);
+                CellSubHeading.SetCellValue("DETAILS OF MLWF CONTRIBUTION FOR THE MONTH OF " + WAG_Month);
+                CellSubHeading.CellStyle = styleBold;
+                CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 7));
+
+
+                row = excelSheet.CreateRow(3);
+                row.HeightInPoints = (float)(4 * excelSheet.DefaultRowHeightInPoints);
+                ICell cell0 = row.CreateCell(0);
+                cell0.SetCellValue("SR. NO.");
+                cell0.CellStyle = style;
+                excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 0, 0));
+                ICell cell1 = row.CreateCell(1);
+                cell1.SetCellValue("NAME OF COMPANY");
+                excelSheet.SetColumnWidth(1, (int)((30 + 0.72) * 256));//A
+                cell1.CellStyle = style;
+                excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 1, 1));
+                ICell cell2 = row.CreateCell(2);
+                cell2.SetCellValue("NO. OF  \r\n EMPLOYEE  \r\n BELOW 3000/-");
+                excelSheet.SetColumnWidth(2, (int)((15 + 0.72) * 256));
+                cell2.CellStyle = style;
+                excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 2, 2));
+                ICell cell3 = row.CreateCell(3);
+                cell3.SetCellValue("NO. OF  \r\n EMPLOYEE \r\n ABOVE 3000/-");
+                excelSheet.SetColumnWidth(3, (int)((15 + 0.72) * 256));
+                cell3.CellStyle = style;
+                excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 3, 3));
+                ICell cell4 = row.CreateCell(4);
+                cell4.SetCellValue("EMPLOYEE \r\n CONTR. BELOW \r\n 3000/-");
+                excelSheet.SetColumnWidth(4, (int)((16 + 0.72) * 256));
+                cell4.CellStyle = style;
+                ICell cell5 = row.CreateCell(5);
+                cell5.SetCellValue("EMPLOYEE \r\n CONTR. ABOVE \r\n 3000/-");
+                excelSheet.SetColumnWidth(5, (int)((16 + 0.72) * 256));
+                cell5.CellStyle = style;
+                ICell cell6 = row.CreateCell(6);
+                cell6.SetCellValue("EMPLOYER \r\n CONTR. BELOW \r\n 3000/-");
+                excelSheet.SetColumnWidth(6, (int)((16 + 0.72) * 256));
+                cell6.CellStyle = style;
+                ICell cell7 = row.CreateCell(7);
+                cell7.SetCellValue("EMPLOYER \r\n CONTR. ABOVE  \r\n 3000/-");
+                excelSheet.SetColumnWidth(7, (int)((16 + 0.72) * 256));
+                cell7.CellStyle = style;
+
+                row = excelSheet.CreateRow(4);
+
+                ICell cell44 = row.CreateCell(4);
+                cell44.SetCellValue("RS. 6/-");               
+                cell44.CellStyle = style;
+                CellUtil.SetAlignment(cell44, workbook, (short)HorizontalAlignment.Center);
+                ICell cell55 = row.CreateCell(5);               
+                cell55.SetCellValue("RS. 12/-");
+                cell55.CellStyle = style;
+                CellUtil.SetAlignment(cell55, workbook, (short)HorizontalAlignment.Center);
+                ICell cell66 = row.CreateCell(6);                
+                cell66.SetCellValue("RS. 18/-");
+                cell66.CellStyle = style;
+                CellUtil.SetAlignment(cell66, workbook, (short)HorizontalAlignment.Center);
+                ICell cell77 = row.CreateCell(7);                
+                cell77.SetCellValue("RS. 36/-");
+                cell77.CellStyle = style;
+                CellUtil.SetAlignment(cell77, workbook, (short)HorizontalAlignment.Center);
+
+                List<MLWF_ContributionVM> MLWF_ContributionReports = manager.MLWF_ContributionReports(WAG_Id);
+                int rowCount = 5;
+                int srNo = 1;
+                int EMP_BELOW_3K = 0, EMP_ABOVE_3K = 0;
+                decimal EMP_CONTR_BELOW_3K = 0M, EMP_CONTR_ABOVE_3K = 0M, EMPLOYER_CONTR_BELOW_3K = 0M, EMPLOYER_CONTR_ABOVE_3K = 0M;
+                foreach (var item in MLWF_ContributionReports)
+                {
+                    row = excelSheet.CreateRow(rowCount);
+                    row.CreateCell(0).SetCellValue(srNo++);
+                    row.CreateCell(1).SetCellValue(item.CLI_Name);
+
+                    ICell celL_2 = row.CreateCell(2);
+                    celL_2.SetCellValue(item.EMP_BELOW_3K);
+                    celL_2.CellStyle = Defaultstyle;
+                    CellUtil.SetAlignment(celL_2, workbook, (short)HorizontalAlignment.Center);
+
+                    ICell celL_3 = row.CreateCell(3);
+                    celL_3.SetCellValue(item.EMP_ABOVE_3K);
+                    celL_3.CellStyle = Defaultstyle;
+                    CellUtil.SetAlignment(celL_3, workbook, (short)HorizontalAlignment.Center);
+
+                    ICell celL_4 = row.CreateCell(4);
+                    celL_4.SetCellValue(Convert.ToString(item.EMP_CONTR_BELOW_3K()));
+                    celL_4.CellStyle = Defaultstyle;
+                    CellUtil.SetAlignment(celL_4, workbook, (short)HorizontalAlignment.Center);
+
+                    ICell celL_5 = row.CreateCell(5);
+                    celL_5.SetCellValue(Convert.ToString(item.EMP_CONTR_ABOVE_3K()));
+                    celL_5.CellStyle = Defaultstyle;
+                    CellUtil.SetAlignment(celL_5, workbook, (short)HorizontalAlignment.Center);
+
+                    ICell celL_6 = row.CreateCell(6);
+                    celL_6.SetCellValue(Convert.ToString(item.EMPLOYER_CONTR_BELOW_3K()));
+                    celL_6.CellStyle = Defaultstyle;
+                    CellUtil.SetAlignment(celL_6, workbook, (short)HorizontalAlignment.Center);
+
+                    ICell celL_7 = row.CreateCell(7);
+                    celL_7.SetCellValue(Convert.ToString(item.EMPLOYER_CONTR_ABOVE_3K()));
+                    celL_7.CellStyle = Defaultstyle;
+                    CellUtil.SetAlignment(celL_7, workbook, (short)HorizontalAlignment.Center);                   
+
+                    EMP_BELOW_3K = EMP_BELOW_3K + item.EMP_BELOW_3K;
+                    EMP_ABOVE_3K = EMP_ABOVE_3K + item.EMP_ABOVE_3K;
+                    EMP_CONTR_BELOW_3K = EMP_CONTR_BELOW_3K + (item.EMP_CONTR_BELOW_3K());
+                    EMP_CONTR_ABOVE_3K = EMP_CONTR_ABOVE_3K + (item.EMP_CONTR_ABOVE_3K());
+                    EMPLOYER_CONTR_BELOW_3K = EMPLOYER_CONTR_BELOW_3K + (item.EMPLOYER_CONTR_BELOW_3K());
+                    EMPLOYER_CONTR_ABOVE_3K = EMPLOYER_CONTR_ABOVE_3K + (item.EMPLOYER_CONTR_ABOVE_3K());
+
+                    rowCount++;
+                }
+
+                row = excelSheet.CreateRow(rowCount);
+                ICell cellTotal = row.CreateCell(0);
+                cellTotal.SetCellValue("TOTAL");
+                cellTotal.CellStyle = styleBold;
+                CellUtil.SetAlignment(cellTotal, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 2, 0, 1));
+
+                ICell cellTotal2 = row.CreateCell(2);
+                cellTotal2.SetCellValue(EMP_BELOW_3K);
+                cellTotal2.CellStyle = styleBold;
+                CellUtil.SetAlignment(cellTotal2, workbook, (short)HorizontalAlignment.Center);
+
+                ICell cellTotal3 = row.CreateCell(3);
+                cellTotal3.SetCellValue(EMP_ABOVE_3K);
+                cellTotal3.CellStyle = styleBold;
+                CellUtil.SetAlignment(cellTotal3, workbook, (short)HorizontalAlignment.Center);
+
+                ICell cellTotal4 = row.CreateCell(4);
+                cellTotal4.SetCellValue(Convert.ToString(EMP_CONTR_BELOW_3K));
+                cellTotal4.CellStyle = styleBold;
+                CellUtil.SetAlignment(cellTotal4, workbook, (short)HorizontalAlignment.Center);
+
+                ICell cellTotal5 = row.CreateCell(5);
+                cellTotal5.SetCellValue(Convert.ToString(EMP_CONTR_ABOVE_3K));
+                cellTotal5.CellStyle = styleBold;
+                CellUtil.SetAlignment(cellTotal5, workbook, (short)HorizontalAlignment.Center);
+
+                ICell cellTotal6 = row.CreateCell(6);
+                cellTotal6.SetCellValue(Convert.ToString(EMPLOYER_CONTR_BELOW_3K));
+                cellTotal6.CellStyle = styleBold;
+                CellUtil.SetAlignment(cellTotal6, workbook, (short)HorizontalAlignment.Center);
+
+                ICell cellTotal7 = row.CreateCell(7);
+                cellTotal7.SetCellValue(Convert.ToString(EMPLOYER_CONTR_ABOVE_3K));
+                cellTotal7.CellStyle = styleBold;
+                CellUtil.SetAlignment(cellTotal7, workbook, (short)HorizontalAlignment.Center);
+
+                row = excelSheet.CreateRow(rowCount + 1);
+                ICell cellTotalEmp = row.CreateCell(2);
+                cellTotalEmp.SetCellValue(EMP_BELOW_3K + EMP_ABOVE_3K);
+                cellTotalEmp.CellStyle = styleBold;
+                CellUtil.SetAlignment(cellTotalEmp, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(rowCount + 1, rowCount + 2, 2, 3));
+
+                ICell cellEmpCont = row.CreateCell(4);
+                cellEmpCont.SetCellValue(Convert.ToString(EMP_CONTR_BELOW_3K + EMP_CONTR_ABOVE_3K));
+                cellEmpCont.CellStyle = styleBold;
+                CellUtil.SetAlignment(cellEmpCont, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(rowCount + 1, rowCount + 1, 4, 5));
+
+
+                ICell cellEmployerCont = row.CreateCell(6);
+                cellEmployerCont.SetCellValue(Convert.ToString(EMPLOYER_CONTR_BELOW_3K + EMPLOYER_CONTR_ABOVE_3K));
+                cellEmployerCont.CellStyle = styleBold;
+                CellUtil.SetAlignment(cellEmployerCont, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(rowCount + 1, rowCount + 1, 6, 7));
+
+                row = excelSheet.CreateRow(rowCount + 2);
+                ICell cellFinal = row.CreateCell(4);
+                cellFinal.SetCellValue(Convert.ToString(EMP_CONTR_BELOW_3K + EMP_CONTR_ABOVE_3K + EMPLOYER_CONTR_BELOW_3K + EMPLOYER_CONTR_ABOVE_3K));
+                cellFinal.CellStyle = styleBold;
+                CellUtil.SetAlignment(cellFinal, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(rowCount + 2, rowCount + 2, 4, 7));
+
+                workbook.Write(fs);
+            }
+            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            new FileInfo(Path.Combine(newPath, fileName)).Delete();
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
         #endregion
     }
 

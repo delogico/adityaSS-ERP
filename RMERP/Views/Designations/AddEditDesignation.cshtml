@@ -31,11 +31,18 @@
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
                 <div class="form-group">
                     @Html.HiddenFor(m => m.DES_Id)
                     @Html.LabelFor(m => m.DES_Title)
                     @Html.TextBoxFor(m => m.DES_Title, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.DES_Title, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.CheckBoxFor(m => m.DES_Exclude_LWF)
+                    @Html.LabelFor(m => m.DES_Exclude_LWF)
+                    @Html.ValidationMessageFor(model => model.DES_Exclude_LWF, "", new { @class = "text-danger" })
                 </div>
                 <div class="m-t-20 text-center">
                     <input type="submit" name="Submit Designation" id="btnSubmit" class="btn btn-primary" />

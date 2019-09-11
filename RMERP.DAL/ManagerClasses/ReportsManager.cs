@@ -102,21 +102,22 @@ namespace RMERP.DAL.ManagerClasses
         {
             List<MLWF_ContributionVM> reports = new List<MLWF_ContributionVM>();
             WageRegisterManager registerManager = new WageRegisterManager(_context);
-            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersByWAG_Id(WAG_Id);
+            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersBySelectedDES(WAG_Id);
             foreach (var item in wage_Registers.Select(m => new { m.CLI_Id, m.CLI_.CLI_Name }).Distinct())
             {
                 MLWF_ContributionVM report = new MLWF_ContributionVM();
                 report.CLI_Id = item.CLI_Id;
                 report.CLI_Name = item.CLI_Name;
-                List<Wage_Register> register = registerManager.GetWageRegisters(WAG_Id, item.CLI_Id);
+                // List<Wage_Register> register = registerManager.GetWageRegisters(WAG_Id, item.CLI_Id);
+                List<Wage_Register> register = wage_Registers.Where(m => m.CLI_Id.Equals(item.CLI_Id)).ToList();
                 int EMP_BELOW_3K = 0, EMP_ABOVE_3K = 0;
                 foreach (var emp in register)
                 {
-                    if (emp.WAR_FinalTotal > 0 && emp.WAR_FinalTotal < 3000)
+                    if (emp.WAR_GrossTotal > 0 && emp.WAR_FinalTotal < 3000)
                     {
                         EMP_BELOW_3K++;
                     }
-                    else if (emp.WAR_FinalTotal >= 3000)
+                    else if (emp.WAR_GrossTotal >= 3000)
                     {
                         EMP_ABOVE_3K++;
                     }
@@ -757,37 +758,65 @@ namespace RMERP.DAL.ManagerClasses
                 ESICReport.ESICReportVMs = reportVMs;
                 reports.Add(ESICReport);
             }
-            //#region Left Employees
+            #region Left Employees
             //IEnumerable<Employees> employees = GetLeftEmployeesOfPrevMonth(wage_Registers[0].WAG_.WAG_Month);
-            //dynamic LeftclientList = employees.Select(m => new
+            //List<Wage_Register> Prev_wageRegister = wageManager.GetWageRegistersByWAG_Id(WAG_Id);
+            //int[] EMP_Ids = employees.Select(m => m.EMP_Id).ToArray();
+            //dynamic LeftclientList = null;
+            //var Prev_wageRegisters = from wageReg in Prev_wageRegister
+            //                         where EMP_Ids.Contains(wageReg.EMP_Id)
+            //                         select wageReg;
+            //LeftclientList = Prev_wageRegisters.Select(m => new
             //{
             //    m.CLI_Id,
             //    m.CLI_.CLI_Name,
             //}).Distinct();
+            //List<Wage_Register> Prev_wage_Register = new List<Wage_Register>();
             //foreach (var client in LeftclientList)
             //{
+            //    Prev_wage_Register = Prev_wageRegister.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
             //    ESICReportEmpWiseVM ESICReport = new ESICReportEmpWiseVM();
             //    ESICReport.NAME_OF_COMPANY = client.CLI_Name;
             //    List<ESICReportVM> reportVMs = new List<ESICReportVM>();
-            //    List<Clients_Employees> lstemp = employees.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
-            //    foreach (Clients_Employees emp in lstemp)
+            //    foreach (var emp in Prev_wage_Register)
             //    {
             //        ESICReportVM reportVM = new ESICReportVM();
             //        reportVM.TotalMonthlyWages = 0;
             //        reportVM.PayableDays = 0;
 
-            //        reportVM.LastWorkingDay = emp.CLE_UnassignedOn.Value.ToShortDateString();
+            //        reportVM.LastWorkingDay = emp.EMP_.EMP_InactivatedOn.Value.ToShortDateString();
             //        reportVM.EMP_FirstName = emp.EMP_.EMP_FirstName;
             //        reportVM.EMP_MiddleName = emp.EMP_.EMP_MiddleName;
             //        reportVM.EMP_SurName = emp.EMP_.EMP_SurName;
             //        reportVM.IP_Number = emp.EMP_.EMP_ESIC_Number;
-            //        reportVM.ReasonCode = "2";
+            //        reportVM.ReasonCode = emp.EMP_.EMP_ReasonCode != null ? emp.EMP_.EMP_ReasonCode.ToString() : "-";
             //        reportVMs.Add(reportVM);
             //    }
             //    ESICReport.ESICReportVMs = reportVMs;
             //    reports.Add(ESICReport);
             //}
-            //#endregion
+            #endregion
+
+            #region employees
+            IEnumerable<Employees> employees = GetLeftEmployeesOfPrevMonth(wage_Registers[0].WAG_.WAG_Month);
+            ESICReportEmpWiseVM ESICReportLeft = new ESICReportEmpWiseVM();
+            List<ESICReportVM> reportVMLefts = new List<ESICReportVM>();
+            foreach (var emp in employees)
+            {
+                ESICReportVM reportVM = new ESICReportVM();
+                reportVM.TotalMonthlyWages = 0;
+                reportVM.PayableDays = 0;
+                reportVM.LastWorkingDay = emp.EMP_InactivatedOn.Value.ToShortDateString();
+                reportVM.EMP_FirstName = emp.EMP_FirstName;
+                reportVM.EMP_MiddleName = emp.EMP_MiddleName;
+                reportVM.EMP_SurName = emp.EMP_SurName;
+                reportVM.IP_Number = emp.EMP_ESIC_Number;
+                reportVM.ReasonCode = emp.EMP_ReasonCode != null ? emp.EMP_ReasonCode.ToString() : "-";
+                reportVMLefts.Add(reportVM);
+            }
+            ESICReportLeft.ESICReportVMs = reportVMLefts;
+            reports.Add(ESICReportLeft);
+            #endregion
             return reports;
         }
 
@@ -844,9 +873,9 @@ namespace RMERP.DAL.ManagerClasses
         public List<Employees> GetLeftEmployeesOfPrevMonth(DateTime Wag_Month)
         {
             DateTime date = Wag_Month.AddMonths(-1);
-            DateTime PrevMonthDate = new DateTime(date.Year, date.Month, 1);
-            DateTime LastMonthDate = new DateTime(Wag_Month.Year, Wag_Month.Month, 1).AddMonths(1).AddDays(-1);
-            List<Employees> emp = _context.Employees.Where(m => m.EMP_InactivatedOn.Value.Date < LastMonthDate.Date && m.EMP_InactivatedOn >= PrevMonthDate).ToList();
+            DateTime StartDate = new DateTime(date.Year, date.Month, 1); //1-march-18
+            DateTime EndDate = new DateTime(date.Year, date.Month, 1).AddMonths(1).AddDays(-1); //31-march-18
+            List<Employees> emp = _context.Employees.Where(m => m.EMP_InactivatedOn.Value.Date <= EndDate.Date && m.EMP_InactivatedOn >= StartDate).ToList();
             return emp;
         }
         #endregion
