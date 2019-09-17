@@ -2230,12 +2230,12 @@ namespace RMERP.Controllers
                     case "2": //IDBI_Bank_To_Others_Report
                         fileName = "IDBI_To_Other_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Employee_PF_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        IDBI_To_Other_BankReportExcel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "3": //CHEQUE_CASH_Report
                         fileName = "CHEQUE_CASH_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Client_Wise_PF_Above58_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        CHEQUE_CASH_BankReportExcel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;                   
                     default: break;
                 }
@@ -2716,12 +2716,12 @@ namespace RMERP.Controllers
                 cell_3.SetCellValue("3");
                 cell_3.CellStyle = style;
                 CellUtil.SetAlignment(cell_3, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.SetColumnWidth(2, (int)((12 + 0.72) * 256));
+                excelSheet.SetColumnWidth(2, (int)((14 + 0.72) * 256));
                 ICell cell_4 = row.CreateCell(3);
                 cell_4.SetCellValue("4");
                 cell_4.CellStyle = style;
                 CellUtil.SetAlignment(cell_4, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.SetColumnWidth(3, (int)((15 + 0.72) * 256));
+                excelSheet.SetColumnWidth(3, (int)((17 + 0.72) * 256));
                 ICell cell_5 = row.CreateCell(4);
                 cell_5.SetCellValue("5");
                 cell_5.CellStyle = style;
@@ -2730,7 +2730,7 @@ namespace RMERP.Controllers
                 cell_6.SetCellValue("6");
                 cell_6.CellStyle = style;
                 CellUtil.SetAlignment(cell_6, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.SetColumnWidth(5, (int)((25 + 0.72) * 256));
+                excelSheet.SetColumnWidth(5, (int)((35 + 0.72) * 256));
                 ICell cell_7 = row.CreateCell(6);
                 cell_7.SetCellValue("7");
                 cell_7.CellStyle = style;
@@ -2911,11 +2911,11 @@ namespace RMERP.Controllers
                 cell0.CellStyle = style;
                 ICell cell1 = row.CreateCell(1);
                 cell1.SetCellValue("NAME");
-                excelSheet.SetColumnWidth(1, (int)((22 + 0.72) * 256));
+                excelSheet.SetColumnWidth(1, (int)((35 + 0.72) * 256));
                 cell1.CellStyle = style;
                 ICell cell2 = row.CreateCell(2);
                 cell2.SetCellValue("LOCATION");
-                excelSheet.SetColumnWidth(2, (int)((15 + 0.72) * 256));
+                excelSheet.SetColumnWidth(2, (int)((22 + 0.72) * 256));
                 cell2.CellStyle = style;
                 ICell cell3 = row.CreateCell(3);
                 cell3.SetCellValue("SALARY");
@@ -2998,7 +2998,7 @@ namespace RMERP.Controllers
                     case "0": //Client_Wise_ESIC_Excel
                         fileName = "Client_Wise_ESIC_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Client_Wise_PF_Details_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Client_Wise_ESIC_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "1": //Employee_Wise_Esic_Details_Excel
                         fileName = "Employee_Wise_ESIC_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";

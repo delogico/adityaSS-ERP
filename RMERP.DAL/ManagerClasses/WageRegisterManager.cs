@@ -167,6 +167,7 @@ namespace RMERP.DAL.ManagerClasses
                     #endregion                  
 
                     #region New Allowances
+                    
                     if (cr.CRI_Attendance_Allowance)
                     {
                         if (totAbsent <= cr.CRI_Attendance_Allowance_MaximumDays)

@@ -147,10 +147,12 @@
                                 <td class="lightgray">Basic</td>
                                 <td class="lightgray">DA</td>
                                 <td class="lightgray">HRA</td>
-                                @foreach (var all in wageRegisters[0].allowanceVMs)
+
+                                @foreach (var all in wageRegisters[0].allowanceVMs.OrderBy(m => m.WAA_Id))
                                 {
                                     <td class="lightgray">@all.allowanceVM.ALL_Alias</td>
                                 }
+
                                 @if (clientRequirement.CRI_OutStation_Allowance == true)
                                 {
                                     <td class="lightgray">Outstation Allowance</td>
@@ -204,7 +206,7 @@
                         <tbody>
 
                             @foreach (var employee in wageRegisters)
-                            {
+                            {                                
                                 <tr>
                                     <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
                                     <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
@@ -227,7 +229,7 @@
                                     }
                                     <td class="lightgray"><span title="@str1">@Math.Round(employee.WAR_HRA_Calculated, MidpointRounding.AwayFromZero)</span></td>
                                     @{
-                                        foreach (var all in employee.allowanceVMs)
+                                        foreach (var all in employee.allowanceVMs.OrderBy(m=>m.WAA_Id))
                                         {
                                             string str = "";
                                             if (all.WAA_DayswiseOrFull)
