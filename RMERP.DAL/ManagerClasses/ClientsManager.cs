@@ -320,7 +320,8 @@ namespace RMERP.DAL.ManagerClasses
                 client.CLI_GST_Info = clients.CLI_GST_Info;
                 client.CLI_Place_Of_Supply = clients.CLI_Place_Of_Supply;
 
-                client.CLI_Employer_Cont_Rate = clients.CLI_Employer_Cont_Rate;
+                client.CLI_PF_Employer_Cont_Rate = clients.CLI_PF_Employer_Cont_Rate;
+                client.CLI_ESIC_Employer_Cont_Rate = clients.CLI_ESIC_Employer_Cont_Rate;
                 client.CLI_EPF_Rate = clients.CLI_EPF_Rate;
                 client.CLI_EPS_Rate = clients.CLI_EPS_Rate;
 

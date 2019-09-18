@@ -153,7 +153,10 @@ namespace RMERP.Controllers
                 cv.clientsModel.CLI_RegisteredOn = clients.CLI_RegisteredOn;
                 cv.clientsModel.CliLogoImage = clients.CLI_Logo;
 
-                cv.clientsModel.CLI_Employer_Cont_Rate = clients.CLI_Employer_Cont_Rate;
+                if(clients.CLI_PF_Employer_Cont_Rate!=null)
+                    cv.clientsModel.CLI_PF_Employer_Cont_Rate = clients.CLI_PF_Employer_Cont_Rate.Value;
+                if (clients.CLI_ESIC_Employer_Cont_Rate != null)
+                    cv.clientsModel.CLI_ESIC_Employer_Cont_Rate = clients.CLI_ESIC_Employer_Cont_Rate.Value;
                 cv.clientsModel.CLI_EPF_Rate = clients.CLI_EPF_Rate;
                 cv.clientsModel.CLI_EPS_Rate = clients.CLI_EPS_Rate;
 
@@ -231,7 +234,8 @@ namespace RMERP.Controllers
                 clients.ADM_Id_RegisterBy = cv.clientsModel.ADM_Id_RegisterBy;
                 clients.CLI_RegisteredOn = cv.clientsModel.CLI_RegisteredOn;
 
-                clients.CLI_Employer_Cont_Rate = cv.clientsModel.CLI_Employer_Cont_Rate;
+                clients.CLI_PF_Employer_Cont_Rate = cv.clientsModel.CLI_PF_Employer_Cont_Rate;
+                clients.CLI_ESIC_Employer_Cont_Rate = cv.clientsModel.CLI_ESIC_Employer_Cont_Rate;
                 clients.CLI_EPF_Rate = cv.clientsModel.CLI_EPF_Rate;
                 clients.CLI_EPS_Rate = cv.clientsModel.CLI_EPS_Rate;
 
@@ -547,7 +551,8 @@ namespace RMERP.Controllers
                     clients.CLI_Att_Month_Start = cvm.ParametersClientsModel.CLI_Att_Month_Start;
                     clients.CLI_Att_Month_End = cvm.ParametersClientsModel.CLI_Att_Month_End;
                 }
-                clients.CLI_Employer_Cont_Rate = cvm.clientsModel.CLI_Employer_Cont_Rate;
+                clients.CLI_PF_Employer_Cont_Rate = cvm.clientsModel.CLI_PF_Employer_Cont_Rate;
+                clients.CLI_ESIC_Employer_Cont_Rate = cvm.clientsModel.CLI_ESIC_Employer_Cont_Rate;
                 clients.CLI_EPF_Rate = cvm.clientsModel.CLI_EPF_Rate;
                 clients.CLI_EPS_Rate = cvm.clientsModel.CLI_EPS_Rate;
                 string res= clientsManager.UpdateParameters(clients);
