@@ -54,9 +54,18 @@ namespace RMERP.Controllers
                                        {
                                            Text = ProjectUtils.GetStringValue(action),
                                            Value = ((int)action).ToString()
-                                       };
+                                       };           
+         
             return View(new Tuple<IEnumerable<EmployeeVM>, int>(EmployeesMapper.MapEmployees(employeeManager.GetEmployees(FRM_Id).ToList(), _context), FRM_Id));
 
+
+        }
+        [HttpGet]
+        public JsonResult GetCity(int STA_Id)
+        {
+            EmployeeManager employeeManager = new EmployeeManager(_context);
+            var citylist = new SelectList(employeeManager.GetCities(STA_Id), "CITY_Id", "CITY_Name");
+            return Json(citylist);
 
         }
         [HttpPost]
@@ -85,7 +94,9 @@ namespace RMERP.Controllers
             IEnumerable<Firms> listFirms = new List<Firms>();
             listFirms = firmsManager.getFirmList();
             ViewBag.firmList = listFirms;
-            EmployeeVM employeeVM = new EmployeeVM();           
+            EmployeeVM employeeVM = new EmployeeVM();
+            employeeVM.EMP_Payment_Type = (int)PAYMENT_TYPE.Cheque_Cash;
+            employeeVM.EMP_Is_IDBI_Other = (int)PAYMENT_BANK_TYPE.IDBI_To_Others;
             if (EMP_Id > 0)
             {
                 Employee_Id = EMP_Id;
@@ -101,6 +112,7 @@ namespace RMERP.Controllers
                 employeeVM.FRM_Id = sessionUtils.GetLoggedFirmID().Value;
             }
             ViewBag.DocumentTypes = typesManager.GetDocumentTypes();
+            ViewBag.States = employeeManager.GetStates();            
             return View(employeeVM);
         }      
 
@@ -113,9 +125,7 @@ namespace RMERP.Controllers
             if (ModelState.IsValid)
             {
                 Employees employee = new Employees();               
-                employee = EmployeesMapper.MapMeModel(employeeVM);
-                employee.EMP_Payment_Type = (int)PAYMENT_TYPE.Cheque_Cash;
-                employee.EMP_Is_IDBI_Other = (int)PAYMENT_BANK_TYPE.IDBI_To_Others;
+                employee = EmployeesMapper.MapMeModel(employeeVM);                
                 employee.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
                 res = employeeManager.AddEditEmployee(employee);
             }

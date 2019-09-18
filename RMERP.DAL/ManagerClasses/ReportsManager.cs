@@ -536,9 +536,10 @@ namespace RMERP.DAL.ManagerClasses
                 bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
                 bankReport.EMP_SurName = item.EMP_.EMP_SurName;
                 bankReport.EMP_ACCOUNT_NUMBER = item.EMP_.EMP_Account_Number;
-                bankReport.EMP_CURRENCY_CODE = "-";
-                bankReport.EMP_SERVICE_OUTLET = "-";
-                bankReport.EMP_PART_TRAN_TYPE = "-";
+                bankReport.EMP_CURRENCY_CODE = "INR";
+                string IFSC_Code = item.EMP_.EMP_Bank_IFSC;                
+                bankReport.EMP_SERVICE_OUTLET = IFSC_Code.Substring(IFSC_Code.Length-3);
+                bankReport.EMP_PART_TRAN_TYPE = "C";
                 bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
                 DateTime WAG_Month = wage_Registers.First().WAG_.WAG_Month;
                 bankReport.EMP_TRANSACTION_PARTICULARS = "Salary " + WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
@@ -563,16 +564,16 @@ namespace RMERP.DAL.ManagerClasses
             {
                 BankReportVM bankReport = new BankReportVM();
                 bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
-                bankReport.ACCOUNT_SENDER_NUMBER = "-";
+                bankReport.ACCOUNT_SENDER_NUMBER = item.WAG_.FRM_.FRM_AccountNumber;
                 bankReport.ACCOUNT_IFSC_CODE = item.EMP_.EMP_Bank_IFSC;
                 bankReport.ACCOUNT_RECEIVERS_NUMBER = item.EMP_.EMP_Account_Number;
-                bankReport.ACCOUNT_TYPE = "-";
+                bankReport.ACCOUNT_TYPE = "S/A";
 
                 bankReport.EMP_FirstName = item.EMP_.EMP_FirstName;
                 bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
                 bankReport.EMP_SurName = item.EMP_.EMP_SurName;
 
-                bankReport.EMP_ADDRESS = item.EMP_.EMP_Address;
+                bankReport.EMP_ADDRESS = item.EMP_.EMP_CityNavigation.CITY_Name;
                 bankReport.MESSAGE = "SALARY";
                 bankReport.ORIGINETOR = "RELIABLE";
 
@@ -718,7 +719,7 @@ namespace RMERP.DAL.ManagerClasses
                         PayableDays = 27;
                     }
                     reportVM.PayableDays = ProjectUtils.intRoundFigure(PayableDays);
-                    reportVM.LastWorkingDay = "-";
+                    reportVM.LastWorkingDay = "";
                     reportVM.EMP_FirstName = register.EMP_.EMP_FirstName;
                     reportVM.EMP_MiddleName = register.EMP_.EMP_MiddleName;
                     reportVM.EMP_SurName = register.EMP_.EMP_SurName;

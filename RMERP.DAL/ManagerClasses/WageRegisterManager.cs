@@ -461,11 +461,13 @@ namespace RMERP.DAL.ManagerClasses
             return wage_Register_Allowances;
         }
 
-        public string UpdateWageRegister(Wage_Register wage_Register)
+        public string UpdateWageRegister(Wage_Register wage_Reg)
         {
             string res = string.Empty;
             try
             {
+                Wage_Register wage_Register = new Wage_Register();
+                wage_Register = wage_Reg;
                 wage_Register.WAR_LastModifiedOn = ProjectUtils.DateNow();
                 //;_context.Wage_Register.Update(wage_Register);
                 _context.Entry(wage_Register).State = EntityState.Modified;
@@ -501,7 +503,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public List<Wage_Register> GetWageRegistersForIDBI_To_Other(int WAG_Id)
         {
-            return _context.Wage_Register.Where(m => m.WAG_Id == WAG_Id && m.EMP_.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && m.EMP_.EMP_Is_IDBI_Other.Equals((int)PAYMENT_BANK_TYPE.IDBI_To_Others)).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
+            return _context.Wage_Register.Include(M=>M.WAG_).ThenInclude(m=>m.FRM_).Where(m => m.WAG_Id == WAG_Id && m.EMP_.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && m.EMP_.EMP_Is_IDBI_Other.Equals((int)PAYMENT_BANK_TYPE.IDBI_To_Others)).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m=>m.EMP_CityNavigation).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
         }
         public List<Wage_Register> GetWageRegistersForChequeCash(int WAG_Id)
         {

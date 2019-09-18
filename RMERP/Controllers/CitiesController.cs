@@ -45,8 +45,8 @@ namespace RMERP.Controllers
         {
             CitiesManager citiesManager = new CitiesManager(_context);
             Cities cities  = new Cities();
-            cities.CITY_Id = citiesVM.CITY_Id;
-            cities.CITY_Name = citiesVM.CITY_Name;
+            cities.CIT_Id = citiesVM.CITY_Id;
+            cities.CIT_Name = citiesVM.CITY_Name;
             if (ModelState.IsValid)
             {
                 string res = citiesManager.saveEditCity(cities);

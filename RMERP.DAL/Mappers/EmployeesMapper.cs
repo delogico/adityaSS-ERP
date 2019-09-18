@@ -67,6 +67,10 @@ namespace RMERP.DAL.Mappers
             emp.EMP_ESIC_Remark = employee.EMP_ESIC_Remark;
             if(employee.EMP_ReasonCode!=null)
                 emp.EMP_ReasonCode = employee.EMP_ReasonCode.Value;
+            if(employee.EMP_State!=null)
+                emp.EMP_State = employee.EMP_State.Value;
+            if (employee.EMP_City != null)
+                emp.EMP_City = employee.EMP_City.Value;
             return emp;
         }
 
@@ -118,6 +122,8 @@ namespace RMERP.DAL.Mappers
             emp.EMP_UAN_Remark = employee.EMP_UAN_Remark;
             emp.EMP_ESIC_Remark = employee.EMP_ESIC_Remark;
             emp.EMP_ReasonCode = employee.EMP_ReasonCode;
+            emp.EMP_State = employee.EMP_State;
+            emp.EMP_City = employee.EMP_City;
             return emp;
         }
     }

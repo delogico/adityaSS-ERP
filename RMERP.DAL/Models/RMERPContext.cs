@@ -19,11 +19,13 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Allowances> Allowances { get; set; }
         public virtual DbSet<Attendance> Attendance { get; set; }
         public virtual DbSet<Cities> Cities { get; set; }
+        public virtual DbSet<Cities_all> Cities_all { get; set; }
         public virtual DbSet<Client_Contacts> Client_Contacts { get; set; }
         public virtual DbSet<Client_Requirement_Allowances> Client_Requirement_Allowances { get; set; }
         public virtual DbSet<Client_Requirements> Client_Requirements { get; set; }
         public virtual DbSet<Clients> Clients { get; set; }
         public virtual DbSet<Clients_Employees> Clients_Employees { get; set; }
+        public virtual DbSet<Countries> Countries { get; set; }
         public virtual DbSet<Designations> Designations { get; set; }
         public virtual DbSet<Document_Types> Document_Types { get; set; }
         public virtual DbSet<Employee_Advance> Employee_Advance { get; set; }
@@ -31,6 +33,7 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<Firms> Firms { get; set; }
         public virtual DbSet<ProfessionalTaxCalculation> ProfessionalTaxCalculation { get; set; }
+        public virtual DbSet<States> States { get; set; }
         public virtual DbSet<Wage_Process> Wage_Process { get; set; }
         public virtual DbSet<Wage_Process_Clients> Wage_Process_Clients { get; set; }
         public virtual DbSet<Wage_Register> Wage_Register { get; set; }
@@ -159,13 +162,21 @@ namespace RMERP.DAL.Models
 
             modelBuilder.Entity<Cities>(entity =>
             {
-                entity.HasKey(e => e.CITY_Id);
+                entity.HasKey(e => e.CIT_Id);
 
-                entity.Property(e => e.CITY_Id).ValueGeneratedNever();
+                entity.Property(e => e.CIT_Name)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Cities_all>(entity =>
+            {
+                entity.HasKey(e => e.CITY_Id);
 
                 entity.Property(e => e.CITY_Name)
                     .IsRequired()
-                    .HasMaxLength(100)
+                    .HasMaxLength(255)
                     .IsUnicode(false);
             });
 
@@ -408,6 +419,23 @@ namespace RMERP.DAL.Models
                     .HasConstraintName("FK_Clients_Employees_Employees");
             });
 
+            modelBuilder.Entity<Countries>(entity =>
+            {
+                entity.HasKey(e => e.COU_Id);
+
+                entity.Property(e => e.COU_Code)
+                    .IsRequired()
+                    .HasMaxLength(2)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.COU_Name)
+                    .IsRequired()
+                    .HasMaxLength(45)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+            });
+
             modelBuilder.Entity<Designations>(entity =>
             {
                 entity.HasKey(e => e.DES_Id);
@@ -574,6 +602,16 @@ namespace RMERP.DAL.Models
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
+                entity.HasOne(d => d.EMP_CityNavigation)
+                    .WithMany(p => p.Employees)
+                    .HasForeignKey(d => d.EMP_City)
+                    .HasConstraintName("FK_Employees_Cities_all");
+
+                entity.HasOne(d => d.EMP_StateNavigation)
+                    .WithMany(p => p.Employees)
+                    .HasForeignKey(d => d.EMP_State)
+                    .HasConstraintName("FK_Employees_States");
+
                 entity.HasOne(d => d.FRM_)
                     .WithMany(p => p.Employees)
                     .HasForeignKey(d => d.FRM_Id)
@@ -638,6 +676,22 @@ namespace RMERP.DAL.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.PTC_To).HasColumnType("decimal(9, 2)");
+            });
+
+            modelBuilder.Entity<States>(entity =>
+            {
+                entity.HasKey(e => e.STA_Id);
+
+                entity.Property(e => e.STA_Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.COU_)
+                    .WithMany(p => p.States)
+                    .HasForeignKey(d => d.COU_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_states_Countries");
             });
 
             modelBuilder.Entity<Wage_Process>(entity =>

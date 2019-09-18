@@ -204,6 +204,15 @@ namespace RMERP.DAL.ManagerClasses
             return _context.Employees.Where(m => m.EMP_IsActive.Equals(true) && m.FRM_Id.Equals(FRM_ID)).Count();
         }
 
+        public List<States> GetStates()
+        {
+            return _context.States.Where(m=>m.COU_Id.Equals(105)).ToList();
+        }
+        public List<Cities_all> GetCities(int STA_Id)
+        {
+            return _context.Cities_all.Where(m => m.STA_Id.Equals(STA_Id)).ToList();
+        }
+
     }
 }
 

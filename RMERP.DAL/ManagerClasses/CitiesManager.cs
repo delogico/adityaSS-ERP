@@ -15,14 +15,14 @@ namespace RMERP.DAL.ManagerClasses
         }
         public IEnumerable<Cities> getCityList()
         {
-            return _context.Cities.OrderBy(m=>m.CITY_Name).ToList();
+            return _context.Cities.OrderBy(m=>m.CIT_Name).ToList();
         }
         public string saveEditCity(Cities cities)
         {
             string res = string.Empty;
             try
             {
-                if (cities.CITY_Id > 0)
+                if (cities.CIT_Id > 0)
                 {
                     _context.Cities.Update(cities);
                 }
@@ -38,9 +38,9 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public Cities GetCity(int CITY_Id)
+        public Cities GetCity(int CIT_Id)
         {
-            return _context.Cities.Find(CITY_Id);
+            return _context.Cities.Find(CIT_Id);
         }
     }
 }

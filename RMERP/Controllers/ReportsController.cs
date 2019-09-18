@@ -1577,7 +1577,7 @@ namespace RMERP.Controllers
                 IWorkbook workbook;
                 workbook = new XSSFWorkbook();
                 #region single client
-                ISheet excelSheet = workbook.CreateSheet("ESIC CON");
+                ISheet excelSheet = workbook.CreateSheet("PF CON");
 
                 IFont fontcell = workbook.CreateFont();
                 fontcell.IsBold = true;
@@ -1625,7 +1625,7 @@ namespace RMERP.Controllers
 
                 IRow rowSubHeading = excelSheet.CreateRow(2);
                 ICell CellSubHeading = rowSubHeading.CreateCell(0);
-                CellSubHeading.SetCellValue("LIST OF ESIC CONTRIBUTION OF EMPLOYEES FOR THE MONTH OF " + WAG_Month);
+                CellSubHeading.SetCellValue("LIST OF PF CONTRIBUTION FOR THE MONTH OF " + WAG_Month);
                 CellSubHeading.CellStyle = styleClient;
                 CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 6));
@@ -3114,7 +3114,7 @@ namespace RMERP.Controllers
 
                 IRow rowSubHeading = excelSheet.CreateRow(2);
                 ICell CellSubHeading = rowSubHeading.CreateCell(0);
-                CellSubHeading.SetCellValue(WAG_Month);
+                CellSubHeading.SetCellValue("LIST OF ESIC CONTRIBUTION FOR THE MONTH OF " + WAG_Month);               
                 CellSubHeading.CellStyle = styleClient;
                 CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 6));

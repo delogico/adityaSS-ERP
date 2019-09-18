@@ -11,8 +11,8 @@ namespace RMERP.DAL.Mappers
         public static CitiesVM mapMe(Cities cities)
         {
             CitiesVM cityVM = new CitiesVM();
-            cityVM.CITY_Id = cities.CITY_Id;
-            cityVM.CITY_Name = cities.CITY_Name;
+            cityVM.CITY_Id = cities.CIT_Id;
+            cityVM.CITY_Name = cities.CIT_Name;
             return cityVM;
         }
 

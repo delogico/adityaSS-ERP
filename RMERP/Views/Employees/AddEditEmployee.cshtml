@@ -21,12 +21,23 @@
         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>*@
     <script>
         $(document).ready(function () {
+            //$('.selectpicker').selectpicker({
+            //    liveSearch: true,
+            //    showSubtext: true
+            //});
+
+            var items = "<option value='0'>Select City</option>";
+            $("#EMP_City").html(items);
+            if (@Model.EMP_City != null && @Model.EMP_City!= 0) {
+                GetCity(@Model.EMP_City,@Model.EMP_State);
+            }
+            
             if (@Model.EMP_Payment_Type== 0) {
                 $(".divBankType").show();
             } else {
                 $(".divBankType").hide();
             }
-           
+
             EMP_Id = $('#EMP_Id').val();
             if (EMP_Id == 0) {
                 $('.nav li').not('.active').addClass('disabled');
@@ -68,14 +79,14 @@
             }
         };
 
-        function PAYMENT_TYPE(payment) {           
+        function PAYMENT_TYPE(payment) {
             if (payment.value == "0") { //Bank Account
                 $(".divBankType").show();
             } else {
                 $(".divBankType").hide();
             }
         };
-        function PAYMENT_BANK_TYPE(bankType) {            
+        function PAYMENT_BANK_TYPE(bankType) {
             if (bankType.value == "0") { //IDBI BANK  Account
                 $("#EMP_Bank").val("IDBI BANK");
                 $("#EMP_Bank").prop("disabled", true);
@@ -83,7 +94,47 @@
                 $("#EMP_Bank").val("");
                 $("#EMP_Bank").prop("disabled", false);
             }
-        }
+        };
+        $("#EMP_State").change(function () {
+            debugger;
+            var items = "<option value='0'>Select City</option>";
+            $("#EMP_City").html(items);
+            GetCity();
+        });
+
+        function GetCity(EMP_City, EMP_State) {   
+            debugger;
+            if (EMP_City != 0 && EMP_City != undefined) {
+                if (@Model.EMP_City != 0) {
+                    var EMP_City =@Model.EMP_City;
+                } else {
+                    var EMP_City = $("#EMP_City").val();
+                }
+                if (@Model.EMP_State != 0) {
+                    var STA_Id =@Model.EMP_State;
+                } else {
+                    var STA_Id = $("#EMP_State").val();
+                }
+            } else if (EMP_State == undefined) {
+                var STA_Id = $("#EMP_State").val();
+            }
+
+            var url = "/Employees/GetCity";
+
+            $.getJSON(url, { STA_Id: STA_Id }, function (data) {
+                var item = "";
+                $("#EMP_City").empty();
+                $.each(data, function (i, city) {
+                    var select = "";
+                    if (EMP_City == city.value) {                       
+                        select = "selected='selected'";
+                    }
+                    item += "<option " + select + " value='" + city.value + "'>" + city.text + "</option>";
+                });
+                $("#EMP_City").html(item);
+            });
+        };
+        
     </script>
     @if (TempData["message"] != null)
     {
@@ -119,7 +170,13 @@
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             @Html.HiddenFor(m => m.EMP_Id)
                             @Html.HiddenFor(m => m.EMP_IsActive)
-
+                            @Html.HiddenFor(m => m.EMP_Payment_Type)
+                            @Html.HiddenFor(m => m.EMP_Is_IDBI_Other)
+                            @Html.HiddenFor(m => m.EMP_Account_Name)
+                            @Html.HiddenFor(m => m.EMP_Account_Number)
+                            @Html.HiddenFor(m => m.EMP_Bank)
+                            @Html.HiddenFor(m => m.EMP_Bank_IFSC)
+                            @Html.HiddenFor(m => m.EMP_Branch)
                             <p class="div-title">Firm</p>
                             <br /> SessionUtils sessionUtils = new SessionUtils(this.Context.Request, this.Context.Response);
                             <div class="row pb-3">
@@ -226,6 +283,13 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
+                                        @Html.LabelFor(m => m.EMP_Designation, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.EMP_Designation, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.EMP_Designation, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
                                         @Html.LabelFor(m => m.EMP_Address, new { @class = "control-label" })
                                         @Html.TextBoxFor(m => m.EMP_Address, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.EMP_Address, "", new { @class = "text-danger" })
@@ -233,11 +297,23 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.EMP_Designation, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_Designation, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.EMP_Designation, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.EMP_State, new { @class = "control-label" })
+                                        @Html.DropDownListFor(m => m.EMP_State, new SelectList(ViewBag.States, "STA_Id", "STA_Name"), "Select State", new { @class = "form-control" })
+                                        @*@Html.DropDownListFor(x => x.EMP_State, new SelectList(ViewBag.States, "STA_Id", "STA_Name"), "Select State", new { @class = "form-control selectpicker" ,
+                            data_show_subtext = "true",
+                            data_live_search = "true"
+                        })*@
+                                        @Html.ValidationMessageFor(m => m.EMP_State, "", new { @class = "text-danger" })
                                     </div>
-                                </div>                                
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.EMP_City, new { @class = "control-label" })
+                                        @*@Html.DropDownListFor(m => m.EMP_City, new SelectList(ViewBag.Cities, "CITY_Id", "CITY_Name"), "Select City", new { @class = "form-control" })*@
+                                        <select class="form-control" id="EMP_City" name="EMP_City"></select>
+                                        @Html.ValidationMessageFor(m => m.EMP_City, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
                             </div>
 
                             <p class="div-title">Legal Details</p>
@@ -293,7 +369,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="m-t-20 text-center">
                                 <input type="submit" name="Save" id="btnSubmit" class="btn btn-primary" />
                             </div>
@@ -408,22 +484,22 @@
                                     {
                                         @foreach (var item in Model.advances)
                                         {
-                                    <tr>
-                                        <td>@item.ADV_Amount </td>
-                                        <td>@DateHelper.getDateWithFormat(@item.ADV_RegisteredOn) </td>
+                                            <tr>
+                                                <td>@item.ADV_Amount </td>
+                                                <td>@DateHelper.getDateWithFormat(@item.ADV_RegisteredOn) </td>
 
-                                        @if (Model.wageRegisterAdvances == null)
-                                        {
-                                            <td><a href='@Url.Action("AddEditAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit Amount</a></td>
-                                            <td><a href='@Url.Action("DeleteAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Remove</a></td>
-                                        }
-                                        else
-                                        {
-                                            <td><a href='#' title="Edit" onclick="return alert('Please first delete advance installment of this employee!')"><i class="fa fa-pencil m-r-5"></i> Edit Amount</a></td>
-                                            <td><a href='#' title="Delete" onclick="return alert('Please first delete advance installment of this employee!');"><i class="fa fa-trash m-r-5"></i> Remove</a></td>
+                                                @if (Model.wageRegisterAdvances == null)
+                                                {
+                                                    <td><a href='@Url.Action("AddEditAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit Amount</a></td>
+                                                    <td><a href='@Url.Action("DeleteAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Remove</a></td>
+                                                }
+                                                else
+                                                {
+                                                    <td><a href='#' title="Edit" onclick="return alert('Please first delete advance installment of this employee!')"><i class="fa fa-pencil m-r-5"></i> Edit Amount</a></td>
+                                                    <td><a href='#' title="Delete" onclick="return alert('Please first delete advance installment of this employee!');"><i class="fa fa-trash m-r-5"></i> Remove</a></td>
 
-                                        }
-                                    </tr>
+                                                }
+                                            </tr>
                                         }
                                     }
 
@@ -438,7 +514,7 @@
     </div>
     <div id="PaymentInfo" class="tab-pane fade">
         <div class="modal-dialog modelLeftSide">
-            <div class="modal-content modal-lg">               
+            <div class="modal-content modal-lg">
                 <div class="modal-body">
                     <div class="m-b-30">
                         @using (Html.BeginForm("AddEditEmployeesPaymentInfo", "Employees", FormMethod.Post))
@@ -447,7 +523,7 @@
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             @Html.HiddenFor(m => m.EMP_Id)
                             <p class="div-title">Payment Type</p>
-                            <br />                            
+                            <br />
                             <div class="row col-md-12">
                                 <div class="form-group">
                                     @Html.LabelFor(m => m.EMP_Payment_Type, new { @class = "control-label" })
@@ -469,9 +545,9 @@
                                         <label class="radio-inline form-control ">
                                             @foreach (var PAYMENT_BANK_TYPE in Enum.GetValues(typeof(PAYMENT_BANK_TYPE)).Cast<PAYMENT_BANK_TYPE>())
                                             {
-                                            <label class="radio-inline">
-                                                @Html.RadioButtonFor(s => s.EMP_Is_IDBI_Other, (int)PAYMENT_BANK_TYPE, (int)PAYMENT_BANK_TYPE == 0 ? (object)new { @checked = true, @id = (int)PAYMENT_BANK_TYPE, onclick = "PAYMENT_BANK_TYPE(this)" } : new { @id = (int)PAYMENT_BANK_TYPE, onclick = "PAYMENT_BANK_TYPE(this)" })@GetStringValue(PAYMENT_BANK_TYPE)
-                                            </label>
+                                                <label class="radio-inline">
+                                                    @Html.RadioButtonFor(s => s.EMP_Is_IDBI_Other, (int)PAYMENT_BANK_TYPE, (int)PAYMENT_BANK_TYPE == 0 ? (object)new { @checked = true, @id = (int)PAYMENT_BANK_TYPE, onclick = "PAYMENT_BANK_TYPE(this)" } : new { @id = (int)PAYMENT_BANK_TYPE, onclick = "PAYMENT_BANK_TYPE(this)" })@GetStringValue(PAYMENT_BANK_TYPE)
+                                                </label>
                                             }
                                         </label>
                                         @Html.ValidationMessageFor(x => x.EMP_Is_IDBI_Other, "", new { @class = "text-danger" })
@@ -492,7 +568,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">                                       
+                                    <div class="form-group">
                                         @Html.LabelFor(m => m.EMP_Bank, new { @class = "control-label" })
                                         @if (Model.EMP_Bank == "IDBI BANK" || Model.EMP_Bank == "IDBI BANK LTD")
                                         {

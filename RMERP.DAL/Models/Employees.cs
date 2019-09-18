@@ -50,7 +50,11 @@ namespace RMERP.DAL.Models
         public string EMP_UAN_Remark { get; set; }
         public string EMP_ESIC_Remark { get; set; }
         public int? EMP_ReasonCode { get; set; }
+        public int? EMP_State { get; set; }
+        public int? EMP_City { get; set; }
 
+        public Cities_all EMP_CityNavigation { get; set; }
+        public States EMP_StateNavigation { get; set; }
         public Firms FRM_ { get; set; }
         public ICollection<Attendance> Attendance { get; set; }
         public ICollection<Clients_Employees> Clients_Employees { get; set; }

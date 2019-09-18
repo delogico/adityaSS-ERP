@@ -10,8 +10,8 @@ namespace RMERP.DAL.Models
             Clients = new HashSet<Clients>();
         }
 
-        public int CITY_Id { get; set; }
-        public string CITY_Name { get; set; }
+        public int CIT_Id { get; set; }
+        public string CIT_Name { get; set; }
 
         public ICollection<Clients> Clients { get; set; }
     }

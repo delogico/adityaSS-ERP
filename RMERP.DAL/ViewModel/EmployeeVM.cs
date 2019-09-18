@@ -149,6 +149,11 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Reason")]
         public int EMP_ReasonCode { get; set; }
 
+        [Display(Name = "State")]
+        public int EMP_State { get; set; }
+
+        [Display(Name = "City")]
+        public int EMP_City { get; set; }
     }
 
     public class EmployeePaymentVM
