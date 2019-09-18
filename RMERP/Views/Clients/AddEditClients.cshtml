@@ -103,7 +103,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.clientsModel.CITY_Id, new { @class = "control-label" })
-                                        @Html.DropDownListFor(x => x.clientsModel.CITY_Id, new SelectList(ViewBag.cityList, "CITY_Id", "CITY_Name"), "Select City", new { @class = "form-control" })
+                                        @Html.DropDownListFor(x => x.clientsModel.CITY_Id, new SelectList(ViewBag.cityList, "CIT_Id", "CIT_Name"), "Select City", new { @class = "form-control" })
                                         @Html.ValidationMessageFor(x => x.clientsModel.CITY_Id, "", new { @class = "text-danger" })
                                     </div>
                                 </div>

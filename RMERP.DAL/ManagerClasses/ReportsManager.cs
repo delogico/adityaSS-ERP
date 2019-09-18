@@ -624,6 +624,7 @@ namespace RMERP.DAL.ManagerClasses
                 {
                     m.CLI_Id,
                     m.CLI_.CLI_Name,
+                    m.CLI_.CLI_Employer_Cont_Rate
                 }).Distinct();
             }
             else
@@ -632,6 +633,7 @@ namespace RMERP.DAL.ManagerClasses
                 {
                     m.CLI_Id,
                     m.CLI_.CLI_Name,
+                    m.CLI_.CLI_Employer_Cont_Rate
                 }).Distinct();
             }
 
@@ -659,14 +661,15 @@ namespace RMERP.DAL.ManagerClasses
                         (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
                         (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
                         (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
-                    EMPLOYEES_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION + (AppSalary * item.WAR_ESIC) / 100, MidpointRounding.AwayFromZero);
-                    EMPLOYERS_CONTRIBUTION = Math.Round(EMPLOYERS_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.CLI_.CLI_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
+                    EMPLOYEES_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION + (AppSalary * item.WAR_ESIC) / 100, MidpointRounding.AwayFromZero);                   
+
                     TOTAL_CONTRIBUTION = TOTAL_CONTRIBUTION + (EMPLOYEES_CONTRIBUTION + EMPLOYERS_CONTRIBUTION);
                     TOTAL_WAGES = Math.Round(AppSalary + TOTAL_WAGES, MidpointRounding.AwayFromZero);
                 }
                 reportVM.TOTAL_WAGES = TOTAL_WAGES;
                 reportVM.EMPLOYEES_CONTRIBUTION = EMPLOYEES_CONTRIBUTION;
-                reportVM.EMPLOYERS_CONTRIBUTION = EMPLOYERS_CONTRIBUTION;
+              //  EMPLOYERS_CONTRIBUTION = Math.Round(EMPLOYERS_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.CLI_.CLI_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
+                reportVM.EMPLOYERS_CONTRIBUTION = Math.Round(TOTAL_WAGES * Convert.ToDecimal(client.CLI_Employer_Cont_Rate) / 100, MidpointRounding.AwayFromZero);
                 reportVM.TOTAL_CONTRIBUTION = TOTAL_CONTRIBUTION;
                 reportVMs.Add(reportVM);
             }
