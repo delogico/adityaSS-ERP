@@ -78,7 +78,7 @@ namespace RMERP.DAL.ManagerClasses
             {
                 MLWF_ContributionVM report = new MLWF_ContributionVM();
                 report.CLI_Id = item.CLI_Id;
-                report.CLI_Name = item.CLI_Name;               
+                report.CLI_Name = item.CLI_Name;
                 List<Wage_Register> register = wage_Registers.Where(m => m.CLI_Id.Equals(item.CLI_Id)).ToList();
                 int EMP_BELOW_3K = 0, EMP_ABOVE_3K = 0;
                 foreach (var emp in register)
@@ -537,8 +537,8 @@ namespace RMERP.DAL.ManagerClasses
                 bankReport.EMP_SurName = item.EMP_.EMP_SurName;
                 bankReport.EMP_ACCOUNT_NUMBER = item.EMP_.EMP_Account_Number;
                 bankReport.EMP_CURRENCY_CODE = "INR";
-                string IFSC_Code = item.EMP_.EMP_Bank_IFSC;                
-                bankReport.EMP_SERVICE_OUTLET = IFSC_Code.Substring(IFSC_Code.Length-3);
+                string IFSC_Code = item.EMP_.EMP_Bank_IFSC;
+                bankReport.EMP_SERVICE_OUTLET = IFSC_Code.Substring(IFSC_Code.Length - 3);
                 bankReport.EMP_PART_TRAN_TYPE = "C";
                 bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
                 DateTime WAG_Month = wage_Registers.First().WAG_.WAG_Month;
@@ -573,7 +573,8 @@ namespace RMERP.DAL.ManagerClasses
                 bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
                 bankReport.EMP_SurName = item.EMP_.EMP_SurName;
 
-                bankReport.EMP_ADDRESS = item.EMP_.EMP_CityNavigation.CITY_Name;
+                if(item.EMP_.EMP_CityNavigation!=null)
+                    bankReport.EMP_ADDRESS = item.EMP_.EMP_CityNavigation.CITY_Name;
                 bankReport.MESSAGE = "SALARY";
                 bankReport.ORIGINETOR = "RELIABLE";
 
@@ -637,7 +638,7 @@ namespace RMERP.DAL.ManagerClasses
                 }).Distinct();
             }
 
-            List<ESICReportVM> reportVMs = new List<ESICReportVM>();                     
+            List<ESICReportVM> reportVMs = new List<ESICReportVM>();
             List<Wage_Register> wage_Register = new List<Wage_Register>();
             foreach (var client in ESICClientList)
             {
@@ -645,7 +646,7 @@ namespace RMERP.DAL.ManagerClasses
                 wage_Register = wage_Registers.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
                 reportVM.NAME_OF_COMPANY = client.CLI_Name;
                 reportVM.NO_OF_EMPLOYEE = wage_Register.Select(m => m.EMP_Id).Count();
-                decimal TOTAL_WAGES = 0M, EMPLOYEES_CONTRIBUTION = 0M, EMPLOYERS_CONTRIBUTION = 0M, TOTAL_CONTRIBUTION = 0M;
+                decimal TOTAL_WAGES = 0M, EMPLOYEES_CONTRIBUTION = 0M;
                 foreach (var item in wage_Register)
                 {
                     List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
@@ -661,16 +662,15 @@ namespace RMERP.DAL.ManagerClasses
                         (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
                         (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
                         (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
-                    EMPLOYEES_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION + (AppSalary * item.WAR_ESIC) / 100, MidpointRounding.AwayFromZero);                   
-
-                    TOTAL_CONTRIBUTION = TOTAL_CONTRIBUTION + (EMPLOYEES_CONTRIBUTION + EMPLOYERS_CONTRIBUTION);
-                    TOTAL_WAGES = Math.Round(AppSalary + TOTAL_WAGES, MidpointRounding.AwayFromZero);
+                    EMPLOYEES_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION + (AppSalary * item.WAR_ESIC) / 100, MidpointRounding.AwayFromZero);
+                    TOTAL_WAGES = AppSalary + TOTAL_WAGES;
                 }
-                reportVM.TOTAL_WAGES = TOTAL_WAGES;
+                reportVM.TOTAL_WAGES = Math.Round(TOTAL_WAGES, MidpointRounding.AwayFromZero);
                 reportVM.EMPLOYEES_CONTRIBUTION = EMPLOYEES_CONTRIBUTION;
-              //  EMPLOYERS_CONTRIBUTION = Math.Round(EMPLOYERS_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.CLI_.CLI_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
-                reportVM.EMPLOYERS_CONTRIBUTION = Math.Round(TOTAL_WAGES * Convert.ToDecimal(client.CLI_Employer_Cont_Rate) / 100, MidpointRounding.AwayFromZero);
-                reportVM.TOTAL_CONTRIBUTION = TOTAL_CONTRIBUTION;
+                //  EMPLOYERS_CONTRIBUTION = Math.Round(EMPLOYERS_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.CLI_.CLI_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
+                decimal EMPLOYERS_CONTRI = Math.Round(TOTAL_WAGES * Convert.ToDecimal(client.CLI_Employer_Cont_Rate) / 100, MidpointRounding.AwayFromZero);
+                reportVM.EMPLOYERS_CONTRIBUTION = EMPLOYERS_CONTRI;
+                reportVM.TOTAL_CONTRIBUTION = EMPLOYEES_CONTRIBUTION + EMPLOYERS_CONTRI;
                 reportVMs.Add(reportVM);
             }
             return reportVMs;
@@ -702,7 +702,7 @@ namespace RMERP.DAL.ManagerClasses
                 }).Distinct();
             }
 
-            List<ESICReportEmpWiseVM> reports = new List<ESICReportEmpWiseVM>();           
+            List<ESICReportEmpWiseVM> reports = new List<ESICReportEmpWiseVM>();
             List<Wage_Register> wage_Register = new List<Wage_Register>();
             foreach (var client in ESICClientList)
             {
