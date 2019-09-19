@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using RMERP.DAL.Helpers;
 using static RMERP.DAL.Helpers.ProjectUtils;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace RMERP.DAL.ManagerClasses
 {
@@ -541,7 +542,18 @@ namespace RMERP.DAL.ManagerClasses
                 bankReport.EMP_ACCOUNT_NUMBER = item.EMP_.EMP_Account_Number;
                 bankReport.EMP_CURRENCY_CODE = "INR";
                 string IFSC_Code = item.EMP_.EMP_Bank_IFSC;
-                bankReport.EMP_SERVICE_OUTLET = IFSC_Code.Substring(IFSC_Code.Length - 3);
+                string IFSC = IFSC_Code.Substring(IFSC_Code.Length - 3);
+                int code;
+                if (Int32.TryParse(IFSC, out code))
+                {
+                    code = Convert.ToInt32(IFSC_Code.Substring(IFSC_Code.Length - 3));
+                    bankReport.EMP_SERVICE_OUTLET = code.ToString("D3");
+                }
+                else
+                {
+                    bankReport.EMP_SERVICE_OUTLET = "";
+                }                
+                
                 bankReport.EMP_PART_TRAN_TYPE = "C";
                 bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
                 DateTime WAG_Month = wage_Registers.First().WAG_.WAG_Month;
@@ -649,33 +661,33 @@ namespace RMERP.DAL.ManagerClasses
                 wage_Register = wage_Registers.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
                 reportVM.NAME_OF_COMPANY = client.CLI_Name;
                 reportVM.NO_OF_EMPLOYEE = wage_Register.Select(m => m.EMP_Id).Count();
-                decimal TOTAL_WAGES = 0M, EMPLOYEES_CONTRIBUTION = 0M;
+                decimal TOTAL_WAGES = 0M, EMPLOYEES_CONTRIBUTION = 0M, GROSS = 0M; ;
                 foreach (var item in wage_Register)
                 {
-                    List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
-                    decimal AppSalary = GetAmountBasedOnFormula(
-                        item.WAR_ESIC_Formula,
-                        item.WAR_Basic_Calculated,
-                        item.WAR_DA_Calculated,
-                        item.WAR_HRA_Calculated, All,
-                        item.WAR_TotalWorkingDays,
-                        item.WAR_TotalPaybleDays,
-                        item.WAR_OverTime_Calculated,
-                        (item.WAR_OutStation_Allowance_Calculated != null ? item.WAR_OutStation_Allowance_Calculated.Value : 0),
-                        (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
-                        (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
-                        (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
-                    EMPLOYEES_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION + (AppSalary * item.WAR_ESIC) / 100, MidpointRounding.AwayFromZero);
-                    TOTAL_WAGES = AppSalary + TOTAL_WAGES;
+                    // List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
+                    //decimal AppSalary = GetAmountBasedOnFormula(
+                    //    item.WAR_ESIC_Formula,
+                    //    item.WAR_Basic_Calculated,
+                    //    item.WAR_DA_Calculated,
+                    //    item.WAR_HRA_Calculated, All,
+                    //    item.WAR_TotalWorkingDays,
+                    //    item.WAR_TotalPaybleDays,
+                    //    item.WAR_OverTime_Calculated,
+                    //    (item.WAR_OutStation_Allowance_Calculated != null ? item.WAR_OutStation_Allowance_Calculated.Value : 0),
+                    //    (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
+                    //    (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
+                    //    (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
+                    EMPLOYEES_CONTRIBUTION = EMPLOYEES_CONTRIBUTION + (item.WAR_GrossTotal * item.WAR_ESIC) / 100;
+                    GROSS= GROSS+ item.WAR_GrossTotal;
+                    TOTAL_WAGES = item.WAR_GrossTotal + TOTAL_WAGES;
                 }
-                reportVM.TOTAL_WAGES = Math.Round(TOTAL_WAGES, MidpointRounding.AwayFromZero);
-                reportVM.EMPLOYEES_CONTRIBUTION = EMPLOYEES_CONTRIBUTION;
-                //  EMPLOYERS_CONTRIBUTION = Math.Round(EMPLOYERS_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.CLI_.CLI_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
+                reportVM.TOTAL_WAGES = Math.Round(GROSS, MidpointRounding.AwayFromZero);
+                reportVM.EMPLOYEES_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION,MidpointRounding.AwayFromZero);                
                 decimal EMPLOYERS_CONTRI = 0m;
-                if (client.CLI_ESIC_Employer_Cont_Rate!=null)
-                    EMPLOYERS_CONTRI = Math.Round(TOTAL_WAGES * Convert.ToDecimal(client.CLI_ESIC_Employer_Cont_Rate) / 100, MidpointRounding.AwayFromZero);
-                reportVM.EMPLOYERS_CONTRIBUTION = EMPLOYERS_CONTRI;
-                reportVM.TOTAL_CONTRIBUTION = EMPLOYEES_CONTRIBUTION + EMPLOYERS_CONTRI;
+                if (client.CLI_ESIC_Employer_Cont_Rate != null)
+                    EMPLOYERS_CONTRI = TOTAL_WAGES * Convert.ToDecimal(client.CLI_ESIC_Employer_Cont_Rate) / 100;
+                reportVM.EMPLOYERS_CONTRIBUTION = Math.Round(EMPLOYERS_CONTRI, MidpointRounding.AwayFromZero);
+                reportVM.TOTAL_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION + EMPLOYERS_CONTRI, MidpointRounding.AwayFromZero);
                 reportVMs.Add(reportVM);
             }
             return reportVMs;
