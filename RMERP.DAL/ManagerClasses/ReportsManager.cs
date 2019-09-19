@@ -681,7 +681,7 @@ namespace RMERP.DAL.ManagerClasses
                     EMPLOYEES_CONTRIBUTION = EMPLOYEES_CONTRIBUTION + item.WAR_ESIC_Calculated;
                     //  EMPLOYEES_CONTRIBUTION = EMPLOYEES_CONTRIBUTION + (AppSalary * item.WAR_ESIC) / 100;
                    // GROSS = GROSS+ item.WAR_GrossTotal;
-                    TOTAL_WAGES = AppSalary + TOTAL_WAGES;
+                    TOTAL_WAGES = Math.Round(AppSalary, MidpointRounding.AwayFromZero) + TOTAL_WAGES;
                 }
                 reportVM.TOTAL_WAGES = Math.Round(TOTAL_WAGES, MidpointRounding.AwayFromZero);
                 reportVM.EMPLOYEES_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION,MidpointRounding.AwayFromZero);                
