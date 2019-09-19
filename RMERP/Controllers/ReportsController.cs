@@ -1641,7 +1641,7 @@ namespace RMERP.Controllers
                 excelSheet.SetColumnWidth(1, (int)((22 + 0.72) * 256));
                 cell1.CellStyle = style;
                 ICell cell2 = row.CreateCell(2);
-                cell2.SetCellValue("ESIC APPLICABLE \r\n  SALARY / \r\n  BASIC+DA");
+                cell2.SetCellValue("PF APPLICABLE \r\n  SALARY / \r\n  BASIC+DA");
                 excelSheet.SetColumnWidth(2, (int)((15 + 0.72) * 256));
                 cell2.CellStyle = style;
                 ICell cell3 = row.CreateCell(3);

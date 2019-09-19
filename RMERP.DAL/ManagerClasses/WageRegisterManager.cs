@@ -166,8 +166,7 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.WAR_Advance_Amount = totalEMI;
                     #endregion                  
 
-                    #region New Allowances
-                    
+                    #region New Allowances                    
                     if (cr.CRI_Attendance_Allowance)
                     {
                         if (totAbsent <= cr.CRI_Attendance_Allowance_MaximumDays)
@@ -255,12 +254,13 @@ namespace RMERP.DAL.ManagerClasses
                                 }
                             }
                         }
+
                         decimal PFsum = Math.Round(GetAmountBasedOnFormula(
                             cr.CRI_PF_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, 
                             cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, 
                             WAR_OverTime_Calculated,WAR_Outstation_Allowance_Calculated, WAR_Attendance_Allowance_Calculated,
                             WAR_Nightshift_Allowance_Calculated,WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
-
+                        
                         decimal ESICsum = Math.Round(GetAmountBasedOnFormula(
                             cr.CRI_ESIC_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, 
                             cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_OverTime_Calculated, 
