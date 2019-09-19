@@ -469,8 +469,8 @@ namespace RMERP.DAL.ManagerClasses
                 Wage_Register wage_Register = new Wage_Register();
                 wage_Register = wage_Reg;
                 wage_Register.WAR_LastModifiedOn = ProjectUtils.DateNow();
-                //;_context.Wage_Register.Update(wage_Register);
-                _context.Entry(wage_Register).State = EntityState.Modified;
+                _context.Wage_Register.Update(wage_Register);
+                //_context.Entry(wage_Register).State = EntityState.Modified;
                 _context.SaveChanges();
             }
             catch (Exception ex)

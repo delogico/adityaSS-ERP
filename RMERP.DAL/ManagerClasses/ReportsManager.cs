@@ -308,6 +308,7 @@ namespace RMERP.DAL.ManagerClasses
                         (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
                         (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
                         (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
+
                     EMPLOYEE_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION + (AppSalary * item.WAR_PF) / 100, MidpointRounding.AwayFromZero);
                     if(item.CLI_.CLI_PF_Employer_Cont_Rate!=null)
                         EMPLOYER_CONTRIBUTION = Math.Round(EMPLOYER_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.CLI_.CLI_PF_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
@@ -731,16 +732,29 @@ namespace RMERP.DAL.ManagerClasses
                 //decimal TotalMonthlyWages = 0M;               
                 List<ESICReportVM> reportVMs = new List<ESICReportVM>();
                 foreach (var register in wage_Register)
-                {
+                {                    
                     ESICReportVM reportVM = new ESICReportVM();
-                    decimal TotalMonthlyWages = ProjectUtils.GetGrossAmountBasedOnFormula(register.WAR_ESIC_Formula, register);
+                    List<Client_Requirement_Allowances> All = register.CRI_.Client_Requirement_Allowances.ToList();                   
+                    decimal TotalMonthlyWages = GetAmountBasedOnFormula(
+                        register.WAR_ESIC_Formula,
+                        register.WAR_Basic_Calculated,
+                        register.WAR_DA_Calculated,
+                        register.WAR_HRA_Calculated, All,
+                        register.WAR_TotalWorkingDays,
+                        register.WAR_TotalPaybleDays,
+                        register.WAR_OverTime_Calculated,
+                        (register.WAR_OutStation_Allowance_Calculated != null ? register.WAR_OutStation_Allowance_Calculated.Value : 0),
+                        (register.WAR_Attendance_Allowance_Calculated != null ? register.WAR_Attendance_Allowance_Calculated.Value : 0),
+                        (register.WAR_Nightshift_Allowance_Calculated != null ? register.WAR_Nightshift_Allowance_Calculated.Value : 0),
+                        (register.WAR_Performance_Allowance_Calculated != null ? register.WAR_Performance_Allowance_Calculated.Value : 0));
+
                     reportVM.TotalMonthlyWages = Math.Round(TotalMonthlyWages, MidpointRounding.AwayFromZero);
                     double PayableDays = register.WAR_TotalPaybleDays;
                     if (register.WAR_TotalPaybleDays > 27)
                     {
                         PayableDays = 27;
                     }
-                    reportVM.PayableDays = ProjectUtils.intRoundFigure(PayableDays);
+                    reportVM.PayableDays = intRoundFigure(PayableDays);
                     reportVM.LastWorkingDay = "";
                     reportVM.EMP_FirstName = register.EMP_.EMP_FirstName;
                     reportVM.EMP_MiddleName = register.EMP_.EMP_MiddleName;

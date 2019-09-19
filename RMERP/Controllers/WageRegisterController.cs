@@ -96,7 +96,7 @@ namespace RMERP.Controllers
         {
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
 
-            Wage_Register wageRegister = wageRegisterManager.GetWage_RegisterByID(editWageRegisterVM.wageRegisterVM.WAR_Id);
+           // Wage_Register wageRegister = wageRegisterManager.GetWage_RegisterByID(editWageRegisterVM.wageRegisterVM.WAR_Id);
 
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             editWageRegisterVM.wageRegisterVM.ADM_LastModifiedBy = sessionUtils.GetLoggedAdminID();
