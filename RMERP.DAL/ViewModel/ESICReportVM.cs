@@ -45,7 +45,6 @@ namespace RMERP.DAL.ViewModel
         public string PENDING_REGISTRAION_SINCE { get; set; }
         public string REMARKS { get; set; }
 
-
     }
 
 }

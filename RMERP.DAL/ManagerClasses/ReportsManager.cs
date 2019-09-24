@@ -696,11 +696,12 @@ namespace RMERP.DAL.ManagerClasses
             return reportVMs;
         }
 
-        public List<ESICReportEmpWiseVM> ESICReportEmpWise(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
+        public List<ESICReportEmpWiseVM> ESICReportEmpWise1(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
         {
             WageRegisterManager wageManager = new WageRegisterManager(_context);
             List<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);
             dynamic ESICClientList = null;
+
             if (IsSelected == true)
             {
                 int[] CLI_Ids = selectionVMs.Select(m => m.CLI_Id).ToArray();
@@ -728,13 +729,12 @@ namespace RMERP.DAL.ManagerClasses
             {
                 wage_Register = wage_Registers.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
                 ESICReportEmpWiseVM ESICReport = new ESICReportEmpWiseVM();
-                ESICReport.NAME_OF_COMPANY = client.CLI_Name;
-                //decimal TotalMonthlyWages = 0M;               
+                ESICReport.NAME_OF_COMPANY = client.CLI_Name;                          
                 List<ESICReportVM> reportVMs = new List<ESICReportVM>();
                 foreach (var register in wage_Register)
-                {                    
+                {
                     ESICReportVM reportVM = new ESICReportVM();
-                    List<Client_Requirement_Allowances> All = register.CRI_.Client_Requirement_Allowances.ToList();                   
+                    List<Client_Requirement_Allowances> All = register.CRI_.Client_Requirement_Allowances.ToList();
                     decimal TotalMonthlyWages = GetAmountBasedOnFormula(
                         register.WAR_ESIC_Formula,
                         register.WAR_Basic_Calculated,
@@ -825,6 +825,71 @@ namespace RMERP.DAL.ManagerClasses
             reports.Add(ESICReportLeft);
             #endregion
             return reports;
+        }
+
+        public List<ESICReportVM> ESICReportEmpWise(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
+        {
+            WageRegisterManager wageManager = new WageRegisterManager(_context);
+            IEnumerable<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);          
+            if (IsSelected == true)
+            {
+                int[] CLI_Ids = selectionVMs.Select(m => m.CLI_Id).ToArray();
+                wage_Registers = from wageReg in wage_Registers
+                                 where CLI_Ids.Contains(wageReg.CLI_Id)
+                                 select wageReg;
+            }
+            List<ESICReportVM> ESICReportVMs = new List<ESICReportVM>();            
+            foreach (Wage_Register register in wage_Registers)
+            {                
+                ESICReportVM reportVM = new ESICReportVM();
+                List<Client_Requirement_Allowances> All = register.CRI_.Client_Requirement_Allowances.ToList();
+                decimal TotalMonthlyWages = GetAmountBasedOnFormula(
+                    register.WAR_ESIC_Formula,
+                    register.WAR_Basic_Calculated,
+                    register.WAR_DA_Calculated,
+                    register.WAR_HRA_Calculated, All,
+                    register.WAR_TotalWorkingDays,
+                    register.WAR_TotalPaybleDays,
+                    register.WAR_OverTime_Calculated,
+                    (register.WAR_OutStation_Allowance_Calculated != null ? register.WAR_OutStation_Allowance_Calculated.Value : 0),
+                    (register.WAR_Attendance_Allowance_Calculated != null ? register.WAR_Attendance_Allowance_Calculated.Value : 0),
+                    (register.WAR_Nightshift_Allowance_Calculated != null ? register.WAR_Nightshift_Allowance_Calculated.Value : 0),
+                    (register.WAR_Performance_Allowance_Calculated != null ? register.WAR_Performance_Allowance_Calculated.Value : 0));
+
+                reportVM.TotalMonthlyWages = Math.Round(TotalMonthlyWages, MidpointRounding.AwayFromZero);
+                double PayableDays = register.WAR_TotalPaybleDays;
+                if (register.WAR_TotalPaybleDays > 27)
+                {
+                    PayableDays = 27;
+                }
+                reportVM.PayableDays = intRoundFigure(PayableDays);
+                reportVM.LastWorkingDay = "";
+                reportVM.EMP_FirstName = register.EMP_.EMP_FirstName;
+                reportVM.EMP_MiddleName = register.EMP_.EMP_MiddleName;
+                reportVM.EMP_SurName = register.EMP_.EMP_SurName;
+                reportVM.IP_Number = register.EMP_.EMP_ESIC_Number;
+                ESICReportVMs.Add(reportVM);
+            }
+
+            #region Left employees
+            IEnumerable<Employees> employees = GetLeftEmployeesOfPrevMonth(wage_Registers.First().WAG_.WAG_Month);
+           // ESICReportEmpWiseVM ESICReportLeft = new ESICReportEmpWiseVM();
+           // List<ESICReportVM> reportVMLefts = new List<ESICReportVM>();
+            foreach (var emp in employees)
+            {
+                ESICReportVM reportVM = new ESICReportVM();
+                reportVM.TotalMonthlyWages = 0;
+                reportVM.PayableDays = 0;
+                reportVM.LastWorkingDay = emp.EMP_InactivatedOn.Value.ToShortDateString();
+                reportVM.EMP_FirstName = emp.EMP_FirstName;
+                reportVM.EMP_MiddleName = emp.EMP_MiddleName;
+                reportVM.EMP_SurName = emp.EMP_SurName;
+                reportVM.IP_Number = emp.EMP_ESIC_Number;
+                reportVM.ReasonCode = emp.EMP_ReasonCode != null ? emp.EMP_ReasonCode.ToString() : "-";
+                ESICReportVMs.Add(reportVM);
+            }                     
+            #endregion
+            return ESICReportVMs;
         }
 
         public List<ESICReportVM> ESIC_Employees_Pending_For_Registration(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)

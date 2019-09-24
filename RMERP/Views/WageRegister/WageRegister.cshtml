@@ -94,7 +94,7 @@
 
 <div class="tab-content">
     @foreach (var item in Model)
-    {
+    {        
         <div id="@item.client.CLI_Id" class="tabcontent tab-pane fade">
             <div class="well well-sm"> <h3><u>@item.client.CLI_Name</u></h3></div>
             <hr />
@@ -103,7 +103,7 @@
             }
             @foreach (var dd in distinceDesignations)
             {
-                List<WageRegisterVM> wageRegisters = item.wageRegisterVMs.Where(r => r.designation.DES_Id.Equals(dd.DES_Id)).ToList();
+                List<WageRegisterVM> wageRegisters = item.wageRegisterVMs.Where(r => r.designation.DES_Id.Equals(dd.DES_Id)).OrderBy(m=>m.EMP_Id).ToList();
                 ClientRequirementVM clientRequirement = wageRegisters.Select(m => m.clientRequirementVM).Where(m => m.CLI_Id.Equals(item.client.CLI_Id) && m.DES_Id.Equals(dd.DES_Id)).First();
 
                 <div class="row">
@@ -148,7 +148,7 @@
                                 <td class="lightgray">DA</td>
                                 <td class="lightgray">HRA</td>
 
-                                @foreach (var all in wageRegisters[0].allowanceVMs.OrderBy(m => m.WAA_Id))
+                                @foreach (var all in wageRegisters[0].allowanceVMs.OrderBy(m => m.allowanceVM.ALL_Id))
                                 {
                                     <td class="lightgray">@all.allowanceVM.ALL_Alias</td>
                                 }
@@ -229,7 +229,7 @@
                                     }
                                     <td class="lightgray"><span title="@str1">@Math.Round(employee.WAR_HRA_Calculated, MidpointRounding.AwayFromZero)</span></td>
                                     @{
-                                        foreach (var all in employee.allowanceVMs.OrderBy(m=>m.WAA_Id))
+                                        foreach (var all in employee.allowanceVMs.OrderBy(m=>m.allowanceVM.ALL_Id))
                                         {
                                             string str = "";
                                             if (all.WAA_DayswiseOrFull)
