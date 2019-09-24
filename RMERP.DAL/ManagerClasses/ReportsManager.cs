@@ -709,7 +709,7 @@ namespace RMERP.DAL.ManagerClasses
             return reportVMs;
         }
 
-        public List<ESICReportEmpWiseVM> ESICReportEmpWise1(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
+        public List<ESICReportEmpWiseVM> ESICReportEmpWise(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
         {
             WageRegisterManager wageManager = new WageRegisterManager(_context);
             List<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);
@@ -840,7 +840,7 @@ namespace RMERP.DAL.ManagerClasses
             return reports;
         }
 
-        public List<ESICReportVM> ESICReportEmpWise(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
+        public List<ESICReportVM> ESICReportEmpWise1(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
         {
             WageRegisterManager wageManager = new WageRegisterManager(_context);
             IEnumerable<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);          

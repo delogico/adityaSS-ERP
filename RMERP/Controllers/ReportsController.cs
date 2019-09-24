@@ -3290,35 +3290,63 @@ namespace RMERP.Controllers
                 cell5.CellStyle = style;
                 excelSheet.SetColumnWidth(5, (int)((22 + 0.72) * 256));
 
-                List<ESICReportVM> ESICReportVMs = manager.ESICReportEmpWise(WAG_Id, selectionVMs.Where(m => m.IsSelect.Equals(true)).ToList(), IsSelected);               
-               int rowCount = 1;
-                foreach (var emp in ESICReportVMs.GroupBy(m => m.IP_Number).Select(g=>new
-                {
-                    IP_Name = g.Select(n => n.IP_Name).First(),
-                    IP_Number = g.Select(n => n.IP_Number).First(),                   
-                    PayableDays = g.Sum(x => x.PayableDays),
-                    ReasonCode = g.Select(n => n.ReasonCode).First(),
-                    LastWorkingDay = g.Select(n => n.LastWorkingDay).First() ,
-                    TotalMonthlyWages = g.Sum(x => x.TotalMonthlyWages)
-                }))
+                List<ESICReportEmpWiseVM> ESICReportEmpWiseVMs = manager.ESICReportEmpWise(WAG_Id, selectionVMs.Where(m => m.IsSelect.Equals(true)).ToList(), IsSelected);
+                int rowCount = 1;
+                foreach (var item in ESICReportEmpWiseVMs)
                 {
                     row = excelSheet.CreateRow(rowCount);
                     row.HeightInPoints = (float)(1.5 * excelSheet.DefaultRowHeightInPoints);
-                    row = excelSheet.CreateRow(rowCount);
-                    row.CreateCell(0).SetCellValue(emp.IP_Number);
-                    row.CreateCell(1).SetCellValue(emp.IP_Name);
-                    row.CreateCell(2).SetCellValue(emp.PayableDays);
+                    ICell cell_client = row.CreateCell(0);
+                    cell_client.SetCellValue(item.NAME_OF_COMPANY);
+                    cell_client.CellStyle = styleClient;
+                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 5));
+                    foreach (var emp in item.ESICReportVMs)
+                    {
+                        rowCount++;
+                        row = excelSheet.CreateRow(rowCount);
+                        row.CreateCell(0).SetCellValue(emp.IP_Number);
+                        row.CreateCell(1).SetCellValue(emp.IP_Name);
+                        row.CreateCell(2).SetCellValue(emp.PayableDays);
 
-                    ICell cell_3 = row.CreateCell(3);
-                    cell_3.SetCellValue(Convert.ToDouble(emp.TotalMonthlyWages));
-                    cell_3.CellStyle = styleAmount;
+                        ICell cell_3 = row.CreateCell(3);
+                        cell_3.SetCellValue(Convert.ToDouble(emp.TotalMonthlyWages));
+                        cell_3.CellStyle = styleAmount;
 
-                    ICell cell_5 = row.CreateCell(5);
+                        ICell cell_5 = row.CreateCell(5);
 
-                    row.CreateCell(4).SetCellValue(emp.ReasonCode);
-                    cell_5.SetCellValue(emp.LastWorkingDay);
+                        row.CreateCell(4).SetCellValue(emp.ReasonCode);
+                        cell_5.SetCellValue(emp.LastWorkingDay);
+                    }
                     rowCount++;
+
                 }
+                //foreach (var emp in ESICReportVMs.GroupBy(m => m.IP_Number).Select(g=>new
+                //{
+                //    IP_Name = g.Select(n => n.IP_Name).First(),
+                //    IP_Number = g.Select(n => n.IP_Number).First(),                   
+                //    PayableDays = g.Sum(x => x.PayableDays),
+                //    ReasonCode = g.Select(n => n.ReasonCode).First(),
+                //    LastWorkingDay = g.Select(n => n.LastWorkingDay).First() ,
+                //    TotalMonthlyWages = g.Sum(x => x.TotalMonthlyWages)
+                //}))
+                //{
+                //    row = excelSheet.CreateRow(rowCount);
+                //    row.HeightInPoints = (float)(1.5 * excelSheet.DefaultRowHeightInPoints);
+                //    row = excelSheet.CreateRow(rowCount);
+                //    row.CreateCell(0).SetCellValue(emp.IP_Number);
+                //    row.CreateCell(1).SetCellValue(emp.IP_Name);
+                //    row.CreateCell(2).SetCellValue(emp.PayableDays);
+
+                //    ICell cell_3 = row.CreateCell(3);
+                //    cell_3.SetCellValue(Convert.ToDouble(emp.TotalMonthlyWages));
+                //    cell_3.CellStyle = styleAmount;
+
+                //    ICell cell_5 = row.CreateCell(5);
+
+                //    row.CreateCell(4).SetCellValue(emp.ReasonCode);
+                //    cell_5.SetCellValue(emp.LastWorkingDay);
+                //    rowCount++;
+                //}
                 workbook.Write(fs);
             }            
         }
