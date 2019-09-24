@@ -85,8 +85,7 @@ namespace RMERP.DAL.ManagerClasses
         }
 
         public List<Employee_Advance> IDBI_TO_IDBI_AdvanceRpt(DateTime WAG_Month, int FRM_Id)
-        {
-            WAG_Month = WAG_Month.AddMonths(-1);
+        {           
             DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
             DateTime startDate = new DateTime(WAG_Month.Year, WAG_Month.Month-1, 1);            
 
@@ -101,8 +100,7 @@ namespace RMERP.DAL.ManagerClasses
             return result;
         }
         public List<Employee_Advance> IDBI_TO_Other_AdvanceRpt(DateTime WAG_Month, int FRM_Id)
-        {
-            WAG_Month = WAG_Month.AddMonths(-1);
+        {            
             DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
             DateTime startDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1);
             List<Employee_Advance> result = _context.Employee_Advance.Include(m => m.EMP_).Where(m => m.ADV_RegisteredOn.Date <= lastDate.Date && m.ADV_RegisteredOn.Date >= startDate.Date && m.EMP_.FRM_Id.Equals(FRM_Id) && m.EMP_.EMP_Payment_Type.Equals((int)ProjectUtils.PAYMENT_TYPE.Bank_Account) && m.EMP_.EMP_Is_IDBI_Other.Equals((int)ProjectUtils.PAYMENT_BANK_TYPE.IDBI_To_Others))
@@ -116,8 +114,7 @@ namespace RMERP.DAL.ManagerClasses
             return result;
         }
         public List<Employee_Advance> CHEQUE_CASH_AdvanceRpt(DateTime WAG_Month, int FRM_Id)
-        {
-            WAG_Month = WAG_Month.AddMonths(-1);
+        {           
             DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
             DateTime startDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1);
             List<Employee_Advance> result = _context.Employee_Advance.Include(m => m.EMP_).Where(m => m.ADV_RegisteredOn.Date <= lastDate.Date && m.ADV_RegisteredOn.Date >= startDate.Date && m.EMP_.FRM_Id.Equals(FRM_Id) && m.EMP_.EMP_Payment_Type.Equals((int)ProjectUtils.PAYMENT_TYPE.Cheque_Cash))

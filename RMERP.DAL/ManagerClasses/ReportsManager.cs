@@ -194,7 +194,7 @@ namespace RMERP.DAL.ManagerClasses
                 bankReportVM.EMP_PART_TRAN_TYPE = "C";
                 bankReportVM.EMP_TRANSACTION_AMOUNT = item.ADV_Amount;
 
-                bankReportVM.EMP_TRANSACTION_PARTICULARS = "Advance " + WAG_Month.AddMonths(-1).ToString("MMMM") + "-" + WAG_Month.AddMonths(-1).ToString("yyyy");
+                bankReportVM.EMP_TRANSACTION_PARTICULARS = "Advance " + WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
                 advanceBankReportVMs.Add(bankReportVM);
             }
             return advanceBankReportVMs;
