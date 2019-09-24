@@ -341,6 +341,58 @@ namespace RMERP.DAL.Helpers
             }
             return sum;
         }
+        public static decimal GetAmountBasedOnFormula_Report(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Wage_Register_Allowances> All, double totalWorkingDays, double totalPaybleDays, decimal WAR_OverTime_Calculated, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated)
+        {            
+            decimal sum = 0M;
+            string[] arr_CRI_Formula;
+
+            if (CRI_Formula != null)
+            {
+                arr_CRI_Formula = CRI_Formula.Split("+");
+                foreach (string item in arr_CRI_Formula)
+                {
+                    switch (item)
+                    {
+                        case "BASIC":
+                            sum += Convert.ToDecimal(WAR_Basic_Calculated);
+                            break;
+                        case "DA":
+                            sum += Convert.ToDecimal(CRI_DA_Calculated);
+                            break;
+                        case "HRA":
+                            sum += Convert.ToDecimal(CRI_HRA_Calculated);
+                            break;
+                        case "OT":
+                            sum += Convert.ToDecimal(WAR_OverTime_Calculated);
+                            break;
+                        case "OSL":
+                            sum += Convert.ToDecimal(WAR_Outstation_Allowance_Calculated);
+                            break;
+                        case "AAL":
+                            sum += Convert.ToDecimal(WAR_Attendance_Allowance_Calculated);
+                            break;
+                        case "NSL":
+                            sum += Convert.ToDecimal(WAR_Nightshift_Allowance_Calculated);
+                            break;
+                        case "PAL":
+                            sum += Convert.ToDecimal(WAR_Performance_Allowance_Calculated);
+                            break;
+                        default:
+                            {
+                                foreach (var allowance in All)
+                                {
+                                    if (allowance.CRA_.ALL_.ALL_Shortform == item)
+                                    {                                        
+                                            sum += allowance.WAA_Amount_Calculated;                                        
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return sum;
+        }
 
         public static decimal GetAmountBasedOnFormulaOT(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Client_Requirement_Allowances> All, int totalWorkingDays, double totalPaybleDays, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated)
         {

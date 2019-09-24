@@ -3150,8 +3150,7 @@ namespace RMERP.Controllers
                 ICell cell6 = row.CreateCell(6);
                 cell6.SetCellValue("TOTAL \r\n CONTRIBUTION");
                 cell6.CellStyle = style;
-                excelSheet.SetColumnWidth(6, (int)((15 + 0.72) * 256));
-              ;
+                excelSheet.SetColumnWidth(6, (int)((15 + 0.72) * 256));              
                 List<ESICReportVM> ESICReportVMS = manager.Client_Wise_ESIC(WAG_Id, selectionVMs.Where(m => m.IsSelect.Equals(true)).ToList(), IsSelected);
                 int rowCount = 4,SrNo=0, NO_OF_EMPLOYEE = 0;
                 decimal TOTAL_WAGES=0M,EMPLOYEES_CONTRIBUTION = 0M, EMPLOYERS_CONTRIBUTION = 0M, TOTAL_CONTRIBUTION = 0M;

@@ -190,7 +190,7 @@ namespace RMERP.DAL.ManagerClasses
                 else
                 {
                     bankReportVM.EMP_SERVICE_OUTLET = "";
-                }                
+                }
                 bankReportVM.EMP_PART_TRAN_TYPE = "C";
                 bankReportVM.EMP_TRANSACTION_AMOUNT = item.ADV_Amount;
 
@@ -309,11 +309,11 @@ namespace RMERP.DAL.ManagerClasses
                 foreach (var item in wage_Register)
                 {
                     List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
-                    decimal AppSalary = GetAmountBasedOnFormula(
+                    decimal AppSalary = GetAmountBasedOnFormula_Report(
                         item.WAR_PF_Formula,
                         item.WAR_Basic_Calculated,
                         item.WAR_DA_Calculated,
-                        item.WAR_HRA_Calculated, All,
+                        item.WAR_HRA_Calculated, item.Wage_Register_Allowances.ToList(),
                         item.WAR_TotalWorkingDays,
                         item.WAR_TotalPaybleDays,
                         item.WAR_OverTime_Calculated,
@@ -323,7 +323,7 @@ namespace RMERP.DAL.ManagerClasses
                         (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
 
                     EMPLOYEE_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION + (AppSalary * item.WAR_PF) / 100, MidpointRounding.AwayFromZero);
-                    if(item.CLI_.CLI_PF_Employer_Cont_Rate!=null)
+                    if (item.CLI_.CLI_PF_Employer_Cont_Rate != null)
                         EMPLOYER_CONTRIBUTION = Math.Round(EMPLOYER_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.CLI_.CLI_PF_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
                     ApplicableSalary = Math.Round(AppSalary + ApplicableSalary, MidpointRounding.AwayFromZero);
                 }
@@ -403,11 +403,11 @@ namespace RMERP.DAL.ManagerClasses
             foreach (var item in wage_Registers)
             {
                 List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
-                decimal ApplicableSalary = Math.Round(GetAmountBasedOnFormula(
+                decimal ApplicableSalary = Math.Round(GetAmountBasedOnFormula_Report(
                             item.WAR_PF_Formula,
                             item.WAR_Basic_Calculated,
                             item.WAR_DA_Calculated,
-                            item.WAR_HRA_Calculated, All,
+                            item.WAR_HRA_Calculated, item.Wage_Register_Allowances.ToList(),
                             item.WAR_TotalWorkingDays,
                             item.WAR_TotalPaybleDays,
                             item.WAR_OverTime_Calculated,
@@ -449,11 +449,11 @@ namespace RMERP.DAL.ManagerClasses
             foreach (var item in wage_Registers)
             {
                 List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
-                decimal ApplicableSalary = Math.Round(GetAmountBasedOnFormula(
+                decimal ApplicableSalary = Math.Round(GetAmountBasedOnFormula_Report(
                             item.WAR_PF_Formula,
                             item.WAR_Basic_Calculated,
                             item.WAR_DA_Calculated,
-                            item.WAR_HRA_Calculated, All,
+                            item.WAR_HRA_Calculated, item.Wage_Register_Allowances.ToList(),
                             item.WAR_TotalWorkingDays,
                             item.WAR_TotalPaybleDays,
                             item.WAR_OverTime_Calculated,
@@ -566,8 +566,8 @@ namespace RMERP.DAL.ManagerClasses
                 else
                 {
                     bankReport.EMP_SERVICE_OUTLET = "";
-                }                
-                
+                }
+
                 bankReport.EMP_PART_TRAN_TYPE = "C";
                 bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
                 DateTime WAG_Month = wage_Registers.First().WAG_.WAG_Month;
@@ -602,7 +602,7 @@ namespace RMERP.DAL.ManagerClasses
                 bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
                 bankReport.EMP_SurName = item.EMP_.EMP_SurName;
 
-                if(item.EMP_.EMP_CityNavigation!=null)
+                if (item.EMP_.EMP_CityNavigation != null)
                     bankReport.EMP_ADDRESS = item.EMP_.EMP_CityNavigation?.CITY_Name;
                 bankReport.MESSAGE = "SALARY";
                 bankReport.ORIGINETOR = "RELIABLE";
@@ -677,28 +677,28 @@ namespace RMERP.DAL.ManagerClasses
                 reportVM.NO_OF_EMPLOYEE = wage_Register.Select(m => m.EMP_Id).Count();
                 decimal TOTAL_WAGES = 0M, EMPLOYEES_CONTRIBUTION = 0M;
                 foreach (var item in wage_Register)
-                {
+                {                    
                     List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
-                    decimal AppSalary = GetAmountBasedOnFormula(
+                    decimal AppSalary = GetAmountBasedOnFormula_Report(
                         item.WAR_ESIC_Formula,
-                        item.WAR_Basic_Calculated,
-                        item.WAR_DA_Calculated,
-                        item.WAR_HRA_Calculated, All,
+                        Math.Round(item.WAR_Basic_Calculated, MidpointRounding.AwayFromZero),
+                        Math.Round(item.WAR_DA_Calculated, MidpointRounding.AwayFromZero),
+                        Math.Round(item.WAR_HRA_Calculated, MidpointRounding.AwayFromZero),
+                         item.Wage_Register_Allowances.ToList(),
                         item.WAR_TotalWorkingDays,
                         item.WAR_TotalPaybleDays,
-                        item.WAR_OverTime_Calculated,
-                        (item.WAR_OutStation_Allowance_Calculated != null ? item.WAR_OutStation_Allowance_Calculated.Value : 0),
-                        (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
-                        (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
-                        (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
-
-                    EMPLOYEES_CONTRIBUTION = EMPLOYEES_CONTRIBUTION + item.WAR_ESIC_Calculated;
-                    //  EMPLOYEES_CONTRIBUTION = EMPLOYEES_CONTRIBUTION + (AppSalary * item.WAR_ESIC) / 100;
-                   // GROSS = GROSS+ item.WAR_GrossTotal;
-                    TOTAL_WAGES = Math.Round(AppSalary, MidpointRounding.AwayFromZero) + TOTAL_WAGES;
+                        Math.Round(item.WAR_OverTime_Calculated, MidpointRounding.AwayFromZero),
+                        (item.WAR_OutStation_Allowance_Calculated != null ? Math.Round(item.WAR_OutStation_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0),
+                        (item.WAR_Attendance_Allowance_Calculated != null ? Math.Round(item.WAR_Attendance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0),
+                        (item.WAR_Nightshift_Allowance_Calculated != null ? Math.Round(item.WAR_Nightshift_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0),
+                        (item.WAR_Performance_Allowance_Calculated != null ? Math.Round(item.WAR_Performance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0));
+                  
+                     EMPLOYEES_CONTRIBUTION = EMPLOYEES_CONTRIBUTION + Math.Round(item.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero);
+                    TOTAL_WAGES = AppSalary + TOTAL_WAGES;
                 }
+               
                 reportVM.TOTAL_WAGES = Math.Round(TOTAL_WAGES, MidpointRounding.AwayFromZero);
-                reportVM.EMPLOYEES_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION,MidpointRounding.AwayFromZero);                
+                reportVM.EMPLOYEES_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION, MidpointRounding.AwayFromZero);
                 decimal EMPLOYERS_CONTRI = 0m;
                 if (client.CLI_ESIC_Employer_Cont_Rate != null)
                     EMPLOYERS_CONTRI = TOTAL_WAGES * Convert.ToDecimal(client.CLI_ESIC_Employer_Cont_Rate) / 100;
@@ -742,17 +742,17 @@ namespace RMERP.DAL.ManagerClasses
             {
                 wage_Register = wage_Registers.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
                 ESICReportEmpWiseVM ESICReport = new ESICReportEmpWiseVM();
-                ESICReport.NAME_OF_COMPANY = client.CLI_Name;                          
+                ESICReport.NAME_OF_COMPANY = client.CLI_Name;
                 List<ESICReportVM> reportVMs = new List<ESICReportVM>();
                 foreach (var register in wage_Register)
                 {
                     ESICReportVM reportVM = new ESICReportVM();
                     List<Client_Requirement_Allowances> All = register.CRI_.Client_Requirement_Allowances.ToList();
-                    decimal TotalMonthlyWages = GetAmountBasedOnFormula(
+                    decimal TotalMonthlyWages = GetAmountBasedOnFormula_Report(
                         register.WAR_ESIC_Formula,
                         register.WAR_Basic_Calculated,
                         register.WAR_DA_Calculated,
-                        register.WAR_HRA_Calculated, All,
+                        register.WAR_HRA_Calculated, register.Wage_Register_Allowances.ToList(),
                         register.WAR_TotalWorkingDays,
                         register.WAR_TotalPaybleDays,
                         register.WAR_OverTime_Calculated,
@@ -763,18 +763,20 @@ namespace RMERP.DAL.ManagerClasses
 
                     reportVM.TotalMonthlyWages = Math.Round(TotalMonthlyWages, MidpointRounding.AwayFromZero);
                     double PayableDays = register.WAR_TotalPaybleDays;
-                    
+
                     if (register.WAR_TotalPaybleDays > 26)
                     {
                         int days = DateTime.DaysInMonth(register.WAG_.WAG_Month.Year, register.WAG_.WAG_Month.Month);
                         if (days == 30)
                         {
                             PayableDays = 26;
-                        }else if (days == 31)
+                        }
+                        else if (days == 31)
                         {
                             PayableDays = 27;
                         }
-                        else{
+                        else
+                        {
                             PayableDays = 26;
                         }
                     }
@@ -854,7 +856,7 @@ namespace RMERP.DAL.ManagerClasses
         public List<ESICReportVM> ESICReportEmpWise1(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
         {
             WageRegisterManager wageManager = new WageRegisterManager(_context);
-            IEnumerable<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);          
+            IEnumerable<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);
             if (IsSelected == true)
             {
                 int[] CLI_Ids = selectionVMs.Select(m => m.CLI_Id).ToArray();
@@ -862,16 +864,16 @@ namespace RMERP.DAL.ManagerClasses
                                  where CLI_Ids.Contains(wageReg.CLI_Id)
                                  select wageReg;
             }
-            List<ESICReportVM> ESICReportVMs = new List<ESICReportVM>();            
+            List<ESICReportVM> ESICReportVMs = new List<ESICReportVM>();
             foreach (Wage_Register register in wage_Registers)
-            {                
+            {
                 ESICReportVM reportVM = new ESICReportVM();
                 List<Client_Requirement_Allowances> All = register.CRI_.Client_Requirement_Allowances.ToList();
-                decimal TotalMonthlyWages = GetAmountBasedOnFormula(
+                decimal TotalMonthlyWages = GetAmountBasedOnFormula_Report(
                     register.WAR_ESIC_Formula,
                     register.WAR_Basic_Calculated,
                     register.WAR_DA_Calculated,
-                    register.WAR_HRA_Calculated, All,
+                    register.WAR_HRA_Calculated, register.Wage_Register_Allowances.ToList(),
                     register.WAR_TotalWorkingDays,
                     register.WAR_TotalPaybleDays,
                     register.WAR_OverTime_Calculated,
@@ -881,7 +883,7 @@ namespace RMERP.DAL.ManagerClasses
                     (register.WAR_Performance_Allowance_Calculated != null ? register.WAR_Performance_Allowance_Calculated.Value : 0));
 
                 reportVM.TotalMonthlyWages = Math.Round(TotalMonthlyWages, MidpointRounding.AwayFromZero);
-                double PayableDays = register.WAR_TotalPaybleDays;                
+                double PayableDays = register.WAR_TotalPaybleDays;
                 if (register.WAR_TotalPaybleDays > 26)
                 {
                     int days = DateTime.DaysInMonth(register.WAG_.WAG_Month.Year, register.WAG_.WAG_Month.Month);
@@ -909,8 +911,8 @@ namespace RMERP.DAL.ManagerClasses
 
             #region Left employees
             IEnumerable<Employees> employees = GetLeftEmployeesOfPrevMonth(wage_Registers.First().WAG_.WAG_Month);
-           // ESICReportEmpWiseVM ESICReportLeft = new ESICReportEmpWiseVM();
-           // List<ESICReportVM> reportVMLefts = new List<ESICReportVM>();
+            // ESICReportEmpWiseVM ESICReportLeft = new ESICReportEmpWiseVM();
+            // List<ESICReportVM> reportVMLefts = new List<ESICReportVM>();
             foreach (var emp in employees)
             {
                 ESICReportVM reportVM = new ESICReportVM();
@@ -923,7 +925,7 @@ namespace RMERP.DAL.ManagerClasses
                 reportVM.IP_Number = emp.EMP_ESIC_Number;
                 reportVM.ReasonCode = emp.EMP_ReasonCode != null ? emp.EMP_ReasonCode.ToString() : "-";
                 ESICReportVMs.Add(reportVM);
-            }                     
+            }
             #endregion
             return ESICReportVMs;
         }
