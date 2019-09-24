@@ -114,6 +114,7 @@ namespace RMERP.DAL.ManagerClasses
                 int UpTo7500 = 0, UpTo7500Ladies = 0, UpTo10000 = 0, UpTo10000Ladies = 0, Above10000 = 0, Above10000Ladies = 0;
                 foreach (var emp in register)
                 {
+                    emp.WAR_FinalTotal = emp.WAR_GrossTotal;
                     if (emp.WAR_FinalTotal > 0 && emp.WAR_FinalTotal <= 7500)
                     {
                         if (emp.EMP_.EMP_Gender.Equals(true)) //Male
@@ -176,12 +177,24 @@ namespace RMERP.DAL.ManagerClasses
                 bankReportVM.EMP_MiddleName = item.EMP_.EMP_MiddleName;
                 bankReportVM.EMP_SurName = item.EMP_.EMP_SurName;
                 bankReportVM.EMP_ACCOUNT_NUMBER = item.EMP_.EMP_Account_Number;
-                bankReportVM.EMP_CURRENCY_CODE = "-";
-                bankReportVM.EMP_SERVICE_OUTLET = "-";
-                bankReportVM.EMP_PART_TRAN_TYPE = "-";
+                bankReportVM.EMP_CURRENCY_CODE = "INR";
+
+                string IFSC_Code = item.EMP_.EMP_Bank_IFSC;
+                string IFSC = IFSC_Code.Substring(IFSC_Code.Length - 3);
+                int code;
+                if (Int32.TryParse(IFSC, out code))
+                {
+                    code = Convert.ToInt32(IFSC_Code.Substring(IFSC_Code.Length - 3));
+                    bankReportVM.EMP_SERVICE_OUTLET = code.ToString("D3");
+                }
+                else
+                {
+                    bankReportVM.EMP_SERVICE_OUTLET = "";
+                }                
+                bankReportVM.EMP_PART_TRAN_TYPE = "C";
                 bankReportVM.EMP_TRANSACTION_AMOUNT = item.ADV_Amount;
 
-                bankReportVM.EMP_TRANSACTION_PARTICULARS = "Advance " + WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
+                bankReportVM.EMP_TRANSACTION_PARTICULARS = "Advance " + WAG_Month.AddMonths(-1).ToString("MMMM") + "-" + WAG_Month.AddMonths(-1).ToString("yyyy");
                 advanceBankReportVMs.Add(bankReportVM);
             }
             return advanceBankReportVMs;
@@ -199,16 +212,16 @@ namespace RMERP.DAL.ManagerClasses
             {
                 BankReportVM bankReportVM = new BankReportVM();
                 bankReportVM.EMP_TRANSACTION_AMOUNT = item.ADV_Amount;
-                bankReportVM.ACCOUNT_SENDER_NUMBER = "-";
+                bankReportVM.ACCOUNT_SENDER_NUMBER = item.EMP_.FRM_?.FRM_AccountNumber;
                 bankReportVM.ACCOUNT_IFSC_CODE = item.EMP_.EMP_Bank_IFSC;
                 bankReportVM.ACCOUNT_RECEIVERS_NUMBER = item.EMP_.EMP_Account_Number;
-                bankReportVM.ACCOUNT_TYPE = "-";
+                bankReportVM.ACCOUNT_TYPE = "S/A";
 
                 bankReportVM.EMP_FirstName = item.EMP_.EMP_FirstName;
                 bankReportVM.EMP_MiddleName = item.EMP_.EMP_MiddleName;
                 bankReportVM.EMP_SurName = item.EMP_.EMP_SurName;
 
-                bankReportVM.EMP_ADDRESS = item.EMP_.EMP_Address;
+                bankReportVM.EMP_ADDRESS = item.EMP_.EMP_CityNavigation?.CITY_Name;
                 bankReportVM.MESSAGE = "SALARY";
                 bankReportVM.ORIGINETOR = "RELIABLE";
                 advanceBankReportVMs.Add(bankReportVM);
@@ -231,7 +244,7 @@ namespace RMERP.DAL.ManagerClasses
                 bankReport.EMP_FirstName = item.EMP_.EMP_FirstName;
                 bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
                 bankReport.EMP_SurName = item.EMP_.EMP_SurName;
-                bankReport.EMP_ADDRESS = item.EMP_.EMP_Address;
+                bankReport.EMP_ADDRESS = item.EMP_.EMP_CityNavigation?.CITY_Name;
                 bankReport.EMP_TRANSACTION_AMOUNT = item.ADV_Amount;
                 bankReportVMs.Add(bankReport);
             }
@@ -590,7 +603,7 @@ namespace RMERP.DAL.ManagerClasses
                 bankReport.EMP_SurName = item.EMP_.EMP_SurName;
 
                 if(item.EMP_.EMP_CityNavigation!=null)
-                    bankReport.EMP_ADDRESS = item.EMP_.EMP_CityNavigation.CITY_Name;
+                    bankReport.EMP_ADDRESS = item.EMP_.EMP_CityNavigation?.CITY_Name;
                 bankReport.MESSAGE = "SALARY";
                 bankReport.ORIGINETOR = "RELIABLE";
 
@@ -618,7 +631,7 @@ namespace RMERP.DAL.ManagerClasses
                 bankReport.EMP_FirstName = item.EMP_.EMP_FirstName;
                 bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
                 bankReport.EMP_SurName = item.EMP_.EMP_SurName;
-                bankReport.EMP_ADDRESS = item.EMP_.EMP_Address;
+                bankReport.EMP_ADDRESS = item.EMP_.EMP_CityNavigation?.CITY_Name;
                 bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
                 bankReportVMs.Add(bankReport);
             }

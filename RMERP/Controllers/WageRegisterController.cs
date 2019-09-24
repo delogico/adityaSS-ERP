@@ -340,7 +340,7 @@ namespace RMERP.Controllers
                                 int cell = 8;
                                 List<string> allowance = new List<string>();
                                 int i = 0;
-                                foreach (var all in wageRegisters[0].allowanceVMs)
+                                foreach (var all in wageRegisters[0].allowanceVMs.OrderBy(m => m.allowanceVM.ALL_Id))
                                 {
                                     arrAllowancesTotal[i] = 0;
                                     allowance.Add(all.allowanceVM.ALL_Alias);
@@ -487,7 +487,7 @@ namespace RMERP.Controllers
                                     cellEmp8.CellStyle = styleGrey40;
                                     int cellAllowance = 8;
                                     int j = 0;
-                                    foreach (var all in employee.allowanceVMs)
+                                    foreach (var all in employee.allowanceVMs.OrderBy(m => m.allowanceVM.ALL_Id))
                                     {
                                         arrAllowancesTotal[j] = arrAllowancesTotal[j] + all.WAA_Amount_Calculated;                                        
                                         ICell cellEmpAll = row.CreateCell(cellAllowance + 1);
@@ -653,7 +653,7 @@ namespace RMERP.Controllers
                               
                                 int k = 0;
                                 int cellAllow = totalCount + 4;
-                                foreach (var all in wageRegisters[0].allowanceVMs)
+                                foreach (var all in wageRegisters[0].allowanceVMs.OrderBy(m => m.allowanceVM.ALL_Id))
                                 {
                                     ICell cellEmpAll = row.CreateCell(cellAllow + 1);
                                     cellEmpAll.SetCellValue(Math.Round(arrAllowancesTotal[k], MidpointRounding.AwayFromZero).ToString());

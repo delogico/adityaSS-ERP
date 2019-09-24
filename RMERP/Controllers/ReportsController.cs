@@ -952,7 +952,9 @@ namespace RMERP.Controllers
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
 
-        public async Task<FileResult> IDBI_To_IDBI_AdvanceReportExcel(int WAG_Id,int FRM_Id)
+        #region ADVANCE Report
+
+        public async Task<FileResult> IDBI_To_IDBI_AdvanceReportExcel(int WAG_Id, int FRM_Id)
         {
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
@@ -1096,7 +1098,7 @@ namespace RMERP.Controllers
                 excelSheet.SetColumnWidth(6, (int)((22 + 0.72) * 256));//A
                 cell6.CellStyle = style;
 
-                List<BankReportVM> BankReportVMs = manager.IDBI_TO_IDBI_AdvanceReports(WAG_Id,FRM_Id);
+                List<BankReportVM> BankReportVMs = manager.IDBI_TO_IDBI_AdvanceReports(WAG_Id, FRM_Id);
                 int rowCount = 6;
                 decimal TRANSACTION_AMOUNT = 0M;
                 foreach (var item in BankReportVMs)
@@ -1182,7 +1184,7 @@ namespace RMERP.Controllers
                 styleTotal.SetFont(fontcell);
 
                 styleClient.SetFont(fontcell);
-                styleSub.SetFont(fontcellSub);               
+                styleSub.SetFont(fontcellSub);
 
                 // Style the cell with borders all around.
                 style.WrapText = true;
@@ -1314,7 +1316,7 @@ namespace RMERP.Controllers
                 cell9.SetCellValue("");
                 cell9.CellStyle = style;
 
-                List<BankReportVM> BankReportVMs = manager.IDBI_TO_Other_AdvanceReports(WAG_Id,FRM_Id);
+                List<BankReportVM> BankReportVMs = manager.IDBI_TO_Other_AdvanceReports(WAG_Id, FRM_Id);
                 int rowCount = 7;
                 decimal TRANSACTION_AMOUNT = 0M;
                 foreach (var item in BankReportVMs)
@@ -1350,7 +1352,7 @@ namespace RMERP.Controllers
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
 
-        public async Task<FileResult> CHEQUE_CASH_AdvanceReportExcel(int WAG_Id,int FRM_Id)
+        public async Task<FileResult> CHEQUE_CASH_AdvanceReportExcel(int WAG_Id, int FRM_Id)
         {
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
@@ -1366,7 +1368,7 @@ namespace RMERP.Controllers
             {
                 IWorkbook workbook;
                 workbook = new XSSFWorkbook();
-                ISheet excelSheet = workbook.CreateSheet("Template");           
+                ISheet excelSheet = workbook.CreateSheet("Template");
 
                 // Style the cell with font color white
                 IFont fontcell = workbook.CreateFont();
@@ -1403,7 +1405,7 @@ namespace RMERP.Controllers
                 style.SetFont(fontcell);
 
                 IRow row = excelSheet.CreateRow(0);
-                
+
                 ICell CellSub = row.CreateCell(0);
                 CellSub.SetCellValue("RELIABLE SECURITY SERVICES ");
                 CellSub.CellStyle = styleSub;
@@ -1430,7 +1432,7 @@ namespace RMERP.Controllers
                 cell0.CellStyle = style;
                 ICell cell1 = row.CreateCell(1);
                 cell1.SetCellValue("NAME");
-                excelSheet.SetColumnWidth(1, (int)((22 + 0.72) * 256));
+                excelSheet.SetColumnWidth(1, (int)((32 + 0.72) * 256));
                 cell1.CellStyle = style;
                 ICell cell2 = row.CreateCell(2);
                 cell2.SetCellValue("LOCATION");
@@ -1449,7 +1451,7 @@ namespace RMERP.Controllers
                 excelSheet.SetColumnWidth(5, (int)((15 + 0.72) * 256));
                 cell5.CellStyle = style;
 
-                List<BankReportVM> BankReportVMs = manager.ChequeCash_AdvancesReports(WAG_Id,FRM_Id);
+                List<BankReportVM> BankReportVMs = manager.ChequeCash_AdvancesReports(WAG_Id, FRM_Id);
                 int rowCount = 4, srNo = 1;
                 decimal TRANSACTION_AMOUNT = 0M;
                 foreach (var item in BankReportVMs)
@@ -1486,7 +1488,9 @@ namespace RMERP.Controllers
             memory.Position = 0;
             new FileInfo(Path.Combine(newPath, fileName)).Delete();
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-        }        
+        }
+
+        #endregion
 
         #region PF Reports
 
