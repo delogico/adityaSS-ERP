@@ -763,9 +763,20 @@ namespace RMERP.DAL.ManagerClasses
 
                     reportVM.TotalMonthlyWages = Math.Round(TotalMonthlyWages, MidpointRounding.AwayFromZero);
                     double PayableDays = register.WAR_TotalPaybleDays;
-                    if (register.WAR_TotalPaybleDays > 27)
+                    
+                    if (register.WAR_TotalPaybleDays > 26)
                     {
-                        PayableDays = 27;
+                        int days = DateTime.DaysInMonth(register.WAG_.WAG_Month.Year, register.WAG_.WAG_Month.Month);
+                        if (days == 30)
+                        {
+                            PayableDays = 26;
+                        }else if (days == 31)
+                        {
+                            PayableDays = 27;
+                        }
+                        else{
+                            PayableDays = 26;
+                        }
                     }
                     reportVM.PayableDays = intRoundFigure(PayableDays);
                     reportVM.LastWorkingDay = "";
@@ -870,10 +881,22 @@ namespace RMERP.DAL.ManagerClasses
                     (register.WAR_Performance_Allowance_Calculated != null ? register.WAR_Performance_Allowance_Calculated.Value : 0));
 
                 reportVM.TotalMonthlyWages = Math.Round(TotalMonthlyWages, MidpointRounding.AwayFromZero);
-                double PayableDays = register.WAR_TotalPaybleDays;
-                if (register.WAR_TotalPaybleDays > 27)
+                double PayableDays = register.WAR_TotalPaybleDays;                
+                if (register.WAR_TotalPaybleDays > 26)
                 {
-                    PayableDays = 27;
+                    int days = DateTime.DaysInMonth(register.WAG_.WAG_Month.Year, register.WAG_.WAG_Month.Month);
+                    if (days == 30)
+                    {
+                        PayableDays = 26;
+                    }
+                    else if (days == 31)
+                    {
+                        PayableDays = 27;
+                    }
+                    else
+                    {
+                        PayableDays = 26;
+                    }
                 }
                 reportVM.PayableDays = intRoundFigure(PayableDays);
                 reportVM.LastWorkingDay = "";
