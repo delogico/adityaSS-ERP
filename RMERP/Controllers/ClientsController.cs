@@ -215,7 +215,7 @@ namespace RMERP.Controllers
                 clients.CLI_Name = cv.clientsModel.CLI_Name;
                 clients.CLI_International_Domestic = cv.clientsModel.CLI_International_Domestic;
                 clients.CLI_Address = cv.clientsModel.CLI_Address;
-              //  clients.CITY_Id = cv.clientsModel.CITY_Id;
+                clients.CITY_Id = cv.clientsModel.CITY_Id;
                 clients.CLI_Pincode = cv.clientsModel.CLI_Pincode;
                 clients.CLI_Phone = cv.clientsModel.CLI_Phone;
                 clients.CLI_Fax = cv.clientsModel.CLI_Fax;
