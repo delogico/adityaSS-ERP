@@ -170,7 +170,6 @@ namespace RMERP.DAL.ManagerClasses
             List<Employee_Advance> employee_Advances = this.GetIDBI_TO_IDBIEmployeeAdvances(WAG_Month, FRM_Id);
 
             foreach (var item in employee_Advances)
-
             {
                 BankReportVM bankReportVM = new BankReportVM();
                 bankReportVM.EMP_FirstName = item.EMP_.EMP_FirstName;
