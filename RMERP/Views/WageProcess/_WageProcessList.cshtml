@@ -23,8 +23,8 @@
     <div class="col-md-2">
         <h6>Advance:</h6>
         <ul style="font-size:10px;padding-left: 10px !important;">
-            <li>@Html.ActionLink("Advance Distribution Report(" + Model.totEmpTakeAdvance + ")", "AdvanceRptForBank", "Employees", new { WAG_Month = Model.WAG_Month, FRM_Id = Model.FRM_Id })</li>
-            <li>@Html.ActionLink("Set installment against advance", "UpdateAdvanceEMI", "Employees", new { WAG_Month = Model.WAG_Month, WAG_Id = Model.WAG_Id, FRM_Id = Model.FRM_Id })</li>
+            <li>@Html.ActionLink("Advance Distribution(" + Model.totEmpTakeAdvance + ")", "AdvanceRptForBank", "Employees", new { WAG_Month = Model.WAG_Month, FRM_Id = Model.FRM_Id })</li>
+            <li>@Html.ActionLink("Installment against advance", "UpdateAdvanceEMI", "Employees", new { WAG_Month = Model.WAG_Month, WAG_Id = Model.WAG_Id, FRM_Id = Model.FRM_Id })</li>
         </ul>
     </div>
     <div class="col-md-2">
@@ -41,7 +41,7 @@
                 @if (Model.WageRegisterSaved() == Model.ActiveClients)
                 {
                     <span style="color:green;">Wage Register for all Clients is Finalize.</span><br />
-                    <a class="btn btn-primary btn-xs" onclick="return window.confirm('Are you sure, you want to finalize wage Register for this month? Now onwards wage register can not be able to modify.')"
+                    <a onclick="return window.confirm('Are you sure, you want to finalize wage Register for this month? Now onwards wage register can not be able to modify.')"
                        href='@Url.Action("WageRegisterStatus", "WageProcess", new { WAG_Id = Model.WAG_Id})' title="Confirm">
                         Finalize Web Register
                     </a>
@@ -58,48 +58,31 @@
         <h6>Reports:</h6>
 
         <div class="raw">
-            <div class="col-md-4">
-                <ul style="font-size:10px;padding-left: 10px !important;">
+            <div class="col-md-6">
+                <ul style="font-size:10px;padding-left: 10px !important;margin-bottom:0px;list-style-type:none;">
                     <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForPF","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees PF Report"><i class="fa fa-file-excel-o m-r-5"></i>PF Reports</a></li>
                     <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForESIC","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees ESIC Report"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Reports</a></li>
-                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForBank","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees Bank Report"><i class="fa fa-file-excel-o m-r-5"></i>Bank Reports</a></li>
-                   
-                </ul>
-            </div>
-            <div class="col-md-4">
-                <ul style="font-size:10px;padding-left: 10px !important;">
-                    @*<li><a href='@Url.Action( "MLWF_ContributionExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="MLWF CONTRIBUTION Report"><i class="fa fa-file-excel-o m-r-5"></i>MLWF CONTRIBUTION Report.xlsx</a></li>*@
+                    <li><a href='@Url.Action( "PayTaxExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PAY TAX Report"><i class="fa fa-file-excel-o m-r-5"></i>PAY TAX Report.xlsx</a></li>
                     @if (Model.WAG_Month.Month.Equals((int)ProjectUtils.Month.June) || Model.WAG_Month.Month.Equals((int)ProjectUtils.Month.December))
                     {
                         <li><a href='@Url.Action( "Labour_WelfareFund_Excel","Reports",new { WAG_Id = Model.WAG_Id })' title="MLWF CONTRIBUTION Report"><i class="fa fa-file-excel-o m-r-5"></i>MLWF CONTRIBUTION.xlsx</a></li>
                     }
-                    <li><a href='@Url.Action( "PayTaxExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PAY TAX Report"><i class="fa fa-file-excel-o m-r-5"></i>PAY TAX Report.xlsx</a></li>
+
                 </ul>
-            </div>
-            <div class="col-md-4">
-                @*<ul style="font-size:10px;padding-left: 10px !important;">
-                        <li>
-                            <div class="dropdown">
-                                <a href="#" style="font-size:10px;color:#009ce7;" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Report</a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "Client_Wise_ESIC_Excel","Reports",new { WAG_Id = Model.WAG_Id })' title="Client Wise ESIC Report"><i class="fa fa-file-excel-o m-r-5"></i>Client Wise ESIC Report.xlsx</a></li>
-                                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "Employee_Wise_Esic_Details_Excel","Reports",new { WAG_Id = Model.WAG_Id })' title="Employee Wise Esic Details"><i class="fa fa-file-excel-o m-r-5"></i>Employee Wise Esic Details.xlsx</a></li>
-                                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ESIC_Employees_Pending_For_Registration_Excel","Reports",new { WAG_Id = Model.WAG_Id })' title="Employee Wise Esic Details"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Employees Pending For Registration.xlsx</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>*@               
-                <ul style="font-size:10px;padding-left: 10px !important;">
+            </div>           
+            <div class="col-md-6">                             
+                <ul style="font-size:10px;padding-left: 10px !important;list-style-type:none">
+                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForBank","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees Bank Report"><i class="fa fa-file-excel-o m-r-5"></i>Bank Reports</a></li>
                     <li>
                         <div class="dropdown">
-                            <a href="#" style="font-size:10px;color:#009ce7;" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-file-excel-o m-r-5"></i>Advance Reports</a>
+                            <a href="#" style="font-size:10px;color:#009ce7;padding-left: 0px;" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-file-excel-o m-r-5"></i>Advance Reports</a>
                             <ul class="dropdown-menu pull-right">
                                 <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "IDBI_To_IDBI_AdvanceReportExcel","Reports",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id })' title="IDBI To IDBI Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI To IDBI Advance Report.xlsx</a></li>
                                 <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "IDBI_To_Other_AdvanceReportExcel","Reports",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id })' title="IDBI To Others Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI To Others Advance Report.xlsx</a></li>
                                 <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "CHEQUE_CASH_AdvanceReportExcel","Reports",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id })' title="CHEQUE/CASH Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>CHEQUE/CASH Advance Report.xlsx</a></li>
                             </ul>
                         </div>
-                    </li>                   
+                    </li>
                 </ul>
 
             </div>
