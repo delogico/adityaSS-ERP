@@ -85,6 +85,7 @@ namespace RMERP.Controllers
             {
                 FRM_Id = sessionUtils.GetLoggedFirmID().Value;
             }
+            EmployeeManager employeeManager = new EmployeeManager(_context);
             AdminUserManager adminUserManager = new AdminUserManager(_context);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             FirmsManager firmsManager = new FirmsManager(_context);
@@ -95,6 +96,14 @@ namespace RMERP.Controllers
             Clients clients = new Clients();
             cv.clientsModel.CLI_RegisteredOn = ProjectUtils.DateNow();
             cv.clientsModel.FRM_Id = FRM_Id;
+            ViewBag.states = employeeManager.GetStates();
+            IEnumerable<Firms> listFirms = new List<Firms>();
+            List<Cities> listCity = new List<Cities>();
+
+            listFirms = firmsManager.getFirmList();
+            listCity = adminUserManager.getCityList();
+            ViewBag.firmList = listFirms;
+            ViewBag.cityList = listCity;
             if (id > 0)
             {
                 clients = clientsManager.GetClientById(id);
@@ -104,7 +113,8 @@ namespace RMERP.Controllers
                 cv.clientsModel.FRM_Id = clients.FRM_Id;
                 cv.clientsModel.CLI_Name = clients.CLI_Name;
                 cv.clientsModel.CLI_International_Domestic = clients.CLI_International_Domestic;
-                cv.clientsModel.CLI_Address = clients.CLI_Address;             
+                cv.clientsModel.CLI_Address = clients.CLI_Address;
+                cv.clientsModel.CITY_Id = clients.CITY_Id;
                 cv.clientsModel.CLI_Pincode = clients.CLI_Pincode;
                 cv.clientsModel.CLI_Phone = clients.CLI_Phone;
                 cv.clientsModel.CLI_Fax = clients.CLI_Fax;
@@ -123,7 +133,11 @@ namespace RMERP.Controllers
                 cv.ParametersClientsModel.CLI_Att_MonthReal = clients.CLI_Att_MonthReal;
 
                 cv.ParametersClientsModel.clientsModel.CLI_Invoicing_Name = clients.CLI_Invoicing_Name;
-                cv.ParametersClientsModel.clientsModel.CLI_Invoicing_Address = clients.CLI_Invoicing_Address;
+                cv.ParametersClientsModel.clientsModel.STA_Id = clients.STA_Id;
+                cv.clientsModel.STA_Id = clients.STA_Id;
+
+                cv.ParametersClientsModel.clientsModel.CLI_Invoicing_Address1 = clients.CLI_Invoicing_Address1;
+                cv.ParametersClientsModel.clientsModel.CLI_Invoicing_Address2 = clients.CLI_Invoicing_Address2;
                 cv.ParametersClientsModel.clientsModel.CLI_Invoicing_City = clients.CLI_Invoicing_City;
                 if(clients.CLI_Invoicing_ZipCode!=null)
                     cv.ParametersClientsModel.clientsModel.CLI_Invoicing_ZipCode = clients.CLI_Invoicing_ZipCode.Value;
@@ -140,7 +154,7 @@ namespace RMERP.Controllers
                     cv.ParametersClientsModel.clientsModel.CLI_IsSGST = clients.CLI_IsSGST.Value;
                 if (clients.CLI_SGST != null)
                     cv.ParametersClientsModel.clientsModel.CLI_SGST = clients.CLI_SGST.Value;
-                cv.ParametersClientsModel.clientsModel.CLI_GST_Info = clients.CLI_GST_Info;
+              //  cv.ParametersClientsModel.clientsModel.CLI_GST_Info = clients.CLI_GST_Info;
                 cv.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply = clients.CLI_Place_Of_Supply;
 
 
@@ -173,14 +187,8 @@ namespace RMERP.Controllers
                                            Text = GetFullEnumString(action.ToString()),
                                            Value = ((int)action).ToString()
                                        };
-            IEnumerable<Firms> listFirms = new List<Firms>();
-            List<Cities> listCity = new List<Cities>();
-
-            listFirms = firmsManager.getFirmList();
-            listCity = adminUserManager.getCityList();
-            ViewBag.firmList = listFirms;
-            ViewBag.cityList = listCity;
-
+            
+          
             return View(cv);
         }
 
@@ -238,6 +246,7 @@ namespace RMERP.Controllers
                 clients.CLI_ESIC_Employer_Cont_Rate = cv.clientsModel.CLI_ESIC_Employer_Cont_Rate;
                 clients.CLI_EPF_Rate = cv.clientsModel.CLI_EPF_Rate;
                 clients.CLI_EPS_Rate = cv.clientsModel.CLI_EPS_Rate;
+                clients.STA_Id = cv.clientsModel.STA_Id;
 
                 if (cv.clientsModel.CLI_Logo != null)
                 {
@@ -514,7 +523,9 @@ namespace RMERP.Controllers
                 clients.CLI_WorkingHours_In_Day = cvm.clientsModel.CLI_WorkingHours_In_Day;
 
                 clients.CLI_Invoicing_Name = cvm.ParametersClientsModel.clientsModel.CLI_Invoicing_Name;
-                clients.CLI_Invoicing_Address = cvm.ParametersClientsModel.clientsModel.CLI_Invoicing_Address;
+                clients.CLI_Invoicing_Address1 = cvm.ParametersClientsModel.clientsModel.CLI_Invoicing_Address1;
+                clients.CLI_Invoicing_Address2 = cvm.ParametersClientsModel.clientsModel.CLI_Invoicing_Address2;
+                clients.STA_Id = cvm.ParametersClientsModel.clientsModel.STA_Id;
                 clients.CLI_Invoicing_City = cvm.ParametersClientsModel.clientsModel.CLI_Invoicing_City;
                 clients.CLI_Invoicing_ZipCode = cvm.ParametersClientsModel.clientsModel.CLI_Invoicing_ZipCode;
                 clients.CLI_Invoicing_Location = cvm.ParametersClientsModel.clientsModel.CLI_Invoicing_Location;
@@ -536,7 +547,7 @@ namespace RMERP.Controllers
                 {
                     clients.CLI_SGST = 0;
                 }
-                clients.CLI_GST_Info = cvm.ParametersClientsModel.clientsModel.CLI_GST_Info;
+              //  clients.CLI_GST_Info = cvm.ParametersClientsModel.clientsModel.CLI_GST_Info;
                 clients.CLI_Place_Of_Supply = cvm.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply;
 
                 if (cvm.ParametersClientsModel.CLI_Att_MonthReal == true)

@@ -44,6 +44,12 @@ namespace RMERP.DAL.ViewModel
 
         [Display(Name = "IFSC Code")]
         public string FRM_IFSC_Code { get; set; }
+
+        [Display(Name = "State")]
+        [Required(ErrorMessage ="State is required")]
+        public int STA_Id { get; set; }
+
+        public States STA_ { get; set; }
     }
 }
 

@@ -10,6 +10,7 @@ namespace RMERP.DAL.Models
             AdminUsers = new HashSet<AdminUsers>();
             Clients = new HashSet<Clients>();
             Employees = new HashSet<Employees>();
+            Invoices = new HashSet<Invoices>();
             Wage_Process = new HashSet<Wage_Process>();
         }
 
@@ -24,10 +25,13 @@ namespace RMERP.DAL.Models
         public string FRM_BankName { get; set; }
         public string FRM_AccountNumber { get; set; }
         public string FRM_IFSC_Code { get; set; }
+        public int STA_Id { get; set; }
 
+        public States STA_ { get; set; }
         public ICollection<AdminUsers> AdminUsers { get; set; }
         public ICollection<Clients> Clients { get; set; }
         public ICollection<Employees> Employees { get; set; }
+        public ICollection<Invoices> Invoices { get; set; }
         public ICollection<Wage_Process> Wage_Process { get; set; }
     }
 }

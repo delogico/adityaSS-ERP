@@ -23,6 +23,8 @@ namespace RMERP.DAL.Mappers
             firmVM.FRM_BankName = firm.FRM_BankName;
             firmVM.FRM_AccountNumber = firm.FRM_AccountNumber;
             firmVM.FRM_IFSC_Code = firm.FRM_IFSC_Code;
+            firmVM.STA_Id = firm.STA_Id;
+            firmVM.STA_ = firm.STA_;
             return firmVM;
         }
         public static Firms mapMeModel(FirmVM firmVM)
@@ -39,6 +41,8 @@ namespace RMERP.DAL.Mappers
             firm.FRM_BankName = firmVM.FRM_BankName;
             firm.FRM_AccountNumber = firmVM.FRM_AccountNumber;
             firm.FRM_IFSC_Code = firmVM.FRM_IFSC_Code;
+            firm.STA_Id = firmVM.STA_Id;
+            firm.STA_ = firmVM.STA_;
             return firm;
         }
 

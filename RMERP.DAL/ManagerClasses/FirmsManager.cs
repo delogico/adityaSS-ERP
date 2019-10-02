@@ -1,4 +1,5 @@
-﻿using RMERP.DAL.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using RMERP.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public IEnumerable<Firms> getFirmList()
         {
-            return _context.Firms.OrderBy(m=>m.FRM_Name).ToList();
+            return _context.Firms.Include(m=>m.STA_).OrderBy(m=>m.FRM_Name).ToList();
         }  
         public string saveEditFirm(Firms firms)
         {

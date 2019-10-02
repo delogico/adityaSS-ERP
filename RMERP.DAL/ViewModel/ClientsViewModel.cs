@@ -86,10 +86,14 @@ namespace RMERP.DAL.ViewModel
 
         [Display(Name = "Invoicing name")]       
         public string CLI_Invoicing_Name { get; set; }
-        [Display(Name = "Address")]
-        public string CLI_Invoicing_Address { get; set; }
+        [Display(Name = "Address 1")]
+        public string CLI_Invoicing_Address1 { get; set; }
+        [Display(Name = "Address 2")]
+        public string CLI_Invoicing_Address2 { get; set; }
         [Display(Name = "City")]       
         public string CLI_Invoicing_City { get; set; }
+        [Display(Name = "State")]
+        public int STA_Id { get; set; }
         [Display(Name = "Zipcode")]
         public int CLI_Invoicing_ZipCode { get; set; }
         [Display(Name = "Location")]
@@ -103,8 +107,8 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "SGST(%)")]
         public bool CLI_IsSGST { get; set; }
         public double CLI_SGST { get; set; }
-        [Display(Name = "GST Info")]
-        public string CLI_GST_Info { get; set; }
+        //[Display(Name = "GST Info")]
+        //public string CLI_GST_Info { get; set; }
         [Display(Name = "Place of supply")]
         public string CLI_Place_Of_Supply { get; set; }
         [Display(Name = "Employer PF Contribution Rate(%)")]

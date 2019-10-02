@@ -30,9 +30,11 @@ namespace RMERP.Controllers
         
         public ActionResult AddEditFirm(int FRM_Id=0)
         {
+            EmployeeManager employeeManager = new EmployeeManager(_context);
             FirmsManager firmsManager = new FirmsManager(_context);
             FirmVM vm = new FirmVM();
-            if(FRM_Id > 0)
+            ViewBag.States = employeeManager.GetStates();
+            if (FRM_Id > 0)
             {
                 vm = FirmMapper.mapMe(firmsManager.GetFirm(FRM_Id));
             }            

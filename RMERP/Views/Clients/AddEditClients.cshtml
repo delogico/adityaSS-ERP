@@ -50,7 +50,7 @@
                             @Html.HiddenFor(m => m.clientsModel.CLI_Id)
                             @Html.HiddenFor(m => m.clientsModel.CLI_IsActive)
                             @Html.HiddenFor(m => m.clientsModel.CliLogoImage)
-
+                            @Html.HiddenFor(m => m.clientsModel.STA_Id)
                             if (Model.clientsModel.CLI_Id > 0)
                             {
                                 @Html.HiddenFor(m => m.clientsModel.FRM_Id)
@@ -441,31 +441,7 @@
                         <div class="col-md-12">
                             <div class="profile-view">
                                 <h4 class="page-title">Invoicing Parameters</h4>
-                                @*<div class="row">
-                                    <div class="form-group col-sm-6">
-                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number)
-                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number, "", new { @class = "text-danger" })
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Rate)
-                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Rate, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Rate, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-sm-6">
-                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_HSN_Code)
-                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_HSN_Code, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_HSN_Code, "", new { @class = "text-danger" })
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_TDS_Rate)
-                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_TDS_Rate, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_TDS_Rate, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>*@
-
+                               
                                 <div class="row">
                                     <div class="form-group col-sm-10">
                                         @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Name)
@@ -473,15 +449,24 @@
                                         @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Name, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group col-sm-6">
-                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Address)
-                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Address, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Address, "", new { @class = "text-danger" })
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.STA_Id)
+                                        @Html.DropDownListFor(x => x.ParametersClientsModel.clientsModel.STA_Id, new SelectList(ViewBag.states, "STA_Id", "STA_Name"), "Select State", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.STA_Id, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group col-sm-6">
                                         @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_City)
-                                        @*@Html.DropDownListFor(x => x.clientsModel.CLI_Invoicing_City, new SelectList(ViewBag.cityList, "CITY_Id", "CITY_Name"), "Select City", new { @class = "form-control" })*@
                                         @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_City, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_City, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Address1)
+                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Address1, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Address1, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Address2)
+                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Address2, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Address2, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group col-sm-6">
                                         @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_ZipCode)
@@ -539,11 +524,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-10">
-                                        @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Info)
-                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Info, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Info, "", new { @class = "text-danger" })
-                                    </div>
+                                    @*<div class="form-group col-sm-10">
+            @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Info)
+            @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Info, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Info, "", new { @class = "text-danger" })
+        </div>*@
                                     <div class="form-group col-sm-6">
                                         @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply)
                                         @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply, new { @class = "form-control" })

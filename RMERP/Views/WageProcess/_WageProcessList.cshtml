@@ -22,7 +22,7 @@
     </div>
     <div class="col-md-2">
         <h6>Advance:</h6>
-        <ul style="font-size:10px;padding-left: 10px !important;">
+        <ul style="font-size:10px;padding-left: 10px !important;list-style-type:none;">
             <li>@Html.ActionLink("Advance Distribution(" + Model.totEmpTakeAdvance + ")", "AdvanceRptForBank", "Employees", new { WAG_Month = Model.WAG_Month, FRM_Id = Model.FRM_Id })</li>
             <li>@Html.ActionLink("Installment against advance", "UpdateAdvanceEMI", "Employees", new { WAG_Month = Model.WAG_Month, WAG_Id = Model.WAG_Id, FRM_Id = Model.FRM_Id })</li>
         </ul>

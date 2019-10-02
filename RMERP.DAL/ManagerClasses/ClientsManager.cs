@@ -112,12 +112,12 @@ namespace RMERP.DAL.ManagerClasses
             }
             return ClientList.ToList();
         }
-        public Clients GetClientById(int id)
+        public Clients GetClientById(int CLI_Id)
         {
             Clients clients = new Clients();
             try
             {
-                clients = _contaxt.Clients.Find(id);
+                clients = _contaxt.Clients.Find(CLI_Id);
             }
             catch (Exception ex)
             {
@@ -307,7 +307,9 @@ namespace RMERP.DAL.ManagerClasses
                 client.CLI_WorkingHours_In_Day = clients.CLI_WorkingHours_In_Day;
 
                 client.CLI_Invoicing_Name = clients.CLI_Invoicing_Name;
-                client.CLI_Invoicing_Address = clients.CLI_Invoicing_Address;
+                client.CLI_Invoicing_Address1 = clients.CLI_Invoicing_Address1;
+                client.CLI_Invoicing_Address2 = clients.CLI_Invoicing_Address2;
+                client.STA_Id = clients.STA_Id;
                 client.CLI_Invoicing_City = clients.CLI_Invoicing_City;
                 client.CLI_Invoicing_ZipCode = clients.CLI_Invoicing_ZipCode;
                 client.CLI_Invoicing_Location = clients.CLI_Invoicing_Location;
@@ -317,7 +319,7 @@ namespace RMERP.DAL.ManagerClasses
                 client.CLI_CGST = clients.CLI_CGST;
                 client.CLI_IsSGST = clients.CLI_IsSGST;
                 client.CLI_SGST = clients.CLI_SGST;
-                client.CLI_GST_Info = clients.CLI_GST_Info;
+             //   client.CLI_GST_Info = clients.CLI_GST_Info;
                 client.CLI_Place_Of_Supply = clients.CLI_Place_Of_Supply;
 
                 client.CLI_PF_Employer_Cont_Rate = clients.CLI_PF_Employer_Cont_Rate;

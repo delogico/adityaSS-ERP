@@ -32,6 +32,8 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Employee_Documents> Employee_Documents { get; set; }
         public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<Firms> Firms { get; set; }
+        public virtual DbSet<Invoice_Concepts> Invoice_Concepts { get; set; }
+        public virtual DbSet<Invoices> Invoices { get; set; }
         public virtual DbSet<ProfessionalTaxCalculation> ProfessionalTaxCalculation { get; set; }
         public virtual DbSet<States> States { get; set; }
         public virtual DbSet<Wage_Process> Wage_Process { get; set; }
@@ -316,8 +318,6 @@ namespace RMERP.DAL.Models
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.CLI_GST_Info).IsUnicode(false);
-
                 entity.Property(e => e.CLI_GST_Number)
                     .HasMaxLength(20)
                     .IsUnicode(false);
@@ -328,7 +328,13 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.CLI_InActivatedOn).HasColumnType("datetime");
 
-                entity.Property(e => e.CLI_Invoicing_Address).IsUnicode(false);
+                entity.Property(e => e.CLI_Invoicing_Address1)
+                    .HasMaxLength(1000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CLI_Invoicing_Address2)
+                    .HasMaxLength(1000)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.CLI_Invoicing_City)
                     .HasMaxLength(100)
@@ -374,6 +380,8 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.CLI_WorkingHours_In_Day).HasDefaultValueSql("((8))");
 
+                entity.Property(e => e.STA_Id).HasDefaultValueSql("((12))");
+
                 entity.HasOne(d => d.CITY_)
                     .WithMany(p => p.Clients)
                     .HasForeignKey(d => d.CITY_Id)
@@ -385,6 +393,12 @@ namespace RMERP.DAL.Models
                     .HasForeignKey(d => d.FRM_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Clients_Firms");
+
+                entity.HasOne(d => d.STA_)
+                    .WithMany(p => p.Clients)
+                    .HasForeignKey(d => d.STA_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Clients_States");
             });
 
             modelBuilder.Entity<Clients_Employees>(entity =>
@@ -660,6 +674,73 @@ namespace RMERP.DAL.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.STA_)
+                    .WithMany(p => p.Firms)
+                    .HasForeignKey(d => d.STA_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Firms_States");
+            });
+
+            modelBuilder.Entity<Invoice_Concepts>(entity =>
+            {
+                entity.HasKey(e => e.INC_Id);
+
+                entity.Property(e => e.INC_Description)
+                    .IsRequired()
+                    .IsUnicode(false);
+
+                entity.Property(e => e.INC_Total).HasColumnType("decimal(9, 2)");
+
+                entity.HasOne(d => d.INV_)
+                    .WithMany(p => p.Invoice_Concepts)
+                    .HasForeignKey(d => d.INV_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Invoice_Concepts_Invoices");
+            });
+
+            modelBuilder.Entity<Invoices>(entity =>
+            {
+                entity.HasKey(e => e.INV_Id);
+
+                entity.Property(e => e.INV_CGST_Total).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.INV_ClientOrder_Date).HasColumnType("date");
+
+                entity.Property(e => e.INV_ClientOrder_Number)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.INV_CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.INV_Date).HasColumnType("date");
+
+                entity.Property(e => e.INV_HSN)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.INV_IGST_Total).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.INV_Number)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.INV_SGST_Total).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.INV_Total).HasColumnType("decimal(9, 2)");
+
+                entity.HasOne(d => d.CLI_)
+                    .WithMany(p => p.Invoices)
+                    .HasForeignKey(d => d.CLI_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Invoices_Clients");
+
+                entity.HasOne(d => d.FRM_)
+                    .WithMany(p => p.Invoices)
+                    .HasForeignKey(d => d.FRM_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Invoices_Firms");
             });
 
             modelBuilder.Entity<ProfessionalTaxCalculation>(entity =>
@@ -681,6 +762,10 @@ namespace RMERP.DAL.Models
             modelBuilder.Entity<States>(entity =>
             {
                 entity.HasKey(e => e.STA_Id);
+
+                entity.Property(e => e.STA_GST_Code)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.STA_Name)
                     .IsRequired()
