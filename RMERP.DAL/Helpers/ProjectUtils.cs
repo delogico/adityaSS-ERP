@@ -74,9 +74,9 @@ namespace RMERP.DAL.Helpers
             [StringValue("PF EXCEL.xlsx")]
             Employee_PF_Excel = 2,
             [StringValue("LIST OF EMPLOYEE ABOVE 58.xlsx")]
-            PF_Report_Above_58 =3,
+            PF_Report_Above_58 = 3,
             [StringValue("PF Report.txt")]
-            PF_Report_Text =4
+            PF_Report_Text = 4
         }
         public enum ESIC_REPORT_TYPE
         {
@@ -86,7 +86,7 @@ namespace RMERP.DAL.Helpers
             Employee_Wise_Esic_Details_Excel = 1,
             [StringValue("ESIC Employees Pending For Registration.xlsx")]
             ESIC_Employees_Pending_For_Registration_Excel = 2
-            
+
         }
         public enum BANK_REPORT_TYPE
         {
@@ -97,39 +97,39 @@ namespace RMERP.DAL.Helpers
             [StringValue("IDBI Bank To Others Report.xlsx")]
             IDBI_Bank_To_Others_Report = 2,
             [StringValue("CHEQUE/CASH Report.xlsx")]
-            CHEQUE_CASH_Report = 3         
-        } 
+            CHEQUE_CASH_Report = 3
+        }
 
         public enum EMPLOYEE_LEFT_REASON_CODE
         {
             [StringValue("Without Reason")]
-            Without_Reason =0,
+            Without_Reason = 0,
             [StringValue("On Leave")]
-            On_Leave =1,
+            On_Leave = 1,
             [StringValue("Left Service")]
-            Left_Service =2,
+            Left_Service = 2,
             [StringValue("Retired")]
-            Retired =3,
+            Retired = 3,
             [StringValue("Out of Coverage")]
-            Out_Of_Coverage =4,
+            Out_Of_Coverage = 4,
             [StringValue("Expired")]
-            Expired =5,
+            Expired = 5,
             [StringValue("Non Implemented area")]
-            Non_Implemented_Area =6,
+            Non_Implemented_Area = 6,
             [StringValue("Compliance by Immediate Employer")]
-            Compliance_By_Immediate_Employer =7,
+            Compliance_By_Immediate_Employer = 7,
             [StringValue("Suspension of work")]
-            Suspension_Of_Work =8,
+            Suspension_Of_Work = 8,
             [StringValue("Strike/Lockout")]
-            Strike_Lockout =9,
+            Strike_Lockout = 9,
             [StringValue("Retrenchment")]
-            Retrenchment =10,
+            Retrenchment = 10,
             [StringValue("No Work")]
-            No_Work =11,
+            No_Work = 11,
             [StringValue("Doesnt Belong To This Employer")]
-            Doesnt_Belong_To_This_Employer =12,
+            Doesnt_Belong_To_This_Employer = 12,
             [StringValue("Duplicate IP")]
-            Duplicate_IP =13
+            Duplicate_IP = 13
         }
         public enum Month
         {
@@ -147,6 +147,14 @@ namespace RMERP.DAL.Helpers
             November = 11,
             December = 12
         }
+
+
+        public enum PDFAction
+        {
+            Download = 0,
+            View = 1
+        }
+
         public static DateTime DateNow()
         {
             DateTime utcTime = DateTime.UtcNow;
@@ -342,7 +350,7 @@ namespace RMERP.DAL.Helpers
             return sum;
         }
         public static decimal GetAmountBasedOnFormula_Report(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Wage_Register_Allowances> All, double totalWorkingDays, double totalPaybleDays, decimal WAR_OverTime_Calculated, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated)
-        {            
+        {
             decimal sum = 0M;
             string[] arr_CRI_Formula;
 
@@ -382,8 +390,8 @@ namespace RMERP.DAL.Helpers
                                 foreach (var allowance in All)
                                 {
                                     if (allowance.CRA_.ALL_.ALL_Shortform == item)
-                                    {                                        
-                                            sum += allowance.WAA_Amount_Calculated;                                        
+                                    {
+                                        sum += allowance.WAA_Amount_Calculated;
                                     }
                                 }
                             }
@@ -475,18 +483,61 @@ namespace RMERP.DAL.Helpers
             return sum;
         }
 
-        public static int intRoundFigure(double value=12.5)
+        public static int intRoundFigure(double value = 12.5)
         {
-            int val = 0;            
+            int val = 0;
             if (value % 1 <= 0.5)
             {
                 val = (int)value;
             }
             else
             {
-                val = (int)value +1;
+                val = (int)value + 1;
             }
             return val;
+        }
+
+        public static string ConvertNumbertoWords(decimal price)
+        {
+            int number = (int)price;
+            if (number == 0) return "Zero";
+            if (number < 0) return "minus " + ConvertNumbertoWords(Math.Abs(number));
+            string words = "";
+            if ((number / 1000000) > 0)
+            {
+                words += ConvertNumbertoWords(number / 100000) + " Lakes ";
+                number %= 1000000;
+            }
+            if ((number / 1000) > 0)
+            {
+                words += ConvertNumbertoWords(number / 1000) + " Thousand ";
+                number %= 1000;
+            }
+            if ((number / 100) > 0)
+            {
+                words += ConvertNumbertoWords(number / 100) + " Hundred ";
+                number %= 100;
+            }
+
+            if (number > 0)
+            {
+                if (words != "") words += "And ";
+                var unitsMap = new[]
+                {
+            "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"
+        };
+                var tensMap = new[]
+                {
+            "Zero", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
+        };
+                if (number < 20) words += unitsMap[number];
+                else
+                {
+                    words += tensMap[number / 10];
+                    if ((number % 10) > 0) words += " " + unitsMap[number % 10];
+                }
+            }
+            return words;
         }
     }
 }

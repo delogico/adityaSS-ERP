@@ -19,17 +19,17 @@ namespace RMERP.DAL.ManagerClasses
         {
             if (FRM_Id == 0)
             {
-                return _context.Invoices.Include(m=>m.CLI_).Include(m => m.Invoice_Concepts).OrderByDescending(m=>m.INV_Date).ToList();
+                return _context.Invoices.Include(m=>m.CLI_).ThenInclude(m=>m.FRM_).Include(m => m.Invoice_Concepts).OrderByDescending(m=>m.INV_Date).ToList();
             }
             else
             {
-                return _context.Invoices.Include(m => m.CLI_).Include(m => m.Invoice_Concepts).Where(m => m.FRM_Id.Equals(FRM_Id)).OrderByDescending(m => m.INV_Date).ToList();
+                return _context.Invoices.Include(m => m.CLI_).ThenInclude(m => m.FRM_).Include(m => m.Invoice_Concepts).Where(m => m.FRM_Id.Equals(FRM_Id)).OrderByDescending(m => m.INV_Date).ToList();
             }            
         }
         
         public Invoices GetInvoice(int INV_Id)
         {
-            return _context.Invoices.Include(m=>m.Invoice_Concepts).Where(m=>m.INV_Id.Equals(INV_Id)).FirstOrDefault();
+            return _context.Invoices.Include(m=>m.FRM_).ThenInclude(m=>m.STA_).Include(m=>m.CLI_).ThenInclude(m=>m.STA_).Include(m => m.CLI_).ThenInclude(m=>m.CITY_).Include(m=>m.Invoice_Concepts).Where(m=>m.INV_Id.Equals(INV_Id)).FirstOrDefault();
         }
         public int AddEditInvoice(Invoices invoice)
         {

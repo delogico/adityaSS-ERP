@@ -1,0 +1,231 @@
+﻿@model RMERP.DAL.Models.Invoices
+@using static RMERP.DAL.Helpers.ProjectUtils;
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <style>
+        .invoice-title h2, .invoice-title h3 {
+            display: inline-block;
+        }
+
+        .table > tbody > tr > .no-line {
+            border-top: none;
+        }
+
+        .table > thead > tr > .no-line {
+            border-bottom: none;
+        }
+
+        .table > tbody > tr > .thick-line {
+            border-top: 2px solid;
+        }
+
+        .custom-border {
+            border: solid 1px;
+            border-color: #ddd;
+            padding: 10px;
+        }
+        }
+    </style>
+</head>
+<body>
+    <div class="container custom-border" style="margin-top: 10px;">
+
+        <div class="row">
+            <div class="col-xs-12">
+                <center>
+                    <h1><strong>@Model.FRM_.FRM_Name</strong></h1>
+                    <strong>
+                        @Model.FRM_.FRM_Address1<br>
+                        @Model.FRM_.FRM_Address2<br>
+                        GSTIN/UIN : @Model.FRM_.FRM_GST_No<br>
+                        State Name: @Model.FRM_.STA_.STA_Name , Code: @Model.FRM_.STA_.STA_GST_Code<br>
+                        E-Mail : @Model.FRM_.FRM_Email<br>
+                    </strong>
+                </center>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <hr />
+                <div class="invoice-title text-center">
+                    <h1><strong>TAX INVOICE</strong></h1>
+                </div>
+                <hr />
+                <div class="row">
+                    @*<div class="col-xs-8">
+                        <address>
+                            <strong>Buyer: </strong><br>
+                            <strong>@Model.CLI_.CLI_Name</strong> <br>
+                            @Model.CLI_.CLI_Invoicing_Address1<br>
+                            @Model.CLI_.CLI_Invoicing_Address2<br>
+                            @Model.CLI_.CLI_Invoicing_City<br><br>
+
+                            Pin Code: @Model.CLI_.CLI_Pincode <br />
+                            LOCATION : <strong>@Model.CLI_.CLI_Invoicing_Location</strong> <br />
+                            Buyer's GSTIN/UIN : @Model.CLI_.CLI_GST_Number  <br />
+                            @Model.CLI_.STA_.STA_Name Code: @Model.CLI_.STA_.STA_GST_Code <br />
+                            Place of Supply:  @Model.CLI_.STA_.STA_Name
+                        </address>
+                    </div>
+                    <div class="col-xs-4 text-right">
+                        <address>
+                            <strong>Invoice No: @Model.INV_Number</strong><br>
+                            <strong>Date :</strong> @Model.INV_Date.ToShortDateString()<hr>
+                            Order No. : @Model.INV_ClientOrder_Number<br>
+                            Date : @Model.INV_ClientOrder_Date.Value.ToShortDateString()<br>
+                        </address>
+                    </div>*@
+
+                    <div class="col-sm-12">
+                        <table width="100%" style="font-size:inherit">
+                            <tr>
+                                <td width="75%">
+                                    <address>
+                                        <strong>Buyer: </strong><br>
+                                        <strong>@Model.CLI_.CLI_Name</strong> <br>
+                                        @Model.CLI_.CLI_Invoicing_Address1<br>
+                                        @Model.CLI_.CLI_Invoicing_Address2<br>
+                                        @Model.CLI_.CLI_Invoicing_City<br><br>
+
+                                        Pin Code: @Model.CLI_.CLI_Pincode <br />
+                                        LOCATION : <strong>@Model.CLI_.CLI_Invoicing_Location</strong> <br />
+                                        Buyer's GSTIN/UIN : @Model.CLI_.CLI_GST_Number  <br />
+                                        @Model.CLI_.STA_.STA_Name Code: @Model.CLI_.STA_.STA_GST_Code <br />
+                                        Place of Supply:  @Model.CLI_.STA_.STA_Name
+                                    </address>
+                                </td>
+                                <td class="text-right" width="25%" style="vertical-align:top;">
+                                    <address>
+                                        <strong>Invoice No: @Model.INV_Number</strong><br>
+                                        <strong>Date :</strong> @Model.INV_Date.ToShortDateString()<hr/>
+                                        Order No. : @Model.INV_ClientOrder_Number<br>
+                                        Date : @Model.INV_ClientOrder_Date.Value.ToShortDateString()<br>
+                                    </address>                                    
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Order summary</strong></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <table class="table table-condensed border-dark">
+                                <thead>
+                                    <tr>
+                                        <td width="10%"><strong>Sr.No</strong></td>
+                                        <td class="text-left"><strong>Description</strong></td>
+                                        <td width="20%" class="text-right"><strong>Amount</strong></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Invoice_Concepts)
+                                    {
+                                        <tr>
+                                            <td>@item.INC_Serial_Number</td>
+                                            <td class="text-left">@item.INC_Description</td>
+                                            <td class="text-right"><i class="fa fa-rupee"></i>@item.INC_Total</td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td class="thick-line"></td>
+                                        <td class="thick-line text-right"><strong>Total</strong></td>
+                                        <td class="thick-line text-right"><i class="fa fa-rupee"></i>@Model.INV_Total</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="border:1px;border:medium">
+            <div class="col-sm-12">
+                <strong>Amount in Word: </strong>Indian Rupees @ConvertNumbertoWords(Model.INV_Total) Only
+            </div>
+            <div class="col-sm-12">
+                <strong>Company GST No: </strong> @Model.FRM_.FRM_GST_No
+            </div>
+            <div class="col-sm-12">
+                <strong>Company's Bank Details </strong><br />
+            </div>
+            <div class="col-sm-12">
+                <table width="100%" style="font-size:inherit">
+                    <tbody>
+                        <tr>
+                            <td class="text-left" width="33%"> <strong>Bank Name:</strong>  @Model.FRM_.FRM_BankName</td>
+                            <td class="text-center" width="33%">  <strong> A/c No. :</strong>  @Model.FRM_.FRM_AccountNumber</td>
+                            <td class="text-right" width="33%"> <strong>IFSC Code:</strong>  @Model.FRM_.FRM_IFSC_Code</td>                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-sm-12">
+                <strong>Remark: </strong>
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <p class="text-right"><strong> For @Model.FRM_.FRM_Name</strong> </p>
+            </div>
+        </div>
+        <div class="row">
+            <br /><br /><br />
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <table width="100%" style="font-size:inherit">
+                    <tbody>
+                        <tr>
+                            <td class="text-left" width="25%"><strong>Customer Seal and Signature: </strong></td>
+                            <td class="text-center" width="25%"> <strong>Prepared by: </strong></td>
+                            <td class="text-center" width="25%"> <strong>Verified by: </strong></td>
+                            <td class="text-right" width="25%"><strong>Propriator: </strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            @*<div class="col-sm-10 text-center">
+                <span>Subject to Jurisdiction</span>
+            </div>
+            <div class="col-sm-2 text-right">
+                <span>E & O.E</span>
+            </div>*@
+            <div class="col-sm-12">
+                <table width="100%" style="font-size:inherit">
+                    <tbody>
+                        <tr>
+                            <td class="text-center" width="75%"><span>Subject to Jurisdiction</span></td>
+                            <td class="text-right" width="25%"><span>E & O.E</span></td>                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+

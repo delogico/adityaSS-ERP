@@ -1,4 +1,5 @@
 ﻿@model List<RMERP.DAL.Models.Invoices>
+@using static RMERP.DAL.Helpers.ProjectUtils;
 @{
     ViewData["Title"] = "Index";
 }
@@ -72,8 +73,8 @@
                         <tr>
                             <td>@srNo</td>
                             <td>@item.INV_Date.ToShortDateString()</td>
-                            <td><a href="invoice-view.html">INV_@item.INV_Number</a></td>
-                            <td>@item.CLI_.CLI_Name</td>                           
+                            <td><a target="_blank" href="@Url.Action("DownloadInvoice","Invoices",new {INV_Id=item.INV_Id,ActionId= (int)PDFAction.View })">INV_@item.INV_Number</a></td>
+                            <td>@item.CLI_.CLI_Name (@item.FRM_.FRM_ShortName)</td>                           
                             <td><i class="fa fa-rupee"></i> @item.INV_Total</td>
                             @*<td><span class="label label-success-border">Paid</span></td>*@
                             <td class="text-right">
@@ -82,7 +83,7 @@
                                     <ul class="dropdown-menu pull-right">
                                         <li><a href="@Url.Action("AddEditInvoice","Invoices",new {INV_Id=item.INV_Id })"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
                                         <li><a href="@Url.Action("AddEditInvoice","Invoices",new {INV_Id=item.INV_Id })"><i class="fa fa-eye m-r-5"></i> View</a></li>
-                                        <li><a href="@Url.Action("DownloadInvoice","Invoices",new {INV_Id=item.INV_Id })"><i class="fa fa-file-pdf-o m-r-5"></i> Download</a></li>
+                                        <li><a href="@Url.Action("DownloadInvoice","Invoices",new {INV_Id=item.INV_Id,Action= (int)PDFAction.Download })"><i class="fa fa-file-pdf-o m-r-5"></i> Download</a></li>
                                         <li><a href="@Url.Action("DeleteInvoice","Invoices",new {INV_Id=item.INV_Id })"><i class="fa fa-trash-o m-r-5"></i> Delete</a></li>
                                     </ul>
                                 </div>

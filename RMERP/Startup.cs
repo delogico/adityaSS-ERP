@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Rotativa.AspNetCore;
 using SmartBreadcrumbs.Extensions;
 
 namespace RMERP
@@ -105,6 +106,7 @@ namespace RMERP
                      //template: "{controller=AdminUsers}/{action=DashBoard}/{id?}");
                      template: "{controller=AdminUsers}/{action=DashBoard}/{id?}");
             });
+            RotativaConfiguration.Setup(env);
         }
 
 
