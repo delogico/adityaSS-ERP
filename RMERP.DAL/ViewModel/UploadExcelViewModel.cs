@@ -3,14 +3,17 @@ using System;
 using System.Collections.Generic;
 using RMERP.DAL.ViewModel;
 using RMERP.DAL.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace RMERP.DAL.ViewModel
 {
     public class UploadExcelViewModel
     {
         public WageProcessVM wageProcessVM { get; set; }
+        [Required(ErrorMessage = "Excel file is required")]
         public IFormFile ExcelFile { get; set; }
         public Clients client { get; set; }
+        [Required(ErrorMessage ="Choose Template")]
         public string Template { get; set; }       
     }
 
