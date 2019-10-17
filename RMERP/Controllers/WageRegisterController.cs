@@ -502,32 +502,32 @@ namespace RMERP.Controllers
                                     if (clientRequirement.CRI_OutStation_Allowance == true)
                                     {
                                         ICell cellOutstation = row.CreateCell(cellNxt);
-                                        cellOutstation.SetCellValue(Math.Round(employee.WAR_OutStation_Allowance_Calculated, MidpointRounding.AwayFromZero).ToString());
-                                        TotalOutStation = TotalOutStation + Math.Round(employee.WAR_OutStation_Allowance_Calculated);
+                                        cellOutstation.SetCellValue(Math.Round(employee.WAR_OutStation_Allowance_Calculated.Value, MidpointRounding.AwayFromZero).ToString());
+                                        TotalOutStation = TotalOutStation + Math.Round(employee.WAR_OutStation_Allowance_Calculated.Value);
                                         cellOutstation.CellStyle = styleGrey40;
                                         cellNxt = cellNxt + 1;
                                     }
                                     if (clientRequirement.CRI_Attendance_Allowance == true)
                                     {
                                         ICell cellAttendance= row.CreateCell(cellNxt);
-                                        cellAttendance.SetCellValue(Math.Round(employee.WAR_Attendance_Allowance_Calculated, MidpointRounding.AwayFromZero).ToString());
-                                        TotalAttendance = TotalAttendance + Math.Round(employee.WAR_Attendance_Allowance_Calculated, MidpointRounding.AwayFromZero);
+                                        cellAttendance.SetCellValue(Math.Round(employee.WAR_Attendance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero).ToString());
+                                        TotalAttendance = TotalAttendance + Math.Round(employee.WAR_Attendance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero);
                                         cellAttendance.CellStyle = styleGrey40;
                                         cellNxt = cellNxt + 1;
                                     }
                                     if (clientRequirement.CRI_Nightshift_Allowance == true)
                                     {
                                         ICell cellNightshift = row.CreateCell(cellNxt);
-                                        cellNightshift.SetCellValue(Math.Round(employee.WAR_Nightshift_Allowance_Calculated, MidpointRounding.AwayFromZero).ToString());
-                                        TotalNightshift = TotalNightshift + Math.Round(employee.WAR_Nightshift_Allowance_Calculated, MidpointRounding.AwayFromZero);
+                                        cellNightshift.SetCellValue(Math.Round(employee.WAR_Nightshift_Allowance_Calculated.Value, MidpointRounding.AwayFromZero).ToString());
+                                        TotalNightshift = TotalNightshift + Math.Round(employee.WAR_Nightshift_Allowance_Calculated.Value, MidpointRounding.AwayFromZero);
                                         cellNightshift.CellStyle = styleGrey40;
                                         cellNxt = cellNxt + 1;
                                     }
                                     if (clientRequirement.CRI_Performance_Allowance == true)
                                     {
                                         ICell cellPerformance = row.CreateCell(cellNxt);
-                                        cellPerformance.SetCellValue(Math.Round(employee.WAR_Performance_Allowance_Calculated, MidpointRounding.AwayFromZero).ToString());
-                                        TotalPerformance = TotalPerformance + Math.Round(employee.WAR_Performance_Allowance_Calculated, MidpointRounding.AwayFromZero);
+                                        cellPerformance.SetCellValue(Math.Round(employee.WAR_Performance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero).ToString());
+                                        TotalPerformance = TotalPerformance + Math.Round(employee.WAR_Performance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero);
                                         cellPerformance.CellStyle = styleGrey40;
                                         cellNxt = cellNxt + 1;
                                     }
@@ -590,7 +590,7 @@ namespace RMERP.Controllers
                                     if (!dd.DES_Exclude_LWF)
                                     {
                                         ICell cell_LWF = row.CreateCell(cellNext2);
-                                        cell_LWF.SetCellValue(Convert.ToString(Math.Round(employee.WAR_LWF_Deduction_Calculated, MidpointRounding.AwayFromZero).ToString()));
+                                        cell_LWF.SetCellValue(Convert.ToString(Math.Round(employee.WAR_LWF_Deduction_Calculated.Value, MidpointRounding.AwayFromZero).ToString()));
                                         excelSheet.SetColumnWidth(cellNext2, (int)((25 + 0.72) * 140));
                                         cell_LWF.CellStyle = styleGrey50;
                                         TotalLWF = TotalLWF + Convert.ToDecimal(employee.WAR_LWF_Deduction_Calculated);
@@ -599,7 +599,7 @@ namespace RMERP.Controllers
 
                                     #region Total Deduction
                                     decimal DeductTotal = Math.Round(employee.WAR_PF_Calculated, MidpointRounding.AwayFromZero) + Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero) + Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated), MidpointRounding.AwayFromZero)
-                                        + Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero) + Math.Round(employee.WAR_LWF_Deduction_Calculated, MidpointRounding.AwayFromZero);
+                                        + Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero) + Math.Round(employee.WAR_LWF_Deduction_Calculated.Value, MidpointRounding.AwayFromZero);
                                     if (employee.WAR_RevenueDeduction_Calculated != "-")
                                     {
                                         DeductTotal += Math.Round(Convert.ToDecimal(employee.WAR_RevenueDeduction_Calculated), MidpointRounding.AwayFromZero);
@@ -774,5 +774,56 @@ namespace RMERP.Controllers
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
 
+        [HttpPost]
+        public JsonResult Calculate_PF_ESIC([FromBody]CalculationEditVM CalculationEditVM)
+        {
+            WageRegisterManager registerManager = new WageRegisterManager(_context);           
+            CalculatedEditVM calculated = new CalculatedEditVM();
+            if (CalculationEditVM != null)
+            {
+                Wage_Register wageRegister = registerManager.GetWageRegister(CalculationEditVM.WAR_Id);
+                CalculationEditVM.CRI_PF_Formula = wageRegister.WAR_PF_Formula;
+                CalculationEditVM.CRI_ESIC_Formula = wageRegister.WAR_ESIC_Formula;
+                decimal PFsum = Math.Round(GetAmountBasedOnFormula_Edit(
+                                CalculationEditVM.CRI_PF_Formula, CalculationEditVM.WAR_Basic_Calculated, CalculationEditVM.CRI_DA_Calculated, CalculationEditVM.CRI_HRA_Calculated,
+                                CalculationEditVM.CalculatedAllowanceVM, CalculationEditVM.totalWorkingDays, CalculationEditVM.totalPaybleDays,
+                                CalculationEditVM.WAR_OverTime_Calculated, CalculationEditVM.WAR_Outstation_Allowance_Calculated, CalculationEditVM.WAR_Attendance_Allowance_Calculated,
+                                CalculationEditVM.WAR_Nightshift_Allowance_Calculated, CalculationEditVM.WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
+
+                decimal ESICsum = Math.Round(GetAmountBasedOnFormula_Edit(
+                               CalculationEditVM.CRI_ESIC_Formula, CalculationEditVM.WAR_Basic_Calculated, CalculationEditVM.CRI_DA_Calculated, CalculationEditVM.CRI_HRA_Calculated,
+                               CalculationEditVM.CalculatedAllowanceVM, CalculationEditVM.totalWorkingDays, CalculationEditVM.totalPaybleDays, CalculationEditVM.WAR_OverTime_Calculated,
+                               CalculationEditVM.WAR_Outstation_Allowance_Calculated, CalculationEditVM.WAR_Attendance_Allowance_Calculated, CalculationEditVM.WAR_Nightshift_Allowance_Calculated,
+                               CalculationEditVM.WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
+
+                calculated.WAR_PF_Calculated = Math.Round(Decimal.Multiply(PFsum, CalculationEditVM.CRI_PF_Percentage) / 100, MidpointRounding.AwayFromZero);
+                calculated.WAR_ESIC_Calculated = Math.Ceiling(Decimal.Multiply(ESICsum, CalculationEditVM.CRI_ESIC_Percentage) / 100);
+
+            }
+
+            return Json(calculated);
+        }
+
+         [HttpPost]
+        public JsonResult Calculate_OT1([FromBody]CalculationEditVM CalculationEditVM)
+        {
+            WageRegisterManager registerManager = new WageRegisterManager(_context);
+            decimal Calculated_OT = 0M;
+            if (CalculationEditVM != null)
+            {
+                Wage_Register wageRegister = registerManager.GetWageRegister(CalculationEditVM.WAR_Id);
+                CalculationEditVM.CRI_OT_Formula = wageRegister.WAR_OverTime_Formula;              
+                decimal OTsum = Math.Round(GetAmountBasedOnFormula_Edit(
+                                CalculationEditVM.CRI_OT_Formula, CalculationEditVM.WAR_Basic_Calculated, CalculationEditVM.CRI_DA_Calculated, CalculationEditVM.CRI_HRA_Calculated,
+                                CalculationEditVM.CalculatedAllowanceVM, CalculationEditVM.totalWorkingDays, CalculationEditVM.totalPaybleDays,
+                                CalculationEditVM.WAR_OverTime_Calculated, CalculationEditVM.WAR_Outstation_Allowance_Calculated, CalculationEditVM.WAR_Attendance_Allowance_Calculated,
+                                CalculationEditVM.WAR_Nightshift_Allowance_Calculated, CalculationEditVM.WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
+                double OvertimeInDay = CalculationEditVM.ExtraWorkingHours / Convert.ToDouble(wageRegister.CLI_.CLI_WorkingHours_In_Day);
+                Calculated_OT = Math.Round(Convert.ToDecimal(((Convert.ToDouble(OTsum) / CalculationEditVM.totalPaybleDays) * OvertimeInDay) * wageRegister.CRI_.CRI_OT_MultipleTimes), MidpointRounding.AwayFromZero);
+            }
+
+            return Json(Calculated_OT);
+        }
     }
+    
 }

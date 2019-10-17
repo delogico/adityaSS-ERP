@@ -44,7 +44,10 @@ namespace RMERP.DAL.ManagerClasses
             List<Wage_Register> lst= _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id).Include(m => m.WAG_).Include(m => m.CLI_).Include(m => m.EMP_).ToList();
             return lst;
         }
-
+        public Wage_Register GetWageRegister(int WAR_Id)
+        {
+            return _context.Wage_Register.Include(m=>m.CRI_).Include(m => m.WAG_).Include(m => m.CLI_).Include(m => m.EMP_).Where(r => r.WAR_Id == WAR_Id).FirstOrDefault();
+        }
         public List<ClientWageRegisterVM> GenerateWageRegisterTable(int WAG_Id, int AdminID, int FRM_Id)
         {
             List<ClientWageRegisterVM> lst = new List<ClientWageRegisterVM>();
@@ -480,12 +483,18 @@ namespace RMERP.DAL.ManagerClasses
             return res;
         }
 
-        public List<Wage_Register_Advances> GetWageRegisterAdvances(DateTime WAG_Month)
+        public List<Wage_Register_Advances> GetWageRegisterAdvances(int WAG_Id)
         {
             List<Wage_Register_Advances> wage_Register_Advances = new List<Wage_Register_Advances>();
-            DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
-            wage_Register_Advances = _context.Wage_Register_Advances.Include(m => m.EMP_)
-                .Where(m => m.WAD_Status.Equals(false))
+            wage_Register_Advances = _context.Wage_Register_Advances.Where(m=>m.WAG_Id.Equals(WAG_Id)).Include(m => m.EMP_)
+                .ToList();
+
+            return wage_Register_Advances;
+        }
+        public List<Wage_Register_Advances> GetWageRegisterAdvances()
+        {
+            List<Wage_Register_Advances> wage_Register_Advances = new List<Wage_Register_Advances>();
+            wage_Register_Advances = _context.Wage_Register_Advances.Include(m=>m.WAG_).Include(m => m.EMP_)
                 .ToList();
 
             return wage_Register_Advances;

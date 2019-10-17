@@ -11,6 +11,7 @@ namespace RMERP.DAL.Models
         public decimal WAD_Amount { get; set; }
         public int? CLI_Id { get; set; }
         public bool WAD_Status { get; set; }
+        public bool WAD_Is_LoanCompleted { get; set; }
         public DateTime? WAD_ClosedOn { get; set; }
 
         public Employees EMP_ { get; set; }

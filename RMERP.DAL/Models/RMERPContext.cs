@@ -483,6 +483,11 @@ namespace RMERP.DAL.Models
                     .HasForeignKey(d => d.EMP_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Employee_Advance_Employees");
+
+                entity.HasOne(d => d.WAG_Id_Closed_OnNavigation)
+                    .WithMany(p => p.Employee_Advance)
+                    .HasForeignKey(d => d.WAG_Id_Closed_On)
+                    .HasConstraintName("FK_Employee_Advance_Wage_Process");
             });
 
             modelBuilder.Entity<Employee_Documents>(entity =>

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Linq;
+using RMERP.DAL.Models;
+
 
 namespace RMERP.DAL.ViewModel
 {
@@ -12,7 +12,7 @@ namespace RMERP.DAL.ViewModel
         public int ADV_Id { get; set; }
         [Display(Name = "Employee")]
         [Required(ErrorMessage = "Employee is required")]
-        public int EMP_Id { get; set; }
+        public int EMP_Id { get; set; }       
         [Display(Name ="Amount Taken")]
         [Required(ErrorMessage = "Advance amount is required")]
         [RegularExpression(@"^(0|-?\d{0,16}(\.\d{0,2})?)$")]
@@ -23,8 +23,11 @@ namespace RMERP.DAL.ViewModel
         public DateTime ADV_RegisteredOn { get; set; } = DateTime.Today;
         public int ADM_Id_RegisteredBy { get; set; }
         public bool ADV_Status { get; set; }
-        public string EmployeeName { get; set; }    
-       
+        public string EmployeeName { get; set; }
+
+        public DateTime minDateAdvanceTaken { get; set; }
+        public Wage_Process Wage_Process_Closed_On { get; set; }
+
     }
 
     public class UpdateAdvanceEMI

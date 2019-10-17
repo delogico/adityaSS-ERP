@@ -31,7 +31,7 @@
             if (@Model.EMP_City != null && @Model.EMP_City!= 0) {
                 GetCity(@Model.EMP_City,@Model.EMP_State);
             }
-            
+
             if (@Model.EMP_Payment_Type== 0) {
                 $(".divBankType").show();
             } else {
@@ -102,7 +102,7 @@
             GetCity();
         });
 
-        function GetCity(EMP_City, EMP_State) {   
+        function GetCity(EMP_City, EMP_State) {
             debugger;
             if (EMP_City != 0 && EMP_City != undefined) {
                 if (@Model.EMP_City != 0) {
@@ -126,7 +126,7 @@
                 $("#EMP_City").empty();
                 $.each(data, function (i, city) {
                     var select = "";
-                    if (EMP_City == city.value) {                       
+                    if (EMP_City == city.value) {
                         select = "selected='selected'";
                     }
                     item += "<option " + select + " value='" + city.value + "'>" + city.text + "</option>";
@@ -134,7 +134,7 @@
                 $("#EMP_City").html(item);
             });
         };
-        
+
     </script>
     @if (TempData["message"] != null)
     {
@@ -300,9 +300,9 @@
                                         @Html.LabelFor(m => m.EMP_State, new { @class = "control-label" })
                                         @Html.DropDownListFor(m => m.EMP_State, new SelectList(ViewBag.States, "STA_Id", "STA_Name"), "Select State", new { @class = "form-control" })
                                         @*@Html.DropDownListFor(x => x.EMP_State, new SelectList(ViewBag.States, "STA_Id", "STA_Name"), "Select State", new { @class = "form-control selectpicker" ,
-                            data_show_subtext = "true",
-                            data_live_search = "true"
-                        })*@
+                                                data_show_subtext = "true",
+                                                data_live_search = "true"
+                                            })*@
                                         @Html.ValidationMessageFor(m => m.EMP_State, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -447,7 +447,6 @@
                                         }
                                     }
 
-
                                 </tbody>
                             </table>
                         </div>
@@ -476,7 +475,6 @@
                                         <th>Amount Taken</th>
                                         <th>On</th>
                                         <th></th>
-                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -488,17 +486,22 @@
                                                 <td>@item.ADV_Amount </td>
                                                 <td>@DateHelper.getDateWithFormat(@item.ADV_RegisteredOn) </td>
 
-                                                @if (Model.wageRegisterAdvances == null)
+                                                @if (item.ADV_Status == true)
                                                 {
-                                                    <td><a href='@Url.Action("AddEditAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit Amount</a></td>
-                                                    <td><a href='@Url.Action("DeleteAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Remove</a></td>
+                                                    <td>
+                                                        <span class="text-success">Closed on @item.Wage_Process_Closed_On.WAG_Month.ToString("MMM-yyyy")</span>
+                                                    </td>
                                                 }
                                                 else
                                                 {
-                                                    <td><a href='#' title="Edit" onclick="return alert('Please first delete advance installment of this employee!')"><i class="fa fa-pencil m-r-5"></i> Edit Amount</a></td>
-                                                    <td><a href='#' title="Delete" onclick="return alert('Please first delete advance installment of this employee!');"><i class="fa fa-trash m-r-5"></i> Remove</a></td>
-
+                                                    <td>
+                                                        <a href='@Url.Action("AddEditAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit Amount</a> |
+                                                        <a href='@Url.Action("DeleteAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Remove</a>
+                                                    </td>
                                                 }
+
+
+
                                             </tr>
                                         }
                                     }

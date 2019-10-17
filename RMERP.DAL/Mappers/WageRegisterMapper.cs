@@ -49,7 +49,10 @@ namespace RMERP.DAL.Mappers
                 wageRegisterVM.WAR_OutStation_Allowance_Calculated = wageRegister.WAR_OutStation_Allowance_Calculated.Value;
             if (wageRegister.WAR_Attendance_Allowance_Calculated != null)
                 wageRegisterVM.WAR_Attendance_Allowance_Calculated = wageRegister.WAR_Attendance_Allowance_Calculated.Value;
-
+            if (wageRegister.WAR_Nightshift_Allowance_Calculated != null)
+                wageRegisterVM.WAR_Nightshift_Allowance_Calculated = wageRegister.WAR_Nightshift_Allowance_Calculated.Value;
+            if (wageRegister.WAR_LWF_Deduction_Calculated != null)
+                wageRegisterVM.WAR_LWF_Deduction_Calculated = wageRegister.WAR_LWF_Deduction_Calculated.Value;
             if (wageRegister.WAR_Performance_Allowance_Calculated != null)
                 wageRegisterVM.WAR_Performance_Allowance_Calculated = wageRegister.WAR_Performance_Allowance_Calculated.Value;
 
@@ -99,6 +102,7 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_LastModifiedOn = wageRegisterVM.WAR_LastModifiedOn;
             wageRegister.ADM_LastModifiedBy = wageRegisterVM.ADM_LastModifiedBy;
             wageRegister.WAR_OverTime_Calculated = wageRegisterVM.WAR_OverTime_Calculated;
+            wageRegister.WAR_OverTime_Formula = wageRegisterVM.WAR_OverTime_Formula;
             wageRegister.WAR_PF = wageRegisterVM.WAR_PF;
             wageRegister.WAR_PF_Formula = wageRegisterVM.WAR_PF_Formula;
             wageRegister.WAR_PF_Calculated = wageRegisterVM.WAR_PF_Calculated;
@@ -111,6 +115,8 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_Performance_Allowance_Calculated = wageRegisterVM.WAR_Performance_Allowance_Calculated;
             wageRegister.WAR_Attendance_Allowance_Calculated = wageRegisterVM.WAR_Attendance_Allowance_Calculated;
             wageRegister.WAR_OutStation_Allowance_Calculated = wageRegisterVM.WAR_OutStation_Allowance_Calculated;
+            wageRegister.WAR_Nightshift_Allowance_Calculated = wageRegisterVM.WAR_Nightshift_Allowance_Calculated;
+            wageRegister.WAR_LWF_Deduction_Calculated = wageRegisterVM.WAR_LWF_Deduction_Calculated;
 
             wageRegister.WAR_Advance_Amount = wageRegisterVM.WAR_Advance_Amount;
             if (wageRegisterVM.employeeVM != null)

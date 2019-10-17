@@ -16,9 +16,12 @@ namespace RMERP.DAL.Mappers
             employeeAdvanceVM.ADV_Amount = employee_Advance.ADV_Amount;
             employeeAdvanceVM.ADV_Status = employee_Advance.ADV_Status;
             employeeAdvanceVM.ADV_RegisteredOn = employee_Advance.ADV_RegisteredOn;
-            employeeAdvanceVM.ADM_Id_RegisteredBy = employee_Advance.ADM_Id_RegisteredBy;
+            employeeAdvanceVM.ADM_Id_RegisteredBy = employee_Advance.ADM_Id_RegisteredBy;            
             if (employee_Advance.EMP_ != null)
                 employeeAdvanceVM.EmployeeName = employee_Advance.EMP_.EMP_FirstName + " " + employee_Advance.EMP_.EMP_MiddleName + " " + employee_Advance.EMP_.EMP_SurName;
+            if (employee_Advance.WAG_Id_Closed_OnNavigation != null)
+                employeeAdvanceVM.Wage_Process_Closed_On = employee_Advance.WAG_Id_Closed_OnNavigation;
+
             return employeeAdvanceVM;
         }
         public static Employee_Advance mapMeModel(EmployeeAdvanceVM employee_AdvanceVM)

@@ -102,16 +102,16 @@ namespace RMERP.DAL.ViewModel
         public List<WageRegisterAllowanceVM> allowanceVMs { get; set; }
 
         [Display(Name = "Outstation Allowance")]
-        public decimal WAR_OutStation_Allowance_Calculated { get; set; }
+        public decimal? WAR_OutStation_Allowance_Calculated { get; set; }
         [Display(Name = "Attendance Allowance")]
-        public decimal WAR_Attendance_Allowance_Calculated { get; set; }
+        public decimal? WAR_Attendance_Allowance_Calculated { get; set; }
 
         [Display(Name = "Performance Allowance")]
-        public decimal WAR_Performance_Allowance_Calculated { get; set; }
+        public decimal? WAR_Performance_Allowance_Calculated { get; set; }
         [Display(Name = "Calculated Nightshift")]
-        public decimal WAR_Nightshift_Allowance_Calculated { get; set; }
+        public decimal? WAR_Nightshift_Allowance_Calculated { get; set; }
         [Display(Name = "MLWF Deduction")]
-        public decimal WAR_LWF_Deduction_Calculated { get; set; }
+        public decimal? WAR_LWF_Deduction_Calculated { get; set; }
     }
 
 

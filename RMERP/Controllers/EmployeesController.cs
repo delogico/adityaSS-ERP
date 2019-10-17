@@ -188,18 +188,7 @@ namespace RMERP.Controllers
 
         }
 
-        //public ActionResult ActiveEmployee(int EMP_Id, DateTime date)
-        //{
-        //    EmployeeManager employeeManager = new EmployeeManager(_context);
-        //    SessionUtils sessionUtils = new SessionUtils(Request, Response);
-        //    employeeManager.ActiveEmployee(EMP_Id, date, sessionUtils.GetLoggedAdminID(), out string actionMessage);
-        //    if (actionMessage != string.Empty)
-        //    {
-        //        TempData["message"] = actionMessage;
-        //    }
-        //    return RedirectToAction("Index");
-        //}
-
+        
         public ActionResult LeftEmployee(int EMP_Id,DateTime EMP_Left_Date, int EMP_Reason_Code)
         {
             EmployeeManager employeeManager = new EmployeeManager(_context);
@@ -275,48 +264,107 @@ namespace RMERP.Controllers
             ViewBag.FRM_Id = FRM_Id;
             return View(advancesVM);
         }        
-        
+
         public ActionResult UpdateAdvanceEMI(DateTime WAG_Month, int WAG_Id, int FRM_Id)
         {
-            AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
-            WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
+            WageProcessManager processManager = new WageProcessManager(_context);
             FirmsManager firmsManager = new FirmsManager(_context);
-            UpdateAdvanceEMI updateAdvanceEMI = new UpdateAdvanceEMI();
-            List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.NotCompletedAdvanceLst(WAG_Month,FRM_Id));
-            List<WageRegisterAdvancesVM> wageRegisterAdvancesVMs = WageRegisterAdvancesMapper.mapMeModels(wageRegisterManager.GetWageRegisterAdvances(WAG_Month));
-            updateAdvanceEMI.employeeAdvanceVMs = advancesVM;
-            updateAdvanceEMI.wageRegisterAdvancesVMs = wageRegisterAdvancesVMs;
-            updateAdvanceEMI.WAG_Month = WAG_Month;
-            updateAdvanceEMI.WAG_Id = WAG_Id;
-            updateAdvanceEMI.FRM_Name = firmsManager.GetFirm(FRM_Id).FRM_ShortName;
-            ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
-            ViewBag.FRM_Id = FRM_Id;
-            return View(updateAdvanceEMI);
+            UpdateAdvancesVM updateAdvancesVM = new UpdateAdvancesVM();          
+            updateAdvancesVM.WAG_ = processManager.getWageProcessById(WAG_Id);
+            Firms firm = firmsManager.GetFirm(FRM_Id);
+            updateAdvancesVM.FRM_Name = firm.FRM_ShortName;
+            updateAdvancesVM.FRM_Id = firm.FRM_Id;            
+            List<AdvanceVM> AdvanceVMs = GetAdvanceVMs(WAG_Month, WAG_Id, FRM_Id);           
+            updateAdvancesVM.AdvanceVMs = AdvanceVMs;
+            return View(updateAdvancesVM);
         }
 
-        [HttpPost]
-        public ActionResult addWageRegisterAdvances(int EMP_id, int WAG_Id, decimal WAD_Amount, bool WAD_Status,int FRM_Id)
+        public DateTime FirstDayOfMonth(DateTime dt)
         {
-            WageProcessManager wageProcess = new WageProcessManager(_context);
-            AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
-            ClientsManager clients = new ClientsManager(_context, _configuration);
-            DateTime WAG_Month = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
-            int CLI_id = clients.GetClientIDByEmpID(EMP_id, WAG_Month);
-            string res = advance.addWageRegisterAdvances(EMP_id, WAG_Id, CLI_id, WAD_Amount, WAG_Month, WAD_Status);
-            return RedirectToAction("UpdateAdvanceEMI", new { WAG_Month = WAG_Month, WAG_Id = WAG_Id , FRM_Id = FRM_Id });
+            return new DateTime(dt.Year, dt.Month, 1);
         }
 
-        [HttpPost]
-        public ActionResult UpdateWageRegisterAdvances(int EMP_id, decimal WAD_Amount, int WAG_Id, bool WAD_Status, int WAD_Id = -1,int FRM_Id=-1)
+        public DateTime LastDayOfMonth(DateTime dt)
         {
-            WageProcessManager wageProcess = new WageProcessManager(_context);
-            ClientsManager clients = new ClientsManager(_context, _configuration);
-            AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
-            DateTime WAG_Month = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
-            string res = advance.addWageRegisterAdvances(EMP_id, WAD_Amount, WAD_Status, WAG_Month, WAD_Id);
-            return RedirectToAction("UpdateAdvanceEMI", new { WAG_Month = WAG_Month, WAG_Id = WAG_Id , FRM_Id = FRM_Id });
+            return new DateTime(dt.Year, dt.Month, 1).AddMonths(1).AddDays(-1);
         }
 
+        public List<AdvanceVM> GetAdvanceVMs(DateTime WAG_Month, int WAG_Id, int FRM_Id)
+        {
+            WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
+            AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
+            List<Employee_Advance> advancesVM = advance.NotCompletedAdvanceLst(WAG_Month, FRM_Id, WAG_Id);
+            List<Wage_Register_Advances> wage_Register_Advances = wageRegisterManager.GetWageRegisterAdvances();
+            var advances = advancesVM.GroupBy(l => l.EMP_Id)
+                                             .Select(cl => new EmployeeAdvanceVM
+                                             {
+                                                 EMP_Id = cl.First().EMP_Id,
+                                                 EmployeeName = cl.First().EMP_.EMP_FirstName,
+                                                 ADV_Amount = cl.Sum(c => c.ADV_Amount),
+                                                 minDateAdvanceTaken = cl.Min(c=>c.ADV_RegisteredOn)
+                                             }).ToList();
+
+            List<AdvanceVM> AdvanceVMs = new List<AdvanceVM>();
+            foreach (var item in advances)
+            {
+                Wage_Register_Advances register_Advance = wage_Register_Advances.Where(m => m.EMP_Id.Equals(item.EMP_Id) && m.WAG_Id.Equals(WAG_Id)).FirstOrDefault();
+                               
+                var TotalPaid = wage_Register_Advances.Where(m => m.EMP_Id.Equals(item.EMP_Id) && LastDayOfMonth(m.WAG_.WAG_Month) >= item.minDateAdvanceTaken && FirstDayOfMonth(m.WAG_.WAG_Month) <= LastDayOfMonth(WAG_Month)).Sum(m => m.WAD_Amount);
+                AdvanceVM advanceVM = new AdvanceVM();
+                if (register_Advance != null)
+                {
+                    advanceVM.WAD_Id = register_Advance.WAD_Id;
+                    advanceVM.WAG_Id = register_Advance.WAG_Id;
+                    advanceVM.WAD_Amount = register_Advance.WAD_Amount;
+                    advanceVM.WAD_Is_LoanCompleted = register_Advance.WAD_Is_LoanCompleted;
+                    advanceVM.WAD_Status = register_Advance.WAD_Status;
+                }
+                else
+                {
+                    advanceVM.WAD_Id = -1;
+                    advanceVM.WAD_Amount = 0;
+                    advanceVM.WAD_Is_LoanCompleted = false;                    
+                }
+              
+
+                advanceVM.EMP_Id = item.EMP_Id;
+                advanceVM.EMP_Name = item.EmployeeName;
+                advanceVM.Total_Advance = item.ADV_Amount;
+                advanceVM.Paid_WAD_Amount = Convert.ToDecimal(TotalPaid);
+
+
+                AdvanceVMs.Add(advanceVM);
+            }
+            return AdvanceVMs;
+        }
+        public string AddAdvanceEMI(int WAD_Id, int EMP_id, int WAG_Id, decimal WAD_Amount, bool WAD_Is_LoanCompleted)
+        {
+            AdvanceWageRegisterManager advanceManager = new AdvanceWageRegisterManager(_context);
+            try
+            {
+                if (WAD_Id > 0)
+                {
+                    advanceManager.editWageRegisterAdvances(WAD_Id, WAD_Amount, WAD_Is_LoanCompleted);
+                }
+                else
+                {
+                    WageProcessManager wageProcessManager = new WageProcessManager(_context);
+                    ClientsManager clients = new ClientsManager(_context, _configuration);
+                    DateTime WAG_Month = wageProcessManager.getWageProcessById(WAG_Id).WAG_Month;
+                    int CLI_id = clients.GetClientIDByEmpID(EMP_id, WAG_Month);
+                    advanceManager.addWageRegisterAdvances(EMP_id, WAG_Id, CLI_id, WAD_Amount, WAG_Month, WAD_Is_LoanCompleted);
+                }
+                return "ok";
+            }
+            catch (Exception)
+            {
+                return "ko";
+            }
+            
+                 
+        }
+
+        
         [HttpPost]
         public async Task<ActionResult> AddEmployeeDocuments(EmployeeVM employeeVM)
         {
@@ -418,8 +466,7 @@ namespace RMERP.Controllers
                 {".csv", "text/csv"}
             };
         }
-
-        //[AcceptVerbs("Get", "Post")]
+                
         public IActionResult CheckExistingAadhar(string EMP_Aadhar_Number, int EMP_Id)
         {
             EMP_Aadhar_Number=EMP_Aadhar_Number.Trim().Replace(@"\", string.Empty);

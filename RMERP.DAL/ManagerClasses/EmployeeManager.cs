@@ -60,7 +60,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public Employees GetEmployeeById(int EMP_Id)
         {
-            return _context.Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Include(e => e.Employee_Advance).Include(m => m.Employee_Documents).Include(m => m.Wage_Register_Advances).Include(m => m.FRM_).FirstOrDefault();
+            return _context.Employees.Where(m => m.EMP_Id.Equals(EMP_Id)).Include(e => e.Employee_Advance).ThenInclude(m=>m.WAG_Id_Closed_OnNavigation).Include(m => m.Employee_Documents).Include(m => m.Wage_Register_Advances).Include(m => m.FRM_).FirstOrDefault();
         }
         public void ActiveEmployee(int EmpId, int EMP_Reason_Code, DateTime date, int AdminId, out string actionMessage)
         {
@@ -135,23 +135,7 @@ namespace RMERP.DAL.ManagerClasses
             return employee_Advances;
         }
 
-        //public List<UpdateAdvanceEMI> UpdateAdvanceEMIs(DateTime WAG_Month)
-        //{
-        //    DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
-        //    List<UpdateAdvanceEMI> UpdateAdvanceEMIs = new List<UpdateAdvanceEMI>();
-        //    List<Employee_Advance> employee_Advances = _context.Employee_Advance.Include(m => m.EMP_)
-        //        .Where(m => m.ADV_RegisteredOn.Date <= lastDate.Date && m.ADV_Status.Equals(false))
-        //        .ToList();
-        //    foreach(var item in employee_Advances)
-        //    {
-        //        UpdateAdvanceEMI update = new UpdateAdvanceEMI();
-        //        update.EMP_Id = item.EMP_Id;
-        //        update.EmployeeName = item.EMP_.EMP_FirstName;
-        //        update.WAG_Month = WAG_Month;                
-        //    }
-        //    return UpdateAdvanceEMIs;
-        //}
-
+        
         public bool IsAssignedEmployee(int EMP_Id)
         {
             List<Clients_Employees> list = _context.Clients_Employees.Where(m => m.EMP_Id.Equals(EMP_Id) && m.CLE_UnassignedOn != null).ToList();

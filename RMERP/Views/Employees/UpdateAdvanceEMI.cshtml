@@ -1,81 +1,23 @@
-﻿@model RMERP.DAL.ViewModel.UpdateAdvanceEMI
-@using RMERP.DAL.ViewModel;
+﻿@model RMERP.DAL.ViewModel.UpdateAdvancesVM
 @{
     ViewData["Title"] = "UpdateAdvanceEMI";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 @section Breadcrumbs{
-    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = ViewBag.FRM_Id })</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id })</li>
     <li class="breadcrumb-item">Advance EMI</li>
 }
-@section scripts{
-    @if (TempData["message"] != null)
-    {
-        <script>
-            $(document).ready(function () {
-                alert('@TempData["message"]');
-            });
 
-        </script>
-    };
-    <script>
-        function RemainigAmt(total, id) {
-            var advance = $("#Amount" + id).val();
-            if (parseInt(advance) > parseInt($("#amt_" + id).html())) {
-                $("#Amount" + id).val(0);
-                alert("Your Amount Must Be Less Than Remaining Amount");
-            } else {
-                debugger;
-                var RemaimigAmt = (total - parseInt(advance));
-                $("#amt_" + id).html(RemaimigAmt);
-                $("#Ramt_" + id).html("<b>"+RemaimigAmt+"</b>");
-                var Cheked = $("#WAD_Status" + id).prop("checked");
-                var Url = siteUrl + "Employees/addWageRegisterAdvances?EMP_id=" + id + "&WAG_Id=" +@Model.WAG_Id+"&WAD_Amount=" + advance + "&WAD_Status=" + Cheked + "&FRM_Id=" + @ViewBag.FRM_Id;
-                $.ajax({
-                    type: "POST",
-                    url: Url
-                });
-
-            }
-        }; @ViewBag.FRM_Id
-
-        function EditAmt(total, id, WAD_Id) {
-            debugger;
-            var advance = $("#Amount" + id).val();
-            if (parseInt(advance) > total) {
-                $("#Amount" + id).val(0);
-                alert("Your Amount Must Be Less Than Remaining Amount");
-            } else {
-                debugger;
-                var RemaimigAmt = (total - parseInt(advance));
-                $("#amt_" + id).html(RemaimigAmt);
-                $("#Ramt_" + id).html("<b>"+RemaimigAmt+"</b>");
-                var Cheked = $("#WAD_Status" + id).prop("checked");
-                var Url = siteUrl + "Employees/UpdateWageRegisterAdvances?EMP_id=" + id + "&WAG_Id=" +@Model.WAG_Id+"&WAD_Amount=" + parseInt(advance) + "&WAD_Status=" + Cheked + "&WAD_Id=" + WAD_Id +"&FRM_Id="+ @ViewBag.FRM_Id;
-                $.ajax({
-                    type: "POST",
-                    url: Url
-                });
-
-            }
-        };
-    </script>
-}
-<style>
-    .modal-dialog {
-        transform: translate(0, -50%);
-        top: 30%;
-        margin: 0 auto;
-    }
-</style>
 <div>
     <div class="content container-fluid">
         <div class="row">
             <div class="col-sm-8">
-                <h4 class="page-title">@Model.FRM_Name (@ViewBag.WAG_Month)</h4>
+                @{
+                    var WAG_Month = Model.WAG_.WAG_Month.ToString("MMMM") + "-" + Model.WAG_.WAG_Month.ToString("yyyy");
+                }
+                <h4 class="page-title">@Model.FRM_Name (@WAG_Month)</h4>
             </div>
             <div class="col-sm-4 text-right m-b-30">
-
             </div>
         </div>
         <div class="row">
@@ -85,84 +27,82 @@
                         <thead>
                             <tr>
                                 <th>Employee</th>
-                                <th>Total Advance</th>
+                                <th>Total advance till @WAG_Month</th>
                                 <th>Amount</th>
-                                <th>Remaining Amount</th>
+                                <th></th>
+                                <th></th>
+                                <th>Remaining amount till @WAG_Month</th>
                             </tr>
                         </thead>
                         <tbody>
-
-                            @foreach (var item in Model.employeeAdvanceVMs.Select(n => new { n.EMP_Id, n.EmployeeName }).Distinct().ToList())
+                            @foreach (var item in Model.AdvanceVMs)
                             {
-                                bool IsPaid = false;
-                                int WADId = 0;
-                                DateTime lastDate = new DateTime(Model.WAG_Month.Year, Model.WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
-                                decimal totalAmt = 0, amount = 0;
-                                if (Model.employeeAdvanceVMs.Where(v => v.EMP_Id.Equals(item.EMP_Id)).Count() > 0)
+
+                                bool disabl = item.WAD_Is_LoanCompleted;
+                                if (item.WAD_Status)
                                 {
-                                    var totalAdvance = Model.employeeAdvanceVMs.Where(m => m.EMP_Id == item.EMP_Id && m.ADV_Status == false && m.ADV_RegisteredOn.Date <= lastDate.Date).GroupBy(m => m.EMP_Id).Select(g => new
-                                    {
-                                        ADV_Amt = g.Sum(n => n.ADV_Amount)
-                                    });
-                                    totalAmt = Convert.ToDecimal(totalAdvance.Select(g => g.ADV_Amt).First());
+                                    disabl = true;
                                 }
-                                decimal totalEMI = 0M;
-                                if (Model.wageRegisterAdvancesVMs.Where(v => v.EMP_Id.Equals(item.EMP_Id)).Count() > 0)
+                                if (Model.WAG_.WAG_Status)
                                 {
-                                    var EMI = Model.wageRegisterAdvancesVMs.Where(m => m.EMP_Id == item.EMP_Id && m.WAD_Status == false).GroupBy(m => m.EMP_Id).Select(g => new
-                                    {
-                                        WAD_Amt = g.Sum(n => n.WAD_Amount)
-                                    });
-                                    totalEMI = Convert.ToDecimal(EMI.Select(g => g.WAD_Amt).First());
-                                    if (Model.wageRegisterAdvancesVMs.Where(v => v.EMP_Id.Equals(item.EMP_Id)).First().WAG_Id == Model.WAG_Id)
-                                    {
-                                        IsPaid = true;
-                                        var AdvancesVM = Model.wageRegisterAdvancesVMs.Where(m => m.EMP_Id == item.EMP_Id && m.WAD_Status == false && m.WAG_Id == Model.WAG_Id).First();
-                                        WADId = AdvancesVM.WAD_Id;
-                                        amount = AdvancesVM.WAD_Amount;
-                                    }
+                                    disabl = true;
                                 }
 
-                                decimal RemainingAmt = totalAmt - totalEMI;
+                                @Html.HiddenFor(m => item.WAD_Id, new { @id = "WAD_Id_" + @item.EMP_Id })
+
                                 <tr>
-                                    <td><b>@item.EmployeeName</b></td>
-                                    <td id="Ramt_@item.EMP_Id"><b>@RemainingAmt</b></td>
-                                    <td>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        @*@if (IsPaid == true) {
-                                                             @Html.TextBox("RemainingAmt", amount, new { @class = "form-control", id = "Amount" + item.EMP_Id, @disabled= "disabled" })
-                                                            }
-                                                            else
-                                                            {*@
-                                                        @Html.TextBox("RemainingAmt", amount, new { @class = "form-control", id = "Amount" + item.EMP_Id })
-                                                        @*}*@
-                                                    </div>
-                                                </div>
-                                                @*@disabled = (IsPaid == true ? "disabled" :"none")*@
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        @Html.CheckBox("WAD_Status", new { @id = "WAD_Status" + item.EMP_Id, @value = item.EMP_Id })Consider Loan Completed
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        @if (IsPaid == false)
+                                    <td> <b>@item.EMP_Name</b></td>
+                                    <td><b>@item.Total_Advance</b></td>
+
+                                    @if (disabl)
+                                    {
+                                        <td>
+                                            @Html.TextBoxFor(m => item.WAD_Amount, new { @class = "form-control", id = "WAD_Amount_" + @item.EMP_Id, disabled = "disabled" })
+                                        </td>
+                                        <td>
+                                            @Html.CheckBoxFor(m => item.WAD_Is_LoanCompleted, new { @id = "WAD_Is_LoanCompleted_" + @item.EMP_Id, disabled = "disabled" }) Consider Loan Completed
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @Html.TextBoxFor(m => item.WAD_Amount, new { @class = "form-control", id = "WAD_Amount_" + @item.EMP_Id })
+                                        </td>
+                                        <td>
+                                            @Html.CheckBoxFor(m => item.WAD_Is_LoanCompleted, new { @id = "WAD_Is_LoanCompleted_" + @item.EMP_Id }) Consider Loan Completed
+                                        </td>
+                                    }
+                                        <td>
+                                            @if (!item.WAD_Status)
+                                            {
+                                                if (!Model.WAG_.WAG_Status)
+                                                {
+                                                    @if (!item.WAD_Is_LoanCompleted)
+                                                    {
+                                                        @if (item.WAD_Id > 0)
                                                         {
-                                                            <input type="button" onclick="RemainigAmt(@totalAmt,@item.EMP_Id)" name="Add" value="Add" class="btn btn-success btn-xs" />
+                                                            <a onclick="AddAdvanceEMI(@item.EMP_Id)" class="btn btn-warning btn-xs" title="Edit">Edit</a>
                                                         }
                                                         else
                                                         {
-                                                            <input type="button" onclick="EditAmt(@totalAmt,@item.EMP_Id,@WADId)" name="Edit" value="Edit" class="btn btn-warning btn-xs" />
+                                                            <a onclick="AddAdvanceEMI(@item.EMP_Id)" class="btn btn-success btn-xs" title="Add">Add</a>
                                                         }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td id="amt_@item.EMP_Id">@Html.DisplayFor(m => RemainingAmt, new { @id = "Remaining" + item.EMP_Id })</td>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <span class="text text-warning">Wage Process for this month is Closed.</span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span class="text text-success">Loan is Closed.</span>
+                                            }
+                                        </td>
+                                    @{
+                                        var RemaimngAmt = item.Total_Advance - item.Paid_WAD_Amount;
+                                    }
+                                    <td><b>@RemaimngAmt</b></td>
                                 </tr>
                             }
                         </tbody>
@@ -172,3 +112,36 @@
         </div>
     </div>
 </div>
+
+
+@section scripts{
+    <script>
+        function AddAdvanceEMI(EMP_Id) {
+          var WAD_Id = $("#WAD_Id_" + EMP_Id).val();
+          var WAD_Amount = $("#WAD_Amount_" + EMP_Id).val();
+            var Checked = $("#WAD_Is_LoanCompleted_" + EMP_Id).prop("checked");
+            if (Checked) {
+                if (window.confirm("Once Closed, Advance Can't undo. Please be sure before Mark it as Completed.")) {
+                    callAPI(WAD_Id, EMP_Id, WAD_Amount, Checked);
+                }
+            } else {
+                callAPI(WAD_Id, EMP_Id, WAD_Amount, Checked);
+            }
+        };
+        function callAPI(WAD_Id, EMP_Id, WAD_Amount, WAD_Is_LoanCompleted) {
+            var Url = siteUrl + "Employees/AddAdvanceEMI?WAD_Id=" + WAD_Id + "&EMP_Id=" + EMP_Id + "&WAG_Id=" +@Model.WAG_.WAG_Id+"&WAD_Amount=" + WAD_Amount + "&WAD_Is_LoanCompleted=" + WAD_Is_LoanCompleted;
+                $.ajax({
+                    type: "GET",
+                    url: Url,
+                    success: function (data) {
+                        if (data == "ok") {
+                            location.reload();
+                        } else {
+                            alert("Try Again!");
+                        }
+                        
+                    }
+                });
+        }
+    </script>
+}
