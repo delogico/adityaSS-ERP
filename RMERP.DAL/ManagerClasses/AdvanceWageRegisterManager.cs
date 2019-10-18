@@ -46,14 +46,15 @@ namespace RMERP.DAL.ManagerClasses
 
                 if (WAD_Is_LoanCompleted == true)
                 {
-                    wra.WAD_Status = true;
-                    wra.WAD_ClosedOn = ProjectUtils.DateNow();
-
                     List<Wage_Register_Advances> register_Advances = _context.Wage_Register_Advances.Where(m => m.EMP_Id.Equals(EMP_id) && m.WAD_Status.Equals(false)).ToList();
                     register_Advances.ForEach(m => m.WAD_Status=true);
                    
                     List<Employee_Advance> employee_Advances = _context.Employee_Advance.Where(m => m.EMP_Id.Equals(EMP_id) && m.ADV_Status.Equals(false)).ToList();
                     employee_Advances.ForEach(m => { m.ADV_Status = true;m.WAG_Id_Closed_On = WAG_Id; });
+
+                    wra.WAD_Status = true;
+                    wra.WAD_ClosedOn = ProjectUtils.DateNow();
+
                 }
                 _context.SaveChanges();
             }
@@ -66,8 +67,6 @@ namespace RMERP.DAL.ManagerClasses
         public void editWageRegisterAdvances(int WAD_Id,decimal WAD_Amount,bool WAD_Is_LoanCompleted)
         {
             Wage_Register_Advances register_Advance = _context.Wage_Register_Advances.Find(WAD_Id);
-            register_Advance.WAD_Amount = WAD_Amount;
-            register_Advance.WAD_Is_LoanCompleted = WAD_Is_LoanCompleted;
             if (register_Advance.WAD_Is_LoanCompleted==false && WAD_Is_LoanCompleted == true)
             {
                 register_Advance.WAD_Status = true;
@@ -79,6 +78,8 @@ namespace RMERP.DAL.ManagerClasses
                 List<Employee_Advance> employee_Advances = _context.Employee_Advance.Where(m => m.EMP_Id.Equals(register_Advance.EMP_Id) && m.ADV_Status.Equals(false)).ToList();
                 employee_Advances.ForEach(m => { m.ADV_Status = true; m.WAG_Id_Closed_On = register_Advance.WAG_Id; });
             }
+            register_Advance.WAD_Amount = WAD_Amount;
+            register_Advance.WAD_Is_LoanCompleted = WAD_Is_LoanCompleted;
 
             _context.SaveChanges();
         }

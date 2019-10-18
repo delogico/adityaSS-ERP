@@ -33,18 +33,7 @@
             <label class="control-label">To</label>
             <div class="cal-icon"><input class="form-control floating datetimepicker" type="text"></div>
         </div>
-    </div>
-    <div class="col-sm-3 col-xs-6">
-        @*<div class="form-group form-focus select-focus">
-                <label class="control-label">Status</label>
-                <select class="select floating">
-                    <option value="">Select Status</option>
-                    <option value="">Pending</option>
-                    <option value="1">Paid</option>
-                    <option value="1">Partially Paid</option>
-                </select>
-            </div>*@
-    </div>
+    </div>    
     <div class="col-sm-3 col-xs-6">
         <a href="#" class="btn btn-success btn-block"> Search </a>
     </div>
@@ -76,7 +65,7 @@
                             <td><a target="_blank" href="@Url.Action("DownloadInvoice","Invoices",new {INV_Id=item.INV_Id,ActionId= (int)PDFAction.View })">INV_@item.INV_Number</a></td>
                             <td>@item.CLI_.CLI_Name (@item.FRM_.FRM_ShortName)</td>                           
                             <td><i class="fa fa-rupee"></i> @item.INV_Total</td>
-                            @*<td><span class="label label-success-border">Paid</span></td>*@
+                          
                             <td class="text-right">
                                 <div class="dropdown">
                                     <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>

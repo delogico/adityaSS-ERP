@@ -299,7 +299,7 @@ namespace RMERP.Controllers
                                              .Select(cl => new EmployeeAdvanceVM
                                              {
                                                  EMP_Id = cl.First().EMP_Id,
-                                                 EmployeeName = cl.First().EMP_.EMP_FirstName,
+                                                 EmployeeName = cl.First().EMP_.EMP_FirstName+" "+ cl.First().EMP_.EMP_MiddleName+" "+ cl.First().EMP_.EMP_SurName,
                                                  ADV_Amount = cl.Sum(c => c.ADV_Amount),
                                                  minDateAdvanceTaken = cl.Min(c=>c.ADV_RegisteredOn)
                                              }).ToList();

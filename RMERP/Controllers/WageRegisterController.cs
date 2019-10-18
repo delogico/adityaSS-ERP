@@ -502,32 +502,52 @@ namespace RMERP.Controllers
                                     if (clientRequirement.CRI_OutStation_Allowance == true)
                                     {
                                         ICell cellOutstation = row.CreateCell(cellNxt);
-                                        cellOutstation.SetCellValue(Math.Round(employee.WAR_OutStation_Allowance_Calculated.Value, MidpointRounding.AwayFromZero).ToString());
-                                        TotalOutStation = TotalOutStation + Math.Round(employee.WAR_OutStation_Allowance_Calculated.Value);
+                                        decimal WAR_OutStation_Allowance_Calculated = 0M;
+                                        if (employee.WAR_OutStation_Allowance_Calculated != null)
+                                        {
+                                            WAR_OutStation_Allowance_Calculated = Math.Round(employee.WAR_OutStation_Allowance_Calculated.Value, MidpointRounding.AwayFromZero);
+                                        }                                        
+                                        cellOutstation.SetCellValue(WAR_OutStation_Allowance_Calculated.ToString());
+                                        TotalOutStation = TotalOutStation + WAR_OutStation_Allowance_Calculated;
                                         cellOutstation.CellStyle = styleGrey40;
                                         cellNxt = cellNxt + 1;
                                     }
                                     if (clientRequirement.CRI_Attendance_Allowance == true)
                                     {
                                         ICell cellAttendance= row.CreateCell(cellNxt);
-                                        cellAttendance.SetCellValue(Math.Round(employee.WAR_Attendance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero).ToString());
-                                        TotalAttendance = TotalAttendance + Math.Round(employee.WAR_Attendance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero);
+                                        decimal WAR_Attendance_Allowance_Calculated = 0M;
+                                        if (employee.WAR_Attendance_Allowance_Calculated != null)
+                                        {
+                                            WAR_Attendance_Allowance_Calculated = Math.Round(employee.WAR_Attendance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero);
+                                        }
+                                        cellAttendance.SetCellValue(WAR_Attendance_Allowance_Calculated.ToString());
+                                        TotalAttendance = TotalAttendance + WAR_Attendance_Allowance_Calculated;
                                         cellAttendance.CellStyle = styleGrey40;
                                         cellNxt = cellNxt + 1;
                                     }
                                     if (clientRequirement.CRI_Nightshift_Allowance == true)
                                     {
                                         ICell cellNightshift = row.CreateCell(cellNxt);
-                                        cellNightshift.SetCellValue(Math.Round(employee.WAR_Nightshift_Allowance_Calculated.Value, MidpointRounding.AwayFromZero).ToString());
-                                        TotalNightshift = TotalNightshift + Math.Round(employee.WAR_Nightshift_Allowance_Calculated.Value, MidpointRounding.AwayFromZero);
+                                        decimal WAR_Nightshift_Allowance_Calculated = 0M;
+                                        if (employee.WAR_Nightshift_Allowance_Calculated != null)
+                                        {
+                                            WAR_Nightshift_Allowance_Calculated = Math.Round(employee.WAR_Nightshift_Allowance_Calculated.Value, MidpointRounding.AwayFromZero);
+                                        }
+                                        cellNightshift.SetCellValue(WAR_Nightshift_Allowance_Calculated.ToString());
+                                        TotalNightshift = TotalNightshift + WAR_Nightshift_Allowance_Calculated;
                                         cellNightshift.CellStyle = styleGrey40;
                                         cellNxt = cellNxt + 1;
                                     }
                                     if (clientRequirement.CRI_Performance_Allowance == true)
                                     {
                                         ICell cellPerformance = row.CreateCell(cellNxt);
-                                        cellPerformance.SetCellValue(Math.Round(employee.WAR_Performance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero).ToString());
-                                        TotalPerformance = TotalPerformance + Math.Round(employee.WAR_Performance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero);
+                                        decimal WAR_Performance_Allowance_Calculated = 0M;
+                                        if (employee.WAR_Performance_Allowance_Calculated != null)
+                                        {
+                                            WAR_Performance_Allowance_Calculated = Math.Round(employee.WAR_Performance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero);
+                                        }
+                                        cellPerformance.SetCellValue(WAR_Performance_Allowance_Calculated.ToString());
+                                        TotalPerformance = TotalPerformance + WAR_Performance_Allowance_Calculated;
                                         cellPerformance.CellStyle = styleGrey40;
                                         cellNxt = cellNxt + 1;
                                     }
