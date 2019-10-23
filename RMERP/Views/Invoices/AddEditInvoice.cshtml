@@ -30,7 +30,7 @@
                     <div class="form-group">
                         @Html.LabelFor(m => m.INV_Number, new { @class = "control-label" })
                         @Html.TextBoxFor(m => m.INV_Number, new { @readonly = "readonly", @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.INV_Number, "", new { @class = "text-danger" })
+                        @*@Html.ValidationMessageFor(m => m.INV_Number, "", new { @class = "text-danger" })*@
                     </div>
                 </div>
 
@@ -38,28 +38,28 @@
                     <div class="form-group">
                         @Html.LabelFor(m => m.INV_Date, new { @class = "control-label" })
                         @Html.EditorFor(m => m.INV_Date, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(m => m.INV_Date, "", new { @class = "text-danger" })
+                        @*@Html.ValidationMessageFor(m => m.INV_Date, "", new { @class = "text-danger" })*@
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
                         @Html.LabelFor(m => m.INV_ClientOrder_Number, new { @class = "control-label" })
                         @Html.TextBoxFor(m => m.INV_ClientOrder_Number, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.INV_ClientOrder_Number, "", new { @class = "text-danger" })
+                        @*@Html.ValidationMessageFor(m => m.INV_ClientOrder_Number, "", new { @class = "text-danger" })*@
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
                         @Html.LabelFor(m => m.INV_ClientOrder_Date, new { @class = "control-label" })
                         @Html.EditorFor(m => m.INV_ClientOrder_Date, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(m => m.INV_ClientOrder_Date, "", new { @class = "text-danger" })
+                        @*@Html.ValidationMessageFor(m => m.INV_ClientOrder_Date, "", new { @class = "text-danger" })*@
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
                         @Html.LabelFor(m => m.INV_HSN, new { @class = "control-label" })
                         @Html.TextBoxFor(m => m.INV_HSN, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.INV_HSN, "", new { @class = "text-danger" })
+                        @*@Html.ValidationMessageFor(m => m.INV_HSN, "", new { @class = "text-danger" })*@
                     </div>
                 </div>
             </div>
@@ -200,7 +200,7 @@
     <script>
         function openInvoiceTemplate() {
             var CLI_Id = $("#CLI_Id").val();
-            var Url = siteUrl + "Invoices/GetInvoiceTemplate?CLI_Id=" + CLI_Id + "&FRM_Id=" + @Model.FRM_Id;
+            var Url = siteUrl + "Invoices/GetInvoiceTemplate?CLI_Id=" + CLI_Id ;
             $.ajax({
                 type: "GET",
                 url: Url,
@@ -340,16 +340,16 @@
             InvoiceVM.Invoice_Concepts = Concepts;
             debugger;           
             $.ajax({
-                url: '/Invoices/AddEditInvoice',
+                url: siteUrl+'Invoices/AddEditInvoice',
                 contentType: "application/json",
                 async: true,
                 type: "POST",
-                data: JSON.stringify(InvoiceVM),
-                success: function (data) {
-                    alert(data.D);
-                    window.location.href = "/Invoices/Index"
-                }, error: function (jqXHR, textStatus, errorThrown) {
-                    console.log("FAIL: " + errorThrown);
+                data: JSON.stringify(InvoiceVM),                
+                error: function (jqXHR, textStatus, errorThrown) {
+                    window.location.href = siteUrl + "Invoices/Index";
+                },
+                success: function (data) {                   
+                    window.location.href = siteUrl + "Invoices/Index";
                 }
             });
         });

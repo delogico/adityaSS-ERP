@@ -8,8 +8,7 @@ namespace RMERP.DAL.ViewModel
 {
     public class InvoiceMasterVM
     {
-        public int CLI_Id { get; set; }
-        public int FRM_Id { get; set; }
+        public int CLI_Id { get; set; }      
         public List<InvoiceVM> InvoiceVMs { get; set; }
     }
     public class InvoiceVM

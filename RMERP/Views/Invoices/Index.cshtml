@@ -31,7 +31,7 @@
         <h4 class="page-title">Invoices</h4>
     </div>
     <div class="col-sm-4 text-right m-b-30">
-        <a href="@Url.Action("AddEditInvoice","Invoices",new { FRM_Id=Model.FRM_Id,INV_Id=0})" class="btn btn-primary rounded"><i class="fa fa-plus"></i> Create New Invoice</a>
+        <a href="@Url.Action("AddEditInvoice","Invoices",new {INV_Id=0})" class="btn btn-primary rounded"><i class="fa fa-plus"></i> Create New Invoice</a>
     </div>
 </div>
 <div class="row filter-row">
@@ -46,6 +46,6 @@
         </div>
 </div>
 <div class="row" id="divClientList">
-    @{Html.RenderPartial("_InvoiceList", Model);}
+    @{Html.RenderPartial("_InvoiceList", Model.InvoiceVMs);}
 </div>
 

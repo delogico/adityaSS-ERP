@@ -26,30 +26,16 @@ namespace RMERP.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
-        public IActionResult Index(int FRM_Id)
-        {
+        public IActionResult Index()
+        {            
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             InvoicesManager invoicesManager = new InvoicesManager(_context);                      
             InvoiceMasterVM masterVM = new InvoiceMasterVM();
-            masterVM.FRM_Id = FRM_Id;
+            int FRM_Id = (sessionUtils.GetLoggedFirmID()!=null? sessionUtils.GetLoggedFirmID().Value:0);           
             List<Invoices> invoices = invoicesManager.GetInvoices(FRM_Id);
             masterVM.InvoiceVMs = InvoiceMapper.mapMe(invoices.Where(m => DateTime.Compare(m.INV_Date.Date, DateTime.Now.Date.AddMonths(-2)) > 0).ToList());
             ViewBag.ClientList = invoices.Select(m => m.CLI_).Distinct().ToList();
             return View(masterVM);
-        }
-
-        public IActionResult ChooseFirm()
-        {
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            if (sessionUtils.GetLoggedFirmID().HasValue)
-            {
-                return RedirectToAction("Index", new { FRM_Id = sessionUtils.GetLoggedFirmID().Value });
-            }
-            else
-            {
-                FirmsManager frmManager = new FirmsManager(_context);
-                return View(frmManager.getFirmList());
-            }
         }
 
         public ActionResult DeleteInvoice(int INV_Id)
@@ -66,7 +52,7 @@ namespace RMERP.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult AddEditInvoice(int FRM_Id,int INV_Id = 0)
+        public IActionResult AddEditInvoice(int INV_Id = 0)
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             ClientsManager clientsManager = new ClientsManager(_context);
@@ -76,8 +62,7 @@ namespace RMERP.Controllers
             InvoiceVM invoiceVM = new InvoiceVM();
             invoiceVM.INV_Number = invoicesManager.GetNextInvoiceNumber();
             invoiceVM.INV_ClientOrder_Date = DateNow();
-            invoiceVM.INV_Date = DateNow();
-            invoiceVM.FRM_Id = FRM_Id;
+            invoiceVM.INV_Date = DateNow();            
             invoiceVM.Invoice_Concepts = new List<Invoice_ConceptsVM>();
             if (INV_Id > 0)
             {
@@ -89,7 +74,7 @@ namespace RMERP.Controllers
             return View(invoiceVM);
         }
         [HttpPost]
-        public IActionResult AddEditInvoice([FromBody]InvoiceVM InvoiceVM)
+        public JsonResult AddEditInvoice([FromBody]InvoiceVM InvoiceVM)
         {
             ClientsManager clientsManager = new ClientsManager(_context);
             InvoicesManager invoicesManager = new InvoicesManager(_context);
@@ -119,12 +104,13 @@ namespace RMERP.Controllers
             }
             catch (Exception)
             {
-                return Content("Ko");
+                return Json("Ko");
             }
-            return Content("Ok");
+            return Json("Ok");
         }
-        public ActionResult GetInvoiceTemplate(int CLI_Id,int FRM_Id)
+        public ActionResult GetInvoiceTemplate(int CLI_Id)
         {
+            ClientsManager clientsManager = new ClientsManager(_context);
             WageRegisterManager registerManager = new WageRegisterManager(_context);
             WageProcessManager wagManager = new WageProcessManager(_context);
             IEnumerable<INVOICE_TEMPLATE_TYPE> INVOICE_TEMPLATE_TYPE = Enum.GetValues(typeof(INVOICE_TEMPLATE_TYPE))
@@ -137,6 +123,7 @@ namespace RMERP.Controllers
                                       Value = ((int)action).ToString()
                                   };
 
+            int FRM_Id = clientsManager.GetClientById(CLI_Id).FRM_Id;
             var cc = wagManager.getWageProcessList(FRM_Id);
             ViewBag.Months = from c in cc
                              select new SelectListItem
@@ -144,7 +131,7 @@ namespace RMERP.Controllers
                                  Text = c.WAG_Month.ToShortDateString(),
                                  Value = c.WAG_Id.ToString()
                              };
-            ViewBag.Designation = registerManager.GetWageRegistersForInvoice(FRM_Id, CLI_Id).Select(m => m.CRI_.DES_).Distinct();
+            ViewBag.Designation = registerManager.GetWageRegistersForInvoice(CLI_Id).Select(m => m.CRI_.DES_).Distinct();
             return PartialView("_InvoiceType");
         }
         public IActionResult DownloadInvoice(int INV_Id,int ActionId)

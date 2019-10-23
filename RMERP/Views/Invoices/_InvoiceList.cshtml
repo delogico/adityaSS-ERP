@@ -1,7 +1,7 @@
-﻿@model RMERP.DAL.ViewModel.InvoiceMasterVM
+﻿@model List<RMERP.DAL.ViewModel.InvoiceVM>
 @using static RMERP.DAL.Helpers.ProjectUtils;
 <div class="col-md-12">
-    @if (Model.InvoiceVMs.Count() > 0)
+    @if (Model.Count() > 0)
     {
         <div class="table-responsive">
             <table class="table table-striped custom-table m-b-0">
@@ -18,7 +18,7 @@
                 </thead>
                 <tbody>
                     @{int srNo = 1;}
-                    @foreach (var item in Model.InvoiceVMs)
+                    @foreach (var item in Model)
                     {
                         <tr>
                             <td>@srNo</td>
@@ -31,7 +31,7 @@
                                 <div class="dropdown">
                                     <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><a href="@Url.Action("AddEditInvoice","Invoices",new {FRM_Id=Model.FRM_Id ,INV_Id=item.INV_Id})"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
+                                        <li><a href="@Url.Action("AddEditInvoice","Invoices",new {INV_Id=item.INV_Id})"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
                                         <li><a href="@Url.Action("AddEditInvoice","Invoices",new {INV_Id=item.INV_Id })"><i class="fa fa-eye m-r-5"></i> View</a></li>
                                         <li><a href="@Url.Action("DownloadInvoice","Invoices",new {INV_Id=item.INV_Id,Action= (int)PDFAction.Download })"><i class="fa fa-file-pdf-o m-r-5"></i> Download</a></li>
                                         <li><a href="@Url.Action("DeleteInvoice","Invoices",new {INV_Id=item.INV_Id })"><i class="fa fa-trash-o m-r-5"></i> Delete</a></li>
