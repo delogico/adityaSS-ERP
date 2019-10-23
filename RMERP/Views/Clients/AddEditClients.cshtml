@@ -848,8 +848,7 @@
             }
 
         }
-        function WorkingDays_Change(days) {
-            debugger;
+        function WorkingDays_Change(days) {       
             if ($(days).find('option:selected').val() == "2") {
                 $("#divSelectMethod").show();
             } else if ($(days).find('option:selected').val() == "3") {
@@ -864,8 +863,7 @@
                 title: "Choose Month!",
                 inputType: 'date',
 
-                callback: function (result) {
-                    debugger;
+                callback: function (result) {                   
                     if (result != null) {
                         $.ajax({
                             type: "POST",

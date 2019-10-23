@@ -8,11 +8,12 @@
 
 <script>
     function calculateTotal() {
+        debugger;
         var totalPaybleDays = $("#wageRegisterVM_WAR_TotalPaybleDays").val();
         var totalWorkingDays = $("#wageRegisterVM_WAR_TotalWorkingDays").val();
-        if (totalPaybleDays > totalWorkingDays) {
-            $("#wageRegisterVM_WAR_TotalPaybleDays").val(0);
-        }
+        //if (totalPaybleDays > totalWorkingDays) {
+        //    $("#wageRegisterVM_WAR_TotalPaybleDays").val(0);
+        //}
         var WAR_ExtraWorkingHours = $("#wageRegisterVM_WAR_ExtraWorkingHours").val();
         var CRI_Basic = $("#wageRegisterVM_WAR_Basic").val();
         var CRI_DA = $("#wageRegisterVM_WAR_DA").val();
@@ -24,8 +25,7 @@
         var BasicDa = parseInt(CRI_Basic) + parseInt(CRI_DA);
 
         var Percentage = document.getElementById("Percentage").checked;
-        var Fixed = document.getElementById("Fixed").checked;
-        debugger;
+        var Fixed = document.getElementById("Fixed").checked;        
         var CRI_HRA_Calculated = 0, WAR_Basic_Calculated = 0,  CRI_DA_Calculated=0;
         if (totalWorkingDays != 0) {
             CRI_DA_Calculated = (CRI_DA * totalPaybleDays) / totalWorkingDays;
@@ -34,7 +34,18 @@
             CRI_HRA_Calculated = (Percentage == true ? ((BasicDaCalculated * CRI_HRA) / 100) : ((CRI_HRA * totalPaybleDays) / totalWorkingDays));  
         }
         var WAR_PF_Calculated = parseFloat($("#wageRegisterVM_WAR_PF_Calculated").val());
-        var WAR_ESIC_Calculated = parseFloat($("#wageRegisterVM_WAR_ESIC_Calculated").val());       
+        var WAR_ESIC_Calculated = parseFloat($("#wageRegisterVM_WAR_ESIC_Calculated").val()); 
+
+        var WAR_CanteenFacility_Calculation = 0, WAR_RevenueDeduction_Calculated=0;
+        var WAR_ProffesionalTax_Calculated = parseFloat($("#wageRegisterVM_WAR_ProffesionalTax_Calculated").val()); 
+        
+        if ($("#wageRegisterVM_WAR_RevenueDeduction_Calculated").val() != null) {
+            WAR_RevenueDeduction_Calculated = parseFloat($("#wageRegisterVM_WAR_RevenueDeduction_Calculated").val());
+        }        
+        if ($("#wageRegisterVM_WAR_CanteenFacility_Calculation").val() != null) {
+            WAR_CanteenFacility_Calculation = parseFloat($("#wageRegisterVM_WAR_CanteenFacility_Calculation").val());
+        }
+       
         var AllowancesTotal = 0;
 
         
@@ -86,18 +97,17 @@
             WAR_LWF_Deduction_Calculated = $("#wageRegisterVM_WAR_LWF_Deduction_Calculated").val();
         }
 
-       ////////////End//////////////////
-        debugger;
-        var WAR_GrossTotal = WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + parseFloat(WAR_OverTime_Calculated) + AllowancesTotal + parseFloat(WAR_OutStation_Allowance_Calculated) + parseFloat(WAR_Attendance_Allowance_Calculated) + parseFloat(WAR_Performance_Allowance_Calculated) + parseFloat(WAR_Nightshift_Allowance_Calculated) + parseFloat(WAR_LWF_Deduction_Calculated);
-        var WAR_FinalTotal = parseInt(WAR_GrossTotal) - (WAR_PF_Calculated + WAR_ESIC_Calculated);
+       ////////////End//////////////////      
+        var WAR_GrossTotal = WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + parseFloat(WAR_OverTime_Calculated) + AllowancesTotal + parseFloat(WAR_OutStation_Allowance_Calculated) + parseFloat(WAR_Nightshift_Allowance_Calculated) + parseFloat(WAR_Performance_Allowance_Calculated) + parseFloat(WAR_Attendance_Allowance_Calculated);
+        var WAR_FinalTotal = parseFloat(WAR_GrossTotal) - (WAR_PF_Calculated + WAR_ESIC_Calculated + WAR_ProffesionalTax_Calculated + WAR_RevenueDeduction_Calculated + WAR_CanteenFacility_Calculation+ parseFloat(WAR_LWF_Deduction_Calculated));
 
-        $("#wageRegisterVM_WAR_DA_Calculated").val(CRI_DA_Calculated.toFixed(2));
-        $("#wageRegisterVM_WAR_HRA_Calculated").val(CRI_HRA_Calculated.toFixed(2));
-        $("#wageRegisterVM_WAR_Basic_Calculated").val(WAR_Basic_Calculated.toFixed(2));      
+        $("#wageRegisterVM_WAR_DA_Calculated").val(Math.round(CRI_DA_Calculated));
+        $("#wageRegisterVM_WAR_HRA_Calculated").val(Math.round(CRI_HRA_Calculated));
+        $("#wageRegisterVM_WAR_Basic_Calculated").val(Math.round(WAR_Basic_Calculated));      
              
 
-        $("#wageRegisterVM_WAR_GrossTotal").val(WAR_GrossTotal.toFixed(2));
-        $("#wageRegisterVM_WAR_FinalTotal").val(WAR_FinalTotal.toFixed(2));
+        $("#wageRegisterVM_WAR_GrossTotal").val(Math.round(WAR_GrossTotal));
+        $("#wageRegisterVM_WAR_FinalTotal").val(Math.round(WAR_FinalTotal));
     };
 
     
@@ -136,7 +146,7 @@
             success: function (data) {                
                 if (data != null) {                 
                     $("#wageRegisterVM_WAR_OverTime_Calculated").val(data);   
-                    debugger;
+            
                     calculateTotal();
                 }
             }
@@ -261,7 +271,7 @@
                             @Html.LabelFor(m => m.wageRegisterVM.WAR_HRA, new { @class = "control-label" })
                             @Html.RadioButtonFor(m => m.wageRegisterVM.clientRequirementVM.HRAselection, false, new { @id = "Percentage", @checked = "checked", @style = "margin: 0px 0 0", onclick = "calculateTotal()" }) Percentage
                             @Html.RadioButtonFor(m => m.wageRegisterVM.clientRequirementVM.HRAselection, true, new { @id = "Fixed", @style = "margin: 0px 0 0", onclick = "calculateTotal()" }) Fixed
-                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_HRA, new { @class = "form-control", onclick = "calculateTotal()" })
+                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_HRA, new { @class = "form-control", onfocusout = "calculateTotal()" })
                             @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_HRA, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -275,8 +285,8 @@
                     @{
                         for (var i = 0; i < Model.wage_Register_Allowances.Count(); i++)
                         {
-                            
-                                 @Html.HiddenFor(m => Model.wage_Register_Allowances[i].CRA_.ALL_.ALL_Shortform)
+
+                            @Html.HiddenFor(m => Model.wage_Register_Allowances[i].CRA_.ALL_.ALL_Shortform)
                             @Html.HiddenFor(m => Model.wage_Register_Allowances[i].WAA_Id)
                             <div class="col-md-12">
                                 @Html.Label(Model.wage_Register_Allowances[i].CRA_.ALL_.ALL_Title)
@@ -362,14 +372,14 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             @Html.LabelFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, new { @class = "control-label" })
-                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, new { @class = "form-control" })
+                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, new { @class = "form-control", onfocusout = "calculateTotal()" })
                             @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             @Html.LabelFor(m => m.wageRegisterVM.WAR_GrossTotal, new { @class = "control-label" })
-                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_GrossTotal, new { @class = "form-control" })
+                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_GrossTotal, new { @class = "form-control", onfocusout = "calculateTotal()" })
                             @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_GrossTotal, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -377,14 +387,14 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.wageRegisterVM.WAR_PF, new { @class = "control-label" })
-                                @Html.EditorFor(m => m.wageRegisterVM.WAR_PF, new { htmlAttributes = new { @class = "form-control"} })
+                                @Html.EditorFor(m => m.wageRegisterVM.WAR_PF, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_PF, "", new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-md-5">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.wageRegisterVM.WAR_ESIC, new { @class = "control-label" })
-                                @Html.EditorFor(m => m.wageRegisterVM.WAR_ESIC, new { htmlAttributes = new { @class = "form-control"} })
+                                @Html.EditorFor(m => m.wageRegisterVM.WAR_ESIC, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_ESIC, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -397,7 +407,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             @Html.LabelFor(m => m.wageRegisterVM.WAR_PF_Calculated, new { @class = "control-label" })
-                            @Html.EditorFor(m => m.wageRegisterVM.WAR_PF_Calculated, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(m => m.wageRegisterVM.WAR_PF_Calculated, new { htmlAttributes = new { @class = "form-control" , onfocusout = "calculateTotal()" } })
                             @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_PF_Calculated, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -405,10 +415,41 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             @Html.LabelFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, new { @class = "control-label" })
-                            @Html.EditorFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
                             @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, "", new { @class = "text-danger" })
                         </div>
                     </div>
+                    @if (Model.wageRegisterVM.clientRequirementVM.CRI_ProfessionalTax)
+                    {
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_ProffesionalTax_Calculated, new { @class = "control-label" })
+                                @Html.EditorFor(m => m.wageRegisterVM.WAR_ProffesionalTax_Calculated, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_ProffesionalTax_Calculated, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    }
+                    @if (Model.wageRegisterVM.clientRequirementVM.CRI_RevenueDeduction)
+                    {
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_RevenueDeduction_Calculated, new { @class = "control-label" })
+                                @Html.EditorFor(m => m.wageRegisterVM.WAR_RevenueDeduction_Calculated, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_RevenueDeduction_Calculated, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    }
+                    @if (Model.wageRegisterVM.clientRequirementVM.CRI_CanteenFacility)
+                    {
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_CanteenFacility_Calculation, new { @class = "control-label" })
+                                @Html.EditorFor(m => m.wageRegisterVM.WAR_CanteenFacility_Calculation, new { htmlAttributes = new { @class = "form-control" , onfocusout = "calculateTotal()" } })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_CanteenFacility_Calculation, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    }
 
                     <div class="col-md-12">
                         <div class="form-group">

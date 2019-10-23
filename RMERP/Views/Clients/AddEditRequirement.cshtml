@@ -75,8 +75,7 @@
             }
 
 
-            $('input[class="Allselection"]').click(function () {
-                debugger;
+            $('input[class="Allselection"]').click(function () {              
                 if ($(this).prop("checked") == true) {
                     $("#divReqAllow_" + this.id).show();
                     addCheckbox(this.id);
@@ -120,8 +119,7 @@
                 }
                 $("#CRI_PF_Formula").val(PFSelection.join("+"));
             });
-            $(document).on("click", "INPUT[class^=ESICselection]", function (event) {
-                debugger;
+            $(document).on("click", "INPUT[class^=ESICselection]", function (event) {               
                 if ($(this).prop("checked") == true) {
                     ESICSelection.push($(this).prop('value'));
                 }
@@ -200,7 +198,7 @@
             $('#rdo_OT_Fixed_Amount').val("False");
         });
         $('input[id="chkOutStation"]').click(function () {
-            debugger;
+            
             if ($(this).prop("checked") == true) {
                 $("#divOutStaion").show();
                 var name = "OSL";
@@ -213,7 +211,7 @@
             }
         });
         $('input[id="chkNightshift"]').click(function () {
-            debugger;
+           
             if ($(this).prop("checked") == true) {
                 $("#divNightshift").show();
                 var name = "NSL";

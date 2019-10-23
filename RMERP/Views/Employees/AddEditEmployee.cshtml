@@ -96,15 +96,14 @@
             }
         };
         $("#EMP_State").change(function () {
-            debugger;
+            
             var items = "<option value='0'>Select City</option>";
             $("#EMP_City").html(items);
             GetCity();
         });
 
         function GetCity(EMP_City, EMP_State) {
-            debugger;
-            if (EMP_City != 0 && EMP_City != undefined) {
+                        if (EMP_City != 0 && EMP_City != undefined) {
                 if (@Model.EMP_City != 0) {
                     var EMP_City =@Model.EMP_City;
                 } else {

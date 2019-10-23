@@ -26,7 +26,12 @@ namespace RMERP.DAL.ManagerClasses
                 return _context.Invoices.Include(m => m.CLI_).ThenInclude(m => m.FRM_).Include(m => m.Invoice_Concepts).Where(m => m.FRM_Id.Equals(FRM_Id)).OrderByDescending(m => m.INV_Date).ToList();
             }            
         }
-        
+
+        public List<Invoices> GetInvoicesByClientId(int CLI_Id)
+        {           
+                return _context.Invoices.Include(m => m.CLI_).ThenInclude(m => m.FRM_).Include(m => m.Invoice_Concepts).Where(m => m.CLI_Id.Equals(CLI_Id)).OrderByDescending(m => m.INV_Date).ToList();           
+        }
+
         public Invoices GetInvoice(int INV_Id)
         {
             return _context.Invoices.Include(m=>m.FRM_).ThenInclude(m=>m.STA_).Include(m=>m.CLI_).ThenInclude(m=>m.STA_).Include(m => m.CLI_).ThenInclude(m=>m.CITY_).Include(m=>m.Invoice_Concepts).Where(m=>m.INV_Id.Equals(INV_Id)).FirstOrDefault();
@@ -65,10 +70,39 @@ namespace RMERP.DAL.ManagerClasses
             InvoiceNumber = number.ToString("D6");
             return InvoiceNumber;
         }
+
         public void DeleteInvoice(int INV_Id)
         {
             _context.Invoices.Remove(_context.Invoices.Find(INV_Id));
             _context.SaveChanges();
+        }
+
+        public void DeleteIncidenceConcepts(int INV_Id)
+        {
+            List<Invoice_Concepts> invoiceConcepts = _context.Invoice_Concepts.Where(m => m.INV_Id.Equals(INV_Id)).ToList();
+            if(invoiceConcepts!=null)
+                _context.Invoice_Concepts.RemoveRange(invoiceConcepts);
+            _context.SaveChanges();
+        }
+
+        public Invoice_Concepts GetTotalDaysInvoiceData(int CLI_Id,int WAG_Id, int DES_Id)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context);
+            DesignationManager designationManager = new DesignationManager(_context);
+            Invoice_Concepts invoice_Concept = new Invoice_Concepts();
+            string DES_Title = designationManager.GetDesignationById(DES_Id).DES_Title;
+            var list = _context.Wage_Register.Include(M=>M.CRI_).Where(m =>m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(CLI_Id) && m.CRI_.DES_Id.Equals(DES_Id));
+            double totalPayableDay = 0;
+            decimal totalAmount = 0M;
+            Clients client = clientsManager.GetClientById(CLI_Id);
+            foreach (Wage_Register wage_Register in list.ToList())
+            {
+                totalPayableDay = totalPayableDay + wage_Register.WAR_TotalPaybleDays;
+                totalAmount = totalAmount + wage_Register.WAR_FinalTotal;
+            }
+            invoice_Concept.INC_Description = client.CLI_Name+ "[Post: "+ DES_Title + "(Payable days * Employees) : (" + totalPayableDay+" * "+ list.Select(m=>m.EMP_Id).Count()+ ")]";
+            invoice_Concept.INC_Total = Convert.ToDecimal(totalPayableDay * list.Select(m => m.EMP_Id).Count());
+            return invoice_Concept;
         }
     }
 }

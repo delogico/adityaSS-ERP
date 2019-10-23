@@ -2,6 +2,12 @@
 @{
     ViewData["Title"] = "Add Invoice";
 }
+
+<style>
+    .modal-dialog {
+        padding-top: 50px;
+    }
+</style>
 <div class="row">
     <div class="col-sm-8">
         <h4 class="page-title">Create Invoice</h4>
@@ -11,7 +17,7 @@
     <div class="col-md-12">
         <form>
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="form-group">
                         @Html.HiddenFor(m => m.INV_Id)
                         @Html.HiddenFor(m => m.INV_CreatedOn)
@@ -20,7 +26,7 @@
                         @Html.ValidationMessageFor(m => m.CLI_Id, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="form-group">
                         @Html.LabelFor(m => m.INV_Number, new { @class = "control-label" })
                         @Html.TextBoxFor(m => m.INV_Number, new { @readonly = "readonly", @class = "form-control" })
@@ -28,34 +34,34 @@
                     </div>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="form-group">
                         @Html.LabelFor(m => m.INV_Date, new { @class = "control-label" })
                         @Html.EditorFor(m => m.INV_Date, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(m => m.INV_Date, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="form-group">
                         @Html.LabelFor(m => m.INV_ClientOrder_Number, new { @class = "control-label" })
                         @Html.TextBoxFor(m => m.INV_ClientOrder_Number, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.INV_ClientOrder_Number, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="form-group">
                         @Html.LabelFor(m => m.INV_ClientOrder_Date, new { @class = "control-label" })
                         @Html.EditorFor(m => m.INV_ClientOrder_Date, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(m => m.INV_ClientOrder_Date, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="form-group">
                         @Html.LabelFor(m => m.INV_HSN, new { @class = "control-label" })
                         @Html.TextBoxFor(m => m.INV_HSN, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.INV_HSN, "", new { @class = "text-danger" })
                     </div>
-                </div>                
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -65,52 +71,56 @@
                                 <tr>
                                     <th style="width: 20px">#</th>
                                     <th class="col-md-6">Description</th>
-                                    <th>Amount</th>
+                                    <th>Amount</th>                                    
                                     <th> </th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @{
+                                    int sr = 1;
+                                }
                                 @foreach (var item in Model.Invoice_Concepts)
                                 {
                                     <tr>
                                         <td>
-                                            @item.INC_Serial_Number                                           
+                                            <input class="form-control" id="INC_Serial_Number" value=@item.INC_Serial_Number type="text" style="min-width:50px">
                                         </td>
                                         <td>
-                                            @item.INC_Description                                            
+                                            <textarea id="INC_Description" class="form-control">@item.INC_Description</textarea>
                                         </td>
                                         <td>
-                                            @item.INC_Total                                            
-                                        </td>
+                                            <input class="form-control" id="INC_Total" value="@item.INC_Total" type="text" readonly>
+                                        </td>                                       
                                         <td>
                                             <a onclick="RemoveInvoiceConcept(this)" class="text-danger font-18" title="Remove"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
+                                    sr++;
                                 }
+
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td>
-                                        @{ 
-                                            int srNo = 0;
-                                            if (Model.Invoice_Concepts != null) { srNo = Model.Invoice_Concepts.Count() + 1; }
-                                          }
-                                        <input class="form-control" id="INC_Serial_Number" value=@srNo type="text" readonly="" style="min-width:50px">
+                                    <td>                                      
+                                        <input class="form-control" id="INC_Serial_Number_nxt" value=@sr type="text" style="min-width:50px">
                                     </td>
                                     <td>
-                                        <input class="form-control" id="INC_Description" type="text" style="min-width:150px">
+                                        <textarea id="INC_Description" class="form-control"></textarea>
                                     </td>
                                     <td>
-                                        <input class="form-control" id="INC_Total" style="width:100px" type="text">
-                                    </td>                                   
-                                    <td><a id="btnAdd" class="text-success font-18" title="Add"><i class="fa fa-plus"></i></a></td>
+                                        <input class="form-control" id="INC_Total" type="text">
+
+                                    </td>
+                                    <td>
+                                        <a class="InvoiceType text-success font-18" title="Add" onclick="openInvoiceTemplate()"><i class="fa fa-plus"></i></a>
+                                    </td>
 
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-hover table-white border">                     
+                        <table class="table table-hover table-white border">
                             <tbody>
                                 <tr>
                                     <td></td>
@@ -118,16 +128,16 @@
                                     <td></td>
                                     <td></td>
                                     <td width="10%" class="text-right">Total</td>
-                                    <td style="text-align: right; padding-right: 30px;width: 230px"> @Html.TextBoxFor(m=>m.All_INC_Total,new { @class = "form-control text-right", @readonly = "readonly" })</td>
-                                </tr>                                
+                                    <td style="text-align: right; padding-right: 30px;width: 230px"> @Html.TextBoxFor(m => m.All_INC_Total, new { @class = "form-control text-right", @readonly = "readonly" })</td>
+                                </tr>
                                 <tr>
                                     <td colspan="3" class="text-right">CGST(%)</td>
                                     <td style="text-align: right; padding-right: 30px;width: 230px">
-                                        @Html.TextBoxFor(M => M.INV_CGST_Percentage, new { @class = "form-control text-right" , onfocusout = "calculateGST()" })
+                                        @Html.TextBoxFor(M => M.INV_CGST_Percentage, new { @class = "form-control text-right", onfocusout = "calculateGST()" })
                                     </td>
                                     <td class="text-right">Total CGST</td>
                                     <td style="text-align: right; padding-right: 30px;width: 230px">
-                                         @Html.TextBoxFor(M => M.INV_CGST_Total, new { @class = "form-control text-right", @readonly = "readonly" })
+                                        @Html.TextBoxFor(M => M.INV_CGST_Total, new { @class = "form-control text-right", @readonly = "readonly" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -143,7 +153,7 @@
                                 <tr>
                                     <td colspan="3" class="text-right">IGST(%)</td>
                                     <td style="text-align: right; padding-right: 30px;width: 230px">
-                                        @Html.TextBoxFor(M => M.INV_IGST_Percentage, new { @class = "form-control text-right" , onfocusout = "calculateGST()" })
+                                        @Html.TextBoxFor(M => M.INV_IGST_Percentage, new { @class = "form-control text-right", onfocusout = "calculateGST()" })
                                     </td>
                                     <td class="text-right">Total IGST</td>
                                     <td style="text-align: right; padding-right: 30px;width: 230px">
@@ -152,10 +162,10 @@
                                 </tr>
                                 <tr>
                                     <td colspan="5" class="text-right">
-                                        Tax 
+                                        Tax
                                     </td>
                                     <td style="text-align: right; padding-right: 30px;width: 230px">
-                                        @Html.TextBoxFor(m=>m.totTAX, new { @class = " form-control text-right", @readonly = "readonly" })
+                                        @Html.TextBoxFor(m => m.totTAX, new { @class = " form-control text-right", @readonly = "readonly" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -163,19 +173,20 @@
                                         Grand Total &nbsp;(<i class="fa fa-rupee"></i>)
                                     </td>
                                     <td style="text-align: right; padding-right: 30px; font-weight: bold; font-size: 16px;width: 230px">
-                                         @Html.TextBoxFor(m => Model.INV_Total, new { @class = "form-control text-right", @readonly = "readonly" })
+                                        @Html.TextBoxFor(m => Model.INV_Total, new { @class = "form-control text-right", @readonly = "readonly" })
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                    </div>                    
+                    </div>
                 </div>
             </div>
             <button class="btn btn-primary" id="btnSave">Save All</button>
         </form>
     </div>
 </div>
-
+<div id="invoiceTemplate">
+</div>
 @section scripts{
     <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
     @if (TempData["message"] != null)
@@ -187,54 +198,79 @@
         </script>
     };
     <script>
-        $("body").on("click", "#btnAdd", function () {
-            if ($("#INC_Total") != null) {                             
-                //Reference the Name and Country TextBoxes.
-                var INC_Serial_Number = $("#INC_Serial_Number");
-                var INC_Description = $("#INC_Description");
-                var INC_Total = $("#INC_Total");
+        function openInvoiceTemplate() {
+            var CLI_Id = $("#CLI_Id").val();
+            var Url = siteUrl + "Invoices/GetInvoiceTemplate?CLI_Id=" + CLI_Id + "&FRM_Id=" + @Model.FRM_Id;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                success: function (data) {
+                    $('#invoiceTemplate').html(data);                   
+                    $('#InvoiceTypeModal').modal('show');
+                }
+            })
+        };
 
-                //Get the reference of the Table's TBODY element.
-                var tBody = $("#tblIncidenceConcepts > TBODY")[0];
+        function FillData(id) {
+            var Type = $("#type_id_"+id).val();
+            var WAG_Id = $("#month_"+id).val();           
+            var CLI_Id = $("#CLI_Id").val();
+            var DES_Id = $("#designation_" + id).val();
+            if (CLI_Id != "") {
+                var Url = siteUrl + "Invoices/GetInvoiceData?CLI_Id=" + CLI_Id + "&Type=" + Type + "&WAG_Id=" + WAG_Id + "&DES_Id=" + DES_Id;
+                $.ajax({
+                    type: "GET",
+                    url: Url,
+                    success: function (data) {
+                        debugger;
+                        //Get the reference of the Table's TBODY element.
+                        var tBody = $("#tblIncidenceConcepts > TBODY")[0];
+                        var id = $('#tblIncidenceConcepts  tr').length - 1;
+                        //Add Row.
+                        var row = tBody.insertRow(-1);
+                        cell = $(row.insertCell(-1));
+                        cell.html("<input class='form-control' value=" + id + " type='text'>");
+                       
 
-                //Add Row.
-                var row = tBody.insertRow(-1);
+                        //Add Description cell.
+                        cell = $(row.insertCell(-1));
+                        //cell.html(" <input class='form-control' id='INC_Description' value="+data.inC_Description+" type='text' style='min-width:150px'> ");
+                        var textArea = $('<textarea id="INC_Description" class="form-control"/>');
+                        textArea.text(data.inC_Description);
+                        cell.append(textArea);
 
-                //Add Serial_Number  cell.
-                var cell = $(row.insertCell(-1));
-                cell.html(INC_Serial_Number.val());
+                        //Add Total cell.
+                        cell = $(row.insertCell(-1));
+                        cell.html(data.inC_Total);
+                        cell.html(" <input class='form-control' id='INC_Total' value=" + data.inC_Total + " type='text' readonly> ");
 
-                //Add Description cell.
-                cell = $(row.insertCell(-1));
-                cell.html(INC_Description.val());
+                        cell = $(row.insertCell(-1));
 
-                //Add Total cell.
-                cell = $(row.insertCell(-1));
-                cell.html(INC_Total.val());
+                        var stringRemove = "<a onclick=\"RemoveInvoiceConcept(this)\" class=\"text-danger font-18\" title=\"Remove\">";
+                        stringRemove = stringRemove + "<i class=\"fa fa-trash-o\" aria-hidden=\"true\"> ";
+                        stringRemove = stringRemove + "</i ></a > ";
+                        cell.append(stringRemove);
 
-                cell = $(row.insertCell(-1));
+                        var v = parseFloat($("#All_INC_Total").val());
+                        var All_INC_Total = (isNaN(All_INC_Total = parseFloat($("#All_INC_Total").val(), 10)) ? 0 : All_INC_Total);                       
+                        $("#All_INC_Total").val(parseInt(All_INC_Total) + data.inC_Total);
 
-                var stringRemove = "<a onclick=\"RemoveInvoiceConcept(this)\" class=\"text-danger font-18\" title=\"Remove\">";
-                stringRemove = stringRemove + "<i class=\"fa fa-trash-o\" aria-hidden=\"true\"> ";
-                stringRemove = stringRemove + "</i ></a > ";
-                cell.append(stringRemove);
+                        calculateGST();
 
-                var All_INC_Total = (isNaN(All_INC_Total = parseInt($("#All_INC_Total").val(), 10)) ? 0 : All_INC_Total);
-                var newTotal = $("#INC_Total").val();               
-                $("#All_INC_Total").val(parseInt(All_INC_Total) + parseInt(newTotal));             
-                                
-                calculateGST();
+                        //Clear the TextBoxes.
+                        var Next_INC_Serial_Number = parseInt(id) + 1;
+                        $("#INC_Serial_Number_nxt").val(Next_INC_Serial_Number);
+                        
+                        $('#InvoiceTypeModal').modal('toggle');
+                    }
+                })
+            } else {
+                alert("Please select client!");
+            }
 
-                //Clear the TextBoxes.
-                var Next_INC_Serial_Number = parseInt($("#INC_Serial_Number").val())+1;
-                INC_Serial_Number.val(Next_INC_Serial_Number);
-                INC_Description.val("");
-                INC_Total.val("");
-            }            
-        });
+        };
 
-        function calculateGST() {         
-         
+        function calculateGST() {           
             var INV_CGST_Percentage = (isNaN(INV_CGST_Percentage = parseInt($("#INV_CGST_Percentage").val(), 10)) ? 0 : INV_CGST_Percentage);
             var INV_SGST_Percentage = (isNaN(INV_SGST_Percentage = parseInt($("#INV_SGST_Percentage").val(), 10)) ? 0 : INV_SGST_Percentage);
             var INV_IGST_Percentage = (isNaN(INV_IGST_Percentage = parseInt($("#INV_IGST_Percentage").val(), 10)) ? 0 : INV_IGST_Percentage);
@@ -246,7 +282,7 @@
 
             $("#INV_CGST_Total").val(INV_CGST_Total);
             $("#INV_SGST_Total").val(INV_SGST_Total);
-            $("#INV_IGST_Total").val(INV_IGST_Total); 
+            $("#INV_IGST_Total").val(INV_IGST_Total);
 
             var totTAX = parseInt(INV_CGST_Total) + parseInt(INV_SGST_Total) + parseInt(INV_IGST_Total);
             $("#totTAX").val(totTAX);
@@ -254,58 +290,64 @@
             $("#INV_Total").val(parseInt(All_INC_Total) + parseInt(totTAX));
         };
 
-        function RemoveInvoiceConcept(button) {          
-           
+        function RemoveInvoiceConcept(button) {
+
             var row = $(button).closest("TR");
-            var INC_Total =$.trim($("TD", row).eq(2).html());
-            if (confirm("Are you sure you want to Remove?")) {              
+            var INC_Total = $.trim($("TD", row).eq(2).children().val());
+            if (confirm("Are you sure you want to Remove?")) {
                 var table = $("#tblIncidenceConcepts")[0];
                 table.deleteRow(row[0].rowIndex);
             }
 
-            var All_INC_Total = (isNaN(All_INC_Total = parseInt($("#All_INC_Total").val(), 10)) ? 0 : All_INC_Total);          
-            $("#All_INC_Total").val(parseInt(All_INC_Total) - parseInt(INC_Total)); 
+            var All_INC_Total = (isNaN(All_INC_Total = parseInt($("#All_INC_Total").val(), 10)) ? 0 : All_INC_Total);
+            $("#All_INC_Total").val(parseInt(All_INC_Total) - parseInt(INC_Total));
             calculateGST();
         };
         $("body").on("click", "#btnSave", function () {
-           
+
             //Loop through the Table rows and build a JSON array.
             var InvoiceVM = {};
-            InvoiceVM.INV_Id = $("#INV_Id").val();
-            InvoiceVM.INV_CreatedOn = $("#INV_CreatedOn").val();            
-            InvoiceVM.CLI_Id = $("#CLI_Id").val();
+            InvoiceVM.INV_Id = parseInt($("#INV_Id").val());
+            InvoiceVM.FRM_Id = 0;
+            InvoiceVM.CLI_Id = parseInt($("#CLI_Id").val());
             InvoiceVM.INV_Number = $("#INV_Number").val();
             InvoiceVM.INV_Date = $("#INV_Date").val();
             InvoiceVM.INV_ClientOrder_Number = $("#INV_ClientOrder_Number").val();
             InvoiceVM.INV_ClientOrder_Date = $("#INV_ClientOrder_Date").val();
+
+            InvoiceVM.INV_CreatedOn = $("#INV_CreatedOn").val();
+
             InvoiceVM.INV_HSN = $("#INV_HSN").val();
-            InvoiceVM.INV_Total = $("#INV_Total").val();
-            InvoiceVM.INV_CGST_Percentage = $("#INV_CGST_Percentage").val();
-            InvoiceVM.INV_SGST_Percentage = $("#INV_SGST_Percentage").val();
-            InvoiceVM.INV_IGST_Percentage = $("#INV_IGST_Percentage").val();
-            InvoiceVM.INV_CGST_Total = $("#INV_CGST_Total").val();
-            InvoiceVM.INV_SGST_Total = $("#INV_SGST_Total").val();
-            InvoiceVM.INV_IGST_Total = $("#INV_IGST_Total").val();
+            InvoiceVM.INV_Total = parseFloat($("#INV_Total").val());
+            InvoiceVM.INV_CGST_Percentage = parseFloat($("#INV_CGST_Percentage").val());
+            InvoiceVM.INV_SGST_Percentage = parseFloat($("#INV_SGST_Percentage").val());
+            InvoiceVM.INV_IGST_Percentage = parseFloat($("#INV_IGST_Percentage").val());
+            InvoiceVM.INV_CGST_Total = parseFloat($("#INV_CGST_Total").val());
+            InvoiceVM.INV_SGST_Total = parseFloat($("#INV_SGST_Total").val());
+            InvoiceVM.INV_IGST_Total = parseFloat($("#INV_IGST_Total").val());
+
             var Concepts = new Array();
 
             $("#tblIncidenceConcepts TBODY TR").each(function () {
+
                 var row = $(this);
                 var Concept = {};
-                Concept.INC_Serial_Number = row.find("TD").eq(0).html();
-                Concept.INC_Description = $.trim(row.find("TD").eq(1).html()); 
-                Concept.INC_Total = row.find("TD").eq(2).html();
+                Concept.INC_Serial_Number = parseInt(row.find("TD").eq(0).children().val());
+                Concept.INC_Description = $.trim(row.find("TD").eq(1).children().val());
+                Concept.INC_Total = parseFloat(row.find("TD").eq(2).children().val());
                 Concepts.push(Concept);
-            });           
+            });
             InvoiceVM.Invoice_Concepts = Concepts;
-            //alert(JSON.stringify(InvoiceVM));
+            debugger;           
             $.ajax({
                 url: '/Invoices/AddEditInvoice',
                 contentType: "application/json",
                 async: true,
                 type: "POST",
-                data: JSON.stringify(InvoiceVM) ,       
-                success: function (data, r, jqXHR) {                   
-                    alert(r + " record(s) inserted.");
+                data: JSON.stringify(InvoiceVM),
+                success: function (data) {
+                    alert(data.D);
+                    window.location.href = "/Invoices/Index"
                 }, error: function (jqXHR, textStatus, errorThrown) {
                     console.log("FAIL: " + errorThrown);
                 }

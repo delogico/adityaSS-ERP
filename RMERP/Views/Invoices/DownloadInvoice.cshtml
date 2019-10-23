@@ -133,7 +133,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model.Invoice_Concepts)
+                                    @foreach (var item in Model.Invoice_Concepts.OrderBy(m=>m.INC_Serial_Number))
                                     {
                                         <tr>
                                             <td>@item.INC_Serial_Number</td>

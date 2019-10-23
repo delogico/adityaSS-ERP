@@ -1,0 +1,53 @@
+﻿@model RMERP.DAL.ViewModel.InvoiceMasterVM
+@using static RMERP.DAL.Helpers.ProjectUtils;
+<div class="col-md-12">
+    @if (Model.InvoiceVMs.Count() > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-striped custom-table m-b-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Invoice Date</th>
+                        <th>Invoice Number</th>
+                        <th>Client</th>
+                        <th>Amount</th>
+                        @*<th>Status</th>*@
+                        <th class="text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int srNo = 1;}
+                    @foreach (var item in Model.InvoiceVMs)
+                    {
+                        <tr>
+                            <td>@srNo</td>
+                            <td>@item.INV_Date.ToShortDateString()</td>
+                            <td><a target="_blank" href="@Url.Action("DownloadInvoice","Invoices",new {INV_Id=item.INV_Id,ActionId= (int)PDFAction.View })">INV_@item.INV_Number</a></td>
+                            <td>@item.CLI_.CLI_Name (@item.FRM_.FRM_ShortName)</td>
+                            <td><i class="fa fa-rupee"></i> @item.INV_Total</td>
+
+                            <td class="text-right">
+                                <div class="dropdown">
+                                    <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="@Url.Action("AddEditInvoice","Invoices",new {FRM_Id=Model.FRM_Id ,INV_Id=item.INV_Id})"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
+                                        <li><a href="@Url.Action("AddEditInvoice","Invoices",new {INV_Id=item.INV_Id })"><i class="fa fa-eye m-r-5"></i> View</a></li>
+                                        <li><a href="@Url.Action("DownloadInvoice","Invoices",new {INV_Id=item.INV_Id,Action= (int)PDFAction.Download })"><i class="fa fa-file-pdf-o m-r-5"></i> Download</a></li>
+                                        <li><a href="@Url.Action("DeleteInvoice","Invoices",new {INV_Id=item.INV_Id })"><i class="fa fa-trash-o m-r-5"></i> Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        srNo++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p>No Invoice Generated.</p>
+    }
+
+</div>

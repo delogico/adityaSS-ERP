@@ -55,8 +55,22 @@ namespace RMERP.DAL.Mappers
             if (invoice.INV_IGST_Total != null)
                 InvoiceVM.INV_IGST_Total = invoice.INV_IGST_Total.Value;
             if (invoice.Invoice_Concepts != null)
-                InvoiceVM.Invoice_Concepts = invoice.Invoice_Concepts.ToList();
+                InvoiceVM.Invoice_Concepts = InvoiceConceptsMapper.mapMe(invoice.Invoice_Concepts.ToList());
+            if (invoice.CLI_ != null)
+                InvoiceVM.CLI_ = invoice.CLI_;
+            if (invoice.FRM_ != null)
+                InvoiceVM.FRM_ = invoice.FRM_;
             return InvoiceVM;
+        }
+
+        public static List<InvoiceVM> mapMe(List<Invoices> invoices)
+        {
+            List<InvoiceVM> invoiceVMs = new List<InvoiceVM>();
+            foreach(Invoices invoice in invoices)
+            {
+                invoiceVMs.Add(mapMe(invoice));
+            }
+            return invoiceVMs;
         }
     }
 }

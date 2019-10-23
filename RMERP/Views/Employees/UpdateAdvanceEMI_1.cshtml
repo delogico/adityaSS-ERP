@@ -20,13 +20,13 @@
     };
     <script>
         function RemainigAmt(id) {
-            debugger;
+          
             var advance = $("#Amount" + id).val();
             if (parseInt(advance) > parseInt($("#amt_" + id).html())) {
                 $("#Amount" + id).val(0);
                 alert("Your Amount Must Be Less Than Remaining Amount");
             } else {
-                debugger;
+             
                 var RemaimigAmt = (parseInt($("#amt_" + id).html()) - parseInt(advance));
                 $("#amt_" + id).html(RemaimigAmt);
                 $("#Ramt_" + id).html("<b>"+RemaimigAmt+"</b>");
@@ -44,13 +44,13 @@
         }; @ViewBag.FRM_Id
 
         function EditAmt(total, id, WAD_Id) {
-            debugger;
+          
             var advance = $("#Amount" + id).val();
             if (parseInt(advance) > total) {
                 $("#Amount" + id).val(0);
                 alert("Your Amount Must Be Less Than Remaining Amount");
             } else {
-                debugger;
+             
                 var RemaimigAmt = (total - parseInt(advance));
                 $("#amt_" + id).html(RemaimigAmt);
                 $("#Ramt_" + id).html("<b>"+RemaimigAmt+"</b>");

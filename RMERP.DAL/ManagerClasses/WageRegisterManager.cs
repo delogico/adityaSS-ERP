@@ -519,5 +519,10 @@ namespace RMERP.DAL.ManagerClasses
             return _context.Wage_Register.Where(m => m.WAG_Id == WAG_Id && m.EMP_.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Cheque_Cash)).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
         }
 
+        public List<Wage_Register> GetWageRegistersForInvoice(int FRM_Id, int CLI_Id)
+        {
+            return _context.Wage_Register.Include(m=>m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).Where(r => r.WAG_.FRM_Id == FRM_Id && r.CLI_Id == CLI_Id).ToList();
+        }
+
     }
 }

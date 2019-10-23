@@ -1,0 +1,58 @@
+﻿@using RMERP.DAL.Helpers;
+
+<div id="InvoiceTypeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Select Template</h4>
+            </div>
+            <div class="modal-body">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <input type="hidden" name="USR_Id" id="USR_Id" value="" />
+                <div class="form-group table">
+                    <table class="table table-hover">
+
+                        @{
+                            IEnumerable<ProjectUtils.INVOICE_TEMPLATE_TYPE>
+                                INVOICE_TEMPLATE_TYPES = Enum.GetValues(typeof(ProjectUtils.INVOICE_TEMPLATE_TYPE))
+                                .Cast<ProjectUtils.INVOICE_TEMPLATE_TYPE>();
+                        }
+
+                        @for (int i = 0; i < INVOICE_TEMPLATE_TYPES.Count(); i++)
+                        {
+                            string id = ((int)INVOICE_TEMPLATE_TYPES.ToList()[i]).ToString();
+                            <tr>
+                                <td>
+                                    <input type="hidden" value="@id" id="type_id_@i" />
+                                    @if (INVOICE_TEMPLATE_TYPES.ToList()[i] == ProjectUtils.INVOICE_TEMPLATE_TYPE.MONTHLY_TOTAL_DAYS_FROM_OUR_EMPLOYEES)
+                                    {
+                                        <span>
+                                            Total Payble days for month
+                                            @Html.DropDownList("Month", new SelectList(ViewBag.Months, "Value", "Text"), new { @id = "month_" + i })
+                                            for the Designation
+                                            @Html.DropDownList("Designation", new SelectList(ViewBag.Designation, "DES_Id", "DES_Title"), new { @id = "designation_" + i })
+                                        </span>
+                                    }
+
+                                </td>
+                                <td>
+                                    <a class="btn btn-xs btn-primary" onclick="FillData(@i)" title="Add">Select</a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+
+
+                @*<div class="m-t-20 text-center">
+                        <a class="btn btn-primary" onclick="FillData()" title="Add">Submit</a>
+                    </div>*@
+            </div>
+        </div>
+
+    </div>
+</div>

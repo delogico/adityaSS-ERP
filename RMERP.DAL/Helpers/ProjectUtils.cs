@@ -131,6 +131,10 @@ namespace RMERP.DAL.Helpers
             [StringValue("Duplicate IP")]
             Duplicate_IP = 13
         }
+        public enum INVOICE_TEMPLATE_TYPE
+        {
+            MONTHLY_TOTAL_DAYS_FROM_OUR_EMPLOYEES = 10,
+        }
         public enum Month
         {
             NotSet = 0,

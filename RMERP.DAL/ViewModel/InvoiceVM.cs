@@ -6,6 +6,12 @@ using RMERP.DAL.Models;
 
 namespace RMERP.DAL.ViewModel
 {
+    public class InvoiceMasterVM
+    {
+        public int CLI_Id { get; set; }
+        public int FRM_Id { get; set; }
+        public List<InvoiceVM> InvoiceVMs { get; set; }
+    }
     public class InvoiceVM
     {
         public int INV_Id { get; set; }
@@ -16,7 +22,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Invoice Number")]
         [Required(ErrorMessage = "Invoice Number is required.")]
         public string INV_Number { get; set; }
-        [Display(Name = "Date")]
+        [Display(Name = "Invoice Date")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Date is required.")]
         public DateTime INV_Date { get; set; }
@@ -50,9 +56,23 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Total IGST")]
         public decimal INV_IGST_Total { get; set; }
 
-        public List<Invoice_Concepts> Invoice_Concepts { get; set; }
+        public List<Invoice_ConceptsVM> Invoice_Concepts { get; set; }
 
         public decimal All_INC_Total { get; set; }
         public decimal totTAX { get; set; }
+
+        public Clients CLI_ { get; set; }
+        public Firms FRM_ { get; set; }
     }
+    public class Invoice_ConceptsVM
+    {
+        public int INC_Id { get; set; }
+        public int INV_Id { get; set; }
+        public int INC_Serial_Number { get; set; }
+        public string INC_Description { get; set; }
+        public decimal INC_Total { get; set; }
+        public int hdnId { get; set; }
+        public Invoices INV_ { get; set; }
+    }
+    
 }
