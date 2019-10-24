@@ -832,14 +832,29 @@ namespace RMERP.Controllers
             if (CalculationEditVM != null)
             {
                 Wage_Register wageRegister = registerManager.GetWageRegister(CalculationEditVM.WAR_Id);
-                CalculationEditVM.CRI_OT_Formula = wageRegister.WAR_OverTime_Formula;              
-                decimal OTsum = Math.Round(GetAmountBasedOnFormula_Edit(
-                                CalculationEditVM.CRI_OT_Formula, CalculationEditVM.WAR_Basic_Calculated, CalculationEditVM.CRI_DA_Calculated, CalculationEditVM.CRI_HRA_Calculated,
-                                CalculationEditVM.CalculatedAllowanceVM, CalculationEditVM.totalWorkingDays, CalculationEditVM.totalPaybleDays,
-                                CalculationEditVM.WAR_OverTime_Calculated, CalculationEditVM.WAR_Outstation_Allowance_Calculated, CalculationEditVM.WAR_Attendance_Allowance_Calculated,
-                                CalculationEditVM.WAR_Nightshift_Allowance_Calculated, CalculationEditVM.WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
                 double OvertimeInDay = CalculationEditVM.ExtraWorkingHours / Convert.ToDouble(wageRegister.CLI_.CLI_WorkingHours_In_Day);
-                Calculated_OT = Math.Round(Convert.ToDecimal(((Convert.ToDouble(OTsum) / CalculationEditVM.totalPaybleDays) * OvertimeInDay) * wageRegister.CRI_.CRI_OT_MultipleTimes), MidpointRounding.AwayFromZero);
+                if (OvertimeInDay > 0)
+                {
+                    if (!wageRegister.CRI_.CRI_OT_Calculate_Payableday)
+                    {
+                        if (wageRegister.CRI_.CRI_OT_Fixed_PerHour > 0)
+                        {
+                            Calculated_OT = Convert.ToDecimal(CalculationEditVM.ExtraWorkingHours) * wageRegister.CRI_.CRI_OT_Fixed_PerHour.Value;
+                        }
+                        else if (wageRegister.CRI_.CRI_OT_Formula != null)
+                        {
+                            CalculationEditVM.CRI_OT_Formula = wageRegister.WAR_OverTime_Formula;
+                            decimal OTsum = Math.Round(GetAmountBasedOnFormula_Edit(
+                                            CalculationEditVM.CRI_OT_Formula, CalculationEditVM.WAR_Basic_Calculated, CalculationEditVM.CRI_DA_Calculated, CalculationEditVM.CRI_HRA_Calculated,
+                                            CalculationEditVM.CalculatedAllowanceVM, CalculationEditVM.totalWorkingDays, CalculationEditVM.totalPaybleDays,
+                                            CalculationEditVM.WAR_OverTime_Calculated, CalculationEditVM.WAR_Outstation_Allowance_Calculated, CalculationEditVM.WAR_Attendance_Allowance_Calculated,
+                                            CalculationEditVM.WAR_Nightshift_Allowance_Calculated, CalculationEditVM.WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
+
+                            Calculated_OT = Math.Round(Convert.ToDecimal(((Convert.ToDouble(OTsum) / CalculationEditVM.totalPaybleDays) * OvertimeInDay) * wageRegister.CRI_.CRI_OT_MultipleTimes), MidpointRounding.AwayFromZero);
+                        }
+                    }
+                }
+   
             }
 
             return Json(Calculated_OT);

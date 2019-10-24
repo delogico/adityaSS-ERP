@@ -28,12 +28,12 @@ namespace RMERP.DAL.ManagerClasses
 
         public List<Wage_Register> GetWageRegisters(int WAG_Id, int CLI_Id)
         {
-            return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id && r.CLI_Id == CLI_Id).Include(m=>m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
+            return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id && r.CLI_Id == CLI_Id).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
         }
 
         public List<Wage_Register> GetWageRegistersByWAG_Id(int WAG_Id)
         {
-            return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).ThenInclude(m=>m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
+            return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).ThenInclude(m => m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
         }
         public List<Wage_Register> GetWageRegistersByLWF(int WAG_Id)
         {
@@ -41,12 +41,12 @@ namespace RMERP.DAL.ManagerClasses
         }
         public List<Wage_Register> GetWageRegisters(int WAG_Id)
         {
-            List<Wage_Register> lst= _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id).Include(m => m.WAG_).Include(m => m.CLI_).Include(m => m.EMP_).ToList();
+            List<Wage_Register> lst = _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id).Include(m => m.WAG_).Include(m => m.CLI_).Include(m => m.EMP_).ToList();
             return lst;
         }
         public Wage_Register GetWageRegister(int WAR_Id)
         {
-            return _context.Wage_Register.Include(m=>m.CRI_).Include(m => m.WAG_).Include(m => m.CLI_).Include(m => m.EMP_).Where(r => r.WAR_Id == WAR_Id).FirstOrDefault();
+            return _context.Wage_Register.Include(m => m.CRI_).Include(m => m.WAG_).Include(m => m.CLI_).Include(m => m.EMP_).Where(r => r.WAR_Id == WAR_Id).FirstOrDefault();
         }
         public List<ClientWageRegisterVM> GenerateWageRegisterTable(int WAG_Id, int AdminID, int FRM_Id)
         {
@@ -76,6 +76,7 @@ namespace RMERP.DAL.ManagerClasses
 
         public List<WageRegisterVM> GetWageRegisterCalculated(Wage_Process wageProcess, int CLI_Id, int AdminID)
         {
+
             List<WageRegisterVM> lstRegister = new List<WageRegisterVM>();
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);
             AttendanceManager attManager = new AttendanceManager(_context);
@@ -93,7 +94,7 @@ namespace RMERP.DAL.ManagerClasses
                     double totalPaybleDays = 0;
                     decimal CRI_Basic = 0M, WAR_Basic_Calculated = 0M, BasicDa = 0M, WAR_OverTime_Calculated = 0M, WAR_PF, WAR_PF_Calculated = 0M, WAR_ESIC = 0M, WAR_ESIC_Calculated = 0M, WAR_LWF_Deduction_Calculated = 0M;
                     decimal CRI_DA = 0M, CRI_DA_Calculated = 0M, CRI_HRA = 0M, CRI_HRA_Calculated = 0M;
-                    decimal WAR_Attendance_Allowance_Calculated = 0M, WAR_Outstation_Allowance_Calculated = 0M, WAR_Performance_Allowance_Calculated = 0M, WAR_Nightshift_Allowance_Calculated=0M;
+                    decimal WAR_Attendance_Allowance_Calculated = 0M, WAR_Outstation_Allowance_Calculated = 0M, WAR_Performance_Allowance_Calculated = 0M, WAR_Nightshift_Allowance_Calculated = 0M;
 
                     #region Total working day calculation
                     Clients cli = clientsManager.GetClientById(CLI_Id);
@@ -116,7 +117,7 @@ namespace RMERP.DAL.ManagerClasses
                     #region Paybale day counting
 
                     int totWeekOffs = 0, totalPublicHoliday = 0, totEarnLeave = 0, totNightShift = 0, totAbsent = 0;
-                    double totPresentDays = 0, totHalfDays = 0, totExtraWorkingDays = 0, WAR_ExtraWorkingHours = 0,totNighthours=0;
+                    double totPresentDays = 0, totHalfDays = 0, totExtraWorkingDays = 0, WAR_ExtraWorkingHours = 0, totNighthours = 0;
 
                     totPresentDays = attendances.Where(a => a.ATT_IsPresent == true).Count();
                     totEarnLeave = attendances.Where(a => a.ATT_IsEarnLeave == true).Count();
@@ -157,14 +158,49 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.designation = employee.DES_;
 
                     #region EMI Calculation
+
                     decimal totalEMI = 0;
+                    if (employee.EMP_Id == 134)
+                    {
+
+                    }
                     if (employee.EMP_.Wage_Register_Advances.Count() > 0)
                     {
-                        var EMI = employee.EMP_.Wage_Register_Advances.Where(m => m.WAD_Status == false).GroupBy(m => m.EMP_Id).Select(g => new
+                        bool flag = false;
+                        int clients = attManager.getAttendance_Wage_Employee(wageProcess.WAG_Id, employee.EMP_Id).Select(m => m.CLI_Id).Distinct().Count();
+                        if (clients > 1)
                         {
-                            WAD_Amt = g.Sum(n => n.WAD_Amount)
-                        });
-                        totalEMI = Math.Round(EMI.Select(g => g.WAD_Amt).FirstOrDefault(),MidpointRounding.AwayFromZero);
+                            IEnumerable<Clients_Employees> clientList = clientsManager.listActiveClientsEmployees_clients(employee.EMP_Id, wageProcess.WAG_Month);
+                            Client_Requirements requirementMax = null;
+                            foreach (Clients_Employees clients_Employee in clientList)
+                            {
+                                Client_Requirements requirement = clientsManager.getActiveClientRequirement(clients_Employee.CLI_Id, clients_Employee.DES_Id);
+                                if (requirementMax == null)
+                                    requirementMax = requirement;
+                                else
+                                {
+                                    if (requirementMax.CRI_Basic < requirement.CRI_Basic)
+                                        requirementMax = requirement;
+                                }
+                            }
+                            if (requirementMax.CLI_Id.Equals(CLI_Id))
+                                flag = true;
+                        }
+                        else
+                        {
+                            flag = true;
+                        }
+                        if (flag)
+                        {
+                            var EMI = employee.EMP_.Wage_Register_Advances.Where(m => m.WAD_Status == false).GroupBy(m => m.EMP_Id).Select(g => new
+                            {
+                                WAD_Amt = g.Sum(n => n.WAD_Amount)
+                            });
+                            totalEMI = Math.Round(EMI.Select(g => g.WAD_Amt).FirstOrDefault(), MidpointRounding.AwayFromZero);
+                        }
+                        
+
+
                     }
                     wageRegisterVM.WAR_Advance_Amount = totalEMI;
                     #endregion                  
@@ -237,7 +273,7 @@ namespace RMERP.DAL.ManagerClasses
                         WAR_Basic_Calculated = Math.Round(Math.Round((Decimal.Multiply(CRI_Basic, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays, MidpointRounding.AwayFromZero), MidpointRounding.AwayFromZero);
                         decimal CalculatedBasicDa = Math.Round(Decimal.Add(WAR_Basic_Calculated, Convert.ToDecimal(CRI_DA_Calculated)), MidpointRounding.AwayFromZero);
                         CRI_HRA_Calculated = (cr.CRI_HRA_Fixed == null ? Math.Round((Math.Round(CalculatedBasicDa * Convert.ToDecimal(cr.CRI_HRA_Percentage))) / 100, MidpointRounding.AwayFromZero) : Math.Round((Decimal.Multiply(cr.CRI_HRA_Fixed.Value, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays, MidpointRounding.AwayFromZero));
-                      
+
                         #region START PF-ESIC -OT CALCULATION  
                         if (OvertimeInDay > 0)
                         {
@@ -250,7 +286,7 @@ namespace RMERP.DAL.ManagerClasses
                                 else if (cr.CRI_OT_Formula != null)
                                 {
                                     decimal OTsum = Math.Round(GetAmountBasedOnFormulaOT(cr.CRI_OT_Formula, WAR_Basic_Calculated, CRI_DA_Calculated,
-                                        CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_Outstation_Allowance_Calculated, 
+                                        CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_Outstation_Allowance_Calculated,
                                         WAR_Attendance_Allowance_Calculated, WAR_Nightshift_Allowance_Calculated, WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
 
                                     WAR_OverTime_Calculated = Math.Round(Convert.ToDecimal(((Convert.ToDouble(OTsum) / totalPaybleDays) * OvertimeInDay) * cr.CRI_OT_MultipleTimes), MidpointRounding.AwayFromZero);
@@ -259,15 +295,15 @@ namespace RMERP.DAL.ManagerClasses
                         }
 
                         decimal PFsum = Math.Round(GetAmountBasedOnFormula(
-                            cr.CRI_PF_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, 
-                            cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, 
-                            WAR_OverTime_Calculated,WAR_Outstation_Allowance_Calculated, WAR_Attendance_Allowance_Calculated,
-                            WAR_Nightshift_Allowance_Calculated,WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
-                        
+                            cr.CRI_PF_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated,
+                            cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays,
+                            WAR_OverTime_Calculated, WAR_Outstation_Allowance_Calculated, WAR_Attendance_Allowance_Calculated,
+                            WAR_Nightshift_Allowance_Calculated, WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
+
                         decimal ESICsum = Math.Round(GetAmountBasedOnFormula(
-                            cr.CRI_ESIC_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated, 
-                            cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_OverTime_Calculated, 
-                            WAR_Outstation_Allowance_Calculated, WAR_Attendance_Allowance_Calculated, WAR_Nightshift_Allowance_Calculated, 
+                            cr.CRI_ESIC_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated,
+                            cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_OverTime_Calculated,
+                            WAR_Outstation_Allowance_Calculated, WAR_Attendance_Allowance_Calculated, WAR_Nightshift_Allowance_Calculated,
                             WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
 
                         WAR_PF = Convert.ToDecimal(cr.CRI_PF_Percentage);
@@ -320,12 +356,12 @@ namespace RMERP.DAL.ManagerClasses
                         }
                         allowances.Add(all);
                     }
-              
+
                     wageRegisterVM.WAR_Attendance_Allowance_Calculated = WAR_Attendance_Allowance_Calculated;
                     wageRegisterVM.allowanceVMs = allowances;
                     //************************** ALLOWANCES CALCULATION *****************************/
-                    decimal WAR_GrossTotal = Math.Round(WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + WAR_OverTime_Calculated + 
-                                                        AllowancesTotal + WAR_Outstation_Allowance_Calculated+ WAR_Nightshift_Allowance_Calculated+ 
+                    decimal WAR_GrossTotal = Math.Round(WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + WAR_OverTime_Calculated +
+                                                        AllowancesTotal + WAR_Outstation_Allowance_Calculated + WAR_Nightshift_Allowance_Calculated +
                                                         WAR_Performance_Allowance_Calculated + WAR_Attendance_Allowance_Calculated, MidpointRounding.AwayFromZero);
 
                     #region ProfessionalTax Calculation
@@ -333,13 +369,13 @@ namespace RMERP.DAL.ManagerClasses
                     if (cr.CRI_ProfessionalTax == true)
                     {
                         ProfessionalTaxCalculationManager ptcManager = new ProfessionalTaxCalculationManager(_context);
-                        
-                        WAR_ProffesionalTax_Calculated = Math.Round(ptcManager.GetPT((employee.EMP_.EMP_Gender ? "M" : "F"), WAR_GrossTotal), MidpointRounding.AwayFromZero);                        
+
+                        WAR_ProffesionalTax_Calculated = Math.Round(ptcManager.GetPT((employee.EMP_.EMP_Gender ? "M" : "F"), WAR_GrossTotal), MidpointRounding.AwayFromZero);
                     }
                     #endregion
 
                     #region LWF Calculation   
-                    if (wageProcess.WAG_Month.Month==(int)Month.June || wageProcess.WAG_Month.Month == (int)Month.December)
+                    if (wageProcess.WAG_Month.Month == (int)Month.June || wageProcess.WAG_Month.Month == (int)Month.December)
                     {
                         if (!employee.DES_.DES_Exclude_LWF)
                         {
@@ -353,7 +389,7 @@ namespace RMERP.DAL.ManagerClasses
                             }
                         }
                     }
-                    
+
                     wageRegisterVM.WAR_LWF_Deduction_Calculated = WAR_LWF_Deduction_Calculated;
                     #endregion
 
@@ -380,7 +416,7 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.WAR_ProffesionalTax_Calculated = WAR_ProffesionalTax_Calculated.ToString();
                     wageRegisterVM.WAR_RevenueDeduction_Calculated = WAR_RevenueDeduction_Calculated.ToString();
 
-                    decimal WAR_FinalTotal = Math.Round(WAR_GrossTotal - (WAR_PF_Calculated + WAR_ESIC_Calculated + totalEMI + WAR_ProffesionalTax_Calculated + WAR_RevenueDeduction_Calculated + WAR_CanteenFacility_Calculation+ WAR_LWF_Deduction_Calculated), MidpointRounding.AwayFromZero);
+                    decimal WAR_FinalTotal = Math.Round(WAR_GrossTotal - (WAR_PF_Calculated + WAR_ESIC_Calculated + totalEMI + WAR_ProffesionalTax_Calculated + WAR_RevenueDeduction_Calculated + WAR_CanteenFacility_Calculation + WAR_LWF_Deduction_Calculated), MidpointRounding.AwayFromZero);
                     wageRegisterVM.WAR_GrossTotal = WAR_GrossTotal;
                     wageRegisterVM.WAR_FinalTotal = WAR_FinalTotal;
                     wageRegisterVM.WAR_DA = CRI_DA;
@@ -469,11 +505,12 @@ namespace RMERP.DAL.ManagerClasses
             string res = string.Empty;
             try
             {
+                wage_Reg.CRI_ = null;
                 Wage_Register wage_Register = new Wage_Register();
                 wage_Register = wage_Reg;
                 wage_Register.WAR_LastModifiedOn = ProjectUtils.DateNow();
-                _context.Wage_Register.Update(wage_Register);
-                //_context.Entry(wage_Register).State = EntityState.Modified;
+                //_context.Wage_Register.Update(wage_Register);
+                _context.Entry(wage_Register).State = EntityState.Modified;
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -486,7 +523,7 @@ namespace RMERP.DAL.ManagerClasses
         public List<Wage_Register_Advances> GetWageRegisterAdvances(int WAG_Id)
         {
             List<Wage_Register_Advances> wage_Register_Advances = new List<Wage_Register_Advances>();
-            wage_Register_Advances = _context.Wage_Register_Advances.Where(m=>m.WAG_Id.Equals(WAG_Id)).Include(m => m.EMP_)
+            wage_Register_Advances = _context.Wage_Register_Advances.Where(m => m.WAG_Id.Equals(WAG_Id)).Include(m => m.EMP_)
                 .ToList();
 
             return wage_Register_Advances;
@@ -494,7 +531,7 @@ namespace RMERP.DAL.ManagerClasses
         public List<Wage_Register_Advances> GetWageRegisterAdvances()
         {
             List<Wage_Register_Advances> wage_Register_Advances = new List<Wage_Register_Advances>();
-            wage_Register_Advances = _context.Wage_Register_Advances.Include(m=>m.WAG_).Include(m => m.EMP_)
+            wage_Register_Advances = _context.Wage_Register_Advances.Include(m => m.WAG_).Include(m => m.EMP_)
                 .ToList();
 
             return wage_Register_Advances;
@@ -512,7 +549,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public List<Wage_Register> GetWageRegistersForIDBI_To_Other(int WAG_Id)
         {
-            return _context.Wage_Register.Include(M=>M.WAG_).ThenInclude(m=>m.FRM_).Where(m => m.WAG_Id == WAG_Id && m.EMP_.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && m.EMP_.EMP_Is_IDBI_Other.Equals((int)PAYMENT_BANK_TYPE.IDBI_To_Others)).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m=>m.EMP_CityNavigation).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
+            return _context.Wage_Register.Include(M => M.WAG_).ThenInclude(m => m.FRM_).Where(m => m.WAG_Id == WAG_Id && m.EMP_.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && m.EMP_.EMP_Is_IDBI_Other.Equals((int)PAYMENT_BANK_TYPE.IDBI_To_Others)).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.EMP_CityNavigation).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
         }
         public List<Wage_Register> GetWageRegistersForChequeCash(int WAG_Id)
         {
@@ -521,7 +558,13 @@ namespace RMERP.DAL.ManagerClasses
 
         public List<Wage_Register> GetWageRegistersForInvoice(int CLI_Id)
         {
-            return _context.Wage_Register.Include(m=>m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).Where(r => r.CLI_Id == CLI_Id).ToList();
+            return _context.Wage_Register.Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).Where(r => r.CLI_Id == CLI_Id).ToList();
+        }
+
+        public int GetClient_EmployeeHavingMaxBasic(int EMP_Id, int WAG_Id)
+        {
+            int CLI_Id = 0;
+            return CLI_Id;
         }
 
     }

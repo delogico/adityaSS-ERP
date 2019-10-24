@@ -100,7 +100,7 @@ namespace RMERP.DAL.ManagerClasses
                 totalPayableDay = totalPayableDay + wage_Register.WAR_TotalPaybleDays;
                 totalAmount = totalAmount + wage_Register.WAR_FinalTotal;
             }
-            invoice_Concept.INC_Description = client.CLI_Name+ "[Post: "+ DES_Title + "(Payable days * Employees) : (" + totalPayableDay+" * "+ list.Select(m=>m.EMP_Id).Count()+ ")]";
+            invoice_Concept.INC_Description ="<b>"+client.CLI_Name+ "</b><br/>Post : <b>"+ DES_Title + "</b><br/>Payable days : "+ totalPayableDay + "<br/>Employees : "+ list.Select(m=>m.EMP_Id).Count();
             invoice_Concept.INC_Total = Convert.ToDecimal(totalPayableDay * list.Select(m => m.EMP_Id).Count());
             return invoice_Concept;
         }
