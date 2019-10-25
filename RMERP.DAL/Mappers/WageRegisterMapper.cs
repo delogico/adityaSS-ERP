@@ -225,5 +225,62 @@ namespace RMERP.DAL.Mappers
                 lst.Add(mapMeAllowance(wageReg));
             return lst;
         }
+
+        public static Wage_Register mapMeEdit(WageRegisterVM wageRegisterVM,Wage_Register wageRegister)
+        {
+            //Wage_Register wageRegister = new Wage_Register();
+            //wageRegister.CLI_Id = wage_Register.CLI_Id;
+            //wageRegister.WAG_Id = wage_Register.WAG_Id;
+            //wageRegister.EMP_Id = wage_Register.EMP_Id;
+            //wageRegister.CRI_Id = wage_Register.CRI_Id;
+            //wageRegister.WAR_Id = wage_Register.WAR_Id;
+            //wageRegister.WAR_ESIC_Formula = wage_Register.WAR_ESIC_Formula;
+            //wageRegister.WAR_PF_Formula = wage_Register.WAR_PF_Formula;
+            //wageRegister.WAR_OverTime_Formula = wage_Register.WAR_OverTime_Formula;
+
+
+            wageRegister.WAR_Basic = wageRegisterVM.WAR_Basic;
+            wageRegister.WAR_Basic_Calculated = wageRegisterVM.WAR_Basic_Calculated;
+            wageRegister.WAR_DA = wageRegisterVM.WAR_DA;
+            wageRegister.WAR_DA_Calculated = wageRegisterVM.WAR_DA_Calculated;
+            wageRegister.WAR_ESIC = wageRegisterVM.WAR_ESIC;          
+            wageRegister.WAR_ESIC_Calculated = wageRegisterVM.WAR_ESIC_Calculated;
+            wageRegister.WAR_ExtraWorkingHours = wageRegisterVM.WAR_ExtraWorkingHours;
+            wageRegister.WAR_FinalTotal = wageRegisterVM.WAR_FinalTotal;
+            wageRegister.WAR_GrossTotal = wageRegisterVM.WAR_GrossTotal;
+            wageRegister.WAR_HRA = wageRegisterVM.WAR_HRA;
+            wageRegister.WAR_HRA_Calculated = wageRegisterVM.WAR_HRA_Calculated;
+            wageRegister.WAR_LastModifiedOn = wageRegisterVM.WAR_LastModifiedOn;
+            wageRegister.ADM_LastModifiedBy = wageRegisterVM.ADM_LastModifiedBy;
+            wageRegister.WAR_OverTime_Calculated = wageRegisterVM.WAR_OverTime_Calculated;
+            
+            wageRegister.WAR_PF = wageRegisterVM.WAR_PF;
+            
+            wageRegister.WAR_PF_Calculated = wageRegisterVM.WAR_PF_Calculated;
+            wageRegister.WAR_TotalPaybleDays = wageRegisterVM.WAR_TotalPaybleDays;
+            wageRegister.WAR_TotalWorkingDays = wageRegisterVM.WAR_TotalWorkingDays;
+
+            wageRegister.WAR_ProffesionalTax_Calculated = wageRegisterVM.WAR_ProffesionalTax_Calculated;
+            wageRegister.WAR_RevenueDeduction_Calculated = wageRegisterVM.WAR_RevenueDeduction_Calculated;
+            wageRegister.WAR_CanteenFacility_Calculation = wageRegisterVM.WAR_CanteenFacility_Calculation;
+            wageRegister.WAR_Performance_Allowance_Calculated = wageRegisterVM.WAR_Performance_Allowance_Calculated;
+            wageRegister.WAR_Attendance_Allowance_Calculated = wageRegisterVM.WAR_Attendance_Allowance_Calculated;
+            wageRegister.WAR_OutStation_Allowance_Calculated = wageRegisterVM.WAR_OutStation_Allowance_Calculated;
+            wageRegister.WAR_Nightshift_Allowance_Calculated = wageRegisterVM.WAR_Nightshift_Allowance_Calculated;
+            wageRegister.WAR_LWF_Deduction_Calculated = wageRegisterVM.WAR_LWF_Deduction_Calculated;
+
+            wageRegister.WAR_Advance_Amount = wageRegisterVM.WAR_Advance_Amount;
+
+            //wageRegister.EMP_ = wage_Register.EMP_;
+            //wageRegister.CRI_ = wage_Register.CRI_;
+            if (wageRegisterVM.allowanceVMs != null)
+                wageRegister.Wage_Register_Allowances = mapWageAllowancesList(wageRegisterVM.allowanceVMs);
+
+
+
+            wageRegister.WAR_LWF_Deduction_Calculated = wageRegisterVM.WAR_LWF_Deduction_Calculated;
+
+            return wageRegister;
+        }
     }
 }

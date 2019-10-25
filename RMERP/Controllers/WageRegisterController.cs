@@ -95,12 +95,12 @@ namespace RMERP.Controllers
         public ActionResult EditWageRegister(EditWageRegisterVM editWageRegisterVM)
         {
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
-
-           // Wage_Register wageRegister = wageRegisterManager.GetWage_RegisterByID(editWageRegisterVM.wageRegisterVM.WAR_Id);
-
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            Wage_Register wageRegister = wageRegisterManager.GetWage_RegisterByID(editWageRegisterVM.wageRegisterVM.WAR_Id);           
             editWageRegisterVM.wageRegisterVM.ADM_LastModifiedBy = sessionUtils.GetLoggedAdminID();
-            string res = wageRegisterManager.UpdateWageRegister(WageRegisterMapper.mapMe(editWageRegisterVM.wageRegisterVM));
+            wageRegister = WageRegisterMapper.mapMeEdit(editWageRegisterVM.wageRegisterVM, wageRegister);
+           
+            string res = wageRegisterManager.UpdateWageRegister(wageRegister);
             if (res != string.Empty)
             {
                 TempData["message"] = "Wage Register is not updated!";

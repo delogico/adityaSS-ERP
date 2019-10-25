@@ -489,7 +489,7 @@ namespace RMERP.DAL.ManagerClasses
         public Wage_Register GetWage_RegisterByID(int WAR_Id)
         {
             Wage_Register wage = new Wage_Register();
-            wage = _context.Wage_Register.Include(m => m.CRI_).ThenInclude(m => m.DES_).SingleOrDefault(m => m.WAR_Id.Equals(WAR_Id));
+            wage = _context.Wage_Register.Include(m=>m.EMP_).Include(m => m.CRI_).ThenInclude(m => m.DES_).SingleOrDefault(m => m.WAR_Id.Equals(WAR_Id));
             return wage;
         }
 
@@ -504,18 +504,14 @@ namespace RMERP.DAL.ManagerClasses
         {
             string res = string.Empty;
             try
-            {
-                wage_Reg.CRI_ = null;
-                Wage_Register wage_Register = new Wage_Register();
-                wage_Register = wage_Reg;
-                wage_Register.WAR_LastModifiedOn = ProjectUtils.DateNow();
-                //_context.Wage_Register.Update(wage_Register);
-                _context.Entry(wage_Register).State = EntityState.Modified;
+            {               
+                wage_Reg.WAR_LastModifiedOn = DateNow();               
+                _context.Entry(wage_Reg).State = EntityState.Modified;
                 _context.SaveChanges();
             }
             catch (Exception ex)
             {
-                res = ex.InnerException.Message;
+                res = ex.Message;
             }
             return res;
         }
