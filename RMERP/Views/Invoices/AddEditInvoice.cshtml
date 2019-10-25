@@ -82,17 +82,16 @@
                                 @foreach (var item in Model.Invoice_Concepts)
                                 {
                                     <tr>
-                                        <td>
+                                        <td style="width: 5%">
                                             <input class="form-control" id="INC_Serial_Number" value=@item.INC_Serial_Number type="text" style="min-width:50px">
                                         </td>
-                                        <td>
-                                            <p id="desc">@Html.Raw(item.INC_Description)</p>
-                                            @*<input class="form-control desc" id="INC_Description" value=@item.INC_Description type="text" style="min-width:50px">*@
+                                        <td style="width: 65%">                                           
+                                            <textarea id="INC_Description" class="form-control desc">@item.INC_Description</textarea>
                                         </td>
-                                        <td>
-                                            <input class="form-control" id="INC_Total" value="@item.INC_Total" type="text" readonly>
+                                        <td style="width: 20%">
+                                            <input class="form-control calculation" id="INC_Total" value="@item.INC_Total" type="text" style="max-width:150px">
                                         </td>
-                                        <td>
+                                        <td style="width: 10%">
                                             <a onclick="RemoveInvoiceConcept(this)" class="text-danger font-18" title="Remove"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
@@ -102,18 +101,17 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td>
+                                    <td style="width: 5%">
                                         <input class="form-control" id="INC_Serial_Number_nxt" value=@sr type="text" style="min-width:50px">
                                     </td>
-                                    <td>
+                                    <td style="width: 65%">
                                         <textarea id="INC_Description" class="form-control desc"></textarea>
                                     </td>
-                                    <td>
-                                        <input class="form-control" id="INC_Total" type="text">
+                                    <td style="width: 20%">
+                                        <input class="form-control calculation" id="INC_Total" type="text" style="max-width:150px">
 
                                     </td>
-                                    <td>
-                                        @*<a class="InvoiceType text-success font-18" title="Add" onclick="openInvoiceTemplate()"><i class="fa fa-plus"></i></a>*@
+                                    <td style="width: 10%">                                        
                                         <a class="InvoiceType text-success font-18" title="Add" id="opnInvoice"><i class="fa fa-plus"></i></a>
                                     </td>
 
@@ -125,59 +123,76 @@
                         <table class="table table-hover table-white border">
                             <tbody>
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td width="10%" class="text-right">Total</td>
-                                    <td style="text-align: right; padding-right: 30px;width: 230px"> @Html.TextBoxFor(m => m.All_INC_Total, new { @class = "form-control text-right", @readonly = "readonly" })</td>
+                                    <td style="width: 5%"></td>
+                                    <td style="width: 65%" class="text-right">
+                                        Total
+                                    </td>
+                                    <td style="width: 10%">
+                                        @Html.TextBoxFor(m => m.All_INC_Total, new { @class = "form-control text-right", @readonly = "readonly", style = "max-width:150px" })
+                                    </td>
+                                    <td style="width: 10%"></td>
+                                    <td style="width: 10%"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" class="text-right">CGST(%)</td>
-                                    <td style="text-align: right; padding-right: 30px;width: 230px">
-                                        @Html.TextBoxFor(M => M.INV_CGST_Percentage, new { @class = "form-control text-right", onfocusout = "calculateGST()" })
+                                    <td style="width: 5%"></td>
+                                    <td style="width: 65%" class="text-right">
+                                        CGST(%)
                                     </td>
-                                    <td class="text-right">Total CGST</td>
-                                    <td style="text-align: right; padding-right: 30px;width: 230px">
-                                        @Html.TextBoxFor(M => M.INV_CGST_Total, new { @class = "form-control text-right", @readonly = "readonly" })
+                                    <td style="width: 10%">
+                                        @Html.TextBoxFor(M => M.INV_CGST_Percentage, new { @class = "form-control text-right", style = "max-width:150px", onfocusout = "calculateGST()" })
                                     </td>
+                                    <td style="width: 10%" class="text-right"> Total CGST</td>
+                                    <td style="width: 10%">
+                                        @Html.TextBoxFor(M => M.INV_CGST_Total, new { @class = "form-control text-right", @readonly = "readonly", style = "max-width:150px" })
+                                    </td>
+
                                 </tr>
                                 <tr>
-                                    <td colspan="3" class="text-right">SGST(%)</td>
-                                    <td style="text-align: right; padding-right: 30px;width: 230px">
-                                        @Html.TextBoxFor(M => M.INV_SGST_Percentage, new { @class = "form-control text-right", onfocusout = "calculateGST()" })
+                                    <td style="width: 5%"></td>
+                                    <td style="width: 65%" class="text-right">
+                                        SGST(%)
                                     </td>
-                                    <td class="text-right">Total SGST</td>
-                                    <td style="text-align: right; padding-right: 30px;width: 230px">
-                                        @Html.TextBoxFor(M => M.INV_SGST_Total, new { @class = "form-control text-right", @readonly = "readonly" })
+                                    <td style="width: 10%">
+                                        @Html.TextBoxFor(M => M.INV_SGST_Percentage, new { @class = "form-control text-right", style = "max-width:150px", onfocusout = "calculateGST()" })
                                     </td>
+                                    <td style="width: 10%" class="text-right"> Total SGST</td>
+                                    <td style="width: 10%">
+                                        @Html.TextBoxFor(M => M.INV_SGST_Total, new { @class = "form-control text-right", @readonly = "readonly", style = "max-width:150px" })
+                                    </td>
+
                                 </tr>
                                 <tr>
-                                    <td colspan="3" class="text-right">IGST(%)</td>
-                                    <td style="text-align: right; padding-right: 30px;width: 230px">
-                                        @Html.TextBoxFor(M => M.INV_IGST_Percentage, new { @class = "form-control text-right", onfocusout = "calculateGST()" })
+                                    <td style="width: 5%"></td>
+                                    <td style="width: 65%" class="text-right">
+                                        IGST(%)
                                     </td>
-                                    <td class="text-right">Total IGST</td>
-                                    <td style="text-align: right; padding-right: 30px;width: 230px">
-                                        @Html.TextBoxFor(M => M.INV_IGST_Total, new { @class = "form-control text-right", @readonly = "readonly" })
+                                    <td style="width: 10%">
+                                        @Html.TextBoxFor(M => M.INV_IGST_Percentage, new { @class = "form-control text-right", style = "max-width:150px", onfocusout = "calculateGST()" })
                                     </td>
+                                    <td style="width: 10%" class="text-right"> Total IGST</td>
+                                    <td style="width: 10%">
+                                        @Html.TextBoxFor(M => M.INV_IGST_Total, new { @class = "form-control text-right", @readonly = "readonly", style = "max-width:150px" })
+                                    </td>
+
                                 </tr>
                                 <tr>
-                                    <td colspan="5" class="text-right">
-                                        Tax
-                                    </td>
-                                    <td style="text-align: right; padding-right: 30px;width: 230px">
+                                    <td style="width: 5%"></td>
+                                    <td style="width: 65%" class="text-right"></td>
+                                    <td style="width: 10%"></td>
+                                    <td style="width: 10%" class="text-right">Tax</td>
+                                    <td style="width: 10%">
                                         @Html.TextBoxFor(m => m.totTAX, new { @class = " form-control text-right", @readonly = "readonly" })
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="5" style="text-align: right; font-weight: bold">
-                                        Grand Total &nbsp;(<i class="fa fa-rupee"></i>)
-                                    </td>
-                                    <td style="text-align: right; padding-right: 30px; font-weight: bold; font-size: 16px;width: 230px">
+                                    <td style="width: 5%"></td>
+                                    <td style="width: 65%" class="text-right"></td>
+                                    <td style="width: 10%"></td>
+                                    <td style="width: 10%" class="text-right"> Grand Total &nbsp;(<i class="fa fa-rupee"></i>)</td>
+                                    <td style="width: 10%">
                                         @Html.TextBoxFor(m => Model.INV_Total, new { @class = "form-control text-right", @readonly = "readonly" })
                                     </td>
-                                </tr>
+                                </tr>                               
                             </tbody>
                         </table>
                     </div>
@@ -191,7 +206,7 @@
 </div>
 @section scripts{
     <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
-    @*<script src="https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js"></script>*@
+    <script src="https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js"></script>
     @if (TempData["message"] != null)
     {
         <script>
@@ -201,11 +216,28 @@
         </script>
     };
     <script>
+        $(document).ready(function () {
+            var allEditors = document.querySelectorAll('.desc');
+            for (var i = 0; i < allEditors.length; ++i) {
+                ClassicEditor.create(allEditors[i]);
+            };
+            $(document).on('change', '.calculation', function () {
+                debugger;
+                var All_INC_Total = 0;
+                $("#tblIncidenceConcepts TBODY TR").each(function () {                   
+                    var row = $(this);
+                    var INC_Total = parseFloat(row.find("TD").eq(2).children().val());
+                    All_INC_Total = All_INC_Total + parseFloat(INC_Total);
+                });
+                $("#All_INC_Total").val(All_INC_Total);
+                calculateGST();
+            });
+        });
+
         var DELAY = 700,
             clicks = 0,
             timer = null;
         $("#opnInvoice").click(function () {
-            debugger;
             if ($("#CLI_Id").val() != "") {
                 clicks++;  //count clicks
                 if (clicks === 1) {
@@ -259,15 +291,23 @@
 
                         //Add Description cell.
                         cell = $(row.insertCell(-1));
-                        cell.html("<p id='desc'>" + data.inC_Description + "</p>");
-                        //var textArea = $('<textarea id="INC_Description" class="form-control desc"/>');
-                        //textArea.text(data.inC_Description);
-                        //cell.append(textArea);
+                        //cell.html("<p id='desc'>" + data.inC_Description + "</p>");
+                        var newDesc = "newDesc_" + id;
+                        var textArea = $('<textarea id="INC_Description" class="form-control desc ' + newDesc + '"/>');
+                        textArea.text(data.inC_Description);
+                        cell.append(textArea);
+
+                        var allEditors = document.querySelectorAll('.' + newDesc);
+                        for (var i = 0; i < allEditors.length; ++i) {
+                            ClassicEditor.create(allEditors[i]);
+                        }
+
 
                         //Add Total cell.
                         cell = $(row.insertCell(-1));
                         cell.html(data.inC_Total);
-                        cell.html(" <input class='form-control' id='INC_Total' value=" + data.inC_Total + " type='text' readonly> ");
+                        var clClass = "calc_"+id;
+                        cell.html('<input class="form-control calculation ' + clClass + '" id="INC_Total" value="' + data.inC_Total + '" type="text" style="max-width:150px"> ');
 
                         cell = $(row.insertCell(-1));
 
@@ -316,7 +356,6 @@
         };
 
         function RemoveInvoiceConcept(button) {
-
             var row = $(button).closest("TR");
             var INC_Total = $.trim($("TD", row).eq(2).children().val());
             if (confirm("Are you sure you want to Remove?")) {
@@ -354,11 +393,11 @@
             var Concepts = new Array();
 
             $("#tblIncidenceConcepts TBODY TR").each(function () {
+                debugger;
                 var row = $(this);
                 var Concept = {};
                 Concept.INC_Serial_Number = parseInt(row.find("TD").eq(0).children().val());
-                //Concept.INC_Description = $.trim(row.find("TD").eq(1).children().val());
-                Concept.INC_Description = row.find("TD").eq(1).children().html();
+                Concept.INC_Description = $.trim(row.find("TD").eq(1).find(".ck-editor__editable_inline").html());
                 Concept.INC_Total = parseFloat(row.find("TD").eq(2).children().val());
                 Concepts.push(Concept);
             });
@@ -378,10 +417,5 @@
             });
         });
 
-        //ClassicEditor
-        //    .create(document.querySelector('.desc'))
-        //    .catch(error => {
-        //        console.error(error);
-        //    });
     </script>
 }
