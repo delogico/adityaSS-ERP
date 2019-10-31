@@ -1,0 +1,46 @@
+﻿@model RMERP.DAL.ViewModel.ClientRequirementVM
+
+@section scripts{
+    <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+}
+<div id="RegDateModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content modal-md">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"> Change Date</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("EditRegistrationDate", "Clients", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    if (Model.LastRecordRegOn != DateTime.MinValue)
+                    {
+                        <div class="form-group">
+                            <span>Last Record Registered On: @Model.LastRecordRegOn </span>
+                            <br />
+                            <span>This record is only affected when effective from date time is greater than above date.</span>
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        @Html.HiddenFor(m => m.CRI_Id)
+                        @Html.HiddenFor(m => m.DES_Id)
+                        @Html.HiddenFor(m => m.CLI_Id)
+                        @Html.HiddenFor(m => m.Edit_History)
+                        @Html.LabelFor(m => m.CRI_RegisteredOn)
+                        @Html.EditorFor(m => m.CRI_RegisteredOn, new { htmlAttributes = new { @class = "form -control" } })
+                        @Html.ValidationMessageFor(model => model.CRI_RegisteredOn, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="m-t-20 text-center">
+                        <input type="submit" name="Submit" id="btnSubmit" class="btn btn-primary" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

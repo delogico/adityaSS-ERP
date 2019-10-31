@@ -59,7 +59,9 @@ namespace RMERP.DAL.ViewModel
         public bool CRI_IsPayable_WeeklyOff { get; set; }
         [Display(Name = "Public holiday is payable?")]
         public bool CRI_IsPayable_PublicHoliday { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Date is required")]       
+        [Display(Name = "Effective From")]
+        [DataType(DataType.DateTime)]
         public DateTime CRI_RegisteredOn { get; set; }
         [Required]
         public bool? CRI_Active { get; set; }
@@ -103,6 +105,9 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Nightshift allowance")]
         public bool CRI_Nightshift_Allowance { get; set; }
         public decimal? CRI_Nightshift_Allowance_Rate { get; set; }
+
+        public string Edit_History { get; set; }
+        public DateTime LastRecordRegOn { get; set; }
 
     }
 }

@@ -593,5 +593,11 @@ namespace RMERP.DAL.Helpers
             }
             return words;
         }
+
+        public static DateTime GetLastDateOfMonth(DateTime date)
+        {
+            DateTime lastDate = new DateTime(date.Year, date.Month, 1).AddMonths(1).AddDays(-1);
+            return lastDate;
+        }
     }
 }

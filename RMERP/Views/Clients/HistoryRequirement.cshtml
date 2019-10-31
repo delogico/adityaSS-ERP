@@ -4,11 +4,17 @@
     ViewData["Title"] = "History of Requirement";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
+<style>
+    .modal-dialog {
+        padding-top: 50px;
+    }
+</style>
 @section Breadcrumbs{
     <li class="breadcrumb-item">@Html.ActionLink("Clients", "Index", "Clients")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Client Info", "AddEditClients", "Clients", new { id = 1 })</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Client Info", "AddEditClients", "Clients", new { id = ViewBag.CLI_Id })</li>
     <li class="breadcrumb-item">Requirement History</li>
 }
+<div id="RegDate"></div>
 <div class="col-sm-8">
     <h4 class="page-title">@ViewBag.CLI_Name</h4>
     <p>Designation - <b>@ViewBag.DES_Title</b></p>
@@ -19,6 +25,7 @@
         <table class="table table-striped custom-table m-b-0 ">
             <thead>
                 <tr>
+                    <th>CRI Ref</th>
                     <th>Effective Period</th>
                     <th></th>
                 </tr>
@@ -27,7 +34,11 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@Html.Raw(DateHelper.getDateWithFormat(item.CRI_RegisteredOn) + " - " + DateHelper.getDateWithFormat(item.CRI_InactivatedOn.Value))</td>
+                        <td>@item.CRI_Id</td>
+                        <td>
+                            @Html.Raw(DateHelper.getDateWithFormat(item.CRI_RegisteredOn) + " - " + DateHelper.getDateWithFormat(item.CRI_InactivatedOn.Value))
+                            <a onclick="EditRegDate(@item.CRI_Id)" style="cursor:pointer" title="Change Effective From"><i class="fa fa-pencil m-r-5"></i></a>
+                        </td>
                         <td>
                             <a href='@Url.Action("AddEditRequirement", "Clients", new {CLI_Id=item.CLI_Id, CRI_Id=item.CRI_Id,tab="History" })' title="View"><i class="fa fa-eye m-r-5"></i> View</a>
                         </td>
@@ -43,4 +54,20 @@ else
     <div class="col-sm-8 m-t-30">
         <p>Never Change happened in This Requirement</p>
     </div>
+}
+@section scripts{ 
+    <script>
+        function EditRegDate(CRI_Id) {
+            $(".modal-backdrop").removeClass("modal-backdrop").addClass("modal");            
+            var Url = siteUrl + "Clients/EditRegistrationDate?CRI_Id=" + CRI_Id+"&Act=History";
+            $.ajax({
+                type: "GET",
+                url: Url,
+                success: function (data) {
+                    $('#RegDate').html(data);
+                    $('#RegDateModal').modal('show');
+                }
+            })
+        };
+    </script>
 }

@@ -4,7 +4,8 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using RMERP.DAL.Models;
-using RMERP.DAL.App_Code;
+//using RMERP.DAL.App_Code;
+using RMERP.DAL.Helpers;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -252,6 +253,13 @@ namespace RMERP.DAL.ManagerClasses
 
             return res;
         }
+        public void EditRequirementRegDate(int CRI_Id,DateTime RegDate)
+        {
+            Client_Requirements requirement = _contaxt.Client_Requirements.Find(CRI_Id);
+            requirement.CRI_RegisteredOn = RegDate;
+            _contaxt.Update(requirement);
+            _contaxt.SaveChanges();
+        }
         public Client_Requirements GetRequirementsById(int CRI_Id)
         {
             return _contaxt.Client_Requirements.Where(c => c.CRI_Id == CRI_Id).Include(m => m.Wage_Register).Include(c => c.DES_).Include(m => m.Client_Requirement_Allowances).FirstOrDefault();
@@ -259,7 +267,12 @@ namespace RMERP.DAL.ManagerClasses
 
         public IEnumerable<Client_Requirements> GetClient_RequirementsList(int desId, int cliId, bool active = true)
         {
-            IEnumerable<Client_Requirements> list = _contaxt.Client_Requirements.Include(m => m.CLI_).Include(m => m.DES_).Where(m => m.CLI_Id.Equals(cliId) && m.CRI_Active.Equals(active) && m.DES_Id.Equals(desId)).OrderByDescending(m => m.CRI_RegisteredOn).ToList();
+            IEnumerable<Client_Requirements> list = _contaxt.Client_Requirements.Include(m => m.CLI_).Include(m => m.DES_).Where(m => m.CLI_Id.Equals(cliId) && m.CRI_Active.Equals(active) && m.DES_Id.Equals(desId)).OrderByDescending(m => m.CRI_RegisteredOn).ThenByDescending(m=>m.CRI_Id).ToList();
+            return list;
+        }
+        public IEnumerable<Client_Requirements> GetClientRequirementsList(int desId, int cliId)
+        {
+            IEnumerable<Client_Requirements> list = _contaxt.Client_Requirements.Include(m => m.CLI_).Include(m => m.DES_).Where(m => m.CLI_Id.Equals(cliId) && m.DES_Id.Equals(desId)).OrderByDescending(m => m.CRI_RegisteredOn).ToList();
             return list;
         }
 
@@ -525,11 +538,15 @@ namespace RMERP.DAL.ManagerClasses
             return list;
         }
 
-        public Client_Requirements getActiveClientRequirement(int CLI_Id, int DES_Id)
+        //public Client_Requirements getActiveClientRequirement(int CLI_Id, int DES_Id)
+        //{
+        //    return _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.DES_Id == DES_Id && r.CRI_Active == true).Include(c => c.Client_Requirement_Allowances).ThenInclude(a => a.ALL_).FirstOrDefault();
+        //}
+        public Client_Requirements getActiveClientRequirement(int CLI_Id, int DES_Id,DateTime WAG_Month)
         {
-            return _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.DES_Id == DES_Id && r.CRI_Active == true).Include(c => c.Client_Requirement_Allowances).ThenInclude(a => a.ALL_).FirstOrDefault();
+            DateTime LastDate = ProjectUtils.GetLastDateOfMonth(WAG_Month);
+            return _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.DES_Id == DES_Id && r.CRI_RegisteredOn.Date <= LastDate.Date).OrderByDescending(m=>m.CRI_RegisteredOn).ThenByDescending(m=>m.CRI_Id).Take(1).Include(c => c.Client_Requirement_Allowances).ThenInclude(a => a.ALL_).FirstOrDefault();
         }
-
         public List<Clients> GetActiveClientForAttandanceReg(DateTime monthStartDate)
         {
             DateTime lastDate = new DateTime(monthStartDate.Year, monthStartDate.Month, 1).AddMonths(1).AddDays(-1);
@@ -708,5 +725,7 @@ namespace RMERP.DAL.ManagerClasses
                                           select a;
             return cliList.ToList();
         }
+
+        
     }
 }

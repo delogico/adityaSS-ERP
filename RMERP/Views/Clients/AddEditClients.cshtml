@@ -238,6 +238,9 @@
         </div>
     </div>
     <div id="ClientRequirement" class="tab-pane fade">
+        <div id="RegDate">
+
+        </div>
         <div class="content container-fluid">
             <div class="row">
                 <div class="col-sm-8">
@@ -255,6 +258,7 @@
                             <table class="table table-striped custom-table m-b-0 ">
                                 <thead>
                                     <tr>
+                                        <th>CR Ref</th>
                                         <th>Designation</th>
                                         <th>Total Post</th>
                                         <th>Effective from</th>
@@ -265,9 +269,13 @@
                                     @foreach (var item in Model.requirements)
                                     {
                                         <tr>
+                                            <td>@item.CRI_Id</td>
                                             <td><b>@item.DES_Title</b></td>
                                             <td>@item.CRI_Total</td>
-                                            <td>@DateHelper.getDateWithFormat(item.CRI_RegisteredOn)</td>
+                                            <td>
+                                                @DateHelper.getDateWithFormat(item.CRI_RegisteredOn)
+                                                <a onclick="EditRegDate(@item.CRI_Id)" style="cursor:pointer" title="Change Effective From"><i class="fa fa-pencil m-r-5"></i></a>
+                                            </td>
                                             <td class="text-right">
                                                 <div class="dropdown">
                                                     <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
@@ -881,8 +889,8 @@
                     }
                 }
             });
-        }
-
+        };
+        
         function onConfirmClickSingle() {
             bootbox.prompt({
                 title: "Choose Month!",
@@ -906,7 +914,8 @@
                     }
                 }
             });
-        }
+        };
+
         function onUnassignClick(CLE_Id) {
             bootbox.prompt({
                 title: "Choose Month!",
@@ -925,12 +934,10 @@
                             }
 
                         })
-                    }
-                    else if (result == null) {
-                    }
+                    }                   
                 }
             });
-        }
+        };
 
         function onDeleteEmployeeClick(CLE_Id,CLI_Id,EMP_Id,DES_Id) {
 
@@ -1002,6 +1009,19 @@
                 $("#chkIsSGST").val("false");
             }
         });
+
+        function EditRegDate(CRI_Id) {
+            $(".modal-backdrop").removeClass("modal-backdrop").addClass("modal");            
+            var Url = siteUrl + "Clients/EditRegistrationDate?CRI_Id=" + CRI_Id;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                success: function (data) {
+                    $('#RegDate').html(data);
+                    $('#RegDateModal').modal('show');
+                }
+            })
+        };
     </script>
 }
 

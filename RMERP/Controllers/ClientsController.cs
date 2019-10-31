@@ -139,7 +139,7 @@ namespace RMERP.Controllers
                 cv.ParametersClientsModel.clientsModel.CLI_Invoicing_Address1 = clients.CLI_Invoicing_Address1;
                 cv.ParametersClientsModel.clientsModel.CLI_Invoicing_Address2 = clients.CLI_Invoicing_Address2;
                 cv.ParametersClientsModel.clientsModel.CLI_Invoicing_City = clients.CLI_Invoicing_City;
-                if(clients.CLI_Invoicing_ZipCode!=null)
+                if (clients.CLI_Invoicing_ZipCode != null)
                     cv.ParametersClientsModel.clientsModel.CLI_Invoicing_ZipCode = clients.CLI_Invoicing_ZipCode.Value;
                 cv.ParametersClientsModel.clientsModel.CLI_Invoicing_Location = clients.CLI_Invoicing_Location;
                 if (clients.CLI_IsIGST != null)
@@ -154,7 +154,7 @@ namespace RMERP.Controllers
                     cv.ParametersClientsModel.clientsModel.CLI_IsSGST = clients.CLI_IsSGST.Value;
                 if (clients.CLI_SGST != null)
                     cv.ParametersClientsModel.clientsModel.CLI_SGST = clients.CLI_SGST.Value;
-              //  cv.ParametersClientsModel.clientsModel.CLI_GST_Info = clients.CLI_GST_Info;
+                //  cv.ParametersClientsModel.clientsModel.CLI_GST_Info = clients.CLI_GST_Info;
                 cv.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply = clients.CLI_Place_Of_Supply;
 
 
@@ -167,7 +167,7 @@ namespace RMERP.Controllers
                 cv.clientsModel.CLI_RegisteredOn = clients.CLI_RegisteredOn;
                 cv.clientsModel.CliLogoImage = clients.CLI_Logo;
 
-                if(clients.CLI_PF_Employer_Cont_Rate!=null)
+                if (clients.CLI_PF_Employer_Cont_Rate != null)
                     cv.clientsModel.CLI_PF_Employer_Cont_Rate = clients.CLI_PF_Employer_Cont_Rate.Value;
                 if (clients.CLI_ESIC_Employer_Cont_Rate != null)
                     cv.clientsModel.CLI_ESIC_Employer_Cont_Rate = clients.CLI_ESIC_Employer_Cont_Rate.Value;
@@ -187,8 +187,8 @@ namespace RMERP.Controllers
                                            Text = GetFullEnumString(action.ToString()),
                                            Value = ((int)action).ToString()
                                        };
-            
-          
+
+
             return View(cv);
         }
 
@@ -491,6 +491,7 @@ namespace RMERP.Controllers
             List<ClientRequirementVM> lst = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsList(DES_Id, CLI_Id, false).ToList());
             ViewBag.DES_Title = designationManager.GetDesignationsById(DES_Id);
             ViewBag.CLI_Name = clientsManager.GetClientById(CLI_Id).CLI_Name;
+            ViewBag.CLI_Id = CLI_Id;
             return View(lst);
         }
 
@@ -504,6 +505,48 @@ namespace RMERP.Controllers
                 TempData["message"] = "Requirement can not deleted! Please remove assigned employees of this requirement.";
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
+        }
+
+        public ActionResult EditRegistrationDate(int CRI_Id, string Act = "")
+        {
+            ClientsManager clientsManager = new ClientsManager(_context);
+            ClientRequirementVM requirementVM = new ClientRequirementVM();
+            Client_Requirements requirement = clientsManager.GetRequirementsById(CRI_Id);
+            requirementVM = ClientRequirementMapper.mapMe(requirement);
+            IEnumerable<Client_Requirements> lst = clientsManager.GetClientRequirementsList(requirement.DES_Id, requirement.CLI_Id).Take(2);
+            if (lst.Count() > 1)
+            {
+                DateTime date = lst.Skip(1).First().CRI_RegisteredOn;
+                requirementVM.LastRecordRegOn = date;
+            }
+            if (Act == "History")
+            {
+                requirementVM.Edit_History = Act;
+            }
+
+            return PartialView("_EditRegistrationDate", requirementVM);
+        }
+        [HttpPost]
+        public ActionResult EditRegistrationDate(ClientRequirementVM requirementVM)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context);
+            try
+            {
+                clientsManager.EditRequirementRegDate(requirementVM.CRI_Id, requirementVM.CRI_RegisteredOn);
+            }
+            catch (Exception)
+            {
+                TempData["message"] = "Try Again";
+            }
+            if (requirementVM.Edit_History == "History")
+            {
+                return RedirectToAction("HistoryRequirement", new { DES_Id = requirementVM.DES_Id, CLI_Id = requirementVM.CLI_Id });
+            }
+            else
+            {
+                return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
+            }
+
         }
 
         [HttpPost]
@@ -534,20 +577,20 @@ namespace RMERP.Controllers
                 if (!cvm.ParametersClientsModel.clientsModel.CLI_IsIGST)
                 {
                     clients.CLI_IGST = 0;
-                }               
+                }
                 clients.CLI_IsCGST = cvm.ParametersClientsModel.clientsModel.CLI_IsCGST;
                 clients.CLI_CGST = cvm.ParametersClientsModel.clientsModel.CLI_CGST;
                 if (!cvm.ParametersClientsModel.clientsModel.CLI_IsCGST)
                 {
                     clients.CLI_CGST = 0;
-                }                
+                }
                 clients.CLI_IsSGST = cvm.ParametersClientsModel.clientsModel.CLI_IsSGST;
                 clients.CLI_SGST = cvm.ParametersClientsModel.clientsModel.CLI_SGST;
                 if (!cvm.ParametersClientsModel.clientsModel.CLI_IsSGST)
                 {
                     clients.CLI_SGST = 0;
                 }
-              //  clients.CLI_GST_Info = cvm.ParametersClientsModel.clientsModel.CLI_GST_Info;
+                //  clients.CLI_GST_Info = cvm.ParametersClientsModel.clientsModel.CLI_GST_Info;
                 clients.CLI_Place_Of_Supply = cvm.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply;
 
                 if (cvm.ParametersClientsModel.CLI_Att_MonthReal == true)
@@ -566,10 +609,10 @@ namespace RMERP.Controllers
                 clients.CLI_ESIC_Employer_Cont_Rate = cvm.clientsModel.CLI_ESIC_Employer_Cont_Rate;
                 clients.CLI_EPF_Rate = cvm.clientsModel.CLI_EPF_Rate;
                 clients.CLI_EPS_Rate = cvm.clientsModel.CLI_EPS_Rate;
-                string res= clientsManager.UpdateParameters(clients);
+                string res = clientsManager.UpdateParameters(clients);
                 if (res != string.Empty)
                 {
-                    TempData["message"] = "data can not updated";                   
+                    TempData["message"] = "data can not updated";
                 }
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "Parameters" });
@@ -647,7 +690,7 @@ namespace RMERP.Controllers
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
         }
 
-        public ActionResult DeleteAssignEmployee(int CLE_Id,int CLI_ID,int EMP_Id, int DES_Id)
+        public ActionResult DeleteAssignEmployee(int CLE_Id, int CLI_ID, int EMP_Id, int DES_Id)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             string res = clientsManager.DeleteAssignEmployee(CLE_Id, CLI_ID, EMP_Id, DES_Id);
@@ -1326,7 +1369,7 @@ namespace RMERP.Controllers
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
 
-        public ActionResult GetAssignEmployeeDependancy(int CLE_Id,int CLI_Id,int EMP_Id,int DES_Id)
+        public ActionResult GetAssignEmployeeDependancy(int CLE_Id, int CLI_Id, int EMP_Id, int DES_Id)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             string res = clientsManager.GetAssignEmployeeDependancy(CLE_Id, CLI_Id, EMP_Id, DES_Id);
