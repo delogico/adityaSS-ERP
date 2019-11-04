@@ -13,16 +13,14 @@ using RMERP.DAL.Helpers;
 using RMERP.DAL.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using RMERP.Helpers;
-using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
-using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using SmartBreadcrumbs.Attributes;
+using System.Drawing;
 
 namespace RMERP.Controllers
 {
@@ -218,6 +216,7 @@ namespace RMERP.Controllers
                 cv.clientsModel.ADM_Id_RegisterBy = sessionUtils.GetLoggedAdminID();
                 Clients clients = new Clients();
                 IFormFile file = cv.clientsModel.CLI_Logo;
+
                 clients.CLI_Id = cv.clientsModel.CLI_Id;
                 clients.FRM_Id = cv.clientsModel.FRM_Id;
                 clients.CLI_Name = cv.clientsModel.CLI_Name;
@@ -266,22 +265,22 @@ namespace RMERP.Controllers
                     clientID = tuple.Item2;
                     TempData["message"] = "Successfull Done!";
                 }
-                #region
-                string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+                #region Image adding
+              //  string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
                 string ImagePath = Configuration.GetSection("DEFAULT_FOLDER_PATH").Value + Configuration.GetSection("CLIENTS_LOGO_PATH").Value;
 
-                if (!System.IO.Directory.Exists(ImagePath + "/" + clientID))
+                if (!Directory.Exists(ImagePath + "/" + clientID))
                 {
-                    System.IO.Directory.CreateDirectory(ImagePath + "/" + clientID);
+                    Directory.CreateDirectory(ImagePath + "/" + clientID);
                 }
                 else
                 {
-                    string[] files = System.IO.Directory.GetFiles(ImagePath + "/" + clientID);
+                    string[] files = Directory.GetFiles(ImagePath + "/" + clientID);
                     if (file != null)
                     {
                         foreach (string s in files)
                         {
-                            string fileName = System.IO.Path.GetFileName(s);
+                            string fileName = Path.GetFileName(s);
                             System.IO.File.Delete(ImagePath + "/" + clientID + "/" + fileName);
                         }
                     }
@@ -291,17 +290,23 @@ namespace RMERP.Controllers
                 }
                 else
                 {
-                    var path = Path.Combine(ImagePath + "\\" + clientID, file.FileName);
-                    using (var stream = new FileStream(path, FileMode.Create))
+                    using (Image img = Image.FromStream(file.OpenReadStream()))
                     {
-                        await file.CopyToAsync(stream);
+                        Stream ms = new MemoryStream(img.Resize(100, 100).ToByteArray());
+                        var path = Path.Combine(ImagePath + "\\" + clientID, file.FileName);
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            ms.CopyTo(stream);                          
+                            await file.CopyToAsync(stream);
+                            stream.Flush();
+                        }
                     }
+
                 }
                 #endregion            
             }
             return RedirectToAction("AddEditClients", new { id = clientID });
         }
-
         [HttpGet]
         public ActionResult AddEditContacts(int CLI_Id, int CON_Id = -1)
         {
