@@ -161,50 +161,7 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.wageProcessVM = WageProcessMapper.mapMe(wageProcess);
                     wageRegisterVM.employeeVM = EmployeesMapper.MapMe(employee.EMP_);
                     wageRegisterVM.designation = employee.DES_;
-
-                    #region EMI Calculation
-
-                    decimal totalEMI = 0;
-                    if (employee.EMP_.Wage_Register_Advances.Count() > 0)
-                    {
-                        bool flag = false;
-                        int clients = attManager.getAttendance_Wage_Employee(wageProcess.WAG_Id, employee.EMP_Id).Select(m => m.CLI_Id).Distinct().Count();
-                        if (clients > 1)
-                        {
-                            IEnumerable<Clients_Employees> clientList = clientsManager.listActiveClientsEmployees_clients(employee.EMP_Id, wageProcess.WAG_Month);
-                            Client_Requirements requirementMax = null;
-                            foreach (Clients_Employees clients_Employee in clientList)
-                            {
-                                Client_Requirements requirement = clientsManager.getActiveClientRequirement(clients_Employee.CLI_Id, clients_Employee.DES_Id, wageProcess.WAG_Month);
-                                if (requirementMax == null)
-                                    requirementMax = requirement;
-                                else
-                                {
-                                    if (requirementMax.CRI_Basic < requirement.CRI_Basic)
-                                        requirementMax = requirement;
-                                }
-                            }
-                            if (requirementMax.CLI_Id.Equals(CLI_Id))
-                                flag = true;
-                        }
-                        else
-                        {
-                            flag = true;
-                        }
-                        if (flag)
-                        {
-                            var EMI = employee.EMP_.Wage_Register_Advances.Where(m => m.WAD_Status == false).GroupBy(m => m.EMP_Id).Select(g => new
-                            {
-                                WAD_Amt = g.Sum(n => n.WAD_Amount)
-                            });
-                            totalEMI = Math.Round(EMI.Select(g => g.WAD_Amt).FirstOrDefault(), MidpointRounding.AwayFromZero);
-                        }
-
-
-
-                    }
-                    wageRegisterVM.WAR_Advance_Amount = totalEMI;
-                    #endregion
+                                        
 
                     #region New Allowances 
                     if (cr != null)
@@ -390,6 +347,95 @@ namespace RMERP.DAL.ManagerClasses
                     decimal WAR_GrossTotal = Math.Round(WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + WAR_OverTime_Calculated +
                                                         AllowancesTotal + WAR_Outstation_Allowance_Calculated + WAR_Nightshift_Allowance_Calculated +
                                                         WAR_Performance_Allowance_Calculated + WAR_Attendance_Allowance_Calculated, MidpointRounding.AwayFromZero);
+
+
+                    #region EMI Calculation
+
+                    decimal totalEMI = 0;
+                    if (employee.EMP_.Wage_Register_Advances.Count() > 0)
+                    {
+                        bool flag = false;
+                        int clients = attManager.getAttendance_Wage_Employee(wageProcess.WAG_Id, employee.EMP_Id).Select(m => m.CLI_Id).Distinct().Count();
+                        if (clients > 1)
+                        {
+                            IEnumerable<Clients_Employees> clientList = clientsManager.listActiveClientsEmployees_clients(employee.EMP_Id, wageProcess.WAG_Month);
+                            Client_Requirements requirementMax = null;
+                            decimal Basic_Paybaleday_Max = 0;
+                          
+                            foreach (Clients_Employees clients_Employee in clientList)
+                            {
+                                Client_Requirements requirement = clientsManager.getActiveClientRequirement(clients_Employee.CLI_Id, clients_Employee.DES_Id, wageProcess.WAG_Month);                               
+                                IEnumerable<Attendance> atts = attManager.getAttendance_Wage_Client_Employee_Designation(wageProcess.WAG_Id, clients_Employee.CLI_Id, clients_Employee.EMP_Id, clients_Employee.DES_Id);
+                               
+                                #region payable days
+                                int totWeekOffs1 = 0, totalPublicHoliday1 = 0, totEarnLeave1 = 0, totNightShift1 = 0;
+                                double totPresentDays1 = 0, totHalfDays1 = 0, totExtraWorkingDays1 = 0, WAR_ExtraWorkingHours1 = 0, totNighthours1 = 0, totalPaybleDays1 = 0; ;
+
+                                totPresentDays1 = atts.Where(a => a.ATT_IsPresent == true).Count();
+                                totEarnLeave1 = atts.Where(a => a.ATT_IsEarnLeave == true).Count();
+                                totNightShift1 = atts.Where(a => a.ATT_NightShift == true).Count();
+                                totHalfDays1 = atts.Where(a => a.ATT_IsHalfday == true).Count();
+                                WAR_ExtraWorkingHours1 = atts.Sum(m => m.ATT_ExtraHoursWorked);
+                                totExtraWorkingDays1 = WAR_ExtraWorkingHours / cli.CLI_WorkingHours_In_Day;
+                                totWeekOffs1 = atts.Where(a => a.ATT_IsWeeklyOff == true).Count();
+                                totalPublicHoliday1 = atts.Where(a => a.ATT_IsPublicHoliday == true).Count();
+                                totNighthours1 = totNightShift * cli.CLI_WorkingHours_In_Day;
+                                totalPaybleDays1 = (totPresentDays1 - totHalfDays1) + (totHalfDays1 / 2) + totEarnLeave1;
+                                if (requirement != null)
+                                {
+                                    if (requirement.CRI_IsPayable_WeeklyOff)
+                                    {
+                                        totalPaybleDays1 = totalPaybleDays1 + totWeekOffs1;
+                                    }
+                                    if (requirement.CRI_IsPayable_PublicHoliday)
+                                    {
+                                        totalPaybleDays1 = totalPaybleDays1 + totalPublicHoliday1;
+                                    }
+                                    if (requirement.CRI_OT_Calculate_Payableday)
+                                    {
+                                        totalPaybleDays1 = totalPaybleDays1 + totExtraWorkingDays1;
+                                    }
+                                }
+                                #endregion
+
+                                decimal Basic_Paybaleday = Convert.ToDecimal(Convert.ToDouble(requirement.CRI_Basic) * totalPaybleDays1);
+
+                                if (Basic_Paybaleday_Max == 0)
+                                {
+                                    Basic_Paybaleday_Max = Basic_Paybaleday;
+                                    requirementMax = requirement;
+                                }                                   
+                                else
+                                {
+                                    if (Basic_Paybaleday_Max < Basic_Paybaleday)
+                                    {
+                                        Basic_Paybaleday_Max = Basic_Paybaleday;
+                                        requirementMax = requirement;
+                                    }
+                                }                               
+
+                            }
+                            if (requirementMax.CLI_Id.Equals(CLI_Id))
+                                flag = true;
+                        }
+                        else
+                        {
+                            flag = true;
+                        }
+                        if (flag)
+                        {
+                            var EMI = employee.EMP_.Wage_Register_Advances.Where(m => m.WAD_Status == false || (m.WAD_Status.Equals(true) && m.WAG_Id.Equals(wageProcess.WAG_Id))).GroupBy(m => m.EMP_Id).Select(g => new
+                            {
+                                WAD_Amt = g.Sum(n => n.WAD_Amount)
+                            });
+                            totalEMI = Math.Round(EMI.Select(g => g.WAD_Amt).FirstOrDefault(), MidpointRounding.AwayFromZero);
+                        }
+
+
+
+                    }
+                    wageRegisterVM.WAR_Advance_Amount = totalEMI;
+                    #endregion
 
                     #region ProfessionalTax Calculation
                     decimal WAR_ProffesionalTax_Calculated = 0M, WAR_RevenueDeduction_Calculated = 0M, WAR_CanteenFacility_Calculation = 0M;

@@ -46,6 +46,10 @@ namespace RMERP.DAL.Models
         public bool CRI_Performance_Allowance { get; set; }
         public bool CRI_Nightshift_Allowance { get; set; }
         public decimal? CRI_Nightshift_Allowance_Rate { get; set; }
+        public int CRI_Billing_Type { get; set; }
+        public decimal? CRI_Billing_Amount { get; set; }
+        public double? CRI_Billing_ServiceCharge { get; set; }
+        public string CRI_Billing_ServiceCharge_Formula { get; set; }
 
         public Clients CLI_ { get; set; }
         public Designations DES_ { get; set; }

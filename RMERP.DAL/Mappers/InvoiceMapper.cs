@@ -19,6 +19,11 @@ namespace RMERP.DAL.Mappers
             Invoice.INV_Date = invoiceVM.INV_Date;
             Invoice.INV_ClientOrder_Number = invoiceVM.INV_ClientOrder_Number;
             Invoice.INV_ClientOrder_Date = invoiceVM.INV_ClientOrder_Date;
+            if (invoiceVM.INV_ClientOrder_Date == DateTime.MinValue)
+            {
+                Invoice.INV_ClientOrder_Date = null;
+            }
+
             Invoice.INV_HSN = invoiceVM.INV_HSN;
             Invoice.INV_Total = invoiceVM.INV_Total;
             Invoice.ADM_Id_CreatedBy = invoiceVM.ADM_Id_CreatedBy;
@@ -29,6 +34,7 @@ namespace RMERP.DAL.Mappers
             Invoice.INV_CGST_Total = invoiceVM.INV_CGST_Total;
             Invoice.INV_SGST_Total = invoiceVM.INV_SGST_Total;
             Invoice.INV_IGST_Total = invoiceVM.INV_IGST_Total;
+            Invoice.INV_Remark = invoiceVM.INV_Remark;
             return Invoice;
         }
         public static InvoiceVM mapMe(Invoices invoice)
@@ -40,7 +46,12 @@ namespace RMERP.DAL.Mappers
             InvoiceVM.INV_Number = invoice.INV_Number;
             InvoiceVM.INV_Date = invoice.INV_Date;
             InvoiceVM.INV_ClientOrder_Number = invoice.INV_ClientOrder_Number;
-            InvoiceVM.INV_ClientOrder_Date = invoice.INV_ClientOrder_Date;
+            InvoiceVM.INV_ClientOrder_Date = invoice.INV_ClientOrder_Date;          
+            if (invoice.INV_ClientOrder_Date == DateTime.MinValue)
+            {
+                InvoiceVM.INV_ClientOrder_Date = null;
+            }
+
             InvoiceVM.INV_HSN = invoice.INV_HSN;
             InvoiceVM.INV_Total = invoice.INV_Total;
             InvoiceVM.ADM_Id_CreatedBy = invoice.ADM_Id_CreatedBy;
@@ -48,6 +59,7 @@ namespace RMERP.DAL.Mappers
             InvoiceVM.INV_CGST_Percentage = invoice.INV_CGST_Percentage;
             InvoiceVM.INV_SGST_Percentage = invoice.INV_SGST_Percentage;
             InvoiceVM.INV_IGST_Percentage = invoice.INV_IGST_Percentage;
+            InvoiceVM.INV_Remark = invoice.INV_Remark;
             if (invoice.INV_CGST_Total!=null)
                 InvoiceVM.INV_CGST_Total = invoice.INV_CGST_Total.Value;
             if (invoice.INV_SGST_Total != null)

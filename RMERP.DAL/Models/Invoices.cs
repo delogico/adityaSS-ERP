@@ -27,6 +27,7 @@ namespace RMERP.DAL.Models
         public decimal? INV_CGST_Total { get; set; }
         public decimal? INV_SGST_Total { get; set; }
         public decimal? INV_IGST_Total { get; set; }
+        public string INV_Remark { get; set; }
 
         public Clients CLI_ { get; set; }
         public Firms FRM_ { get; set; }

@@ -96,12 +96,12 @@ namespace RMERP.DAL.ManagerClasses
         public IEnumerable<Clients> listClients(bool IsActive, int? FirmId, string Client = "")
         {
             IQueryable<Clients> ClientList = _contaxt.Clients.Include(m => m.CITY_).Include(m => m.FRM_).Include(m => m.Client_Contacts);
-            if (FirmId.HasValue)
+            if (FirmId.HasValue && FirmId!=0)
             {
                 ClientList = ClientList.Where(m => m.FRM_Id == FirmId.Value);
             }
 
-            if (string.IsNullOrEmpty(Client))
+            if (string.IsNullOrEmpty(Client) || FirmId==0)
             {
                 ClientList = ClientList.Where(m => m.CLI_IsActive.Equals(IsActive));
             }

@@ -8,7 +8,9 @@ namespace RMERP.DAL.ViewModel
 {
     public class InvoiceMasterVM
     {
-        public int CLI_Id { get; set; }      
+        public int CLI_Id { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
         public List<InvoiceVM> InvoiceVMs { get; set; }
     }
     public class InvoiceVM
@@ -54,6 +56,8 @@ namespace RMERP.DAL.ViewModel
         public decimal INV_SGST_Total { get; set; }
         [Display(Name = "Total IGST")]
         public decimal INV_IGST_Total { get; set; }
+        [Display(Name = "Remark")]
+        public string INV_Remark { get; set; }
 
         public List<Invoice_ConceptsVM> Invoice_Concepts { get; set; }
 

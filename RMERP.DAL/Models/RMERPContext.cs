@@ -251,6 +251,12 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.CRI_Basic).HasColumnType("decimal(9, 2)");
 
+                entity.Property(e => e.CRI_Billing_Amount).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.CRI_Billing_ServiceCharge_Formula).HasMaxLength(200);
+
+                entity.Property(e => e.CRI_Billing_Type).HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.CRI_DA).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.CRI_ESIC_Area)
@@ -355,6 +361,8 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.CLI_Logo)
                     .HasMaxLength(250)
                     .IsUnicode(false);
+
+                entity.Property(e => e.CLI_MLWF_Contribution).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.CLI_Name)
                     .IsRequired()
@@ -729,6 +737,10 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.INV_Number)
                     .IsRequired()
                     .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.INV_Remark)
+                    .HasMaxLength(1000)
                     .IsUnicode(false);
 
                 entity.Property(e => e.INV_SGST_Total).HasColumnType("decimal(9, 2)");

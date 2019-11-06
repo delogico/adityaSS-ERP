@@ -25,13 +25,14 @@
                 <div>
                     <table class="table table-striped custom-table">
                         <thead>
-                            <tr>
+                            <tr>                               
                                 <th>Employee</th>
                                 <th>Total advance till @WAG_Month</th>
+                                <th>Remaining amount till @WAG_Month</th>
                                 <th>Amount</th>
                                 <th></th>
                                 <th></th>
-                                <th>Remaining amount till @WAG_Month</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -50,60 +51,61 @@
 
                                 @Html.HiddenFor(m => item.WAD_Id, new { @id = "WAD_Id_" + @item.EMP_Id })
 
-                                <tr>
-                                    <td> <b>@item.EMP_Name</b></td>
-                                    <td><b>@item.Total_Advance</b></td>
+                            <tr>
+                                <td> <b>@item.EMP_Name</b></td>
+                                <td><b>@item.Total_Advance</b></td>
+                                @{
+                                    var RemaimngAmt = item.Total_Advance - item.Paid_WAD_Amount;
+                                }
+                                <td><b>@RemaimngAmt</b></td>
 
-                                    @if (disabl)
+                                @if (disabl)
+                                {
+                                    <td>
+                                        @Html.TextBoxFor(m => item.WAD_Amount, new { @class = "form-control", id = "WAD_Amount_" + @item.EMP_Id, disabled = "disabled" })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => item.WAD_Is_LoanCompleted, new { @id = "WAD_Is_LoanCompleted_" + @item.EMP_Id, disabled = "disabled" }) Consider Loan Completed
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        @Html.TextBoxFor(m => item.WAD_Amount, new { @class = "form-control", id = "WAD_Amount_" + @item.EMP_Id })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => item.WAD_Is_LoanCompleted, new { @id = "WAD_Is_LoanCompleted_" + @item.EMP_Id }) Consider Loan Completed
+                                    </td>
+                                }
+                                <td>
+                                    @if (!item.WAD_Status)
                                     {
-                                        <td>
-                                            @Html.TextBoxFor(m => item.WAD_Amount, new { @class = "form-control", id = "WAD_Amount_" + @item.EMP_Id, disabled = "disabled" })
-                                        </td>
-                                        <td>
-                                            @Html.CheckBoxFor(m => item.WAD_Is_LoanCompleted, new { @id = "WAD_Is_LoanCompleted_" + @item.EMP_Id, disabled = "disabled" }) Consider Loan Completed
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td>
-                                            @Html.TextBoxFor(m => item.WAD_Amount, new { @class = "form-control", id = "WAD_Amount_" + @item.EMP_Id })
-                                        </td>
-                                        <td>
-                                            @Html.CheckBoxFor(m => item.WAD_Is_LoanCompleted, new { @id = "WAD_Is_LoanCompleted_" + @item.EMP_Id }) Consider Loan Completed
-                                        </td>
-                                    }
-                                        <td>
-                                            @if (!item.WAD_Status)
+                                        if (!Model.WAG_.WAG_Status)
+                                        {
+                                            @if (!item.WAD_Is_LoanCompleted)
                                             {
-                                                if (!Model.WAG_.WAG_Status)
+                                                @if (item.WAD_Id > 0)
                                                 {
-                                                    @if (!item.WAD_Is_LoanCompleted)
-                                                    {
-                                                        @if (item.WAD_Id > 0)
-                                                        {
-                                                            <a onclick="AddAdvanceEMI(@item.EMP_Id)" class="btn btn-warning btn-xs" title="Edit">Edit</a>
-                                                        }
-                                                        else
-                                                        {
-                                                            <a onclick="AddAdvanceEMI(@item.EMP_Id)" class="btn btn-success btn-xs" title="Add">Add</a>
-                                                        }
-                                                    }
+                                                    <a onclick="AddAdvanceEMI(@item.EMP_Id)" class="btn btn-warning btn-xs" title="Edit">Edit</a>
                                                 }
                                                 else
                                                 {
-                                                    <span class="text text-warning">Wage Process for this month is Closed.</span>
+                                                    <a onclick="AddAdvanceEMI(@item.EMP_Id)" class="btn btn-success btn-xs" title="Add">Add</a>
                                                 }
                                             }
-                                            else
-                                            {
-                                                <span class="text text-success">Loan is Closed.</span>
-                                            }
-                                        </td>
-                                    @{
-                                        var RemaimngAmt = item.Total_Advance - item.Paid_WAD_Amount;
+                                        }
+                                        else
+                                        {
+                                            <span class="text text-warning">Wage Process for this month is Closed.</span>
+                                        }
                                     }
-                                    <td><b>@RemaimngAmt</b></td>
-                                </tr>
+                                    else
+                                    {
+                                        <span class="text text-success">Loan is Closed.</span>
+                                    }
+                                </td>
+
+                            </tr>
                             }
                         </tbody>
                     </table>

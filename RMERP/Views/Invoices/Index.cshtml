@@ -1,4 +1,4 @@
-﻿@model RMERP.DAL.ViewModel.InvoiceMasterVM 
+﻿@model RMERP.DAL.ViewModel.InvoiceMasterVM
 @using static RMERP.DAL.Helpers.ProjectUtils;
 @{
     ViewData["Title"] = "Index";
@@ -15,12 +15,19 @@
     <script>
         function searchInvoiceList() {
             var CLI_Id = $("#CLI_Id").val();
-            var Url = siteUrl + "Invoices/SearchInvoice?CLI_Id=" + CLI_Id;
+            var Year = $("#Year").val();
+            var Month = $("#Month").val();
+            var Url = siteUrl + "Invoices/SearchInvoice?CLI_Id=" + CLI_Id + "&Year=" + Year + "&Month=" + Month;
             $.ajax({
                 type: "GET",
                 url: Url,
+                beforeSend: function () {
+                    $("#loading-image").show();
+                    $('#divClientList').html("");                    
+                },
                 success: function (data) {
                     $('#divClientList').html(data);
+                    $("#loading-image").hide();
                 }
             })
         }
@@ -35,16 +42,29 @@
     </div>
 </div>
 <div class="row filter-row">
-      <div class="col-sm-3 col-xs-6">
-            <div class="form-group form-focus select-focus">
-                <label class="control-label">Clients</label>
-                @Html.DropDownListFor(m=>m.CLI_Id, new SelectList(ViewBag.ClientList, "CLI_Id", "CLI_Name"), "Select Client", new { @class = "select floating" })
-            </div>
+    <div class="col-sm-3 col-xs-4">
+        <div class="form-group form-focus select-focus">
+            <label class="control-label">Clients</label>
+            @Html.DropDownListFor(m => m.CLI_Id, new SelectList(ViewBag.ClientList, "CLI_Id", "CLI_Name"), "Select Client", new { @class = "select floating" })
         </div>
-        <div class="col-sm-3 col-xs-6">
-            <a class="btn btn-success btn-block" onclick="searchInvoiceList()"> Search </a>
+    </div>
+    <div class="col-sm-3 col-xs-4">
+        <div class="form-group form-focus select-focus">
+            <label class="control-label">Year</label>
+            @Html.DropDownListFor(m => m.Year, new SelectList(ViewBag.linktoYearId, "Value", "Text"), "Select Year", new { @class = "select floating" })
         </div>
+    </div>
+    <div class="col-sm-3 col-xs-4">
+        <div class="form-group form-focus select-focus">
+            <label class="control-label">Month</label>
+            @Html.DropDownListFor(m => m.Month, new SelectList(ViewBag.linktoMonthId, "Value", "Text"), "Select Month", new { @class = "select floating" })
+        </div>
+    </div>
+    <div class="col-sm-3 col-xs-4">
+        <a class="btn btn-success btn-block" onclick="searchInvoiceList()"> Search </a>
+    </div>
 </div>
+<img id="loading-image" src="~/assets/img/25.gif" style="display:none;position: fixed;left: 50%;top: 50%;z-index: 1000000; background-position:center;" />
 <div id="divClientList">
     @{Html.RenderPartial("_InvoiceList", Model.InvoiceVMs);}
 </div>

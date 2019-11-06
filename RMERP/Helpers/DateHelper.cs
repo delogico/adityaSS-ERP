@@ -11,6 +11,10 @@ namespace RMERP.Helpers
         {
             return dt.ToShortDateString();
         }
+        public static string getLongDateFormat(DateTime dt)
+        {
+            return dt.ToString("dd-MMM-yyyy");
+        }
 
         public static DateTime[] getStartEndDatePeriodForAttendance(Clients client, DateTime wageDate)
         {

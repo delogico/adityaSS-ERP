@@ -27,17 +27,58 @@ namespace RMERP.Controllers
         }
 
         public IActionResult Index()
-        {            
+        {           
+            ClientsManager clientsManager = new ClientsManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             InvoicesManager invoicesManager = new InvoicesManager(_context);                      
             InvoiceMasterVM masterVM = new InvoiceMasterVM();
             int FRM_Id = (sessionUtils.GetLoggedFirmID()!=null? sessionUtils.GetLoggedFirmID().Value:0);           
             List<Invoices> invoices = invoicesManager.GetInvoices(FRM_Id);
-            masterVM.InvoiceVMs = InvoiceMapper.mapMe(invoices.Where(m => DateTime.Compare(m.INV_Date.Date, DateTime.Now.Date.AddMonths(-2)) > 0).ToList());
-            ViewBag.ClientList = invoices.Select(m => m.CLI_).Distinct().ToList();
+            masterVM.InvoiceVMs = InvoiceMapper.mapMe(invoices.Where(m => DateTime.Compare(m.INV_CreatedOn.Date, DateTime.Now.Date.AddMonths(-2)) > 0).ToList());           
+            ViewBag.ClientList =clientsManager.listClients(true, FRM_Id);
+
+            DateTime dt = DateTime.Now;           
+
+            ViewBag.linktoYearId = GetYears(dt.Year);
+            ViewBag.linktoMonthId = GetMonths(dt.Year);
             return View(masterVM);
         }
+                      
+        private SelectList GetYears(int? iSelectedYear)
+        {
+            List<SelectListItem> ddlYears = new List<SelectListItem>();
+            int CurrentYear = DateTime.Now.Year;
 
+            for (int i = 2018; i <= CurrentYear; i++)
+            {
+                ddlYears.Add(new SelectListItem
+                {
+                    Text = i.ToString(),
+                    Value = i.ToString()
+                });
+            }         
+            return new SelectList(ddlYears, "Value", "Text", iSelectedYear);
+        }      
+        private SelectList GetMonths(int? iSelectedYear)
+        {
+            List<SelectListItem> ddlMonths = new List<SelectListItem>();
+            var months = Enumerable.Range(1, 12).Select(i => new
+            {
+                A = i,
+                B = DateTimeFormatInfo.CurrentInfo.GetMonthName(i)
+            });
+
+            int CurrentMonth = 1; //January  
+
+            foreach (var item in months)
+            {
+                ddlMonths.Add(new SelectListItem { Text = item.B.ToString(), Value = item.A.ToString() });
+            }
+
+            //Default It will Select Current Month  
+            return new SelectList(ddlMonths, "Value", "Text", CurrentMonth);
+
+        }
         public ActionResult DeleteInvoice(int INV_Id)
         {
             InvoicesManager invoicesManager = new InvoicesManager(_context);
@@ -60,8 +101,7 @@ namespace RMERP.Controllers
             InvoicesManager invoicesManager = new InvoicesManager(_context);
             ViewBag.Clients = clientsManager.listClients(true, sessionUtils.GetLoggedFirmID());
             InvoiceVM invoiceVM = new InvoiceVM();
-            invoiceVM.INV_Number = invoicesManager.GetNextInvoiceNumber();
-            invoiceVM.INV_ClientOrder_Date = DateNow();
+            invoiceVM.INV_Number = invoicesManager.GetNextInvoiceNumber();           
             invoiceVM.INV_Date = DateNow();            
             invoiceVM.Invoice_Concepts = new List<Invoice_ConceptsVM>();
             if (INV_Id > 0)
@@ -108,6 +148,8 @@ namespace RMERP.Controllers
             }
             return Json("Ok");
         }
+
+
         public ActionResult GetInvoiceTemplate(int CLI_Id)
         {
             ClientsManager clientsManager = new ClientsManager(_context);
@@ -128,7 +170,7 @@ namespace RMERP.Controllers
             ViewBag.Months = from c in cc
                              select new SelectListItem
                              {
-                                 Text = c.WAG_Month.ToShortDateString(),
+                                 Text = c.WAG_Month.ToString("MMM-yyyy"),
                                  Value = c.WAG_Id.ToString()
                              };
             ViewBag.Designation = registerManager.GetWageRegistersForInvoice(CLI_Id).Select(m => m.CRI_.DES_).Distinct();
@@ -160,8 +202,7 @@ namespace RMERP.Controllers
             InvoicesManager invoicesManager = new InvoicesManager(_context);
             ViewBag.Clients = clientsManager.listClients(true, sessionUtils.GetLoggedFirmID());
             InvoiceVM invoiceVM = new InvoiceVM();
-            invoiceVM.INV_Number = invoicesManager.GetNextInvoiceNumber();
-            invoiceVM.INV_ClientOrder_Date = ProjectUtils.DateNow();
+            invoiceVM.INV_Number = invoicesManager.GetNextInvoiceNumber();           
             invoiceVM.INV_Date = ProjectUtils.DateNow();
             invoiceVM.Invoice_Concepts = new List<Invoice_ConceptsVM>();
             if (INV_Id > 0)
@@ -217,21 +258,28 @@ namespace RMERP.Controllers
             return RedirectToAction("Index","Invoices");            
         }
 
-        public ActionResult SearchInvoice(int CLI_Id)
+        public ActionResult SearchInvoice(int CLI_Id,int Year,int Month)
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             InvoicesManager invoicesManager = new InvoicesManager(_context);
             int FRM_Id = (sessionUtils.GetLoggedFirmID() != null ? sessionUtils.GetLoggedFirmID().Value : 0);
             List<InvoiceVM> invoiceVMs = new List<InvoiceVM>();
             if (CLI_Id >0)
-            {
-                invoiceVMs = InvoiceMapper.mapMe(invoicesManager.GetInvoicesByClientId(CLI_Id));
+            {                
+                invoiceVMs = InvoiceMapper.mapMe(invoicesManager.GetInvoicesByClientId(CLI_Id));                
             }
             else
             {
-                invoiceVMs = InvoiceMapper.mapMe(invoicesManager.GetInvoices(FRM_Id).Where(m => DateTime.Compare(m.INV_Date.Date, DateTime.Now.Date.AddMonths(-2)) > 0).ToList());
+                invoiceVMs = InvoiceMapper.mapMe(invoicesManager.GetInvoices(FRM_Id).Where(m => DateTime.Compare(m.INV_CreatedOn.Date, DateTime.Now.Date.AddMonths(-2)) > 0).ToList());
             }
-            
+            if (Year > 0)
+            {
+                invoiceVMs=invoiceVMs.Where(m => m.INV_Date.Year == Year).ToList();
+            }
+            if (Month > 0)
+            {
+                invoiceVMs=invoiceVMs.Where(m => m.INV_Date.Month == Month).ToList();
+            }
             return PartialView("_InvoiceList", invoiceVMs);
         }
 

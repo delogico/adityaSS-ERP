@@ -1,8 +1,11 @@
 ﻿@model RMERP.DAL.ViewModel.InvoiceVM
 @{
-    ViewData["Title"] = "Add Invoice";
+    ViewData["Title"] = "Invoice Info";
 }
-
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Invoices", "Index", "Invoices")</li>
+    <li class="breadcrumb-item">Invoice Info</li>
+}
 <style>
     .modal-dialog {
         padding-top: 50px;
@@ -17,13 +20,22 @@
     <div class="col-md-12">
         <form>
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-8">
                     <div class="form-group">
                         @Html.HiddenFor(m => m.INV_Id)
                         @Html.HiddenFor(m => m.INV_CreatedOn)
                         @Html.LabelFor(m => m.CLI_Id, new { @class = "control-label" })
                         @Html.DropDownListFor(m => m.CLI_Id, new SelectList(ViewBag.Clients, "CLI_Id", "CLI_Name"), "Select Client", new { @class = "select floating" })
                         @Html.ValidationMessageFor(m => m.CLI_Id, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.INV_ClientOrder_Number, new { @class = "control-label" })
+                        @Html.TextBoxFor(m => m.INV_ClientOrder_Number, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.INV_ClientOrder_Number, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -41,28 +53,17 @@
                         @Html.ValidationMessageFor(m => m.INV_Date, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.INV_ClientOrder_Number, new { @class = "control-label" })
-                        @Html.TextBoxFor(m => m.INV_ClientOrder_Number, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.INV_ClientOrder_Number, "", new { @class = "text-danger" })
-                    </div>
+                <div class="col-sm-2">
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-2">
                     <div class="form-group">
                         @Html.LabelFor(m => m.INV_ClientOrder_Date, new { @class = "control-label" })
                         @Html.EditorFor(m => m.INV_ClientOrder_Date, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(m => m.INV_ClientOrder_Date, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.INV_HSN, new { @class = "control-label" })
-                        @Html.TextBoxFor(m => m.INV_HSN, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.INV_HSN, "", new { @class = "text-danger" })
-                    </div>
-                </div>
             </div>
+            <img id="loading-image" src="~/assets/img/25.gif" style="display:none; position: fixed;left: 50%;top: 31%;z-index: 1000000; background-position:center;" />
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="table-responsive">
@@ -85,7 +86,7 @@
                                         <td style="width: 5%">
                                             <input class="form-control" id="INC_Serial_Number" value=@item.INC_Serial_Number type="text" style="min-width:50px">
                                         </td>
-                                        <td style="width: 65%">                                           
+                                        <td style="width: 65%">
                                             <textarea id="INC_Description" class="form-control desc">@item.INC_Description</textarea>
                                         </td>
                                         <td style="width: 20%">
@@ -111,7 +112,7 @@
                                         <input class="form-control calculation" id="INC_Total" type="text" style="max-width:150px">
 
                                     </td>
-                                    <td style="width: 10%">                                        
+                                    <td style="width: 10%">
                                         <a class="InvoiceType text-success font-18" title="Add" id="opnInvoice"><i class="fa fa-plus"></i></a>
                                     </td>
 
@@ -192,9 +193,17 @@
                                     <td style="width: 10%">
                                         @Html.TextBoxFor(m => Model.INV_Total, new { @class = "form-control text-right", @readonly = "readonly" })
                                     </td>
-                                </tr>                               
+                                </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        @Html.TextAreaFor(m => m.INV_Remark, new { @class = " form-control" })
                     </div>
                 </div>
             </div>
@@ -224,7 +233,7 @@
             $(document).on('change', '.calculation', function () {
                 debugger;
                 var All_INC_Total = 0;
-                $("#tblIncidenceConcepts TBODY TR").each(function () {                   
+                $("#tblIncidenceConcepts TBODY TR").each(function () {
                     var row = $(this);
                     var INC_Total = parseFloat(row.find("TD").eq(2).children().val());
                     All_INC_Total = All_INC_Total + parseFloat(INC_Total);
@@ -263,9 +272,15 @@
             $.ajax({
                 type: "GET",
                 url: Url,
+                beforeSend: function () {
+                    $("#loading-image").show();
+                    $('#invoiceTemplate').html("");
+                    $('#InvoiceTypeModal').hide();
+                },
                 success: function (data) {
                     $('#invoiceTemplate').html(data);
                     $('#InvoiceTypeModal').modal('show');
+                    $("#loading-image").hide();
                 }
             })
         };
@@ -306,7 +321,7 @@
                         //Add Total cell.
                         cell = $(row.insertCell(-1));
                         cell.html(data.inC_Total);
-                        var clClass = "calc_"+id;
+                        var clClass = "calc_" + id;
                         cell.html('<input class="form-control calculation ' + clClass + '" id="INC_Total" value="' + data.inC_Total + '" type="text" style="max-width:150px"> ');
 
                         cell = $(row.insertCell(-1));
@@ -376,24 +391,27 @@
             InvoiceVM.CLI_Id = parseInt($("#CLI_Id").val());
             InvoiceVM.INV_Number = $("#INV_Number").val();
             InvoiceVM.INV_Date = $("#INV_Date").val();
-            InvoiceVM.INV_ClientOrder_Number = $("#INV_ClientOrder_Number").val();
-            InvoiceVM.INV_ClientOrder_Date = $("#INV_ClientOrder_Date").val();
+            InvoiceVM.INV_Remark = ($("#INV_Remark") != "" ? $("#INV_Remark").val() : null);
+            InvoiceVM.INV_ClientOrder_Number = (isNaN(INV_ClientOrder_Number = parseFloat($("#INV_ClientOrder_Number").val(), 10)) ? 0 : INV_ClientOrder_Number);
 
+            InvoiceVM.INV_ClientOrder_Date = ($("#INV_ClientOrder_Date") == "0001-01-01" ? null : $("#INV_ClientOrder_Date").val());
             InvoiceVM.INV_CreatedOn = $("#INV_CreatedOn").val();
 
-            InvoiceVM.INV_HSN = $("#INV_HSN").val();
-            InvoiceVM.INV_Total = parseFloat($("#INV_Total").val());
-            InvoiceVM.INV_CGST_Percentage = parseFloat($("#INV_CGST_Percentage").val());
-            InvoiceVM.INV_SGST_Percentage = parseFloat($("#INV_SGST_Percentage").val());
-            InvoiceVM.INV_IGST_Percentage = parseFloat($("#INV_IGST_Percentage").val());
-            InvoiceVM.INV_CGST_Total = parseFloat($("#INV_CGST_Total").val());
-            InvoiceVM.INV_SGST_Total = parseFloat($("#INV_SGST_Total").val());
-            InvoiceVM.INV_IGST_Total = parseFloat($("#INV_IGST_Total").val());
+            InvoiceVM.INV_HSN = (isNaN(INV_HSN = parseFloat($("#INV_HSN").val(), 10)) ? 0 : INV_HSN);
+            InvoiceVM.INV_Total = (isNaN(INV_Total = parseFloat($("#INV_Total").val(), 10)) ? 0 : INV_Total);
+
+            InvoiceVM.INV_CGST_Percentage = (isNaN(INV_CGST_Percentage = parseFloat($("#INV_CGST_Percentage").val(), 10)) ? 0 : INV_CGST_Percentage);
+            InvoiceVM.INV_SGST_Percentage = (isNaN(INV_SGST_Percentage = parseFloat($("#INV_SGST_Percentage").val(), 10)) ? 0 : INV_SGST_Percentage);
+            InvoiceVM.INV_IGST_Percentage = (isNaN(INV_IGST_Percentage = parseFloat($("#INV_IGST_Percentage").val(), 10)) ? 0 : INV_IGST_Percentage);
+
+            InvoiceVM.INV_CGST_Total = (isNaN(INV_CGST_Total = parseFloat($("#INV_CGST_Total").val(), 10)) ? 0 : INV_CGST_Total);
+            InvoiceVM.INV_SGST_Total = (isNaN(INV_SGST_Total = parseFloat($("#INV_SGST_Total").val(), 10)) ? 0 : INV_SGST_Total);
+            InvoiceVM.INV_IGST_Total = (isNaN(INV_IGST_Total = parseFloat($("#INV_IGST_Total").val(), 10)) ? 0 : INV_IGST_Total);
 
             var Concepts = new Array();
 
             $("#tblIncidenceConcepts TBODY TR").each(function () {
-                debugger;
+
                 var row = $(this);
                 var Concept = {};
                 Concept.INC_Serial_Number = parseInt(row.find("TD").eq(0).children().val());
@@ -408,11 +426,14 @@
                 async: true,
                 type: "POST",
                 data: JSON.stringify(InvoiceVM),
-                error: function (jqXHR, textStatus, errorThrown) {
-                    window.location.href = siteUrl + "Invoices/Index";
-                },
-                success: function (data) {
-                    window.location.href = siteUrl + "Invoices/Index";
+                success: function (data, textStatus, jQxhr) {
+                    if (data == "Ok") {
+                        window.location.href = siteUrl + "Invoices/Index";
+                    } else {
+                        alert("Try Again");
+                    }
+                }, error: function (jqXhr, textStatus, errorThrown) {
+                    alert("error");
                 }
             });
         });

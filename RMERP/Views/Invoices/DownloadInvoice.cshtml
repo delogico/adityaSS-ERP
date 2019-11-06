@@ -1,5 +1,6 @@
 ﻿@model RMERP.DAL.Models.Invoices
 @using static RMERP.DAL.Helpers.ProjectUtils;
+@using RMERP.Helpers
 @{
     Layout = null;
 }
@@ -30,6 +31,11 @@
             border-color: #ddd;
             padding: 10px;
         }
+
+        .gst-table td {
+            border: solid 1px;
+            border-color: #ddd;
+            padding: 5px;
         }
     </style>
 </head>
@@ -59,54 +65,71 @@
                 </div>
                 <hr />
                 <div class="row">
-                    @*<div class="col-xs-8">
-                            <address>
-                                <strong>Buyer: </strong><br>
-                                <strong>@Model.CLI_.CLI_Name</strong> <br>
-                                @Model.CLI_.CLI_Invoicing_Address1<br>
-                                @Model.CLI_.CLI_Invoicing_Address2<br>
-                                @Model.CLI_.CLI_Invoicing_City<br><br>
-
-                                Pin Code: @Model.CLI_.CLI_Pincode <br />
-                                LOCATION : <strong>@Model.CLI_.CLI_Invoicing_Location</strong> <br />
-                                Buyer's GSTIN/UIN : @Model.CLI_.CLI_GST_Number  <br />
-                                @Model.CLI_.STA_.STA_Name Code: @Model.CLI_.STA_.STA_GST_Code <br />
-                                Place of Supply:  @Model.CLI_.STA_.STA_Name
-                            </address>
-                        </div>
-                        <div class="col-xs-4 text-right">
-                            <address>
-                                <strong>Invoice No: @Model.INV_Number</strong><br>
-                                <strong>Date :</strong> @Model.INV_Date.ToShortDateString()<hr>
-                                Order No. : @Model.INV_ClientOrder_Number<br>
-                                Date : @Model.INV_ClientOrder_Date.Value.ToShortDateString()<br>
-                            </address>
-                        </div>*@
 
                     <div class="col-sm-12">
                         <table width="100%" style="font-size:inherit">
                             <tr>
                                 <td width="75%">
+                                    <span style="font-size: 12px;font-weight:bold">Buyer: </span>
+                                    <br>
                                     <address>
-                                        <strong>Buyer: </strong><br>
-                                        <strong>@Model.CLI_.CLI_Name</strong> <br>
-                                        @Model.CLI_.CLI_Invoicing_Address1<br>
-                                        @Model.CLI_.CLI_Invoicing_Address2<br>
-                                        @Model.CLI_.CLI_Invoicing_City<br><br>
+                                        <strong>@Model.CLI_.CLI_Invoicing_Name</strong> <br>
+                                        @if (!string.IsNullOrEmpty(Model.CLI_.CLI_Invoicing_Address1))
+                                        {
+                                            @Model.CLI_.CLI_Invoicing_Address1<br>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.CLI_.CLI_Invoicing_Address2))
+                                        {
+                                            @Model.CLI_.CLI_Invoicing_Address2<br>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.CLI_.CLI_Invoicing_City))
+                                        {
+                                            @Model.CLI_.CLI_Invoicing_City<br>
+                                        }
 
-                                        Pin Code: @Model.CLI_.CLI_Pincode <br />
-                                        LOCATION : <strong>@Model.CLI_.CLI_Invoicing_Location</strong> <br />
-                                        Buyer's GSTIN/UIN : @Model.CLI_.CLI_GST_Number  <br />
+                                        @if (Model.CLI_.CLI_Invoicing_ZipCode != null)
+                                        {
+                                            <br /><span>Pin Code: @Model.CLI_.CLI_Invoicing_ZipCode</span><br /><br />
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.CLI_.CLI_Invoicing_Location))
+                                        {
+                                            <span>LOCATION : @Model.CLI_.CLI_Invoicing_Location</span><br />
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.CLI_.CLI_GST_Number))
+                                        {
+                                            <span>Buyer's GSTIN/UIN : @Model.CLI_.CLI_GST_Number</span><br />
+                                        }
+
                                         @Model.CLI_.STA_.STA_Name Code: @Model.CLI_.STA_.STA_GST_Code <br />
-                                        Place of Supply:  @Model.CLI_.STA_.STA_Name
+                                        @if (!string.IsNullOrEmpty(Model.CLI_.CLI_Place_Of_Supply))
+                                        {
+                                            <span> Place of Supply : @Model.CLI_.CLI_Place_Of_Supply</span><br />
+                                        }
+
                                     </address>
                                 </td>
                                 <td class="text-right" width="25%" style="vertical-align:top;">
                                     <address>
                                         <strong>Invoice No: @Model.INV_Number</strong><br>
-                                        <strong>Date :</strong> @Model.INV_Date.ToShortDateString()<hr />
-                                        Order No. : @Model.INV_ClientOrder_Number<br>
-                                        Date : @Model.INV_ClientOrder_Date.Value.ToShortDateString()<br>
+                                        <strong>Date :</strong> @DateHelper.getLongDateFormat(Model.INV_Date)<hr />
+                                        @if (Model.INV_ClientOrder_Number != null && Model.INV_ClientOrder_Number != "0")
+                                        {
+                                            <span>Order No. : </span>@Model.INV_ClientOrder_Number<br>
+                                        }
+
+
+                                        @{
+                                            var dt = "";
+                                            if (Model.INV_ClientOrder_Date != null)
+                                            {
+                                                dt = DateHelper.getLongDateFormat(Model.INV_ClientOrder_Date.Value);
+                                            }
+                                        }
+                                        @if (dt != "")
+                                        {
+                                            <span>Date :</span> @dt<br>
+                                        }
+
                                     </address>
                                 </td>
                             </tr>
@@ -118,76 +141,166 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><strong>Order summary</strong></h3>
-                    </div>
-                    <div class="panel-body">
-                        <div>
-                            <table class="table table-condensed border-dark">
-                                <thead>
-                                    <tr>
-                                        <td width="10%"><strong>Sr.No</strong></td>
-                                        <td class="text-left"><strong>Description</strong></td>
-                                        <td width="20%" class="text-right"><strong>Amount</strong></td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.Invoice_Concepts.OrderBy(m => m.INC_Serial_Number))
-                                    {
-                                        <tr>
-                                            <td>@item.INC_Serial_Number</td>
-                                            <td class="text-left">@Html.Raw(item.INC_Description)</td>
-                                            <td class="text-right"><i class="fa fa-rupee"></i>@item.INC_Total</td>
-                                        </tr>
-                                    }
-                                    @{
-                                        int count = Model.Invoice_Concepts.Count();
-                                    }
-                                    @if (Model.INV_SGST_Total.Value > 0)
-                                    {
-                                        count = count + 1;
-                                        <tr>
-                                            <td>@count</td>
-                                            <td class="text-left"><strong>SGST</strong></td>
-                                            <td class="text-right"><i class="fa fa-rupee"></i>@Model.INV_SGST_Total.Value</td>
-                                        </tr>
-                                    }
-                                    @if (Model.INV_CGST_Total.Value > 0)
-                                    {
-                                        count = count + 1;
-                                        <tr>
-                                            <td>@count</td>
-                                            <td class="text-left"><strong>CGST</strong></td>
-                                            <td class="text-right"><i class="fa fa-rupee"></i>@Model.INV_CGST_Total.Value</td>
-                                        </tr>
-                                    }
-                                    @if (Model.INV_IGST_Total.Value > 0)
-                                    {
-                                        count = count + 1;
-                                        <tr>
-                                            <td>@count</td>
-                                            <td class="text-left"><strong>IGST</strong></td>
-                                            <td class="text-right"><i class="fa fa-rupee"></i>@Model.INV_IGST_Total.Value</td>
-                                        </tr>
-                                    }
+                <table class="gst-table" width="100%">
 
-                                    <tr>
-                                        <td class="thick-line"></td>
-                                        <td class="thick-line text-right"><strong>Total</strong></td>
-                                        <td class="thick-line text-right"><i class="fa fa-rupee"></i>@Model.INV_Total</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                    <thead>
+                        <tr>
+                            <td width="10%"><strong>Sr.No</strong></td>
+                            <td class="text-left"><strong>Description</strong></td>
+                            <td width="20%" class="text-right"><strong>Amount</strong></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            bool IsGST = false;
+                            bool IsIGST = false;
+                            decimal TaxableAmt = Model.Invoice_Concepts.Sum(m => m.INC_Total);
+                        }
+                        @foreach (var item in Model.Invoice_Concepts.OrderBy(m => m.INC_Serial_Number))
+                        {
+                            <tr>
+                                <td>@item.INC_Serial_Number</td>
+                                <td class="text-left">@Html.Raw(item.INC_Description)</td>
+                                <td class="text-right"><i class="fa fa-rupee"></i>@item.INC_Total</td>
+                            </tr>
+                        }
+                        @{
+                            int count = Model.Invoice_Concepts.Count();
+                        }
+                        @if (Model.INV_SGST_Total.Value > 0)
+                        {
+                            IsGST = true;
+                            count = count + 1;
+                            <tr>
+                                <td>@count</td>
+                                <td class="text-left"><strong>SGST</strong></td>
+                                <td class="text-right"><i class="fa fa-rupee"></i>@Model.INV_SGST_Total.Value</td>
+                            </tr>
+                        }
+                        @if (Model.INV_CGST_Total.Value > 0)
+                        {
+                            IsGST = true;
+                            count = count + 1;
+                            <tr>
+                                <td>@count</td>
+                                <td class="text-left"><strong>CGST</strong></td>
+                                <td class="text-right"><i class="fa fa-rupee"></i>@Model.INV_CGST_Total.Value</td>
+                            </tr>
+                        }
+                        @if (Model.INV_IGST_Total.Value > 0)
+                        {
+                            IsIGST = true;
+                            count = count + 1;
+                            <tr>
+                                <td>@count</td>
+                                <td class="text-left"><strong>IGST</strong></td>
+                                <td class="text-right"><i class="fa fa-rupee"></i>@Model.INV_IGST_Total.Value</td>
+                            </tr>
+                        }
+
+                        <tr>
+                            <td class="thick-line"></td>
+                            <td class="thick-line text-right"><strong>Total</strong></td>
+                            <td class="thick-line text-right"><i class="fa fa-rupee"></i>@Model.INV_Total</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
+        @if (IsGST)
+        {
+            <table width="100%" style="font-size:inherit" class="gst-table">
+                <tr>
+                    <td rowspan="2" class="text-center" width="30%">HSN/SAC</td>
+                    <td rowspan="2" class="text-center">Taxable Value</td>
+                    <td colspan="2" class="text-center">Central Tax</td>
+                    <td colspan="2" class="text-center">State Tax</td>
+                    <td rowspan="2" class="text-center">Total Tax Amount</td>
+                </tr>
+                <tr>
+                    <td class="text-center">Rate</td>
+                    <td class="text-center">Amount</td>
+                    <td class="text-center">Rate</td>
+                    <td class="text-center">Amount</td>
+                </tr>
+                <tr>
+                    <td class="text-left">@Model.CLI_.CLI_HSN_Code</td>
+                    <td class="text-right">@TaxableAmt</td>
+                    <td class="text-right">@Model.INV_CGST_Percentage %</td>
+                    <td class="text-right">@Model.INV_CGST_Total</td>
+                    <td class="text-right">@Model.INV_SGST_Percentage %</td>
+                    <td class="text-right">@Model.INV_SGST_Total</td>
+                    @{
+                        decimal GST_Total = Model.INV_CGST_Total.Value + Model.INV_SGST_Total.Value;
+                    }
+                    <td class="text-right">@GST_Total</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Total</strong></td>
+                    <td class="text-right"><strong>@TaxableAmt</strong></td>
+                    <td></td>
+                    <td class="text-right"><strong>@Model.INV_CGST_Total</strong></td>
+                    <td></td>
+                    <td class="text-right"><strong>@Model.INV_SGST_Total</strong></td>
+                    <td class="text-right"><strong>@GST_Total</strong></td>
+                </tr>
+            </table>
+        }
+        else if (IsIGST)
+        {
+            <table width="100%" style="font-size:inherit" class="gst-table">
+                <tr>
+                    <td rowspan="2" class="text-center" width="30%">HSN/SAC</td>
+                    <td rowspan="2" class="text-center">Taxable Value</td>
+                    <td colspan="2" class="text-center">Integrated Tax</td>
+                    <td rowspan="2" class="text-center">Total Tax Amount</td>
+                </tr>
+                <tr>
+                    <td class="text-center">Rate</td>
+                    <td class="text-center">Amount</td>
+                </tr>
+                <tr>
+                    @{ var HSN_Number = (Model.CLI_.CLI_HSN_Code != "" ? Model.CLI_.CLI_HSN_Code : "-");}
 
-        <div class="row" style="border:1px;border:medium">
+
+                    <td class="text-left">@HSN_Number</td>
+                    <td class="text-right">@TaxableAmt</td>
+                    <td class="text-right">@Model.INV_IGST_Percentage %</td>
+                    <td class="text-right">@Model.INV_IGST_Total</td>
+                    <td class="text-right">@Model.INV_IGST_Total</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Total</strong></td>
+                    <td class="text-right"><strong>@TaxableAmt</strong></td>
+                    <td></td>
+                    <td class="text-right"><strong>@Model.INV_IGST_Total</strong></td>
+
+                    <td class="text-right"><strong>@Model.INV_IGST_Total</strong></td>
+                </tr>
+            </table>
+        }
+            <table width="100%" style="font-size:inherit" class="gst-table">
+                <tr>
+                    <td colspan="3"> <strong>Amount in Word: </strong>@ConvertNumbertoWords(Model.INV_Total) Only</td>
+                </tr>
+                <tr>
+                    <td colspan="3"><strong>Company GST No: </strong> @Model.FRM_.FRM_GST_No</td>
+                </tr>
+                <tr>
+                    <td colspan="3"><strong>Company's Bank Details </strong><br /></td>
+                </tr>
+                <tr>                   
+                    <td class="text-left" width="33%"> <strong>Bank Name:</strong>  @Model.FRM_.FRM_BankName</td>
+                    <td class="text-center" width="33%">  <strong> A/c No. :</strong>  @Model.FRM_.FRM_AccountNumber</td>
+                    <td class="text-right" width="33%"> <strong>IFSC Code:</strong>  @Model.FRM_.FRM_IFSC_Code</td>                    
+                </tr>
+                <tr>
+                    <td colspan="3"> <strong>Remark: </strong> @Model.INV_Remark</td>
+                </tr>
+            </table>
+        @*<div class="row" style="border:1px;border:medium">
             <div class="col-sm-12">
-                <strong>Amount in Word: </strong>Indian Rupees @ConvertNumbertoWords(Model.INV_Total) Only
+                <strong>Amount in Word: </strong>@ConvertNumbertoWords(Model.INV_Total) Only
             </div>
             <div class="col-sm-12">
                 <strong>Company GST No: </strong> @Model.FRM_.FRM_GST_No
@@ -206,12 +319,11 @@
                     </tbody>
                 </table>
             </div>
-
             <div class="col-sm-12">
-                <strong>Remark: </strong>
+                <strong>Remark: </strong> @Model.INV_Remark
                 <hr />
             </div>
-        </div>
+        </div>*@
         <div class="row">
             <div class="col-sm-12">
                 <p class="text-right"><strong> For @Model.FRM_.FRM_Name</strong> </p>
@@ -226,10 +338,10 @@
                 <table width="100%" style="font-size:inherit">
                     <tbody>
                         <tr>
-                            <td class="text-left" width="25%"><strong>Customer Seal and Signature: </strong></td>
-                            <td class="text-center" width="25%"> <strong>Prepared by: </strong></td>
-                            <td class="text-center" width="25%"> <strong>Verified by: </strong></td>
-                            <td class="text-right" width="25%"><strong>Propriator: </strong></td>
+                            <td class="text-left" width="25%"><strong>Customer Seal and Signature </strong></td>
+                            <td class="text-center" width="25%"> <strong>Prepared by </strong></td>
+                            <td class="text-center" width="25%"> <strong>Verified by </strong></td>
+                            <td class="text-right" width="25%"><strong>Propriator </strong></td>
                         </tr>
                     </tbody>
                 </table>
@@ -238,17 +350,11 @@
     </div>
     <div class="container">
         <div class="row">
-            @*<div class="col-sm-10 text-center">
-                    <span>Subject to Jurisdiction</span>
-                </div>
-                <div class="col-sm-2 text-right">
-                    <span>E & O.E</span>
-                </div>*@
             <div class="col-sm-12">
                 <table width="100%" style="font-size:inherit">
                     <tbody>
                         <tr>
-                            <td class="text-center" width="75%"><span>Subject to Jurisdiction</span></td>
+                            <td class="text-center" width="75%"><span><i>Subject to Jurisdiction</i></span></td>
                             <td class="text-right" width="25%"><span>E & O.E</span></td>
                         </tr>
                     </tbody>

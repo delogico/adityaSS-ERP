@@ -61,6 +61,7 @@ namespace RMERP.DAL.Models
         public double CLI_EPS_Rate { get; set; }
         public double? CLI_ESIC_Employer_Cont_Rate { get; set; }
         public int STA_Id { get; set; }
+        public decimal? CLI_MLWF_Contribution { get; set; }
 
         public Cities CITY_ { get; set; }
         public Firms FRM_ { get; set; }

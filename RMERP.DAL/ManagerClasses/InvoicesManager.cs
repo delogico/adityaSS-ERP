@@ -37,7 +37,7 @@ namespace RMERP.DAL.ManagerClasses
             return _context.Invoices.Include(m=>m.FRM_).ThenInclude(m=>m.STA_).Include(m=>m.CLI_).ThenInclude(m=>m.STA_).Include(m => m.CLI_).ThenInclude(m=>m.CITY_).Include(m=>m.Invoice_Concepts).Where(m=>m.INV_Id.Equals(INV_Id)).FirstOrDefault();
         }
         public int AddEditInvoice(Invoices invoice)
-        {
+        {            
             if (invoice.INV_Id > 0)
             {
                 _context.Invoices.Update(invoice);
