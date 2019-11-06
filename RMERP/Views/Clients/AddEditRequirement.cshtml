@@ -37,7 +37,7 @@
 </style>
 @section Breadcrumbs{
     <li class="breadcrumb-item">@Html.ActionLink("Clients", "Index", "Clients")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Client Info", "AddEditClients", "Clients", new { id = Model.CLI_Id })</li>    
+    <li class="breadcrumb-item">@Html.ActionLink("Client Info", "AddEditClients", "Clients", new { id = Model.CLI_Id })</li>
     <li class="breadcrumb-item">Add-Edit Requirement</li>
 }
 @section scripts{
@@ -68,6 +68,10 @@
                     }
                 }
             };
+
+            //$("#div_lumpsum_amount").hide();
+            //$("#div_service_change_basic").show();
+
             if (tab == "History" || tab == "ViewRequirement") {
                 $('select', 'form').attr('disabled', true).attr('readonly', true);
                 $('input', 'form').attr('disabled', true).attr('readonly', true);
@@ -75,7 +79,7 @@
             }
 
 
-            $('input[class="Allselection"]').click(function () {              
+            $('input[class="Allselection"]').click(function () {
                 if ($(this).prop("checked") == true) {
                     $("#divReqAllow_" + this.id).show();
                     addCheckbox(this.id);
@@ -91,6 +95,7 @@
             });
             var PFSelection = [];
             var ESICSelection = [];
+            var BillingSelection = [];
             var OTSelection = [];
             var OTDeductSelection = [];
             if ($("#CRI_PF_Formula").val() != "") {
@@ -110,6 +115,11 @@
                 }
 
             }
+            if ($("#CRI_Billing_ServiceCharge_Formula").val() != "") {
+                var Billing_Formula = $("#CRI_Billing_ServiceCharge_Formula").val();
+                BillingSelection = Billing_Formula.split("+");
+
+            }
             $(document).on("click", "INPUT[class^=PFselection]", function (event) {
                 if ($(this).prop("checked") == true) {
                     PFSelection.push($(this).prop('value'));
@@ -119,7 +129,7 @@
                 }
                 $("#CRI_PF_Formula").val(PFSelection.join("+"));
             });
-            $(document).on("click", "INPUT[class^=ESICselection]", function (event) {               
+            $(document).on("click", "INPUT[class^=ESICselection]", function (event) {
                 if ($(this).prop("checked") == true) {
                     ESICSelection.push($(this).prop('value'));
                 }
@@ -127,6 +137,15 @@
                     ESICSelection.splice(ESICSelection.indexOf($(this).prop('value')), 1)
                 }
                 $("#CRI_ESIC_Formula").val(ESICSelection.join("+"));
+            });
+            $(document).on("click", "INPUT[class^=Billingselection]", function (event) {
+                if ($(this).prop("checked") == true) {
+                    BillingSelection.push($(this).prop('value'));
+                }
+                else if ($(this).prop("checked") == false) {
+                    BillingSelection.splice(BillingSelection.indexOf($(this).prop('value')), 1)
+                }
+                $("#CRI_Billing_ServiceCharge_Formula").val(BillingSelection.join("+"));
             });
             $(document).on("click", "INPUT[class^=OTselection]", function (event) {
                 calculateFormula();
@@ -160,15 +179,17 @@
                 var containerEsic = $('#ESIClist');
                 var containerOT = $('#OTlist');
                 var containerDeductOT = $('#OTDeductlist');
+                var containerBilling = $('#Billinglist');
                 var short = $("#allAllowances_" + (parseInt(id) - 1) + "__allowance_ALL_Shortform");
-                var all = $("#allAllowances_" + (parseInt(id) - 1) + "__allowance_ALL_Title");                
+                var all = $("#allAllowances_" + (parseInt(id) - 1) + "__allowance_ALL_Title");
                 var id = 'PF_' + short.val();
                 container.append("<div class='col-md-12'><input type='checkbox' class='PFselection' id='" + id + "' value='" + short.val() + "' />" + all.val() + "</div>")
                 containerEsic.append("<div class='col-md-12'><input type='checkbox' class='ESICselection' id='" + id + "' value='" + short.val() + "' />" + all.val() + "</div>")
                 containerOT.append("<div class='col-md-12'><input type='checkbox' class='OTselection' id='" + id + "' value='" + short.val() + "' />" + all.val() + "</div>")
-                containerDeductOT.append("<div class='col-md-12'><input type='checkbox' class='OTDeductSelection' id='" + id + "' value='" + short.val() + "' />" + all.val() + "</div>")              
+                containerDeductOT.append("<div class='col-md-12'><input type='checkbox' class='OTDeductSelection' id='" + id + "' value='" + short.val() + "' />" + all.val() + "</div>")
+                containerBilling.append("<div class='col-md-12'><input type='checkbox' class='Billingselection' id='" + id + "' value='" + short.val() + "' />" + all.val() + "</div>")
             }
-            
+
         });
         $("input[id='rdo_OT_Payable']").click(function () {
             $("#divOTdifferently").hide();
@@ -198,7 +219,7 @@
             $('#rdo_OT_Fixed_Amount').val("False");
         });
         $('input[id="chkOutStation"]').click(function () {
-            
+
             if ($(this).prop("checked") == true) {
                 $("#divOutStaion").show();
                 var name = "OSL";
@@ -211,7 +232,7 @@
             }
         });
         $('input[id="chkNightshift"]').click(function () {
-           
+
             if ($(this).prop("checked") == true) {
                 $("#divNightshift").show();
                 var name = "NSL";
@@ -236,20 +257,20 @@
             }
         });
         $('input[id="chkPerformance"]').click(function () {
-            if ($(this).prop("checked") == true) {   
+            if ($(this).prop("checked") == true) {
                 var name = "PAL";
                 addCheckboxNewAllowance(name);
                 $("#CRI_Performance_Allowance").val("true");
             }
-            else if ($(this).prop("checked") == false) {              
+            else if ($(this).prop("checked") == false) {
                 $("#CRI_Performance_Allowance").val("false");
             }
-        });        
-        function addCheckboxNewAllowance(allowance) {           
+        });
+        function addCheckboxNewAllowance(allowance) {
             var container = $('#PFlist');
             var containerEsic = $('#ESIClist');
             var containerOT = $('#OTlist');
-            var containerDeductOT = $('#OTDeductlist');           
+            var containerDeductOT = $('#OTDeductlist');
             container.append("<div class='col-md-12'><input type='checkbox' class='PFselection' id='" + allowance + "' value='" + allowance + "' />" + allowanceName(allowance) + "</div>")
             containerEsic.append("<div class='col-md-12'><input type='checkbox' class='ESICselection' id='" + allowance + "' value='" + allowance + "' />" + allowanceName(allowance) + "</div>")
             containerOT.append("<div class='col-md-12'><input type='checkbox' class='OTselection' id='" + allowance + "' value='" + allowance + "' />" + allowanceName(allowance) + "</div>")
@@ -302,6 +323,22 @@
 
             }
         });
+
+        $("input[name='CRI_Billing_Type']").click(function () {
+            debugger;
+            var radioValue = $("input[name='CRI_Billing_Type']:checked").val();
+            if (radioValue == 1) {
+                $("#div_lumpsum_amount").show();
+                $("#div_service_change_basic").hide();
+            } else if (radioValue == 2) {
+                $("#div_lumpsum_amount").hide();
+                $("#div_service_change_basic").show();
+            }
+        });
+
+
+
+
     </script>
 
 
@@ -341,6 +378,7 @@
                         <li><a href="#SalaryAllowances" data-toggle="tab">Salary and Incentives <i class="fa"></i></a></li>
                         <li><a href="#Deduction" data-toggle="tab">Deduction <i class="fa"></i></a></li>
                         <li><a href="#OverTime" data-toggle="tab">Over Time <i class="fa"></i></a></li>
+                        <li><a href="#Billing" data-toggle="tab">Billing <i class="fa"></i></a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -1011,7 +1049,7 @@
                                                                     </div>
                                                                 }
                                                             }
-                                                        </div>                                                       
+                                                        </div>
                                                     </div>
 
                                                 </div>
@@ -1025,6 +1063,195 @@
                                         </div>
                                     </div>
                                 </div>
+
+                            </div>
+                        </div>
+                        <div id="Billing" class="tab-pane">
+                            @{
+                                string Bstyle1 = (Model.CRI_Billing_Type == (int)CRI_BILLING_TYPE.Lump_Sum_Amount ? "display:block" : "display:none");
+                                string Bstyle2 = (Model.CRI_Billing_Type == (int)CRI_BILLING_TYPE.Service_Change_Basic ? "display:block" : "display:none");
+                            }
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            @Html.RadioButtonFor(m => m.CRI_Billing_Type, (int)CRI_BILLING_TYPE.Lump_Sum_Amount, new { @id = "bill_" + (int)CRI_BILLING_TYPE.Lump_Sum_Amount })
+                                            @Html.Label("bill_" + (int)CRI_BILLING_TYPE.Lump_Sum_Amount, "Billing On Lump-Sum Amount Per Month Per Person", new { @Name = "CRI_Billing_Type" })
+                                        </div>
+                                        <div id="div_lumpsum_amount" style="@Bstyle1">
+                                            <div class="form-group">
+                                                <div class="col-md-5">
+                                                </div>
+                                                <div class="col-md-5  text-right">
+                                                    @Html.TextBoxFor(m => m.CRI_Billing_Amount, new { @class = "form-control" })
+                                                </div>
+                                                <div class="col-md-2  text-left">
+                                                    @Html.Raw("INR")
+                                                </div>
+
+                                                @Html.ValidationMessageFor(x => x.CRI_Billing_Amount, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            @Html.RadioButtonFor(m => m.CRI_Billing_Type, (int)CRI_BILLING_TYPE.Service_Change_Basic, new { @id = "bill_" + (int)CRI_BILLING_TYPE.Service_Change_Basic })
+                                            @Html.Label("bill_" + (int)CRI_BILLING_TYPE.Service_Change_Basic, "Billing On Service Change Basic", new { @Name = "CRI_Billing_Type" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12" id="div_service_change_basic" style="@Bstyle2">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <div id="Billinglist">
+                                                @{
+                                                    string[] arrBilling = null;
+                                                    if (Model.CRI_Billing_ServiceCharge_Formula != null)
+                                                    {
+                                                        arrBilling = Model.CRI_Billing_ServiceCharge_Formula.Split('+');
+                                                    }
+                                                }
+                                                <div class="col-md-3 text-right">
+                                                    @Html.TextBoxFor(m => m.CRI_Billing_ServiceCharge, new { @class = "form-control" })
+                                                </div>
+                                                <div class="col-md-1 text-left">
+                                                    @Html.Raw("%")
+                                                </div>
+                                                <div class="col-md-8">
+                                                </div>
+                                                <div class="col-md-12" style="padding-top: 20px;">
+                                                    <label>
+                                                        @Html.Label("", "On Formula", new { @class = "control-label" })
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    @if (arrBilling != null && arrBilling.Contains("BASIC"))
+                                                    {
+                                                        @Html.CheckBox("Billing_BASIC", new { @class = "Billingselection", @value = "BASIC", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("Billing_BASIC", new { @class = "Billingselection", @value = "BASIC" })
+                                                    }
+                                                    @Html.Raw("BASIC")
+                                                </div>
+                                                <div class="col-md-12">
+                                                    @if (arrBilling != null && arrBilling.Contains("DA"))
+                                                    {
+                                                        @Html.CheckBox("Billing_DA", new { @class = "Billingselection", @value = "DA", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("Billing_DA", new { @class = "Billingselection", @value = "DA" })
+                                                    }
+                                                    @Html.Raw("DA")
+                                                </div>
+                                                <div class="col-md-12">
+                                                    @if (arrBilling != null && arrBilling.Contains("HRA"))
+                                                    {
+                                                        @Html.CheckBox("Billing_HRA", new { @class = "Billingselection", @value = "HRA", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("Billing_HRA", new { @class = "Billingselection", @value = "HRA" })
+                                                    }
+                                                    @Html.Raw("HRA")
+                                                </div>
+                                                <div class="col-md-12">
+                                                    @if (arrBilling != null && arrBilling.Contains("OT"))
+                                                    {
+                                                        @Html.CheckBox("Billing_OT", new { @class = "Billingselection", @value = "OT", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("Billing_OT", new { @class = "Billingselection", @value = "OT" })
+                                                    }
+                                                    @Html.Raw("OT")
+                                                </div>
+
+                                                @if (Model.CRI_OutStation_Allowance == true)
+                                                {
+                                                    <div class="col-md-12">
+                                                        @if (arrBilling != null && arrBilling.Contains("OSL"))
+                                                        {
+                                                            @Html.CheckBox("Billing_OutStation", new { @class = "Billingselection", @value = "OSL", @checked = "checked" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBox("Billing_OutStation", new { @class = "Billingselection", @value = "OSL" })
+                                                        }
+                                                        @Html.Raw("OutStation Allowance")
+                                                    </div>
+                                                }
+                                                @if (Model.CRI_Attendance_Allowance == true)
+                                                {
+                                                    <div class="col-md-12">
+                                                        @if (arrBilling != null && arrBilling.Contains("AAL"))
+                                                        {
+                                                            @Html.CheckBox("Billing_Attendance", new { @class = "Billingselection", @value = "AAL", @checked = "checked" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBox("Billing_Attendance", new { @class = "Billingselection", @value = "AAL" })
+                                                        }
+                                                        @Html.Raw("Attendance Allowance")
+                                                    </div>
+                                                }
+                                                @if (Model.CRI_Nightshift_Allowance == true)
+                                                {
+                                                    <div class="col-md-12">
+                                                        @if (arrBilling != null && arrBilling.Contains("NSL"))
+                                                        {
+                                                            @Html.CheckBox("Billing_Nightshift", new { @class = "Billingselection", @value = "NSL", @checked = "checked" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBox("Billing_Nightshift", new { @class = "Billingselection", @value = "NSL" })
+                                                        }
+                                                        @Html.Raw("Nightshift Allowance")
+                                                    </div>
+                                                }
+                                                @if (Model.CRI_Performance_Allowance == true)
+                                                {
+                                                    <div class="col-md-12">
+                                                        @if (arrBilling != null && arrBilling.Contains("Performance"))
+                                                        {
+                                                            @Html.CheckBox("Billing_Performance", new { @class = "Billingselection", @value = "PAL", @checked = "checked" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBox("Billing_Performance", new { @class = "Billingselection", @value = "PAL" })
+                                                        }
+                                                        @Html.Raw("Performance Allowance")
+                                                    </div>
+                                                }
+
+                                                @for (var i = 0; i < Model.allAllowances.Count; i++)
+                                                {
+                                                    if (Model.allAllowances[i].flagClientRequirement == true)
+                                                    {
+                                                        <div class="col-md-12">
+                                                            @if (arrBilling != null && arrBilling.Contains(Model.allAllowances[i].allowance.ALL_Shortform))
+                                                            {
+                                                                @Html.CheckBox(Model.allAllowances[i].allowance.ALL_Shortform, new { @class = "Billingselection", @Value = Model.allAllowances[i].allowance.ALL_Shortform, @checked = "checked" })
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.CheckBox(Model.allAllowances[i].allowance.ALL_Shortform, new { @class = "Billingselection", @Value = Model.allAllowances[i].allowance.ALL_Shortform })
+                                                            }
+                                                            @Html.Raw(@Model.allAllowances[i].allowance.ALL_Title)
+                                                        </div>
+                                                    }
+                                                }
+
+                                            </div>
+                                            @Html.TextBoxFor(m => m.CRI_Billing_ServiceCharge_Formula, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+
 
                             </div>
                         </div>

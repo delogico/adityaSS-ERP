@@ -106,6 +106,15 @@ namespace RMERP.DAL.ViewModel
         public bool CRI_Nightshift_Allowance { get; set; }
         public decimal? CRI_Nightshift_Allowance_Rate { get; set; }
 
+        [Display(Name = "Billing Type")]
+        public int CRI_Billing_Type { get; set; }
+        [Display(Name = "Billing Amount")]
+        public decimal? CRI_Billing_Amount { get; set; }
+        [Display(Name = "Billing Service Charge")]
+        public double? CRI_Billing_ServiceCharge { get; set; }
+        [Display(Name = "Billing Service Charge Formula")]
+        public string CRI_Billing_ServiceCharge_Formula { get; set; }
+
         public string Edit_History { get; set; }
         public DateTime LastRecordRegOn { get; set; }
 

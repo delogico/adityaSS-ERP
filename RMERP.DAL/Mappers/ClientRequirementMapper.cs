@@ -64,6 +64,12 @@ namespace RMERP.DAL.Mappers
                 clientRequirementVM.HRAselection = true;
             else if(requirement.CRI_HRA_Percentage !=null)
                 clientRequirementVM.HRAselection = false;
+
+            clientRequirementVM.CRI_Billing_Amount = requirement.CRI_Billing_Amount;
+            clientRequirementVM.CRI_Billing_ServiceCharge = requirement.CRI_Billing_ServiceCharge;
+            clientRequirementVM.CRI_Billing_ServiceCharge_Formula = requirement.CRI_Billing_ServiceCharge_Formula;
+            clientRequirementVM.CRI_Billing_Type = requirement.CRI_Billing_Type;
+
             return clientRequirementVM;
         }
 
@@ -112,6 +118,11 @@ namespace RMERP.DAL.Mappers
                 requirement.CRI_HRA_Fixed = requirementVM.CRI_HRA_Fixed;
             else if(requirementVM.HRAselection == false)
                 requirement.CRI_HRA_Percentage = requirementVM.CRI_HRA_Percentage;
+
+            requirement.CRI_Billing_Amount = requirementVM.CRI_Billing_Amount;
+            requirement.CRI_Billing_ServiceCharge = requirementVM.CRI_Billing_ServiceCharge;
+            requirement.CRI_Billing_ServiceCharge_Formula = requirementVM.CRI_Billing_ServiceCharge_Formula;
+            requirement.CRI_Billing_Type = requirementVM.CRI_Billing_Type;
 
             return requirement;
         }

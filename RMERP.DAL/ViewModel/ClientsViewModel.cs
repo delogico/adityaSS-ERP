@@ -95,6 +95,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "State")]
         public int STA_Id { get; set; }
         [Display(Name = "Zipcode")]
+        [Required(ErrorMessage = "ZipCode is required")]
         public int CLI_Invoicing_ZipCode { get; set; }
         [Display(Name = "Location")]
         public string CLI_Invoicing_Location { get; set; }
@@ -123,6 +124,9 @@ namespace RMERP.DAL.ViewModel
 
         [Display(Name = "Employer ESIC Contribution Rate(%)")]
         public double CLI_ESIC_Employer_Cont_Rate { get; set; }
+
+        [Display(Name = "Employer MLWF Contribution(INR)")]
+        public decimal CLI_MLWF_Contribution { get; set; }
     }
     public class ParametersClientsModel
     {

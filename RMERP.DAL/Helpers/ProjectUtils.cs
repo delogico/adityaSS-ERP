@@ -131,6 +131,13 @@ namespace RMERP.DAL.Helpers
             [StringValue("Duplicate IP")]
             Duplicate_IP = 13
         }
+        public enum CRI_BILLING_TYPE
+        {
+            [StringValue("Billing On Lump-Sum Amount Per Month Per Person")]
+            Lump_Sum_Amount = 1,
+            [StringValue("Billing On Service Change Basic")]
+            Service_Change_Basic = 2,
+        }
         public enum INVOICE_TEMPLATE_TYPE
         {
             MONTHLY_TOTAL_DAYS_FROM_OUR_EMPLOYEES = 10,

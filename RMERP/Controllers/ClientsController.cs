@@ -171,6 +171,8 @@ namespace RMERP.Controllers
                     cv.clientsModel.CLI_ESIC_Employer_Cont_Rate = clients.CLI_ESIC_Employer_Cont_Rate.Value;
                 cv.clientsModel.CLI_EPF_Rate = clients.CLI_EPF_Rate;
                 cv.clientsModel.CLI_EPS_Rate = clients.CLI_EPS_Rate;
+                if(clients.CLI_MLWF_Contribution!=null)
+                    cv.clientsModel.CLI_MLWF_Contribution = clients.CLI_MLWF_Contribution.Value;
 
                 cv.contacts = ClientContactMapper.mapContacts(clientsManager.GetClientContactsListById(id).ToList());
                 cv.requirements = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsofClient(id, true).ToList());
@@ -476,6 +478,14 @@ namespace RMERP.Controllers
                 if (!clientRequirementVM.CRI_Nightshift_Allowance)
                 {
                     clientRequirementVM.CRI_Nightshift_Allowance_Rate = 0;
+                }
+                if (clientRequirementVM.CRI_Billing_Type == (int)ProjectUtils.CRI_BILLING_TYPE.Lump_Sum_Amount)
+                {
+                    clientRequirementVM.CRI_Billing_ServiceCharge_Formula = null;
+                    clientRequirementVM.CRI_Billing_ServiceCharge = null;
+                }else if (clientRequirementVM.CRI_Billing_Type == (int)ProjectUtils.CRI_BILLING_TYPE.Service_Change_Basic)
+                {
+                    clientRequirementVM.CRI_Billing_Amount = null;                    
                 }
                 cr = ClientRequirementMapper.mapMeModel(clientRequirementVM);
                 res = clientsManager.AddEditRequirement(cr, lst, sessionUtils.GetLoggedAdminID());
