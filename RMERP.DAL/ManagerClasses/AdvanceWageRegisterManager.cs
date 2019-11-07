@@ -49,7 +49,7 @@ namespace RMERP.DAL.ManagerClasses
                     List<Wage_Register_Advances> register_Advances = _context.Wage_Register_Advances.Where(m => m.EMP_Id.Equals(EMP_id) && m.WAD_Status.Equals(false)).ToList();
                     register_Advances.ForEach(m => m.WAD_Status=true);
                    
-                    List<Employee_Advance> employee_Advances = _context.Employee_Advance.Where(m => m.EMP_Id.Equals(EMP_id) && m.ADV_Status.Equals(false)).ToList();
+                    List<Employee_Advance> employee_Advances = _context.Employee_Advance.Where(m => m.EMP_Id.Equals(EMP_id) && m.ADV_Status.Equals(false) && m.ADV_RegisteredOn.Date<=WAG_Month.Date).ToList();
                     employee_Advances.ForEach(m => { m.ADV_Status = true;m.WAG_Id_Closed_On = WAG_Id; });
 
                     wra.WAD_Status = true;

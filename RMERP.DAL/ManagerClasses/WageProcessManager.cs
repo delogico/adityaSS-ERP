@@ -161,5 +161,20 @@ namespace RMERP.DAL.ManagerClasses
         {
             return true;
         }
+        public IEnumerable<Wage_Process> getDistinctWageMonths(int FRM_Id)
+        {
+            IEnumerable<Wage_Process> list = null;
+            if (FRM_Id > 0)
+            {
+                list = _context.Wage_Process.Where(m => m.FRM_Id == FRM_Id).Include(m => m.Attendance).Include(m => m.Wage_Process_Clients).OrderBy(m => m.WAG_Month).ToList();
+
+            }
+            else
+            {
+                list = _context.Wage_Process.Include(m => m.Attendance).Include(m => m.Wage_Process_Clients).OrderBy(m => m.WAG_Month).ToList();
+
+            }
+            return list;
+        }
     }
 }

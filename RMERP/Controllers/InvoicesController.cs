@@ -110,7 +110,7 @@ namespace RMERP.Controllers
                 invoiceVM = InvoiceMapper.mapMe(invoice);
                 invoiceVM.totTAX = invoice.INV_IGST_Total.Value + invoice.INV_CGST_Total.Value + invoice.INV_SGST_Total.Value;
                 invoiceVM.All_INC_Total = invoice.Invoice_Concepts.Sum(m => m.INC_Total);
-            }            
+            }           
             return View(invoiceVM);
         }
         [HttpPost]
@@ -150,8 +150,9 @@ namespace RMERP.Controllers
         }
 
 
-        public ActionResult GetInvoiceTemplate(int CLI_Id)
+        public ActionResult GetInvoiceTemplate(int CLI_Id,DateTime INV_Date)
         {
+            InvoiceTypeVM invoiceTypeVM = new InvoiceTypeVM();
             ClientsManager clientsManager = new ClientsManager(_context);
             WageRegisterManager registerManager = new WageRegisterManager(_context);
             WageProcessManager wagManager = new WageProcessManager(_context);
@@ -161,20 +162,46 @@ namespace RMERP.Controllers
             ViewBag.InvoiceType = from action in INVOICE_TEMPLATE_TYPE
                                   select new SelectListItem
                                   {
-                                      Text = ProjectUtils.GetStringValue(action),
+                                      Text = GetStringValue(action),
                                       Value = ((int)action).ToString()
                                   };
 
             int FRM_Id = clientsManager.GetClientById(CLI_Id).FRM_Id;
-            var cc = wagManager.getWageProcessList(FRM_Id);
+            var cc = wagManager.getDistinctWageMonths(FRM_Id);
+
             ViewBag.Months = from c in cc
                              select new SelectListItem
                              {
                                  Text = c.WAG_Month.ToString("MMM-yyyy"),
                                  Value = c.WAG_Id.ToString()
                              };
-            ViewBag.Designation = registerManager.GetWageRegistersForInvoice(CLI_Id).Select(m => m.CRI_.DES_).Distinct();
-            return PartialView("_InvoiceType");
+            DateTime Prev_INV_Date = INV_Date.AddMonths(-1);
+            Wage_Process PrevWage = cc.Where(m => m.WAG_Month.Month == Prev_INV_Date.Month && m.WAG_Month.Year == Prev_INV_Date.Year).FirstOrDefault();           
+            invoiceTypeVM.WAG_Id = PrevWage.WAG_Id;        
+            return PartialView("_InvoiceType", invoiceTypeVM);
+        }
+        public JsonResult GetRequirenmentTypes(int Wag_Id, int CLI_Id)
+        {            
+            return Json(new SelectList(GetRequirements(Wag_Id, CLI_Id), "Value", "Text"));
+        }
+        private List<SelectListItem> GetRequirements(int Wag_Id, int CLI_Id)
+        {           
+            ClientsManager clientsManager = new ClientsManager(_context);
+            WageProcessManager wagManager = new WageProcessManager(_context);
+            List<SelectListItem> Requirements = new List<SelectListItem>();
+            DateTime date = wagManager.getWageProcessById(Wag_Id).WAG_Month;
+            List<Client_Requirements> list = clientsManager.getClientRequirements(date, CLI_Id);
+            foreach (var item in list.Where(m => m.CRI_Billing_Type == (int)CRI_BILLING_TYPE.Lump_Sum_Amount && m.CRI_Billing_Amount != null).Select(m => new { m.CRI_Billing_Amount }).Distinct())
+            {
+                string Text = "CR With " + item.CRI_Billing_Amount + " Fixed Amount";
+                Requirements.Add(new SelectListItem { Text = Text, Value = "fixed_"+item.CRI_Billing_Amount.ToString() });
+            }
+            foreach (var item in list.Where(m => m.CRI_Billing_Type == (int)CRI_BILLING_TYPE.Service_Change_Basic && m.CRI_Billing_ServiceCharge != null).Select(m => new { m.CRI_Billing_ServiceCharge }).Distinct())
+            {
+                string Text = "CR With Service Charge Of " + item.CRI_Billing_ServiceCharge + "%";
+                Requirements.Add(new SelectListItem { Text = Text, Value = "service_"+item.CRI_Billing_ServiceCharge.ToString() });
+            }
+            return Requirements;
         }
         public IActionResult DownloadInvoice(int INV_Id,int ActionId)
         {
@@ -283,20 +310,36 @@ namespace RMERP.Controllers
             return PartialView("_InvoiceList", invoiceVMs);
         }
 
-        public Invoice_Concepts GetInvoiceData(int CLI_Id,int Type,int WAG_Id,int DES_Id)
+        public Invoice_Concepts GetInvoiceData(int CLI_Id,string Type_Id,int WAG_Id,int Type)
         {
             InvoicesManager invoicesManager = new InvoicesManager(_context);
             Invoice_Concepts concept = new Invoice_Concepts();
-            switch (Type)
+            if (!string.IsNullOrEmpty(Type_Id))
             {
-                case (int)INVOICE_TEMPLATE_TYPE.MONTHLY_TOTAL_DAYS_FROM_OUR_EMPLOYEES : //MONTHLY_TOTAL_DAYS_FROM_OUR_EMPLOYEES
-                    concept= invoicesManager.GetTotalDaysInvoiceData(CLI_Id, WAG_Id, DES_Id);
-                    break;
-                default:
-                    concept = invoicesManager.GetTotalDaysInvoiceData(CLI_Id, WAG_Id, DES_Id);
-                    concept.INC_Description = "Default";
-                    break;
+                if (Type_Id.Split("_")[0] == "service")
+                {
+                    int BillingType = (int)CRI_BILLING_TYPE.Service_Change_Basic;
+                    var CRI_Billing_ServiceCharge = Type_Id.Split("_")[1];
+                    concept = invoicesManager.Get_Billing_Data_T1(CLI_Id, WAG_Id, Convert.ToDouble(CRI_Billing_ServiceCharge),0, BillingType);
+                }
+                else
+                {                    
+                    int BillingType = (int)CRI_BILLING_TYPE.Lump_Sum_Amount;
+                    var CRI_Billing_Amount = Type_Id.Split("_")[1];
+                    concept = invoicesManager.Get_Billing_Data_T1(CLI_Id, WAG_Id, 0,Convert.ToDecimal(CRI_Billing_Amount), BillingType);
+                }
             }
+            
+            //switch (Type)
+            //{
+            //    case (int)INVOICE_TEMPLATE_TYPE.COMPANY_CONTRIBUTION_PF_ESIC :
+            //        concept= invoicesManager.GetTotalDaysInvoiceData(CLI_Id, WAG_Id, DES_Id);
+            //        break;
+            //    default:
+            //        concept = invoicesManager.GetTotalDaysInvoiceData(CLI_Id, WAG_Id, DES_Id);
+            //        concept.INC_Description = "Default";
+            //        break;
+            //}
             return concept;
         }
        

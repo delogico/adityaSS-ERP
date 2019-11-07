@@ -224,14 +224,13 @@
         });
         </script>
     };
-    <script>
+        <script>
         $(document).ready(function () {
             var allEditors = document.querySelectorAll('.desc');
             for (var i = 0; i < allEditors.length; ++i) {
                 ClassicEditor.create(allEditors[i]);
             };
-            $(document).on('change', '.calculation', function () {
-                debugger;
+            $(document).on('change', '.calculation', function () {               
                 var All_INC_Total = 0;
                 $("#tblIncidenceConcepts TBODY TR").each(function () {
                     var row = $(this);
@@ -241,8 +240,34 @@
                 $("#All_INC_Total").val(All_INC_Total);
                 calculateGST();
             });
-        });
 
+            $(document).on("change", "SELECT[class^=Month_1]", function (event) {                
+                var WAG_Id = $("#month_0").val();
+                var CLI_Id = $("#CLI_Id").val();              
+                $(".drpType").empty();
+                GetRequirenmentTypes(WAG_Id, CLI_Id);
+                return false;
+            });
+            
+        });
+            function GetRequirenmentTypes(WAG_Id, CLI_Id) {                
+                var Url = siteUrl + "Invoices/GetRequirenmentTypes?Wag_Id=" + WAG_Id + "&CLI_Id=" + CLI_Id;
+                $.ajax({
+                    type: 'POST',
+                    url: Url, 
+                    dataType: 'json',                   
+                    success: function (Types) {
+                        debugger;
+                        $.each(Types, function (i, Type) {
+                            $(".drpType").append('<option value="' + Type.value + '">' +
+                                Type.text + '</option>');                            
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve Type.' + ex);
+                    }
+                });
+            };
         var DELAY = 700,
             clicks = 0,
             timer = null;
@@ -268,7 +293,8 @@
         function openInvoiceTemplate() {
             $(".modal-backdrop").removeClass("modal-backdrop").addClass("modal");
             var CLI_Id = $("#CLI_Id").val();
-            var Url = siteUrl + "Invoices/GetInvoiceTemplate?CLI_Id=" + CLI_Id;
+            var INV_Date = $("#INV_Date").val();
+            var Url = siteUrl + "Invoices/GetInvoiceTemplate?CLI_Id=" + CLI_Id + "&INV_Date=" + INV_Date;
             $.ajax({
                 type: "GET",
                 url: Url,
@@ -278,19 +304,29 @@
                     $('#InvoiceTypeModal').hide();
                 },
                 success: function (data) {
-                    $('#invoiceTemplate').html(data);
-                    $('#InvoiceTypeModal').modal('show');
+                    debugger;
+                    $('#invoiceTemplate').html(data);                   
                     $("#loading-image").hide();
+                    //var items = "<option value='0'>Select Type</option>";
+                    //var WAG_Id = $("#WAG_Id").val();
+                    //var CLI_Id = $("#CLI_Id").val();
+                    //$(".drpType").html(items);
+                    //if (WAG_Id != "0" || WAG_Id != "" || typeof WAG_Id != 'undefined') {
+                    //    GetRequirenmentTypes(WAG_Id, CLI_Id);
+                    //    return false;
+                    //}                       
+                    $('#InvoiceTypeModal').modal('show');
                 }
             })
         };
         function FillData(id) {
-            var Type = $("#type_id_" + id).val();
+            debugger;
+            var Type_Id = $("#type_" + id).val();
             var WAG_Id = $("#month_" + id).val();
             var CLI_Id = $("#CLI_Id").val();
-            var DES_Id = $("#designation_" + id).val();
+            var Type = 0;
             if (CLI_Id != "") {
-                var Url = siteUrl + "Invoices/GetInvoiceData?CLI_Id=" + CLI_Id + "&Type=" + Type + "&WAG_Id=" + WAG_Id + "&DES_Id=" + DES_Id;
+                var Url = siteUrl + "Invoices/GetInvoiceData?CLI_Id=" + CLI_Id + "&Type_Id=" + Type_Id + "&WAG_Id=" + WAG_Id + "&Type=" + Type;
                 $.ajax({
                     type: "GET",
                     url: Url,
@@ -438,5 +474,5 @@
             });
         });
 
-    </script>
+        </script>
 }

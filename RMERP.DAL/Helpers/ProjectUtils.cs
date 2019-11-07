@@ -140,7 +140,9 @@ namespace RMERP.DAL.Helpers
         }
         public enum INVOICE_TEMPLATE_TYPE
         {
-            MONTHLY_TOTAL_DAYS_FROM_OUR_EMPLOYEES = 10,
+            CONTRACT_BILL_FOR_PROVIDING_FACILITY_SERVICES=1,
+            COMPANY_CONTRIBUTION_PF_ESIC=2,
+            FULL_AND_FINAL_SETTLEMENT=3
         }
         public enum Month
         {
@@ -605,6 +607,11 @@ namespace RMERP.DAL.Helpers
         {
             DateTime lastDate = new DateTime(date.Year, date.Month, 1).AddMonths(1).AddDays(-1);
             return lastDate;
+        }
+        public static DateTime GetFirstDateOfMonth(DateTime date)
+        {
+            DateTime firstDate = new DateTime(date.Year, 1, 1);
+            return firstDate;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using RMERP.DAL.Models;
 
 namespace RMERP.DAL.ViewModel
@@ -77,5 +78,9 @@ namespace RMERP.DAL.ViewModel
         public int hdnId { get; set; }
         public Invoices INV_ { get; set; }
     }
-    
+    public class InvoiceTypeVM
+    {
+        public int WAG_Id { get; set; }
+        public int Type { get; set; }
+    }
 }

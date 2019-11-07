@@ -339,7 +339,7 @@ namespace RMERP.DAL.ManagerClasses
                 client.CLI_ESIC_Employer_Cont_Rate = clients.CLI_ESIC_Employer_Cont_Rate;
                 client.CLI_EPF_Rate = clients.CLI_EPF_Rate;
                 client.CLI_EPS_Rate = clients.CLI_EPS_Rate;
-
+                client.CLI_MLWF_Contribution = clients.CLI_MLWF_Contribution;
                 _contaxt.Clients.Update(client);
                 _contaxt.SaveChanges();
             }
@@ -726,6 +726,30 @@ namespace RMERP.DAL.ManagerClasses
             return cliList.ToList();
         }
 
-        
+        public List<Client_Requirements> getClientRequirements(DateTime date,int CLI_Id)
+        {           
+            List<Client_Requirements> cli_Req_List= new List<Client_Requirements>();
+            DateTime LastDate = ProjectUtils.GetLastDateOfMonth(date);
+            List<Client_Requirements> client_Requirements = _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.CRI_RegisteredOn.Date <= LastDate.Date).OrderByDescending(m => m.CRI_RegisteredOn).ToList();
+            
+            var q = from t in client_Requirements
+                    group t by t.DES_Id
+                        into g
+                    select new
+                    {
+                        DES_Id = g.Key,
+                        CRI_RegisteredOn = (from t2 in g select t2.CRI_RegisteredOn).Max(),
+                        CRI_Id=g.Where(m=>m.DES_Id==g.Key && m.CRI_RegisteredOn== (from t2 in g select t2.CRI_RegisteredOn).Max()).OrderByDescending(m=>m.CRI_RegisteredOn).First().CRI_Id
+                    };
+
+            var CRI_List = from cr in client_Requirements
+                       where q.Select(m=>m.CRI_Id).Contains(cr.CRI_Id)
+                       select cr;
+
+            return CRI_List.ToList();
+        }
+
+
+
     }
 }

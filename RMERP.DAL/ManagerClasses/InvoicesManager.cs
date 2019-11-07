@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RMERP.DAL.App_Code;
+using RMERP.DAL.Helpers;
 using RMERP.DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -104,5 +104,68 @@ namespace RMERP.DAL.ManagerClasses
             invoice_Concept.INC_Total = Convert.ToDecimal(totalPayableDay * list.Select(m => m.EMP_Id).Count());
             return invoice_Concept;
         }
+
+        public Invoice_Concepts Get_Billing_Data_T1(int CLI_Id, int WAG_Id, double CRI_Billing_ServiceCharge,decimal CRI_Billing_Amount, int BillingType)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context);
+            WageProcessManager processManager = new WageProcessManager(_context);            
+            Invoice_Concepts invoice_Concept = new Invoice_Concepts();
+            Clients client = clientsManager.GetClientById(CLI_Id);
+            List<Wage_Register> list = _context.Wage_Register.Include(m=>m.WAG_).Include(m => m.CRI_).ThenInclude(m=>m.DES_).Where(m => m.WAG_Id==WAG_Id && m.CLI_Id.Equals(CLI_Id) && m.CRI_.CRI_Billing_Type==BillingType && m.CRI_.CRI_Billing_ServiceCharge==CRI_Billing_ServiceCharge).ToList();
+            decimal INC_Total = list.Select(m => m.WAR_FinalTotal).Sum();
+            decimal HRA = (INC_Total * 5)/ 100;
+            decimal ServiceCharge = (INC_Total * Convert.ToDecimal(CRI_Billing_ServiceCharge)) / 100;
+            decimal MLWF = (client.CLI_MLWF_Contribution!=null? client.CLI_MLWF_Contribution.Value : 0);
+            int Nos = list.Where(m=>m.CRI_.DES_.DES_Exclude_LWF==false).Select(m => m.EMP_Id).Count();
+
+            Wage_Process wage = list[0].WAG_;
+            DateTime startDate = DateTime.Now;
+            DateTime EndDate = DateTime.Now;
+            if (client.CLI_Att_MonthReal.Value)
+            {
+                //startDate= client.CLI_Att_Month_Start.
+                //Real
+            }
+            else
+            {
+                //Custmize
+            }
+            
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<b>Contract Receipt</b></br><i>");
+            sb.AppendLine("Contract Bill For Providing Security Service</br>");
+            if (BillingType == (int)ProjectUtils.CRI_BILLING_TYPE.Service_Change_Basic)
+            {
+                sb.Append("For The Month Of " + wage.WAG_Month.ToString("MMM-yyyy") + "</br>");
+                sb.Append("(A) Salary Wages Including HRA @5% = " + HRA + "/-</br>");
+                sb.Append("Extra Work Wages and Upkeep Allowances");
+                sb.Append("(B) Service Charges @ 12%= " + ServiceCharge + "/-</br>");
+
+                if (wage.WAG_Month.Month == (int)ProjectUtils.Month.June || wage.WAG_Month.Month == (int)ProjectUtils.Month.December)
+                {
+                    if (MLWF != 0)
+                    {
+                        sb.Append("(C) MLWF Contribution </br>");
+                        sb.Append("[Rs." + MLWF + " x " + Nos + " Nos = " + (MLWF * Nos) + "/-]");
+                    }
+                }
+
+                sb.Append("</i>");
+            }
+            else
+            {
+                
+               
+                sb.Append("From");
+            }
+            
+
+            invoice_Concept.INC_Description =sb.ToString();
+            invoice_Concept.INC_Total = INC_Total;
+            return invoice_Concept;
+        }
+
+
     }
 }
