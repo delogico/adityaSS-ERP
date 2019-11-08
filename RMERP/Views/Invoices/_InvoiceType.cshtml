@@ -15,7 +15,7 @@
                 <input type="hidden" name="USR_Id" id="USR_Id" value="" />
                 <div class="form-group table">
                     <table class="table table-hover">
-                        @Html.HiddenFor(m=>m.WAG_Id)
+                        @*@Html.HiddenFor(m=>m.WAG_Id)*@
                         @{
                             IEnumerable<ProjectUtils.INVOICE_TEMPLATE_TYPE>
                                 INVOICE_TEMPLATE_TYPES = Enum.GetValues(typeof(ProjectUtils.INVOICE_TEMPLATE_TYPE))
@@ -32,34 +32,46 @@
                                     {
                                         <span>
                                             Contact Bill For Provinding Facility Services For Month
-                                            @Html.DropDownListFor(m => m.WAG_Id, new SelectList(ViewBag.Months, "Value", "Text"), new { @id = "month_" + i, @class = "Month_1" })
-                                            And For Type                     
-                                            @Html.DropDownListFor(m=>m.Type, new SelectList(string.Empty, "Value", "Text"), "Select Type", new { @id = "type_" + i,@class = "drpType" })
+                                            @Html.DropDownList("WAG_Id", new SelectList(ViewBag.Months, "Value", "Text"), new { @id = "month_" + i, @class = "Month_0" })
+                                            And For Type
+                                            @Html.DropDownListFor(m => m.Type, new SelectList(string.Empty, "Value", "Text"), "Select Type", new { @id = "type_" + i, @class = "drpType" })
 
                                         </span>
                                     }
-                                    else if (INVOICE_TEMPLATE_TYPES.ToList()[i] == ProjectUtils.INVOICE_TEMPLATE_TYPE.COMPANY_CONTRIBUTION_PF_ESIC)
+                                    else if (INVOICE_TEMPLATE_TYPES.ToList()[i] == ProjectUtils.INVOICE_TEMPLATE_TYPE.COMPANY_CONTRIBUTION_PF)
                                     {
                                         <span>
-                                            Company Contribution For PF & ESIC For Month
-                                            @Html.DropDownListFor(m => m.WAG_Id, new SelectList(ViewBag.Months, "Value", "Text"), new { @id = "month1_" + i, @class = "Month_2" })
+                                            Company Contribution For PF Of Month
+                                            @Html.DropDownListFor(m => m.WAG_Id, new SelectList(ViewBag.Months, "Value", "Text"), new { @id = "month1_" + i, @class = "Month_1" })
+                                        </span>
+                                    }
+                                    else if (INVOICE_TEMPLATE_TYPES.ToList()[i] == ProjectUtils.INVOICE_TEMPLATE_TYPE.COMPANY_CONTRIBUTION_ESIC)
+                                    {
+                                        <span>
+                                            Company Contribution For ESIC Of Month
+                                            @Html.DropDownListFor(m => m.WAG_Id, new SelectList(ViewBag.Months, "Value", "Text"), new { @id = "month2_" + i, @class = "Month_2" })
                                         </span>
                                     }
                                     else if (INVOICE_TEMPLATE_TYPES.ToList()[i] == ProjectUtils.INVOICE_TEMPLATE_TYPE.FULL_AND_FINAL_SETTLEMENT)
                                     {
                                         <span>
                                             Full & Final Settlement Of Left Employees
-                                            @Html.DropDownListFor(m => m.WAG_Id, new SelectList(ViewBag.Months, "Value", "Text"), new { @id = "month2_" + i, @class = "Month_3" })
+                                            @Html.DropDownList("Left_EMP_Id", new SelectList(ViewBag.LeftEmps, "EMP_Id", "EMP_FullName", "Select Employee"), new { @multiple = "multiple" })                                           
                                         </span>
-                                    }
+                                    }                                    
 
                                 </td>
                                 <td>
                                     <a class="btn btn-xs btn-primary" onclick="FillData(@i)" title="Add">Select</a>
                                 </td>
                             </tr>
-
                         }
+                            <tr>
+                                <td><span>Manual</span></td>
+                                <td>
+                                    <a class="btn btn-xs btn-primary" onclick="FillData(999)" title="Add">Select</a>
+                                </td>
+                            </tr>
                     </table>
                 </div>
 

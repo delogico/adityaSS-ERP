@@ -176,8 +176,15 @@ namespace RMERP.Controllers
                                  Value = c.WAG_Id.ToString()
                              };
             DateTime Prev_INV_Date = INV_Date.AddMonths(-1);
-            Wage_Process PrevWage = cc.Where(m => m.WAG_Month.Month == Prev_INV_Date.Month && m.WAG_Month.Year == Prev_INV_Date.Year).FirstOrDefault();           
-            invoiceTypeVM.WAG_Id = PrevWage.WAG_Id;        
+            Wage_Process PrevWage = cc.Where(m => m.WAG_Month.Month == Prev_INV_Date.Month && m.WAG_Month.Year == Prev_INV_Date.Year).FirstOrDefault();
+            if (PrevWage != null)
+            {
+                invoiceTypeVM.WAG_Id = PrevWage.WAG_Id;
+            }            
+           
+
+            ViewBag.LeftEmps = EmployeesMapper.MapEmployees(registerManager.GetWageRegistersForInvoice(CLI_Id).Where(m=>m.EMP_.EMP_IsActive.Equals(false)).Select(m=>m.EMP_).ToList()); 
+
             return PartialView("_InvoiceType", invoiceTypeVM);
         }
         public JsonResult GetRequirenmentTypes(int Wag_Id, int CLI_Id)
@@ -310,7 +317,32 @@ namespace RMERP.Controllers
             return PartialView("_InvoiceList", invoiceVMs);
         }
 
-        public Invoice_Concepts GetInvoiceData(int CLI_Id,string Type_Id,int WAG_Id,int Type)
+        public Invoice_Concepts GetInvoiceData(int CLI_Id,string Type_Id,int WAG_Id,int Type, string EMPs)
+        {
+            
+            Invoice_Concepts concept = new Invoice_Concepts();                        
+            switch (Type)
+            {
+                case (int)INVOICE_TEMPLATE_TYPE.CONTRACT_BILL_FOR_PROVIDING_FACILITY_SERVICES:
+                    concept = Get_Billing_Data_T1(CLI_Id,Type_Id,WAG_Id);
+                    break;
+                case (int)INVOICE_TEMPLATE_TYPE.COMPANY_CONTRIBUTION_PF:
+                    concept = Get_Billing_Data_T2_PF(CLI_Id, WAG_Id);
+                    break;
+                case (int)INVOICE_TEMPLATE_TYPE.COMPANY_CONTRIBUTION_ESIC:
+                    concept = Get_Billing_Data_T2_ESIC(CLI_Id, WAG_Id);
+                    break;
+                case (int)INVOICE_TEMPLATE_TYPE.FULL_AND_FINAL_SETTLEMENT:
+                    concept = Get_Billing_Data_T3(CLI_Id,EMPs);
+                    break;
+                default:               
+                   
+                    break;
+            }
+
+            return concept;
+        }
+        private Invoice_Concepts Get_Billing_Data_T1(int CLI_Id, string Type_Id, int WAG_Id)
         {
             InvoicesManager invoicesManager = new InvoicesManager(_context);
             Invoice_Concepts concept = new Invoice_Concepts();
@@ -320,29 +352,38 @@ namespace RMERP.Controllers
                 {
                     int BillingType = (int)CRI_BILLING_TYPE.Service_Change_Basic;
                     var CRI_Billing_ServiceCharge = Type_Id.Split("_")[1];
-                    concept = invoicesManager.Get_Billing_Data_T1(CLI_Id, WAG_Id, Convert.ToDouble(CRI_Billing_ServiceCharge),0, BillingType);
+                    concept = invoicesManager.Get_Billing_Data_T1(CLI_Id, WAG_Id, Convert.ToDouble(CRI_Billing_ServiceCharge), 0, BillingType);
                 }
                 else
-                {                    
+                {
                     int BillingType = (int)CRI_BILLING_TYPE.Lump_Sum_Amount;
                     var CRI_Billing_Amount = Type_Id.Split("_")[1];
-                    concept = invoicesManager.Get_Billing_Data_T1(CLI_Id, WAG_Id, 0,Convert.ToDecimal(CRI_Billing_Amount), BillingType);
+                    concept = invoicesManager.Get_Billing_Data_T1(CLI_Id, WAG_Id, 0, Convert.ToDecimal(CRI_Billing_Amount), BillingType);
                 }
             }
-            
-            //switch (Type)
-            //{
-            //    case (int)INVOICE_TEMPLATE_TYPE.COMPANY_CONTRIBUTION_PF_ESIC :
-            //        concept= invoicesManager.GetTotalDaysInvoiceData(CLI_Id, WAG_Id, DES_Id);
-            //        break;
-            //    default:
-            //        concept = invoicesManager.GetTotalDaysInvoiceData(CLI_Id, WAG_Id, DES_Id);
-            //        concept.INC_Description = "Default";
-            //        break;
-            //}
             return concept;
         }
-       
-    }
 
+        private Invoice_Concepts Get_Billing_Data_T2_PF(int CLI_Id, int WAG_Id)
+        {
+            InvoicesManager invoicesManager = new InvoicesManager(_context);
+            Invoice_Concepts concept = new Invoice_Concepts();
+            concept = invoicesManager.Get_Billing_Data_T2_PF(CLI_Id, WAG_Id);
+            return concept;
+        }
+        private Invoice_Concepts Get_Billing_Data_T2_ESIC(int CLI_Id, int WAG_Id)
+        {
+            InvoicesManager invoicesManager = new InvoicesManager(_context);
+            Invoice_Concepts concept = new Invoice_Concepts();
+            concept = invoicesManager.Get_Billing_Data_T2_ESIC(CLI_Id,WAG_Id);
+            return concept;
+        }
+        private Invoice_Concepts Get_Billing_Data_T3(int CLI_Id, string EMPs)
+        {
+            InvoicesManager invoicesManager = new InvoicesManager(_context);
+            Invoice_Concepts concept = invoicesManager.Get_Billing_Data_T3(CLI_Id, EMPs);
+            return concept;
+        }
+    }
+    
 }

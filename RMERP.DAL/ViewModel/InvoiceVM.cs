@@ -81,6 +81,7 @@ namespace RMERP.DAL.ViewModel
     public class InvoiceTypeVM
     {
         public int WAG_Id { get; set; }
-        public int Type { get; set; }
+        public int Type { get; set; }        
     }
+    
 }

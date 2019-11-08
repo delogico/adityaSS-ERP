@@ -141,8 +141,9 @@ namespace RMERP.DAL.Helpers
         public enum INVOICE_TEMPLATE_TYPE
         {
             CONTRACT_BILL_FOR_PROVIDING_FACILITY_SERVICES=1,
-            COMPANY_CONTRIBUTION_PF_ESIC=2,
-            FULL_AND_FINAL_SETTLEMENT=3
+            COMPANY_CONTRIBUTION_PF=2,
+            COMPANY_CONTRIBUTION_ESIC = 3,
+            FULL_AND_FINAL_SETTLEMENT =4
         }
         public enum Month
         {
@@ -610,7 +611,7 @@ namespace RMERP.DAL.Helpers
         }
         public static DateTime GetFirstDateOfMonth(DateTime date)
         {
-            DateTime firstDate = new DateTime(date.Year, 1, 1);
+            DateTime firstDate = new DateTime(date.Year, date.Month, 1);
             return firstDate;
         }
     }

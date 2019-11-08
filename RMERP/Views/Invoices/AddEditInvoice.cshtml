@@ -213,9 +213,28 @@
 </div>
 <div id="invoiceTemplate">
 </div>
+
 @section scripts{
     <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
+   @*<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />*@
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js" type="text/javascript"></script>
+    @*<link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />*@
+    <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        var j = jQuery.noConflict();
+        j(function () {
+            j('#Left_EMP_Id').multiselect({
+                includeSelectAllOption: true
+            });
+        });
+    </script>
+
+
     @if (TempData["message"] != null)
     {
         <script>
@@ -224,13 +243,14 @@
         });
         </script>
     };
-        <script>
-        $(document).ready(function () {
+    <script>
+        $(document).ready(function () {                   
+
             var allEditors = document.querySelectorAll('.desc');
             for (var i = 0; i < allEditors.length; ++i) {
                 ClassicEditor.create(allEditors[i]);
             };
-            $(document).on('change', '.calculation', function () {               
+            $(document).on('change', '.calculation', function () {
                 var All_INC_Total = 0;
                 $("#tblIncidenceConcepts TBODY TR").each(function () {
                     var row = $(this);
@@ -241,33 +261,36 @@
                 calculateGST();
             });
 
-            $(document).on("change", "SELECT[class^=Month_1]", function (event) {                
+            $(document).on("change", "SELECT[class^=Month_0]", function (event) {
+                debugger;
                 var WAG_Id = $("#month_0").val();
-                var CLI_Id = $("#CLI_Id").val();              
+                var CLI_Id = $("#CLI_Id").val();
                 $(".drpType").empty();
                 GetRequirenmentTypes(WAG_Id, CLI_Id);
                 return false;
             });
-            
+
+
         });
-            function GetRequirenmentTypes(WAG_Id, CLI_Id) {                
-                var Url = siteUrl + "Invoices/GetRequirenmentTypes?Wag_Id=" + WAG_Id + "&CLI_Id=" + CLI_Id;
-                $.ajax({
-                    type: 'POST',
-                    url: Url, 
-                    dataType: 'json',                   
-                    success: function (Types) {
-                        debugger;
-                        $.each(Types, function (i, Type) {
-                            $(".drpType").append('<option value="' + Type.value + '">' +
-                                Type.text + '</option>');                            
-                        });
-                    },
-                    error: function (ex) {
-                        alert('Failed to retrieve Type.' + ex);
-                    }
-                });
-            };
+        function GetRequirenmentTypes(WAG_Id, CLI_Id) {
+            debugger;
+            var Url = siteUrl + "Invoices/GetRequirenmentTypes?Wag_Id=" + WAG_Id + "&CLI_Id=" + CLI_Id;
+            $.ajax({
+                type: 'POST',
+                url: Url,
+                dataType: 'json',
+                success: function (Types) {
+                    debugger;
+                    $.each(Types, function (i, Type) {
+                        $(".drpType").append('<option value="' + Type.value + '">' +
+                            Type.text + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve Type.' + ex);
+                }
+            });
+        };
         var DELAY = 700,
             clicks = 0,
             timer = null;
@@ -305,7 +328,7 @@
                 },
                 success: function (data) {
                     debugger;
-                    $('#invoiceTemplate').html(data);                   
+                    $('#invoiceTemplate').html(data);
                     $("#loading-image").hide();
                     //var items = "<option value='0'>Select Type</option>";
                     //var WAG_Id = $("#WAG_Id").val();
@@ -314,19 +337,42 @@
                     //if (WAG_Id != "0" || WAG_Id != "" || typeof WAG_Id != 'undefined') {
                     //    GetRequirenmentTypes(WAG_Id, CLI_Id);
                     //    return false;
-                    //}                       
+                    //}
                     $('#InvoiceTypeModal').modal('show');
                 }
             })
         };
+
+       
         function FillData(id) {
             debugger;
-            var Type_Id = $("#type_" + id).val();
+            var EMPs = "";
+            var Type_Id = 0;
             var WAG_Id = $("#month_" + id).val();
             var CLI_Id = $("#CLI_Id").val();
-            var Type = 0;
+            var Type = $("#type_id_" + id).val();
+
+            if (id == 0) {
+                Type_Id = $("#type_" + id).val();
+                WAG_Id = $("#month_" + id).val();
+            }
+            if (id == 1) {
+                WAG_Id = $("#month1_" + id).val();
+            }
+            if (id == 2) {
+                WAG_Id = $("#month2_" + id).val();
+            }
+            if (id == 3) {
+                var selected = $("#Left_EMP_Id option:selected");
+                
+                selected.each(function () {                
+                    EMPs += $(this).val() + ",";
+                });
+                EMPs= EMPs.substring(0, EMPs.length - 1) 
+                              
+            }            
             if (CLI_Id != "") {
-                var Url = siteUrl + "Invoices/GetInvoiceData?CLI_Id=" + CLI_Id + "&Type_Id=" + Type_Id + "&WAG_Id=" + WAG_Id + "&Type=" + Type;
+                var Url = siteUrl + "Invoices/GetInvoiceData?CLI_Id=" + CLI_Id + "&Type_Id=" + Type_Id + "&WAG_Id=" + WAG_Id + "&Type=" + Type + "&EMPs=" + EMPs;
                 $.ajax({
                     type: "GET",
                     url: Url,
@@ -474,5 +520,5 @@
             });
         });
 
-        </script>
+    </script>
 }
