@@ -92,6 +92,7 @@ namespace RMERP.DAL.ManagerClasses
             Invoice_Concepts invoice_Concept = new Invoice_Concepts();
             Clients client = clientsManager.GetClientById(CLI_Id);
             List<Wage_Register> list = new List<Wage_Register>();
+            decimal TotalServiceCharge = 0;
             if (BillingType == (int)ProjectUtils.CRI_BILLING_TYPE.Lump_Sum_Amount)
             {
                 list = _context.Wage_Register.Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id) && m.CRI_.CRI_Billing_Type == BillingType && m.CRI_.CRI_Billing_Amount == CRI_Billing_Amount).ToList();
@@ -99,11 +100,26 @@ namespace RMERP.DAL.ManagerClasses
             else if (BillingType == (int)ProjectUtils.CRI_BILLING_TYPE.Service_Change_Basic)
             {
                 list = _context.Wage_Register.Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id) && m.CRI_.CRI_Billing_Type == BillingType && m.CRI_.CRI_Billing_ServiceCharge == CRI_Billing_ServiceCharge).ToList();
+                if (list.Count() > 0)
+                {
+                    foreach(Wage_Register wage in list)
+                    {
+                        TotalServiceCharge = TotalServiceCharge + ProjectUtils.GetAmountBasedOnFormula_Report(
+                            wage.CRI_.CRI_Billing_ServiceCharge_Formula,
+                            wage.WAR_Basic_Calculated,wage.WAR_DA_Calculated,wage.WAR_HRA_Calculated,
+                            wage.Wage_Register_Allowances.ToList(),wage.WAR_TotalWorkingDays,
+                            wage.WAR_TotalPaybleDays,wage.WAR_OverTime_Calculated,
+                            (wage.WAR_OutStation_Allowance_Calculated!=null? wage.WAR_OutStation_Allowance_Calculated.Value:0), 
+                            (wage.WAR_Attendance_Allowance_Calculated!=null?wage.WAR_Attendance_Allowance_Calculated.Value:0),
+                            (wage.WAR_Nightshift_Allowance_Calculated!=null?wage.WAR_Nightshift_Allowance_Calculated.Value:0),
+                            (wage.WAR_Performance_Allowance_Calculated!=null?wage.WAR_Performance_Allowance_Calculated.Value:0));
+                    }
+                }
             }
             if (list.Count() > 0)
             {
                 double TotalPaybleDays = list.Select(m => m.WAR_TotalPaybleDays).Sum();
-                decimal INC_Total = list.Select(m => m.WAR_FinalTotal).Sum();
+                decimal INC_Total = list.Select(m => m.WAR_GrossTotal).Sum();
                 decimal MLWF = (client.CLI_MLWF_Contribution != null ? client.CLI_MLWF_Contribution.Value : 0);
                 int Nos = list.Where(m => m.CRI_.DES_.DES_Exclude_LWF == false).Select(m => m.EMP_Id).Count();
 
@@ -126,13 +142,12 @@ namespace RMERP.DAL.ManagerClasses
                 sb.AppendLine("Contract Bill For Providing Security Service</br>");
                 if (BillingType == (int)ProjectUtils.CRI_BILLING_TYPE.Service_Change_Basic)
                 {
-                    decimal HRA = (INC_Total * 5) / 100;
-                    decimal ServiceCharge = (INC_Total * Convert.ToDecimal(CRI_Billing_ServiceCharge)) / 100;
+                    decimal HRA = (INC_Total * 5) / 100;                    
 
                     sb.Append("For The Month Of " + DatePeriod + "</br>");
                     sb.Append("(A) Salary Wages Including HRA @5% = " + HRA + "/-</br>");
                     sb.Append("Extra Work Wages and Upkeep Allowances");
-                    sb.Append("(B) Service Charges @ 12%= " + ServiceCharge + "/-</br>");
+                    sb.Append("(B) Service Charges @ "+ CRI_Billing_ServiceCharge + "%= " + TotalServiceCharge + "/-</br>");
 
                     if (wage.WAG_Month.Month == (int)ProjectUtils.Month.June || wage.WAG_Month.Month == (int)ProjectUtils.Month.December)
                     {

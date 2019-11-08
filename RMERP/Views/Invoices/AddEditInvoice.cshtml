@@ -261,8 +261,7 @@
                 calculateGST();
             });
 
-            $(document).on("change", "SELECT[class^=Month_0]", function (event) {
-                debugger;
+            $(document).on("change", "SELECT[class^=Month_0]", function (event) {               
                 var WAG_Id = $("#month_0").val();
                 var CLI_Id = $("#CLI_Id").val();
                 $(".drpType").empty();
@@ -344,8 +343,7 @@
         };
 
        
-        function FillData(id) {
-            debugger;
+        function FillData(id) {           
             var EMPs = "";
             var Type_Id = 0;
             var WAG_Id = $("#month_" + id).val();

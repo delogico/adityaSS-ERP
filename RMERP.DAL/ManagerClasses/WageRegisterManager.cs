@@ -637,7 +637,7 @@ namespace RMERP.DAL.ManagerClasses
 
         public List<Wage_Register> GetWageRegistersForInvoice(int CLI_Id)
         {
-            return _context.Wage_Register.Include(m=>m.EMP_).Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).Where(r => r.CLI_Id == CLI_Id).ToList();
+            return _context.Wage_Register.Include(m=>m.EMP_).ThenInclude(m=>m.Clients_Employees).Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).Where(r => r.CLI_Id == CLI_Id).ToList();
         }
 
         public int GetClient_EmployeeHavingMaxBasic(int EMP_Id, int WAG_Id)

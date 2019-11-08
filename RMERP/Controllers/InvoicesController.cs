@@ -180,10 +180,9 @@ namespace RMERP.Controllers
             if (PrevWage != null)
             {
                 invoiceTypeVM.WAG_Id = PrevWage.WAG_Id;
-            }            
-           
-
-            ViewBag.LeftEmps = EmployeesMapper.MapEmployees(registerManager.GetWageRegistersForInvoice(CLI_Id).Where(m=>m.EMP_.EMP_IsActive.Equals(false)).Select(m=>m.EMP_).ToList()); 
+            }
+            List<Employees> emps = registerManager.GetWageRegistersForInvoice(CLI_Id).Where(m => m.EMP_.Clients_Employees.Where(cle => cle.CLI_Id.Equals(CLI_Id)).Any(mb => mb.CLE_UnassignedOn != null)).Select(m => m.EMP_).Distinct().ToList();
+            ViewBag.LeftEmps = EmployeesMapper.MapEmployees(emps); 
 
             return PartialView("_InvoiceType", invoiceTypeVM);
         }
