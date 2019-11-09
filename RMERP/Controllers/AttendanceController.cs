@@ -147,7 +147,7 @@ namespace RMERP.Controllers
                         {
                             Employees empExtra = new Employees();
                             empExtra.EMP_Id = Convert.ToInt32(row.EMP_Id);
-                            empExtra.EMP_FirstName = row.EMP_Name;
+                            empExtra.EMP_FirstName = row.EMP_Name.Trim();
                             empListExtraInExcel.Add(empExtra);
                         }
                         else

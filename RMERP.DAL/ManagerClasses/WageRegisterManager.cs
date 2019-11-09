@@ -421,11 +421,9 @@ namespace RMERP.DAL.ManagerClasses
                                         requirementMax = requirement;
                                     }
                                 }
-
                             }
                             if (requirementMax.CLI_Id.Equals(CLI_Id))
                                 flag = true;
-
                         }
                         else
                         {

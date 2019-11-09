@@ -14,9 +14,9 @@ namespace RMERP.DAL.Mappers
 
             EmployeeVM emp = new EmployeeVM();
             emp.EMP_Id = employee.EMP_Id;
-            emp.EMP_FirstName = employee.EMP_FirstName;
-            emp.EMP_MiddleName = employee.EMP_MiddleName;
-            emp.EMP_SurName = employee.EMP_SurName;
+            emp.EMP_FirstName = employee.EMP_FirstName.Trim();
+            emp.EMP_MiddleName = employee.EMP_MiddleName.Trim();
+            emp.EMP_SurName = employee.EMP_SurName.Trim();
             emp.EMP_Aadhar_Name = employee.EMP_Aadhar_Name;
             emp.EMP_Aadhar_Number = employee.EMP_Aadhar_Number;
             emp.EMP_DOB = employee.EMP_DOB;
@@ -86,10 +86,10 @@ namespace RMERP.DAL.Mappers
         {
             Employees emp = new Employees();
             emp.EMP_Id = employee.EMP_Id;
-            emp.EMP_FirstName = employee.EMP_FirstName;
-            emp.EMP_MiddleName = employee.EMP_MiddleName;
-            emp.EMP_SurName = employee.EMP_SurName;
-            emp.EMP_Aadhar_Name = employee.EMP_Aadhar_Name;
+            emp.EMP_FirstName = employee.EMP_FirstName.Trim();
+            emp.EMP_MiddleName = employee.EMP_MiddleName.Trim();
+            emp.EMP_SurName = employee.EMP_SurName.Trim();
+            emp.EMP_Aadhar_Name = employee.EMP_Aadhar_Name.Trim();
             emp.EMP_Aadhar_Number = employee.EMP_Aadhar_Number;
             emp.EMP_DOB = employee.EMP_DOB;
             emp.EMP_Married = employee.EMP_Married;
