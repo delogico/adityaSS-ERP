@@ -18,8 +18,11 @@
         </script>
     };
     <script>
-        $(document).on("click", ".empModal", function () {
-            
+        $(document).on("click", ".empModal", function () {            
+            var EMP_Id = $(this).data('id');
+            $(".modal-body #EMP_Id").val(EMP_Id);
+        });
+        $(document).on("click", ".empRejoinModal", function () {
             var EMP_Id = $(this).data('id');
             $(".modal-body #EMP_Id").val(EMP_Id);
         });
@@ -125,8 +128,13 @@
                                             @DateHelper.getDateWithFormat(@item.EMP_DateOfJoining)
                                             @if (item.EMP_IsActive.Equals(false))
                                             {
-                                            <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue ? DateHelper.getDateWithFormat(item.EMP_InactivatedOn.Value) : "") (@ProjectUtils.GetStringValue((ProjectUtils.EMPLOYEE_LEFT_REASON_CODE)item.EMP_ReasonCode))</div>                                                
+                                                <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue ? DateHelper.getDateWithFormat(item.EMP_InactivatedOn.Value) : "") (@ProjectUtils.GetStringValue((ProjectUtils.EMPLOYEE_LEFT_REASON_CODE)item.EMP_ReasonCode))</div>
                                             }
+                                            else if (item.EMP_RejoinOn!=null)
+                                            {
+                                                <div style="font-size:10px;color:green">Rejoin on @(item.EMP_RejoinOn.HasValue ? DateHelper.getDateWithFormat(item.EMP_RejoinOn.Value) : "")</div>
+                                            }
+
                                         </td>
                                         <td>@item.EMP_MoF</td>
                                         <td>@item.EMP_Contact_Primary</td>
@@ -135,13 +143,15 @@
                                                 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                 <ul class="dropdown-menu pull-right">
                                                     <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
-                                                    @*<li>
-                                                            <a href='#' title="Employee Left" onclick="onConfirmClick(@item.EMP_Id,'@item.IsAssigned')">
-                                                                <i class="fa fa-trash-o m-r-5"></i>
-                                                                @lable
-                                                            </a>
-                                                        </li>*@
-                                                    <li><a class="empModal" style="cursor:pointer" title="Employee Left" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empModal"><i class="fa fa-trash-o m-r-5"></i>Employee Left</a></li>
+                                                    @if (!item.EMP_IsActive)
+                                                    {
+                                                        <li><a class="empRejoinModal" style="cursor:pointer" title="Employee Rejoin" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empRejoinModal"><i class="fa fa-plus-square-o m-r-5"></i>Employee Rejoin</a></li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li><a class="empModal" style="cursor:pointer" title="Employee Left" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empModal"><i class="fa fa-trash-o m-r-5"></i>Employee Left</a></li>
+                                                    }
+
                                                     <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-eye m-r-5"></i> View</a></li>
                                                 </ul>
                                             </div>
@@ -170,7 +180,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Notification</h4>
+                <h4 class="modal-title">Employee Left</h4>
             </div>
             <div class="modal-body">
                 @using (Html.BeginForm("LeftEmployee", "Employees", FormMethod.Post))
@@ -188,6 +198,37 @@
                         @Html.DropDownList("EMP_Reason_Code", new SelectList(ViewBag.Reason_Code, "Value", "Text"), "Select Reason", new { @class = "form-control" })
                         @Html.ValidationMessage("EMP_Reason_Code", "", new { @class = "text-danger" })
                     </div>
+
+                    <div class="m-t-20 text-center">
+                        <input type="submit" name="Submit" id="btnSubmit" class="btn btn-primary" />
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="empRejoinModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Employee Rejoin</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("RejoinEmployee", "Employees", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <input type="hidden" name="EMP_Id" id="EMP_Id" value="" />
+                    <div class="form-group">
+                        @Html.Label("Choose Rejoin Date")
+                        @Html.TextBox("EMP_Rejoin_Date", "", new { @class = "form-control", @type = "date" })
+                        @Html.ValidationMessage("EMP_Rejoin_Date", "", new { @class = "text-danger" })
+                    </div>                   
 
                     <div class="m-t-20 text-center">
                         <input type="submit" name="Submit" id="btnSubmit" class="btn btn-primary" />

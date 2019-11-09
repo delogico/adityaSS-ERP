@@ -154,6 +154,9 @@ namespace RMERP.DAL.ViewModel
 
         [Display(Name = "City")]
         public int EMP_City { get; set; }
+
+        [Display(Name = "Rejoin On")]
+        public DateTime? EMP_RejoinOn { get; set; }
     }
 
     public class EmployeePaymentVM

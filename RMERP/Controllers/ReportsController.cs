@@ -1925,24 +1925,28 @@ namespace RMERP.Controllers
 
                 foreach (var item in result)
                 {
+                    decimal PF_APPLICABLE_SALARY = Math.Round(item.PF_APPLICABLE_SALARY, MidpointRounding.AwayFromZero);
+                    decimal EPF_CONTRIBUTION = Math.Round(item.EPF_CONTRIBUTION, MidpointRounding.AwayFromZero);
+                    decimal EPS_CONTRIBUTION = Math.Round(item.EPS_CONTRIBUTION, MidpointRounding.AwayFromZero);
+                    decimal DIFF_EPF_EPS = Math.Round(item.DIFF_EPF_EPS, MidpointRounding.AwayFromZero);
                     row = excelSheet.CreateRow(rowCount);
                     row.HeightInPoints = (float)(1.4 * excelSheet.DefaultRowHeightInPoints);
                     row.CreateCell(0).SetCellValue(Convert.ToString(item.UAN_Number));
                     row.CreateCell(1).SetCellValue(Convert.ToString(item.EMP_FullName));
-                    row.CreateCell(2).SetCellValue(Convert.ToString(item.PF_APPLICABLE_SALARY));
-                    row.CreateCell(3).SetCellValue(Convert.ToString(item.PF_APPLICABLE_SALARY));
-                    row.CreateCell(4).SetCellValue(Convert.ToString(item.PF_APPLICABLE_SALARY));
-                    row.CreateCell(5).SetCellValue(Convert.ToString(item.PF_APPLICABLE_SALARY));
-                    row.CreateCell(6).SetCellValue(Convert.ToString(item.EPF_CONTRIBUTION));
-                    row.CreateCell(7).SetCellValue(Convert.ToString(item.EPS_CONTRIBUTION));
-                    row.CreateCell(8).SetCellValue(Convert.ToString(item.DIFF_EPF_EPS));
+                    row.CreateCell(2).SetCellValue(Convert.ToString(PF_APPLICABLE_SALARY));
+                    row.CreateCell(3).SetCellValue(Convert.ToString(PF_APPLICABLE_SALARY));
+                    row.CreateCell(4).SetCellValue(Convert.ToString(PF_APPLICABLE_SALARY));
+                    row.CreateCell(5).SetCellValue(Convert.ToString(PF_APPLICABLE_SALARY));
+                    row.CreateCell(6).SetCellValue(Convert.ToString(EPF_CONTRIBUTION));
+                    row.CreateCell(7).SetCellValue(Convert.ToString(EPS_CONTRIBUTION));
+                    row.CreateCell(8).SetCellValue(Convert.ToString(DIFF_EPF_EPS));
                     row.CreateCell(9).SetCellValue(Convert.ToString(item.NCP1));
                     row.CreateCell(10).SetCellValue(Convert.ToString(item.NCP2));
 
-                    tot_PF_APPLICABLE_SALARY = tot_PF_APPLICABLE_SALARY + item.PF_APPLICABLE_SALARY;
-                    tot_EPF_CONTRIBUTION = tot_EPF_CONTRIBUTION + item.EPF_CONTRIBUTION;
-                    tot_EPS_CONTRIBUTION = tot_EPS_CONTRIBUTION + item.EPS_CONTRIBUTION;
-                    tot_DIFF_EPF_EPS = tot_DIFF_EPF_EPS + item.DIFF_EPF_EPS;
+                    tot_PF_APPLICABLE_SALARY = tot_PF_APPLICABLE_SALARY + PF_APPLICABLE_SALARY;
+                    tot_EPF_CONTRIBUTION = tot_EPF_CONTRIBUTION + EPF_CONTRIBUTION;
+                    tot_EPS_CONTRIBUTION = tot_EPS_CONTRIBUTION + EPS_CONTRIBUTION;
+                    tot_DIFF_EPF_EPS = tot_DIFF_EPF_EPS + DIFF_EPF_EPS;
                     tot_NCP1 = tot_NCP1 + item.NCP1;
                     tot_NCP2 = tot_NCP2 + item.NCP2;
 

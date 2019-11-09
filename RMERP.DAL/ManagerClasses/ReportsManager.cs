@@ -402,7 +402,7 @@ namespace RMERP.DAL.ManagerClasses
             foreach (var item in wage_Registers)
             {
                 List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
-                decimal ApplicableSalary = Math.Round(GetAmountBasedOnFormula_Report(
+                decimal ApplicableSalary = GetAmountBasedOnFormula_Report(
                             item.WAR_PF_Formula,
                             item.WAR_Basic_Calculated,
                             item.WAR_DA_Calculated,
@@ -413,18 +413,20 @@ namespace RMERP.DAL.ManagerClasses
                             (item.WAR_OutStation_Allowance_Calculated != null ? item.WAR_OutStation_Allowance_Calculated.Value : 0),
                             (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
                             (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
-                            (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0)), MidpointRounding.AwayFromZero);
-                decimal EPF_CONTRIBUTION = Math.Round((ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPF_Rate)) / 100, MidpointRounding.AwayFromZero);
-                decimal EPS_CONTRIBUTION = Math.Round((ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPS_Rate)) / 100, MidpointRounding.AwayFromZero);
+                            (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
+                //decimal EPF_CONTRIBUTION = Math.Round((ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPF_Rate)) / 100, MidpointRounding.AwayFromZero);
+                //decimal EPS_CONTRIBUTION = Math.Round((ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPS_Rate)) / 100, MidpointRounding.AwayFromZero);
+                decimal EPF_CONTRIBUTION = (ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPF_Rate)) / 100;
+                decimal EPS_CONTRIBUTION =(ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPS_Rate)) / 100;
                 PFClientReportVM pFClient = new PFClientReportVM();
                 pFClient.EMP_Id = item.EMP_Id;
                 pFClient.UAN_Number = item.EMP_.EMP_UAN_Number;
                 pFClient.EMP_FirstName = item.EMP_.EMP_FirstName;
                 pFClient.EMP_MiddleName = item.EMP_.EMP_MiddleName;
                 pFClient.EMP_SurName = item.EMP_.EMP_SurName;
-                pFClient.PF_APPLICABLE_SALARY = Math.Round(ApplicableSalary, MidpointRounding.AwayFromZero);
-                pFClient.EPF_CONTRIBUTION = Math.Round(EPF_CONTRIBUTION, MidpointRounding.AwayFromZero);
-                pFClient.EPS_CONTRIBUTION = Math.Round(EPS_CONTRIBUTION, MidpointRounding.AwayFromZero);
+                pFClient.PF_APPLICABLE_SALARY = ApplicableSalary;
+                pFClient.EPF_CONTRIBUTION = EPF_CONTRIBUTION;
+                pFClient.EPS_CONTRIBUTION = EPS_CONTRIBUTION;
                 pFClient.NCP1 = 0;
                 pFClient.NCP2 = 0;
                 reportVMs.Add(pFClient);

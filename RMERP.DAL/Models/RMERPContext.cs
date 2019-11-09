@@ -255,8 +255,6 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.CRI_Billing_ServiceCharge_Formula).HasMaxLength(200);
 
-                entity.Property(e => e.CRI_Billing_Type).HasDefaultValueSql("((1))");
-
                 entity.Property(e => e.CRI_DA).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.CRI_ESIC_Area)
@@ -610,6 +608,8 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.EMP_RegisteredOn)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.EMP_RejoinOn).HasColumnType("datetime");
 
                 entity.Property(e => e.EMP_SurName)
                     .IsRequired()

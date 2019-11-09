@@ -197,6 +197,14 @@ namespace RMERP.DAL.ManagerClasses
             return _context.Cities_all.Where(m => m.STA_Id.Equals(STA_Id)).ToList();
         }
 
+        public void RejoinEmployee(int EMP_Id, DateTime EMP_Rejoin_Date)
+        {
+            Employees emp = GetEmployeeById(EMP_Id);
+            emp.EMP_IsActive = true;
+            emp.EMP_RejoinOn = ProjectUtils.DateNow();
+            _context.SaveChanges();
+        }
+
     }
 }
 

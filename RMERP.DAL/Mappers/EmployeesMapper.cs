@@ -15,8 +15,8 @@ namespace RMERP.DAL.Mappers
             EmployeeVM emp = new EmployeeVM();
             emp.EMP_Id = employee.EMP_Id;
             emp.EMP_FirstName = employee.EMP_FirstName.Trim();
-            emp.EMP_MiddleName = employee.EMP_MiddleName.Trim();
-            emp.EMP_SurName = employee.EMP_SurName.Trim();
+            emp.EMP_MiddleName = (employee.EMP_MiddleName!=null? employee.EMP_MiddleName.Trim(): employee.EMP_MiddleName);
+            emp.EMP_SurName = (employee.EMP_SurName!=null? employee.EMP_SurName.Trim(): employee.EMP_SurName);
             emp.EMP_Aadhar_Name = employee.EMP_Aadhar_Name;
             emp.EMP_Aadhar_Number = employee.EMP_Aadhar_Number;
             emp.EMP_DOB = employee.EMP_DOB;
@@ -44,6 +44,7 @@ namespace RMERP.DAL.Mappers
             emp.EMP_IsActive = Convert.ToBoolean(employee.EMP_IsActive);
             emp.EMP_InactivatedOn = employee.EMP_InactivatedOn;
             emp.ADM_Id_InactivatedBy = employee.ADM_Id_InactivatedBy;
+            emp.EMP_RejoinOn = employee.EMP_RejoinOn;
 
             if (employee.Employee_Advance.Count > 0)
                 emp.advances = EmployeeAdvanceMapper.mapAdvances(employee.Employee_Advance.ToList());
@@ -71,6 +72,8 @@ namespace RMERP.DAL.Mappers
                 emp.EMP_State = employee.EMP_State.Value;
             if (employee.EMP_City != null)
                 emp.EMP_City = employee.EMP_City.Value;
+
+
             return emp;
         }
 
@@ -124,6 +127,7 @@ namespace RMERP.DAL.Mappers
             emp.EMP_ReasonCode = employee.EMP_ReasonCode;
             emp.EMP_State = employee.EMP_State;
             emp.EMP_City = employee.EMP_City;
+            emp.EMP_RejoinOn = employee.EMP_RejoinOn;
             return emp;
         }
     }

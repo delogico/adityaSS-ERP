@@ -52,6 +52,7 @@ namespace RMERP.DAL.Models
         public int? EMP_ReasonCode { get; set; }
         public int? EMP_State { get; set; }
         public int? EMP_City { get; set; }
+        public DateTime? EMP_RejoinOn { get; set; }
 
         public Cities_all EMP_CityNavigation { get; set; }
         public States EMP_StateNavigation { get; set; }

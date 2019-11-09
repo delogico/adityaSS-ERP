@@ -485,5 +485,20 @@ namespace RMERP.Controllers
 
         }
 
+        public ActionResult RejoinEmployee(int EMP_Id, DateTime EMP_Rejoin_Date)
+        {
+            EmployeeManager employeeManager = new EmployeeManager(_context);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            try
+            {
+                employeeManager.RejoinEmployee(EMP_Id, EMP_Rejoin_Date);
+            }
+            catch (Exception)
+            {
+                TempData["message"] = "Try Again";
+            }
+            return RedirectToAction("Index");
+        }
+
     }
 }
