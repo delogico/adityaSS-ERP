@@ -402,7 +402,7 @@ namespace RMERP.DAL.ManagerClasses
                                                 && m.CLE_RegisteredOn.Date <= lastDate.Date
                                                 && (m.CLE_UnassignedOn == null || m.CLE_UnassignedOn >= lastDate.Date)
                                                 && (m.EMP_.EMP_IsActive == true || (m.EMP_.EMP_IsActive == false && m.EMP_.EMP_InactivatedOn != null && (m.EMP_.EMP_InactivatedOn.Value.Date >= firstDate.Date))))
-                                                .Include(m => m.EMP_)
+                                                .Include(m => m.EMP_).ThenInclude(m=>m.Wage_Register_Advances).ThenInclude(m=>m.WAG_)
                                                 .Include(m => m.DES_).ToList();
             return list;
         }
@@ -730,25 +730,10 @@ namespace RMERP.DAL.ManagerClasses
         {           
             List<Client_Requirements> cli_Req_List= new List<Client_Requirements>();
             DateTime LastDate = ProjectUtils.GetLastDateOfMonth(date);
-            //List<Client_Requirements> client_Requirements = _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.CRI_RegisteredOn.Date <= LastDate.Date).OrderByDescending(m => m.CRI_RegisteredOn).ToList();
             
-            //var q = from t in client_Requirements
-            //        group t by t.DES_Id
-            //            into g
-            //        select new
-            //        {
-            //            DES_Id = g.Key,
-            //            CRI_RegisteredOn = (from t2 in g select t2.CRI_RegisteredOn).Max(),
-            //            CRI_Id=g.Where(m=>m.DES_Id==g.Key && m.CRI_RegisteredOn== (from t2 in g select t2.CRI_RegisteredOn).Max()).OrderByDescending(m=>m.CRI_RegisteredOn).First().CRI_Id
-            //        };
-
-            //var CRI_List = from cr in client_Requirements
-            //           where q.Select(m=>m.CRI_Id).Contains(cr.CRI_Id)
-            //           select cr;
-
-            var query = from n in _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.CRI_RegisteredOn.Date <= LastDate.Date).OrderByDescending(m => m.CRI_RegisteredOn)
+            var query = from n in _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.CRI_RegisteredOn.Date <= LastDate.Date)
                         group n by n.DES_Id into g
-                    select g.OrderByDescending(t => t.CRI_RegisteredOn).FirstOrDefault();
+                    select g.OrderByDescending(t => t.CRI_RegisteredOn).ThenByDescending(m=>m.CRI_Id).FirstOrDefault();
 
             return query.ToList();
         }

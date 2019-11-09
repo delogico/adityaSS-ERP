@@ -190,10 +190,33 @@ namespace RMERP.DAL.ManagerClasses
             Clients client = clientsManager.GetClientById(CLI_Id);
 
             List<Wage_Register> list = _context.Wage_Register.Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id)).ToList();
-            var INC_Total = 0M;
+
+
+            decimal PF_Calculated = 0;
             StringBuilder sb = new StringBuilder();
             if (list.Count() > 0)
             {
+                decimal ApplicableSalary = 0M;
+                foreach (var item in list)
+                {
+                    List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
+                    decimal AppSalary = ProjectUtils.GetAmountBasedOnFormula_Report(
+                        item.WAR_PF_Formula,
+                        item.WAR_Basic_Calculated,
+                        item.WAR_DA_Calculated,
+                        item.WAR_HRA_Calculated, item.Wage_Register_Allowances.ToList(),
+                        item.WAR_TotalWorkingDays,
+                        item.WAR_TotalPaybleDays,
+                        item.WAR_OverTime_Calculated,
+                        (item.WAR_OutStation_Allowance_Calculated != null ? item.WAR_OutStation_Allowance_Calculated.Value : 0),
+                        (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
+                        (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
+                        (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
+                                        
+                    ApplicableSalary = Math.Round(AppSalary + ApplicableSalary, MidpointRounding.AwayFromZero);
+                }
+                PF_Calculated = ApplicableSalary;
+
                 Wage_Process wage = list[0].WAG_;
                 string DatePeriod = "";
                 DateTime StartDate = DateTime.Now;
@@ -208,8 +231,8 @@ namespace RMERP.DAL.ManagerClasses
                     EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
                     DatePeriod = StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
                 }
-                decimal PF_Calculated = list.Select(m => m.WAR_PF_Calculated).Sum();
-                INC_Total = PF_Calculated;
+                //decimal PF_Calculated1 = list.Select(m => m.WAR_PF_Calculated).Sum();
+                //INC_Total = PF_Calculated;
                 sb.Append("<b>Company Contribution Towards PF @" + client.CLI_PF_Employer_Cont_Rate + "%</b><i></br>");
                 sb.Append("Rembursment Of Company Contribution <br/>");
                 sb.Append("To The P.F @" + 12 + "% and Other Charges @" + 1 + "%<br/>");
@@ -219,7 +242,7 @@ namespace RMERP.DAL.ManagerClasses
             }
 
             invoice_Concept.INC_Description = sb.ToString();
-            invoice_Concept.INC_Total = INC_Total;
+            invoice_Concept.INC_Total = PF_Calculated;
 
             return invoice_Concept;
         }
@@ -232,10 +255,30 @@ namespace RMERP.DAL.ManagerClasses
             Clients client = clientsManager.GetClientById(CLI_Id);
 
             List<Wage_Register> list = _context.Wage_Register.Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id)).ToList();
-            decimal INC_Total = 0M;
+            decimal ESIC_Calculated = 0M;
             StringBuilder sb = new StringBuilder();
             if (list.Count() > 0)
             {
+                decimal ApplicableSalary = 0M;
+                foreach (var item in list)
+                {                   
+                    decimal AppSalary = ProjectUtils.GetAmountBasedOnFormula_Report(
+                        item.WAR_ESIC_Formula,
+                        Math.Round(item.WAR_Basic_Calculated, MidpointRounding.AwayFromZero),
+                        Math.Round(item.WAR_DA_Calculated, MidpointRounding.AwayFromZero),
+                        Math.Round(item.WAR_HRA_Calculated, MidpointRounding.AwayFromZero),
+                         item.Wage_Register_Allowances.ToList(),
+                        item.WAR_TotalWorkingDays,
+                        item.WAR_TotalPaybleDays,
+                        Math.Round(item.WAR_OverTime_Calculated, MidpointRounding.AwayFromZero),
+                        (item.WAR_OutStation_Allowance_Calculated != null ? Math.Round(item.WAR_OutStation_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0),
+                        (item.WAR_Attendance_Allowance_Calculated != null ? Math.Round(item.WAR_Attendance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0),
+                        (item.WAR_Nightshift_Allowance_Calculated != null ? Math.Round(item.WAR_Nightshift_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0),
+                        (item.WAR_Performance_Allowance_Calculated != null ? Math.Round(item.WAR_Performance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0));
+
+                    ApplicableSalary = Math.Round(AppSalary + ApplicableSalary, MidpointRounding.AwayFromZero);
+                }
+                ESIC_Calculated = ApplicableSalary;
                 Wage_Process wage = list[0].WAG_;
                 string DatePeriod = "";
                 DateTime StartDate = DateTime.Now;
@@ -249,19 +292,17 @@ namespace RMERP.DAL.ManagerClasses
                     StartDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_Start.Value);
                     EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
                     DatePeriod = StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
-                }
-                decimal Gross = list.Select(m => m.WAR_GrossTotal).Sum();
-                INC_Total = (Gross * (decimal)client.CLI_ESIC_Employer_Cont_Rate) / 100;
+                }                       
                 sb.Append("<b>Company Contribution Towards ESIC @" + client.CLI_ESIC_Employer_Cont_Rate + "%</b><i></br>");
                 sb.Append("Rembursment Of Company Contribution <br/>");
-                sb.Append("On Gross Salary= Rs." + Gross + "/-<br/>");
-                sb.Append("@" + client.CLI_ESIC_Employer_Cont_Rate + "% = " + INC_Total + "<br/>");
+                sb.Append("On Gross Salary= Rs." + list.Select(m => m.WAR_GrossTotal).Sum() + "/-<br/>");
+                sb.Append("@" + client.CLI_ESIC_Employer_Cont_Rate + "% = " + ESIC_Calculated + "<br/>");
                 sb.Append("As Per The Act For The Month Of " + DatePeriod + "<br/>");
                 sb.Append("</i>");
             }
 
             invoice_Concept.INC_Description = sb.ToString();
-            invoice_Concept.INC_Total = INC_Total;
+            invoice_Concept.INC_Total = ESIC_Calculated;
 
             return invoice_Concept;
         }

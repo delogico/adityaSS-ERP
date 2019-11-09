@@ -353,20 +353,28 @@ namespace RMERP.DAL.ManagerClasses
 
                     decimal totalEMI = 0;
                     if (employee.EMP_.Wage_Register_Advances.Count() > 0)
-                    {
+                    {                        
                         bool flag = false;
                         int clients = attManager.getAttendance_Wage_Employee(wageProcess.WAG_Id, employee.EMP_Id).Select(m => m.CLI_Id).Distinct().Count();
                         if (clients > 1)
                         {
+                            //if (employee.EMP_.Wage_Register_Advances.Where(m => m.WAG_Id.Equals(wageProcess.WAG_Id) && m.WAD_Status.Equals(true) && m.WAD_ClosedOn!=null) != null)
+                            //{
+                            //    flag = true;
+                            //}
+                            //else
+                            //{
+
+                            //}
                             IEnumerable<Clients_Employees> clientList = clientsManager.listActiveClientsEmployees_clients(employee.EMP_Id, wageProcess.WAG_Month);
                             Client_Requirements requirementMax = null;
                             decimal Basic_Paybaleday_Max = 0;
-                          
+
                             foreach (Clients_Employees clients_Employee in clientList)
                             {
-                                Client_Requirements requirement = clientsManager.getActiveClientRequirement(clients_Employee.CLI_Id, clients_Employee.DES_Id, wageProcess.WAG_Month);                               
+                                Client_Requirements requirement = clientsManager.getActiveClientRequirement(clients_Employee.CLI_Id, clients_Employee.DES_Id, wageProcess.WAG_Month);
                                 IEnumerable<Attendance> atts = attManager.getAttendance_Wage_Client_Employee_Designation(wageProcess.WAG_Id, clients_Employee.CLI_Id, clients_Employee.EMP_Id, clients_Employee.DES_Id);
-                               
+
                                 #region payable days
                                 int totWeekOffs1 = 0, totalPublicHoliday1 = 0, totEarnLeave1 = 0, totNightShift1 = 0;
                                 double totPresentDays1 = 0, totHalfDays1 = 0, totExtraWorkingDays1 = 0, WAR_ExtraWorkingHours1 = 0, totNighthours1 = 0, totalPaybleDays1 = 0; ;
@@ -404,7 +412,7 @@ namespace RMERP.DAL.ManagerClasses
                                 {
                                     Basic_Paybaleday_Max = Basic_Paybaleday;
                                     requirementMax = requirement;
-                                }                                   
+                                }
                                 else
                                 {
                                     if (Basic_Paybaleday_Max < Basic_Paybaleday)
@@ -412,11 +420,12 @@ namespace RMERP.DAL.ManagerClasses
                                         Basic_Paybaleday_Max = Basic_Paybaleday;
                                         requirementMax = requirement;
                                     }
-                                }                               
+                                }
 
                             }
                             if (requirementMax.CLI_Id.Equals(CLI_Id))
                                 flag = true;
+
                         }
                         else
                         {
@@ -424,15 +433,12 @@ namespace RMERP.DAL.ManagerClasses
                         }
                         if (flag)
                         {
-                            var EMI = employee.EMP_.Wage_Register_Advances.Where(m => m.WAD_Status == false || (m.WAD_Status.Equals(true) && m.WAG_Id.Equals(wageProcess.WAG_Id))).GroupBy(m => m.EMP_Id).Select(g => new
+                            var EMI = employee.EMP_.Wage_Register_Advances.Where(m => (m.WAD_Status == false && m.WAG_.WAG_Month.Date<=wageProcess.WAG_Month.Date) || (m.WAD_Status.Equals(true) && m.WAG_Id.Equals(wageProcess.WAG_Id))).GroupBy(m => m.EMP_Id).Select(g => new
                             {
                                 WAD_Amt = g.Sum(n => n.WAD_Amount)
                             });
                             totalEMI = Math.Round(EMI.Select(g => g.WAD_Amt).FirstOrDefault(), MidpointRounding.AwayFromZero);
                         }
-
-
-
                     }
                     wageRegisterVM.WAR_Advance_Amount = totalEMI;
                     #endregion
