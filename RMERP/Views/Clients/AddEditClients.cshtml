@@ -273,7 +273,7 @@
                                             <td><b>@item.DES_Title</b></td>
                                             <td>@item.CRI_Total</td>
                                             <td>
-                                                @DateHelper.getDateWithFormat(item.CRI_RegisteredOn)
+                                                @DateHelper.getLongDateFormat(item.CRI_RegisteredOn)
                                                 <a onclick="EditRegDate(@item.CRI_Id)" style="cursor:pointer" title="Change Effective From"><i class="fa fa-pencil m-r-5"></i></a>
                                             </td>
                                             <td class="text-right">
@@ -601,7 +601,7 @@
                                         <tr @style>
                                             <td><b>@item.DES_Title</b></td>
                                             <td>@item.employee.EMP_FullName</td>
-                                            <td>@DateHelper.getDateWithFormat(item.CLE_RegisteredOn)</td>
+                                            <td>@DateHelper.getLongDateFormat(item.CLE_RegisteredOn)</td>
 
                                             <td class="text-right">
                                                 <div class="dropdown">

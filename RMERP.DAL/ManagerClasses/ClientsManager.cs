@@ -260,6 +260,36 @@ namespace RMERP.DAL.ManagerClasses
             _contaxt.Update(requirement);
             _contaxt.SaveChanges();
         }
+        public string EditHistoryRequirement(Client_Requirements clientRequirements, List<Client_Requirement_Allowances> lst, int ADM_Id)
+        {
+            string res = string.Empty;
+            try
+            {               
+                if (clientRequirements.CRI_Id > 0)
+                {                    
+                    _contaxt.Client_Requirements.Update(clientRequirements);
+                    _contaxt.SaveChanges();
+                }                
+                CRI_Id = clientRequirements.CRI_Id;
+
+                foreach (var item in lst)
+                {
+                    Client_Requirement_Allowances cra = new Client_Requirement_Allowances();
+                    cra.CRI_Id = CRI_Id;
+                    cra.ALL_Id = item.ALL_Id;
+                    cra.CRA_Amount = item.CRA_Amount;
+                    cra.CRA_DayswiseOrFull = item.CRA_DayswiseOrFull;
+                    _contaxt.Client_Requirement_Allowances.Add(cra);
+                    _contaxt.SaveChanges();
+                    cra = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                res = ex.Message;
+            }
+            return res;
+        }
         public Client_Requirements GetRequirementsById(int CRI_Id)
         {
             return _contaxt.Client_Requirements.Where(c => c.CRI_Id == CRI_Id).Include(m => m.Wage_Register).Include(c => c.DES_).Include(m => m.Client_Requirement_Allowances).FirstOrDefault();

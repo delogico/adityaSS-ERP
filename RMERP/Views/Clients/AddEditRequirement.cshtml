@@ -366,8 +366,11 @@
                 {
                     @Html.AntiForgeryToken()
                     @Html.HiddenFor(m => m.CRI_Id)
-                    @Html.HiddenFor(m => m.CRI_Active)
-                    if (Model.CRI_Id > 0)
+                    @Html.HiddenFor(m => m.IsHistory)
+                    @Html.HiddenFor(m => m.CRI_InactivatedOn)
+                    
+                        @Html.HiddenFor(m => m.CRI_Active)
+                        if (Model.CRI_Id > 0)
                     {
                         @Html.HiddenFor(m => m.DES_Id, new { @id = "designationID" })
                     }
@@ -379,6 +382,7 @@
                         <li><a href="#Deduction" data-toggle="tab">Deduction <i class="fa"></i></a></li>
                         <li><a href="#OverTime" data-toggle="tab">Over Time <i class="fa"></i></a></li>
                         <li><a href="#Billing" data-toggle="tab">Billing <i class="fa"></i></a></li>
+                        <li><a href="#RegDate" data-toggle="tab">Registartion Date <i class="fa"></i></a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -1253,6 +1257,16 @@
                                 </div>
 
 
+                            </div>
+                        </div>
+                        <div id="RegDate" class="tab-pane">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.CRI_RegisteredOn, new { @class = "control-label" })
+                                        @Html.TextBoxFor(m => m.CRI_RegisteredOn, new { @class = "form-control" })
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -27,8 +27,8 @@ else
                         <h6 class="modal-title">Total Public Holidays: @Model.totalPublicHolidays</h6>
                     </div>
                     <div class="col-md-5">
-                        <h6 class="modal-title">Starting Date: @DateHelper.getDateWithFormat(Model.startDate)</h6>
-                        <h6 class="modal-title">Ending Date: @DateHelper.getDateWithFormat(Model.endDate)</h6>
+                        <h6 class="modal-title">Starting Date: @DateHelper.getLongDateFormat(Model.startDate)</h6>
+                        <h6 class="modal-title">Ending Date: @DateHelper.getLongDateFormat(Model.endDate)</h6>
                     </div>
                 </div>
             </div>

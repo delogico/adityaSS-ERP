@@ -240,7 +240,7 @@
                                 <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
                                 <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
                                 <td class="gainsboro">@(employee.employeeVM.EMP_Gender == true ? "M" : "F")</td>
-                                <td class="gainsboro">@DateHelper.getDateWithFormat(employee.employeeVM.EMP_DateOfJoining)</td>
+                                <td class="gainsboro">@DateHelper.getLongDateFormat(employee.employeeVM.EMP_DateOfJoining)</td>
 
                                 @if (clientRequirement != null)
                                 {
@@ -395,7 +395,7 @@
                         if (item.wageProcessClientVM != null)
                         {
                             <div class="alert alert-success" style="position: absolute;">
-                                <h2>Web Register is finalized on  @DateHelper.getDateWithFormat(item.wageProcessClientVM.WPC_SavedOn)</h2> <br />
+                                <h2>Web Register is finalized on  @DateHelper.getLongDateFormat(item.wageProcessClientVM.WPC_SavedOn)</h2> <br />
                                 <input type="submit" value="Reset" formaction="ResetWageRegister" onclick="return confirm('Are you sure you want to reset?');" class="btn btn-success pull-right" />
                             </div>
                         }

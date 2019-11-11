@@ -409,7 +409,7 @@ namespace RMERP.Controllers
         }
 
         [HttpGet]
-        public ActionResult AddEditRequirement(int CLI_Id, int CRI_Id = -1)
+        public ActionResult AddEditRequirement(int CLI_Id, int CRI_Id = -1, bool IsHistory = false)
         {
             ClientId = CLI_Id;
             DesignationManager designationManager = new DesignationManager(_context);
@@ -430,12 +430,13 @@ namespace RMERP.Controllers
                 clientRequirement.CRI_Id = -1;
                 clientRequirement.CLI_Id = CLI_Id;
                 clientRequirement.CRI_Active = true;
+                clientRequirement.CRI_RegisteredOn = ProjectUtils.DateNow();
             }
 
             clientRequirement.allAllowances = AllowanceMapper.mapMeAllowancesWithClientReq(AllowanceManager.GetAllowanceList(), listClientReqAllowances);
-            ViewBag.ADList = designationManager.getRemainingDesignationsList(CLI_Id).Select(m => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Value = Convert.ToString(m.DES_Id), Text = m.DES_Title });
+            ViewBag.ADList = designationManager.getRemainingDesignationsList(CLI_Id).Select(m => new SelectListItem { Value = Convert.ToString(m.DES_Id), Text = m.DES_Title });
 
-
+            clientRequirement.IsHistory = IsHistory;
             return View(clientRequirement);
         }
 
@@ -488,7 +489,15 @@ namespace RMERP.Controllers
                     clientRequirementVM.CRI_Billing_Amount = null;                    
                 }
                 cr = ClientRequirementMapper.mapMeModel(clientRequirementVM);
-                res = clientsManager.AddEditRequirement(cr, lst, sessionUtils.GetLoggedAdminID());
+                if (clientRequirementVM.IsHistory)
+                {
+                    res = clientsManager.EditHistoryRequirement(cr, lst, sessionUtils.GetLoggedAdminID());
+                }
+                else
+                {
+                    res = clientsManager.AddEditRequirement(cr, lst, sessionUtils.GetLoggedAdminID());
+                }
+               
             }
             if (res != "")
             {

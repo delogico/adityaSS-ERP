@@ -56,7 +56,7 @@
                                                 Wage_Process_Clients wage = Model.wageProcess.wage_Process_Clients.Where(m => m.CLI_Id.Equals(item.CLI_Id)).FirstOrDefault();
                                                 if (wage != null)
                                                 {
-                                                    <span class='label label-warning-border'>Wage is already registed on  @DateHelper.getDateWithFormat(wage.WPC_SavedOn)</span>
+                                                    <span class='label label-warning-border'>Wage is already registed on  @DateHelper.getLongDateFormat(wage.WPC_SavedOn)</span>
                                                 }
                                                 else
                                                 {

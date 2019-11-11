@@ -35,7 +35,7 @@ namespace RMERP.Controllers
             int FRM_Id = (sessionUtils.GetLoggedFirmID()!=null? sessionUtils.GetLoggedFirmID().Value:0);           
             List<Invoices> invoices = invoicesManager.GetInvoices(FRM_Id);
             masterVM.InvoiceVMs = InvoiceMapper.mapMe(invoices.Where(m => DateTime.Compare(m.INV_CreatedOn.Date, DateTime.Now.Date.AddMonths(-2)) > 0).ToList());           
-            ViewBag.ClientList =clientsManager.listClients(true, FRM_Id);
+            ViewBag.ClientList =clientsManager.listClients(true, FRM_Id).OrderBy(m=>m.CLI_Name);
 
             DateTime dt = DateTime.Now;           
 
@@ -99,7 +99,7 @@ namespace RMERP.Controllers
             ClientsManager clientsManager = new ClientsManager(_context);
             WageProcessManager wagManager = new WageProcessManager(_context);
             InvoicesManager invoicesManager = new InvoicesManager(_context);
-            ViewBag.Clients = clientsManager.listClients(true, sessionUtils.GetLoggedFirmID());
+            ViewBag.Clients = clientsManager.listClients(true, sessionUtils.GetLoggedFirmID()).OrderBy(m=>m.CLI_Name);
             InvoiceVM invoiceVM = new InvoiceVM();
             invoiceVM.INV_Number = invoicesManager.GetNextInvoiceNumber();           
             invoiceVM.INV_Date = DateNow();            

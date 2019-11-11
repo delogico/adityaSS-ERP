@@ -117,6 +117,7 @@ namespace RMERP.DAL.ViewModel
 
         public string Edit_History { get; set; }
         public DateTime LastRecordRegOn { get; set; }
+        public bool IsHistory { get; set; }
 
     }
 }
