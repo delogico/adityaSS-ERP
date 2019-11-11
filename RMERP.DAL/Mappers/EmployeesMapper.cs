@@ -92,7 +92,7 @@ namespace RMERP.DAL.Mappers
             emp.EMP_FirstName = employee.EMP_FirstName.Trim();
             emp.EMP_MiddleName = employee.EMP_MiddleName.Trim();
             emp.EMP_SurName = employee.EMP_SurName.Trim();
-            emp.EMP_Aadhar_Name = employee.EMP_Aadhar_Name.Trim();
+            emp.EMP_Aadhar_Name = employee.EMP_Aadhar_Name;
             emp.EMP_Aadhar_Number = employee.EMP_Aadhar_Number;
             emp.EMP_DOB = employee.EMP_DOB;
             emp.EMP_Married = employee.EMP_Married;

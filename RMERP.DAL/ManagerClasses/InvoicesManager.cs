@@ -119,35 +119,36 @@ namespace RMERP.DAL.ManagerClasses
             if (list.Count() > 0)
             {
                 double TotalPaybleDays = list.Select(m => m.WAR_TotalPaybleDays).Sum();
-                decimal INC_Total = list.Select(m => m.WAR_GrossTotal).Sum();
                 decimal MLWF = (client.CLI_MLWF_Contribution != null ? client.CLI_MLWF_Contribution.Value : 0);
                 int Nos = list.Where(m => m.CRI_.DES_.DES_Exclude_LWF == false).Select(m => m.EMP_Id).Count();
 
                 Wage_Process wage = list[0].WAG_;
                 string DatePeriod = "";
+                decimal Total = 0;
                 DateTime StartDate = DateTime.Now;
                 DateTime EndDate = DateTime.Now;
                 if (client.CLI_Att_MonthReal.Value)
                 {
-                    DatePeriod = wage.WAG_Month.ToString("MMM-yyyy");
+                    DatePeriod = "For The Month Of "+wage.WAG_Month.ToString("MMM-yyyy");
                 }
                 else
                 {
                     StartDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_Start.Value);
                     EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
-                    DatePeriod = StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
+                    DatePeriod ="From "+ StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
                 }
                 StringBuilder sb = new StringBuilder();
                 sb.Append("<b>Contract Receipt</b></br><i>");
                 sb.AppendLine("Contract Bill For Providing Security Service</br>");
                 if (BillingType == (int)ProjectUtils.CRI_BILLING_TYPE.Service_Change_Basic)
-                {
-                    decimal HRA = (INC_Total * 5) / 100;                    
-
-                    sb.Append("For The Month Of " + DatePeriod + "</br>");
+                {                  
+                    decimal HRA = list.Select(m => m.WAR_HRA_Calculated).Sum();
+                    decimal ServiceCharge = ((TotalServiceCharge * (decimal)CRI_Billing_ServiceCharge) / 100);
+                    Total = Total + HRA+ ServiceCharge;
+                    sb.Append(DatePeriod + "</br>");
                     sb.Append("(A) Salary Wages Including HRA @5% = " + HRA + "/-</br>");
                     sb.Append("Extra Work Wages and Upkeep Allowances");
-                    sb.Append("(B) Service Charges @ "+ CRI_Billing_ServiceCharge + "%= " + TotalServiceCharge + "/-</br>");
+                    sb.Append("(B) Service Charges @ "+ CRI_Billing_ServiceCharge + "%= " + ServiceCharge + "/-</br>");
 
                     if (wage.WAG_Month.Month == (int)ProjectUtils.Month.June || wage.WAG_Month.Month == (int)ProjectUtils.Month.December)
                     {
@@ -155,13 +156,17 @@ namespace RMERP.DAL.ManagerClasses
                         {
                             sb.Append("(C) MLWF Contribution </br>");
                             sb.Append("[Rs." + MLWF + " x " + Nos + " Nos = " + (MLWF * Nos) + "/-]");
+                            Total = Total + (MLWF * Nos);
                         }
                     }
                 }
                 else
-                {
-                    decimal Total = CRI_Billing_Amount * Convert.ToDecimal(TotalPaybleDays);
-                    sb.Append("From " + DatePeriod + "</br>");
+                {                  
+                    decimal SingleDay = CRI_Billing_Amount / DateTime.DaysInMonth(wage.WAG_Month.Year,wage.WAG_Month.Month);
+                    Total = SingleDay * (decimal)TotalPaybleDays;
+
+
+                    sb.Append(DatePeriod + "</br>");
                     sb.Append("(A) " + TotalPaybleDays + "Duties Of Facility Staff</br>");
                     sb.Append("@Rs. " + CRI_Billing_Amount + "PM = " + Total + "/-<br/>");
 
@@ -171,13 +176,14 @@ namespace RMERP.DAL.ManagerClasses
                         {
                             sb.Append("(C) MLWF Contribution </br>");
                             sb.Append("[Rs." + MLWF + " x " + Nos + " Nos = " + (MLWF * Nos) + "/-]");
+                            Total = Total + (MLWF * Nos);
                         }
                     }
                 }
                 sb.Append("</i>");
 
                 invoice_Concept.INC_Description = sb.ToString();
-                invoice_Concept.INC_Total = INC_Total;
+                invoice_Concept.INC_Total = Total;
             }
             return invoice_Concept;
         }
@@ -223,20 +229,20 @@ namespace RMERP.DAL.ManagerClasses
                 DateTime EndDate = DateTime.Now;
                 if (client.CLI_Att_MonthReal.Value)
                 {
-                    DatePeriod = wage.WAG_Month.ToString("MMM-yyyy");
+                    DatePeriod = "For Month Of " + wage.WAG_Month.ToString("MMM-yyyy");
                 }
                 else
                 {
                     StartDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_Start.Value);
                     EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
-                    DatePeriod = StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
+                    DatePeriod ="From "+ StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
                 }
                 //decimal PF_Calculated1 = list.Select(m => m.WAR_PF_Calculated).Sum();
                 //INC_Total = PF_Calculated;
                 sb.Append("<b>Company Contribution Towards PF @" + client.CLI_PF_Employer_Cont_Rate + "%</b><i></br>");
                 sb.Append("Rembursment Of Company Contribution <br/>");
                 sb.Append("To The P.F @" + 12 + "% and Other Charges @" + 1 + "%<br/>");
-                sb.Append("As Per The Act For Month Of " + DatePeriod + "</br/>");
+                sb.Append("As Per The Act " + DatePeriod + "</br/>");
                 sb.Append("(Total=" + PF_Calculated + "/-)");
                 sb.Append("</i>");
             }
@@ -285,19 +291,19 @@ namespace RMERP.DAL.ManagerClasses
                 DateTime EndDate = DateTime.Now;
                 if (client.CLI_Att_MonthReal.Value)
                 {
-                    DatePeriod = wage.WAG_Month.ToString("MMM-yyyy");
+                    DatePeriod = "For The Month Of " + wage.WAG_Month.ToString("MMM-yyyy");
                 }
                 else
                 {
                     StartDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_Start.Value);
                     EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
-                    DatePeriod = StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
+                    DatePeriod = "From "+StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
                 }                       
                 sb.Append("<b>Company Contribution Towards ESIC @" + client.CLI_ESIC_Employer_Cont_Rate + "%</b><i></br>");
                 sb.Append("Rembursment Of Company Contribution <br/>");
                 sb.Append("On Gross Salary= Rs." + list.Select(m => m.WAR_GrossTotal).Sum() + "/-<br/>");
                 sb.Append("@" + client.CLI_ESIC_Employer_Cont_Rate + "% = " + ESIC_Calculated + "<br/>");
-                sb.Append("As Per The Act For The Month Of " + DatePeriod + "<br/>");
+                sb.Append("As Per The Act " + DatePeriod + "<br/>");
                 sb.Append("</i>");
             }
 
