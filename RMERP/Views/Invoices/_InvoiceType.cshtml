@@ -15,7 +15,7 @@
                 <input type="hidden" name="USR_Id" id="USR_Id" value="" />
                 <div class="form-group table">
                     <table class="table table-hover">
-                        @*@Html.HiddenFor(m=>m.WAG_Id)*@
+                        @Html.HiddenFor(m=>m.WAG_Id)
                         @{
                             IEnumerable<ProjectUtils.INVOICE_TEMPLATE_TYPE>
                                 INVOICE_TEMPLATE_TYPES = Enum.GetValues(typeof(ProjectUtils.INVOICE_TEMPLATE_TYPE))
@@ -32,7 +32,7 @@
                                     {
                                         <span>
                                             Contact Bill For Provinding Facility Services For Month
-                                            @Html.DropDownList("WAG_Id", new SelectList(ViewBag.Months, "Value", "Text"), new { @id = "month_" + i, @class = "Month_0" })
+                                            @Html.DropDownList("WAG_Idd", new SelectList(ViewBag.Months, "Value", "Text"), new { @id = "month_" + i, @class = "Month_0" })
                                             And For Type
                                             @Html.DropDownListFor(m => m.Type, new SelectList(string.Empty, "Value", "Text"), "Select Type", new { @id = "type_" + i, @class = "drpType" })
 

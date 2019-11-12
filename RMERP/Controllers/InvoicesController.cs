@@ -181,6 +181,10 @@ namespace RMERP.Controllers
             {
                 invoiceTypeVM.WAG_Id = PrevWage.WAG_Id;
             }
+            else
+            {
+                invoiceTypeVM.WAG_Id = cc.FirstOrDefault().WAG_Id;
+            }
             List<Employees> emps = registerManager.GetWageRegistersForInvoice(CLI_Id).Where(m => m.EMP_.Clients_Employees.Where(cle => cle.CLI_Id.Equals(CLI_Id)).Any(mb => mb.CLE_UnassignedOn != null)).Select(m => m.EMP_).Distinct().ToList();
             ViewBag.LeftEmps = EmployeesMapper.MapEmployees(emps); 
 

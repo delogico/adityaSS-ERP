@@ -324,8 +324,7 @@
             }
         });
 
-        $("input[name='CRI_Billing_Type']").click(function () {
-            debugger;
+        $("input[name='CRI_Billing_Type']").click(function () {           
             var radioValue = $("input[name='CRI_Billing_Type']:checked").val();
             if (radioValue == 1) {
                 $("#div_lumpsum_amount").show();
@@ -1263,8 +1262,8 @@
                             <div class="row">
                                 <div class="col-md-10">
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.CRI_RegisteredOn, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.CRI_RegisteredOn, new { @class = "form-control" })
+                                        @Html.LabelFor(m => m.CRI_RegisteredOn, new { @class = "control-label" })                                        
+                                        @Html.EditorFor(m => m.CRI_RegisteredOn, new { htmlAttributes = new { @class = "form -control" } })
                                     </div>
                                 </div>
                             </div>
