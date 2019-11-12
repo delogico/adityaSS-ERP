@@ -142,13 +142,13 @@ namespace RMERP.DAL.ManagerClasses
                 sb.AppendLine("Contract Bill For Providing Security Service</br>");
                 if (BillingType == (int)ProjectUtils.CRI_BILLING_TYPE.Service_Change_Basic)
                 {                  
-                    decimal HRA = list.Select(m => m.WAR_HRA_Calculated).Sum();
+                    decimal GrossTotal = list.Select(m => m.WAR_GrossTotal).Sum();
                     decimal ServiceCharge = ((TotalServiceCharge * (decimal)CRI_Billing_ServiceCharge) / 100);
-                    Total = Total + HRA+ ServiceCharge;
+                    Total = Total + GrossTotal + ServiceCharge;
                     sb.Append(DatePeriod + "</br>");
-                    sb.Append("(A) Salary Wages Including HRA @5% = " + HRA + "/-</br>");
-                    sb.Append("Extra Work Wages and Upkeep Allowances");
-                    sb.Append("(B) Service Charges @ "+ CRI_Billing_ServiceCharge + "%= " + ServiceCharge + "/-</br>");
+                    sb.Append("(A) Salary Wages Including HRA @5% = " + String.Format("{0:0.##}", GrossTotal) + "/-</br>");
+                    sb.Append("Extra Work Wages and Upkeep Allowances <br/>");
+                    sb.Append("(B) Service Charges @ "+ CRI_Billing_ServiceCharge + "%= " + String.Format("{0:0.##}", ServiceCharge) + "/-</br>");
 
                     if (wage.WAG_Month.Month == (int)ProjectUtils.Month.June || wage.WAG_Month.Month == (int)ProjectUtils.Month.December)
                     {
@@ -268,6 +268,7 @@ namespace RMERP.DAL.ManagerClasses
             if (list.Count() > 0)
             {
                 decimal ApplicableSalary = 0M;
+                decimal GrossTotal = list.Select(m => m.WAR_GrossTotal).Sum();
                 foreach (var item in list)
                 {                   
                     decimal AppSalary = ProjectUtils.GetAmountBasedOnFormula_Report(
@@ -303,7 +304,7 @@ namespace RMERP.DAL.ManagerClasses
                 }                       
                 sb.Append("<b>Company Contribution Towards ESIC @" + client.CLI_ESIC_Employer_Cont_Rate + "%</b><i></br>");
                 sb.Append("Rembursment Of Company Contribution <br/>");
-                sb.Append("On Gross Salary= Rs." + String.Format("{0:0.##}", list.Select(m => m.WAR_GrossTotal).Sum())  + "/-<br/>");
+                sb.Append("On Gross Salary= Rs." + String.Format("{0:0.##}", GrossTotal)  + "/-<br/>");
                 sb.Append("@" + client.CLI_ESIC_Employer_Cont_Rate + "% = " + String.Format("{0:0.##}", ESIC_Calculated) + "<br/>");
                 sb.Append("As Per The Act " + DatePeriod + "<br/>");
                 sb.Append("</i>");
