@@ -34,7 +34,7 @@
                                             Contact Bill For Provinding Facility Services For Month
                                             @Html.DropDownList("WAG_Idd", new SelectList(ViewBag.Months, "Value", "Text"), new { @id = "month_" + i, @class = "Month_0" })
                                             And For Type
-                                            @Html.DropDownListFor(m => m.Type, new SelectList(string.Empty, "Value", "Text"), "Select Type", new { @id = "type_" + i, @class = "drpType" })
+                                            @Html.DropDownListFor(m => m.Type, new SelectList(string.Empty, "Value", "Text"), new { @id = "type_" + i, @class = "drpType" })
 
                                         </span>
                                     }

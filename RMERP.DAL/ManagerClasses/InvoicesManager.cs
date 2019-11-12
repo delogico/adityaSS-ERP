@@ -156,7 +156,7 @@ namespace RMERP.DAL.ManagerClasses
                         {
                             decimal TotMLWF = Convert.ToDecimal(String.Format("{0:0.##}", (MLWF * Nos)));
                             sb.Append("(C) MLWF Contribution </br>");
-                            sb.Append("[Rs." + MLWF + " x " + Nos + " Nos = " + TotMLWF + "/-]");
+                            sb.Append("[Rs." + String.Format("{0:0.##}", MLWF)  + " x " + Nos + " Nos = " + TotMLWF + "/-]");
                             Total = Total + TotMLWF;
                         }
                     }
@@ -169,7 +169,7 @@ namespace RMERP.DAL.ManagerClasses
 
                     sb.Append(DatePeriod + "</br>");
                     sb.Append("(A) " + TotalPaybleDays + "Duties Of Facility Staff</br>");
-                    sb.Append("@Rs. " + CRI_Billing_Amount + "PM = " + String.Format("{0:0.##}", Total) + "/-<br/>");
+                    sb.Append("@Rs. " + String.Format("{0:0.##}", CRI_Billing_Amount) + "PM = " + String.Format("{0:0.##}", Total) + "/-<br/>");
 
                     if (wage.WAG_Month.Month == (int)ProjectUtils.Month.June || wage.WAG_Month.Month == (int)ProjectUtils.Month.December)
                     {
@@ -177,7 +177,7 @@ namespace RMERP.DAL.ManagerClasses
                         {
                             decimal TotMLWF = Convert.ToDecimal(String.Format("{0:0.##}", (MLWF * Nos)));
                             sb.Append("(C) MLWF Contribution </br>");
-                            sb.Append("[Rs." + MLWF + " x " + Nos + " Nos = " + TotMLWF + "/-]");
+                            sb.Append("[Rs." + String.Format("{0:0.##}", MLWF)  + " x " + Nos + " Nos = " + TotMLWF + "/-]");
                             Total = Total + TotMLWF;
                         }
                     }
@@ -303,7 +303,7 @@ namespace RMERP.DAL.ManagerClasses
                 }                       
                 sb.Append("<b>Company Contribution Towards ESIC @" + client.CLI_ESIC_Employer_Cont_Rate + "%</b><i></br>");
                 sb.Append("Rembursment Of Company Contribution <br/>");
-                sb.Append("On Gross Salary= Rs." + list.Select(m => m.WAR_GrossTotal).Sum() + "/-<br/>");
+                sb.Append("On Gross Salary= Rs." + String.Format("{0:0.##}", list.Select(m => m.WAR_GrossTotal).Sum())  + "/-<br/>");
                 sb.Append("@" + client.CLI_ESIC_Employer_Cont_Rate + "% = " + String.Format("{0:0.##}", ESIC_Calculated) + "<br/>");
                 sb.Append("As Per The Act " + DatePeriod + "<br/>");
                 sb.Append("</i>");

@@ -260,7 +260,7 @@
                 calculateGST();
             });
 
-            $(document).on("change", "SELECT[class^=Month_0]", function (event) {  
+            $(document).on("change", "SELECT[class^=Month_0]", function (event) {                
                 var WAG_Id = $("#month_0").val();
                 var CLI_Id = $("#CLI_Id").val();
                 $(".drpType").empty();
@@ -326,8 +326,10 @@
                   
                     $("#loading-image").hide();                   
                     $(".drpType").empty();
-                    $('#invoiceTemplate').html(data);
-                    var WAG_Id = $("#WAG_Id").val();                  
+                    $('#invoiceTemplate').html(data);                  
+
+                    var WAG_Id = $("#WAG_Id").val(); 
+                    
                     if (WAG_Id != "0" || WAG_Id != "" || typeof WAG_Id != 'undefined') {
                         var Url = siteUrl + "Invoices/GetRequirenmentTypes?Wag_Id=" + WAG_Id + "&CLI_Id=" + CLI_Id;
                         $.ajax({
