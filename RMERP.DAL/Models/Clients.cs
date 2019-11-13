@@ -47,7 +47,7 @@ namespace RMERP.DAL.Models
         public string CLI_Invoicing_Address1 { get; set; }
         public string CLI_Invoicing_Address2 { get; set; }
         public string CLI_Invoicing_City { get; set; }
-        public int? CLI_Invoicing_ZipCode { get; set; }
+        public string CLI_Invoicing_ZipCode { get; set; }
         public string CLI_Invoicing_Location { get; set; }
         public bool? CLI_IsIGST { get; set; }
         public double? CLI_IGST { get; set; }

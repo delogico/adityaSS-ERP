@@ -138,7 +138,7 @@ namespace RMERP.Controllers
                 cv.ParametersClientsModel.clientsModel.CLI_Invoicing_Address2 = clients.CLI_Invoicing_Address2;
                 cv.ParametersClientsModel.clientsModel.CLI_Invoicing_City = clients.CLI_Invoicing_City;
                 if (clients.CLI_Invoicing_ZipCode != null)
-                    cv.ParametersClientsModel.clientsModel.CLI_Invoicing_ZipCode = clients.CLI_Invoicing_ZipCode.Value;
+                    cv.ParametersClientsModel.clientsModel.CLI_Invoicing_ZipCode = clients.CLI_Invoicing_ZipCode;
                 cv.ParametersClientsModel.clientsModel.CLI_Invoicing_Location = clients.CLI_Invoicing_Location;
                 if (clients.CLI_IsIGST != null)
                     cv.ParametersClientsModel.clientsModel.CLI_IsIGST = clients.CLI_IsIGST.Value;

@@ -352,6 +352,10 @@ namespace RMERP.DAL.Models
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CLI_Invoicing_ZipCode)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.CLI_IsActive)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
