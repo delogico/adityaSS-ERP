@@ -415,6 +415,53 @@ namespace RMERP.DAL.Helpers
             }
             return sum;
         }
+
+        public static string GetStringBasedOnFormula_Report(string CRI_Formula)
+        {
+            string ret = "";
+            string[] arr_CRI_Formula;
+
+            if (CRI_Formula != null)
+            {
+                arr_CRI_Formula = CRI_Formula.Split("+");
+                foreach (string item in arr_CRI_Formula)
+                {
+                    switch (item)
+                    {
+                        case "BASIC":
+                            ret += "BASIC";
+                            break;
+                        case "DA":
+                            ret += ", DA";
+                            break;
+                        case "HRA":
+                            ret += ", HRA";
+                            break;
+                        case "OT":
+                            ret += ", Extra Work Wages";
+                            break;
+                        case "OSL":
+                            ret += ", Outstation Wages";
+                            break;
+                        case "AAL":
+                            ret += ", Attendance Wages";
+                            break;
+                        case "NSL":
+                            ret += ", Night shift Wages";
+                            break;
+                        case "PAL":
+                            ret += ", Performance Wages";
+                            break;
+                        default:
+                            {  
+                            }
+                            break;
+                    }
+                }
+            }
+            return ret;
+        }
+
         public static decimal GetAmountBasedOnFormula_Edit(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<CalculatedAllowanceVM> All, double totalWorkingDays, double totalPaybleDays, decimal WAR_OverTime_Calculated, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated)
         {
             decimal sum = 0M;
@@ -559,6 +606,24 @@ namespace RMERP.DAL.Helpers
                 val = (int)value + 1;
             }
             return val;
+        }
+        public static decimal RoundFigure(decimal oldValue)
+        {
+            double value = (double)oldValue;
+            decimal Finalval = 0;
+            if (value % 1== 0.5)
+            {
+                Finalval =Convert.ToDecimal(value);
+            }
+            else if (value % 1 < 0.5)
+            {
+                Finalval = Convert.ToDecimal((int)value);
+            }
+            else
+            {
+                Finalval = Convert.ToDecimal((int)value + 1);
+            }
+            return Finalval;
         }
 
         public static string ConvertNumbertoWords(decimal price)

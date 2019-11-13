@@ -37,11 +37,11 @@
                         <td>@item.CRI_Id</td>
                         <td>
                             @Html.Raw(DateHelper.getLongDateFormat(item.CRI_RegisteredOn) + " - " + (item.CRI_InactivatedOn!=null? DateHelper.getLongDateFormat(item.CRI_InactivatedOn.Value):""))
-                            <a onclick="EditRegDate(@item.CRI_Id)" style="cursor:pointer" title="Change Effective From"><i class="fa fa-pencil m-r-5"></i></a>
+                            @*<a onclick="EditRegDate(@item.CRI_Id)" style="cursor:pointer" title="Change Effective From"><i class="fa fa-pencil m-r-5"></i></a>*@
                         </td>
                         <td>
                             <a href='@Url.Action("AddEditRequirement", "Clients", new {CLI_Id=item.CLI_Id, CRI_Id=item.CRI_Id,tab="History" })' title="View"><i class="fa fa-eye m-r-5"></i> View</a> |
-                            <a href='@Url.Action("AddEditRequirement","Clients",new { CRI_Id=item.CRI_Id,CLI_Id = item.CLI_Id,IsHistory=true})' title="ChangeRequirement"><i class="fa fa-pencil m-r-5"></i><span style="color:dimgrey;font-size:12px">Edit</span></a>
+                            <a href='@Url.Action("AddEditRequirement","Clients",new { CRI_Id=item.CRI_Id,CLI_Id = item.CLI_Id,IsHistory=true})' title="Edit Requirement"><i style="color:dimgrey;" class="fa fa-edit m-r-5"></i><span style="color:dimgrey;font-size:12px">Edit</span></a>
                         </td>
                     </tr>
                 }

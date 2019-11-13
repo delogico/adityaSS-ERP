@@ -61,7 +61,7 @@ namespace RMERP.DAL.ViewModel
         public bool CRI_IsPayable_PublicHoliday { get; set; }
         [Required(ErrorMessage ="Date is required")]       
         [Display(Name = "Effective From")]
-        [DataType(DataType.DateTime)]
+        [DataType(DataType.Date)]
         public DateTime CRI_RegisteredOn { get; set; }
         [Required]
         public bool? CRI_Active { get; set; }

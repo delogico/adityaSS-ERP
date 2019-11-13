@@ -358,6 +358,10 @@
     <div class="modal-content modal-lg">
         <div class="modal-header">
             <h4 class="modal-title">@client.CLI_Name</h4>
+            @if (ViewContext.ModelState["IsHistory"] != null)
+            {
+            <div class="alert alert-danger"><i class="fa fa-warning"></i> Modification in this Requirement will not save in History. If you want to make please use option <a href='@Url.Action("AddEditRequirement","Clients",new { CRI_Id=Model.CRI_Id,CLI_Id =  Model.CLI_Id})' title="ChangeRequirement">Create new With Major Modifications</a>. <br /> <i class="fa fa-warning"></i> Modification here will not effect in Wages already saved.</div>
+            }
         </div>
         <div class="modal-body">
             <div class="m-b-30">
@@ -1261,6 +1265,7 @@
                         <div id="RegDate" class="tab-pane">
                             <div class="row">
                                 <div class="col-md-10">
+                                    <div class="alert alert-info">This Version of Requirement will be effective from the Month selected in this date. And will be being effective till we have a New Version.</div>
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.CRI_RegisteredOn, new { @class = "control-label" })                                        
                                         @Html.EditorFor(m => m.CRI_RegisteredOn, new { htmlAttributes = new { @class = "form -control" } })

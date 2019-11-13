@@ -141,22 +141,23 @@ namespace RMERP.DAL.ManagerClasses
                 sb.Append("<b>Contract Receipt</b></br><i>");
                 sb.AppendLine("Contract Bill For Providing Security Service</br>");
                 if (BillingType == (int)ProjectUtils.CRI_BILLING_TYPE.Service_Change_Basic)
-                {                  
-                    decimal GrossTotal = list.Select(m => m.WAR_GrossTotal).Sum();
-                    decimal ServiceCharge = ((TotalServiceCharge * (decimal)CRI_Billing_ServiceCharge) / 100);
+                {
+                    decimal GrossTotal = ProjectUtils.RoundFigure(TotalServiceCharge); 
+                    decimal ServiceCharge = ProjectUtils.RoundFigure(TotalServiceCharge * (decimal)CRI_Billing_ServiceCharge / 100);
                     Total = Total + GrossTotal + ServiceCharge;
                     sb.Append(DatePeriod + "</br>");
-                    sb.Append("(A) Salary Wages Including HRA @5% = " + String.Format("{0:0.##}", GrossTotal) + "/-</br>");
-                    sb.Append("Extra Work Wages and Upkeep Allowances <br/>");
-                    sb.Append("(B) Service Charges @ "+ CRI_Billing_ServiceCharge + "%= " + String.Format("{0:0.##}", ServiceCharge) + "/-</br>");
+                    sb.Append("(A) Salary Wages = " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(GrossTotal)) + "/-</br>");
+                    string str = ProjectUtils.GetStringBasedOnFormula_Report(list[0].CRI_.CRI_Billing_ServiceCharge_Formula);
+                    sb.Append(str + "<br/>");
+                    sb.Append("(B) Service Charges @ "+ CRI_Billing_ServiceCharge + "%= " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(ServiceCharge)) + "/-</br>");
 
                     if (wage.WAG_Month.Month == (int)ProjectUtils.Month.June || wage.WAG_Month.Month == (int)ProjectUtils.Month.December)
                     {
                         if (MLWF != 0)
                         {
-                            decimal TotMLWF = Convert.ToDecimal(String.Format("{0:0.##}", (MLWF * Nos)));
+                            decimal TotMLWF = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure((MLWF * Nos))));
                             sb.Append("(C) MLWF Contribution </br>");
-                            sb.Append("[Rs." + String.Format("{0:0.##}", MLWF)  + " x " + Nos + " Nos = " + TotMLWF + "/-]");
+                            sb.Append("[Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(MLWF)  + " x " + Nos + " Nos = " + TotMLWF + "/-]"));
                             Total = Total + TotMLWF;
                         }
                     }
@@ -169,15 +170,15 @@ namespace RMERP.DAL.ManagerClasses
 
                     sb.Append(DatePeriod + "</br>");
                     sb.Append("(A) " + TotalPaybleDays + "Duties Of Facility Staff</br>");
-                    sb.Append("@Rs. " + String.Format("{0:0.##}", CRI_Billing_Amount) + "PM = " + String.Format("{0:0.##}", Total) + "/-<br/>");
+                    sb.Append("@Rs. " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(CRI_Billing_Amount)) + "PM = " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(Total)) + "/-<br/>");
 
                     if (wage.WAG_Month.Month == (int)ProjectUtils.Month.June || wage.WAG_Month.Month == (int)ProjectUtils.Month.December)
                     {
                         if (MLWF != 0)
                         {
-                            decimal TotMLWF = Convert.ToDecimal(String.Format("{0:0.##}", (MLWF * Nos)));
+                            decimal TotMLWF = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(MLWF * Nos)));
                             sb.Append("(C) MLWF Contribution </br>");
-                            sb.Append("[Rs." + String.Format("{0:0.##}", MLWF)  + " x " + Nos + " Nos = " + TotMLWF + "/-]");
+                            sb.Append("[Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(MLWF))  + " x " + Nos + " Nos = " + TotMLWF + "/-]");
                             Total = Total + TotMLWF;
                         }
                     }
@@ -185,7 +186,7 @@ namespace RMERP.DAL.ManagerClasses
                 sb.Append("</i>");
 
                 invoice_Concept.INC_Description = sb.ToString();
-                invoice_Concept.INC_Total =Convert.ToDecimal(String.Format("{0:0.##}", Total));
+                invoice_Concept.INC_Total =Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(Total)));
             }
             return invoice_Concept;
         }
@@ -243,14 +244,14 @@ namespace RMERP.DAL.ManagerClasses
                 //INC_Total = PF_Calculated;
                 sb.Append("<b>Company Contribution Towards PF @" + client.CLI_PF_Employer_Cont_Rate + "%</b><i></br>");
                 sb.Append("Rembursment Of Company Contribution <br/>");
-                sb.Append("To The P.F @" + 12 + "% and Other Charges @" + 1 + "%<br/>");
-                sb.Append("As Per The Act " + DatePeriod + "</br/>");
-                sb.Append("(Total=" + String.Format("{0:0.##}", PF_Calculated) + "/-)");
+                //sb.Append("To The P.F @" + 12 + "% and Other Charges @" + 1 + "%<br/>");
+                //sb.Append("As Per The Act " + DatePeriod + "</br/>");
+                sb.Append("(Total=" + String.Format("{0:0.##}", ProjectUtils.RoundFigure(PF_Calculated * (decimal)client.CLI_PF_Employer_Cont_Rate / 100)) + "/-)");
                 sb.Append("</i>");
             }
 
             invoice_Concept.INC_Description = sb.ToString();
-            invoice_Concept.INC_Total =Convert.ToDecimal(String.Format("{0:0.##}", PF_Calculated));
+            invoice_Concept.INC_Total = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(PF_Calculated * (decimal)client.CLI_PF_Employer_Cont_Rate / 100)));
 
             return invoice_Concept;
         }
@@ -304,14 +305,14 @@ namespace RMERP.DAL.ManagerClasses
                 }                       
                 sb.Append("<b>Company Contribution Towards ESIC @" + client.CLI_ESIC_Employer_Cont_Rate + "%</b><i></br>");
                 sb.Append("Rembursment Of Company Contribution <br/>");
-                sb.Append("On Gross Salary= Rs." + String.Format("{0:0.##}", GrossTotal)  + "/-<br/>");
-                sb.Append("@" + client.CLI_ESIC_Employer_Cont_Rate + "% = " + String.Format("{0:0.##}", ESIC_Calculated) + "<br/>");
-                sb.Append("As Per The Act " + DatePeriod + "<br/>");
+                sb.Append("On Gross Salary= Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(GrossTotal)  + "/-<br/>"));
+                sb.Append("@" + client.CLI_ESIC_Employer_Cont_Rate + "% = " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(ESIC_Calculated * (decimal)client.CLI_ESIC_Employer_Cont_Rate / 100)));
+                //sb.Append("As Per The Act " + DatePeriod + "<br/>");
                 sb.Append("</i>");
             }
 
             invoice_Concept.INC_Description = sb.ToString();
-            invoice_Concept.INC_Total = Convert.ToDecimal(String.Format("{0:0.##}", ESIC_Calculated));
+            invoice_Concept.INC_Total = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(ESIC_Calculated * (decimal)client.CLI_ESIC_Employer_Cont_Rate / 100)));
 
             return invoice_Concept;
         }
