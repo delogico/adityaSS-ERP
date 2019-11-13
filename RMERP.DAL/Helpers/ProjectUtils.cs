@@ -416,49 +416,57 @@ namespace RMERP.DAL.Helpers
             return sum;
         }
 
-        public static string GetStringBasedOnFormula_Report(string CRI_Formula)
+        public static string GetStringBasedOnFormula_Report(string CRI_Formula, List<Wage_Register_Allowances> All)
         {
             string ret = "";
-            string[] arr_CRI_Formula;
+            ret = CRI_Formula.Replace("+", ",");
+            //string[] arr_CRI_Formula;
 
-            if (CRI_Formula != null)
-            {
-                arr_CRI_Formula = CRI_Formula.Split("+");
-                foreach (string item in arr_CRI_Formula)
-                {
-                    switch (item)
-                    {
-                        case "BASIC":
-                            ret += "BASIC";
-                            break;
-                        case "DA":
-                            ret += ", DA";
-                            break;
-                        case "HRA":
-                            ret += ", HRA";
-                            break;
-                        case "OT":
-                            ret += ", Extra Work Wages";
-                            break;
-                        case "OSL":
-                            ret += ", Outstation Wages";
-                            break;
-                        case "AAL":
-                            ret += ", Attendance Wages";
-                            break;
-                        case "NSL":
-                            ret += ", Night shift Wages";
-                            break;
-                        case "PAL":
-                            ret += ", Performance Wages";
-                            break;
-                        default:
-                            {  
-                            }
-                            break;
-                    }
-                }
-            }
+            //if (CRI_Formula != null)
+            //{
+            //    arr_CRI_Formula = CRI_Formula.Split("+");
+            //    foreach (string item in arr_CRI_Formula)
+            //    {
+            //        switch (item)
+            //        {
+            //            case "BASIC":
+            //                ret += "BASIC";
+            //                break;
+            //            case "DA":
+            //                ret += ", DA";
+            //                break;
+            //            case "HRA":
+            //                ret += ", HRA";
+            //                break;
+            //            case "OT":
+            //                ret += ", Extra Work Wages";
+            //                break;
+            //            case "OSL":
+            //                ret += ", Outstation Wages";
+            //                break;
+            //            case "AAL":
+            //                ret += ", Attendance Wages";
+            //                break;
+            //            case "NSL":
+            //                ret += ", Night shift Wages";
+            //                break;
+            //            case "PAL":
+            //                ret += ", Performance Wages";
+            //                break;
+            //            default:
+            //                {
+            //                    foreach (var allowance in All)
+            //                    {
+            //                        if (allowance.CRA_.ALL_.ALL_Shortform == item)
+            //                        {
+            //                            ret +=", "+ allowance.CRA_.ALL_.ALL_Title;
+            //                        }
+            //                    }
+            //                }
+            //                break;
+            //        }
+            //    }
+            //}
             return ret;
         }
 
@@ -611,17 +619,13 @@ namespace RMERP.DAL.Helpers
         {
             double value = (double)oldValue;
             decimal Finalval = 0;
-            if (value % 1== 0.5)
+            if (value % 1 <= 0.5)
             {
-                Finalval =Convert.ToDecimal(value);
-            }
-            else if (value % 1 < 0.5)
-            {
-                Finalval = Convert.ToDecimal((int)value);
+                Finalval =(int)value;
             }
             else
             {
-                Finalval = Convert.ToDecimal((int)value + 1);
+                Finalval =(int)value + 1;
             }
             return Finalval;
         }

@@ -1,4 +1,5 @@
 ﻿@model RMERP.DAL.ViewModel.InvoiceVM
+
 @{
     ViewData["Title"] = "Invoice Info";
 }
@@ -219,7 +220,7 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js"></script>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
-   @*<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />*@
+    @*<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />*@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js" type="text/javascript"></script>
     @*<link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />*@
     <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js" type="text/javascript"></script>
@@ -244,7 +245,7 @@
         </script>
     };
     <script>
-        $(document).ready(function () {                             
+        $(document).ready(function () {
             var allEditors = document.querySelectorAll('.desc');
             for (var i = 0; i < allEditors.length; ++i) {
                 ClassicEditor.create(allEditors[i]);
@@ -260,7 +261,7 @@
                 calculateGST();
             });
 
-            $(document).on("change", "SELECT[class^=Month_0]", function (event) {                
+            $(document).on("change", "SELECT[class^=Month_0]", function (event) {
                 var WAG_Id = $("#month_0").val();
                 var CLI_Id = $("#CLI_Id").val();
                 $(".drpType").empty();
@@ -309,7 +310,7 @@
             }
         });
 
-        function openInvoiceTemplate() {         
+        function openInvoiceTemplate() {
             $(".modal-backdrop").removeClass("modal-backdrop").addClass("modal");
             var CLI_Id = $("#CLI_Id").val();
             var INV_Date = $("#INV_Date").val();
@@ -322,40 +323,40 @@
                     $('#invoiceTemplate').html("");
                     $('#InvoiceTypeModal').hide();
                 },
-                success: function (data) {                
-                  
-                    $("#loading-image").hide();                   
-                    $(".drpType").empty();
-                    $('#invoiceTemplate').html(data);                  
+                success: function (data) {
 
-                    var WAG_Id = $("#WAG_Id").val(); 
-                    
+                    $("#loading-image").hide();
+                    $(".drpType").empty();
+                    $('#invoiceTemplate').html(data);
+
+                    var WAG_Id = $("#WAG_Id").val();
+
                     if (WAG_Id != "0" || WAG_Id != "" || typeof WAG_Id != 'undefined') {
                         var Url = siteUrl + "Invoices/GetRequirenmentTypes?Wag_Id=" + WAG_Id + "&CLI_Id=" + CLI_Id;
                         $.ajax({
                             type: 'POST',
                             url: Url,
                             dataType: 'json',
-                            success: function (Types) {                               
+                            success: function (Types) {
                                 $.each(Types, function (i, Type) {
                                     $("#type_0").append('<option value="' + Type.value + '">' +
                                         Type.text + '</option>');
-                                });                                
+                                });
                             },
                             error: function (ex) {
                                 alert('Failed to retrieve Type.' + ex);
                             }
-                        });   
+                        });
                         $('#invoiceTemplate').html("");
                         $('#invoiceTemplate').html(data);
                         $('#InvoiceTypeModal').modal('show');
-                    } 
+                    }
                 }
             })
         };
 
-       
-        function FillData(id) {            
+
+        function FillData(id) {
             var EMPs = "";
             var Type_Id = 0;
             var WAG_Id = $("#month_" + id).val();
@@ -374,13 +375,13 @@
             }
             if (id == 3) {
                 var selected = $("#Left_EMP_Id option:selected");
-                
-                selected.each(function () {                
+
+                selected.each(function () {
                     EMPs += $(this).val() + ",";
                 });
-                EMPs= EMPs.substring(0, EMPs.length - 1) 
-                              
-            }            
+                EMPs= EMPs.substring(0, EMPs.length - 1)
+
+            }
             if (CLI_Id != "") {
                 var Url = siteUrl + "Invoices/GetInvoiceData?CLI_Id=" + CLI_Id + "&Type_Id=" + Type_Id + "&WAG_Id=" + WAG_Id + "&Type=" + Type + "&EMPs=" + EMPs;
                 $.ajax({
@@ -448,18 +449,18 @@
             var INV_IGST_Percentage = (isNaN(INV_IGST_Percentage = parseFloat($("#INV_IGST_Percentage").val(), 10)) ? 0 : INV_IGST_Percentage);
             var All_INC_Total = $("#All_INC_Total").val();
 
-            var INV_CGST_Total = (parseFloat(All_INC_Total) * parseFloat(INV_CGST_Percentage)) / 100;
+            var INV_CGST_Total =(parseFloat(All_INC_Total) * parseFloat(INV_CGST_Percentage)) / 100;
             var INV_SGST_Total = (parseFloat(All_INC_Total) * parseFloat(INV_SGST_Percentage)) / 100;
             var INV_IGST_Total = (parseFloat(All_INC_Total) * parseFloat(INV_IGST_Percentage)) / 100;
 
-            $("#INV_CGST_Total").val(INV_CGST_Total.toFixed(2));
-            $("#INV_SGST_Total").val(INV_SGST_Total.toFixed(2));
-            $("#INV_IGST_Total").val(INV_IGST_Total.toFixed(2));
+            $("#INV_CGST_Total").val(INV_CGST_Total.toFixed());
+            $("#INV_SGST_Total").val(INV_SGST_Total.toFixed());
+            $("#INV_IGST_Total").val(INV_IGST_Total.toFixed());
 
             var totTAX = parseFloat(INV_CGST_Total) + parseFloat(INV_SGST_Total) + parseFloat(INV_IGST_Total);
-            $("#totTAX").val(totTAX.toFixed(2));
+            $("#totTAX").val(totTAX.toFixed());
 
-            $("#INV_Total").val((parseFloat(All_INC_Total) + parseFloat(totTAX)).toFixed(2));
+            $("#INV_Total").val((parseFloat(All_INC_Total) + parseFloat(totTAX)).toFixed());
         };
 
         function RemoveInvoiceConcept(button) {
@@ -471,7 +472,7 @@
             }
 
             var All_INC_Total = (isNaN(All_INC_Total = parseFloat($("#All_INC_Total").val(), 10)) ? 0 : All_INC_Total);
-            $("#All_INC_Total").val((parseFloat(All_INC_Total) - parseFloat(INC_Total)).toFixed(2));
+            $("#All_INC_Total").val((parseFloat(All_INC_Total) - parseFloat(INC_Total)).toFixed());
             calculateGST();
         };
         $("body").on("click", "#btnSave", function () {

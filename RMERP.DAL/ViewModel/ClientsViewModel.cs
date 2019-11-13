@@ -94,8 +94,7 @@ namespace RMERP.DAL.ViewModel
         public string CLI_Invoicing_City { get; set; }
         [Display(Name = "State")]
         public int STA_Id { get; set; }
-        [Display(Name = "Zipcode")]
-        [Required(ErrorMessage = "ZipCode is required")]
+        [Display(Name = "Zipcode")]       
         public string CLI_Invoicing_ZipCode { get; set; }
         [Display(Name = "Location")]
         public string CLI_Invoicing_Location { get; set; }

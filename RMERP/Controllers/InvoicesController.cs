@@ -349,7 +349,7 @@ namespace RMERP.Controllers
         {
             InvoicesManager invoicesManager = new InvoicesManager(_context);
             Invoice_Concepts concept = new Invoice_Concepts();
-            if (!string.IsNullOrEmpty(Type_Id))
+            if (!string.IsNullOrEmpty(Type_Id)&& Type_Id!="null")
             {
                 if (Type_Id.Split("_")[0] == "service")
                 {

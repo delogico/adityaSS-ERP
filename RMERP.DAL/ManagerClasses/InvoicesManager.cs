@@ -147,7 +147,7 @@ namespace RMERP.DAL.ManagerClasses
                     Total = Total + GrossTotal + ServiceCharge;
                     sb.Append(DatePeriod + "</br>");
                     sb.Append("(A) Salary Wages = " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(GrossTotal)) + "/-</br>");
-                    string str = ProjectUtils.GetStringBasedOnFormula_Report(list[0].CRI_.CRI_Billing_ServiceCharge_Formula);
+                    string str = ProjectUtils.GetStringBasedOnFormula_Report(list[0].CRI_.CRI_Billing_ServiceCharge_Formula, list[0].Wage_Register_Allowances.ToList());
                     sb.Append(str + "<br/>");
                     sb.Append("(B) Service Charges @ "+ CRI_Billing_ServiceCharge + "%= " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(ServiceCharge)) + "/-</br>");
 

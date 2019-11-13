@@ -94,6 +94,7 @@ namespace RMERP.Controllers
             Clients clients = new Clients();
             cv.clientsModel.CLI_RegisteredOn = ProjectUtils.DateNow();
             cv.clientsModel.FRM_Id = FRM_Id;
+            cv.clientsModel.STA_Id = 12;
             ViewBag.states = employeeManager.GetStates();
             IEnumerable<Firms> listFirms = new List<Firms>();
             List<Cities> listCity = new List<Cities>();
