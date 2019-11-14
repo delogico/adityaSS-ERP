@@ -127,15 +127,18 @@ namespace RMERP.DAL.ManagerClasses
                 decimal Total = 0;
                 DateTime StartDate = DateTime.Now;
                 DateTime EndDate = DateTime.Now;
+                int daysInMonth = 0;
                 if (client.CLI_Att_MonthReal.Value)
                 {
                     DatePeriod = "For The Month Of "+wage.WAG_Month.ToString("MMM-yyyy");
+                    daysInMonth = DateTime.DaysInMonth(wage.WAG_Month.Year, wage.WAG_Month.Month);
                 }
                 else
                 {
-                    StartDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_Start.Value);
+                    StartDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month-1, client.CLI_Att_Month_Start.Value);
                     EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
-                    DatePeriod ="From "+ StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
+                    DatePeriod ="From "+ StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy");
+                    daysInMonth = (int)(EndDate - StartDate).TotalDays;
                 }
                 StringBuilder sb = new StringBuilder();
                 sb.Append("<b>Contract Receipt</b></br><i>");
@@ -164,7 +167,7 @@ namespace RMERP.DAL.ManagerClasses
                 }
                 else
                 {                  
-                    decimal SingleDay = CRI_Billing_Amount / DateTime.DaysInMonth(wage.WAG_Month.Year,wage.WAG_Month.Month);
+                    decimal SingleDay = CRI_Billing_Amount / daysInMonth;
                     Total = SingleDay * (decimal)TotalPaybleDays;
 
 
