@@ -418,6 +418,8 @@ namespace RMERP.DAL.Models
                 entity.HasIndex(e => e.CLE_Id)
                     .HasName("IX_Clients_Employees");
 
+                entity.Property(e => e.CLE_ReassignedOn).HasColumnType("datetime");
+
                 entity.Property(e => e.CLE_RegisteredOn)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");

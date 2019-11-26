@@ -138,7 +138,7 @@ namespace RMERP.DAL.ManagerClasses
                     StartDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month-1, client.CLI_Att_Month_Start.Value);
                     EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
                     DatePeriod ="From "+ StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy");
-                    daysInMonth = (int)(EndDate - StartDate).TotalDays;
+                    daysInMonth = (int)(EndDate - StartDate).TotalDays - 1;
                 }
                 StringBuilder sb = new StringBuilder();
                 sb.Append("<b>Contract Receipt</b></br><i>");

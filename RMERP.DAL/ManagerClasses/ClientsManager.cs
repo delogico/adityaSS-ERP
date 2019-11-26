@@ -481,6 +481,25 @@ namespace RMERP.DAL.ManagerClasses
             return res;
         }
 
+        public string ReassignClientEmployee(int id)
+        {
+            string res = string.Empty;
+            try
+            {
+                Clients_Employees clients_Employees = _contaxt.Clients_Employees.Find(id);
+                clients_Employees.CLE_UnassignedOn = null;
+                clients_Employees.ADM_Id_UnassignedBy =null;
+                clients_Employees.CLE_ReassignedOn = ProjectUtils.DateNow();
+                _contaxt.Clients_Employees.Update(clients_Employees);
+                _contaxt.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                res = ex.Message;
+            }
+            return res;
+        }
+
         public IEnumerable<Clients_Employees> listClientsPerWag(bool IsActive, int wagId, int AdminId, int? firmId)
         {
             IEnumerable<Clients_Employees> ClientList = null;

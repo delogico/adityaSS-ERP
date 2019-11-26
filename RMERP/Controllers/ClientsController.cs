@@ -709,7 +709,26 @@ namespace RMERP.Controllers
                     string res = clientsManager.UnassignClientEmployee(CLE_Id, UnassignedOn, sessionUtils.GetLoggedAdminID());
                     if (res != string.Empty)
                     {
-                        TempData["message"] = "Employee can not deleted";
+                        TempData["message"] = "Employee is not able to Unassigned! Try Again";
+                    }
+                }
+            }
+            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
+        }
+
+        public ActionResult ReassignClientEmployee(int CLE_Id = -1)
+        {
+            ClientsViewModel clientsViewModel = new ClientsViewModel();
+            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            if (ModelState.IsValid)
+            {
+                if (CLE_Id > 0)
+                {
+                    string res = clientsManager.ReassignClientEmployee(CLE_Id);
+                    if (res != string.Empty)
+                    {
+                        TempData["message"] = "Employee is not able to Resssign!Try Again";
                     }
                 }
             }

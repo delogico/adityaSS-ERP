@@ -459,7 +459,7 @@
                         <div class="col-md-12">
                             <div class="profile-view">
                                 <h4 class="page-title">Invoicing Parameters</h4>
-                               
+
                                 <div class="row">
                                     <div class="form-group col-sm-10">
                                         @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Invoicing_Name)
@@ -503,46 +503,46 @@
                                     </div>
 
                                     @*<div class="form-group col-sm-2">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="col-sm-6">
-                                                    @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsIGST, new { @id = "chkIsIGST" })
-                                                    &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsIGST, new { @for = "chkIsIGST" })
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="col-sm-6">
+                                                        @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsIGST, new { @id = "chkIsIGST" })
+                                                        &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsIGST, new { @for = "chkIsIGST" })
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <div id="divIGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsIGST ? "block" : "none")">
+                                                            @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IGST, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_IGST, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="form-group col-sm-6">
-                                                    <div id="divIGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsIGST ? "block" : "none")">
-                                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IGST, new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_IGST, "", new { @class = "text-danger" })
+                                                <div class="col-sm-12">
+                                                    <div class="col-sm-6">
+                                                        @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsCGST, new { @id = "chkIsCGST" })
+                                                        &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsCGST, new { @for = "chkIsCGST" })
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <div id="divCGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsCGST ? "block" : "none")">
+                                                            @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_CGST, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_CGST, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="col-sm-6">
+                                                        @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsSGST, new { @id = "chkIsSGST" })
+                                                        &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsSGST, new { @for = "chkIsSGST" })
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <div id="divSGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsSGST ? "block" : "none")">
+                                                            @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_SGST, new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_SGST, "", new { @class = "text-danger" })
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-12">
-                                                <div class="col-sm-6">
-                                                    @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsCGST, new { @id = "chkIsCGST" })
-                                                    &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsCGST, new { @for = "chkIsCGST" })
-                                                </div>
-                                                <div class="form-group col-sm-6">
-                                                    <div id="divCGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsCGST ? "block" : "none")">
-                                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_CGST, new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_CGST, "", new { @class = "text-danger" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div class="col-sm-6">
-                                                    @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsSGST, new { @id = "chkIsSGST" })
-                                                    &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsSGST, new { @for = "chkIsSGST" })
-                                                </div>
-                                                <div class="form-group col-sm-6">
-                                                    <div id="divSGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsSGST ? "block" : "none")">
-                                                        @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_SGST, new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_SGST, "", new { @class = "text-danger" })
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>*@
-                                   
+                                        </div>*@
+
                                     <div class="form-group col-sm-6">
                                         @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply)
                                         @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply, new { @class = "form-control" })
@@ -594,10 +594,12 @@
                                 <tbody>
                                     @foreach (var item in Model.employees)
                                     {
+                                        bool IsUnAssign = false;
                                         var style = "";
                                         if (item.CLE_UnassignedOn != null)
                                         {
                                             style = "style=color:orangered;";
+                                            IsUnAssign = true;
                                         }
                                         <tr @style>
                                             <td><b>@item.DES_Title</b></td>
@@ -608,14 +610,20 @@
                                                 <div class="dropdown">
                                                     <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                     <ul class="dropdown-menu pull-right">
-                                                        @*<li><a href='@Url.Action("UnassignClientEmployee","Clients",new { CLE_Id=item.CLE_Id})' title="Unassign"><i class="fa fa-trash m-r-5"></i> Unassign</a></li>*@
-                                                        <li><a href='#' onclick="onUnassignClick(@item.CLE_Id)" title="Unassign"><i class="fa fa-trash m-r-5"></i> Unassign</a></li>
+                                                        @if (IsUnAssign)
+                                                        {
+                                                            <li><a href='#' onclick="onReassignClick(@item.CLE_Id)" title="Reassign"><i class="fa fa-plus-circle m-r-5"></i> Reassign</a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><a href='#' onclick="onUnassignClick(@item.CLE_Id)" title="Unassign"><i class="fa fa-trash m-r-5"></i> Unassign</a></li>
+                                                        }
                                                         <li><a href='@Url.Action("AddEmployee","Clients",new { CLI_Id=Model.clientsModel.CLI_Id, CLE_Id=item.CLE_Id})' title="Edit"><i class="fa fa-edit m-r-5"></i> Edit</a></li>
                                                         @if (!item.IsEmployeeWagedForClient && item.CLE_UnassignedOn == null)
                                                         {
                                                             @*<li><a href='@Url.Action("DeleteAssignEmployee","Clients",new {CLE_Id=item.CLE_Id})' title="Delete"><i class="fa fa-remove m-r-5"></i> Delete </a></li>*@
                                                             <li><a href='#' onclick="onDeleteEmployeeClick(@item.CLE_Id,@item.CLI_Id,@item.EMP_Id,@item.DES_Id)" title="Delete"><i class="fa fa-remove m-r-5"></i> Delete</a></li>
-                                                        }                                                        
+                                                        }
                                                     </ul>
 
                                                 </div>
@@ -862,7 +870,7 @@
             }
 
         }
-        function WorkingDays_Change(days) {       
+        function WorkingDays_Change(days) {
             if ($(days).find('option:selected').val() == "2") {
                 $("#divSelectMethod").show();
             } else if ($(days).find('option:selected').val() == "3") {
@@ -877,7 +885,7 @@
                 title: "Choose Month!",
                 inputType: 'date',
 
-                callback: function (result) {                   
+                callback: function (result) {
                     if (result != null) {
                         $.ajax({
                             type: "POST",
@@ -896,7 +904,7 @@
                 }
             });
         };
-        
+
         function onConfirmClickSingle() {
             bootbox.prompt({
                 title: "Choose Month!",
@@ -940,9 +948,24 @@
                             }
 
                         })
-                    }                   
+                    }
                 }
             });
+        };
+
+        function onReassignClick(CLE_Id) {
+            debugger;
+            $.ajax({
+                            type: "POST",
+                url: "/Clients/ReassignClientEmployee?CLE_Id=" + CLE_Id,
+                            contentType: 'application/json; charset=utf-8',
+                            datatype: 'json',
+                            type: "GET",
+                            success: function () {
+                                window.location = '@Url.Action("AddEditClients", "Clients",new { @tab = "ClientEmployee" })';
+                            }
+
+                        })
         };
 
         function onDeleteEmployeeClick(CLE_Id,CLI_Id,EMP_Id,DES_Id) {
@@ -960,12 +983,12 @@
                                 buttons: {
                                     cancel: {
                                         label: "Cancel!",
-                                        className: 'btn-danger',                                       
+                                        className: 'btn-danger',
                                     },
                                     ok: {
                                         label: "Yes!",
                                         className: 'btn-info',
-                                        callback: function () {                                            
+                                        callback: function () {
                                             $.ajax({
                                                 type: "POST",
                                                 url: "/Clients/DeleteAssignEmployee?CLE_Id=" + CLE_Id + "&CLI_Id=" + CLI_Id + "&EMP_Id=" + EMP_Id + "&DES_Id=" + DES_Id,
@@ -1017,7 +1040,7 @@
         });
 
         function EditRegDate(CRI_Id) {
-            $(".modal-backdrop").removeClass("modal-backdrop").addClass("modal");            
+            $(".modal-backdrop").removeClass("modal-backdrop").addClass("modal");
             var Url = siteUrl + "Clients/EditRegistrationDate?CRI_Id=" + CRI_Id;
             $.ajax({
                 type: "GET",
