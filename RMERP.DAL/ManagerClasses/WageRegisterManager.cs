@@ -118,7 +118,7 @@ namespace RMERP.DAL.ManagerClasses
                     #region Paybale day counting
 
                     int totWeekOffs = 0, totalPublicHoliday = 0, totEarnLeave = 0, totNightShift = 0, totAbsent = 0;
-                    double totPresentDays = 0, totHalfDays = 0, totExtraWorkingDays = 0, WAR_ExtraWorkingHours = 0, totNighthours = 0;
+                    double totPresentDays = 0, totHalfDays = 0, totExtraWorkingDays = 0, WAR_ExtraWorkingHours = 0;// totNighthours = 0;
 
                     totPresentDays = attendances.Where(a => a.ATT_IsPresent == true).Count();
                     totEarnLeave = attendances.Where(a => a.ATT_IsEarnLeave == true).Count();
@@ -130,7 +130,7 @@ namespace RMERP.DAL.ManagerClasses
 
                     totWeekOffs = attendances.Where(a => a.ATT_IsWeeklyOff == true).Count();
                     totalPublicHoliday = attendances.Where(a => a.ATT_IsPublicHoliday == true).Count();
-                    totNighthours = totNightShift * cli.CLI_WorkingHours_In_Day;
+                   // totNighthours = totNightShift * cli.CLI_WorkingHours_In_Day;
 
                     totalPaybleDays = (totPresentDays - totHalfDays) + (totHalfDays / 2) + totEarnLeave;
 
@@ -190,7 +190,8 @@ namespace RMERP.DAL.ManagerClasses
                         }
                         if (cr.CRI_Nightshift_Allowance)
                         {
-                            WAR_Nightshift_Allowance_Calculated = Convert.ToDecimal(Convert.ToDouble(cr.CRI_Nightshift_Allowance_Rate.Value) * totNighthours);
+                            // WAR_Nightshift_Allowance_Calculated = Convert.ToDecimal(Convert.ToDouble(cr.CRI_Nightshift_Allowance_Rate.Value) * totNighthours);
+                            WAR_Nightshift_Allowance_Calculated = Convert.ToDecimal(Convert.ToDouble(cr.CRI_Nightshift_Allowance_Rate.Value) * totNightShift);
                             wageRegisterVM.WAR_Nightshift_Allowance_Calculated = WAR_Nightshift_Allowance_Calculated;
                         }
                         if (cr.CRI_Performance_Allowance)
