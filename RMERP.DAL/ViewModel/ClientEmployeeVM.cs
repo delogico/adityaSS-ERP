@@ -28,5 +28,6 @@ namespace RMERP.DAL.ViewModel
         public EmployeeVM employee { get; set; }
 
         public bool IsEmployeeWagedForClient { get; set; }
+        public int Old_DES_Id { get; set; }
     }
 }

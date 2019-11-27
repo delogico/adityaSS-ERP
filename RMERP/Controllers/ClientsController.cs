@@ -660,6 +660,7 @@ namespace RMERP.Controllers
                 cvm.DES_Id = clientEmployee.DES_Id;
                 cvm.EMP_Id = clientEmployee.EMP_Id;
                 cvm.CLE_RegisteredOn = clientEmployee.CLE_RegisteredOn;
+                cvm.Old_DES_Id = clientEmployee.DES_Id;
             }
             else
             {
@@ -687,8 +688,8 @@ namespace RMERP.Controllers
                 clientsEmployees.DES_Id = cvm.DES_Id;
                 clientsEmployees.CLE_RegisteredOn = cvm.CLE_RegisteredOn;
                 //clientsEmployees.CLE_UnassignedOn = cvm.CLE_UnassignedOn;
-                SessionUtils sessionUtils = new SessionUtils(Request, Response);
-                res = clientsManager.ClientEmployee(clientsEmployees, sessionUtils.GetLoggedAdminID());
+                SessionUtils sessionUtils = new SessionUtils(Request, Response);               
+                res = clientsManager.ClientEmployee(clientsEmployees, cvm.Old_DES_Id, sessionUtils.GetLoggedAdminID());
                 if (res != string.Empty)
                 {
                     TempData["message"] = "ClientEmployee data can not Inserted";

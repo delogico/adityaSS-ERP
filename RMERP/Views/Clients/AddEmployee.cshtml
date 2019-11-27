@@ -15,7 +15,7 @@
         $(document).ready(function () {
             CLE_Id = $('#CLE_Id').val();
             if (CLE_Id > 0) {
-                $('select', 'form').attr('disabled', true).attr('readonly', true);
+                $("#EMP_Id").attr('disabled', true).attr('readonly', true);
             }
             $('.selectpicker').selectpicker({
                 liveSearch: true,
@@ -42,6 +42,7 @@
                 {
                     @Html.HiddenFor(m => m.CLE_Id)
                     @Html.HiddenFor(m => m.CLI_Id)
+                    @Html.HiddenFor(m => m.Old_DES_Id)
 
                     <div class="row">
                         <div class="col-md-12">

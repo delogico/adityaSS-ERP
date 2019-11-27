@@ -384,7 +384,7 @@ namespace RMERP.DAL.ManagerClasses
         public IEnumerable<Employees> getActiveEmployeeList_NotAssignedYet(int CLI_Id, int FRM_Id)
         {
             return from t1 in _contaxt.Employees.Where(m => m.EMP_IsActive.Equals(true) && m.FRM_Id.Equals(FRM_Id) &&
-                        !(from t2 in _contaxt.Clients_Employees.Where(ce => ce.CLI_Id.Equals(CLI_Id))
+                        !(from t2 in _contaxt.Clients_Employees.Where(ce => ce.CLI_Id.Equals(CLI_Id) && ce.CLE_UnassignedOn==null)
                           select t2.EMP_Id).Contains(m.EMP_Id))
                    select t1;
         }
@@ -394,17 +394,28 @@ namespace RMERP.DAL.ManagerClasses
             return _contaxt.Employees.Where(m => m.FRM_Id.Equals(FRM_Id));
         }
 
-        public string ClientEmployee(Clients_Employees clientsEmployees, int AdminId)
+        public string ClientEmployee(Clients_Employees clientsEmployees, int Old_DES_Id, int AdminId)
         {
             string res = string.Empty;
             if (clientsEmployees.CLE_RegisteredOn == null)
                 clientsEmployees.CLE_RegisteredOn = ProjectUtils.DateNow();
-            clientsEmployees.ADM_Id_RegisteredBy = AdminId;
+            clientsEmployees.ADM_Id_RegisteredBy = AdminId;          
             try
-            {
-                if (clientsEmployees.CLE_Id > 0)
+            {                
+                if(clientsEmployees.CLE_Id > 0 && (Old_DES_Id != clientsEmployees.DES_Id))
                 {
-                    _contaxt.Clients_Employees.Update(clientsEmployees);
+                    List<Clients_Employees> list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(clientsEmployees.CLI_Id) && m.EMP_Id.Equals(clientsEmployees.EMP_Id)).ToList();
+                    list.ForEach(m =>
+                    {
+                        m.CLE_UnassignedOn = ProjectUtils.DateNow(); ;
+                        m.ADM_Id_UnassignedBy = AdminId;
+                    });
+                    _contaxt.SaveChanges();
+                    clientsEmployees.CLE_Id = 0;
+                    _contaxt.Clients_Employees.Add(clientsEmployees);
+                }else if (clientsEmployees.CLE_Id > 0 && Old_DES_Id.Equals(clientsEmployees.DES_Id))
+                {                    
+                     _contaxt.Clients_Employees.Update(clientsEmployees);                                    
                 }
                 else
                 {

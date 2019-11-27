@@ -604,7 +604,13 @@
                                         <tr @style>
                                             <td><b>@item.DES_Title</b></td>
                                             <td>@item.employee.EMP_FullName</td>
-                                            <td>@DateHelper.getLongDateFormat(item.CLE_RegisteredOn)</td>
+                                            <td>
+                                                @DateHelper.getLongDateFormat(item.CLE_RegisteredOn)
+                                                @if (IsUnAssign)
+                                                {
+                                                    <br /> <span style="color:gray;font-size:10px;">UnAssigned On : @DateHelper.getLongDateFormat(item.CLE_UnassignedOn.Value)</span>
+                                                }
+                                            </td>
 
                                             <td class="text-right">
                                                 <div class="dropdown">

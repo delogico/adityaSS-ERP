@@ -81,8 +81,7 @@
     @foreach (var client in Model.Select(m => new { m.client, m.wageProcessClientVM, m.wageProcessVM.Attendance }).Distinct())
     {
         <li>
-            <a data-toggle="tab" href="#@client.client.CLI_Id">
-                @*fa-question-circle*@
+            <a data-toggle="tab" href="#@client.client.CLI_Id">                
                 @{int attCount = client.Attendance.Where(m => m.CLI_Id.Equals(client.client.CLI_Id)).Count();}
                 <i class="fa fa-@( client.wageProcessClientVM != null ? "check-circle" :attCount <=0 ? "times-circle":"info-circle" )"></i>
                 @client.client.CLI_Name
