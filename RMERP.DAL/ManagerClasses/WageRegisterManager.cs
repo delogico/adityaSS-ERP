@@ -301,14 +301,9 @@ namespace RMERP.DAL.ManagerClasses
                             wageRegisterVM.WAR_OverTime_Payment = Convert.ToInt16(cr.CRI_OT_MultipleTimes);
                             wageRegisterVM.WAR_Basic_Calculated = WAR_Basic_Calculated;
                             wageRegisterVM.WAR_HRA_Calculated = CRI_HRA_Calculated;
-                        }
-                        
+                        }                       
                         
                     }
-
-                   
-
-
                     //************************** ALLOWANCES CALCULATION *****************************//
                     List<WageRegisterAllowanceVM> allowances = new List<WageRegisterAllowanceVM>();
                     decimal AllowancesTotal = 0;
@@ -432,7 +427,7 @@ namespace RMERP.DAL.ManagerClasses
                         }
                         if (flag)
                         {
-                            var EMI = employee.EMP_.Wage_Register_Advances.Where(m => (m.WAD_Status == false && m.WAG_.WAG_Month.Date<=wageProcess.WAG_Month.Date) || (m.WAD_Status.Equals(true) && m.WAG_Id.Equals(wageProcess.WAG_Id))).GroupBy(m => m.EMP_Id).Select(g => new
+                            var EMI = employee.EMP_.Wage_Register_Advances.Where(m => (m.WAD_Status == false && m.WAG_.WAG_Month.Date<=wageProcess.WAG_Month.Date && m.WAG_Id.Equals(wageProcess.WAG_Id)) || (m.WAD_Status.Equals(true) && m.WAG_Id.Equals(wageProcess.WAG_Id))).GroupBy(m => m.EMP_Id).Select(g => new
                             {
                                 WAD_Amt = g.Sum(n => n.WAD_Amount)
                             });
