@@ -21,6 +21,7 @@ using NPOI.HSSF.Util;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Drawing;
+using static RMERP.DAL.Helpers.ProjectUtils;
 
 namespace RMERP.Controllers
 {
@@ -177,7 +178,7 @@ namespace RMERP.Controllers
 
                 cv.contacts = ClientContactMapper.mapContacts(clientsManager.GetClientContactsListById(id).ToList());
                 cv.requirements = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsofClient(id, true).ToList());
-                cv.employees = ClientEmployeeMapper.mapEmployees(clientsManager.listClientsEmployees(id).ToList(), _context);
+                cv.employees = ClientEmployeeMapper.mapEmployees(clientsManager.listClientsEmployees(id, Convert.ToString((int)Assign_Unassign.Assign)).ToList(), _context);
             }
 
             IEnumerable<ProjectUtils.Total_WorkingDyas_In_Month> WorkingDays = Enum.GetValues(typeof(ProjectUtils.Total_WorkingDyas_In_Month))
@@ -660,6 +661,9 @@ namespace RMERP.Controllers
                 cvm.DES_Id = clientEmployee.DES_Id;
                 cvm.EMP_Id = clientEmployee.EMP_Id;
                 cvm.CLE_RegisteredOn = clientEmployee.CLE_RegisteredOn;
+                cvm.CLE_ReassignedOn = clientEmployee.CLE_ReassignedOn;
+                cvm.CLE_UnassignedOn = clientEmployee.CLE_UnassignedOn;
+                cvm.ADM_Id_UnassignedBy = clientEmployee.ADM_Id_UnassignedBy;
                 cvm.Old_DES_Id = clientEmployee.DES_Id;
             }
             else
@@ -687,7 +691,9 @@ namespace RMERP.Controllers
                 clientsEmployees.EMP_Id = cvm.EMP_Id;
                 clientsEmployees.DES_Id = cvm.DES_Id;
                 clientsEmployees.CLE_RegisteredOn = cvm.CLE_RegisteredOn;
-                //clientsEmployees.CLE_UnassignedOn = cvm.CLE_UnassignedOn;
+                clientsEmployees.CLE_UnassignedOn = cvm.CLE_UnassignedOn;
+                clientsEmployees.ADM_Id_UnassignedBy = cvm.ADM_Id_UnassignedBy;
+                clientsEmployees.CLE_ReassignedOn = cvm.CLE_ReassignedOn;
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);               
                 res = clientsManager.ClientEmployee(clientsEmployees, cvm.Old_DES_Id, sessionUtils.GetLoggedAdminID());
                 if (res != string.Empty)
@@ -1420,6 +1426,14 @@ namespace RMERP.Controllers
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             string res = clientsManager.GetAssignEmployeeDependancy(CLE_Id, CLI_Id, EMP_Id, DES_Id);
             return Content(res);
+        }
+
+        public ActionResult GetClientEmployee(int CLI_Id,string assign)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context);
+            List<ClientEmployeeVM> ClientEmployeeVMs = new List<ClientEmployeeVM>();
+            ClientEmployeeVMs = ClientEmployeeMapper.mapEmployees(clientsManager.listClientsEmployees(CLI_Id, assign).ToList(), _context);
+            return PartialView("_ClientEmployee", ClientEmployeeVMs);
         }
     }
 }

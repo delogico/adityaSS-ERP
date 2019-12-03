@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Threading.Tasks;
 using System.Text;
+using static RMERP.DAL.Helpers.ProjectUtils;
 
 namespace RMERP.DAL.ManagerClasses
 {
@@ -429,9 +430,22 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public IEnumerable<Clients_Employees> listClientsEmployees(int ClientId)
+        public IEnumerable<Clients_Employees> listClientsEmployees(int ClientId,string assign=null)
         {
-            IEnumerable<Clients_Employees> list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId)).Include(m => m.EMP_).Include(m => m.DES_).ToList();
+            IEnumerable<Clients_Employees> list = null;
+            if (assign == null)
+            {
+                list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId)).Include(m => m.EMP_).Include(m => m.DES_).ToList();
+            }
+            else if(assign == Convert.ToString((int)Assign_Unassign.Assign))
+            {
+                list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId) && m.CLE_UnassignedOn==null).Include(m => m.EMP_).Include(m => m.DES_).ToList();
+            }
+            else if (assign == Convert.ToString((int)Assign_Unassign.Unassign))
+            {
+                list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId) && m.CLE_UnassignedOn!=null).Include(m => m.EMP_).Include(m => m.DES_).ToList();
+            }
+
             return list;
         }
         public IEnumerable<Clients_Employees> listActiveClientsEmployees(int ClientId, DateTime monthDate)

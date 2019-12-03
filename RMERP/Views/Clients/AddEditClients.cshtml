@@ -573,79 +573,20 @@
     <div id="ClientEmployee" class="tab-pane fade">
         <div class="content container-fluid">
             <div class="row">
-                <div class="col-sm-12 text-right m-b-30">
+                <div class="col-sm-2 text-left m-b-30">
+                    @Html.DropDownList("DDL_Assign_Unassign",
+                        new SelectList(new List<SelectListItem> {
+                                 new SelectListItem { Text = "Assign", Value = Convert.ToString((int)Assign_Unassign.Assign)},
+                                 new SelectListItem { Text = "Unassign", Value = Convert.ToString((int)Assign_Unassign.Unassign)}
+                        }, "Value", "Text"),new { @class = "form-control",onclick= "DDL_Change('"+Model.clientsModel.CLI_Id+"')" })
+                </div>
+                <div class="col-sm-10 text-right m-b-30">
                     <a class="btn btn-primary rounded" href="@Url.Action("AddEmployee","Clients", new { CLI_Id=Model.clientsModel.CLI_Id})"><i class="fa fa-plus"></i> Assign Employee</a>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <div>
-                        @if (Model.employees != null)
-                        {
-                            <table class="table table-striped custom-table m-b-0 ">
-                                <thead>
-                                    <tr>
-                                        <th>Designation</th>
-                                        <th>Employee</th>
-                                        <th>Assign On</th>
-                                        <th class="text-right">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.employees)
-                                    {
-                                        bool IsUnAssign = false;
-                                        var style = "";
-                                        if (item.CLE_UnassignedOn != null)
-                                        {
-                                            style = "style=color:orangered;";
-                                            IsUnAssign = true;
-                                        }
-                                        <tr @style>
-                                            <td><b>@item.DES_Title</b></td>
-                                            <td>@item.employee.EMP_FullName</td>
-                                            <td>
-                                                @DateHelper.getLongDateFormat(item.CLE_RegisteredOn)
-                                                @if (IsUnAssign)
-                                                {
-                                                    <br /> <span style="color:gray;font-size:10px;">UnAssigned On : @DateHelper.getLongDateFormat(item.CLE_UnassignedOn.Value)</span>
-                                                }
-                                            </td>
-
-                                            <td class="text-right">
-                                                <div class="dropdown">
-                                                    <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                                    <ul class="dropdown-menu pull-right">
-                                                        @if (IsUnAssign)
-                                                        {
-                                                            <li><a href='#' onclick="onReassignClick(@item.CLE_Id)" title="Reassign"><i class="fa fa-plus-circle m-r-5"></i> Reassign</a></li>
-                                                        }
-                                                        else
-                                                        {
-                                                            <li><a href='#' onclick="onUnassignClick(@item.CLE_Id)" title="Unassign"><i class="fa fa-trash m-r-5"></i> Unassign</a></li>
-                                                        }
-                                                        <li><a href='@Url.Action("AddEmployee","Clients",new { CLI_Id=Model.clientsModel.CLI_Id, CLE_Id=item.CLE_Id})' title="Edit"><i class="fa fa-edit m-r-5"></i> Edit</a></li>
-                                                        @if (!item.IsEmployeeWagedForClient && item.CLE_UnassignedOn == null)
-                                                        {
-                                                            @*<li><a href='@Url.Action("DeleteAssignEmployee","Clients",new {CLE_Id=item.CLE_Id})' title="Delete"><i class="fa fa-remove m-r-5"></i> Delete </a></li>*@
-                                                            <li><a href='#' onclick="onDeleteEmployeeClick(@item.CLE_Id,@item.CLI_Id,@item.EMP_Id,@item.DES_Id)" title="Delete"><i class="fa fa-remove m-r-5"></i> Delete</a></li>
-                                                        }
-                                                    </ul>
-
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-
-                                </tbody>
-                            </table>
-                        }
-                        else
-                        {
-                            <p>Assign first Employee to this Client</p>
-                        }
-
-                    </div>
+                <div class="col-md-12" id="divClientEmp">
+                    @{Html.RenderPartial("_ClientEmployee", Model.employees);}
                 </div>
             </div>
         </div>
@@ -698,28 +639,6 @@
         </div>
     </div>
 </div>
-
-
-@*<div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-         Modal content
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
-            </div>
-            <div class="modal-body">
-
-            </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>*@
-
 
 @section scripts{
     <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
@@ -938,9 +857,8 @@
 
         function onUnassignClick(CLE_Id) {
             bootbox.prompt({
-                title: "Choose Month!",
+                title: "Choose Date! <br/> <div class='alert alert-warning' style='font-size:12px;'>Employee will be available in the wage of selected date's month.</div>",
                 inputType: 'date',
-
                 callback: function (result) {
                     if (result != null) {
                         $.ajax({
@@ -1057,6 +975,20 @@
                 }
             })
         };
+
+        function DDL_Change(CLI_Id) {
+            debugger;
+            var assign = $("#DDL_Assign_Unassign").val();            
+            var Url = siteUrl + "Clients/GetClientEmployee?CLI_Id=" + CLI_Id + "&assign=" + assign;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                success: function (data) {
+                    $('#divClientEmp').html(data);                    
+                }
+            })
+            }
+
     </script>
 }
 

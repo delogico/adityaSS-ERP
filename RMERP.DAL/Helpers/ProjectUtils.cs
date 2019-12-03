@@ -168,6 +168,11 @@ namespace RMERP.DAL.Helpers
             Download = 0,
             View = 1
         }
+        public enum Assign_Unassign
+        {
+            Assign = 0,
+            Unassign = 1
+        }
 
         public static DateTime DateNow()
         {

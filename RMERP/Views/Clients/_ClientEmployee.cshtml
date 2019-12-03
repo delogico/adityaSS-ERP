@@ -1,0 +1,63 @@
+﻿@model List<RMERP.DAL.ViewModel.ClientEmployeeVM>
+@using RMERP.Helpers;
+
+@if (Model != null)
+{
+    <table class="table table-striped custom-table m-b-0 ">
+        <thead>
+            <tr>
+                <th>Designation</th>
+                <th>Employee</th>
+                <th>Assign On</th>
+                <th class="text-right">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                bool IsUnAssign = false;
+                var style = "";
+                if (item.CLE_UnassignedOn != null)
+                {
+                    style = "style=color:orangered;";
+                    IsUnAssign = true;
+                }
+                <tr @style>
+                    <td><b>@item.DES_Title</b></td>
+                    <td>@item.employee.EMP_FullName</td>
+                    <td>
+                        @DateHelper.getLongDateFormat(item.CLE_RegisteredOn)
+                        @if (IsUnAssign)
+                        {
+                            <br /> <span style="color:gray;font-size:10px;">UnAssigned On : @DateHelper.getLongDateFormat(item.CLE_UnassignedOn.Value)</span>
+                        }
+                    </td>
+
+                    <td class="text-right">
+                        <div class="dropdown">
+                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                            <ul class="dropdown-menu pull-right">
+                                @if (!IsUnAssign)
+                                {
+                                    <li><a href='#' onclick="onUnassignClick(@item.CLE_Id)" title="Unassign"><i class="fa fa-trash m-r-5"></i> Unassign</a></li>
+                                }
+                                <li><a href='@Url.Action("AddEmployee","Clients",new { CLI_Id=item.CLI_Id, CLE_Id=item.CLE_Id})' title="Edit"><i class="fa fa-edit m-r-5"></i> Edit</a></li>
+                                @if (!item.IsEmployeeWagedForClient && item.CLE_UnassignedOn == null)
+                                {
+                                    @*<li><a href='@Url.Action("DeleteAssignEmployee","Clients",new {CLE_Id=item.CLE_Id})' title="Delete"><i class="fa fa-remove m-r-5"></i> Delete </a></li>*@
+                                    <li><a href='#' onclick="onDeleteEmployeeClick(@item.CLE_Id,@item.CLI_Id,@item.EMP_Id,@item.DES_Id)" title="Delete"><i class="fa fa-remove m-r-5"></i> Delete</a></li>
+                                }
+                            </ul>
+
+                        </div>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Assign first Employee to this Client</p>
+}

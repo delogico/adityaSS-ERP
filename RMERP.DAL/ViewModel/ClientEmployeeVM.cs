@@ -15,12 +15,14 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Designation")]
         [Required(ErrorMessage = "Designation is required")]
         public int DES_Id { get; set; }
-        [Display(Name = "Registered On")]
+        [Display(Name = "Assign On")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Registeration date is required")]
         public DateTime CLE_RegisteredOn { get; set; } = DateTime.Now;
 
         public DateTime? CLE_UnassignedOn { get; set; }
+        public DateTime? CLE_ReassignedOn { get; set; }
+        
         public int? ADM_Id_UnassignedBy { get; set; }
 
         public int ADM_Id_RegisteredBy { get; set; }       
