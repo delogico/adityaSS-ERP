@@ -1,0 +1,60 @@
+﻿@model RMERP.DAL.ViewModel.WagePaySlipMasterVM
+@using RMERP.Helpers
+
+@{
+    ViewData["Title"] = "PaySlipGenerate";
+}
+
+@section Breadcrumbs{
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id })</li>
+    <li class="breadcrumb-item">Pay Slips</li>
+}
+<div>
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <h4 class="page-title">@Model.FRM_Name (@Model.WAG_Month)</h4>
+            </div>
+            <div class="col-sm-4 text-right m-b-30">
+                @*<a class="btn btn-primary rounded" href="@Url.Action("AddEditDesignation","Designations")"><i class="fa fa-plus"></i> Register New Designation</a>*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <table class="table table-striped custom-table">
+                        <thead>
+                            <tr>
+                                <th>Employee Name</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.EmployeePaySlipVMs)
+                            {
+                                <tr>
+                                    <td>@item.EMP_FullName</td>
+                                    <td>
+                                        @if (item.IsPaySlipGenerated)
+                                        {
+                                        <span>
+                                            <a href="#">Download</a> | <a href="#">Regenerate</a>
+                                            <br />
+                                            Generated on @DateHelper.getLongDateFormat(item.WPS_GeneratedOn.Value) 
+                                        </span> 
+                                        }
+                                        else
+                                        {
+                                            <span>Not Generated Yet</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

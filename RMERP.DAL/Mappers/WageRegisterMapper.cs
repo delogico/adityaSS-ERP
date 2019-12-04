@@ -129,6 +129,7 @@ namespace RMERP.DAL.Mappers
             
 
             wageRegister.WAR_LWF_Deduction_Calculated = wageRegisterVM.WAR_LWF_Deduction_Calculated;
+            wageRegister.CLE_Id = wageRegisterVM.CLE_Id;
 
             return wageRegister;
         }

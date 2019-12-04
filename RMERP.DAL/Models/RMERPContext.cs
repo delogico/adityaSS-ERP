@@ -36,6 +36,7 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Invoices> Invoices { get; set; }
         public virtual DbSet<ProfessionalTaxCalculation> ProfessionalTaxCalculation { get; set; }
         public virtual DbSet<States> States { get; set; }
+        public virtual DbSet<Wage_PaySlips> Wage_PaySlips { get; set; }
         public virtual DbSet<Wage_Process> Wage_Process { get; set; }
         public virtual DbSet<Wage_Process_Clients> Wage_Process_Clients { get; set; }
         public virtual DbSet<Wage_Register> Wage_Register { get; set; }
@@ -802,6 +803,27 @@ namespace RMERP.DAL.Models
                     .HasConstraintName("FK_states_Countries");
             });
 
+            modelBuilder.Entity<Wage_PaySlips>(entity =>
+            {
+                entity.HasKey(e => e.WPS_Id);
+
+                entity.Property(e => e.WPS_GeneratedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.WPS_Status).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.EMP_)
+                    .WithMany(p => p.Wage_PaySlips)
+                    .HasForeignKey(d => d.EMP_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_PaySlips_Employees");
+
+                entity.HasOne(d => d.WAG_)
+                    .WithMany(p => p.Wage_PaySlips)
+                    .HasForeignKey(d => d.WAG_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_PaySlips_Wage_Process");
+            });
+
             modelBuilder.Entity<Wage_Process>(entity =>
             {
                 entity.HasKey(e => e.WAG_Id);
@@ -903,6 +925,11 @@ namespace RMERP.DAL.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.WAR_WorkingHrs_In_Day).HasDefaultValueSql("((8))");
+
+                entity.HasOne(d => d.CLE_)
+                    .WithMany(p => p.Wage_Register)
+                    .HasForeignKey(d => d.CLE_Id)
+                    .HasConstraintName("FK_Wage_Register_Clients_Employees");
 
                 entity.HasOne(d => d.CLI_)
                     .WithMany(p => p.Wage_Register)

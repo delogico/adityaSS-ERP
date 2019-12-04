@@ -157,6 +157,8 @@ namespace RMERP.DAL.ViewModel
 
         [Display(Name = "Rejoin On")]
         public DateTime? EMP_RejoinOn { get; set; }
+
+        public bool IsSalarySlipGenerate { get; set; }
     }
 
     public class EmployeePaymentVM

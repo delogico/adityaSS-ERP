@@ -990,5 +990,12 @@ namespace RMERP.DAL.ManagerClasses
             return emp;
         }
         #endregion
+
+        #region Payslip        
+        public Wage_PaySlips GetPaySlipForEmp(int WAG_Id,int EMP_Id)
+        {
+            return _context.Wage_PaySlips.Where(m => m.WAG_Id.Equals(WAG_Id) && m.EMP_Id.Equals(EMP_Id)).FirstOrDefault();
+        }
+        #endregion
     }
 }

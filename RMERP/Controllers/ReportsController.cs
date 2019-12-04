@@ -17,6 +17,7 @@ using System.Text;
 using NPOI.HSSF.UserModel;
 using System.Drawing;
 using RMERP.DAL.Mappers;
+using RMERP.Helpers;
 
 namespace RMERP.Controllers
 {
@@ -3459,7 +3460,6 @@ namespace RMERP.Controllers
         #endregion
 
         #region Labour WelfareFund
-
         public async Task<FileResult> Labour_WelfareFund_Excel(int WAG_Id)
         {
             ReportsManager manager = new ReportsManager(_context);
@@ -3716,7 +3716,25 @@ namespace RMERP.Controllers
             new FileInfo(Path.Combine(newPath, fileName)).Delete();
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
+        #endregion
 
+        #region paySlip
+        public ActionResult PaySlipGenerate(int WAG_Id)
+        {
+            WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
+            WageProcessManager wageProcessManager = new WageProcessManager(_context);
+            Wage_Process wage_Process = wageProcessManager.getWageProcessById(WAG_Id);
+            ReportsManager manager = new ReportsManager(_context);
+            WagePaySlipMasterVM paySlipMasterVM = new WagePaySlipMasterVM();
+            paySlipMasterVM.FRM_Id = wage_Process.FRM_Id; ;
+            paySlipMasterVM.FRM_Name = wage_Process.FRM_.FRM_Name;
+            paySlipMasterVM.WAG_Month = wage_Process.WAG_Month.ToString("MMM-yyyy");
+
+            paySlipMasterVM.EmployeePaySlipVMs = new List<EmployeePaySlipVM>();
+            List<Employees> emps = wageRegisterManager.GetEmployeesForWage(WAG_Id);
+          
+            return View(paySlipMasterVM);
+        }
         #endregion
     }
 

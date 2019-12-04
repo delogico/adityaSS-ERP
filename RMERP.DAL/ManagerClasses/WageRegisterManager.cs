@@ -646,5 +646,10 @@ namespace RMERP.DAL.ManagerClasses
             return CLI_Id;
         }
 
+        public List<Employees> GetEmployeesForWage(int WAG_Id)
+        {
+            return _context.Wage_Register.Include(m => m.EMP_).ThenInclude(m=>m.Wage_PaySlips).Where(m => m.WAG_Id.Equals(WAG_Id)).Select(m => m.EMP_).ToList();
+        }
+
     }
 }
