@@ -242,7 +242,10 @@ namespace RMERP.DAL.ManagerClasses
                     cra.ALL_Id = item.ALL_Id;
                     cra.CRA_Amount = item.CRA_Amount;
                     cra.CRA_DayswiseOrFull = item.CRA_DayswiseOrFull;
-                    _contaxt.Client_Requirement_Allowances.Add(cra);
+                    if (item.CRA_Id > 0)
+                        _contaxt.Client_Requirement_Allowances.Update(cra);
+                    else
+                        _contaxt.Client_Requirement_Allowances.Add(cra);
                     _contaxt.SaveChanges();
                     cra = null;
                 }
@@ -280,7 +283,10 @@ namespace RMERP.DAL.ManagerClasses
                     cra.ALL_Id = item.ALL_Id;
                     cra.CRA_Amount = item.CRA_Amount;
                     cra.CRA_DayswiseOrFull = item.CRA_DayswiseOrFull;
-                    _contaxt.Client_Requirement_Allowances.Add(cra);
+                    if(item.CRA_Id>0)
+                        _contaxt.Client_Requirement_Allowances.Update(cra);
+                    else
+                        _contaxt.Client_Requirement_Allowances.Add(cra);
                     _contaxt.SaveChanges();
                     cra = null;
                 }

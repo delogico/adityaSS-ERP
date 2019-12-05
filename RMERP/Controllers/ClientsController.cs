@@ -428,7 +428,7 @@ namespace RMERP.Controllers
             }
             else
             {
-                ViewBag.Designation = designationManager.getRemainingDesignationsList(CLI_Id);
+                ViewBag.Designation = designationManager.getRemainingDesignationsList(CLI_Id);               
                 clientRequirement.CRI_Id = -1;
                 clientRequirement.CLI_Id = CLI_Id;
                 clientRequirement.CRI_Active = true;
