@@ -9,7 +9,6 @@ namespace RMERP.DAL.ViewModel
 {
     public class ClientReqAllowanceVM
     {
-        [Key]
         public int CRA_Id { get; set; }
         [Required]
         public int CRI_Id { get; set; }
