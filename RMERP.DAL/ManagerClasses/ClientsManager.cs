@@ -212,7 +212,7 @@ namespace RMERP.DAL.ManagerClasses
             string res = string.Empty;
             try
             {
-                clientRequirements.CRI_RegisteredOn = ProjectUtils.DateNow();
+                
                 if (clientRequirements.CRI_Id > 0)
                 {
                     List<Client_Requirements> list = _contaxt.Client_Requirements.Where(m => m.CLI_Id.Equals(clientRequirements.CLI_Id) && m.DES_Id.Equals(clientRequirements.DES_Id) && m.CRI_Active == true).ToList();
