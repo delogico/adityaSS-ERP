@@ -488,9 +488,23 @@ namespace RMERP.DAL.ManagerClasses
             return list;
         }
 
-        public IEnumerable<Clients_Employees> listClientsEmployees(int ClientId, int DES_Id)
+        //public IEnumerable<Clients_Employees> listClientsEmployees(int ClientId, int DES_Id)
+        //{
+        //    IEnumerable<Clients_Employees> list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId) && m.DES_Id.Equals(DES_Id)).Include(m => m.EMP_).Include(m => m.DES_).ToList();
+        //    return list;
+        //}
+
+        public IEnumerable<Clients_Employees> listActiveClientsEmployees(int ClientId, DateTime monthDate, int DES_Id)
         {
-            IEnumerable<Clients_Employees> list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId) && m.DES_Id.Equals(DES_Id)).Include(m => m.EMP_).Include(m => m.DES_).ToList();
+            DateTime lastDate = new DateTime(monthDate.Year, monthDate.Month, 1).AddMonths(1).AddDays(-1);
+            DateTime firstDate = new DateTime(monthDate.Year, monthDate.Month, 1);
+            IEnumerable<Clients_Employees> list = _contaxt.Clients_Employees
+                                                .Where(m => m.CLI_Id.Equals(ClientId) && m.DES_Id.Equals(DES_Id)
+                                                && m.CLE_RegisteredOn.Date <= lastDate.Date
+                                                && (m.CLE_UnassignedOn == null || m.CLE_UnassignedOn >= lastDate.Date)
+                                                && (m.EMP_.EMP_IsActive == true || (m.EMP_.EMP_IsActive == false && m.EMP_.EMP_InactivatedOn != null && (m.EMP_.EMP_InactivatedOn.Value.Date >= firstDate.Date))))
+                                                .Include(m => m.EMP_).ThenInclude(m => m.Wage_Register_Advances).ThenInclude(m => m.WAG_)
+                                                .Include(m => m.DES_).ToList();
             return list;
         }
 

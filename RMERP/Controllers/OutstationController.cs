@@ -33,7 +33,7 @@ namespace RMERP.Controllers
             OutstationManager outstationManager = new OutstationManager(_context);
             Client_Requirements client_Requirements = clientsManager.GetRequirementsById(CRI_Id);
             List<Wage_Register_OutstationVM> wage_Register_Outstations = new List<Wage_Register_OutstationVM>();
-            IEnumerable<Clients_Employees> clientsEmployees = clientsManager.listClientsEmployees(client_Requirements.CLI_Id, client_Requirements.DES_Id);
+            IEnumerable<Clients_Employees> clientsEmployees = clientsManager.listActiveClientsEmployees(client_Requirements.CLI_Id, WAG_Month, client_Requirements.DES_Id);
             foreach (Clients_Employees employee in clientsEmployees)
             {
                 Wage_Register_Outstation outstation = new Wage_Register_Outstation();

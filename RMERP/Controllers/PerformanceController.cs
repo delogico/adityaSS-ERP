@@ -33,7 +33,7 @@ namespace RMERP.Controllers
             PerformanceManager performanceManager = new PerformanceManager(_context);
             Client_Requirements client_Requirements = clientsManager.GetRequirementsById(CRI_Id);
             List<Wage_Register_PerformanceVM> wage_Register_Performances = new List<Wage_Register_PerformanceVM>();
-            IEnumerable<Clients_Employees> clientsEmployees = clientsManager.listClientsEmployees(client_Requirements.CLI_Id, client_Requirements.DES_Id);
+            IEnumerable<Clients_Employees> clientsEmployees = clientsManager.listActiveClientsEmployees(client_Requirements.CLI_Id, WAG_Month,client_Requirements.DES_Id);
             foreach (Clients_Employees employee in clientsEmployees)
             {
                 Wage_Register_Performance performance = new Wage_Register_Performance();
