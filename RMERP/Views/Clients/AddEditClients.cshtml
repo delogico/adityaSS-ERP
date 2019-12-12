@@ -50,7 +50,7 @@
                             @Html.HiddenFor(m => m.clientsModel.CLI_Id)
                             @Html.HiddenFor(m => m.clientsModel.CLI_IsActive)
                             @Html.HiddenFor(m => m.clientsModel.CliLogoImage)
-                            @Html.HiddenFor(m => m.clientsModel.STA_Id)
+                            @Html.HiddenFor(m => m.clientsModel.STA_Id)                            
                             if (Model.clientsModel.CLI_Id > 0)
                             {
                                 @Html.HiddenFor(m => m.clientsModel.FRM_Id)
@@ -501,48 +501,6 @@
                                         @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_GST_Number, "", new { @class = "text-danger" })
                                     </div>
-
-                                    @*<div class="form-group col-sm-2">
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <div class="col-sm-6">
-                                                        @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsIGST, new { @id = "chkIsIGST" })
-                                                        &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsIGST, new { @for = "chkIsIGST" })
-                                                    </div>
-                                                    <div class="form-group col-sm-6">
-                                                        <div id="divIGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsIGST ? "block" : "none")">
-                                                            @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IGST, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_IGST, "", new { @class = "text-danger" })
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <div class="col-sm-6">
-                                                        @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsCGST, new { @id = "chkIsCGST" })
-                                                        &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsCGST, new { @for = "chkIsCGST" })
-                                                    </div>
-                                                    <div class="form-group col-sm-6">
-                                                        <div id="divCGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsCGST ? "block" : "none")">
-                                                            @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_CGST, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_CGST, "", new { @class = "text-danger" })
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <div class="col-sm-6">
-                                                        @Html.CheckBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_IsSGST, new { @id = "chkIsSGST" })
-                                                        &nbsp;@Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_IsSGST, new { @for = "chkIsSGST" })
-                                                    </div>
-                                                    <div class="form-group col-sm-6">
-                                                        <div id="divSGST" style="display:@(Model.ParametersClientsModel.clientsModel.CLI_IsSGST ? "block" : "none")">
-                                                            @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_SGST, new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(m => m.ParametersClientsModel.clientsModel.CLI_SGST, "", new { @class = "text-danger" })
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>*@
-
                                     <div class="form-group col-sm-6">
                                         @Html.LabelFor(m => m.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply)
                                         @Html.TextBoxFor(m => m.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply, new { @class = "form-control" })
@@ -578,7 +536,7 @@
                         new SelectList(new List<SelectListItem> {
                                  new SelectListItem { Text = "Assign", Value = Convert.ToString((int)Assign_Unassign.Assign)},
                                  new SelectListItem { Text = "Unassign", Value = Convert.ToString((int)Assign_Unassign.Unassign)}
-                        }, "Value", "Text"),new { @class = "form-control",onclick= "DDL_Change('"+Model.clientsModel.CLI_Id+"')" })
+                        }, "Value", "Text"), new { @class = "form-control", onclick = "DDL_Change('" + Model.clientsModel.CLI_Id + "')" })
                 </div>
                 <div class="col-sm-10 text-right m-b-30">
                     <a class="btn btn-primary rounded" href="@Url.Action("AddEmployee","Clients", new { CLI_Id=Model.clientsModel.CLI_Id})"><i class="fa fa-plus"></i> Assign Employee</a>
@@ -593,25 +551,11 @@
         <div class="row">
             <br />
             <div class="col-sm-12 text-right m-b-30">
-                @*<div class="dropdown">
-                        <a href="#" class="dropdown-toggle btn btn-success rounded" data-toggle="dropdown" aria-expanded="false">Get Excel</a>
-                        <ul class="dropdown-menu pull-right">
-                            @foreach (var excel in Enum.GetValues(typeof(ATTENDANCE_EXCEL_TEMPLATE)))
-                            {
-                                <li><a href='@Url.Action( @excel.ToString(),"Clients")' title="@excel.ToString()"><i class="fa fa-file-excel-o m-r-5"></i>  @excel.ToString()</a></li>
-                            }
-                        </ul>
-                    </div>*@
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle btn btn-success rounded" data-toggle="dropdown" aria-expanded="false">Get Excel</a>
                     <ul class="dropdown-menu pull-right">
                         <li><a href='#' title="Generate Excel Template / Double rows" onclick="onConfirmClick()"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Double Rows</a></li>
                         <li><a href='#' title="Generate Excel Template / Single row" onclick="onConfirmClickSingle()"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Single Row</a></li>
-
-                        @*<li><a href='@Url.Action( "GenerateExcelTemplate_TwoRow","Clients")' title="Generate Excel Template / Double rows"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Double Rows</a></li>
-                            <li><a href='@Url.Action( "GenerateExcelTemplate_OneRow","Clients")' title="Generate Excel Template / Single Row"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Single Row</a></li>*@
-
-
                     </ul>
                 </div>
             </div>
@@ -619,7 +563,7 @@
 
     </div>
     <div id="ClientDelete" class="tab-pane fade">
-        <div class="modal-dialog">
+        <div class="modal-dialog" id="ActiveClient">
             <div class="modal-content modal-md">
                 <div class="modal-header">
                     <h4 class="modal-title" id="activeTitle"></h4>
@@ -631,11 +575,18 @@
                         </p>
                         <div class="m-t-20">
                             <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
-                            <button id="btnSubmit" type="submit" class="btn btn-danger"></button>
+                            <span id="btnSubmit" type="submit" class="btn btn-danger"></span>
                         </div>
                     </div>
                 </form>
             </div>
+        </div>
+        <div id="InActiveClient">
+            @{
+                var InActiveDate = DateHelper.getLongDateFormat(Model.clientsModel.CLI_InActivatedOn);
+            }
+            @Html.Hidden("CLI_InActivatedOn",InActiveDate)
+            <div class="col-md-6 alert alert-danger">@Model.clientsModel.CLI_Name is Inactivated On @DateHelper.getLongDateFormat(Model.clientsModel.CLI_InActivatedOn)</div>
         </div>
     </div>
 </div>
@@ -654,11 +605,10 @@
     };
     <script type="text/javascript">
         var ClientID;
-        var CLI_IsActive;
+        var CLI_IsActive_bool;
 
 
         $(document).ready(function () {
-
             radioShow();
             var CLI_Id = $("#clientsModel_FRM_Id").val();
             if (CLI_Id > 0) {
@@ -676,16 +626,17 @@
                     $("#divSelectdate").hide();
                 }
             }
-
             $("#ClientHistory").hide();
             $("#activeTitle").html("InActive Client");
             $("#activeBody").html("Are you sure want to InActive this Client?");
             $("#btnSubmit").html("InActive");
             ClientID = $('#clientsModel_CLI_Id').val();
-            CLI_IsActive = $('#clientsModel_CLI_IsActive').val();
-
-            if (CLI_IsActive.toLowerCase() == "false") {
-
+            var CLI_IsActive = $('#clientsModel_CLI_IsActive').val();
+            CLI_IsActive_bool = (CLI_IsActive =="True");
+            if (!CLI_IsActive_bool) {
+                //$("#ActiveClient").hide();
+                //$("#InActiveClient").show();
+                $("#InActiveClient").hide();
                 var CurrentActive = $('.nav li.active').find("a").attr("href");
                 var NextActive = $('.nav li.active').next('li').next('li').find("a").attr("href");
                 $('.nav li.active').next('li').next('li').next('li').next('li').next('li').addClass("active");
@@ -694,12 +645,14 @@
                 $("#ClientDelete").addClass("in active");
                 $('.nav li').not('.active').addClass('disabled');
                 $('.nav li').not('.active').find('a').removeAttr("data-toggle");
-
-                $("#activeTitle").html("Activate Client");
-                $("#activeBody").html("Are you sure want to Active this Client?");
-                $("#btnSubmit").html("Active");
+                var string = "Client is inactivated on " + $("#CLI_InActivatedOn").val();
+                $("#activeTitle").html(string);
+                $("#activeBody").html("Are you sure want to Change Inactivation date of this Client?");
+                $("#btnSubmit").html("Change");
             }
-            if (CLI_IsActive.toLowerCase() == "true") {
+            if (CLI_IsActive_bool) {
+               // $("#ActiveClient").show();
+                $("#InActiveClient").hide();
                 var CurrentActive = $('.nav li.active').find("a").attr("href");
 
                 if (CurrentActive == "#ClientDelete") {
@@ -714,8 +667,9 @@
                     $('.nav li').not('.active').addClass('disabled');
 
                     $("#activeTitle").html("InActive Client");
-                    $("#activeBody").html("Are you sure want to InActive this Client?");
+                    $("#activeBody").html("Are you sure want to Inactive this Client?");
                     $("#btnSubmit").html("InActive");
+
                 }
 
             }
@@ -765,19 +719,29 @@
         };
 
         $("#btnSubmit").click(
-            function () {
-                var Url = siteUrl + "Clients/InActiveClient?ClientID=" + ClientID + "&Active=" + CLI_IsActive;
-                $.ajax({
-                    type: "POST",
-                    url: Url,
-                    success: function (data) {
-                        if (data.d == null) {
-                            window.location.replace(siteUrl + "Clients/Index");
+            function () {                
+                var active = "Change Inactive Date";
+                if (CLI_IsActive_bool) {
+                    active = "Choose Inactive Date";
+                }
+            bootbox.prompt({
+                        title: active,
+                        inputType: 'date',
+                        callback: function (result) {
+                               var Url = siteUrl + "Clients/InActiveClient?ClientID=" + ClientID + "&Active=" + CLI_IsActive_bool+"&On="+result;
+                                    $.ajax({
+                                        type: "POST",
+                                        url: Url,
+                                        success: function (data) {
+                                            if (data.d == null) {
+                                                window.location.replace(siteUrl + "Clients/Index");
+                                            }
+                                        }
+                                    })
                         }
-                    }
-                })
-
+                    });
             });
+
         function GetParameterValues(param) {
             var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
             for (var i = 0; i < url.length; i++) {
@@ -878,7 +842,6 @@
         };
 
         function onReassignClick(CLE_Id) {
-            debugger;
             $.ajax({
                             type: "POST",
                 url: "/Clients/ReassignClientEmployee?CLE_Id=" + CLE_Id,
@@ -977,14 +940,13 @@
         };
 
         function DDL_Change(CLI_Id) {
-            debugger;
-            var assign = $("#DDL_Assign_Unassign").val();            
+            var assign = $("#DDL_Assign_Unassign").val();
             var Url = siteUrl + "Clients/GetClientEmployee?CLI_Id=" + CLI_Id + "&assign=" + assign;
             $.ajax({
                 type: "GET",
                 url: Url,
                 success: function (data) {
-                    $('#divClientEmp').html(data);                    
+                    $('#divClientEmp').html(data);
                 }
             })
             }

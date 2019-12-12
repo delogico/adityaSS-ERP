@@ -188,16 +188,24 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public string InActiveClient(int ClientId, int AdminId, string Active)
+        public string InActiveClient(int ClientId, int AdminId, bool Active,DateTime On)
         {
             string res = string.Empty;
             try
             {
                 Clients client = new Clients();
-                client = _contaxt.Clients.Find(ClientId);
-                client.CLI_InActivatedOn = ProjectUtils.DateNow();
+                client = _contaxt.Clients.Find(ClientId);                
                 client.ADM_Id_InactivatedBy = AdminId;
-                client.CLI_IsActive = Convert.ToBoolean((Active.ToLower() == "false" ? "true" : "false"));
+                if (Active)
+                {
+                    client.CLI_IsActive = !Active;
+                    client.CLI_InActivatedOn = On;
+                }
+                else
+                {
+                    client.CLI_InActivatedOn = On;                   
+                }
+               // client.CLI_IsActive = Convert.ToBoolean((Active.ToLower() == "false" ? "true" : "false"));
                 _contaxt.Clients.Update(client);
                 _contaxt.SaveChanges();
             }

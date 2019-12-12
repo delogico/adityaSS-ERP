@@ -123,6 +123,8 @@ namespace RMERP.Controllers
                 cv.clientsModel.CLI_Total_WorkingDays = clients.CLI_Total_WorkingDays;
                 cv.clientsModel.CLI_No_Reduce_Days = clients.CLI_No_Reduce_Days;
                 cv.clientsModel.CLI_WorkingHours_In_Day = clients.CLI_WorkingHours_In_Day;
+                if(clients.CLI_InActivatedOn!=null)
+                    cv.clientsModel.CLI_InActivatedOn = clients.CLI_InActivatedOn.Value;
 
                 cv.ParametersClientsModel.clientsModel.CLI_GST_Number = clients.CLI_GST_Number;
                 cv.ParametersClientsModel.clientsModel.CLI_GST_Rate = clients.CLI_GST_Rate;
@@ -390,7 +392,7 @@ namespace RMERP.Controllers
         }
 
         [HttpPost]
-        public string InActiveClient(int ClientID, string Active)
+        public string InActiveClient(int ClientID, bool Active,DateTime On)
         {
             string res = string.Empty;
             ClientsViewModel clientsViewModel = new ClientsViewModel();
@@ -399,7 +401,7 @@ namespace RMERP.Controllers
             {
                 if (ClientID > 0)
                 {
-                    res = clientsManager.InActiveClient(ClientID, Convert.ToInt32(Request.Cookies["AdminID"]), Active);
+                    res = clientsManager.InActiveClient(ClientID, Convert.ToInt32(Request.Cookies["AdminID"]), Active, On);
                     if (res != string.Empty)
                     {
                         TempData["message"] = "Client data can not Deleted";

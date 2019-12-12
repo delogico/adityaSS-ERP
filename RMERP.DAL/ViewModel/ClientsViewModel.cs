@@ -126,6 +126,7 @@ namespace RMERP.DAL.ViewModel
 
         [Display(Name = "Employer MLWF Contribution(INR)")]
         public decimal CLI_MLWF_Contribution { get; set; }
+        public DateTime CLI_InActivatedOn { get; set; }
     }
     public class ParametersClientsModel
     {
