@@ -47,12 +47,13 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Designations.Find(desId);
         }
-        public int getDesignationIdForAttandance(int CLI_Id,int EMP_Id)
+        public int getDesignationIdForAttandance(int CLI_Id,int EMP_Id,DateTime monthDate)
         {
+            DateTime lastDate = new DateTime(monthDate.Year, monthDate.Month, 1).AddMonths(1).AddDays(-1);
             int i = 0;
             try
             {
-                i = _context.Clients_Employees.Where(m => m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id)).FirstOrDefault().DES_Id;
+                i = _context.Clients_Employees.Where(m => m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id) && m.CLE_RegisteredOn.Date <= lastDate.Date && (m.CLE_UnassignedOn == null || m.CLE_UnassignedOn >= lastDate.Date)).FirstOrDefault().DES_Id;
             }
             catch (Exception ex)
             {

@@ -900,7 +900,7 @@ namespace RMERP.Controllers
                         att.EMP_Id = EMP_Id;
                         att.WAG_Id = wageProcess.WAG_Id;
                         att.CLI_Id = client.CLI_Id;
-                        att.DES_Id = designationManager.getDesignationIdForAttandance(client.CLI_Id, EMP_Id);
+                        att.DES_Id = designationManager.getDesignationIdForAttandance(client.CLI_Id, EMP_Id, wageProcess.WAG_Month);
                         att.ATT_Date = tmpDate;
                                           
                         switch (row.GetCell(j).ToString().Replace(" ", ""))
@@ -1043,7 +1043,7 @@ namespace RMERP.Controllers
                     att.EMP_Id = EMP_Id;
                     att.WAG_Id = wageProcess.WAG_Id;
                     att.CLI_Id = client.CLI_Id;
-                    att.DES_Id = designationManager.getDesignationIdForAttandance(client.CLI_Id, EMP_Id);
+                    att.DES_Id = designationManager.getDesignationIdForAttandance(client.CLI_Id, EMP_Id, wageProcess.WAG_Month);
                     att.ATT_Date = tmpDate;                    
 
                     switch (row.GetCell(j).ToString().Replace(" ", ""))
@@ -1216,7 +1216,7 @@ namespace RMERP.Controllers
                         att.EMP_Id = EMP_Id;
                         att.WAG_Id = wageProcess.WAG_Id;
                         att.CLI_Id = client.CLI_Id;
-                        att.DES_Id = designationManager.getDesignationIdForAttandance(client.CLI_Id, EMP_Id);
+                        att.DES_Id = designationManager.getDesignationIdForAttandance(client.CLI_Id, EMP_Id, wageProcess.WAG_Month);
                         att.ATT_Date = tmpDate;
                         //att.ATT_Shift = "";
                         //att.ATT_ExtraHoursWorked = 0.0;
