@@ -603,12 +603,12 @@
         });
         </script>
     };
-    <script type="text/javascript">
+    <script type="text/javascript">       
         var ClientID;
-        var CLI_IsActive_bool;
-
-
-        $(document).ready(function () {
+        var CLI_IsActive_bool;    
+        var CLI_IsActive;
+        $(document).ready(function () {  
+           
             radioShow();
             var CLI_Id = $("#clientsModel_FRM_Id").val();
             if (CLI_Id > 0) {
@@ -631,9 +631,9 @@
             $("#activeBody").html("Are you sure want to InActive this Client?");
             $("#btnSubmit").html("InActive");
             ClientID = $('#clientsModel_CLI_Id').val();
-            var CLI_IsActive = $('#clientsModel_CLI_IsActive').val();
-            CLI_IsActive_bool = (CLI_IsActive =="True");
-            if (!CLI_IsActive_bool) {
+            CLI_IsActive = $('#clientsModel_CLI_IsActive').val();
+            CLI_IsActive_bool = (CLI_IsActive == "True");
+            if (CLI_IsActive.toString()=="False") {
                 //$("#ActiveClient").hide();
                 //$("#InActiveClient").show();
                 $("#InActiveClient").hide();
@@ -650,7 +650,7 @@
                 $("#activeBody").html("Are you sure want to Change Inactivation date of this Client?");
                 $("#btnSubmit").html("Change");
             }
-            if (CLI_IsActive_bool) {
+            if (CLI_IsActive.toString()=="True") {
                // $("#ActiveClient").show();
                 $("#InActiveClient").hide();
                 var CurrentActive = $('.nav li.active').find("a").attr("href");
@@ -719,9 +719,10 @@
         };
 
         $("#btnSubmit").click(
-            function () {                
+            function () { 
+                
                 var active = "Change Inactive Date";
-                if (CLI_IsActive_bool) {
+                if (CLI_IsActive.toString()=="True") {
                     active = "Choose Inactive Date";
                 }
             bootbox.prompt({

@@ -6,8 +6,8 @@
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 @section Breadcrumbs{
-    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id})</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Upload Attendance Excel", "UploadExcel", "Attendance", new { WAG_Id = Model.WAG_Id,CLI_Id=Model.CLI_Id})</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id })</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Upload Attendance Excel", "UploadExcel", "Attendance", new { WAG_Id = Model.WAG_Id, CLI_Id = Model.CLI_Id })</li>
     <li class="breadcrumb-item">Verify Attendance</li>
 }
 @if (Model == null)
@@ -221,7 +221,7 @@ else
                                 </div>
                             }
 
-                            @using (Html.BeginForm("ImportExcel", "Attendance", FormMethod.Post))
+                            @using (Html.BeginForm("ImportExcel", "Attendance", FormMethod.Post, new { @id = "form" }))
                             {
                                 @Html.HiddenFor(m => m.WAG_Id)
                                 @Html.HiddenFor(m => m.CLI_Id)
@@ -246,5 +246,23 @@ else
         </div>
     </div>
 
+}
+
+@section scripts{
+    <script>
+        $(document).on('invalid-form.validate', 'form', function () {
+            var button = $(this).find('input[type="submit"]');
+            setTimeout(function () {
+                button.removeAttr('disabled');
+            }, 1);
+        });
+        $(document).on('submit', 'form', function () {
+            var button = $(this).find('input[type="submit"]');
+            setTimeout(function () {
+                button.attr('disabled', 'disabled');
+            }, 0);
+        });
+
+    </script>
 }
 
