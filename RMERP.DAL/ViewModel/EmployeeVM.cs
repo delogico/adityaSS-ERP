@@ -28,6 +28,7 @@ namespace RMERP.DAL.ViewModel
 
         [Display(Name = "Aadhar number")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Aadhar number is required")]
+        [MaxLength(12, ErrorMessage = "length must be maximum 12 characters long")]
         [Remote("CheckExistingAadhar", "Employees", ErrorMessage = "Aadhar number is already exists!",AdditionalFields ="EMP_Id")]
         public string EMP_Aadhar_Number { get; set; }
 

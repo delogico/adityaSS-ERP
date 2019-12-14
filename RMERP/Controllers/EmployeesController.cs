@@ -124,10 +124,13 @@ namespace RMERP.Controllers
             SessionUtils sessionUtils = new SessionUtils(Request, Response);            
             if (ModelState.IsValid)
             {
-                Employees employee = new Employees();               
-                employee = EmployeesMapper.MapMeModel(employeeVM);                
-                employee.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
-                res = employeeManager.AddEditEmployee(employee);
+                if(!employeeManager.CheckExistingAadhar(employeeVM.EMP_Aadhar_Number, employeeVM.EMP_Id))
+                {
+                    Employees employee = new Employees();
+                    employee = EmployeesMapper.MapMeModel(employeeVM);
+                    employee.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
+                    res = employeeManager.AddEditEmployee(employee);
+                }                
             }
             if (res == string.Empty)
             {
