@@ -807,6 +807,11 @@ namespace RMERP.DAL.Models
             {
                 entity.HasKey(e => e.WPS_Id);
 
+                entity.Property(e => e.WPS_FileName)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.WPS_GeneratedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.WPS_Status).HasDefaultValueSql("((1))");

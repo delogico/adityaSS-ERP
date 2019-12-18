@@ -33,16 +33,7 @@
                                     <a href="@Url.Action("AddEditInvoice","Invoices",new {INV_Id=item.INV_Id})"><i class="fa fa-pencil m-r-5"></i> Edit |</a>
                                     <a href="@Url.Action("DownloadInvoice","Invoices",new {INV_Id=item.INV_Id,Action= (int)PDFAction.Download })"><i class="fa fa-file-pdf-o m-r-5"></i> Download |</a>
                                     <a href="@Url.Action("DeleteInvoice","Invoices",new {INV_Id=item.INV_Id })"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-
-                                    @*<div class="dropdown">
-                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li><a href="@Url.Action("AddEditInvoice","Invoices",new {INV_Id=item.INV_Id})"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
-                                                <li><a href="@Url.Action("AddEditInvoice","Invoices",new {INV_Id=item.INV_Id})"><i class="fa fa-eye m-r-5"></i> View</a></li>
-                                                <li><a href="@Url.Action("DownloadInvoice","Invoices",new {INV_Id=item.INV_Id,Action= (int)PDFAction.Download })"><i class="fa fa-file-pdf-o m-r-5"></i> Download</a></li>
-                                                <li><a href="@Url.Action("DeleteInvoice","Invoices",new {INV_Id=item.INV_Id })"><i class="fa fa-trash-o m-r-5"></i> Delete</a></li>
-                                            </ul>
-                                        </div>*@
+                                                                       
                                 </td>
                             </tr>
                             srNo++;

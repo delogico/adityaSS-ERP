@@ -16,7 +16,9 @@
                 <h4 class="page-title">@Model.FRM_Name (@Model.WAG_Month)</h4>
             </div>
             <div class="col-sm-4 text-right m-b-30">
-                @*<a class="btn btn-primary rounded" href="@Url.Action("AddEditDesignation","Designations")"><i class="fa fa-plus"></i> Register New Designation</a>*@
+                @*<a class="btn btn-primary rounded" onclick="GeneratePaySlipForAll(@Model.WAG_Id)">Generate For All</a>*@
+                <a class="btn btn-primary rounded" href="@Url.Action("GeneratePaySlipForAll","Reports",new { WAG_Id=Model.WAG_Id})">Generate For All</a>
+                <img id="All_loading-image" src="~/assets/img/smallLoading.gif" style="display:none;" />
             </div>
         </div>
         <div class="row">
@@ -25,28 +27,40 @@
                     <table class="table table-striped custom-table">
                         <thead>
                             <tr>
+                                <th>Employee ID</th>
                                 <th>Employee Name</th>
                                 <th>#</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.EmployeePaySlipVMs)
-                            {
+                            @foreach (var item in Model.EmpPaySlipVMs)
+                            {    
+                                
                                 <tr>
+                                    <td>@item.EMP_Id.ToString("D5")</td>
                                     <td>@item.EMP_FullName</td>
                                     <td>
                                         @if (item.IsPaySlipGenerated)
                                         {
                                         <span>
-                                            <a href="#">Download</a> | <a href="#">Regenerate</a>
+                                            <a href="@Url.Action("DownloadPaySlip","Reports",new { WPS_Id=item.WPS_Id})" class="btn btn-xs btn-success">Download</a>
+                                            <a onclick="GeneratePaySlip(@Model.WAG_Id,@item.EMP_Id,@item.WPS_Id)" class="btn btn-xs btn-warning">Regenerate</a>
+                                            @*<a href="@Url.Action("GeneratedPaySlip","Reports",new { WAG_Id=Model.WAG_Id,EMP_Id=@item.EMP_Id})" class="btn btn-xs btn-success">View</a>*@
+                                            <img id="R_loading-image_@item.EMP_Id" src="~/assets/img/smallLoading.gif" style="display:none;" />
                                             <br />
-                                            Generated on @DateHelper.getLongDateFormat(item.WPS_GeneratedOn.Value) 
-                                        </span> 
+                                            <span class="label label-success-border">Generated on @DateHelper.getLongDateFormat(item.WPS_GeneratedOn.Value) </span>
+                                        </span>
                                         }
                                         else
                                         {
-                                            <span>Not Generated Yet</span>
+                                            <span class="label label-danger-border">Not Generated Yet </span>
+                                            <span>&nbsp;&nbsp;</span>
+                                            <span>
+                                                <a class="btn btn-xs btn-info" onclick="GeneratePaySlip(@Model.WAG_Id,@item.EMP_Id,0)"> Generate PaySlip</a>
+                                                <img id="loading-image_@item.EMP_Id" src="~/assets/img/smallLoading.gif" style="display:none;" />
+                                            </span>
                                         }
+
                                     </td>
                                 </tr>
                             }
@@ -58,3 +72,39 @@
     </div>
 </div>
 
+@section scripts{
+    <script>
+        function GeneratePaySlip(WAG_Id, EMP_Id, WPS_Id) {           
+            var Url = siteUrl + "Reports/GeneratedPaySlip?WAG_Id=" + WAG_Id + "&EMP_Id=" + EMP_Id+"&WPS_Id="+WPS_Id;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                beforeSend: function () {
+                    if(WPS_Id>0)
+                        $("#R_loading-image_" + EMP_Id).show();
+                    else
+                        $("#loading-image_" + EMP_Id).show();
+                },
+                success: function (data) {
+                    window.location.replace(siteUrl + "Reports/PaySlipGenerate?WAG_Id=" + WAG_Id);
+                }
+            })
+        };
+        function GeneratePaySlipForAll(WAG_Id) {           
+            var Url = siteUrl + "Reports/GeneratePaySlipForAll?WAG_Id=" + WAG_Id;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                beforeSend: function () {                   
+                        $("#All_loading-image").show();
+                },
+                success: function (data) {
+                    window.location.replace(siteUrl + "Reports/PaySlipGenerate?WAG_Id=" + WAG_Id);
+                },
+                error: function () {
+                    $("#All_loading-image").hide();
+                }
+            })
+        };
+    </script>
+}

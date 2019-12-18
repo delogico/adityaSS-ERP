@@ -53,10 +53,10 @@ namespace RMERP.Helpers
         }
         public int? GetLoggedFirmID()
         {
-            if (request.Cookies["FirmID"] != "")
-                return Convert.ToInt32(request.Cookies["FirmID"]);
-            else
+            if (request.Cookies["FirmID"] == "" || request.Cookies["FirmID"] == null)
                 return null;
+            else
+                return Convert.ToInt32(request.Cookies["FirmID"]);
         }
         public string GetLoggedAdminFullName()
         {

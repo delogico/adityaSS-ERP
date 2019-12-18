@@ -173,7 +173,11 @@ namespace RMERP.DAL.Helpers
             Assign = 0,
             Unassign = 1
         }
-
+        public enum WagePaySlip
+        {
+            NotGenerated=0,
+            Generated = 1
+        }
         public static DateTime DateNow()
         {
             DateTime utcTime = DateTime.UtcNow;
@@ -687,6 +691,30 @@ namespace RMERP.DAL.Helpers
         {
             DateTime firstDate = new DateTime(date.Year, date.Month, 1);
             return firstDate;
+        }
+        public static string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
+
+        public static Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+                {".txt", "text/plain"},
+                {".pdf", "application/pdf"},
+                {".doc", "application/vnd.ms-word"},
+                {".docx", "application/vnd.ms-word"},
+                {".xls", "application/vnd.ms-excel"},
+                {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
+                {".png", "image/png"},
+                {".jpg", "image/jpeg"},
+                {".jpeg", "image/jpeg"},
+                {".gif", "image/gif"},
+                {".csv", "text/csv"}
+            };
         }
     }
 }

@@ -992,10 +992,128 @@ namespace RMERP.DAL.ManagerClasses
         #endregion
 
         #region Payslip        
-        public Wage_PaySlips GetPaySlipForEmp(int WAG_Id,int EMP_Id)
+        public EmployeePaySlipVM GeneratePaySlip(int WAG_Id,int EMP_Id)
         {
-            return _context.Wage_PaySlips.Where(m => m.WAG_Id.Equals(WAG_Id) && m.EMP_Id.Equals(EMP_Id)).FirstOrDefault();
+            EmployeePaySlipVM paySlipVM = new EmployeePaySlipVM();
+            WageRegisterManager registerManager = new WageRegisterManager(_context);
+            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersForSalarySlip(WAG_Id, EMP_Id);
+            decimal WAR_Basic_Calculated = 0M, WAR_DA_Calculated = 0M, WAR_ESIC_Calculated = 0M, WAR_FinalTotal = 0M, WAR_GrossTotal = 0M, WAR_HRA_Calculated = 0M, WAR_PF_Calculated = 0M, WAR_ProffesionalTax_Calculated = 0M;
+            decimal WAR_LWF_Deduction_Calculated = 0M, WAR_Advance_Amount = 0M, WAR_RevenueDeduction_Calculated = 0M, WAR_CanteenFacility_Calculation = 0M;
+            decimal WAR_OverTime_Calculated = 0M, WAR_Outstation_Allowance_Calculated = 0M, WAR_Nightshift_Allowance_Calculated = 0M, WAR_Performance_Allowance_Calculated = 0M, WAR_Attendance_Allowance_Calculated = 0M;
+            double WAR_TotalPaybleDays = 0, WAR_TotalWorkingDays = 0, Max_TotalPaybleDays=0;
+            List<Wage_Register_Allowances> allowances = new List<Wage_Register_Allowances>();
+            foreach (Wage_Register wage in wage_Registers)
+            {
+                WAR_Basic_Calculated = WAR_Basic_Calculated+wage.WAR_Basic_Calculated;
+                WAR_DA_Calculated = WAR_DA_Calculated+ wage.WAR_DA_Calculated;
+                WAR_ESIC_Calculated = WAR_ESIC_Calculated+ wage.WAR_ESIC_Calculated;
+                WAR_HRA_Calculated = WAR_HRA_Calculated+ wage.WAR_HRA_Calculated;
+                WAR_PF_Calculated = WAR_PF_Calculated+wage.WAR_PF_Calculated;
+                WAR_ProffesionalTax_Calculated = WAR_ProffesionalTax_Calculated+Convert.ToDecimal(wage.WAR_ProffesionalTax_Calculated);
+                WAR_TotalPaybleDays = WAR_TotalPaybleDays+wage.WAR_TotalPaybleDays;
+                WAR_TotalWorkingDays = WAR_TotalWorkingDays+wage.WAR_TotalWorkingDays;
+
+                WAR_GrossTotal = WAR_GrossTotal + wage.WAR_GrossTotal;
+                WAR_FinalTotal = WAR_FinalTotal+ wage.WAR_FinalTotal;
+
+                if (WAR_TotalWorkingDays > Max_TotalPaybleDays)
+                {
+                    Max_TotalPaybleDays = WAR_TotalWorkingDays;
+                    paySlipVM.EMP_Location = wage.CLI_.CLI_Invoicing_Location;
+                    paySlipVM.EMP_Designation = wage.CRI_.DES_.DES_Title;
+                    paySlipVM.EMP_Region = wage.CLI_.CLI_Invoicing_City;
+                }
+
+                if(wage.WAR_LWF_Deduction_Calculated!=null)
+                    WAR_LWF_Deduction_Calculated = WAR_LWF_Deduction_Calculated + wage.WAR_LWF_Deduction_Calculated.Value;
+                if(wage.WAR_Advance_Amount!=null)
+                    WAR_Advance_Amount = WAR_Advance_Amount + wage.WAR_Advance_Amount.Value;
+                if (wage.WAR_RevenueDeduction_Calculated != null)
+                    WAR_RevenueDeduction_Calculated = WAR_RevenueDeduction_Calculated +Convert.ToDecimal(wage.WAR_RevenueDeduction_Calculated);
+                if (wage.WAR_CanteenFacility_Calculation != null && wage.WAR_CanteenFacility_Calculation != "-")
+                    WAR_CanteenFacility_Calculation = WAR_CanteenFacility_Calculation + Convert.ToDecimal(wage.WAR_CanteenFacility_Calculation);
+
+                WAR_OverTime_Calculated = WAR_OverTime_Calculated + wage.WAR_OverTime_Calculated;
+                if (wage.WAR_OutStation_Allowance_Calculated != null)
+                    WAR_Outstation_Allowance_Calculated = WAR_Outstation_Allowance_Calculated + wage.WAR_OutStation_Allowance_Calculated.Value;
+                if(wage.WAR_Nightshift_Allowance_Calculated!=null)
+                    WAR_Nightshift_Allowance_Calculated = WAR_Nightshift_Allowance_Calculated + wage.WAR_Nightshift_Allowance_Calculated.Value;
+                if(wage.WAR_Performance_Allowance_Calculated!=null)
+                    WAR_Performance_Allowance_Calculated = WAR_Performance_Allowance_Calculated + wage.WAR_Performance_Allowance_Calculated.Value;
+                if(wage.WAR_Attendance_Allowance_Calculated!=null)
+                    WAR_Attendance_Allowance_Calculated = WAR_Attendance_Allowance_Calculated + wage.WAR_Attendance_Allowance_Calculated.Value;
+                allowances.AddRange(wage.Wage_Register_Allowances);
+
+                
+            }
+            paySlipVM.ArrearsDays = 0;
+            paySlipVM.firm = wage_Registers[0].WAG_.FRM_;
+            paySlipVM.EMP_Account_Number = wage_Registers[0].EMP_.EMP_Account_Number;           
+            paySlipVM.EMP_Bank = wage_Registers[0].EMP_.EMP_Bank;
+            paySlipVM.EMP_Branch = wage_Registers[0].EMP_.EMP_Branch;
+            paySlipVM.EMP_DateOfJoining = wage_Registers[0].EMP_.EMP_DateOfJoining;            
+            paySlipVM.EMP_ESIC_Number = wage_Registers[0].EMP_.EMP_ESIC_Number;
+            paySlipVM.EMP_FirstName = wage_Registers[0].EMP_.EMP_FirstName;
+            paySlipVM.EMP_MiddleName = wage_Registers[0].EMP_.EMP_MiddleName;
+            paySlipVM.EMP_SurName = wage_Registers[0].EMP_.EMP_SurName;
+            paySlipVM.EMP_UAN_Number = wage_Registers[0].EMP_.EMP_UAN_Number;
+            paySlipVM.EMP_Gender = wage_Registers[0].EMP_.EMP_Gender;
+            paySlipVM.EMP_Id = wage_Registers[0].EMP_.EMP_Id;
+            paySlipVM.EMP_Pan_Number = wage_Registers[0].EMP_.EMP_Pan_Number;
+            paySlipVM.EMP_PF_Number = "";                                  
+            paySlipVM.WAG_Month = wage_Registers[0].WAG_.WAG_Month;
+            paySlipVM.Wage_Register_Allowances = allowances;
+            paySlipVM.WAR_Basic_Calculated = WAR_Basic_Calculated;
+            paySlipVM.WAR_DA_Calculated = WAR_DA_Calculated;
+            paySlipVM.WAR_ESIC_Calculated = WAR_ESIC_Calculated;
+            paySlipVM.WAR_FinalTotal = WAR_FinalTotal;
+            paySlipVM.WAR_GrossTotal =WAR_GrossTotal;
+            paySlipVM.WAR_HRA_Calculated = WAR_HRA_Calculated;
+            paySlipVM.WAR_PF_Calculated = WAR_PF_Calculated;
+            paySlipVM.WAR_ProffesionalTax_Calculated = WAR_ProffesionalTax_Calculated;
+            paySlipVM.WAR_TotalPaybleDays =WAR_TotalPaybleDays;
+            paySlipVM.WAR_TotalWorkingDays = WAR_TotalWorkingDays;
+            paySlipVM.WAR_LWF_Deduction_Calculated = WAR_LWF_Deduction_Calculated;
+            paySlipVM.WAR_Advance_Amount = WAR_Advance_Amount;
+            paySlipVM.WAR_RevenueDeduction_Calculated = WAR_RevenueDeduction_Calculated;
+            paySlipVM.WAR_CanteenFacility_Calculation = WAR_CanteenFacility_Calculation;
+            paySlipVM.WAR_OverTime_Calculated = WAR_OverTime_Calculated;
+            decimal DeductTotal = WAR_PF_Calculated + WAR_ESIC_Calculated + WAR_ProffesionalTax_Calculated + WAR_LWF_Deduction_Calculated + WAR_Advance_Amount+ WAR_RevenueDeduction_Calculated+ WAR_CanteenFacility_Calculation;
+            paySlipVM.DeductTotal = DeductTotal;
+
+            return paySlipVM;
         }
+       
+        public Wage_PaySlips AddWagePaySlip(Wage_PaySlips wagePaySlip)
+        {
+            if (wagePaySlip.WPS_Id > 0)
+            {
+                _context.Wage_PaySlips.Update(wagePaySlip);
+            }
+            else
+            {
+                _context.Wage_PaySlips.Add(wagePaySlip);
+            }           
+            _context.SaveChanges();
+            return wagePaySlip;
+        }
+
+        public Wage_PaySlips GetPaySlip(int WPS_Id)
+        {
+            return _context.Wage_PaySlips.Find(WPS_Id);
+        }
+        public List<EmployeePaySlipVM> GeneratePaySlipForAll(int WAG_Id)
+        {
+            WageRegisterManager registerManager = new WageRegisterManager(_context);
+            List<Employees> employees = registerManager.GetEmployeesForSalarySlip(WAG_Id);
+            List<EmployeePaySlipVM> employeePaySlips = new List<EmployeePaySlipVM>();
+            foreach (Employees employee in employees)
+            {
+                employeePaySlips.Add(GeneratePaySlip(WAG_Id, employee.EMP_Id));
+            }
+            return employeePaySlips;
+        }
+        
         #endregion
     }
 }

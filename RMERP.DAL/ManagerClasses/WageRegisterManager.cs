@@ -648,8 +648,17 @@ namespace RMERP.DAL.ManagerClasses
 
         public List<Employees> GetEmployeesForWage(int WAG_Id)
         {
-            return _context.Wage_Register.Include(m => m.EMP_).ThenInclude(m=>m.Wage_PaySlips).Where(m => m.WAG_Id.Equals(WAG_Id)).Select(m => m.EMP_).ToList();
+            int[] EMP_Ids= _context.Wage_Register.Include(m => m.EMP_).Where(m => m.WAG_Id.Equals(WAG_Id)).Select(m => m.EMP_Id).ToArray();
+            return _context.Employees.Where(m=>EMP_Ids.Contains(m.EMP_Id)).Include(m=>m.Wage_PaySlips).ToList();
         }
 
+        public List<Wage_Register> GetWageRegistersForSalarySlip(int WAG_Id, int EMP_Id)
+        {
+            return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id && r.EMP_Id == EMP_Id).Include(m=>m.CLI_).ThenInclude(m=>m.STA_).Include(m=>m.WAG_).ThenInclude(m=>m.FRM_).ThenInclude(m=>m.STA_).Include(m=>m.WAG_).Include(m=>m.CRI_).ThenInclude(m=>m.DES_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).Include(m=>m.EMP_).ThenInclude(m=>m.EMP_StateNavigation).ToList();
+        }
+        public List<Employees> GetEmployeesForSalarySlip(int WAG_Id)
+        {
+            return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id).Select(m=>m.EMP_).ToList();
+        }        
     }
 }

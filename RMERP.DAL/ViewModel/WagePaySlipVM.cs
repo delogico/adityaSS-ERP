@@ -7,14 +7,16 @@ namespace RMERP.DAL.ViewModel
 {
     public class WagePaySlipMasterVM
     {
-        public List<EmployeePaySlipVM> EmployeePaySlipVMs { get; set; }
+        public int WAG_Id { get; set; }
+        public List<EmpPaySlipVM> EmpPaySlipVMs { get; set; }
         public string WAG_Month { get; set; }
         public int FRM_Id { get; set; }
         public string FRM_Name { get; set; }
 
     }
-    public class EmployeePaySlipVM
+    public class EmpPaySlipVM
     {
+        public int WPS_Id { get; set; }
         public int EMP_Id { get; set; }
         public string EMP_FirstName { get; set; }
         public string EMP_MiddleName { get; set; }
