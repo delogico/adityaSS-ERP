@@ -3196,7 +3196,7 @@ namespace RMERP.Controllers
 
                 paySlipVM = reportsManager.GeneratePaySlip(WAG_Id, EMP_Id);
                 string PaySlipPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("RMERP_EMPLOYEE_PAYSLIP_PATH").Value;
-                var FileName = "PaySlip_" + paySlipVM.EMP_Id.ToString("D5") + "_" + (paySlipVM.EMP_FirstName + "_" + paySlipVM.EMP_MiddleName + "_" + paySlipVM.EMP_SurName) + "_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";
+                var FileName = "PaySlip_"+ paySlipVM.EMP_Id.ToString("D5") + "_" + (paySlipVM.EMP_FirstName + "_" + paySlipVM.EMP_MiddleName + "_" + paySlipVM.EMP_SurName) + "_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";
 
                 #region Add Payslip
                 paySlip.WPS_Id = WPS_Id;
@@ -3235,56 +3235,11 @@ namespace RMERP.Controllers
                 };
                 return view;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
-        }
-        public void GeneratePdf(int WAG_Id, int EMP_Id)
-        {
-            Wage_PaySlips paySlip = new Wage_PaySlips();
-            EmployeePaySlipVM paySlipVM = new EmployeePaySlipVM();
-            ReportsManager reportsManager = new ReportsManager(_context);
-
-            paySlipVM = reportsManager.GeneratePaySlip(WAG_Id, EMP_Id);
-            string PaySlipPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("RMERP_EMPLOYEE_PAYSLIP_PATH").Value;
-            var FileName = "PaySlip_" + paySlipVM.EMP_Id.ToString("D5") + "_" + (paySlipVM.EMP_FirstName + "_" + paySlipVM.EMP_MiddleName + "_" + paySlipVM.EMP_SurName) + "_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";
-
-            #region Add Payslip           
-            paySlip.WAG_Id = WAG_Id;
-            paySlip.EMP_Id = EMP_Id;
-            paySlip.WPS_Status = (int)ProjectUtils.WagePaySlip.Generated;
-            paySlip.WPS_GeneratedOn = ProjectUtils.DateNow();
-            paySlip.WPS_FileName = FileName;
-            Wage_PaySlips wage_PaySlip = reportsManager.AddWagePaySlip(paySlip);
-            #endregion
-
-            var root = PaySlipPath + "\\" + wage_PaySlip.WAG_Id + "\\" + "Salary Slip";
-            if (!Directory.Exists(root))
-            {
-                Directory.CreateDirectory(root);
-            }
-            else
-            {
-                string[] fileList = Directory.GetFiles(root, wage_PaySlip.WPS_FileName);
-                if (fileList != null)
-                {
-                    foreach (string s in fileList)
-                    {
-                        string fileName = Path.GetFileName(s);
-                        System.IO.File.Delete(root + "/" + fileName);
-                    }
-                }
-            }
-            var path = Path.Combine(root, FileName);
-            path = Path.GetFullPath(path);
-            var view = new Rotativa.PartialViewAsPdf("_GeneratePdf", paySlipVM)
-            {
-                FileName = FileName,
-                SaveOnServerPath = path               
-            };
-            //return null;
-        }
+        }       
         public async Task<FileResult> DownloadPaySlip(int WPS_Id)
         {
             ReportsManager reportsManager = new ReportsManager(_context);
@@ -3300,32 +3255,7 @@ namespace RMERP.Controllers
             memory.Position = 0;
 
             return File(memory, ProjectUtils.GetContentType(DocumentPath), paySlip.WPS_FileName);
-        }
-
-        public ViewAsPdf GeneratePaySlipForAll(int WAG_Id)
-        {
-            WageRegisterManager registerManager = new WageRegisterManager(_context);
-            ReportsManager reportsManager = new ReportsManager(_context);
-            List<EmployeePaySlipVM> paySlipVMs = new List<EmployeePaySlipVM>();
-            paySlipVMs = reportsManager.GeneratePaySlipForAll(WAG_Id);
-            List<Employees> emps = registerManager.GetEmployeesForSalarySlip(WAG_Id);
-            ViewAsPdf view = new ViewAsPdf();
-            foreach (EmployeePaySlipVM paySlipVM in paySlipVMs)
-            {
-                var FileName = "PaySlip_" + paySlipVM.EMP_Id.ToString("D5") + "_" + (paySlipVM.EMP_FirstName + "_" + paySlipVM.EMP_MiddleName + "_" + paySlipVM.EMP_SurName) + "_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";
-                view= new ViewAsPdf("_GeneratePdf", paySlipVM) { FileName = FileName };
-            }
-            return view;
-
-            //foreach (Employees emp in emps)
-            //{
-            //    //GeneratePdf(WAG_Id, paySlipVM.EMP_Id);
-            //    return new Rotativa.ActionAsPdf("GeneratedPaySlip", new { WAG_Id= WAG_Id,EMP_Id= emp.EMP_Id, WPS_Id =0});               
-
-            //}
-            //return new ViewAsPdf("_GeneratePdf", null) { FileName = "TestPartialViewAsPdf.pdf" };
-        }
-       
+        }       
         #endregion
     }
 

@@ -54,7 +54,7 @@
                 <center>
                     <h2><strong>@Model.firm.FRM_Name</strong></h2>
                     <strong>
-                        @Model.firm.FRM_Address1,@Model.firm.FRM_Address1,@Model.firm.FRM_Address2,@Model.firm.STA_.STA_Name<br>
+                        @Model.firm.FRM_Address1,@Model.firm.FRM_Address2,@Model.firm.STA_.STA_Name<br>
                     </strong>
                 </center>
             </div>
@@ -242,7 +242,7 @@
                                     </tr>
                                     <tr>
                                         <td class="text-left">Professional Tax</td>
-                                        <td class="text-right">@Model.WAR_ProffesionalTax_Calculated</td>
+                                        <td class="text-right">@String.Format("{0:0.00}", Model.WAR_ProffesionalTax_Calculated)</td>
                                     </tr>
                                     @if (Model.WAR_Advance_Amount > 0)
                                     {
@@ -255,21 +255,21 @@
                                     {
                                         <tr>
                                             <td class="text-left">Revenue Deduction</td>
-                                            <td class="text-right">@Model.WAR_RevenueDeduction_Calculated</td>
+                                            <td class="text-right">@String.Format("{0:0.00}", Model.WAR_RevenueDeduction_Calculated)</td>
                                         </tr>
                                     }
                                     @if (Model.WAR_CanteenFacility_Calculation > 0)
                                     {
                                         <tr>
                                             <td class="text-left">Canteen Facility</td>
-                                            <td class="text-right">@Model.WAR_CanteenFacility_Calculation</td>
+                                            <td class="text-right">@String.Format("{0:0.00}", Model.WAR_CanteenFacility_Calculation)</td>
                                         </tr>
                                     }
                                     @if (Model.WAR_LWF_Deduction_Calculated > 0)
                                     {
                                         <tr>
                                             <td class="text-left">LWF Deduction</td>
-                                            <td class="text-right">@Model.WAR_LWF_Deduction_Calculated</td>
+                                            <td class="text-right">@String.Format("{0:0.00}", Model.WAR_LWF_Deduction_Calculated)</td>
                                         </tr>
                                     }
                                     @if (totEarning > totDeduction)
