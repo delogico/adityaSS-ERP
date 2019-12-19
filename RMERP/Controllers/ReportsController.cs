@@ -3179,14 +3179,14 @@ namespace RMERP.Controllers
             paySlipMasterVM.FRM_Name = wage_Process.FRM_.FRM_Name;
             paySlipMasterVM.WAG_Month = wage_Process.WAG_Month.ToString("MMM-yyyy");
 
-            List<Employees> emps = wageRegisterManager.GetEmployeesForWage(WAG_Id);
+            List<Employees> emps = wageRegisterManager.GetEmployeesForWage(WAG_Id).ToList();
             paySlipMasterVM.EmpPaySlipVMs = EmployeePaySlipMapper.mapMe(emps, WAG_Id);
             return View(paySlipMasterVM);
         }
 
         [Obsolete]
         [HttpGet]
-        public IActionResult GeneratedPaySlip(int WAG_Id, int EMP_Id, int WPS_Id)
+        public async Task<IActionResult> GeneratedPaySlip(int WAG_Id, int EMP_Id, int WPS_Id)
         {            
             try
             {
@@ -3196,26 +3196,16 @@ namespace RMERP.Controllers
 
                 paySlipVM = reportsManager.GeneratePaySlip(WAG_Id, EMP_Id);
                 string PaySlipPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("RMERP_EMPLOYEE_PAYSLIP_PATH").Value;
-                var FileName = "PaySlip_"+ paySlipVM.EMP_Id.ToString("D5") + "_" + (paySlipVM.EMP_FirstName + "_" + paySlipVM.EMP_MiddleName + "_" + paySlipVM.EMP_SurName) + "_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";
+                var FileName = "PaySlip_"+ paySlipVM.EMP_Id.ToString("D5") + "_" + (paySlipVM.EMP_FirstName + "_" + paySlipVM.EMP_MiddleName + "_" + paySlipVM.EMP_SurName) + "_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";     
 
-                #region Add Payslip
-                paySlip.WPS_Id = WPS_Id;
-                paySlip.WAG_Id = WAG_Id;
-                paySlip.EMP_Id = EMP_Id;
-                paySlip.WPS_Status = (int)ProjectUtils.WagePaySlip.Generated;
-                paySlip.WPS_GeneratedOn = ProjectUtils.DateNow();
-                paySlip.WPS_FileName = FileName;
-                Wage_PaySlips wage_PaySlip = reportsManager.AddWagePaySlip(paySlip);
-                #endregion
-
-                var root = PaySlipPath + "\\" + wage_PaySlip.WAG_Id + "\\" + "Salary Slip";
+                var root = PaySlipPath + "\\" + WAG_Id + "\\" + "Salary Slip";
                 if (!Directory.Exists(root))
                 {
                     Directory.CreateDirectory(root);
                 }
                 else
                 {
-                    string[] fileList = Directory.GetFiles(root, wage_PaySlip.WPS_FileName);
+                    string[] fileList = Directory.GetFiles(root, FileName);
                     if (fileList != null)
                     {
                         foreach (string s in fileList)
@@ -3233,13 +3223,29 @@ namespace RMERP.Controllers
                     SaveOnServerPath = path,
                     PageSize = Rotativa.AspNetCore.Options.Size.A4
                 };
-                return view;
+                #region Add Payslip
+                paySlip.WPS_Id = WPS_Id;
+                paySlip.WAG_Id = WAG_Id;
+                paySlip.EMP_Id = EMP_Id;
+                paySlip.WPS_Status = (int)ProjectUtils.WagePaySlip.Generated;
+                paySlip.WPS_GeneratedOn = ProjectUtils.DateNow();
+                paySlip.WPS_FileName = FileName;
+                Wage_PaySlips wage_PaySlip = reportsManager.AddWagePaySlip(paySlip);
+                #endregion
+                var byteArray = await view.BuildFile(ControllerContext);
+                GetFile(byteArray);
+                //return Content(wage_PaySlip.WPS_Id.ToString());                
+                return Json(new { WPS_Id = wage_PaySlip.WPS_Id, WPS_GeneratedOn= DateHelper.getLongDateFormat(wage_PaySlip.WPS_GeneratedOn) });
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-        }       
+        }    
+        public FileResult GetFile(byte[] byteArray)
+        {
+            return File(byteArray, "application/pdf");
+        }
         public async Task<FileResult> DownloadPaySlip(int WPS_Id)
         {
             ReportsManager reportsManager = new ReportsManager(_context);
@@ -3255,7 +3261,8 @@ namespace RMERP.Controllers
             memory.Position = 0;
 
             return File(memory, ProjectUtils.GetContentType(DocumentPath), paySlip.WPS_FileName);
-        }       
+        }
+
         #endregion
     }
 
