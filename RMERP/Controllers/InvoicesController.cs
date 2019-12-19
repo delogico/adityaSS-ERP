@@ -13,17 +13,21 @@ using Rotativa.AspNetCore;
 using static RMERP.DAL.Helpers.ProjectUtils;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Globalization;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace RMERP.Controllers
 {
     public class InvoicesController : Controller
     {
+        public IConfiguration _configuration;
         private readonly RMERPContext _context;
         private IHostingEnvironment _hostingEnvironment;
-        public InvoicesController(RMERPContext context, IHostingEnvironment hostingEnvironment)
+        public InvoicesController(RMERPContext context, IHostingEnvironment hostingEnvironment, IConfiguration configuration)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+            _configuration=configuration;
         }
 
         public IActionResult Index()
@@ -217,15 +221,39 @@ namespace RMERP.Controllers
         {
             InvoicesManager invoicesManager = new InvoicesManager(_context);
             Invoices invoices = invoicesManager.GetInvoice(INV_Id);
-            if (ActionId == (int)ProjectUtils.PDFAction.View)
+            if (ActionId == (int)PDFAction.View)
             {
                 return View(invoices);
             }
             else 
             {
+                string FileName = "Invoice_" + invoices.INV_Number + "_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";
+                DateTime toDay = DateNow();
+                string PaySlipPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("RMERP_CLIENTS_INVOICE_PATH").Value;
+                var root = PaySlipPath + "\\" + toDay.Year + "\\" + toDay.Month;
+                if (!Directory.Exists(root))
+                {
+                    Directory.CreateDirectory(root);
+                }
+                else
+                {
+                    string[] fileList = Directory.GetFiles(root, FileName);
+                    if (fileList != null)
+                    {
+                        foreach (string s in fileList)
+                        {
+                            string fileName = Path.GetFileName(s);
+                            System.IO.File.Delete(root + "/" + fileName);
+                        }
+                    }
+                }
+                var path = Path.Combine(root, FileName);
+                path = Path.GetFullPath(path);
                 var view = new ViewAsPdf(invoices)
                 {
-                    FileName = "Invoice_" + invoices.INV_Number + "_" + DateTime.Now.ToString("ddMMyyyyHHmm") + ".pdf",
+                    FileName = FileName,
+                    SaveOnServerPath = path,
+                    PageSize = Rotativa.AspNetCore.Options.Size.A4
                 };
                 return view;
             }
