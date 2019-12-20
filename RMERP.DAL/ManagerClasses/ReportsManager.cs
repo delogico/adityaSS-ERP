@@ -104,7 +104,8 @@ namespace RMERP.DAL.ManagerClasses
         {
             List<PayTaxReportVM> reports = new List<PayTaxReportVM>();
             WageRegisterManager registerManager = new WageRegisterManager(_context);
-            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersByWAG_Id(WAG_Id);
+            var wages= registerManager.GetWageRegistersByWAG_Id(WAG_Id);
+            List<Wage_Register> wage_Registers = wages.Where(m => m.CRI_.CRI_ProfessionalTax == true).ToList();
             foreach (var item in wage_Registers.Select(m => new { m.CLI_Id, m.CLI_.CLI_Name }).Distinct())
             {
                 PayTaxReportVM report = new PayTaxReportVM();

@@ -3189,7 +3189,7 @@ namespace RMERP.Controllers
         public async Task<IActionResult> GeneratedPaySlip(int WAG_Id, int EMP_Id, int WPS_Id)
         {            
             try
-            {
+            {                
                 Wage_PaySlips paySlip = new Wage_PaySlips();
                 EmployeePaySlipVM paySlipVM = new EmployeePaySlipVM();
                 ReportsManager reportsManager = new ReportsManager(_context);
@@ -3228,18 +3228,17 @@ namespace RMERP.Controllers
                 paySlip.WAG_Id = WAG_Id;
                 paySlip.EMP_Id = EMP_Id;
                 paySlip.WPS_Status = (int)ProjectUtils.WagePaySlip.Generated;
-                paySlip.WPS_GeneratedOn = ProjectUtils.DateNow();
+                paySlip.WPS_GeneratedOn = ProjectUtils.DateNow();                               
                 paySlip.WPS_FileName = FileName;
                 Wage_PaySlips wage_PaySlip = reportsManager.AddWagePaySlip(paySlip);
                 #endregion
                 var byteArray = await view.BuildFile(ControllerContext);
-                GetFile(byteArray);
-                //return Content(wage_PaySlip.WPS_Id.ToString());                
-                return Json(new { WPS_Id = wage_PaySlip.WPS_Id, WPS_GeneratedOn= DateHelper.getLongDateFormat(wage_PaySlip.WPS_GeneratedOn) });
+                GetFile(byteArray);                               
+                return Json(new { data="ok"});
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                return Json(new { data = "ko" });
             }
         }    
         public FileResult GetFile(byte[] byteArray)
