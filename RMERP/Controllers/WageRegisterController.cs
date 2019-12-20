@@ -120,7 +120,8 @@ namespace RMERP.Controllers
 
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+            Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
+            DateTime wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM").ToUpper() + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -262,14 +263,14 @@ namespace RMERP.Controllers
                             IRow rowHeading = excelSheet.CreateRow(DesCount);
                             rowHeading.HeightInPoints = (float)(2.8 * excelSheet.DefaultRowHeightInPoints);
                             ICell CellHeading = rowHeading.CreateCell(0);
-                            CellHeading.SetCellValue("RELIABLE SECURITY SERVICES");
+                            CellHeading.SetCellValue(wage_Process.FRM_.FRM_Name.ToUpper());
                             excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 25));
                             CellHeading.CellStyle = styleHeading;
                             CellUtil.SetAlignment(CellHeading, workbook, (short)HorizontalAlignment.Center);
 
                             IRow rowAdd1 = excelSheet.CreateRow(DesCount + 1);
                             ICell CellAdd1 = rowAdd1.CreateCell(0);
-                            CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR");
+                            CellAdd1.SetCellValue(wage_Process.FRM_.FRM_Address1.ToUpper()+","+ wage_Process.FRM_.FRM_Address2.ToUpper()+",");
                             CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                             excelSheet.AddMergedRegion(new CellRangeAddress(DesCount + 1, DesCount + 1, 0, 25));
 

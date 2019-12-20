@@ -43,7 +43,8 @@ namespace RMERP.Controllers
         {
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+            Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
+            DateTime wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -144,20 +145,20 @@ namespace RMERP.Controllers
 
                 IRow rowSub = excelSheet.CreateRow(1);
                 ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue("SECURITY SERVICES");
+                CellSub.SetCellValue(wage_Process.FRM_.FRM_Name.Replace("Reliable","").ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 9));
 
                 IRow rowAdd1 = excelSheet.CreateRow(2);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, Malti Tower, ‘E’ Ward, Near Kiran Bungalow, Tarabai Park, Kolhapur – 416 003,");
+                CellAdd1.SetCellValue(wage_Process.FRM_.FRM_Address1+","+ wage_Process.FRM_.FRM_Address2+",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 9));
 
                 IRow rowAdd2 = excelSheet.CreateRow(3);
                 ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : reliable.manpower@yahoo.com");
+                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : "+ wage_Process.FRM_.FRM_Email);
                 CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 9));
 
@@ -406,7 +407,8 @@ namespace RMERP.Controllers
         {
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+            Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
+            DateTime wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -492,20 +494,20 @@ namespace RMERP.Controllers
 
                 IRow rowSub = excelSheet.CreateRow(1);
                 ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue("SECURITY SERVICES");
+                CellSub.SetCellValue(wage_Process.FRM_.FRM_Name.Replace("Reliable", "").ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
 
                 IRow rowAdd1 = excelSheet.CreateRow(2);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, Malti Tower, ‘E’ Ward, Near Kiran Bungalow, Tarabai Park, Kolhapur – 416 003,");
+                CellAdd1.SetCellValue(wage_Process.FRM_.FRM_Address1 + "," + wage_Process.FRM_.FRM_Address2 + ",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 6));
 
                 IRow rowAdd2 = excelSheet.CreateRow(3);
                 ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : reliable.manpower@yahoo.com");
+                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : "+ wage_Process.FRM_.FRM_Email);
                 CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 6));
 
@@ -586,7 +588,8 @@ namespace RMERP.Controllers
         {
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+            Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
+            DateTime wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -656,20 +659,20 @@ namespace RMERP.Controllers
 
                 IRow rowSub = excelSheet.CreateRow(1);
                 ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue("SECURITY SERVICES");
+                CellSub.SetCellValue(wage_Process.FRM_.FRM_Name.Replace("Reliable", "").ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 9));
 
                 IRow rowAdd1 = excelSheet.CreateRow(2);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, Malti Tower, ‘E’ Ward, Near Kiran Bungalow, Tarabai Park, Kolhapur – 416 003,");
+                CellAdd1.SetCellValue(wage_Process.FRM_.FRM_Address1 + "," + wage_Process.FRM_.FRM_Address2 + ",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 9));
 
                 IRow rowAdd2 = excelSheet.CreateRow(3);
                 ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : reliable.manpower@yahoo.com");
+                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : "+ wage_Process.FRM_.FRM_Email);
                 CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 9));
 
@@ -804,7 +807,8 @@ namespace RMERP.Controllers
         {
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
+            Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
+            DateTime wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -855,14 +859,14 @@ namespace RMERP.Controllers
                 IRow row = excelSheet.CreateRow(0);
 
                 ICell CellSub = row.CreateCell(0);
-                CellSub.SetCellValue("RELIABLE SECURITY SERVICES ");
+                CellSub.SetCellValue(wage_Process.FRM_.FRM_Name.ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 5));
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR 416 003.");
+                CellAdd1.SetCellValue(wage_Process.FRM_.FRM_Address1.ToUpper()+","+wage_Process.FRM_.FRM_Address2.ToUpper());
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 5));
 
@@ -958,7 +962,10 @@ namespace RMERP.Controllers
             string report = clientSelectionVM.Report;
 
             WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(clientSelectionVM.selectionVMs[0].WAG_Id).WAG_Month;
+            
+            Wage_Process wage_Process = wageProcess.getWageProcessById(clientSelectionVM.selectionVMs[0].WAG_Id);
+            DateTime wageMonth = wage_Process.WAG_Month;
+
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -973,27 +980,27 @@ namespace RMERP.Controllers
                     case "0":
                         fileName = "Client_Wise_PF_Report_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Client_Wise_PF_Details_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Client_Wise_PF_Details_Excel(wage_Process.FRM_,clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "1":
                         fileName = "PF_Employees_Pending_For_Registration_Report_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Employees_Pending_For_Registration_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Employees_Pending_For_Registration_Excel(wage_Process.FRM_,clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "2":
                         fileName = "Employee_PF_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Employee_PF_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Employee_PF_Excel(wage_Process.FRM_,clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "3":
                         fileName = "Employee_PF_Above58_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Client_Wise_PF_Above58_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Client_Wise_PF_Above58_Excel(wage_Process.FRM_,clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "4":
                         fileName = "Employee_PF_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".txt";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Employee_PF_Text(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Employee_PF_Text(wage_Process.FRM_,clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     default: break;
                 }
@@ -1020,7 +1027,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void Client_Wise_PF_Details_Excel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Client_Wise_PF_Details_Excel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -1064,14 +1071,14 @@ namespace RMERP.Controllers
 
                 IRow row = excelSheet.CreateRow(0);
                 ICell CellSub = row.CreateCell(0);
-                CellSub.SetCellValue("RELIABLE SECURITY SERVICES ");
+                CellSub.SetCellValue(firm.FRM_Name.ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 6));
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR 416 003.");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper());
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
 
@@ -1167,7 +1174,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void Employees_Pending_For_Registration_Excel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Employees_Pending_For_Registration_Excel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -1208,14 +1215,14 @@ namespace RMERP.Controllers
 
                 IRow row = excelSheet.CreateRow(0);
                 ICell CellSub = row.CreateCell(0);
-                CellSub.SetCellValue("RELIABLE SECURITY SERVICES ");
+                CellSub.SetCellValue(firm.FRM_Name.ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 4));
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR 416 003.");
+                CellAdd1.SetCellValue(firm.FRM_Address1+","+ firm.FRM_Address2);
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 4));
 
@@ -1269,7 +1276,7 @@ namespace RMERP.Controllers
 
         }
 
-        public void Employee_PF_Excel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Employee_PF_Excel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -1453,7 +1460,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void Client_Wise_PF_Above58_Excel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Client_Wise_PF_Above58_Excel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -1497,14 +1504,14 @@ namespace RMERP.Controllers
 
                 IRow row = excelSheet.CreateRow(0);
                 ICell CellSub = row.CreateCell(0);
-                CellSub.SetCellValue("RELIABLE SECURITY SERVICES ");
+                CellSub.SetCellValue(firm.FRM_Name.ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 6));
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR 416 003.");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper());
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
 
@@ -1604,7 +1611,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void Employee_PF_Text(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Employee_PF_Text(Firms firm,List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -1662,8 +1669,9 @@ namespace RMERP.Controllers
         {
             string report = clientSelectionVM.Report;
 
-            WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(clientSelectionVM.selectionVMs[0].WAG_Id).WAG_Month;
+            WageProcessManager wageProcess = new WageProcessManager(_context);           
+            Wage_Process wage_Process = wageProcess.getWageProcessById(clientSelectionVM.selectionVMs[0].WAG_Id);
+            DateTime wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -1678,22 +1686,22 @@ namespace RMERP.Controllers
                     case "0": //Company_Wise_Transfer_Report
                         fileName = "NEFT_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        NEFT_BankReportExcel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        NEFT_BankReportExcel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "1": //IDBI_Bank_To_IDBI_Bank_Report
                         fileName = "IDBI_To_IDBI_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        IDBI_To_IDBI_BankReportExcel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        IDBI_To_IDBI_BankReportExcel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "2": //IDBI_Bank_To_Others_Report
                         fileName = "IDBI_To_Other_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        IDBI_To_Other_BankReportExcel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        IDBI_To_Other_BankReportExcel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "3": //CHEQUE_CASH_Report
                         fileName = "CHEQUE_CASH_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        CHEQUE_CASH_BankReportExcel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        CHEQUE_CASH_BankReportExcel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     default: break;
                 }
@@ -1720,7 +1728,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void NEFT_BankReportExcel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void NEFT_BankReportExcel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -1802,20 +1810,20 @@ namespace RMERP.Controllers
 
                 IRow rowSub = excelSheet.CreateRow(1);
                 ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue("SECURITY SERVICES");
+                CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
 
                 IRow rowAdd1 = excelSheet.CreateRow(2);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, Malti Tower, ‘E’ Ward, Near Kiran Bungalow, Tarabai Park, Kolhapur – 416 003,");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper()+",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 6));
 
                 IRow rowAdd2 = excelSheet.CreateRow(3);
                 ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : reliable.manpower@yahoo.com");
+                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : "+firm.FRM_Email);
                 CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 6));
 
@@ -1902,7 +1910,7 @@ namespace RMERP.Controllers
 
         }
 
-        public void IDBI_To_IDBI_BankReportExcel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void IDBI_To_IDBI_BankReportExcel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -1984,20 +1992,20 @@ namespace RMERP.Controllers
 
                 IRow rowSub = excelSheet.CreateRow(1);
                 ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue("SECURITY SERVICES");
+                CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
 
                 IRow rowAdd1 = excelSheet.CreateRow(2);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, Malti Tower, ‘E’ Ward, Near Kiran Bungalow, Tarabai Park, Kolhapur – 416 003,");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper()+",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 6));
 
                 IRow rowAdd2 = excelSheet.CreateRow(3);
                 ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : reliable.manpower@yahoo.com");
+                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : "+ firm.FRM_Email);
                 CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 6));
 
@@ -2067,7 +2075,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void IDBI_To_Other_BankReportExcel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void IDBI_To_Other_BankReportExcel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -2135,20 +2143,20 @@ namespace RMERP.Controllers
 
                 IRow rowSub = excelSheet.CreateRow(1);
                 ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue("SECURITY SERVICES");
+                CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 8));
 
                 IRow rowAdd1 = excelSheet.CreateRow(2);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, Malti Tower, ‘E’ Ward, Near Kiran Bungalow, Tarabai Park, Kolhapur – 416 003,");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+firm.FRM_Address2.ToUpper()+",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 8));
 
                 IRow rowAdd2 = excelSheet.CreateRow(3);
                 ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : reliable.manpower@yahoo.com");
+                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : "+firm.FRM_Email);
                 CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 8));
 
@@ -2263,7 +2271,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void CHEQUE_CASH_BankReportExcel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void CHEQUE_CASH_BankReportExcel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -2338,14 +2346,14 @@ namespace RMERP.Controllers
 
                 // IRow rowSub = excelSheet.CreateRow(0);
                 ICell CellSub = row.CreateCell(0);
-                CellSub.SetCellValue("RELIABLE SECURITY SERVICES ");
+                CellSub.SetCellValue(firm.FRM_Name.ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 5));
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR 416 003.");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper()+",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 5));
 
@@ -2441,7 +2449,8 @@ namespace RMERP.Controllers
             string report = clientSelectionVM.Report;
 
             WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(clientSelectionVM.selectionVMs[0].WAG_Id).WAG_Month;
+            Wage_Process wage_Process = wageProcess.getWageProcessById(clientSelectionVM.selectionVMs[0].WAG_Id);
+            DateTime wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -2456,17 +2465,17 @@ namespace RMERP.Controllers
                     case "0": //Client_Wise_ESIC_Excel
                         fileName = "Client_Wise_ESIC_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Client_Wise_ESIC_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Client_Wise_ESIC_Excel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "1": //Employee_Wise_Esic_Details_Excel
                         fileName = "Employee_Wise_ESIC_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Employee_Wise_Esic_Details_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Employee_Wise_Esic_Details_Excel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "2": //ESIC_Employees_Pending_For_Registration_Excel
                         fileName = "EISC_Employees_Pending_For_Registration_Report_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        ESIC_Employees_Pending_For_Registration_Excel(clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        ESIC_Employees_Pending_For_Registration_Excel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     default: break;
                 }
@@ -2493,7 +2502,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void Client_Wise_ESIC_Excel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Client_Wise_ESIC_Excel(Firms firm,List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -2559,14 +2568,14 @@ namespace RMERP.Controllers
 
                 IRow row = excelSheet.CreateRow(0);
                 ICell CellSub = row.CreateCell(0);
-                CellSub.SetCellValue("RELIABLE SECURITY SERVICES ");
+                CellSub.SetCellValue(firm.FRM_Name.ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 6));
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR 416 003.");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper()+",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
 
@@ -2658,7 +2667,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void Employee_Wise_Esic_Details_Excel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Employee_Wise_Esic_Details_Excel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -2772,39 +2781,12 @@ namespace RMERP.Controllers
                     }
                     rowCount++;
 
-                }
-                //foreach (var emp in ESICReportVMs.GroupBy(m => m.IP_Number).Select(g=>new
-                //{
-                //    IP_Name = g.Select(n => n.IP_Name).First(),
-                //    IP_Number = g.Select(n => n.IP_Number).First(),                   
-                //    PayableDays = g.Sum(x => x.PayableDays),
-                //    ReasonCode = g.Select(n => n.ReasonCode).First(),
-                //    LastWorkingDay = g.Select(n => n.LastWorkingDay).First() ,
-                //    TotalMonthlyWages = g.Sum(x => x.TotalMonthlyWages)
-                //}))
-                //{
-                //    row = excelSheet.CreateRow(rowCount);
-                //    row.HeightInPoints = (float)(1.5 * excelSheet.DefaultRowHeightInPoints);
-                //    row = excelSheet.CreateRow(rowCount);
-                //    row.CreateCell(0).SetCellValue(emp.IP_Number);
-                //    row.CreateCell(1).SetCellValue(emp.IP_Name);
-                //    row.CreateCell(2).SetCellValue(emp.PayableDays);
-
-                //    ICell cell_3 = row.CreateCell(3);
-                //    cell_3.SetCellValue(Convert.ToDouble(emp.TotalMonthlyWages));
-                //    cell_3.CellStyle = styleAmount;
-
-                //    ICell cell_5 = row.CreateCell(5);
-
-                //    row.CreateCell(4).SetCellValue(emp.ReasonCode);
-                //    cell_5.SetCellValue(emp.LastWorkingDay);
-                //    rowCount++;
-                //}
+                }                
                 workbook.Write(fs);
             }
         }
 
-        public void ESIC_Employees_Pending_For_Registration_Excel(List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void ESIC_Employees_Pending_For_Registration_Excel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -2845,14 +2827,14 @@ namespace RMERP.Controllers
 
                 IRow row = excelSheet.CreateRow(0);
                 ICell CellSub = row.CreateCell(0);
-                CellSub.SetCellValue("RELIABLE SECURITY SERVICES ");
+                CellSub.SetCellValue(firm.FRM_Name.ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 4));
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR 416 003.");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper()+",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 4));
 
@@ -2913,8 +2895,8 @@ namespace RMERP.Controllers
         {
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
-            DateTime wageMonth = wageProcess.getWageProcessById(WAG_Id).WAG_Month;
-            string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
+            Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
+            DateTime WAG_Month = wage_Process.WAG_Month;
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
             string fileName = "MLWF CONTRIBUTION " + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
@@ -2962,7 +2944,7 @@ namespace RMERP.Controllers
 
                 IRow row = excelSheet.CreateRow(0);
                 ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue("RELIABLE SECURITY SERVICES");
+                CellHeader.SetCellValue(wage_Process.FRM_.FRM_Name.ToUpper());
                 CellHeader.CellStyle = styleHeader;
                 CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 7));
@@ -2970,7 +2952,7 @@ namespace RMERP.Controllers
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue("G-9, MALTI TOWER, TARABAI PARK, KOLHAPUR");
+                CellAdd1.SetCellValue(wage_Process.FRM_.FRM_Address1.ToUpper()+","+ wage_Process.FRM_.FRM_Address2.ToUpper()+",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 7));
 
