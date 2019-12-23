@@ -112,6 +112,7 @@ namespace RMERP.DAL.ViewModel
         public decimal? WAR_Nightshift_Allowance_Calculated { get; set; }
         [Display(Name = "MLWF Deduction")]
         public decimal? WAR_LWF_Deduction_Calculated { get; set; }
+
     }
 
 

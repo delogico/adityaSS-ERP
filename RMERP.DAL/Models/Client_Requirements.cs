@@ -50,6 +50,10 @@ namespace RMERP.DAL.Models
         public decimal? CRI_Billing_Amount { get; set; }
         public double? CRI_Billing_ServiceCharge { get; set; }
         public string CRI_Billing_ServiceCharge_Formula { get; set; }
+        public double? CRI_PF_Employer_Cont_Rate { get; set; }
+        public double? CRI_ESIC_Employer_Cont_Rate { get; set; }
+        public double CRI_EPS_Rate { get; set; }
+        public decimal? CRI_MLWF_Contribution { get; set; }
 
         public Clients CLI_ { get; set; }
         public Designations DES_ { get; set; }

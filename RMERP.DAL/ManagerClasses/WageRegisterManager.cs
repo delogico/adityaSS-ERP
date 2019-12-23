@@ -212,6 +212,7 @@ namespace RMERP.DAL.ManagerClasses
                     }
 
                     #endregion
+
                     if (cr != null)
                     {
                         wageRegisterVM.clientRequirementVM = ClientRequirementMapper.mapMe(cr);
@@ -301,6 +302,7 @@ namespace RMERP.DAL.ManagerClasses
                             wageRegisterVM.WAR_OverTime_Payment = Convert.ToInt16(cr.CRI_OT_MultipleTimes);
                             wageRegisterVM.WAR_Basic_Calculated = WAR_Basic_Calculated;
                             wageRegisterVM.WAR_HRA_Calculated = CRI_HRA_Calculated;
+
                         }                       
                         
                     }
@@ -336,14 +338,12 @@ namespace RMERP.DAL.ManagerClasses
                         }
                     }
                   
-
                     wageRegisterVM.WAR_Attendance_Allowance_Calculated = WAR_Attendance_Allowance_Calculated;
                     wageRegisterVM.allowanceVMs = allowances;
                     //************************** ALLOWANCES CALCULATION *****************************/
                     decimal WAR_GrossTotal = Math.Round(WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + WAR_OverTime_Calculated +
                                                         AllowancesTotal + WAR_Outstation_Allowance_Calculated + WAR_Nightshift_Allowance_Calculated +
                                                         WAR_Performance_Allowance_Calculated + WAR_Attendance_Allowance_Calculated, MidpointRounding.AwayFromZero);
-
 
                     #region EMI Calculation
 
@@ -469,6 +469,7 @@ namespace RMERP.DAL.ManagerClasses
 
                     wageRegisterVM.WAR_LWF_Deduction_Calculated = WAR_LWF_Deduction_Calculated;
                     #endregion
+
                     if (cr != null)
                     {
                         if (cr.CRI_RevenueDeduction == true)

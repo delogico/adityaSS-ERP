@@ -119,5 +119,15 @@ namespace RMERP.DAL.ViewModel
         public DateTime LastRecordRegOn { get; set; }
         public bool IsHistory { get; set; }
 
+
+        [Display(Name = "Employer PF Contribution Rate(%)")]
+        public double? CRI_PF_Employer_Cont_Rate { get; set; }
+        [Display(Name = "Employer ESIC Contribution Rate(%)")]
+        public double? CRI_ESIC_Employer_Cont_Rate { get; set; }
+        [Display(Name = "Employee Pension Scheme Rate(%)")]
+        public double CRI_EPS_Rate { get; set; }
+        [Display(Name = "Employer MLWF Contribution(INR)")]
+        public decimal? CRI_MLWF_Contribution { get; set; }
+
     }
 }

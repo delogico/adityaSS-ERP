@@ -70,6 +70,11 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_Billing_ServiceCharge_Formula = requirement.CRI_Billing_ServiceCharge_Formula;
             clientRequirementVM.CRI_Billing_Type = requirement.CRI_Billing_Type;
 
+            clientRequirementVM.CRI_PF_Employer_Cont_Rate = requirement.CRI_PF_Employer_Cont_Rate;
+            clientRequirementVM.CRI_ESIC_Employer_Cont_Rate = requirement.CRI_ESIC_Employer_Cont_Rate;
+            clientRequirementVM.CRI_EPS_Rate = requirement.CRI_EPS_Rate;
+            clientRequirementVM.CRI_MLWF_Contribution = requirement.CRI_MLWF_Contribution;
+
             return clientRequirementVM;
         }
 
@@ -124,6 +129,11 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_Billing_ServiceCharge_Formula = requirementVM.CRI_Billing_ServiceCharge_Formula;
             requirement.CRI_Billing_Type = requirementVM.CRI_Billing_Type;
 
+            requirement.CRI_PF_Employer_Cont_Rate = requirementVM.CRI_PF_Employer_Cont_Rate;
+            requirement.CRI_ESIC_Employer_Cont_Rate = requirementVM.CRI_ESIC_Employer_Cont_Rate;
+            requirement.CRI_EPS_Rate = requirementVM.CRI_EPS_Rate;
+            requirement.CRI_MLWF_Contribution = requirementVM.CRI_MLWF_Contribution;
+            
             return requirement;
         }
 

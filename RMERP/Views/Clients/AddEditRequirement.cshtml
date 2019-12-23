@@ -324,7 +324,7 @@
             }
         });
 
-        $("input[name='CRI_Billing_Type']").click(function () {           
+        $("input[name='CRI_Billing_Type']").click(function () {
             var radioValue = $("input[name='CRI_Billing_Type']:checked").val();
             if (radioValue == 1) {
                 $("#div_lumpsum_amount").show();
@@ -360,7 +360,7 @@
             <h4 class="modal-title">@client.CLI_Name</h4>
             @if (ViewContext.ModelState["IsHistory"] != null)
             {
-            <div class="alert alert-danger"><i class="fa fa-warning"></i> Modification in this Requirement will not save in History. If you want to make please use option <a href='@Url.Action("AddEditRequirement","Clients",new { CRI_Id=Model.CRI_Id,CLI_Id =  Model.CLI_Id})' title="ChangeRequirement">Create new With Major Modifications</a>. <br /> <i class="fa fa-warning"></i> Modification here will not effect in Wages already saved.</div>
+                <div class="alert alert-danger"><i class="fa fa-warning"></i> Modification in this Requirement will not save in History. If you want to make please use option <a href='@Url.Action("AddEditRequirement","Clients",new { CRI_Id=Model.CRI_Id,CLI_Id =  Model.CLI_Id})' title="ChangeRequirement">Create new With Major Modifications</a>. <br /> <i class="fa fa-warning"></i> Modification here will not effect in Wages already saved.</div>
             }
         </div>
         <div class="modal-body">
@@ -371,9 +371,9 @@
                     @Html.HiddenFor(m => m.CRI_Id)
                     @Html.HiddenFor(m => m.IsHistory)
                     @Html.HiddenFor(m => m.CRI_InactivatedOn)
-                    
-                        @Html.HiddenFor(m => m.CRI_Active)
-                        if (Model.CRI_Id > 0)
+
+                    @Html.HiddenFor(m => m.CRI_Active)
+                    if (Model.CRI_Id > 0)
                     {
                         @Html.HiddenFor(m => m.DES_Id, new { @id = "designationID" })
                     }
@@ -522,39 +522,39 @@
                                         <div class="row">
                                             @for (var i = 0; i < Model.allAllowances.Count; i++)
                                             {
-                                            <div class="col-md-12">
-                                                <label>
-                                                    @Html.CheckBoxFor(m => m.allAllowances[i].flagClientRequirement, new { @class = "Allselection", @id = Model.allAllowances[i].ALL_Id })&nbsp;@Model.allAllowances[i].allowance.ALL_Title
+                                                <div class="col-md-12">
+                                                    <label>
+                                                        @Html.CheckBoxFor(m => m.allAllowances[i].flagClientRequirement, new { @class = "Allselection", @id = Model.allAllowances[i].ALL_Id })&nbsp;@Model.allAllowances[i].allowance.ALL_Title
 
-                                                    @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Title, new { @Value = Model.allAllowances[i].allowance.ALL_Title })
-                                                    @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Shortform, new { @Value = Model.allAllowances[i].allowance.ALL_Shortform })
-                                                </label>
-                                                @Html.HiddenFor(m => m.allAllowances[i].ALL_Id)
-                                                @Html.HiddenFor(m => m.allAllowances[i].CRA_Id)
-                                                @Html.HiddenFor(m => m.allAllowances[i].flagClientRequirement, new { @id = "flagClientRequirement" + Model.allAllowances[i].ALL_Id })
-                                                <div id="divReqAllow_@Model.allAllowances[i].ALL_Id" style="display:@(Model.allAllowances[i].flagClientRequirement ? "block" : "none")">
-                                                    <div class="col-md-12">
-                                                        <div class="col-md-6">
-                                                            <div class="col-md-12">
-                                                                <div class="col-md-10">
-                                                                    @Html.TextBoxFor(m => m.allAllowances[i].CRA_Amount, new { @class = "form-control" })
-                                                                    @Html.ValidationMessageFor(m => m.allAllowances[i].CRA_Amount, "", new { @class = "text-danger" })
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    @Html.Raw("INR")
+                                                        @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Title, new { @Value = Model.allAllowances[i].allowance.ALL_Title })
+                                                        @Html.HiddenFor(m => Model.allAllowances[i].allowance.ALL_Shortform, new { @Value = Model.allAllowances[i].allowance.ALL_Shortform })
+                                                    </label>
+                                                    @Html.HiddenFor(m => m.allAllowances[i].ALL_Id)
+                                                    @Html.HiddenFor(m => m.allAllowances[i].CRA_Id)
+                                                    @Html.HiddenFor(m => m.allAllowances[i].flagClientRequirement, new { @id = "flagClientRequirement" + Model.allAllowances[i].ALL_Id })
+                                                    <div id="divReqAllow_@Model.allAllowances[i].ALL_Id" style="display:@(Model.allAllowances[i].flagClientRequirement ? "block" : "none")">
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-6">
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-10">
+                                                                        @Html.TextBoxFor(m => m.allAllowances[i].CRA_Amount, new { @class = "form-control" })
+                                                                        @Html.ValidationMessageFor(m => m.allAllowances[i].CRA_Amount, "", new { @class = "text-danger" })
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        @Html.Raw("INR")
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-6" id="rdo_@Model.allAllowances[i].ALL_Id">
-                                                            @{string id = i + "radioTrue";}
-                                                            @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, false, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Full Amount", new { @for = id })
-                                                            @{id = i + "radioFalse";}
-                                                            @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, true, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Daywise Calculation", new { @for = id })
-                                                            @Html.ValidationMessageFor(x => x.allAllowances[i].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
+                                                            <div class="col-md-6" id="rdo_@Model.allAllowances[i].ALL_Id">
+                                                                @{string id = i + "radioTrue";}
+                                                                @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, false, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Full Amount", new { @for = id })
+                                                                @{id = i + "radioFalse";}
+                                                                @Html.RadioButtonFor(m => m.allAllowances[i].CRA_DayswiseOrFull, true, new { @id = id })@Html.LabelFor(m => m.allAllowances[i].CRA_DayswiseOrFull, "Daywise Calculation", new { @for = id })
+                                                                @Html.ValidationMessageFor(x => x.allAllowances[i].CRA_DayswiseOrFull, "", new { @class = "text-danger" })
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                             }
                                         </div>
                                     </div>
@@ -576,6 +576,10 @@
                                             <div class="col-md-12">
                                                 @Html.LabelFor(m => m.CRI_PF_Percentage, new { @class = "control-label" })
                                                 @Html.TextBoxFor(m => m.CRI_PF_Percentage, new { @class = "form-control" })
+                                            </div>
+                                            <div class="col-md-12">
+                                                @Html.LabelFor(m => m.CRI_PF_Employer_Cont_Rate, new { @class = "control-label" })
+                                                @Html.TextBoxFor(m => m.CRI_PF_Employer_Cont_Rate, new { @class = "form-control" })
                                             </div>
 
                                             <div class="col-md-12" style="padding-top: 20px;">
@@ -723,6 +727,10 @@
                                                 @Html.LabelFor(m => m.CRI_ESIC_Percentage, new { @class = "control-label" })
                                                 @Html.TextBoxFor(m => m.CRI_ESIC_Percentage, new { @class = "form-control" })
                                             </div>
+                                            <div class="col-md-12">
+                                                @Html.LabelFor(m => m.CRI_ESIC_Employer_Cont_Rate, new { @class = "control-label" })
+                                                @Html.TextBoxFor(m => m.CRI_ESIC_Employer_Cont_Rate, new { @class = "form-control" })
+                                            </div>
                                             <div class="col-md-12" style="padding-top: 20px;">
                                                 <label>
                                                     @Html.LabelFor(m => m.CRI_ESIC_Formula, new { @class = "control-label" })
@@ -856,21 +864,38 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        @Html.CheckBoxFor(s => s.CRI_ProfessionalTax) Professional Tax
+                                <div class=" col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.CheckBoxFor(s => s.CRI_ProfessionalTax) Professional Tax
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.CheckBoxFor(s => s.CRI_RevenueDeduction) Revenue Deduction
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.CheckBoxFor(s => s.CRI_CanteenFacility) Canteen Facility
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        @Html.CheckBoxFor(s => s.CRI_RevenueDeduction) Revenue Deduction
+                                <div class=" col-md-6">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.CRI_EPS_Rate, new { @class = "control-label" })
+                                            @Html.TextBoxFor(m => m.CRI_EPS_Rate, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.CRI_MLWF_Contribution, new { @class = "control-label" })
+                                            @Html.TextBoxFor(m => m.CRI_MLWF_Contribution, new { @class = "form-control" })
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        @Html.CheckBoxFor(s => s.CRI_CanteenFacility) Canteen Facility
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                         <div id="OverTime" class="tab-pane">
@@ -1268,7 +1293,7 @@
                                 <div class="col-md-10">
                                     <div class="alert alert-info">This Version of Requirement will be effective from the Month selected in this date. And will be being effective till we have a New Version.</div>
                                     <div class="form-group">
-                                        @Html.LabelFor(m => m.CRI_RegisteredOn, new { @class = "control-label" })                                        
+                                        @Html.LabelFor(m => m.CRI_RegisteredOn, new { @class = "control-label" })
                                         @Html.EditorFor(m => m.CRI_RegisteredOn, new { htmlAttributes = new { @class = "form -control" } })
                                     </div>
                                 </div>

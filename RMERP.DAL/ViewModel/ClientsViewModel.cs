@@ -111,21 +111,23 @@ namespace RMERP.DAL.ViewModel
         //public string CLI_GST_Info { get; set; }
         [Display(Name = "Place of supply")]
         public string CLI_Place_Of_Supply { get; set; }
-        [Display(Name = "Employer PF Contribution Rate(%)")]
-        [Required(ErrorMessage = "Please enter Employer Contribution Rate")]
-        public double CLI_PF_Employer_Cont_Rate { get; set; }
-        [Display(Name = "Employee Provident Fund Rate(%)")]
-        [Required(ErrorMessage = "Please enter Employee Provident Fund Rate")]
-        public double CLI_EPF_Rate { get; set; }
-        [Display(Name = "Employee Pension Scheme Rate(%)")]
-        [Required(ErrorMessage = "Please enter Employee Pension Scheme Rate")]
-        public double CLI_EPS_Rate { get; set; }
 
-        [Display(Name = "Employer ESIC Contribution Rate(%)")]
-        public double CLI_ESIC_Employer_Cont_Rate { get; set; }
+        //[Display(Name = "Employer PF Contribution Rate(%)")]
+        //[Required(ErrorMessage = "Please enter Employer Contribution Rate")]
+        //public double CLI_PF_Employer_Cont_Rate { get; set; }
+        //[Display(Name = "Employee Provident Fund Rate(%)")]
+        //[Required(ErrorMessage = "Please enter Employee Provident Fund Rate")]
+        //public double CLI_EPF_Rate { get; set; }
+        //[Display(Name = "Employee Pension Scheme Rate(%)")]
+        //[Required(ErrorMessage = "Please enter Employee Pension Scheme Rate")]
+        //public double CLI_EPS_Rate { get; set; }
 
-        [Display(Name = "Employer MLWF Contribution(INR)")]
-        public decimal CLI_MLWF_Contribution { get; set; }
+        //[Display(Name = "Employer ESIC Contribution Rate(%)")]
+        //public double CLI_ESIC_Employer_Cont_Rate { get; set; }
+
+        //[Display(Name = "Employer MLWF Contribution(INR)")]
+        //public decimal CLI_MLWF_Contribution { get; set; }
+
         public DateTime CLI_InActivatedOn { get; set; }
     }
     public class ParametersClientsModel

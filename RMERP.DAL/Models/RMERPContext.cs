@@ -268,6 +268,8 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.CRI_InactivatedOn).HasColumnType("datetime");
 
+                entity.Property(e => e.CRI_MLWF_Contribution).HasColumnType("decimal(9, 2)");
+
                 entity.Property(e => e.CRI_Nightshift_Allowance_Rate).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.CRI_OT_Fixed_PerHour).HasColumnType("decimal(9, 2)");

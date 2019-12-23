@@ -323,8 +323,8 @@ namespace RMERP.DAL.ManagerClasses
                         (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
 
                     EMPLOYEE_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION + (AppSalary * item.WAR_PF) / 100, MidpointRounding.AwayFromZero);
-                    if (item.CLI_.CLI_PF_Employer_Cont_Rate != null)
-                        EMPLOYER_CONTRIBUTION = Math.Round(EMPLOYER_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.CLI_.CLI_PF_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
+                    if (item.CRI_.CRI_PF_Employer_Cont_Rate != null)
+                        EMPLOYER_CONTRIBUTION = Math.Round(EMPLOYER_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.CRI_.CRI_PF_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
                     ApplicableSalary = Math.Round(AppSalary + ApplicableSalary, MidpointRounding.AwayFromZero);
                 }
                 pFClient.PF_APPLICABLE_SALARY = Math.Round(ApplicableSalary, MidpointRounding.AwayFromZero);
@@ -463,8 +463,8 @@ namespace RMERP.DAL.ManagerClasses
                             (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0)), MidpointRounding.AwayFromZero);
                 decimal EMPLOYEE_CONTRIBUTION = Math.Round((ApplicableSalary * item.WAR_PF) / 100, MidpointRounding.AwayFromZero);
                 decimal EMPLOYER_CONTRIBUTION = 0M;
-                if (item.CLI_.CLI_PF_Employer_Cont_Rate != null)
-                    EMPLOYER_CONTRIBUTION = Math.Round((ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_PF_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
+                if (item.CRI_.CRI_PF_Employer_Cont_Rate != null)
+                    EMPLOYER_CONTRIBUTION = Math.Round((ApplicableSalary * Convert.ToDecimal(item.CRI_.CRI_PF_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
                 PFClientReportVM pFClient = new PFClientReportVM();
                 pFClient.COMPANY_NAME = item.CLI_.CLI_Name;
                 pFClient.EMP_FirstName = item.EMP_.EMP_FirstName;
