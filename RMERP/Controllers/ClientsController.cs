@@ -155,8 +155,7 @@ namespace RMERP.Controllers
                 if (clients.CLI_IsSGST != null)
                     cv.ParametersClientsModel.clientsModel.CLI_IsSGST = clients.CLI_IsSGST.Value;
                 if (clients.CLI_SGST != null)
-                    cv.ParametersClientsModel.clientsModel.CLI_SGST = clients.CLI_SGST.Value;
-                //  cv.ParametersClientsModel.clientsModel.CLI_GST_Info = clients.CLI_GST_Info;
+                    cv.ParametersClientsModel.clientsModel.CLI_SGST = clients.CLI_SGST.Value;                
                 cv.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply = clients.CLI_Place_Of_Supply;
 
 
@@ -617,8 +616,7 @@ namespace RMERP.Controllers
                 if (!cvm.ParametersClientsModel.clientsModel.CLI_IsSGST)
                 {
                     clients.CLI_SGST = 0;
-                }
-                //  clients.CLI_GST_Info = cvm.ParametersClientsModel.clientsModel.CLI_GST_Info;
+                }                
                 clients.CLI_Place_Of_Supply = cvm.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply;
 
                 if (cvm.ParametersClientsModel.CLI_Att_MonthReal == true)

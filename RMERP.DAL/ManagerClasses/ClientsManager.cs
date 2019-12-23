@@ -382,8 +382,7 @@ namespace RMERP.DAL.ManagerClasses
                 client.CLI_IsCGST = clients.CLI_IsCGST;
                 client.CLI_CGST = clients.CLI_CGST;
                 client.CLI_IsSGST = clients.CLI_IsSGST;
-                client.CLI_SGST = clients.CLI_SGST;
-             //   client.CLI_GST_Info = clients.CLI_GST_Info;
+                client.CLI_SGST = clients.CLI_SGST;             
                 client.CLI_Place_Of_Supply = clients.CLI_Place_Of_Supply;
 
                 client.CLI_PF_Employer_Cont_Rate = clients.CLI_PF_Employer_Cont_Rate;

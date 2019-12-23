@@ -415,7 +415,7 @@ namespace RMERP.DAL.ManagerClasses
                             (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
                             (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
                             (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));              
-                decimal EPF_CONTRIBUTION = (ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPF_Rate)) / 100;
+                decimal EPF_CONTRIBUTION = (ApplicableSalary * Convert.ToDecimal(item.CRI_.CRI_PF_Percentage)) / 100;
                 decimal EPS_CONTRIBUTION =(ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPS_Rate)) / 100;
                 PFClientReportVM pFClient = new PFClientReportVM();
                 pFClient.EMP_Id = item.EMP_Id;
@@ -925,8 +925,7 @@ namespace RMERP.DAL.ManagerClasses
             double WAR_TotalPaybleDays = 0, WAR_TotalWorkingDays = 0, Max_TotalPaybleDays=0;
             List<Wage_Register_Allowances> allowances = new List<Wage_Register_Allowances>();
             foreach (Wage_Register wage in wage_Registers)
-            {               
-
+            {            
                 WAR_Basic_Calculated = WAR_Basic_Calculated+wage.WAR_Basic_Calculated;
                 WAR_DA_Calculated = WAR_DA_Calculated+ wage.WAR_DA_Calculated;
                 
