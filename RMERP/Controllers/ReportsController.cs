@@ -1636,9 +1636,14 @@ namespace RMERP.Controllers
                           });
                 foreach (var item in result)
                 {
-                    Byte[] title = new UTF8Encoding(true).GetBytes(item.UAN_Number + "#~#" + item.EMP_FullName + "#~#" + item.PF_APPLICABLE_SALARY + "#~#" + item.PF_APPLICABLE_SALARY + "#~#" + item.PF_APPLICABLE_SALARY + "#~#" + item.PF_APPLICABLE_SALARY);
+                    decimal PF_APPLICABLE_SALARY = Math.Round(item.PF_APPLICABLE_SALARY, MidpointRounding.AwayFromZero);
+                    decimal EPF_CONTRIBUTION = Math.Round(item.EPF_CONTRIBUTION, MidpointRounding.AwayFromZero);
+                    decimal EPS_CONTRIBUTION = Math.Round(item.EPS_CONTRIBUTION, MidpointRounding.AwayFromZero);
+                    decimal DIFF_EPF_EPS = Math.Round(item.DIFF_EPF_EPS, MidpointRounding.AwayFromZero);
+
+                    Byte[] title = new UTF8Encoding(true).GetBytes(item.UAN_Number + "#~#" + item.EMP_FullName + "#~#" + PF_APPLICABLE_SALARY + "#~#" + PF_APPLICABLE_SALARY + "#~#" + PF_APPLICABLE_SALARY + "#~#" + PF_APPLICABLE_SALARY);
                     fs.Write(title, 0, title.Length);
-                    byte[] br = new UTF8Encoding(true).GetBytes(item.EPF_CONTRIBUTION + "#~#" + item.EPS_CONTRIBUTION + "#~#" + item.DIFF_EPF_EPS + "#~#");
+                    byte[] br = new UTF8Encoding(true).GetBytes(EPF_CONTRIBUTION + "#~#" + EPS_CONTRIBUTION + "#~#" + DIFF_EPF_EPS + "#~#");
                     fs.Write(br, 0, br.Length);
                     byte[] author = new UTF8Encoding(true).GetBytes(item.NCP1 + "#~#" + item.NCP1);
                     fs.Write(author, 0, author.Length);

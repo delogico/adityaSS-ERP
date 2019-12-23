@@ -414,9 +414,7 @@ namespace RMERP.DAL.ManagerClasses
                             (item.WAR_OutStation_Allowance_Calculated != null ? item.WAR_OutStation_Allowance_Calculated.Value : 0),
                             (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
                             (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
-                            (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
-                //decimal EPF_CONTRIBUTION = Math.Round((ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPF_Rate)) / 100, MidpointRounding.AwayFromZero);
-                //decimal EPS_CONTRIBUTION = Math.Round((ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPS_Rate)) / 100, MidpointRounding.AwayFromZero);
+                            (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));              
                 decimal EPF_CONTRIBUTION = (ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPF_Rate)) / 100;
                 decimal EPS_CONTRIBUTION =(ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPS_Rate)) / 100;
                 PFClientReportVM pFClient = new PFClientReportVM();
@@ -853,84 +851,7 @@ namespace RMERP.DAL.ManagerClasses
             reports.Add(ESICReportLeft);
             #endregion
             return reports;
-        }
-
-        public List<ESICReportVM> ESICReportEmpWise1(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
-        {
-            WageRegisterManager wageManager = new WageRegisterManager(_context);
-            IEnumerable<Wage_Register> wage_Registers = wageManager.GetWageRegistersByWAG_Id(WAG_Id);
-            if (IsSelected == true)
-            {
-                int[] CLI_Ids = selectionVMs.Select(m => m.CLI_Id).ToArray();
-                wage_Registers = from wageReg in wage_Registers
-                                 where CLI_Ids.Contains(wageReg.CLI_Id)
-                                 select wageReg;
-            }
-            List<ESICReportVM> ESICReportVMs = new List<ESICReportVM>();
-            foreach (Wage_Register register in wage_Registers)
-            {
-                ESICReportVM reportVM = new ESICReportVM();
-                List<Client_Requirement_Allowances> All = register.CRI_.Client_Requirement_Allowances.ToList();
-                decimal TotalMonthlyWages = GetAmountBasedOnFormula_Report(
-                    register.WAR_ESIC_Formula,
-                    register.WAR_Basic_Calculated,
-                    register.WAR_DA_Calculated,
-                    register.WAR_HRA_Calculated, register.Wage_Register_Allowances.ToList(),
-                    register.WAR_TotalWorkingDays,
-                    register.WAR_TotalPaybleDays,
-                    register.WAR_OverTime_Calculated,
-                    (register.WAR_OutStation_Allowance_Calculated != null ? register.WAR_OutStation_Allowance_Calculated.Value : 0),
-                    (register.WAR_Attendance_Allowance_Calculated != null ? register.WAR_Attendance_Allowance_Calculated.Value : 0),
-                    (register.WAR_Nightshift_Allowance_Calculated != null ? register.WAR_Nightshift_Allowance_Calculated.Value : 0),
-                    (register.WAR_Performance_Allowance_Calculated != null ? register.WAR_Performance_Allowance_Calculated.Value : 0));
-
-                reportVM.TotalMonthlyWages = Math.Round(TotalMonthlyWages, MidpointRounding.AwayFromZero);
-                double PayableDays = register.WAR_TotalPaybleDays;
-                if (register.WAR_TotalPaybleDays > 26)
-                {
-                    int days = DateTime.DaysInMonth(register.WAG_.WAG_Month.Year, register.WAG_.WAG_Month.Month);
-                    if (days == 30)
-                    {
-                        PayableDays = 26;
-                    }
-                    else if (days == 31)
-                    {
-                        PayableDays = 27;
-                    }
-                    else
-                    {
-                        PayableDays = 26;
-                    }
-                }
-                reportVM.PayableDays = intRoundFigure(PayableDays);
-                reportVM.LastWorkingDay = "";
-                reportVM.EMP_FirstName = register.EMP_.EMP_FirstName;
-                reportVM.EMP_MiddleName = register.EMP_.EMP_MiddleName;
-                reportVM.EMP_SurName = register.EMP_.EMP_SurName;
-                reportVM.IP_Number = register.EMP_.EMP_ESIC_Number;
-                ESICReportVMs.Add(reportVM);
-            }
-
-            #region Left employees
-            IEnumerable<Employees> employees = GetLeftEmployeesOfPrevMonth(wage_Registers.First().WAG_.WAG_Month);
-            // ESICReportEmpWiseVM ESICReportLeft = new ESICReportEmpWiseVM();
-            // List<ESICReportVM> reportVMLefts = new List<ESICReportVM>();
-            foreach (var emp in employees)
-            {
-                ESICReportVM reportVM = new ESICReportVM();
-                reportVM.TotalMonthlyWages = 0;
-                reportVM.PayableDays = 0;
-                reportVM.LastWorkingDay = emp.EMP_InactivatedOn.Value.ToShortDateString();
-                reportVM.EMP_FirstName = emp.EMP_FirstName;
-                reportVM.EMP_MiddleName = emp.EMP_MiddleName;
-                reportVM.EMP_SurName = emp.EMP_SurName;
-                reportVM.IP_Number = emp.EMP_ESIC_Number;
-                reportVM.ReasonCode = emp.EMP_ReasonCode != null ? emp.EMP_ReasonCode.ToString() : "-";
-                ESICReportVMs.Add(reportVM);
-            }
-            #endregion
-            return ESICReportVMs;
-        }
+        }             
 
         public List<ESICReportVM> ESIC_Employees_Pending_For_Registration(int WAG_Id, List<SelectionVM> selectionVMs, bool IsSelected)
         {
@@ -1004,11 +925,13 @@ namespace RMERP.DAL.ManagerClasses
             double WAR_TotalPaybleDays = 0, WAR_TotalWorkingDays = 0, Max_TotalPaybleDays=0;
             List<Wage_Register_Allowances> allowances = new List<Wage_Register_Allowances>();
             foreach (Wage_Register wage in wage_Registers)
-            {
+            {               
+
                 WAR_Basic_Calculated = WAR_Basic_Calculated+wage.WAR_Basic_Calculated;
                 WAR_DA_Calculated = WAR_DA_Calculated+ wage.WAR_DA_Calculated;
-                WAR_ESIC_Calculated = WAR_ESIC_Calculated+ wage.WAR_ESIC_Calculated;
+                
                 WAR_HRA_Calculated = WAR_HRA_Calculated+ wage.WAR_HRA_Calculated;
+                WAR_ESIC_Calculated = WAR_ESIC_Calculated + wage.WAR_ESIC_Calculated;
                 WAR_PF_Calculated = WAR_PF_Calculated+wage.WAR_PF_Calculated;
                 WAR_ProffesionalTax_Calculated = WAR_ProffesionalTax_Calculated+Convert.ToDecimal(wage.WAR_ProffesionalTax_Calculated);
                 WAR_TotalPaybleDays = WAR_TotalPaybleDays+wage.WAR_TotalPaybleDays;
