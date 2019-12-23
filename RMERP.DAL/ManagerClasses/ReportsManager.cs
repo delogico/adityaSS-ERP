@@ -416,7 +416,7 @@ namespace RMERP.DAL.ManagerClasses
                             (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
                             (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));              
                 decimal EPF_CONTRIBUTION = (ApplicableSalary * Convert.ToDecimal(item.CRI_.CRI_PF_Percentage)) / 100;
-                decimal EPS_CONTRIBUTION =(ApplicableSalary * Convert.ToDecimal(item.CLI_.CLI_EPS_Rate)) / 100;
+                decimal EPS_CONTRIBUTION =(ApplicableSalary * Convert.ToDecimal(item.CRI_.CRI_EPS_Rate)) / 100;
                 PFClientReportVM pFClient = new PFClientReportVM();
                 pFClient.EMP_Id = item.EMP_Id;
                 pFClient.UAN_Number = item.EMP_.EMP_UAN_Number;
@@ -654,7 +654,7 @@ namespace RMERP.DAL.ManagerClasses
                 {
                     m.CLI_Id,
                     m.CLI_.CLI_Name,
-                    m.CLI_.CLI_ESIC_Employer_Cont_Rate
+                    m.CRI_.CRI_ESIC_Employer_Cont_Rate
                 }).Distinct();
             }
             else
@@ -663,7 +663,7 @@ namespace RMERP.DAL.ManagerClasses
                 {
                     m.CLI_Id,
                     m.CLI_.CLI_Name,
-                    m.CLI_.CLI_ESIC_Employer_Cont_Rate
+                    m.CRI_.CRI_ESIC_Employer_Cont_Rate
                 }).Distinct();
             }
 
@@ -700,8 +700,8 @@ namespace RMERP.DAL.ManagerClasses
                 reportVM.TOTAL_WAGES = Math.Round(TOTAL_WAGES, MidpointRounding.AwayFromZero);
                 reportVM.EMPLOYEES_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION, MidpointRounding.AwayFromZero);
                 decimal EMPLOYERS_CONTRI = 0m;
-                if (client.CLI_ESIC_Employer_Cont_Rate != null)
-                    EMPLOYERS_CONTRI = TOTAL_WAGES * Convert.ToDecimal(client.CLI_ESIC_Employer_Cont_Rate) / 100;
+                if (client.CRI_ESIC_Employer_Cont_Rate != null)
+                    EMPLOYERS_CONTRI = TOTAL_WAGES * Convert.ToDecimal(client.CRI_ESIC_Employer_Cont_Rate) / 100;
                 reportVM.EMPLOYERS_CONTRIBUTION = Math.Round(EMPLOYERS_CONTRI, MidpointRounding.AwayFromZero);
                 reportVM.TOTAL_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION + EMPLOYERS_CONTRI, MidpointRounding.AwayFromZero);
                 reportVMs.Add(reportVM);
