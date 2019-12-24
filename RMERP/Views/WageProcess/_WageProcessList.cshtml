@@ -58,35 +58,71 @@
         <h6>Reports:</h6>
 
         <div class="raw">
-            <div class="col-md-6">
-                <ul style="font-size:10px;padding-left: 10px !important;margin-bottom:0px;list-style-type:none;">
-                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForPF","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees PF Report"><i class="fa fa-file-excel-o m-r-5"></i>PF Reports</a></li>
-                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForESIC","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees ESIC Report"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Reports</a></li>
-                    <li><a href='@Url.Action( "PayTaxExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PAY TAX Report"><i class="fa fa-file-excel-o m-r-5"></i>PAY TAX Report.xlsx</a></li>
-                    @if (Model.WAG_Month.Month.Equals((int)ProjectUtils.Month.June) || Model.WAG_Month.Month.Equals((int)ProjectUtils.Month.December))
-                    {
-                        <li><a href='@Url.Action( "Labour_WelfareFund_Excel","Reports",new { WAG_Id = Model.WAG_Id })' title="MLWF CONTRIBUTION Report"><i class="fa fa-file-excel-o m-r-5"></i>MLWF CONTRIBUTION.xlsx</a></li>
-                    }
+            @if (Model.WageRegisterSaved() > 0)
+            {
+                <div class="col-md-6">
+                    <ul style="font-size:10px;padding-left: 10px !important;margin-bottom:0px;list-style-type:none;">
+                        <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForPF","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees PF Report"><i class="fa fa-file-excel-o m-r-5"></i>PF Reports</a></li>
+                        <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForESIC","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees ESIC Report"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Reports</a></li>
+                        <li><a href='@Url.Action( "PayTaxExcel","Reports",new { WAG_Id = Model.WAG_Id })' title="PAY TAX Report"><i class="fa fa-file-excel-o m-r-5"></i>PAY TAX Report.xlsx</a></li>
+                        @if (Model.WAG_Month.Month.Equals((int)ProjectUtils.Month.June) || Model.WAG_Month.Month.Equals((int)ProjectUtils.Month.December))
+                        {
+                            <li><a href='@Url.Action( "Labour_WelfareFund_Excel","Reports",new { WAG_Id = Model.WAG_Id })' title="MLWF CONTRIBUTION Report"><i class="fa fa-file-excel-o m-r-5"></i>MLWF CONTRIBUTION.xlsx</a></li>
+                        }
+                        
 
-                </ul>
-            </div>           
-            <div class="col-md-6">                             
-                <ul style="font-size:10px;padding-left: 10px !important;list-style-type:none">
-                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForBank","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees Bank Report"><i class="fa fa-file-excel-o m-r-5"></i>Bank Reports</a></li>
-                    <li>
-                        <div class="dropdown">
-                            <a href="#" style="font-size:10px;color:#009ce7;padding-left: 0px;" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-file-excel-o m-r-5"></i>Advance Reports</a>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "IDBI_To_IDBI_AdvanceReportExcel","Reports",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id })' title="IDBI To IDBI Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI To IDBI Advance Report.xlsx</a></li>
-                                <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "IDBI_To_Other_AdvanceReportExcel","Reports",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id })' title="IDBI To Others Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI To Others Advance Report.xlsx</a></li>
-                                <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "CHEQUE_CASH_AdvanceReportExcel","Reports",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id })' title="CHEQUE/CASH Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>CHEQUE/CASH Advance Report.xlsx</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "PaySlipGenerate","Reports",new { WAG_Id = Model.WAG_Id})' title="Employees PaySlip Report"><i class="fa fa-file-excel-o m-r-5"></i>PaySlip Reports</a></li>
-                </ul>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul style="font-size:10px;padding-left: 10px !important;list-style-type:none">
+                        <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "ClientsSelectionForBank","Reports",new { WAG_Id = Model.WAG_Id ,Model.FRM_Id})' title="Employees Bank Report"><i class="fa fa-file-excel-o m-r-5"></i>Bank Reports</a></li>
+                        <li>
+                            <div class="dropdown">
+                                <a href="#" style="font-size:10px;color:#009ce7;padding-left: 0px;" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-file-excel-o m-r-5"></i>Advance Reports</a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "IDBI_To_IDBI_AdvanceReportExcel","Reports",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id })' title="IDBI To IDBI Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI To IDBI Advance Report.xlsx</a></li>
+                                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "IDBI_To_Other_AdvanceReportExcel","Reports",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id })' title="IDBI To Others Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI To Others Advance Report.xlsx</a></li>
+                                    <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "CHEQUE_CASH_AdvanceReportExcel","Reports",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id })' title="CHEQUE/CASH Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>CHEQUE/CASH Advance Report.xlsx</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "PaySlipGenerate","Reports",new { WAG_Id = Model.WAG_Id})' title="Employees PaySlip Report"><i class="fa fa-file-excel-o m-r-5"></i>PaySlip Reports</a></li>
+                    </ul>
 
-            </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-6">
+                    <ul style="font-size:10px;padding-left: 10px !important;margin-bottom:0px;list-style-type:none;">
+                        <li><a style="font-size:10px;color:#009ce7;" href="javascript:void(0)" onclick="return window.alert('No Wages Saved For This Report')" title="Employees PF Report"><i class="fa fa-file-excel-o m-r-5"></i>PF Reports</a></li>
+                        <li><a style="font-size:10px;color:#009ce7;" href="javascript:void(0)" onclick="return window.alert('No Wages Saved For This Report')" title="Employees ESIC Report"><i class="fa fa-file-excel-o m-r-5"></i>ESIC Reports</a></li>
+                        <li><a href="javascript:void(0)" onclick="return window.alert('No Wages Saved For This Report')" title="PAY TAX Report"><i class="fa fa-file-excel-o m-r-5"></i>PAY TAX Report.xlsx</a></li>
+                        @if (Model.WAG_Month.Month.Equals((int)ProjectUtils.Month.June) || Model.WAG_Month.Month.Equals((int)ProjectUtils.Month.December))
+                        {
+                            <li><a href="javascript:void(0)" onclick="return window.alert('No Wages Saved For This Report')" title="MLWF CONTRIBUTION Report"><i class="fa fa-file-excel-o m-r-5"></i>MLWF CONTRIBUTION.xlsx</a></li>
+                        }
+
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul style="font-size:10px;padding-left: 10px !important;list-style-type:none">
+                        <li><a style="font-size:10px;color:#009ce7;" href="javascript:void(0)" onclick="return window.alert('No Wages Saved For This Report')" title="Employees Bank Report"><i class="fa fa-file-excel-o m-r-5"></i>Bank Reports</a></li>
+                        <li>
+                            <div class="dropdown">
+                                <a href="#" style="font-size:10px;color:#009ce7;padding-left: 0px;" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-file-excel-o m-r-5"></i>Advance Reports</a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a style="font-size:10px;color:#009ce7;" href="javascript:void(0)" onclick="return window.alert('No Wages Saved For This Report')" title="IDBI To IDBI Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI To IDBI Advance Report.xlsx</a></li>
+                                    <li><a style="font-size:10px;color:#009ce7;" href="javascript:void(0)" onclick="return window.alert('No Wages Saved For This Report')" title="IDBI To Others Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI To Others Advance Report.xlsx</a></li>
+                                    <li><a style="font-size:10px;color:#009ce7;" href="javascript:void(0)" onclick="return window.alert('No Wages Saved For This Report')" title="CHEQUE/CASH Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>CHEQUE/CASH Advance Report.xlsx</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><a style="font-size:10px;color:#009ce7;" href="javascript:void(0)" onclick="return window.alert('No Wages Saved For This Report')" title="Employees PaySlip Report"><i class="fa fa-file-excel-o m-r-5"></i>PaySlip Reports</a></li>
+                    </ul>
+                </div>                
+            }
+
         </div>
     </div>
 </div>

@@ -12,6 +12,8 @@ namespace RMERP.DAL.ViewModel
         [Display(Name ="Report Type")]
         public string Report { get; set; }
         public int FRM_Id { get; set; }
+
+        public int TotalActiveClients { get; set; }
     }
     public class SelectionVM
     {

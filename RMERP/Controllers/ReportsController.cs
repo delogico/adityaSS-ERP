@@ -947,13 +947,16 @@ namespace RMERP.Controllers
         #region PF Reports
 
         public ActionResult ClientsSelectionForPF(int WAG_Id, int FRM_Id)
-        {
+        {            
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
+            WageProcessManager wageProcessManager = new WageProcessManager(_context);
             ClientSelectionVM clientSelectionVM = new ClientSelectionVM();
             List<Clients> clients = wageRegisterManager.GetWageRegisters(WAG_Id).Where(m => m.WAG_.FRM_Id.Equals(FRM_Id)).Select(m => m.CLI_).Distinct().ToList();
             clientSelectionVM.selectionVMs = ClientSelectionMapper.mapMe(clients, WAG_Id);
             clientSelectionVM.Report = ((int)ProjectUtils.PF_REPORT_TYPE.Client_Wise_PF_Details_Excel).ToString();
             clientSelectionVM.FRM_Id = FRM_Id;
+            ClientsManager clientsManager = new ClientsManager(_context);
+            clientSelectionVM.TotalActiveClients =clientsManager.GetActiveClientOfMonthByFirmId(wageProcessManager.getWageProcessById(WAG_Id).WAG_Month, FRM_Id).Count();
             return View(clientSelectionVM);
         }
 
@@ -1662,11 +1665,14 @@ namespace RMERP.Controllers
         public ActionResult ClientsSelectionForBank(int WAG_Id, int FRM_Id)
         {
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
+            WageProcessManager wageProcessManager = new WageProcessManager(_context);
             ClientSelectionVM clientSelectionVM = new ClientSelectionVM();
             List<Clients> clients = wageRegisterManager.GetWageRegisters(WAG_Id).Where(m => m.WAG_.FRM_Id.Equals(FRM_Id)).Select(m => m.CLI_).Distinct().ToList();
             clientSelectionVM.selectionVMs = ClientSelectionMapper.mapMe(clients, WAG_Id);
             clientSelectionVM.Report = ((int)ProjectUtils.PF_REPORT_TYPE.Client_Wise_PF_Details_Excel).ToString();
             clientSelectionVM.FRM_Id = FRM_Id;
+            ClientsManager clientsManager = new ClientsManager(_context);
+            clientSelectionVM.TotalActiveClients = clientsManager.GetActiveClientOfMonthByFirmId(wageProcessManager.getWageProcessById(WAG_Id).WAG_Month, FRM_Id).Count();
             return View(clientSelectionVM);
         }
 
@@ -2440,12 +2446,15 @@ namespace RMERP.Controllers
 
         public ActionResult ClientsSelectionForESIC(int WAG_Id, int FRM_Id)
         {
+            WageProcessManager wageProcessManager = new WageProcessManager(_context);
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             ClientSelectionVM clientSelectionVM = new ClientSelectionVM();
             List<Clients> clients = wageRegisterManager.GetWageRegisters(WAG_Id).Where(m => m.WAG_.FRM_Id.Equals(FRM_Id)).Select(m => m.CLI_).Distinct().ToList();
             clientSelectionVM.selectionVMs = ClientSelectionMapper.mapMe(clients, WAG_Id);
             clientSelectionVM.Report = ((int)ProjectUtils.ESIC_REPORT_TYPE.Client_Wise_ESIC_Excel).ToString();
             clientSelectionVM.FRM_Id = FRM_Id;
+            ClientsManager clientsManager = new ClientsManager(_context);
+            clientSelectionVM.TotalActiveClients = clientsManager.GetActiveClientOfMonthByFirmId(wageProcessManager.getWageProcessById(WAG_Id).WAG_Month, FRM_Id).Count();
             return View(clientSelectionVM);
         }
 
@@ -2902,11 +2911,12 @@ namespace RMERP.Controllers
             WageProcessManager wageProcess = new WageProcessManager(_context);
             Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
             DateTime WAG_Month = wage_Process.WAG_Month;
+            string WAGMonth = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
-            string fileName = "MLWF CONTRIBUTION " + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
-            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
-            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
+            string fileName = "MLWF CONTRIBUTION " + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAGMonth + ".xlsx";
+            //URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
+            //FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
             var memory = new MemoryStream();
             using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
             {

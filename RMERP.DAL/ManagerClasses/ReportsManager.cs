@@ -966,7 +966,6 @@ namespace RMERP.DAL.ManagerClasses
                 if(wage.WAR_Attendance_Allowance_Calculated!=null)
                     WAR_Attendance_Allowance_Calculated = WAR_Attendance_Allowance_Calculated + wage.WAR_Attendance_Allowance_Calculated.Value;
                 allowances.AddRange(wage.Wage_Register_Allowances);
-
                 
             }
             paySlipVM.ArrearsDays = 0;
