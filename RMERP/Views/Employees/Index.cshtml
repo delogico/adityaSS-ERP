@@ -100,6 +100,7 @@
                             <thead>
                                 <tr>
                                     <th></th>
+                                    <th>ID</th>
                                     <th>Name</th>
                                     <th>DOB</th>
                                     <th>Designation</th>
@@ -119,44 +120,45 @@
                                         style = "style=color:orangered;";
                                         lable = "Employee left";
                                     }
-                                    <tr @style>
-                                        <td>@item.FRM_.FRM_ShortName</td>
-                                        <td>@item.EMP_FullName</td>
-                                        <td>@DateHelper.getLongDateFormat(@item.EMP_DOB)</td>
-                                        <td>@item.EMP_Designation</td>
-                                        <td>
-                                            @DateHelper.getLongDateFormat(@item.EMP_DateOfJoining)
-                                            @if (item.EMP_IsActive.Equals(false))
+                                <tr @style>
+                                    <td>@item.FRM_.FRM_ShortName</td>
+                                    <td>@item.EMP_Id.ToString("D5")</td>
+                                    <td>@item.EMP_FullName</td>
+                                    <td>@DateHelper.getLongDateFormat(@item.EMP_DOB)</td>
+                                    <td>@item.EMP_Designation</td>
+                                    <td>
+                                        @DateHelper.getLongDateFormat(@item.EMP_DateOfJoining)
+                                        @if (item.EMP_IsActive.Equals(false))
                                             {
-                                                <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_InactivatedOn.Value) : "") (@ProjectUtils.GetStringValue((ProjectUtils.EMPLOYEE_LEFT_REASON_CODE)item.EMP_ReasonCode))</div>
+                                        <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_InactivatedOn.Value) : "") (@ProjectUtils.GetStringValue((ProjectUtils.EMPLOYEE_LEFT_REASON_CODE)item.EMP_ReasonCode))</div>
                                             }
                                             else if (item.EMP_RejoinOn!=null)
                                             {
-                                                <div style="font-size:10px;color:green">Rejoin on @(item.EMP_RejoinOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_RejoinOn.Value) : "")</div>
+                                        <div style="font-size:10px;color:green">Rejoin on @(item.EMP_RejoinOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_RejoinOn.Value) : "")</div>
                                             }
 
-                                        </td>
-                                        <td>@item.EMP_MoF</td>
-                                        <td>@item.EMP_Contact_Primary</td>
-                                        <td class="text-right">
-                                            <div class="dropdown">
-                                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
-                                                    @if (!item.EMP_IsActive)
+                                    </td>
+                                    <td>@item.EMP_MoF</td>
+                                    <td>@item.EMP_Contact_Primary</td>
+                                    <td class="text-right">
+                                        <div class="dropdown">
+                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                            <ul class="dropdown-menu pull-right">
+                                                <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
+                                                @if (!item.EMP_IsActive)
                                                     {
-                                                        <li><a class="empRejoinModal" style="cursor:pointer" title="Employee Rejoin" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empRejoinModal"><i class="fa fa-plus-square-o m-r-5"></i>Employee Rejoin</a></li>
+                                                <li><a class="empRejoinModal" style="cursor:pointer" title="Employee Rejoin" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empRejoinModal"><i class="fa fa-plus-square-o m-r-5"></i>Employee Rejoin</a></li>
                                                     }
                                                     else
                                                     {
-                                                        <li><a class="empModal" style="cursor:pointer" title="Employee Left" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empModal"><i class="fa fa-trash-o m-r-5"></i>Employee Left</a></li>
+                                                <li><a class="empModal" style="cursor:pointer" title="Employee Left" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empModal"><i class="fa fa-trash-o m-r-5"></i>Employee Left</a></li>
                                                     }
 
-                                                    <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-eye m-r-5"></i> View</a></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                                <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-eye m-r-5"></i> View</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
                                 }
 
                             </tbody>

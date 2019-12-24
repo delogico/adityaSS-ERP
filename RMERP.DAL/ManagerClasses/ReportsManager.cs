@@ -185,7 +185,7 @@ namespace RMERP.DAL.ManagerClasses
                 if (Int32.TryParse(IFSC, out code))
                 {
                     code = Convert.ToInt32(IFSC_Code.Substring(IFSC_Code.Length - 3));
-                    bankReportVM.EMP_SERVICE_OUTLET = code.ToString("D3");
+                    bankReportVM.EMP_SERVICE_OUTLET = code.ToString("D4");
                 }
                 else
                 {
@@ -561,7 +561,7 @@ namespace RMERP.DAL.ManagerClasses
                 if (Int32.TryParse(IFSC, out code))
                 {
                     code = Convert.ToInt32(IFSC_Code.Substring(IFSC_Code.Length - 3));
-                    bankReport.EMP_SERVICE_OUTLET = code.ToString("D3");
+                    bankReport.EMP_SERVICE_OUTLET = code.ToString("D4");
                 }
                 else
                 {
