@@ -915,7 +915,7 @@ namespace RMERP.DAL.ManagerClasses
 
         #region Payslip        
         public EmployeePaySlipVM GeneratePaySlip(int WAG_Id,int EMP_Id)
-        {
+        {            
             EmployeePaySlipVM paySlipVM = new EmployeePaySlipVM();
             WageRegisterManager registerManager = new WageRegisterManager(_context);
             List<Wage_Register> wage_Registers = registerManager.GetWageRegistersForSalarySlip(WAG_Id, EMP_Id);
@@ -939,9 +939,9 @@ namespace RMERP.DAL.ManagerClasses
                 WAR_GrossTotal = WAR_GrossTotal + wage.WAR_GrossTotal;
                 WAR_FinalTotal = WAR_FinalTotal+ wage.WAR_FinalTotal;
 
-                if (WAR_TotalWorkingDays > Max_TotalPaybleDays)
+                if (wage.WAR_TotalPaybleDays > Max_TotalPaybleDays)
                 {
-                    Max_TotalPaybleDays = WAR_TotalWorkingDays;
+                    Max_TotalPaybleDays = wage.WAR_TotalPaybleDays;
                     paySlipVM.EMP_Location = wage.CLI_.CLI_Invoicing_Location;
                     paySlipVM.EMP_Designation = wage.CRI_.DES_.DES_Title;
                     paySlipVM.EMP_Region = wage.CLI_.CLI_Invoicing_City;
