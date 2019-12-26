@@ -93,7 +93,7 @@ namespace RMERP.DAL.ManagerClasses
 
                     int totalWorkingDays = 0;
                     double totalPaybleDays = 0;
-                    decimal CRI_Basic = 0M, WAR_Basic_Calculated = 0M, BasicDa = 0M, WAR_OverTime_Calculated = 0M, WAR_PF, WAR_PF_Calculated = 0M, WAR_ESIC = 0M, WAR_ESIC_Calculated = 0M, WAR_LWF_Deduction_Calculated = 0M;
+                    decimal CRI_Basic = 0M, WAR_Basic_Calculated = 0M, BasicDa = 0M, WAR_OverTime_Calculated = 0M, WAR_PF, WAR_PF_Calculated = 0M, WAR_ESIC = 0M, WAR_ESIC_Calculated = 0M, WAR_LWF_Deduction_Employer = 0M, WAR_LWF_Deduction_Employee = 0M;
                     decimal CRI_DA = 0M, CRI_DA_Calculated = 0M, CRI_HRA = 0M, CRI_HRA_Calculated = 0M;
                     decimal WAR_Attendance_Allowance_Calculated = 0M, WAR_Outstation_Allowance_Calculated = 0M, WAR_Performance_Allowance_Calculated = 0M, WAR_Nightshift_Allowance_Calculated = 0M;
 
@@ -456,18 +456,27 @@ namespace RMERP.DAL.ManagerClasses
                     {
                         if (!employee.DES_.DES_Exclude_LWF)
                         {
-                            if (WAR_GrossTotal > 0 && WAR_GrossTotal < 3000)
+                            if (WAR_GrossTotal < cr.CRI_MLWF_Employer_Base)
                             {
-                                WAR_LWF_Deduction_Calculated = 6; //Rs.6
+                                WAR_LWF_Deduction_Employer  = (cr.CRI_MLWF_Employer_LThen!=null? cr.CRI_MLWF_Employer_LThen.Value:0); //Rs.6
                             }
-                            else if (WAR_GrossTotal >= 3000)
+                            else if (WAR_GrossTotal >= cr.CRI_MLWF_Employer_Base)
                             {
-                                WAR_LWF_Deduction_Calculated = 12;  //Rs.12
+                                WAR_LWF_Deduction_Employer = (cr.CRI_MLWF_Employer_GThen != null ? cr.CRI_MLWF_Employer_GThen.Value : 0); ;  //Rs.12
+                            }
+
+                            if (WAR_GrossTotal < cr.CRI_MLWF_Employee_Base)
+                            {
+                                WAR_LWF_Deduction_Employee = (cr.CRI_MLWF_Employee_LThen != null ? cr.CRI_MLWF_Employee_LThen.Value : 0); ; //Rs.6
+                            }
+                            else if (WAR_GrossTotal >= cr.CRI_MLWF_Employee_Base)
+                            {
+                                WAR_LWF_Deduction_Employee = (cr.CRI_MLWF_Employee_GThen != null ? cr.CRI_MLWF_Employee_GThen.Value : 0); ;  //Rs.12
                             }
                         }
                     }
-
-                    wageRegisterVM.WAR_LWF_Deduction_Calculated = WAR_LWF_Deduction_Calculated;
+                    wageRegisterVM.WAR_LWF_Deduction_Employee = WAR_LWF_Deduction_Employee;
+                    wageRegisterVM.WAR_LWF_Deduction_Employer = WAR_LWF_Deduction_Employer;
                     #endregion
 
                     if (cr != null)
@@ -497,7 +506,7 @@ namespace RMERP.DAL.ManagerClasses
                     }
                     
 
-                    decimal WAR_FinalTotal = Math.Round(WAR_GrossTotal - (WAR_PF_Calculated + WAR_ESIC_Calculated + totalEMI + WAR_ProffesionalTax_Calculated + WAR_RevenueDeduction_Calculated + WAR_CanteenFacility_Calculation + WAR_LWF_Deduction_Calculated), MidpointRounding.AwayFromZero);
+                    decimal WAR_FinalTotal = Math.Round(WAR_GrossTotal - (WAR_PF_Calculated + WAR_ESIC_Calculated + totalEMI + WAR_ProffesionalTax_Calculated + WAR_RevenueDeduction_Calculated + WAR_CanteenFacility_Calculation + WAR_LWF_Deduction_Employee), MidpointRounding.AwayFromZero);
                     wageRegisterVM.WAR_GrossTotal = WAR_GrossTotal;
                     wageRegisterVM.WAR_FinalTotal = WAR_FinalTotal;
                     wageRegisterVM.WAR_DA = CRI_DA;

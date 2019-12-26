@@ -233,242 +233,242 @@
                     @Html.HiddenFor(m => m.wageRegisterVM.clientRequirementVM.DES_Id)
                     @Html.HiddenFor(m => m.FRM_Id)
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.wageRegisterVM.WAR_TotalPaybleDays, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_TotalPaybleDays, new { @class = "form-control", onfocusout = "calculateTotal()" })
-                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_TotalPaybleDays, "", new { @class = "text-danger" })
-                            </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.wageRegisterVM.WAR_TotalPaybleDays, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_TotalPaybleDays, new { @class = "form-control", onfocusout = "calculateTotal()" })
+                            @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_TotalPaybleDays, "", new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.wageRegisterVM.WAR_TotalWorkingDays, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_TotalWorkingDays, new { @class = "form-control", onfocusout = "calculateTotal()" })
-                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_TotalWorkingDays, "", new { @class = "text-danger" })
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.wageRegisterVM.WAR_TotalWorkingDays, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_TotalWorkingDays, new { @class = "form-control", onfocusout = "calculateTotal()" })
+                            @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_TotalWorkingDays, "", new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.wageRegisterVM.WAR_Basic, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_Basic, new { @class = "form-control", onfocusout = "calculateTotal()" })
-                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_Basic, "", new { @class = "text-danger" })
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.wageRegisterVM.WAR_Basic, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_Basic, new { @class = "form-control", onfocusout = "calculateTotal()" })
+                            @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_Basic, "", new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.wageRegisterVM.WAR_Basic_Calculated, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_Basic_Calculated, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_Basic_Calculated, "", new { @class = "text-danger" })
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.wageRegisterVM.WAR_Basic_Calculated, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_Basic_Calculated, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_Basic_Calculated, "", new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.wageRegisterVM.WAR_DA, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_DA, new { @class = "form-control", onfocusout = "calculateTotal()" })
-                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_DA, "", new { @class = "text-danger" })
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.wageRegisterVM.WAR_DA, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_DA, new { @class = "form-control", onfocusout = "calculateTotal()" })
+                            @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_DA, "", new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.wageRegisterVM.WAR_DA_Calculated, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_DA_Calculated, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_DA_Calculated, "", new { @class = "text-danger" })
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.wageRegisterVM.WAR_DA_Calculated, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_DA_Calculated, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_DA_Calculated, "", new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.wageRegisterVM.WAR_HRA, new { @class = "control-label" })
-                                @Html.RadioButtonFor(m => m.wageRegisterVM.clientRequirementVM.HRAselection, false, new { @id = "Percentage", @checked = "checked", @style = "margin: 0px 0 0", onclick = "calculateTotal()" }) Percentage
-                                @Html.RadioButtonFor(m => m.wageRegisterVM.clientRequirementVM.HRAselection, true, new { @id = "Fixed", @style = "margin: 0px 0 0", onclick = "calculateTotal()" }) Fixed
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_HRA, new { @class = "form-control", onfocusout = "calculateTotal()" })
-                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_HRA, "", new { @class = "text-danger" })
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.wageRegisterVM.WAR_HRA, new { @class = "control-label" })
+                            @Html.RadioButtonFor(m => m.wageRegisterVM.clientRequirementVM.HRAselection, false, new { @id = "Percentage", @checked = "checked", @style = "margin: 0px 0 0", onclick = "calculateTotal()" }) Percentage
+                            @Html.RadioButtonFor(m => m.wageRegisterVM.clientRequirementVM.HRAselection, true, new { @id = "Fixed", @style = "margin: 0px 0 0", onclick = "calculateTotal()" }) Fixed
+                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_HRA, new { @class = "form-control", onfocusout = "calculateTotal()" })
+                            @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_HRA, "", new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.wageRegisterVM.WAR_HRA_Calculated, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_HRA_Calculated, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_HRA_Calculated, "", new { @class = "text-danger" })
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.wageRegisterVM.WAR_HRA_Calculated, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_HRA_Calculated, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_HRA_Calculated, "", new { @class = "text-danger" })
                         </div>
-                        @{
-                            for (var i = 0; i < Model.wage_Register_Allowances.Count(); i++)
-                            {
+                    </div>
+                    @{
+                        for (var i = 0; i < Model.wage_Register_Allowances.Count(); i++)
+                        {
 
-                                @Html.HiddenFor(m => Model.wage_Register_Allowances[i].CRA_.ALL_.ALL_Shortform)
-                                @Html.HiddenFor(m => Model.wage_Register_Allowances[i].WAA_Id)
-                                <div class="col-md-12">
-                                    @Html.Label(Model.wage_Register_Allowances[i].CRA_.ALL_.ALL_Title)
-                                    @Html.RadioButtonFor(m => Model.wage_Register_Allowances[i].CRA_.CRA_DayswiseOrFull, true, new { @id = "CRA_Dayswise[" + @i + "]", @checked = "checked", @style = "margin: 0px 0 0", onclick = "calculateTotal()" }) Dayswise Calculation
-                                    @Html.RadioButtonFor(m => Model.wage_Register_Allowances[i].CRA_.CRA_DayswiseOrFull, false, new { @id = "CRA_Full[" + @i + "]", @style = "margin: 0px 0 0", onclick = "calculateTotal()" })  Full Amount
-                                    <div class="form-group">
-                                        <div class="col-md-6">
-                                            @Html.EditorFor(m => Model.wage_Register_Allowances[i].WAA_Amount, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
-                                            @Html.ValidationMessageFor(m => Model.wage_Register_Allowances[i].WAA_Amount, "", new { @class = "text-danger" })
-                                        </div>
-                                        <div class="col-md-6">
-                                            @Html.EditorFor(m => Model.wage_Register_Allowances[i].WAA_Amount_Calculated, new { htmlAttributes = new { @class = "form-control" } })
-                                            @Html.ValidationMessageFor(m => Model.wage_Register_Allowances[i].WAA_Amount_Calculated, "", new { @class = "text-danger" })
-                                        </div>
+                            @Html.HiddenFor(m => Model.wage_Register_Allowances[i].CRA_.ALL_.ALL_Shortform)
+                            @Html.HiddenFor(m => Model.wage_Register_Allowances[i].WAA_Id)
+                            <div class="col-md-12">
+                                @Html.Label(Model.wage_Register_Allowances[i].CRA_.ALL_.ALL_Title)
+                                @Html.RadioButtonFor(m => Model.wage_Register_Allowances[i].CRA_.CRA_DayswiseOrFull, true, new { @id = "CRA_Dayswise[" + @i + "]", @checked = "checked", @style = "margin: 0px 0 0", onclick = "calculateTotal()" }) Dayswise Calculation
+                                @Html.RadioButtonFor(m => Model.wage_Register_Allowances[i].CRA_.CRA_DayswiseOrFull, false, new { @id = "CRA_Full[" + @i + "]", @style = "margin: 0px 0 0", onclick = "calculateTotal()" })  Full Amount
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        @Html.EditorFor(m => Model.wage_Register_Allowances[i].WAA_Amount, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
+                                        @Html.ValidationMessageFor(m => Model.wage_Register_Allowances[i].WAA_Amount, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.EditorFor(m => Model.wage_Register_Allowances[i].WAA_Amount_Calculated, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(m => Model.wage_Register_Allowances[i].WAA_Amount_Calculated, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-                            }
-                        }
-                        @if (Model.wageRegisterVM.WAR_OutStation_Allowance_Calculated != null)
-                        {
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.wageRegisterVM.WAR_OutStation_Allowance_Calculated, new { @class = "control-label" })
-                                    @Html.TextBoxFor(m => m.wageRegisterVM.WAR_OutStation_Allowance_Calculated, new { @class = "form-control", onfocusout = "calculateTotal()" })
-                                    @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_OutStation_Allowance_Calculated, "", new { @class = "text-danger" })
-                                </div>
                             </div>
                         }
-                        @if (Model.wageRegisterVM.WAR_Attendance_Allowance_Calculated != null)
-                        {
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.wageRegisterVM.WAR_Attendance_Allowance_Calculated, new { @class = "control-label" })
-                                    @Html.TextBoxFor(m => m.wageRegisterVM.WAR_Attendance_Allowance_Calculated, new { @class = "form-control", onfocusout = "calculateTotal()" })
-                                    @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_Attendance_Allowance_Calculated, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                        }
-                        @if (Model.wageRegisterVM.WAR_Performance_Allowance_Calculated != null)
-                        {
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.wageRegisterVM.WAR_Performance_Allowance_Calculated, new { @class = "control-label" })
-                                    @Html.TextBoxFor(m => m.wageRegisterVM.WAR_Performance_Allowance_Calculated, new { @class = "form-control", onfocusout = "calculateTotal()" })
-                                    @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_Performance_Allowance_Calculated, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                        }
-                        @if (Model.wageRegisterVM.WAR_Nightshift_Allowance_Calculated != null)
-                        {
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.wageRegisterVM.WAR_Nightshift_Allowance_Calculated, new { @class = "control-label" })
-                                    @Html.TextBoxFor(m => m.wageRegisterVM.WAR_Nightshift_Allowance_Calculated, new { @class = "form-control", onfocusout = "calculateTotal()" })
-                                    @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_Nightshift_Allowance_Calculated, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                        }
-                        @if (Model.wageRegisterVM.WAR_LWF_Deduction_Calculated != null)
-                        {
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.wageRegisterVM.WAR_LWF_Deduction_Calculated, new { @class = "control-label" })
-                                    @Html.TextBoxFor(m => m.wageRegisterVM.WAR_LWF_Deduction_Calculated, new { @class = "form-control", onfocusout = "calculateTotal()" })
-                                    @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_LWF_Deduction_Calculated, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                        }
-                        <div class="col-md-12 well well-sm">
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.wageRegisterVM.WAR_ExtraWorkingHours, new { @class = "control-label" })
-                                    @Html.TextBoxFor(m => m.wageRegisterVM.WAR_ExtraWorkingHours, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_ExtraWorkingHours, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <a class="btn btn-sm btn-info m-t-20" onclick="Calculate_OT(@Model.wageRegisterVM.WAR_Id)">Calculate</a>
-                                </div>
-                            </div>
-                        </div>
+                    }
+                    @if (Model.wageRegisterVM.WAR_OutStation_Allowance_Calculated != null)
+                    {
                         <div class="col-md-12">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, new { @class = "form-control", onfocusout = "calculateTotal()" })
-                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_OutStation_Allowance_Calculated, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_OutStation_Allowance_Calculated, new { @class = "form-control", onfocusout = "calculateTotal()" })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_OutStation_Allowance_Calculated, "", new { @class = "text-danger" })
                             </div>
                         </div>
+                    }
+                    @if (Model.wageRegisterVM.WAR_Attendance_Allowance_Calculated != null)
+                    {
                         <div class="col-md-12">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.wageRegisterVM.WAR_GrossTotal, new { @class = "control-label" })
-                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_GrossTotal, new { @class = "form-control", onfocusout = "calculateTotal()" })
-                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_GrossTotal, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_Attendance_Allowance_Calculated, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_Attendance_Allowance_Calculated, new { @class = "form-control", onfocusout = "calculateTotal()" })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_Attendance_Allowance_Calculated, "", new { @class = "text-danger" })
                             </div>
                         </div>
-                        <div class="col-md-12 well well-sm">
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.wageRegisterVM.WAR_PF, new { @class = "control-label" })
-                                    @Html.EditorFor(m => m.wageRegisterVM.WAR_PF, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_PF, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.wageRegisterVM.WAR_ESIC, new { @class = "control-label" })
-                                    @Html.EditorFor(m => m.wageRegisterVM.WAR_ESIC, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_ESIC, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <a class="btn btn-sm btn-info m-t-20" onclick="Calculate_PF_ESIC(@Model.wageRegisterVM.WAR_Id)">Calculate</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.wageRegisterVM.WAR_PF_Calculated, new { @class = "control-label" })
-                                @Html.EditorFor(m => m.wageRegisterVM.WAR_PF_Calculated, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
-                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_PF_Calculated, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, new { @class = "control-label" })
-                                @Html.EditorFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
-                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        @if (Model.wageRegisterVM.clientRequirementVM.CRI_ProfessionalTax)
-                        {
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.wageRegisterVM.WAR_ProffesionalTax_Calculated, new { @class = "control-label" })
-                                    @Html.EditorFor(m => m.wageRegisterVM.WAR_ProffesionalTax_Calculated, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
-                                    @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_ProffesionalTax_Calculated, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                        }
-                        @if (Model.wageRegisterVM.clientRequirementVM.CRI_RevenueDeduction)
-                        {
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.wageRegisterVM.WAR_RevenueDeduction_Calculated, new { @class = "control-label" })
-                                    @Html.EditorFor(m => m.wageRegisterVM.WAR_RevenueDeduction_Calculated, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
-                                    @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_RevenueDeduction_Calculated, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                        }
-                        @if (Model.wageRegisterVM.clientRequirementVM.CRI_CanteenFacility)
-                        {
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    @Html.LabelFor(m => m.wageRegisterVM.WAR_CanteenFacility_Calculation, new { @class = "control-label" })
-                                    @Html.EditorFor(m => m.wageRegisterVM.WAR_CanteenFacility_Calculation, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
-                                    @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_CanteenFacility_Calculation, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                        }
-
+                    }
+                    @if (Model.wageRegisterVM.WAR_Performance_Allowance_Calculated != null)
+                    {
                         <div class="col-md-12">
                             <div class="form-group">
-                                @Html.LabelFor(m => m.wageRegisterVM.WAR_FinalTotal, new { @class = "control-label" })
-                                @Html.EditorFor(m => m.wageRegisterVM.WAR_FinalTotal, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_FinalTotal, "", new { @class = "text-danger" })
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_Performance_Allowance_Calculated, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_Performance_Allowance_Calculated, new { @class = "form-control", onfocusout = "calculateTotal()" })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_Performance_Allowance_Calculated, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    }
+                    @if (Model.wageRegisterVM.WAR_Nightshift_Allowance_Calculated != null)
+                    {
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_Nightshift_Allowance_Calculated, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_Nightshift_Allowance_Calculated, new { @class = "form-control", onfocusout = "calculateTotal()" })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_Nightshift_Allowance_Calculated, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    }
+                    @if (Model.wageRegisterVM.WAR_LWF_Deduction_Employee != null)
+                    {
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_LWF_Deduction_Employee, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_LWF_Deduction_Employee, new { @class = "form-control", onfocusout = "calculateTotal()" })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_LWF_Deduction_Employee, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    }                    
+                    <div class="col-md-12 well well-sm">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_ExtraWorkingHours, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_ExtraWorkingHours, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_ExtraWorkingHours, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <a class="btn btn-sm btn-info m-t-20" onclick="Calculate_OT(@Model.wageRegisterVM.WAR_Id)">Calculate</a>
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, new { @class = "form-control", onfocusout = "calculateTotal()" })
+                            @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_OverTime_Calculated, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.wageRegisterVM.WAR_GrossTotal, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.wageRegisterVM.WAR_GrossTotal, new { @class = "form-control", onfocusout = "calculateTotal()" })
+                            @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_GrossTotal, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-12 well well-sm">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_PF, new { @class = "control-label" })
+                                @Html.EditorFor(m => m.wageRegisterVM.WAR_PF, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_PF, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_ESIC, new { @class = "control-label" })
+                                @Html.EditorFor(m => m.wageRegisterVM.WAR_ESIC, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_ESIC, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <a class="btn btn-sm btn-info m-t-20" onclick="Calculate_PF_ESIC(@Model.wageRegisterVM.WAR_Id)">Calculate</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.wageRegisterVM.WAR_PF_Calculated, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.wageRegisterVM.WAR_PF_Calculated, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
+                            @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_PF_Calculated, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
+                            @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_ESIC_Calculated, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    @if (Model.wageRegisterVM.clientRequirementVM.CRI_ProfessionalTax)
+                    {
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_ProffesionalTax_Calculated, new { @class = "control-label" })
+                                @Html.EditorFor(m => m.wageRegisterVM.WAR_ProffesionalTax_Calculated, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_ProffesionalTax_Calculated, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    }
+                    @if (Model.wageRegisterVM.clientRequirementVM.CRI_RevenueDeduction)
+                    {
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_RevenueDeduction_Calculated, new { @class = "control-label" })
+                                @Html.EditorFor(m => m.wageRegisterVM.WAR_RevenueDeduction_Calculated, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_RevenueDeduction_Calculated, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    }
+                    @if (Model.wageRegisterVM.clientRequirementVM.CRI_CanteenFacility)
+                    {
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_CanteenFacility_Calculation, new { @class = "control-label" })
+                                @Html.EditorFor(m => m.wageRegisterVM.WAR_CanteenFacility_Calculation, new { htmlAttributes = new { @class = "form-control", onfocusout = "calculateTotal()" } })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_CanteenFacility_Calculation, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    }
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.wageRegisterVM.WAR_FinalTotal, new { @class = "control-label" })
+                            @Html.EditorFor(m => m.wageRegisterVM.WAR_FinalTotal, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_FinalTotal, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
 
                     <div class="m-t-20 text-center">
                         <input type="submit" name="Submit Wage Register" id="btnSubmit" class="btn btn-primary" />

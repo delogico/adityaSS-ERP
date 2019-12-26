@@ -611,16 +611,16 @@ namespace RMERP.Controllers
                                     if (!dd.DES_Exclude_LWF)
                                     {
                                         ICell cell_LWF = row.CreateCell(cellNext2);
-                                        cell_LWF.SetCellValue(Convert.ToString(Math.Round(employee.WAR_LWF_Deduction_Calculated.Value, MidpointRounding.AwayFromZero).ToString()));
+                                        cell_LWF.SetCellValue(Convert.ToString(Math.Round(employee.WAR_LWF_Deduction_Employee.Value, MidpointRounding.AwayFromZero).ToString()));
                                         excelSheet.SetColumnWidth(cellNext2, (int)((25 + 0.72) * 140));
                                         cell_LWF.CellStyle = styleGrey50;
-                                        TotalLWF = TotalLWF + Convert.ToDecimal(employee.WAR_LWF_Deduction_Calculated);
+                                        TotalLWF = TotalLWF + Convert.ToDecimal(employee.WAR_LWF_Deduction_Employee);
                                         cellNext2 = cellNext2 + 1;
                                     }
 
                                     #region Total Deduction
                                     decimal DeductTotal = Math.Round(employee.WAR_PF_Calculated, MidpointRounding.AwayFromZero) + Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero) + Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated), MidpointRounding.AwayFromZero)
-                                        + Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero) + Math.Round(employee.WAR_LWF_Deduction_Calculated.Value, MidpointRounding.AwayFromZero);
+                                        + Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero) + Math.Round(employee.WAR_LWF_Deduction_Employee.Value, MidpointRounding.AwayFromZero);
                                     if (employee.WAR_RevenueDeduction_Calculated != "-")
                                     {
                                         DeductTotal += Math.Round(Convert.ToDecimal(employee.WAR_RevenueDeduction_Calculated), MidpointRounding.AwayFromZero);

@@ -2979,6 +2979,7 @@ namespace RMERP.Controllers
                 CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 7));
 
+                List<MLWF_ContributionVM> MLWF_ContributionReports = manager.MLWF_ContributionReports(WAG_Id);
 
                 row = excelSheet.CreateRow(3);
                 row.HeightInPoints = (float)(4 * excelSheet.DefaultRowHeightInPoints);
@@ -3021,23 +3022,23 @@ namespace RMERP.Controllers
                 row = excelSheet.CreateRow(4);
 
                 ICell cell44 = row.CreateCell(4);
-                cell44.SetCellValue("RS. 6/-");
+                cell44.SetCellValue("RS. "+ MLWF_ContributionReports[0].CRI_MLWF_Employee_LThen + "/-");
                 cell44.CellStyle = style;
                 CellUtil.SetAlignment(cell44, workbook, (short)HorizontalAlignment.Center);
                 ICell cell55 = row.CreateCell(5);
-                cell55.SetCellValue("RS. 12/-");
+                cell55.SetCellValue("RS. "+ MLWF_ContributionReports[0].CRI_MLWF_Employee_GThen + "/-");
                 cell55.CellStyle = style;
                 CellUtil.SetAlignment(cell55, workbook, (short)HorizontalAlignment.Center);
                 ICell cell66 = row.CreateCell(6);
-                cell66.SetCellValue("RS. 18/-");
+                cell66.SetCellValue("RS. "+ MLWF_ContributionReports[0].CRI_MLWF_Employer_LThen + "/-");
                 cell66.CellStyle = style;
                 CellUtil.SetAlignment(cell66, workbook, (short)HorizontalAlignment.Center);
                 ICell cell77 = row.CreateCell(7);
-                cell77.SetCellValue("RS. 36/-");
+                cell77.SetCellValue("RS. "+ MLWF_ContributionReports[0].CRI_MLWF_Employer_GThen + "/-");
                 cell77.CellStyle = style;
                 CellUtil.SetAlignment(cell77, workbook, (short)HorizontalAlignment.Center);
 
-                List<MLWF_ContributionVM> MLWF_ContributionReports = manager.MLWF_ContributionReports(WAG_Id);
+               
                 int rowCount = 5;
                 int srNo = 1;
                 int EMP_BELOW_3K = 0, EMP_ABOVE_3K = 0;
@@ -3080,10 +3081,12 @@ namespace RMERP.Controllers
 
                     EMP_BELOW_3K = EMP_BELOW_3K + item.EMP_BELOW_3K;
                     EMP_ABOVE_3K = EMP_ABOVE_3K + item.EMP_ABOVE_3K;
+
                     EMP_CONTR_BELOW_3K = EMP_CONTR_BELOW_3K + (item.EMP_CONTR_BELOW_3K());
                     EMP_CONTR_ABOVE_3K = EMP_CONTR_ABOVE_3K + (item.EMP_CONTR_ABOVE_3K());
                     EMPLOYER_CONTR_BELOW_3K = EMPLOYER_CONTR_BELOW_3K + (item.EMPLOYER_CONTR_BELOW_3K());
                     EMPLOYER_CONTR_ABOVE_3K = EMPLOYER_CONTR_ABOVE_3K + (item.EMPLOYER_CONTR_ABOVE_3K());
+
 
                     rowCount++;
                 }

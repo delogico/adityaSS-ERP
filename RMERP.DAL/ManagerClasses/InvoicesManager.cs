@@ -93,6 +93,7 @@ namespace RMERP.DAL.ManagerClasses
             Clients client = clientsManager.GetClientById(CLI_Id);
             List<Wage_Register> list = new List<Wage_Register>();
             decimal TotalServiceCharge = 0;
+            //decimal TotalLWF = 0;
             if (BillingType == (int)ProjectUtils.CRI_BILLING_TYPE.Lump_Sum_Amount)
             {
                 list = _context.Wage_Register.Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id) && m.CRI_.CRI_Billing_Type == BillingType && m.CRI_.CRI_Billing_Amount == CRI_Billing_Amount).ToList();
@@ -113,13 +114,20 @@ namespace RMERP.DAL.ManagerClasses
                             (wage.WAR_Attendance_Allowance_Calculated!=null?wage.WAR_Attendance_Allowance_Calculated.Value:0),
                             (wage.WAR_Nightshift_Allowance_Calculated!=null?wage.WAR_Nightshift_Allowance_Calculated.Value:0),
                             (wage.WAR_Performance_Allowance_Calculated!=null?wage.WAR_Performance_Allowance_Calculated.Value:0));
+
+                        //if (!wage.CRI_.DES_.DES_Exclude_LWF)
+                        //{
+                        //    TotalLWF = TotalLWF + (wage.WAR_LWF_Deduction_Employer!=null?wage.WAR_LWF_Deduction_Employer.Value:0);
+                        //}
                     }
                 }
             }
             if (list.Count() > 0)
             {
                 double TotalPaybleDays = list.Select(m => m.WAR_TotalPaybleDays).Sum();
-                decimal MLWF = (list[0].CRI_.CRI_MLWF_Employee_GThen != null ? list[0].CRI_.CRI_MLWF_Employee_GThen.Value : 0);
+
+                decimal MLWF = (list[0].WAR_LWF_Deduction_Employer != null ? list[0].WAR_LWF_Deduction_Employer.Value : 0);
+
                 int Nos = list.Where(m => m.CRI_.DES_.DES_Exclude_LWF == false).Select(m => m.EMP_Id).Count();
 
                 Wage_Process wage = list[0].WAG_;

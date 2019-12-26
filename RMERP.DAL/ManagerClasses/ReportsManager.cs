@@ -82,17 +82,36 @@ namespace RMERP.DAL.ManagerClasses
                 report.CLI_Name = item.CLI_Name;
                 List<Wage_Register> register = wage_Registers.Where(m => m.CLI_Id.Equals(item.CLI_Id)).ToList();
                 int EMP_BELOW_3K = 0, EMP_ABOVE_3K = 0;
-                foreach (var emp in register)
+                //decimal EMP_DEDUCTION = 0, EMPLOYER_CONTR=0;
+
+
+                if (register.Count() > 0)
                 {
-                    if (emp.WAR_GrossTotal > 0 && emp.WAR_GrossTotal < 3000)
+                    foreach (var emp in register)
                     {
-                        EMP_BELOW_3K++;
+                        if (emp.WAR_GrossTotal > 0 && emp.WAR_GrossTotal < 3000)
+                        {
+                            EMP_BELOW_3K++;
+                        }
+                        else if (emp.WAR_GrossTotal >= 3000)
+                        {
+                            EMP_ABOVE_3K++;
+                        }
+                        //EMP_DEDUCTION = EMP_DEDUCTION + (emp.WAR_LWF_Deduction_Employee!=null?emp.WAR_LWF_Deduction_Employee.Value:0);
+                        //EMPLOYER_CONTR= EMPLOYER_CONTR + (emp.WAR_LWF_Deduction_Employer != null ? emp.WAR_LWF_Deduction_Employer.Value : 0);
                     }
-                    else if (emp.WAR_GrossTotal >= 3000)
-                    {
-                        EMP_ABOVE_3K++;
-                    }
+
+                    report.CRI_MLWF_Employee_GThen = (register[0].CRI_.CRI_MLWF_Employee_GThen!=null? register[0].CRI_.CRI_MLWF_Employee_GThen.Value :0);
+                    report.CRI_MLWF_Employee_LThen = (register[0].CRI_.CRI_MLWF_Employee_LThen != null ? register[0].CRI_.CRI_MLWF_Employee_LThen.Value : 0);
+                    report.CRI_MLWF_Employer_GThen = (register[0].CRI_.CRI_MLWF_Employer_GThen != null ? register[0].CRI_.CRI_MLWF_Employer_GThen.Value : 0);
+                    report.CRI_MLWF_Employer_LThen = (register[0].CRI_.CRI_MLWF_Employer_LThen != null ? register[0].CRI_.CRI_MLWF_Employer_LThen.Value : 0);
+
+                    //report.EMP_DEDUCTION = EMP_DEDUCTION;
+                    //report.EMPLOYER_CONTR = EMPLOYER_CONTR;
+
                 }
+              
+
                 report.EMP_ABOVE_3K = EMP_ABOVE_3K;
                 report.EMP_BELOW_3K = EMP_BELOW_3K;
                 reports.Add(report);

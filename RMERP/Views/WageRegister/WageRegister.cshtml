@@ -337,7 +337,7 @@
                                     }
                                     <td class="silver">@Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero)</td>
 
-                                    decimal DeductTotal = @Math.Round(employee.WAR_PF_Calculated) + @Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero) + @Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated) + @Math.Round(employee.WAR_LWF_Deduction_Calculated != null ? employee.WAR_LWF_Deduction_Calculated.Value : 0), MidpointRounding.AwayFromZero)
+                                    decimal DeductTotal = @Math.Round(employee.WAR_PF_Calculated) + @Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero) + @Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated) + @Math.Round(employee.WAR_LWF_Deduction_Employee != null ? employee.WAR_LWF_Deduction_Employee.Value : 0), MidpointRounding.AwayFromZero)
                                     + @Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero);
                                     if (employee.WAR_RevenueDeduction_Calculated != "-")
                                     {
@@ -350,7 +350,7 @@
 
                                     @if ((wage.WAG_Month.Month == (int)ProjectUtils.Month.June || wage.WAG_Month.Month == (int)ProjectUtils.Month.December) && !employee.designation.DES_Exclude_LWF)
                                     {
-                                        <td class="silver">@Math.Round(employee.WAR_LWF_Deduction_Calculated.Value, MidpointRounding.AwayFromZero)</td>
+                                        <td class="silver">@Math.Round(employee.WAR_LWF_Deduction_Employee.Value, MidpointRounding.AwayFromZero)</td>
                                     }
                                     <td class="silver">@DeductTotal</td>
                                     <td class="gray">@Math.Round(employee.WAR_FinalTotal, MidpointRounding.AwayFromZero)</td>

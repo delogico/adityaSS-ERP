@@ -111,7 +111,8 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Calculated Nightshift")]
         public decimal? WAR_Nightshift_Allowance_Calculated { get; set; }
         [Display(Name = "MLWF Deduction")]
-        public decimal? WAR_LWF_Deduction_Calculated { get; set; }
+        public decimal? WAR_LWF_Deduction_Employer { get; set; }
+        public decimal? WAR_LWF_Deduction_Employee { get; set; }
 
     }
 
