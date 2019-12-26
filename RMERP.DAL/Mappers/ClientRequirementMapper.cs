@@ -73,11 +73,18 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_PF_Employer_Cont_Rate = requirement.CRI_PF_Employer_Cont_Rate;
             clientRequirementVM.CRI_ESIC_Employer_Cont_Rate = requirement.CRI_ESIC_Employer_Cont_Rate;
             clientRequirementVM.CRI_EPS_Rate = requirement.CRI_EPS_Rate;
-            clientRequirementVM.CRI_MLWF_Contribution = requirement.CRI_MLWF_Contribution;
+
+            clientRequirementVM.CRI_MLWF_Employer_GThen = requirement.CRI_MLWF_Employer_GThen;
+            clientRequirementVM.CRI_MLWF_Employer_LThen = requirement.CRI_MLWF_Employer_LThen;
+            clientRequirementVM.CRI_MLWF_Employee_GThen = requirement.CRI_MLWF_Employee_GThen;
+            clientRequirementVM.CRI_MLWF_Employee_LThen = requirement.CRI_MLWF_Employee_LThen;
+            clientRequirementVM.CRI_MLWF_Employer_Base = requirement.CRI_MLWF_Employer_Base;
+            clientRequirementVM.CRI_MLWF_Employee_Base = requirement.CRI_MLWF_Employee_Base;
+            clientRequirementVM.CRI_MLWF_Employer_Max_Base = requirement.CRI_MLWF_Employer_Base;
+            clientRequirementVM.CRI_MLWF_Employee_Max_Base = requirement.CRI_MLWF_Employee_Base;
 
             return clientRequirementVM;
-        }
-
+        }       
         public static Client_Requirements mapMeModel(ClientRequirementVM requirementVM)
         {
             Client_Requirements requirement = new Client_Requirements();
@@ -132,11 +139,16 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_PF_Employer_Cont_Rate = requirementVM.CRI_PF_Employer_Cont_Rate;
             requirement.CRI_ESIC_Employer_Cont_Rate = requirementVM.CRI_ESIC_Employer_Cont_Rate;
             requirement.CRI_EPS_Rate = requirementVM.CRI_EPS_Rate;
-            requirement.CRI_MLWF_Contribution = requirementVM.CRI_MLWF_Contribution;
-            
-            return requirement;
-        }
 
+            requirement.CRI_MLWF_Employer_GThen = requirementVM.CRI_MLWF_Employer_GThen;
+            requirement.CRI_MLWF_Employer_LThen = requirementVM.CRI_MLWF_Employer_LThen;
+            requirement.CRI_MLWF_Employee_GThen = requirementVM.CRI_MLWF_Employee_GThen;
+            requirement.CRI_MLWF_Employee_LThen = requirementVM.CRI_MLWF_Employee_LThen;
+            requirement.CRI_MLWF_Employer_Base = requirementVM.CRI_MLWF_Employer_Base;
+            requirement.CRI_MLWF_Employee_Base = requirementVM.CRI_MLWF_Employee_Base;
+
+            return requirement;
+        }        
         public static List<ClientRequirementVM> mapRequirements(List<Client_Requirements> requirements)
         {
             List<ClientRequirementVM> lst = new List<ClientRequirementVM>();

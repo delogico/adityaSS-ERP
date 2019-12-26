@@ -53,7 +53,12 @@ namespace RMERP.DAL.Models
         public double? CRI_PF_Employer_Cont_Rate { get; set; }
         public double? CRI_ESIC_Employer_Cont_Rate { get; set; }
         public double CRI_EPS_Rate { get; set; }
-        public decimal? CRI_MLWF_Contribution { get; set; }
+        public decimal? CRI_MLWF_Employer_GThen { get; set; }
+        public decimal? CRI_MLWF_Employer_LThen { get; set; }
+        public decimal? CRI_MLWF_Employee_GThen { get; set; }
+        public decimal? CRI_MLWF_Employee_LThen { get; set; }
+        public decimal? CRI_MLWF_Employer_Base { get; set; }
+        public decimal? CRI_MLWF_Employee_Base { get; set; }
 
         public Clients CLI_ { get; set; }
         public Designations DES_ { get; set; }

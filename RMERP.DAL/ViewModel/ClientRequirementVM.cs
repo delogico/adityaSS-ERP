@@ -127,7 +127,15 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Employee Pension Scheme Rate(%)")]
         public double CRI_EPS_Rate { get; set; }
         [Display(Name = "Employer MLWF Contribution(INR)")]
-        public decimal? CRI_MLWF_Contribution { get; set; }
+       
+        public decimal? CRI_MLWF_Employer_GThen { get; set; }
+        public decimal? CRI_MLWF_Employer_LThen { get; set; }
+        public decimal? CRI_MLWF_Employee_GThen { get; set; }
+        public decimal? CRI_MLWF_Employee_LThen { get; set; }
+        public decimal? CRI_MLWF_Employer_Base { get; set; }
+        public decimal? CRI_MLWF_Employee_Base { get; set; }
+        public decimal? CRI_MLWF_Employee_Max_Base { get; set; }
+        public decimal? CRI_MLWF_Employer_Max_Base { get; set; }
 
     }
 }

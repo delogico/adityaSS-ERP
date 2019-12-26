@@ -119,7 +119,7 @@ namespace RMERP.DAL.ManagerClasses
             if (list.Count() > 0)
             {
                 double TotalPaybleDays = list.Select(m => m.WAR_TotalPaybleDays).Sum();
-                decimal MLWF = (list[0].CRI_.CRI_MLWF_Contribution != null ? list[0].CRI_.CRI_MLWF_Contribution.Value : 0);
+                decimal MLWF = (list[0].CRI_.CRI_MLWF_Employee_GThen != null ? list[0].CRI_.CRI_MLWF_Employee_GThen.Value : 0);
                 int Nos = list.Where(m => m.CRI_.DES_.DES_Exclude_LWF == false).Select(m => m.EMP_Id).Count();
 
                 Wage_Process wage = list[0].WAG_;

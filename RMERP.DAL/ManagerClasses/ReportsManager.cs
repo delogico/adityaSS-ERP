@@ -947,8 +947,8 @@ namespace RMERP.DAL.ManagerClasses
                     paySlipVM.EMP_Region = wage.CLI_.CLI_Invoicing_City;
                 }
 
-                if(wage.WAR_LWF_Deduction_Calculated!=null)
-                    WAR_LWF_Deduction_Calculated = WAR_LWF_Deduction_Calculated + wage.WAR_LWF_Deduction_Calculated.Value;
+                if(wage.WAR_LWF_Deduction_Employee != null)
+                    WAR_LWF_Deduction_Calculated = WAR_LWF_Deduction_Calculated + wage.WAR_LWF_Deduction_Employee.Value;
                 if(wage.WAR_Advance_Amount!=null)
                     WAR_Advance_Amount = WAR_Advance_Amount + wage.WAR_Advance_Amount.Value;
                 if (wage.WAR_RevenueDeduction_Calculated != null)

@@ -268,7 +268,17 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.CRI_InactivatedOn).HasColumnType("datetime");
 
-                entity.Property(e => e.CRI_MLWF_Contribution).HasColumnType("decimal(9, 2)");
+                entity.Property(e => e.CRI_MLWF_Employee_Base).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.CRI_MLWF_Employee_GThen).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.CRI_MLWF_Employee_LThen).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.CRI_MLWF_Employer_Base).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.CRI_MLWF_Employer_GThen).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.CRI_MLWF_Employer_LThen).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.CRI_Nightshift_Allowance_Rate).HasColumnType("decimal(9, 2)");
 
@@ -901,7 +911,9 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.WAR_HRA_Calculated).HasColumnType("decimal(9, 2)");
 
-                entity.Property(e => e.WAR_LWF_Deduction_Calculated).HasColumnType("decimal(9, 2)");
+                entity.Property(e => e.WAR_LWF_Deduction_Employee).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_LWF_Deduction_Employer).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_LastModifiedOn).HasColumnType("datetime");
 

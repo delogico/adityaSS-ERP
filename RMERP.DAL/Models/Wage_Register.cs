@@ -46,7 +46,8 @@ namespace RMERP.DAL.Models
         public decimal? WAR_Attendance_Allowance_Calculated { get; set; }
         public decimal? WAR_Performance_Allowance_Calculated { get; set; }
         public decimal? WAR_Nightshift_Allowance_Calculated { get; set; }
-        public decimal? WAR_LWF_Deduction_Calculated { get; set; }
+        public decimal? WAR_LWF_Deduction_Employer { get; set; }
+        public decimal? WAR_LWF_Deduction_Employee { get; set; }
         public int? CLE_Id { get; set; }
 
         public Clients_Employees CLE_ { get; set; }

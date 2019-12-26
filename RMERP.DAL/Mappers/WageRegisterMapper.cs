@@ -37,8 +37,8 @@ namespace RMERP.DAL.Mappers
             wageRegisterVM.WAR_TotalPaybleDays = wageRegister.WAR_TotalPaybleDays;
             wageRegisterVM.WAR_TotalWorkingDays = wageRegister.WAR_TotalWorkingDays;
 
-            if (wageRegister.WAR_LWF_Deduction_Calculated != null)
-                wageRegisterVM.WAR_LWF_Deduction_Calculated = wageRegister.WAR_LWF_Deduction_Calculated.Value;
+            if (wageRegister.WAR_LWF_Deduction_Employee != null)
+                wageRegisterVM.WAR_LWF_Deduction_Calculated = wageRegister.WAR_LWF_Deduction_Employee.Value;
             if (wageRegister.WAR_ProffesionalTax_Calculated != null)
                 wageRegisterVM.WAR_ProffesionalTax_Calculated = wageRegister.WAR_ProffesionalTax_Calculated;
             if (wageRegister.WAR_RevenueDeduction_Calculated != null)
@@ -51,8 +51,8 @@ namespace RMERP.DAL.Mappers
                 wageRegisterVM.WAR_Attendance_Allowance_Calculated = wageRegister.WAR_Attendance_Allowance_Calculated.Value;
             if (wageRegister.WAR_Nightshift_Allowance_Calculated != null)
                 wageRegisterVM.WAR_Nightshift_Allowance_Calculated = wageRegister.WAR_Nightshift_Allowance_Calculated.Value;
-            if (wageRegister.WAR_LWF_Deduction_Calculated != null)
-                wageRegisterVM.WAR_LWF_Deduction_Calculated = wageRegister.WAR_LWF_Deduction_Calculated.Value;
+            if (wageRegister.WAR_LWF_Deduction_Employee != null)
+                wageRegisterVM.WAR_LWF_Deduction_Calculated = wageRegister.WAR_LWF_Deduction_Employee.Value;
             if (wageRegister.WAR_Performance_Allowance_Calculated != null)
                 wageRegisterVM.WAR_Performance_Allowance_Calculated = wageRegister.WAR_Performance_Allowance_Calculated.Value;
 
@@ -116,7 +116,7 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_Attendance_Allowance_Calculated = wageRegisterVM.WAR_Attendance_Allowance_Calculated;
             wageRegister.WAR_OutStation_Allowance_Calculated = wageRegisterVM.WAR_OutStation_Allowance_Calculated;
             wageRegister.WAR_Nightshift_Allowance_Calculated = wageRegisterVM.WAR_Nightshift_Allowance_Calculated;
-            wageRegister.WAR_LWF_Deduction_Calculated = wageRegisterVM.WAR_LWF_Deduction_Calculated;
+            wageRegister.WAR_LWF_Deduction_Employee = wageRegisterVM.WAR_LWF_Deduction_Calculated;
 
             wageRegister.WAR_Advance_Amount = wageRegisterVM.WAR_Advance_Amount;
             if (wageRegisterVM.employeeVM != null)
@@ -126,7 +126,7 @@ namespace RMERP.DAL.Mappers
             if (wageRegisterVM.allowanceVMs != null)
                 wageRegister.Wage_Register_Allowances = mapWageAllowancesList(wageRegisterVM.allowanceVMs);                       
 
-            wageRegister.WAR_LWF_Deduction_Calculated = wageRegisterVM.WAR_LWF_Deduction_Calculated;
+            wageRegister.WAR_LWF_Deduction_Employee = wageRegisterVM.WAR_LWF_Deduction_Calculated;
             wageRegister.CLE_Id = wageRegisterVM.CLE_Id;
 
             return wageRegister;
@@ -170,7 +170,7 @@ namespace RMERP.DAL.Mappers
             
             wageRegister.WAR_Attendance_Allowance_Calculated = wageRegisterVM.WAR_Attendance_Allowance_Calculated;
             wageRegister.WAR_OutStation_Allowance_Calculated = wageRegisterVM.WAR_OutStation_Allowance_Calculated;
-            wageRegister.WAR_LWF_Deduction_Calculated = wageRegisterVM.WAR_LWF_Deduction_Calculated;
+            wageRegister.WAR_LWF_Deduction_Employee = wageRegisterVM.WAR_LWF_Deduction_Employee;
             return wageRegister;
         }
 
@@ -247,14 +247,14 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_Attendance_Allowance_Calculated = wageRegisterVM.WAR_Attendance_Allowance_Calculated;
             wageRegister.WAR_OutStation_Allowance_Calculated = wageRegisterVM.WAR_OutStation_Allowance_Calculated;
             wageRegister.WAR_Nightshift_Allowance_Calculated = wageRegisterVM.WAR_Nightshift_Allowance_Calculated;
-            wageRegister.WAR_LWF_Deduction_Calculated = wageRegisterVM.WAR_LWF_Deduction_Calculated;
+            wageRegister.WAR_LWF_Deduction_Employee = wageRegisterVM.WAR_LWF_Deduction_Calculated;
 
             wageRegister.WAR_Advance_Amount = wageRegisterVM.WAR_Advance_Amount;
 
             if (wageRegisterVM.allowanceVMs != null)
                 wageRegister.Wage_Register_Allowances = mapWageAllowancesList(wageRegisterVM.allowanceVMs);
                        
-            wageRegister.WAR_LWF_Deduction_Calculated = wageRegisterVM.WAR_LWF_Deduction_Calculated;
+            wageRegister.WAR_LWF_Deduction_Employee = wageRegisterVM.WAR_LWF_Deduction_Calculated;
 
             return wageRegister;
         }
