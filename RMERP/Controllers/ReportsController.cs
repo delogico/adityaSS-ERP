@@ -3060,32 +3060,32 @@ namespace RMERP.Controllers
                     CellUtil.SetAlignment(celL_3, workbook, (short)HorizontalAlignment.Center);
 
                     ICell celL_4 = row.CreateCell(4);
-                    celL_4.SetCellValue(Convert.ToString(item.EMP_CONTR_BELOW_3K()));
+                    celL_4.SetCellValue(Convert.ToString(item.EMP_DEDUCTION_BELOW));
                     celL_4.CellStyle = Defaultstyle;
                     CellUtil.SetAlignment(celL_4, workbook, (short)HorizontalAlignment.Center);
 
                     ICell celL_5 = row.CreateCell(5);
-                    celL_5.SetCellValue(Convert.ToString(item.EMP_CONTR_ABOVE_3K()));
+                    celL_5.SetCellValue(Convert.ToString(item.EMP_DEDUCTION_ABOVE));
                     celL_5.CellStyle = Defaultstyle;
                     CellUtil.SetAlignment(celL_5, workbook, (short)HorizontalAlignment.Center);
 
                     ICell celL_6 = row.CreateCell(6);
-                    celL_6.SetCellValue(Convert.ToString(item.EMPLOYER_CONTR_BELOW_3K()));
+                    celL_6.SetCellValue(Convert.ToString(item.EMPLOYER_CONTR_BELOW));
                     celL_6.CellStyle = Defaultstyle;
                     CellUtil.SetAlignment(celL_6, workbook, (short)HorizontalAlignment.Center);
 
                     ICell celL_7 = row.CreateCell(7);
-                    celL_7.SetCellValue(Convert.ToString(item.EMPLOYER_CONTR_ABOVE_3K()));
+                    celL_7.SetCellValue(Convert.ToString(item.EMPLOYER_CONTR_ABOVE));
                     celL_7.CellStyle = Defaultstyle;
                     CellUtil.SetAlignment(celL_7, workbook, (short)HorizontalAlignment.Center);
 
                     EMP_BELOW_3K = EMP_BELOW_3K + item.EMP_BELOW_3K;
                     EMP_ABOVE_3K = EMP_ABOVE_3K + item.EMP_ABOVE_3K;
 
-                    EMP_CONTR_BELOW_3K = EMP_CONTR_BELOW_3K + (item.EMP_CONTR_BELOW_3K());
-                    EMP_CONTR_ABOVE_3K = EMP_CONTR_ABOVE_3K + (item.EMP_CONTR_ABOVE_3K());
-                    EMPLOYER_CONTR_BELOW_3K = EMPLOYER_CONTR_BELOW_3K + (item.EMPLOYER_CONTR_BELOW_3K());
-                    EMPLOYER_CONTR_ABOVE_3K = EMPLOYER_CONTR_ABOVE_3K + (item.EMPLOYER_CONTR_ABOVE_3K());
+                    EMP_CONTR_BELOW_3K = EMP_CONTR_BELOW_3K + (item.EMP_DEDUCTION_BELOW);
+                    EMP_CONTR_ABOVE_3K = EMP_CONTR_ABOVE_3K + (item.EMP_DEDUCTION_ABOVE);
+                    EMPLOYER_CONTR_BELOW_3K = EMPLOYER_CONTR_BELOW_3K + (item.EMPLOYER_CONTR_BELOW);
+                    EMPLOYER_CONTR_ABOVE_3K = EMPLOYER_CONTR_ABOVE_3K + (item.EMPLOYER_CONTR_ABOVE);
 
 
                     rowCount++;

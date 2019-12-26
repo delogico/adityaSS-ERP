@@ -18,14 +18,20 @@ namespace RMERP.DAL.ViewModel
         public decimal CRI_MLWF_Employee_LThen { get; set; }
 
 
-        public decimal EMP_CONTR_BELOW_3K() { return this.EMP_BELOW_3K * CRI_MLWF_Employee_LThen; } //RS.6
-        public decimal EMP_CONTR_ABOVE_3K() { return this.EMP_ABOVE_3K * CRI_MLWF_Employee_GThen; } //RS.12
-        public decimal EMPLOYER_CONTR_BELOW_3K() { return this.EMP_BELOW_3K * CRI_MLWF_Employer_LThen; } //RS.18
-        public decimal EMPLOYER_CONTR_ABOVE_3K() { return this.EMP_ABOVE_3K * CRI_MLWF_Employer_GThen; } //RS.36
+        //public decimal EMP_CONTR_BELOW_3K() { return this.EMP_BELOW_3K * CRI_MLWF_Employee_LThen; } //RS.6
+        //public decimal EMP_CONTR_ABOVE_3K() { return this.EMP_ABOVE_3K * CRI_MLWF_Employee_GThen; } //RS.12
+        //public decimal EMPLOYER_CONTR_BELOW_3K() { return this.EMP_BELOW_3K * CRI_MLWF_Employer_LThen; } //RS.18
+        //public decimal EMPLOYER_CONTR_ABOVE_3K() { return this.EMP_ABOVE_3K * CRI_MLWF_Employer_GThen; } //RS.36
 
 
-        //public decimal EMP_DEDUCTION { get; set; }      
-        //public decimal EMPLOYER_CONTR{ get; set; }
+        public decimal EMP_DEDUCTION_BELOW { get; set; }
+        public decimal EMP_DEDUCTION_ABOVE { get; set; }
+        public decimal EMPLOYER_CONTR_BELOW{ get; set; }
+        public decimal EMPLOYER_CONTR_ABOVE { get; set; }
+
+
+        public decimal MLWF_Employee_Base { get; set; }
+        public decimal MLWF_Employer_Base { get; set; }
 
 
     }
