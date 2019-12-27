@@ -2974,7 +2974,7 @@ namespace RMERP.Controllers
 
                 IRow rowSubHeading = excelSheet.CreateRow(2);
                 ICell CellSubHeading = rowSubHeading.CreateCell(0);
-                CellSubHeading.SetCellValue("DETAILS OF MLWF CONTRIBUTION FOR THE MONTH OF " + WAG_Month);
+                CellSubHeading.SetCellValue("DETAILS OF MLWF CONTRIBUTION FOR THE MONTH OF " + WAG_Month.ToString("MMM-yyyy").ToUpper());
                 CellSubHeading.CellStyle = styleBold;
                 CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 7));
@@ -2993,29 +2993,29 @@ namespace RMERP.Controllers
                 cell1.CellStyle = style;
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 1, 1));
                 ICell cell2 = row.CreateCell(2);
-                cell2.SetCellValue("NO. OF  \r\n EMPLOYEE  \r\n BELOW 3000/-");
+                cell2.SetCellValue("NO. OF  \r\n EMPLOYEE  \r\n BELOW "+ MLWF_ContributionReports[0].MLWF_Employee_Base + "/-");
                 excelSheet.SetColumnWidth(2, (int)((15 + 0.72) * 256));
                 cell2.CellStyle = style;
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 2, 2));
                 ICell cell3 = row.CreateCell(3);
-                cell3.SetCellValue("NO. OF  \r\n EMPLOYEE \r\n ABOVE 3000/-");
+                cell3.SetCellValue("NO. OF  \r\n EMPLOYEE \r\n ABOVE "+ MLWF_ContributionReports[0].MLWF_Employee_Base + "/-");
                 excelSheet.SetColumnWidth(3, (int)((15 + 0.72) * 256));
                 cell3.CellStyle = style;
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 3, 3));
                 ICell cell4 = row.CreateCell(4);
-                cell4.SetCellValue("EMPLOYEE \r\n CONTR. BELOW \r\n 3000/-");
+                cell4.SetCellValue("EMPLOYEE \r\n CONTR. BELOW \r\n "+ MLWF_ContributionReports[0].MLWF_Employee_Base + "/-");
                 excelSheet.SetColumnWidth(4, (int)((16 + 0.72) * 256));
                 cell4.CellStyle = style;
                 ICell cell5 = row.CreateCell(5);
-                cell5.SetCellValue("EMPLOYEE \r\n CONTR. ABOVE \r\n 3000/-");
+                cell5.SetCellValue("EMPLOYEE \r\n CONTR. ABOVE \r\n "+ MLWF_ContributionReports[0].MLWF_Employee_Base + "/-");
                 excelSheet.SetColumnWidth(5, (int)((16 + 0.72) * 256));
                 cell5.CellStyle = style;
                 ICell cell6 = row.CreateCell(6);
-                cell6.SetCellValue("EMPLOYER \r\n CONTR. BELOW \r\n 3000/-");
+                cell6.SetCellValue("EMPLOYER \r\n CONTR. BELOW \r\n "+ MLWF_ContributionReports[0].MLWF_Employer_Base + "/-");
                 excelSheet.SetColumnWidth(6, (int)((16 + 0.72) * 256));
                 cell6.CellStyle = style;
                 ICell cell7 = row.CreateCell(7);
-                cell7.SetCellValue("EMPLOYER \r\n CONTR. ABOVE  \r\n 3000/-");
+                cell7.SetCellValue("EMPLOYER \r\n CONTR. ABOVE  \r\n "+ MLWF_ContributionReports[0].MLWF_Employer_Base + "/-");
                 excelSheet.SetColumnWidth(7, (int)((16 + 0.72) * 256));
                 cell7.CellStyle = style;
 
