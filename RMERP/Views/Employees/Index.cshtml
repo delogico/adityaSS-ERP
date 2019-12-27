@@ -59,32 +59,38 @@
             <div class="col-md-4 well">
                 @using (Html.BeginForm("SearchEmployee", "Employees", FormMethod.Post))
                 {
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                @if (Model.Item2 > 0)
-                                {
-                                    @Html.Hidden("FRM_Id", Model.Item2)
-                                    @Html.DropDownList("FRM_Id", new SelectList(ViewBag.FirmList, "FRM_Id", "FRM_Name", Model.Item2), "Select Firm", new { @class = "form-control", disabled = "disabled" })
-                                }
-                                else
-                                {
-                                    @Html.DropDownList("FRM_Id", new SelectList(ViewBag.FirmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control" })
-                                }
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @if (Model.Item2 > 0)
+                            {
+                                @Html.Hidden("FRM_Id", Model.Item2)
+                                @Html.DropDownList("FRM_Id", new SelectList(ViewBag.FirmList, "FRM_Id", "FRM_Name", Model.Item2), "Select Firm", new { @class = "form-control", disabled = "disabled" })
+                            }
+                            else
+                            {
+                                @Html.DropDownList("FRM_Id", new SelectList(ViewBag.FirmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control" })
+                            }
                         </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                @Html.CheckBox("EMP_UAN_Number", false)Employee without UAN Number
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                @Html.CheckBox("EMP_ESIC_Number", false)Employee without ESIC Number
-                            </div>
-                        </div>
-
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.CheckBox("EMP_UAN_Number", false)Employee without UAN Number
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.CheckBox("EMP_ESIC_Number", false)Employee without ESIC Number
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.Label("Aadhar Number")
+                            @Html.TextBox("EMP_Aadhar_Number","", new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                </div>
                     <div class="m-t-20 text-center">
                         <input type="submit" id="submit" class="btn btn-primary" value="Search" />
                     </div>

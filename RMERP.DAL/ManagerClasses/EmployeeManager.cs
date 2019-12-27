@@ -147,35 +147,30 @@ namespace RMERP.DAL.ManagerClasses
             return _context.Employees.Any(m => m.EMP_Aadhar_Number.Equals(AadharNumber) && m.EMP_Id != EMP_Id);
         }
 
-        public List<Employees> SearchEmployees(int FRM_Id, bool EMP_UAN_Number, bool EMP_ESIC_Number)
+        public List<Employees> SearchEmployees(int FRM_Id, bool EMP_UAN_Number, bool EMP_ESIC_Number,string EMP_Aadhar_Number)
         {
-            List<Employees> list = new List<Employees>();
-
+            IQueryable<Employees> list = null;          
             if (FRM_Id > 0)
             {
-                list = _context.Employees.Where(m => m.FRM_Id.Equals(FRM_Id)).Include(m => m.FRM_).ToList();
+                list = _context.Employees.Where(m => m.FRM_Id.Equals(FRM_Id)).Include(m => m.FRM_);
             }
             else
             {
-                list = _context.Employees.Include(m => m.FRM_).ToList();
+                list = _context.Employees.Include(m => m.FRM_);
             }
             if (EMP_UAN_Number == true)
             {
-                list = list.Where(m => m.EMP_UAN_Number == null || m.EMP_UAN_Number == "").ToList();
-            }
-            //else
-            //{
-            //    list = list.Where(m => m.EMP_UAN_Number != null && m.EMP_UAN_Number != "").ToList();
-            //}            
+                list = list.Where(m => m.EMP_UAN_Number == null || m.EMP_UAN_Number == "");
+            }                      
             if (EMP_ESIC_Number == true)
             {
-                list = list.Where(m => m.EMP_ESIC_Number == null || m.EMP_ESIC_Number == "").ToList();
+                list = list.Where(m => m.EMP_ESIC_Number == null || m.EMP_ESIC_Number == "");
             }
-            //else
-            //{
-            //    list = list.Where(m => m.EMP_ESIC_Number != null && m.EMP_ESIC_Number != "").ToList();
-            //}
-            return list;
+            if (!string.IsNullOrEmpty(EMP_Aadhar_Number))
+            {
+                list = list.Where(m => m.EMP_Aadhar_Number.Contains(EMP_Aadhar_Number));
+            }
+            return list.ToList();
         }
 
         public int GetTotalEmployees()

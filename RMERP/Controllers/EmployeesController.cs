@@ -69,10 +69,10 @@ namespace RMERP.Controllers
 
         }
         [HttpPost]
-        public IActionResult SearchEmployee(int FRM_Id, bool EMP_UAN_Number, bool EMP_ESIC_Number)
+        public IActionResult SearchEmployee(int FRM_Id, bool EMP_UAN_Number, bool EMP_ESIC_Number,string EMP_Aadhar_Number)
         {
             EmployeeManager employeeManager = new EmployeeManager(_context);
-            List<EmployeeVM> listVM = EmployeesMapper.MapEmployees(employeeManager.SearchEmployees(FRM_Id, EMP_UAN_Number, EMP_ESIC_Number));
+            List<EmployeeVM> listVM = EmployeesMapper.MapEmployees(employeeManager.SearchEmployees(FRM_Id, EMP_UAN_Number, EMP_ESIC_Number, EMP_Aadhar_Number));
             FirmsManager firmsManager = new FirmsManager(_context);
             ViewBag.FirmList = firmsManager.getFirmList();
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
@@ -81,6 +81,14 @@ namespace RMERP.Controllers
             {
                 Firm_Id = sessionUtils.GetLoggedFirmID().Value;
             }
+            IEnumerable<EMPLOYEE_LEFT_REASON_CODE> REASON_CODE = Enum.GetValues(typeof(EMPLOYEE_LEFT_REASON_CODE))
+                                                       .Cast<EMPLOYEE_LEFT_REASON_CODE>();
+            ViewBag.Reason_Code = from action in REASON_CODE
+                                  select new SelectListItem
+                                  {
+                                      Text = ProjectUtils.GetStringValue(action),
+                                      Value = ((int)action).ToString()
+                                  };
             return View("Index", new Tuple<IEnumerable<EmployeeVM>, int>(listVM, Firm_Id));
         }
 
