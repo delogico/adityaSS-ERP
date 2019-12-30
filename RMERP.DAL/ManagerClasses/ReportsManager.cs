@@ -1032,6 +1032,12 @@ namespace RMERP.DAL.ManagerClasses
             paySlipVM.WAR_RevenueDeduction_Calculated = WAR_RevenueDeduction_Calculated;
             paySlipVM.WAR_CanteenFacility_Calculation = WAR_CanteenFacility_Calculation;
             paySlipVM.WAR_OverTime_Calculated = WAR_OverTime_Calculated;
+
+            paySlipVM.WAR_Outstation_Allowance_Calculated = WAR_Outstation_Allowance_Calculated;
+            paySlipVM.WAR_Nightshift_Allowance_Calculated = WAR_Nightshift_Allowance_Calculated;
+            paySlipVM.WAR_Performance_Allowance_Calculated = WAR_Performance_Allowance_Calculated;
+            paySlipVM.WAR_Attendance_Allowance_Calculated = WAR_Attendance_Allowance_Calculated;
+            
             decimal DeductTotal = WAR_PF_Calculated + WAR_ESIC_Calculated + WAR_ProffesionalTax_Calculated + WAR_LWF_Deduction_Calculated + WAR_Advance_Amount+ WAR_RevenueDeduction_Calculated+ WAR_CanteenFacility_Calculation;
             paySlipVM.DeductTotal = DeductTotal;
 
