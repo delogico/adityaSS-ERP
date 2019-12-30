@@ -34,7 +34,7 @@ namespace RMERP.DAL.ManagerClasses
             }
             catch (Exception ex)
             {
-                res = ex.Message;
+                res = ex.Message + " More => " + ex.InnerException.Message;
             }
             return res;
         }

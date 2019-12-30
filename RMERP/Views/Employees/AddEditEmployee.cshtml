@@ -92,7 +92,7 @@
             }
         };
         $("#EMP_State").change(function () {
-            
+
             var items = "<option value='0'>Select City</option>";
             $("#EMP_City").html(items);
             GetCity();
@@ -131,18 +131,22 @@
         };
 
     </script>
-    @if (TempData["message"] != null)
-    {
-        <script>
-            $(document).ready(function () {
-            alert('@TempData["message"]');
-        });
-        </script>
-    };
+    @*@if (TempData["message"] != null)
+        {
+            <script>
+                $(document).ready(function () {
+                alert('@TempData["message"]');
+            });
+            </script>
+        };*@
 
 }
 
 <h3>@Model.EMP_FullName</h3>
+@if (TempData["message"] != null)
+{
+ <div class="alert alert-danger">@TempData["message"]</div> 
+}
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#AddEditEmployee">Edit data</a></li>
     <li><a data-toggle="tab" href="#EmployeeDocuments">Employee Documents</a></li>
@@ -169,7 +173,7 @@
                             @Html.HiddenFor(m => m.EMP_Is_IDBI_Other)
                             @Html.HiddenFor(m => m.EMP_Account_Name)
                             @Html.HiddenFor(m => m.EMP_Account_Number)
-                            @Html.HiddenFor(m => m.EMP_Bank,new { id="bank"})
+                            @Html.HiddenFor(m => m.EMP_Bank, new { id = "bank" })
                             @Html.HiddenFor(m => m.EMP_Bank_IFSC)
                             @Html.HiddenFor(m => m.EMP_Branch)
                             <p class="div-title">Firm</p>
@@ -338,7 +342,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.EMP_ESIC_Number, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_ESIC_Number, new { @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.EMP_ESIC_Number, new { @class = "form-control", @maxlength=10 })
                                         @Html.ValidationMessageFor(m => m.EMP_ESIC_Number, "", new { @class = "text-danger" })
                                     </div>
                                 </div>

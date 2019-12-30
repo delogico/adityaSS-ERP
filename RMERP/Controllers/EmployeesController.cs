@@ -146,8 +146,16 @@ namespace RMERP.Controllers
             }
             else
             {
-                TempData["message"] = "Employee data can not Inserted";
-                return RedirectToAction("AddEditEmployee", new { EMP_Id = employeeVM.EMP_Id });
+                TempData["message"] = "Employee data can not Inserted.";
+                //return RedirectToAction("AddEditEmployee", new { EMP_Id = employeeVM.EMP_Id });
+                DocumentTypesManager typesManager = new DocumentTypesManager(_context);
+                FirmsManager firmsManager = new FirmsManager(_context);
+                IEnumerable<Firms> listFirms = new List<Firms>();
+                listFirms = firmsManager.getFirmList();
+                ViewBag.firmList = listFirms;
+                ViewBag.DocumentTypes = typesManager.GetDocumentTypes();
+                ViewBag.States = employeeManager.GetStates();
+                return View("AddEditEmployee",employeeVM);
             }
 
         }
