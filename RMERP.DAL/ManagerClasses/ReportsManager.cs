@@ -211,18 +211,13 @@ namespace RMERP.DAL.ManagerClasses
                 bankReportVM.EMP_ACCOUNT_NUMBER = item.EMP_.EMP_Account_Number;
                 bankReportVM.EMP_CURRENCY_CODE = "INR";
 
-                string IFSC_Code = item.EMP_.EMP_Bank_IFSC;
-                string IFSC = IFSC_Code.Substring(IFSC_Code.Length - 3);
-                int code;
-                if (Int32.TryParse(IFSC, out code))
+                string IFSC_Code = item.EMP_.EMP_Bank_IFSC;               
+                string IFSC = "";
+                if (!string.IsNullOrEmpty(IFSC_Code))
                 {
-                    code = Convert.ToInt32(IFSC_Code.Substring(IFSC_Code.Length - 3));
-                    bankReportVM.EMP_SERVICE_OUTLET = code.ToString("D4");
+                    IFSC = IFSC_Code.Substring(IFSC_Code.Length - 4);
                 }
-                else
-                {
-                    bankReportVM.EMP_SERVICE_OUTLET = "";
-                }
+                bankReportVM.EMP_SERVICE_OUTLET = IFSC;
                 bankReportVM.EMP_PART_TRAN_TYPE = "C";
                 bankReportVM.EMP_TRANSACTION_AMOUNT = item.ADV_Amount;
 
@@ -588,18 +583,12 @@ namespace RMERP.DAL.ManagerClasses
                 bankReport.EMP_ACCOUNT_NUMBER = item.EMP_.EMP_Account_Number;
                 bankReport.EMP_CURRENCY_CODE = "INR";
                 string IFSC_Code = item.EMP_.EMP_Bank_IFSC;
-                string IFSC = IFSC_Code.Substring(IFSC_Code.Length - 3);
-                int code;
-                if (Int32.TryParse(IFSC, out code))
+                string IFSC = "";
+                if (!string.IsNullOrEmpty(IFSC_Code))
                 {
-                    code = Convert.ToInt32(IFSC_Code.Substring(IFSC_Code.Length - 3));
-                    bankReport.EMP_SERVICE_OUTLET = code.ToString("D4");
-                }
-                else
-                {
-                    bankReport.EMP_SERVICE_OUTLET = "";
-                }
-
+                    IFSC = IFSC_Code.Substring(IFSC_Code.Length - 4);
+                }                
+                bankReport.EMP_SERVICE_OUTLET = IFSC;
                 bankReport.EMP_PART_TRAN_TYPE = "C";
                 bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
                 DateTime WAG_Month = wage_Registers.First().WAG_.WAG_Month;
