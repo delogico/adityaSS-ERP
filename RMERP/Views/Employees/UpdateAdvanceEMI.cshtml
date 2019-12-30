@@ -77,34 +77,34 @@
                                         @Html.CheckBoxFor(m => item.WAD_Is_LoanCompleted, new { @id = "WAD_Is_LoanCompleted_" + @item.EMP_Id }) Consider Loan Completed
                                     </td>
                                 }
-                                <td>
-                                    @if (!item.WAD_Status)
+                            <td>
+                                @if (!item.WAD_Status)
+                                {
+                                    if (!Model.WAG_.WAG_Status)
                                     {
-                                        if (!Model.WAG_.WAG_Status)
+                                        @if (!item.WAD_Is_LoanCompleted)
                                         {
-                                            @if (!item.WAD_Is_LoanCompleted)
+                                            @if (item.WAD_Id > 0)
                                             {
-                                                @if (item.WAD_Id > 0)
-                                                {
-                                                    <a onclick="AddAdvanceEMI(@item.EMP_Id)" class="btn btn-warning btn-xs" title="Edit">Edit</a>
-                                                }
-                                                else
-                                                {
-                                                    <a onclick="AddAdvanceEMI(@item.EMP_Id)" class="btn btn-success btn-xs" title="Add">Add</a>
-                                                }
+                                                <a onclick="AddAdvanceEMI(@item.EMP_Id)" class="btn btn-warning btn-xs" title="Edit">Edit</a>
+                                                <a onclick="DeleteAdvanceEMI(@item.WAD_Id)" class="btn btn-danger btn-xs" title="Edit">Delete</a>
                                             }
-                                        }
-                                        else
-                                        {
-                                            <span class="text text-warning">Wage Process for this month is Closed.</span>
+                                            else
+                                            {
+                                                <a onclick="AddAdvanceEMI(@item.EMP_Id)" class="btn btn-success btn-xs" title="Add">Add</a>
+                                            }
                                         }
                                     }
                                     else
                                     {
-                                        <span class="text text-success">Loan is Closed.</span>
+                                        <span class="text text-warning">Wage Process for this month is Closed.</span>
                                     }
-                                </td>
-
+                                }
+                                else
+                                {
+                                    <span class="text text-success">Loan is Closed.</span>
+                                }
+                            </td>                                
                             </tr>
                             }
                         </tbody>
@@ -130,6 +130,25 @@
                 callAPI(WAD_Id, EMP_Id, WAD_Amount, Checked);
             }
         };
+
+        function DeleteAdvanceEMI(WAD_Id) {  
+            var Url = siteUrl + "Employees/DeleteAdvanceEMI?WAD_Id=" + WAD_Id;
+            if (window.confirm("Are You Sure You Wants To Delete?")) {
+                     $.ajax({
+                    type: "GET",
+                    url: Url,
+                         success: function (data) {                          
+                        if (data == "ok") {
+                            location.reload();
+                        } else {
+                            alert("Try Again!");
+                        }
+                        
+                    }
+                });
+                }
+        };
+
         function callAPI(WAD_Id, EMP_Id, WAD_Amount, WAD_Is_LoanCompleted) {
             var Url = siteUrl + "Employees/AddAdvanceEMI?WAD_Id=" + WAD_Id + "&EMP_Id=" + EMP_Id + "&WAG_Id=" +@Model.WAG_.WAG_Id+"&WAD_Amount=" + WAD_Amount + "&WAD_Is_LoanCompleted=" + WAD_Is_LoanCompleted;
                 $.ajax({

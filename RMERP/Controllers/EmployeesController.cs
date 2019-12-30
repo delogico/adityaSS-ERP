@@ -383,7 +383,21 @@ namespace RMERP.Controllers
                  
         }
 
-        
+        public string DeleteAdvanceEMI(int WAD_Id)
+        {
+            AdvanceWageRegisterManager advanceManager = new AdvanceWageRegisterManager(_context);
+            try
+            {
+                advanceManager.DeleteAdvanceEMI(WAD_Id);
+                return "ok";
+            }
+            catch (Exception)
+            {
+                //TempData["message"] = "Employee Advance can not deleted";
+                return "ko";
+            }
+
+        }
         [HttpPost]
         public async Task<ActionResult> AddEmployeeDocuments(EmployeeVM employeeVM)
         {
@@ -495,6 +509,8 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("Index");
         }
+
+
 
     }
 }

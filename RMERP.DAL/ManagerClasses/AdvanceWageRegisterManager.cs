@@ -127,5 +127,12 @@ namespace RMERP.DAL.ManagerClasses
                                             }).ToList();
             return result;
         }
+
+        public void DeleteAdvanceEMI(int WAD_Id)
+        {
+            var WagAdvance = _context.Wage_Register_Advances.Find(WAD_Id);
+            _context.Wage_Register_Advances.Remove(WagAdvance);
+            _context.SaveChanges();
+        }
     }
 }
