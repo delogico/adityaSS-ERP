@@ -441,9 +441,11 @@ namespace RMERP.DAL.ManagerClasses
                             (item.WAR_OutStation_Allowance_Calculated != null ? item.WAR_OutStation_Allowance_Calculated.Value : 0),
                             (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
                             (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
-                            (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));              
+                            (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));      
+                
                 decimal EPF_CONTRIBUTION = (ApplicableSalary * Convert.ToDecimal(item.CRI_.CRI_PF_Percentage)) / 100;
                 decimal EPS_CONTRIBUTION =(ApplicableSalary * Convert.ToDecimal(item.CRI_.CRI_EPS_Rate)) / 100;
+
                 PFClientReportVM pFClient = new PFClientReportVM();
                 pFClient.EMP_Id = item.EMP_Id;
                 pFClient.UAN_Number = item.EMP_.EMP_UAN_Number;
@@ -452,7 +454,7 @@ namespace RMERP.DAL.ManagerClasses
                 pFClient.EMP_SurName = item.EMP_.EMP_SurName;
                 pFClient.PF_APPLICABLE_SALARY = ApplicableSalary;
                 pFClient.EPF_CONTRIBUTION = EPF_CONTRIBUTION;
-                pFClient.EPS_CONTRIBUTION = EPS_CONTRIBUTION;
+                pFClient.EPS_CONTRIBUTION = EPS_CONTRIBUTION;                
                 pFClient.NCP1 = 0;
                 pFClient.NCP2 = 0;
                 reportVMs.Add(pFClient);
@@ -652,7 +654,7 @@ namespace RMERP.DAL.ManagerClasses
                 bankReport.EMP_FirstName = item.EMP_.EMP_FirstName;
                 bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
                 bankReport.EMP_SurName = item.EMP_.EMP_SurName;
-                bankReport.EMP_ADDRESS = item.EMP_.EMP_CityNavigation?.CITY_Name;
+                bankReport.EMP_ADDRESS = item.CLI_.CLI_Invoicing_Location;
                 bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
                 bankReportVMs.Add(bankReport);
             }
@@ -927,8 +929,8 @@ namespace RMERP.DAL.ManagerClasses
         public List<Employees> GetLeftEmployeesOfPrevMonth(DateTime Wag_Month)
         {
             DateTime date = Wag_Month.AddMonths(-1);
-            DateTime StartDate = new DateTime(date.Year, date.Month, 1); //1-march-18
-            DateTime EndDate = new DateTime(date.Year, date.Month, 1).AddMonths(1).AddDays(-1); //31-march-18
+            DateTime StartDate = new DateTime(date.Year, date.Month, 1); //1-nov-18
+            DateTime EndDate = new DateTime(date.Year, date.Month, 1).AddMonths(1).AddDays(-1); //30-nov-18
             List<Employees> emp = _context.Employees.Where(m => m.EMP_InactivatedOn.Value.Date <= EndDate.Date && m.EMP_InactivatedOn >= StartDate).ToList();
             return emp;
         }

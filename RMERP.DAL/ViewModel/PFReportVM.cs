@@ -77,14 +77,15 @@ namespace RMERP.DAL.ViewModel
         public string UAN_Number { get; set; }
         public decimal EPF_CONTRIBUTION { get; set; }
         public decimal EPS_CONTRIBUTION { get; set; }
-        public decimal DIFF_EPF_EPS
-        {
-            get
-            {
-                return (EPF_CONTRIBUTION - EPS_CONTRIBUTION);
-                
-            }
-        }
+       
+        //public decimal DIFF_EPF_EPS
+        //{
+        //    get
+        //    {
+        //        return (EPF_CONTRIBUTION - EPS_CONTRIBUTION);
+
+        //    }
+        //}
         public int NCP1 { get; set; }
         public int NCP2 { get; set; }
     }

@@ -1376,8 +1376,7 @@ namespace RMERP.Controllers
                                EMP_FullName = g.Key.EMP_FullName,
                                PF_APPLICABLE_SALARY = g.Sum(x => x.PF_APPLICABLE_SALARY),
                                EPF_CONTRIBUTION = g.Sum(x => x.EPF_CONTRIBUTION),
-                               EPS_CONTRIBUTION = g.Sum(x => x.EPS_CONTRIBUTION),
-                               DIFF_EPF_EPS = g.Sum(X => X.DIFF_EPF_EPS),
+                               EPS_CONTRIBUTION = g.Sum(x => x.EPS_CONTRIBUTION),                               
                                NCP1 = g.Sum(x => x.NCP1),
                                NCP2 = g.Sum(x => x.NCP2)
                            });
@@ -1387,7 +1386,7 @@ namespace RMERP.Controllers
                     decimal PF_APPLICABLE_SALARY = Math.Round(item.PF_APPLICABLE_SALARY, MidpointRounding.AwayFromZero);
                     decimal EPF_CONTRIBUTION = Math.Round(item.EPF_CONTRIBUTION, MidpointRounding.AwayFromZero);
                     decimal EPS_CONTRIBUTION = Math.Round(item.EPS_CONTRIBUTION, MidpointRounding.AwayFromZero);
-                    decimal DIFF_EPF_EPS = Math.Round(item.DIFF_EPF_EPS, MidpointRounding.AwayFromZero);
+                    decimal DIFF_EPF_EPS = Math.Round(EPF_CONTRIBUTION- EPS_CONTRIBUTION);
                     row = excelSheet.CreateRow(rowCount);
                     row.HeightInPoints = (float)(1.4 * excelSheet.DefaultRowHeightInPoints);
                     row.CreateCell(0).SetCellValue(Convert.ToString(item.UAN_Number));
