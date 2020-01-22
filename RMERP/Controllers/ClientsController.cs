@@ -1166,6 +1166,7 @@ namespace RMERP.Controllers
             IEnumerable<Clients_Employees> employees = clientsManager.listActiveClientsEmployees(ClientId, month);
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
             string fileName = "Template_" + month.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_TwoRow.xlsx";
+            string fullMonthName = month.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
             string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
             FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
             var memory = new MemoryStream();
@@ -1199,6 +1200,14 @@ namespace RMERP.Controllers
                 style.BorderTop = (BorderStyle.Thin);
                 style.TopBorderColor = (IndexedColors.Black.Index);
 
+                IFont fontSubHead = workbook.CreateFont();
+                fontSubHead.IsBold = true;
+                fontSubHead.FontHeightInPoints = ((short)14);
+                fontSubHead.FontName = ("Cambria");
+                ICellStyle styleDesignation = workbook.CreateCellStyle();
+                styleDesignation.FillBackgroundColor = HSSFColor.BlueGrey.Index;
+                styleDesignation.SetFont(fontSubHead);
+
                 IRow row = excelSheet.CreateRow(0);
                 row.Height = 500;
 
@@ -1207,19 +1216,42 @@ namespace RMERP.Controllers
 
 
                 ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue(client.CLI_Name);
+                CellHeader.SetCellValue(client.FRM_.FRM_Name);
                 CellHeader.CellStyle = styleHeader;
                 CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 7));
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays));
 
-                ICell CellMonth = row.CreateCell(TotalDays - 6);
-                string fullMonthName = month.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
-                CellMonth.SetCellValue(fullMonthName + "-" + month.ToString("yy"));
-                CellMonth.CellStyle = styleHeader;
-                CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 6, TotalDays));
+                #region added new on 22 jan 2020
+                IRow rowAdd1 = excelSheet.CreateRow(1);
+                ICell CellAdd1 = rowAdd1.CreateCell(0);
+                CellAdd1.SetCellValue(client.FRM_.FRM_Address1.ToUpper() + "," + client.FRM_.FRM_Address2.ToUpper() + ",");
+                CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(1,1, 0, TotalDays));
 
-                row = excelSheet.CreateRow(1);
+                IRow rowSubHeading = excelSheet.CreateRow(2);
+                ICell CellSubHeading = rowSubHeading.CreateCell(0);
+                CellSubHeading.SetCellValue("ATTENDANCE FOR THE MONTH OF " + fullMonthName.ToUpper() + "-" + month.ToString("yy"));
+                CellSubHeading.CellStyle = styleDesignation;
+                CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, TotalDays));
+
+                IRow rowClient = excelSheet.CreateRow(3);
+                ICell CellClient = rowClient.CreateCell(0);
+                CellClient.SetCellValue(client.CLI_Name.ToString());
+                CellClient.CellStyle = styleDesignation;
+                CellUtil.SetAlignment(CellClient, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, TotalDays));
+
+                #endregion
+
+                //ICell CellMonth = row.CreateCell(TotalDays - 6);
+               
+                //CellMonth.SetCellValue(fullMonthName + "-" + month.ToString("yy"));
+                //CellMonth.CellStyle = styleHeader;
+                //CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
+                //excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 6, TotalDays));
+
+                row = excelSheet.CreateRow(4);
                 row.HeightInPoints = ((5 * excelSheet.DefaultRowHeightInPoints));
                 //excelSheet.AutoSizeColumn(1);
 
@@ -1248,7 +1280,7 @@ namespace RMERP.Controllers
                     i++;
                 }
 
-                int rowCount = 2;
+                int rowCount = 5;
                 int j = 1;
                 foreach (var item in employees)
                 {
@@ -1302,6 +1334,7 @@ namespace RMERP.Controllers
             IEnumerable<Clients_Employees> employees = clientsManager.listActiveClientsEmployees(ClientId, month);
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
             string fileName = "Template_" + month.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_OneRow.xlsx";
+            string fullMonthName = month.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
             string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
             FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
             var memory = new MemoryStream();
@@ -1335,6 +1368,14 @@ namespace RMERP.Controllers
                 style.BorderTop = (BorderStyle.Thin);
                 style.TopBorderColor = (IndexedColors.Black.Index);
 
+                IFont fontSubHead = workbook.CreateFont();
+                fontSubHead.IsBold = true;
+                fontSubHead.FontHeightInPoints = ((short)14);
+                fontSubHead.FontName = ("Cambria");
+                ICellStyle styleDesignation = workbook.CreateCellStyle();
+                styleDesignation.FillBackgroundColor = HSSFColor.BlueGrey.Index;
+                styleDesignation.SetFont(fontSubHead);
+
                 IRow row = excelSheet.CreateRow(0);
                 row.Height = 500;
 
@@ -1343,22 +1384,37 @@ namespace RMERP.Controllers
 
 
                 ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue(client.CLI_Name);
+                CellHeader.SetCellValue(client.FRM_.FRM_Name);
                 CellHeader.CellStyle = styleHeader;
                 CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 7));
+                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays));
 
-                ICell CellMonth = row.CreateCell(TotalDays - 6);
-                string fullMonthName = month.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
-                CellMonth.SetCellValue(fullMonthName + "-" + month.ToString("yy"));
-                CellMonth.CellStyle = styleHeader;
-                CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 6, TotalDays));
+                #region added new on 22 jan 2020
+                IRow rowAdd1 = excelSheet.CreateRow(1);
+                ICell CellAdd1 = rowAdd1.CreateCell(0);
+                CellAdd1.SetCellValue(client.FRM_.FRM_Address1.ToUpper() + "," + client.FRM_.FRM_Address2.ToUpper() + ",");
+                CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, TotalDays));
 
-                row = excelSheet.CreateRow(1);
+                IRow rowSubHeading = excelSheet.CreateRow(2);
+                ICell CellSubHeading = rowSubHeading.CreateCell(0);
+                CellSubHeading.SetCellValue("ATTENDANCE FOR THE MONTH OF " + fullMonthName.ToUpper() + "-" + month.ToString("yy"));
+                CellSubHeading.CellStyle = styleDesignation;
+                CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, TotalDays));
+
+                IRow rowClient = excelSheet.CreateRow(3);
+                ICell CellClient = rowClient.CreateCell(0);
+                CellClient.SetCellValue(client.CLI_Name.ToString());
+                CellClient.CellStyle = styleDesignation;
+                CellUtil.SetAlignment(CellClient, workbook, (short)HorizontalAlignment.Center);
+                excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, TotalDays));
+
+                #endregion               
+
+                row = excelSheet.CreateRow(4);
                 row.HeightInPoints = ((5 * excelSheet.DefaultRowHeightInPoints));
-                //excelSheet.AutoSizeColumn(1);
-
+                
 
                 ICell cell0 = row.CreateCell(0);
                 cell0.SetCellValue("SR.NO");
@@ -1384,7 +1440,7 @@ namespace RMERP.Controllers
                     i++;
                 }
 
-                int rowCount = 2;
+                int rowCount = 5;
                 int j = 1;
                 foreach (var item in employees)
                 {

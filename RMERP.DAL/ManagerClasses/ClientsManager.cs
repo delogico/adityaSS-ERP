@@ -119,7 +119,7 @@ namespace RMERP.DAL.ManagerClasses
             Clients clients = new Clients();
             try
             {
-                clients = _contaxt.Clients.Find(CLI_Id);
+                clients = _contaxt.Clients.Where(m=>m.CLI_Id.Equals(CLI_Id)).Include(m => m.FRM_).First();
             }
             catch (Exception ex)
             {

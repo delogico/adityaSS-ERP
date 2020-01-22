@@ -124,7 +124,7 @@ namespace RMERP.Controllers
             DateTime wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM").ToUpper() + "-" + wageMonth.ToString("yyyy");
 
-            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+            string newPath = GetTempFolderPath(_hostingEnvironment.WebRootPath);
             string fileName = "Wage_Register_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
             string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
             FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
