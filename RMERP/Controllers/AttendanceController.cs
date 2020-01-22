@@ -184,7 +184,7 @@ namespace RMERP.Controllers
             List<Attendance> attandanceList = new List<Attendance>();
             List<ExcelRowViewModel> rows = new List<ExcelRowViewModel>();
             IRow headerRow = sheet.GetRow(0);
-            IRow secondRow = sheet.GetRow(1);
+            IRow secondRow = sheet.GetRow(4);
             int cellCount = secondRow.LastCellNum;
             int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
             int TotEmp = 0;
@@ -206,7 +206,7 @@ namespace RMERP.Controllers
             //        totalPublicHolidays++;
             //}
 
-            for (int i = (sheet.FirstRowNum + 2); i <= sheet.LastRowNum; i += 2)
+            for (int i = (sheet.FirstRowNum + 5); i <= sheet.LastRowNum; i += 2)
             {
                 ExcelRowViewModel excelRow = new ExcelRowViewModel();
                 IRow row = sheet.GetRow(i);
@@ -379,7 +379,7 @@ namespace RMERP.Controllers
             List<Attendance> attandanceList = new List<Attendance>();
             List<ExcelRowViewModel> rows = new List<ExcelRowViewModel>();
             IRow headerRow = sheet.GetRow(0);
-            IRow secondRow = sheet.GetRow(1);
+            IRow secondRow = sheet.GetRow(4);
             int cellCount = secondRow.LastCellNum;
             int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
             int totalPublicHolidays = 0;
@@ -396,7 +396,7 @@ namespace RMERP.Controllers
                 startDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, intStartDate);
             }
             endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, Convert.ToInt16(secondRow.GetCell(cellCount - 1).ToString()));
-            for (int i = (sheet.FirstRowNum + 2); i <= sheet.LastRowNum; i += 2)
+            for (int i = (sheet.FirstRowNum + 5); i <= sheet.LastRowNum; i += 2)
             {
                 ExcelRowViewModel excelRow = new ExcelRowViewModel();
                 IRow row = sheet.GetRow(i);
@@ -617,7 +617,7 @@ namespace RMERP.Controllers
             List<Attendance> attandanceList = new List<Attendance>();
             List<ExcelRowViewModel> rows = new List<ExcelRowViewModel>();
             IRow headerRow = sheet.GetRow(0);
-            IRow secondRow = sheet.GetRow(1);
+            IRow secondRow = sheet.GetRow(4);
             int cellCount = secondRow.LastCellNum;
             int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
             int totalPublicHolidays = 0;
@@ -641,7 +641,7 @@ namespace RMERP.Controllers
             endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, Convert.ToInt16(secondRow.GetCell(cellCount - 1).ToString()));
 
             IRow rowHeader = sheet.GetRow(1);
-            for (int i = (sheet.FirstRowNum + 2); i <= sheet.LastRowNum; i++)
+            for (int i = (sheet.FirstRowNum + 5); i <= sheet.LastRowNum; i++)
             {
                 ExcelRowViewModel excelRow = new ExcelRowViewModel();
                 IRow row = sheet.GetRow(i);
