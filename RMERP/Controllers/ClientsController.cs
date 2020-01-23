@@ -1199,7 +1199,8 @@ namespace RMERP.Controllers
                 style.RightBorderColor = (IndexedColors.Black.Index);
                 style.BorderTop = (BorderStyle.Thin);
                 style.TopBorderColor = (IndexedColors.Black.Index);
-
+                style.WrapText = true;
+                
                 IFont fontSubHead = workbook.CreateFont();
                 fontSubHead.IsBold = true;
                 fontSubHead.FontHeightInPoints = ((short)14);
@@ -1273,9 +1274,10 @@ namespace RMERP.Controllers
                 while (period[1] >= tmpDate)
                 {
                     ICell c = row.CreateCell(i);
-                    c.SetCellValue(tmpDate.Day);
+                    c.SetCellValue(tmpDate.ToString("ddd") + "\r\n" + tmpDate.Day);
                     c.CellStyle = style;
-                    excelSheet.AutoSizeColumn(i);
+                    CellUtil.SetAlignment(c, workbook, (short)HorizontalAlignment.Center);
+                    excelSheet.SetColumnWidth(i, (int)((5 + 0.72) * 256));
                     tmpDate = tmpDate.AddDays(1);
                     i++;
                 }
@@ -1367,6 +1369,7 @@ namespace RMERP.Controllers
                 style.RightBorderColor = (IndexedColors.Black.Index);
                 style.BorderTop = (BorderStyle.Thin);
                 style.TopBorderColor = (IndexedColors.Black.Index);
+                style.WrapText = true;
 
                 IFont fontSubHead = workbook.CreateFont();
                 fontSubHead.IsBold = true;
@@ -1433,9 +1436,10 @@ namespace RMERP.Controllers
                 while (period[1] >= tmpDate)
                 {
                     ICell c = row.CreateCell(i);
-                    c.SetCellValue(tmpDate.Day);
+                    c.SetCellValue(tmpDate.ToString("ddd") + "\r\n" + tmpDate.Day);
                     c.CellStyle = style;
-                    excelSheet.SetColumnWidth(i, 1000);
+                    CellUtil.SetAlignment(c, workbook, (short)HorizontalAlignment.Center);
+                    excelSheet.SetColumnWidth(i, (int)((5 + 0.72) * 256));
                     tmpDate = tmpDate.AddDays(1);
                     i++;
                 }

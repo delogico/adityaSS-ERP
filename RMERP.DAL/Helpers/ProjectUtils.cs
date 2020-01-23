@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using RMERP.DAL.ViewModel;
 using RMERP.DAL.Models;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace RMERP.DAL.Helpers
 {
@@ -697,6 +698,20 @@ namespace RMERP.DAL.Helpers
             var types = GetMimeTypes();
             var ext = Path.GetExtension(path).ToLowerInvariant();
             return types[ext];
+        }
+
+        public static int GetNumberFromString(string str)
+        {
+            int number = 0;
+            string[] numbers = Regex.Split(str, @"\D+");
+            foreach (string value in numbers)
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    number = int.Parse(value);
+                }
+            }
+            return number;
         }
 
         public static Dictionary<string, string> GetMimeTypes()

@@ -20,6 +20,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using RMERP.Helpers;
 using SmartBreadcrumbs.Attributes;
+using System.Text.RegularExpressions;
 
 namespace RMERP.Controllers
 {
@@ -186,7 +187,12 @@ namespace RMERP.Controllers
             IRow headerRow = sheet.GetRow(0);
             IRow secondRow = sheet.GetRow(4);
             int cellCount = secondRow.LastCellNum;
-            int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
+
+            #region added bcz MON-TUE in added in excel            
+            int intStartDate = GetNumberFromString(secondRow.GetCell(4).ToString());
+            #endregion
+
+            //int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
             int TotEmp = 0;
             DateTime startDate = DateTime.Now, endDate = DateTime.Now;
             if (intStartDate > 1)
@@ -198,7 +204,7 @@ namespace RMERP.Controllers
             {
                 startDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, intStartDate);
             }
-            endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, Convert.ToInt16(secondRow.GetCell(cellCount - 1).ToString()));
+            endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month,GetNumberFromString(secondRow.GetCell(cellCount - 1).ToString()));
             int totalPublicHolidays = 0;
             //for (int j = (secondRow.FirstCellNum + 4); j <= secondRow.LastCellNum - 1; j++)
             //{
@@ -381,7 +387,7 @@ namespace RMERP.Controllers
             IRow headerRow = sheet.GetRow(0);
             IRow secondRow = sheet.GetRow(4);
             int cellCount = secondRow.LastCellNum;
-            int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
+            int intStartDate = GetNumberFromString(secondRow.GetCell(4).ToString());
             int totalPublicHolidays = 0;
 
             int TotEmp = 0;
@@ -395,7 +401,7 @@ namespace RMERP.Controllers
             {
                 startDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, intStartDate);
             }
-            endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, Convert.ToInt16(secondRow.GetCell(cellCount - 1).ToString()));
+            endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, GetNumberFromString(secondRow.GetCell(cellCount - 1).ToString()));
             for (int i = (sheet.FirstRowNum + 5); i <= sheet.LastRowNum; i += 2)
             {
                 ExcelRowViewModel excelRow = new ExcelRowViewModel();
@@ -871,7 +877,7 @@ namespace RMERP.Controllers
             IRow headerRow = sheet.GetRow(0);
             IRow secondRow = sheet.GetRow(4);
             int cellCount = secondRow.LastCellNum;
-            int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
+            int intStartDate = GetNumberFromString(secondRow.GetCell(4).ToString());
             DateTime startDate = DateTime.Now, endDate = DateTime.Now;
             if (intStartDate > 1)
             {
@@ -882,7 +888,7 @@ namespace RMERP.Controllers
             {
                 startDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, intStartDate);
             }
-            endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, Convert.ToInt16(secondRow.GetCell(cellCount - 1).ToString()));
+            endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, GetNumberFromString(secondRow.GetCell(cellCount - 1).ToString()));
             for (int i = (sheet.FirstRowNum + 5); i <= sheet.LastRowNum; i += 2)
             {
                 IRow row = sheet.GetRow(i);
@@ -1016,7 +1022,7 @@ namespace RMERP.Controllers
             IRow headerRow = sheet.GetRow(0);
             IRow secondRow = sheet.GetRow(4);
             int cellCount = secondRow.LastCellNum;
-            int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
+            int intStartDate = GetNumberFromString(secondRow.GetCell(4).ToString());
             DateTime startDate = DateTime.Now, endDate = DateTime.Now;
             if (intStartDate > 1)
             {
@@ -1027,7 +1033,7 @@ namespace RMERP.Controllers
             {
                 startDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, intStartDate);
             }
-            endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, Convert.ToInt16(secondRow.GetCell(cellCount - 1).ToString()));
+            endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, GetNumberFromString(secondRow.GetCell(cellCount - 1).ToString()));
             for (int i = (sheet.FirstRowNum + 5); i <= sheet.LastRowNum; i += 2)
             {
                 IRow row = sheet.GetRow(i);
@@ -1187,7 +1193,7 @@ namespace RMERP.Controllers
             IRow headerRow = sheet.GetRow(0);
             IRow secondRow = sheet.GetRow(4);
             int cellCount = secondRow.LastCellNum;
-            int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
+            int intStartDate = GetNumberFromString(secondRow.GetCell(4).ToString());
             DateTime startDate = DateTime.Now, endDate = DateTime.Now;
             if (intStartDate > 1)
             {
@@ -1198,7 +1204,7 @@ namespace RMERP.Controllers
             {
                 startDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, intStartDate);
             }
-            endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, Convert.ToInt16(secondRow.GetCell(cellCount - 1).ToString()));
+            endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, GetNumberFromString(secondRow.GetCell(cellCount - 1).ToString()));
             IRow rowHeader = sheet.GetRow(1);
             for (int i = (sheet.FirstRowNum + 5); i <= sheet.LastRowNum; i++)
             {
