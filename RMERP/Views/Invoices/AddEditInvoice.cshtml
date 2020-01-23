@@ -26,7 +26,7 @@
                         @Html.HiddenFor(m => m.INV_Id)
                         @Html.HiddenFor(m => m.INV_CreatedOn)
                         @Html.LabelFor(m => m.CLI_Id, new { @class = "control-label" })
-                        @Html.DropDownListFor(m => m.CLI_Id, new SelectList(ViewBag.Clients, "CLI_Id", "CLI_Name"), "Select Client", new { @class = "select floating" })
+                        @Html.DropDownListFor(m => m.CLI_Id, new SelectList(ViewBag.Clients, "CLI_Id", "CLI_Name"), "Select Client", new { @class = "select floating select2",@style="display:block!important;width:100%;" })                        
                         @Html.ValidationMessageFor(m => m.CLI_Id, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -246,6 +246,7 @@
     };
     <script>
         $(document).ready(function () {
+          $('.select2').select2();
             var allEditors = document.querySelectorAll('.desc');
             for (var i = 0; i < allEditors.length; ++i) {
                 ClassicEditor.create(allEditors[i]);
@@ -310,7 +311,7 @@
             }
         });
 
-        function openInvoiceTemplate() {
+        function openInvoiceTemplate() {           
             $(".modal-backdrop").removeClass("modal-backdrop").addClass("modal");
             var CLI_Id = $("#CLI_Id").val();
             var INV_Date = $("#INV_Date").val();
