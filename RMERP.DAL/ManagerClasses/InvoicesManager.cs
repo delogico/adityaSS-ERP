@@ -93,14 +93,15 @@ namespace RMERP.DAL.ManagerClasses
             Clients client = clientsManager.GetClientById(CLI_Id);
             List<Wage_Register> list = new List<Wage_Register>();
             decimal TotalServiceCharge = 0;
+            decimal Tot_OT_Allowances = 0;
             //decimal TotalLWF = 0;
             if (BillingType == (int)ProjectUtils.CRI_BILLING_TYPE.Lump_Sum_Amount)
             {
-                list = _context.Wage_Register.Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id) && m.CRI_.CRI_Billing_Type == BillingType && m.CRI_.CRI_Billing_Amount == CRI_Billing_Amount).ToList();
+                list = _context.Wage_Register.Include(m => m.Wage_Register_Allowances).Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id) && m.CRI_.CRI_Billing_Type == BillingType && m.CRI_.CRI_Billing_Amount == CRI_Billing_Amount).ToList();
             }
             else if (BillingType == (int)ProjectUtils.CRI_BILLING_TYPE.Service_Change_Basic)
             {
-                list = _context.Wage_Register.Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id) && m.CRI_.CRI_Billing_Type == BillingType && m.CRI_.CRI_Billing_ServiceCharge == CRI_Billing_ServiceCharge).ToList();
+                list = _context.Wage_Register.Include(m=>m.Wage_Register_Allowances).ThenInclude(m=>m.CRA_).ThenInclude(m=>m.ALL_).Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id) && m.CRI_.CRI_Billing_Type == BillingType && m.CRI_.CRI_Billing_ServiceCharge == CRI_Billing_ServiceCharge).ToList();
                 if (list.Count() > 0)
                 {
                     foreach(Wage_Register wage in list)
@@ -114,6 +115,8 @@ namespace RMERP.DAL.ManagerClasses
                             (wage.WAR_Attendance_Allowance_Calculated!=null?wage.WAR_Attendance_Allowance_Calculated.Value:0),
                             (wage.WAR_Nightshift_Allowance_Calculated!=null?wage.WAR_Nightshift_Allowance_Calculated.Value:0),
                             (wage.WAR_Performance_Allowance_Calculated!=null?wage.WAR_Performance_Allowance_Calculated.Value:0));
+
+                        Tot_OT_Allowances = Tot_OT_Allowances + (wage.WAR_OverTime_Calculated + (wage.Wage_Register_Allowances.Select(m => m.WAA_Amount_Calculated).Sum()));
 
                         //if (!wage.CRI_.DES_.DES_Exclude_LWF)
                         //{
@@ -154,7 +157,7 @@ namespace RMERP.DAL.ManagerClasses
                 if (BillingType == (int)ProjectUtils.CRI_BILLING_TYPE.Service_Change_Basic)
                 {
                     decimal GrossTotal = ProjectUtils.RoundFigure(TotalServiceCharge); 
-                    decimal ServiceCharge = ProjectUtils.RoundFigure(TotalServiceCharge * (decimal)CRI_Billing_ServiceCharge / 100);
+                    decimal ServiceCharge = ProjectUtils.RoundFigure((TotalServiceCharge- Tot_OT_Allowances) * (decimal)CRI_Billing_ServiceCharge / 100);
                     Total = Total + GrossTotal + ServiceCharge;
                     sb.Append(DatePeriod + "</br>");
                     sb.Append("(A) Salary Wages = " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(GrossTotal)) + "/-</br>");
@@ -275,12 +278,12 @@ namespace RMERP.DAL.ManagerClasses
             Clients client = clientsManager.GetClientById(CLI_Id);
 
             List<Wage_Register> list = _context.Wage_Register.Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id)).ToList();
-            decimal ESIC_Calculated = 0M;
+            decimal ESIC_Calculated = 0M, GrossTotal=0M;
             StringBuilder sb = new StringBuilder();
             if (list.Count() > 0)
             {
                 decimal ApplicableSalary = 0M;
-                decimal GrossTotal = list.Select(m => m.WAR_GrossTotal).Sum();
+                GrossTotal = list.Select(m => m.WAR_GrossTotal).Sum();
                 foreach (var item in list)
                 {                   
                     decimal AppSalary = ProjectUtils.GetAmountBasedOnFormula_Report(
@@ -317,13 +320,15 @@ namespace RMERP.DAL.ManagerClasses
                 sb.Append("<b>Company Contribution Towards ESIC @" + list[0].CRI_.CRI_ESIC_Employer_Cont_Rate + "%</b><i></br>");
                 sb.Append("Rembursment Of Company Contribution <br/>");
                 sb.Append("On Gross Salary= Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(GrossTotal)  + "/-<br/>"));
-                sb.Append("@" + list[0].CRI_.CRI_ESIC_Employer_Cont_Rate + "% = " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(ESIC_Calculated * (decimal)list[0].CRI_.CRI_ESIC_Employer_Cont_Rate / 100)));
+                //sb.Append("@" + list[0].CRI_.CRI_ESIC_Employer_Cont_Rate + "% = " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(ESIC_Calculated * (decimal)list[0].CRI_.CRI_ESIC_Employer_Cont_Rate / 100)));
+                sb.Append("@" + list[0].CRI_.CRI_ESIC_Employer_Cont_Rate + "% = " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(ProjectUtils.RoundFigure(GrossTotal) * (decimal)list[0].CRI_.CRI_ESIC_Employer_Cont_Rate / 100)));
                 //sb.Append("As Per The Act " + DatePeriod + "<br/>");
                 sb.Append("</i>");
             }
 
             invoice_Concept.INC_Description = sb.ToString();
-            invoice_Concept.INC_Total = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(ESIC_Calculated * (decimal)list[0].CRI_.CRI_ESIC_Employer_Cont_Rate / 100)));
+            //invoice_Concept.INC_Total = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(ESIC_Calculated * (decimal)list[0].CRI_.CRI_ESIC_Employer_Cont_Rate / 100)));
+            invoice_Concept.INC_Total = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(ProjectUtils.RoundFigure(GrossTotal) * (decimal)list[0].CRI_.CRI_ESIC_Employer_Cont_Rate / 100)));
 
             return invoice_Concept;
         }
