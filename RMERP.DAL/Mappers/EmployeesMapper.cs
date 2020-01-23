@@ -20,9 +20,9 @@ namespace RMERP.DAL.Mappers
             emp.EMP_Aadhar_Name = employee.EMP_Aadhar_Name;
             emp.EMP_Aadhar_Number = employee.EMP_Aadhar_Number;
             emp.EMP_DOB = employee.EMP_DOB;
-            emp.EMP_Married = employee.EMP_Married;
+            emp.EMP_Married = employee.EMP_Married.ToString();
             emp.EMP_DateOfJoining = employee.EMP_DateOfJoining;
-            emp.EMP_Gender = employee.EMP_Gender;
+            emp.EMP_Gender = employee.EMP_Gender.ToString();
             emp.EMP_Contact_Primary = employee.EMP_Contact_Primary;
             emp.EMP_Contact_Secondry = employee.EMP_Contact_Secondry;
             emp.EMP_Address = employee.EMP_Address;
@@ -95,9 +95,10 @@ namespace RMERP.DAL.Mappers
             emp.EMP_Aadhar_Name = employee.EMP_Aadhar_Name;
             emp.EMP_Aadhar_Number = employee.EMP_Aadhar_Number;
             emp.EMP_DOB = employee.EMP_DOB;
-            emp.EMP_Married = employee.EMP_Married;
+            if(!string.IsNullOrEmpty(employee.EMP_Married))
+                emp.EMP_Married = Convert.ToByte(employee.EMP_Married);
             emp.EMP_DateOfJoining = employee.EMP_DateOfJoining;
-            emp.EMP_Gender = employee.EMP_Gender;
+            emp.EMP_Gender = Convert.ToBoolean(employee.EMP_Gender);
             emp.EMP_Contact_Primary = employee.EMP_Contact_Primary;
             emp.EMP_Contact_Secondry = employee.EMP_Contact_Secondry;
             emp.EMP_Address = employee.EMP_Address;

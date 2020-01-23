@@ -238,7 +238,7 @@
                             <tr>
                                 <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
                                 <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
-                                <td class="gainsboro">@(employee.employeeVM.EMP_Gender == true ? "M" : "F")</td>
+                                <td class="gainsboro">@(Convert.ToBoolean(employee.employeeVM.EMP_Gender) == true ? "M" : "F")</td>
                                 <td class="gainsboro">@DateHelper.getLongDateFormat(employee.employeeVM.EMP_DateOfJoining)</td>
 
                                 @if (clientRequirement != null)

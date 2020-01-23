@@ -39,7 +39,7 @@ namespace RMERP.DAL.ViewModel
 
         [Display(Name = "Marital status")]
         [Required(ErrorMessage = "Marital status is required")]
-        public byte EMP_Married { get; set; }
+        public string EMP_Married { get; set; }
 
         [Display(Name = "Date of joining")]
         [Required(ErrorMessage = "Date of joining is required")]
@@ -48,7 +48,7 @@ namespace RMERP.DAL.ViewModel
 
         [Display(Name = "Gender")]
         [Required(ErrorMessage = "Gender is required")]
-        public bool EMP_Gender { get; set; }
+        public string EMP_Gender { get; set; }
 
         [Display(Name = "Primary contact number")]
         public string EMP_Contact_Primary { get; set; }
@@ -113,7 +113,7 @@ namespace RMERP.DAL.ViewModel
         {
             get
             {
-                return EMP_Gender == true ? "M" : "F";
+                return Convert.ToBoolean(EMP_Gender) == true ? "M" : "F";
             }
         }
         public ICollection<Attendance> Attendance { get; set; }

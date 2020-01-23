@@ -462,7 +462,7 @@ namespace RMERP.Controllers
                                     cellEmp1.SetCellValue(employee.employeeVM.EMP_FirstName + " " + employee.employeeVM.EMP_MiddleName + " " + employee.employeeVM.EMP_SurName);
                                     cellEmp1.CellStyle = styleGrey25;
                                     ICell cellEmp2 = row.CreateCell(2);
-                                    cellEmp2.SetCellValue(employee.employeeVM.EMP_Gender == true ? "M" : "F");
+                                    cellEmp2.SetCellValue(Convert.ToBoolean(employee.employeeVM.EMP_Gender) == true ? "M" : "F");
                                     cellEmp2.CellStyle = styleGrey25;
                                     ICell cellEmp3 = row.CreateCell(3);
                                     cellEmp3.SetCellValue(DateHelper.getDateWithFormat(employee.employeeVM.EMP_DateOfJoining));
