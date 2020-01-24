@@ -426,58 +426,25 @@ namespace RMERP.DAL.Helpers
             return sum;
         }
 
-        public static string GetStringBasedOnFormula_Report(string CRI_Formula, List<Wage_Register_Allowances> All)
+        public static string GetStringBasedOnFormula_Report(string CRI_Formula)
         {
             string ret = "";
-            ret = CRI_Formula.Replace("+", ",");
-            //string[] arr_CRI_Formula;
-
-            //if (CRI_Formula != null)
-            //{
-            //    arr_CRI_Formula = CRI_Formula.Split("+");
-            //    foreach (string item in arr_CRI_Formula)
-            //    {
-            //        switch (item)
-            //        {
-            //            case "BASIC":
-            //                ret += "BASIC";
-            //                break;
-            //            case "DA":
-            //                ret += ", DA";
-            //                break;
-            //            case "HRA":
-            //                ret += ", HRA";
-            //                break;
-            //            case "OT":
-            //                ret += ", Extra Work Wages";
-            //                break;
-            //            case "OSL":
-            //                ret += ", Outstation Wages";
-            //                break;
-            //            case "AAL":
-            //                ret += ", Attendance Wages";
-            //                break;
-            //            case "NSL":
-            //                ret += ", Night shift Wages";
-            //                break;
-            //            case "PAL":
-            //                ret += ", Performance Wages";
-            //                break;
-            //            default:
-            //                {
-            //                    foreach (var allowance in All)
-            //                    {
-            //                        if (allowance.CRA_.ALL_.ALL_Shortform == item)
-            //                        {
-            //                            ret +=", "+ allowance.CRA_.ALL_.ALL_Title;
-            //                        }
-            //                    }
-            //                }
-            //                break;
-            //        }
-            //    }
-            //}
+            ret = CRI_Formula.Replace("+", ",");           
             return ret;
+        }
+        public static string GetStringBasedOnFormula_Report(List<string> CRI_Formulas)
+        {            
+            List<string> Formulas = new List<string>();
+            foreach (string CRI_Formula in CRI_Formulas)
+            {
+                foreach(string formula in CRI_Formula.Split("+"))
+                {
+                    Formulas.Add(formula);
+                }
+                
+            }
+            string res= string.Join(",", Formulas.Distinct().ToList());
+            return res;
         }
 
         public static decimal GetAmountBasedOnFormula_Edit(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<CalculatedAllowanceVM> All, double totalWorkingDays, double totalPaybleDays, decimal WAR_OverTime_Calculated, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated)
