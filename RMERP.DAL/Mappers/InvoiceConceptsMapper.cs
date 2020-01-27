@@ -36,7 +36,7 @@ namespace RMERP.DAL.Mappers
             concept.INC_Id = Invoice_ConceptVM.INC_Id;
             concept.INV_Id = Invoice_ConceptVM.INV_Id;
             concept.INC_Serial_Number = Invoice_ConceptVM.INC_Serial_Number;
-            concept.INC_Description = Invoice_ConceptVM.INC_Description;
+            concept.INC_Description = Invoice_ConceptVM.INC_Description.Replace("?", "");
             concept.INC_Total = Invoice_ConceptVM.INC_Total;
             if (Invoice_ConceptVM.INV_ != null)
                 concept.INV_ = Invoice_ConceptVM.INV_;
