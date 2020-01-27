@@ -196,7 +196,7 @@ namespace RMERP.DAL.ManagerClasses
         {
             Employees emp = GetEmployeeById(EMP_Id);
             emp.EMP_IsActive = true;
-            emp.EMP_RejoinOn = ProjectUtils.DateNow();
+            emp.EMP_RejoinOn = EMP_Rejoin_Date;
             _context.SaveChanges();
         }
 
