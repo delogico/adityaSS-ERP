@@ -703,25 +703,7 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = cvm.CLI_Id, tab = "ClientEmployee" });
         }
-
-        public ActionResult UnassignClientEmployee(DateTime UnassignedOn, int CLE_Id = -1)
-        {
-            ClientsViewModel clientsViewModel = new ClientsViewModel();
-            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            if (ModelState.IsValid)
-            {
-                if (CLE_Id > 0)
-                {
-                    string res = clientsManager.UnassignClientEmployee(CLE_Id, UnassignedOn, sessionUtils.GetLoggedAdminID());
-                    if (res != string.Empty)
-                    {
-                        TempData["message"] = "Employee is not able to Unassigned! Try Again";
-                    }
-                }
-            }
-            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
-        }
+              
 
         public ActionResult ReassignClientEmployee(int CLE_Id = -1)
         {
@@ -1494,6 +1476,60 @@ namespace RMERP.Controllers
             List<ClientEmployeeVM> ClientEmployeeVMs = new List<ClientEmployeeVM>();
             ClientEmployeeVMs = ClientEmployeeMapper.mapEmployees(clientsManager.listClientsEmployees(CLI_Id, assign).ToList(), _context);
             return PartialView("_ClientEmployee", ClientEmployeeVMs);
+        }
+
+        //public ActionResult UnassignClientEmployee(DateTime UnassignedOn, int CLE_Id = -1)
+        //{
+        //    ClientsViewModel clientsViewModel = new ClientsViewModel();
+        //    ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+        //    SessionUtils sessionUtils = new SessionUtils(Request, Response);
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (CLE_Id > 0)
+        //        {
+        //            string res = clientsManager.UnassignClientEmployee(CLE_Id, UnassignedOn, sessionUtils.GetLoggedAdminID());
+        //            if (res != string.Empty)
+        //            {
+        //                TempData["message"] = "Employee is not able to Unassigned! Try Again";
+        //            }
+        //        }
+        //    }
+        //    return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
+        //}
+        
+        public IActionResult EditUnassignDate(int CLE_Id, string act)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            UnassignVM unassignVM = new UnassignVM();
+            if (CLE_Id > 0)
+            {
+                unassignVM.CLE_Id = CLE_Id;
+                unassignVM.UnassignedOn = ProjectUtils.DateNow();
+                if (act == "edit")
+                {
+                    Clients_Employees clientEmp = clientsManager.ClientEmployeeById(CLE_Id);                    
+                    unassignVM.UnassignedOn = clientEmp.CLE_UnassignedOn.Value;
+                }               
+                
+            }
+            return PartialView("_EditUnAssignDate", unassignVM);
+        }
+        public ActionResult UnassignClientEmp(UnassignVM unassignVM)
+        {            
+            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            if (ModelState.IsValid)
+            {
+                if (unassignVM.CLE_Id > 0)
+                {
+                    string res = clientsManager.UnassignClientEmployee(unassignVM.CLE_Id, unassignVM.UnassignedOn, sessionUtils.GetLoggedAdminID());
+                    if (res != string.Empty)
+                    {
+                        TempData["message"] = "Employee is not able to Unassigned! Try Again";
+                    }
+                }
+            }
+            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
         }
     }
 }

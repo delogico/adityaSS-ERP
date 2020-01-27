@@ -137,4 +137,11 @@ namespace RMERP.DAL.ViewModel
         public int? CLI_Att_Month_Start { get; set; }
         public int? CLI_Att_Month_End { get; set; }
     }
+    public class UnassignVM
+    {
+        [DataType(DataType.Date)]
+        [Required(ErrorMessage = "Date is required")]
+        public DateTime UnassignedOn { get; set; }
+        public int CLE_Id { get; set; }
+    }
 }

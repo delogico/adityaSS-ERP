@@ -50,7 +50,7 @@
                             @Html.HiddenFor(m => m.clientsModel.CLI_Id)
                             @Html.HiddenFor(m => m.clientsModel.CLI_IsActive)
                             @Html.HiddenFor(m => m.clientsModel.CliLogoImage)
-                            @Html.HiddenFor(m => m.clientsModel.STA_Id)                            
+                            @Html.HiddenFor(m => m.clientsModel.STA_Id)
                             if (Model.clientsModel.CLI_Id > 0)
                             {
                                 @Html.HiddenFor(m => m.clientsModel.FRM_Id)
@@ -396,7 +396,7 @@
                     </div>
                 </div>
             </div>
-           
+
 
             <div class="content container-fluid">
                 <div class="card-box m-b-0">
@@ -530,7 +530,7 @@
             @{
                 var InActiveDate = DateHelper.getLongDateFormat(Model.clientsModel.CLI_InActivatedOn);
             }
-            @Html.Hidden("CLI_InActivatedOn",InActiveDate)
+            @Html.Hidden("CLI_InActivatedOn", InActiveDate)
             <div class="col-md-6 alert alert-danger">@Model.clientsModel.CLI_Name is Inactivated On @DateHelper.getLongDateFormat(Model.clientsModel.CLI_InActivatedOn)</div>
         </div>
     </div>
@@ -548,12 +548,13 @@
         });
         </script>
     };
-    <script type="text/javascript">       
+    <script type="text/javascript">
+
         var ClientID;
-        var CLI_IsActive_bool;    
+        var CLI_IsActive_bool;
         var CLI_IsActive;
-        $(document).ready(function () {  
-           
+        $(document).ready(function () {
+
             radioShow();
             var CLI_Id = $("#clientsModel_FRM_Id").val();
             if (CLI_Id > 0) {
@@ -664,8 +665,8 @@
         };
 
         $("#btnSubmit").click(
-            function () { 
-                
+            function () {
+
                 var active = "Change Inactive Date";
                 if (CLI_IsActive.toString()=="True") {
                     active = "Choose Inactive Date";
@@ -764,33 +765,22 @@
                 }
             });
         };
-
-        function onUnassignClick(CLE_Id) {
-            bootbox.prompt({
-                title: "Choose Date! <br/> <div class='alert alert-warning' style='font-size:12px;'>Employee will be available in the wage of selected date's month.</div>",
-                inputType: 'date',
-                callback: function (result) {
-                    if (result != null) {
-                        $.ajax({
-                            type: "POST",
-                            url: "/Clients/UnassignClientEmployee?UnassignedOn=" + result + "&CLE_Id=" + CLE_Id,
-                            contentType: 'application/json; charset=utf-8',
-                            datatype: 'json',
-                            type: "GET",
-                            success: function () {
-                                window.location = '@Url.Action("AddEditClients", "Clients",new { @tab = "ClientEmployee" })';
-                            }
-
-                        })
-                    }
+                
+        function EditUnassignDate(CLE_Id, action) {
+            var Url = siteUrl + "Clients/EditUnassignDate?CLE_Id=" + CLE_Id+ "&act=" + action;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                success: function (data) {
+                    $('#divEditDate').html(data);
+                    $('#ModelEditDate').modal('show');
                 }
-            });
+            })
         };
-
         function onReassignClick(CLE_Id) {
             $.ajax({
                             type: "POST",
-                url: "/Clients/ReassignClientEmployee?CLE_Id=" + CLE_Id,
+                            url: "/Clients/ReassignClientEmployee?CLE_Id=" + CLE_Id,
                             contentType: 'application/json; charset=utf-8',
                             datatype: 'json',
                             type: "GET",
@@ -802,7 +792,6 @@
         };
 
         function onDeleteEmployeeClick(CLE_Id,CLI_Id,EMP_Id,DES_Id) {
-
             $.ajax({
                 url: "/Clients/GetAssignEmployeeDependancy?CLE_Id=" + CLE_Id + "&CLI_Id=" + CLI_Id + "&EMP_Id=" + EMP_Id + "&DES_Id=" + DES_Id,
                             contentType: 'application/json; charset=utf-8',
@@ -895,7 +884,8 @@
                     $('#divClientEmp').html(data);
                 }
             })
-            }
+        };
+
 
     </script>
 }
