@@ -1,5 +1,6 @@
 ﻿@model List<RMERP.DAL.ViewModel.ClientEmployeeVM>
 @using RMERP.Helpers;
+@using RMERP.DAL.Helpers;
 
 @if (Model != null)
 {
@@ -43,9 +44,17 @@
                                 }
                                 <li><a href='@Url.Action("AddEmployee","Clients",new { CLI_Id=item.CLI_Id, CLE_Id=item.CLE_Id})' title="Edit"><i class="fa fa-edit m-r-5"></i> Edit</a></li>
                                 @if (!item.IsEmployeeWagedForClient && item.CLE_UnassignedOn == null)
-                                {                                   
+                                {
                                     <li><a href='#' onclick="onDeleteEmployeeClick(@item.CLE_Id,@item.CLI_Id,@item.EMP_Id,@item.DES_Id)" title="Delete"><i class="fa fa-remove m-r-5"></i> Delete</a></li>
                                 }
+                                @if (IsUnAssign && item.CLE_UnassignedOn != null)
+                                {
+                                    @if (item.CLE_UnassignedOn.Value.Date > ProjectUtils.DateNow().AddMonths(-1).Date)
+                                    {
+                                        <li><a href='@Url.Action("RevertAssignEmployee","Clients",new { CLE_Id=item.CLE_Id})' title="Revert"><i class="fa fa-undo m-r-5"></i> Revert</a></li>
+                                    }
+                                }
+
                             </ul>
 
                         </div>

@@ -821,7 +821,6 @@ namespace RMERP.DAL.ManagerClasses
             return res;
         }
 
-
         public List<Clients> GetActiveClientByFirmId(DateTime wageDate, int FirmId)
         {
             DateTime lastDate = new DateTime(wageDate.Year, wageDate.Month, 1).AddMonths(1).AddDays(-1);
@@ -843,6 +842,18 @@ namespace RMERP.DAL.ManagerClasses
                     select g.OrderByDescending(t => t.CRI_RegisteredOn).ThenByDescending(m=>m.CRI_Id).FirstOrDefault();
 
             return query.ToList();
+        }
+
+        public void RevertAssignEmployee(int CLE_Id)
+        {
+            Clients_Employees clientEmployee = _contaxt.Clients_Employees.Where(m=>m.CLE_Id.Equals(CLE_Id)).FirstOrDefault();
+            if (clientEmployee != null)
+            {
+                clientEmployee.CLE_UnassignedOn = null;
+                clientEmployee.ADM_Id_UnassignedBy = null;
+                _contaxt.Clients_Employees.Update(clientEmployee);
+                _contaxt.SaveChanges();
+            }
         }
 
     }

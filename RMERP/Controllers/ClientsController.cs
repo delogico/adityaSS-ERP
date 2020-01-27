@@ -1253,5 +1253,18 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
         }
+        public ActionResult RevertAssignEmployee(int CLE_Id)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            try
+            {
+                clientsManager.RevertAssignEmployee(CLE_Id);
+            }
+            catch (Exception)
+            {
+                TempData["message"] = "Employee is not able to Unassigned! Try Again";
+            }
+            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
+        }
     }
 }
