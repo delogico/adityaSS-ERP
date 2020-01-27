@@ -46,16 +46,22 @@ namespace RMERP.DAL.Mappers
             InvoiceVM.INV_Number = invoice.INV_Number;
             InvoiceVM.INV_Date = invoice.INV_Date;
             InvoiceVM.INV_ClientOrder_Number = invoice.INV_ClientOrder_Number;
-            InvoiceVM.INV_ClientOrder_Date = invoice.INV_ClientOrder_Date;          
+            
             if (invoice.INV_ClientOrder_Date == DateTime.MinValue)
             {
                 InvoiceVM.INV_ClientOrder_Date = null;
+            }
+            else if(invoice.INV_ClientOrder_Date!=null)
+            {
+                InvoiceVM.INV_ClientOrder_Date = invoice.INV_ClientOrder_Date.Value.Date;
             }
 
             InvoiceVM.INV_HSN = invoice.INV_HSN;
             InvoiceVM.INV_Total = invoice.INV_Total;
             InvoiceVM.ADM_Id_CreatedBy = invoice.ADM_Id_CreatedBy;
-            InvoiceVM.INV_CreatedOn = invoice.INV_CreatedOn;
+
+            
+            InvoiceVM.INV_CreatedOn = invoice.INV_CreatedOn.Date;
             InvoiceVM.INV_CGST_Percentage = invoice.INV_CGST_Percentage;
             InvoiceVM.INV_SGST_Percentage = invoice.INV_SGST_Percentage;
             InvoiceVM.INV_IGST_Percentage = invoice.INV_IGST_Percentage;

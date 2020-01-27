@@ -24,7 +24,9 @@
                 <div class="col-sm-8">
                     <div class="form-group">
                         @Html.HiddenFor(m => m.INV_Id)
-                        @Html.HiddenFor(m => m.INV_CreatedOn)
+                        
+                        @Html.EditorFor(m => m.INV_CreatedOn, new { htmlAttributes = new { @class = "form-control",@type = "hidden" } })
+                        
                         @Html.LabelFor(m => m.CLI_Id, new { @class = "control-label" })
                         @Html.DropDownListFor(m => m.CLI_Id, new SelectList(ViewBag.Clients, "CLI_Id", "CLI_Name"), "Select Client", new { @class = "select floating select2",@style="display:block!important;width:100%;" })
                         @Html.ValidationMessageFor(m => m.CLI_Id, "", new { @class = "text-danger" })
@@ -82,21 +84,7 @@
                                     int sr = 1;
                                 }
                                 @foreach (var item in Model.Invoice_Concepts)
-                                {
-                                @*<tr>
-                                        <td style="width: 5%">
-                                            <input class="form-control" id="INC_Serial_Number" value=@item.INC_Serial_Number type="text" style="min-width:50px">
-                                        </td>
-                                        <td style="width: 65%">
-                                            <textarea id="INC_Description" class="form-control desc">@item.INC_Description</textarea>
-                                        </td>
-                                        <td style="width: 20%">
-                                            <input class="form-control calculation" id="INC_Total" value="@item.INC_Total" type="text" style="max-width:150px">
-                                        </td>
-                                        <td style="width: 10%">
-                                            <a onclick="RemoveInvoiceConcept(this)" class="text-danger font-18" title="Remove"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                        </td>
-                                    </tr>*@
+                                {                                
                                 <tr>
                                     <td style="width: 5%">
                                         <input class="form-control" id="INC_Serial_Number" value=@item.INC_Serial_Number type="text">
@@ -232,17 +220,10 @@
 </div>
 
 @section scripts{
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
-    @*<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>*@
-    <script src="https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js"></script>
-    
-    @*<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js" type="text/javascript"></script>*@
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>    
+    <script src="https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js"></script>        
     <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js" type="text/javascript"></script>
-
-    @*<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />*@
-    @*<link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />*@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js" type="text/javascript"></script>
-
 
     <script type="text/javascript">
         var j = jQuery.noConflict();
@@ -263,8 +244,7 @@
     </script>
     };
     <script>
-        $(document).ready(function () {
-            debugger;
+        $(document).ready(function () {           
             $('.select2').select2();
             var allEditors = document.querySelectorAll('.desc');
             for (var i = 0; i < allEditors.length; ++i) {
@@ -496,14 +476,13 @@
             calculateGST();
         };
         $("body").on("click", "#btnSave", function () {
-
-            debugger;
-            //Loop through the Table rows and build a JSON array.
-            var InvoiceVM = {};
+            var CLI_Id = $("#CLI_Id").val();
+            if (CLI_Id != "") {
+                var InvoiceVM = {};
             InvoiceVM.INV_Id = parseInt($("#INV_Id").val());
             InvoiceVM.FRM_Id = 0;
             InvoiceVM.CLI_Id = parseInt($("#CLI_Id").val());
-            InvoiceVM.INV_Number = $("#INV_Number").val();
+            InvoiceVM.INV_Number = $("#INV_Number").val();         
             InvoiceVM.INV_Date = $("#INV_Date").val();
             InvoiceVM.INV_Remark = ($("#INV_Remark") != "" ? $("#INV_Remark").val() : null);
             InvoiceVM.INV_ClientOrder_Number = (isNaN(INV_ClientOrder_Number = parseFloat($("#INV_ClientOrder_Number").val(), 10)) ? 0 : INV_ClientOrder_Number);
@@ -534,14 +513,14 @@
             });
 
             InvoiceVM.Invoice_Concepts = Concepts;
-            var v = JSON.stringify(InvoiceVM);
-            debugger;
+            //var v = JSON.stringify(InvoiceVM);
+                       
             $.ajax({
+
                 url: siteUrl + 'Invoices/AddEditInvoice',
-                contentType: "application/json",
-                async: true,
-                type: "POST",
-                data: v,
+                type: 'POST',               
+                data: { "Invoice": JSON.stringify(InvoiceVM) },
+               
                 success: function (data, textStatus, jQxhr) {
                     if (data == "Ok") {
                         window.location.href = siteUrl + "Invoices/Index";
@@ -552,6 +531,10 @@
                     alert("error");
                 }
             });
+            }else {
+                alert("Please select client!");
+            }
+                        
         });
 
     </script>

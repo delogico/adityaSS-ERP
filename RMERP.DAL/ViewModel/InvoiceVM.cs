@@ -41,6 +41,7 @@ namespace RMERP.DAL.ViewModel
         [Required]
         public int ADM_Id_CreatedBy { get; set; }
         [Required(ErrorMessage = "Date is required.")]
+        [DataType(DataType.Date)]
         public DateTime INV_CreatedOn { get; set; }
         [Display(Name = "CGST(%)")]
         [Required(ErrorMessage = "CGST is required.")]
