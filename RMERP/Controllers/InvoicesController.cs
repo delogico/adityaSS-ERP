@@ -189,10 +189,10 @@ namespace RMERP.Controllers
             }
             catch (Exception)
             {
-                return Json("Ko");
+                return Content("Ko");
             }
 
-            return Json("Ok");
+            return Content("Ok");
         }
 
         public ActionResult GetInvoiceTemplate(int CLI_Id,DateTime INV_Date)

@@ -516,18 +516,16 @@
             //var v = JSON.stringify(InvoiceVM);
                        
             $.ajax({
-
                 url: siteUrl + 'Invoices/AddEditInvoice',
                 type: 'POST',               
-                data: { "Invoice": JSON.stringify(InvoiceVM) },
-               
-                success: function (data, textStatus, jQxhr) {
-                    if (data == "Ok") {
+                data: { "Invoice": JSON.stringify(InvoiceVM) },               
+                success: function (data) {                  
+                    if (data == "Ok") {                      
                         window.location.href = siteUrl + "Invoices/Index";
                     } else {
                         alert("Try Again");
                     }
-                }, error: function (jqXhr, textStatus, errorThrown) {
+                }, error: function () {
                     alert("error");
                 }
             });
