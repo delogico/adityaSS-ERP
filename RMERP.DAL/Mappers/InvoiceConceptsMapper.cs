@@ -4,6 +4,7 @@ using RMERP.DAL.Models;
 using RMERP.DAL.ViewModel;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Web;
 
 namespace RMERP.DAL.Mappers
 {
@@ -15,7 +16,7 @@ namespace RMERP.DAL.Mappers
             conceptsVM.INC_Id = Invoice_Concept.INC_Id;
             conceptsVM.INV_Id = Invoice_Concept.INV_Id;
             conceptsVM.INC_Serial_Number = Invoice_Concept.INC_Serial_Number;
-            conceptsVM.INC_Description = Invoice_Concept.INC_Description;
+            conceptsVM.INC_Description = Invoice_Concept.INC_Description.Replace("???????", "");
             conceptsVM.INC_Total = Invoice_Concept.INC_Total;
             if (Invoice_Concept.INV_ != null)
                 conceptsVM.INV_ = Invoice_Concept.INV_;
@@ -36,7 +37,7 @@ namespace RMERP.DAL.Mappers
             concept.INC_Id = Invoice_ConceptVM.INC_Id;
             concept.INV_Id = Invoice_ConceptVM.INV_Id;
             concept.INC_Serial_Number = Invoice_ConceptVM.INC_Serial_Number;
-            concept.INC_Description = Invoice_ConceptVM.INC_Description.Replace("?", "");
+            concept.INC_Description = Invoice_ConceptVM.INC_Description;
             concept.INC_Total = Invoice_ConceptVM.INC_Total;
             if (Invoice_ConceptVM.INV_ != null)
                 concept.INV_ = Invoice_ConceptVM.INV_;

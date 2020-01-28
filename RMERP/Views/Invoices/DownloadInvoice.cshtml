@@ -158,7 +158,7 @@
                         {
                             <tr>
                                 <td>@item.INC_Serial_Number</td>
-                                <td class="text-left">@Html.Raw(item.INC_Description)</td>
+                                <td class="text-left">@Html.Raw(item.INC_Description.Replace("???????", ""))</td>
                                 <td class="text-right"><i class="fa fa-rupee"></i>@item.INC_Total</td>
                             </tr>
                         }
