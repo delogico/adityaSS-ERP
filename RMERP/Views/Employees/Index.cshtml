@@ -18,6 +18,33 @@
         </script>
     };
     <script>
+
+        $.extend(jQuery.fn.dataTableExt.oSort, {            
+            "date-uk-pre": function (a) {   
+                a=a.slice(0, 11);
+                var ukDatea = a.split('-');               
+                var months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];                
+                var monthNo = months.indexOf(ukDatea[1].toLowerCase()) + 1;   
+                debugger;
+                return (ukDatea[2] + monthNo + ukDatea[0]) * 1;
+            }
+    }); 
+    $(document).ready(function () {
+            $('#tblEmp').dataTable({
+                "paging": true,                  
+                columnDefs: [
+                    {
+                        targets: [3,5],
+                        orderable: true,
+                        type: 'date-uk'
+                    },
+                    { targets: [1], orderable: true },
+                    { orderable: true }
+                ],
+
+            });
+        });
+
         $(document).on("click", ".empModal", function () {            
             var EMP_Id = $(this).data('id');
             $(".modal-body #EMP_Id").val(EMP_Id);
@@ -26,6 +53,38 @@
             var EMP_Id = $(this).data('id');
             $(".modal-body #EMP_Id").val(EMP_Id);
         });
+        
+
+    function onConfirmClick(EMP_Id, IsAssigned) {
+
+        if (IsAssigned=="False") {
+
+            bootbox.prompt({
+                title: "Choose Date!",
+                inputType: 'date',
+
+                callback: function (result) {
+                    if (result != null) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employees/ActiveEmployee?EMP_Id=" + EMP_Id + "&date=" + result,
+                            contentType: 'application/json; charset=utf-8',
+                            datatype: 'json',
+                            type: "GET",
+                            success: function () {
+                                window.location = '@Url.Action("Index", "Employees")';
+                            }
+
+                        })
+                    }
+                    else if (result == null) {
+                    }
+                }
+            });
+        } else {
+            alert("We can't delete this, Because it is active in some client.");
+        }
+        }
     </script>
 }
 <style>
@@ -102,7 +161,7 @@
                 @if (Model.Item1.Count() > 0)
                 {
                     <div>
-                        <table class="table table-striped custom-table datatable">
+                        <table class="table table-striped custom-table" id="tblEmp">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -133,15 +192,17 @@
                                     <td>@DateHelper.getLongDateFormat(@item.EMP_DOB)</td>
                                     <td>@item.EMP_Designation</td>
                                     <td>
+
                                         @DateHelper.getLongDateFormat(@item.EMP_DateOfJoining)
+                                        @*@item.EMP_DateOfJoining*@
                                         @if (item.EMP_IsActive.Equals(false))
-                                            {
-                                        <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_InactivatedOn.Value) : "") (@ProjectUtils.GetStringValue((ProjectUtils.EMPLOYEE_LEFT_REASON_CODE)item.EMP_ReasonCode))</div>
-                                            }
-                                            else if (item.EMP_RejoinOn!=null)
-                                            {
-                                        <div style="font-size:10px;color:green">Rejoin on @(item.EMP_RejoinOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_RejoinOn.Value) : "")</div>
-                                            }
+                                        {
+                                            <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_InactivatedOn.Value) : "") (@ProjectUtils.GetStringValue((ProjectUtils.EMPLOYEE_LEFT_REASON_CODE)item.EMP_ReasonCode))</div>
+                                        }
+                                        else if (item.EMP_RejoinOn != null)
+                                        {
+                                            <div style="font-size:10px;color:green">Rejoin on @(item.EMP_RejoinOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_RejoinOn.Value) : "")</div>
+                                        }
 
                                     </td>
                                     <td>@item.EMP_MoF</td>
@@ -247,36 +308,3 @@
 
     </div>
 </div>
-
-<script>
-    function onConfirmClick(EMP_Id, IsAssigned) {
-
-        if (IsAssigned=="False") {
-
-            bootbox.prompt({
-                title: "Choose Date!",
-                inputType: 'date',
-
-                callback: function (result) {
-                    if (result != null) {
-                        $.ajax({
-                            type: "POST",
-                            url: "/Employees/ActiveEmployee?EMP_Id=" + EMP_Id + "&date=" + result,
-                            contentType: 'application/json; charset=utf-8',
-                            datatype: 'json',
-                            type: "GET",
-                            success: function () {
-                                window.location = '@Url.Action("Index", "Employees")';
-                            }
-
-                        })
-                    }
-                    else if (result == null) {
-                    }
-                }
-            });
-        } else {
-            alert("We can't delete this, Because it is active in some client.");
-        }
-        }
-</script>
