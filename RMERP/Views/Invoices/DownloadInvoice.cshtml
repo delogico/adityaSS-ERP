@@ -6,9 +6,10 @@
 }
 <html>
 <head>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
     <style>
         .invoice-title h2, .invoice-title h3 {
             display: inline-block;
@@ -28,14 +29,19 @@
 
         .custom-border {
             border: solid 1px;
-            border-color: #ddd;
+            border-color: #000000;
             padding: 10px;
         }
 
         .gst-table td {
             border: solid 1px;
-            border-color: #ddd;
+            border-color: #000000;
             padding: 5px;
+        }
+
+        hr {
+            height: 1px !important;
+            background-color: #000000 !important;
         }
     </style>
 </head>
@@ -59,7 +65,7 @@
 
         <div class="row">
             <div class="col-xs-12">
-                <hr />
+                <hr/>
                 <div class="invoice-title text-center">
                     <h1><strong>TAX INVOICE</strong></h1>
                 </div>

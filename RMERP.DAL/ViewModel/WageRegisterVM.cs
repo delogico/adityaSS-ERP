@@ -131,4 +131,5 @@ namespace RMERP.DAL.ViewModel
         public List<Wage_Register_Allowances> wage_Register_Allowances { get; set; }
         public int FRM_Id { get; set; }
     }
+
 }

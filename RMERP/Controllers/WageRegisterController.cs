@@ -153,7 +153,7 @@ namespace RMERP.Controllers
                             ICellStyle styleGrey40 = workbook.CreateCellStyle();
                             ICellStyle styleGrey50 = workbook.CreateCellStyle();
                             ICellStyle styleGrey80 = workbook.CreateCellStyle();
-
+                                                        
                             IFont fontcell = workbook.CreateFont();
                             //fontcell.IsBold = true;
 
@@ -290,16 +290,24 @@ namespace RMERP.Controllers
                             #endregion
 
                             DesCount = DesCount + 4;
+
+                            double Final_TotalPaybleDays = 0;
+                            decimal Final_TotalBasic = 0M, Final_TotalDA = 0M, Final_TotalHRA = 0M, Final_TotalOT = 0M, Final_TotalGrossTotal = 0M, Final_TotalPF = 0M, Final_TotalESIC = 0M;
+                            decimal Final_TotalProfTax = 0m, Final_TotalRevenue = 0M, Final_TotalCanteenFacility = 0M, Final_TotalAdvance = 0M, Final_TotalDeduct = 0M, Final_TotalFinal = 0M;
+                            decimal Final_TotalOutStation = 0M, Final_TotalAttendance = 0M, Final_TotalNightshift = 0M, Final_TotalPerformance = 0M, Final_TotalLWF = 0M;
+
+                            bool IsCRI_OutStation_Allowance=false, IsCRI_Attendance_Allowance = false, IsCRI_Nightshift_Allowance = false, IsCRI_Performance_Allowance = false, IsCRI_OT_Calculate_Payableday = false;
+                            bool IsCRI_ProfessionalTax = false, IsCRI_RevenueDeduction = false, IsCRI_CanteenFacility = false, IsDES_Include_LWF = false;
+                            List<WageAllowancesTotalVM> WageAllowancesTotalVMs = new List<WageAllowancesTotalVM>();
                             foreach (var dd in distinceDesignations)
-                            {
-
+                            {                                
                                 int TotalAllowances = 0;
-
                                 List<WageRegisterVM> wageRegisters = item.wageRegisterVMs.Where(r => r.designation.DES_Id.Equals(dd.DES_Id)).ToList();
                                 ClientRequirementVM clientRequirement = wageRegisters.Select(m => m.clientRequirementVM).Where(m => m.CLI_Id.Equals(item.client.CLI_Id) && m.DES_Id.Equals(dd.DES_Id)).First();
 
                                 TotalAllowances = wageRegisters[0].allowanceVMs.Count();
                                 decimal[] arrAllowancesTotal = new decimal[TotalAllowances];
+
                                 #region Headings
                                 IRow row = excelSheet.CreateRow(DesCount);
                                 ICell CellHeader = row.CreateCell(0);
@@ -611,7 +619,7 @@ namespace RMERP.Controllers
                                     if (!dd.DES_Exclude_LWF)
                                     {
                                         ICell cell_LWF = row.CreateCell(cellNext2);
-                                        cell_LWF.SetCellValue(Convert.ToString(Math.Round(employee.WAR_LWF_Deduction_Employee.Value, MidpointRounding.AwayFromZero).ToString()));
+                                        cell_LWF.SetCellValue(Convert.ToString(Math.Round((employee.WAR_LWF_Deduction_Employee!=null?employee.WAR_LWF_Deduction_Employee.Value:0), MidpointRounding.AwayFromZero).ToString()));
                                         excelSheet.SetColumnWidth(cellNext2, (int)((25 + 0.72) * 140));
                                         cell_LWF.CellStyle = styleGrey50;
                                         TotalLWF = TotalLWF + Convert.ToDecimal(employee.WAR_LWF_Deduction_Employee);
@@ -620,7 +628,7 @@ namespace RMERP.Controllers
 
                                     #region Total Deduction
                                     decimal DeductTotal = Math.Round(employee.WAR_PF_Calculated, MidpointRounding.AwayFromZero) + Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero) + Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated), MidpointRounding.AwayFromZero)
-                                        + Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero) + Math.Round(employee.WAR_LWF_Deduction_Employee.Value, MidpointRounding.AwayFromZero);
+                                        + Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero) + Math.Round((employee.WAR_LWF_Deduction_Employee != null ? employee.WAR_LWF_Deduction_Employee.Value : 0), MidpointRounding.AwayFromZero);
                                     if (employee.WAR_RevenueDeduction_Calculated != "-")
                                     {
                                         DeductTotal += Math.Round(Convert.ToDecimal(employee.WAR_RevenueDeduction_Calculated), MidpointRounding.AwayFromZero);
@@ -674,19 +682,27 @@ namespace RMERP.Controllers
                               
                                 int k = 0;
                                 int cellAllow = totalCount + 4;
+                                                              
                                 foreach (var all in wageRegisters[0].allowanceVMs.OrderBy(m => m.allowanceVM.ALL_Id))
                                 {
+                                    WageAllowancesTotalVM wageTotalVM = new WageAllowancesTotalVM();
+                                    wageTotalVM.ALL_Id = all.allowanceVM.ALL_Id;
+                                    wageTotalVM.Parameter = all.allowanceVM.ALL_Alias;
+                                    wageTotalVM.Value = arrAllowancesTotal[k];
+                                    WageAllowancesTotalVMs.Add(wageTotalVM);
                                     ICell cellEmpAll = row.CreateCell(cellAllow + 1);
                                     cellEmpAll.SetCellValue(Math.Round(arrAllowancesTotal[k], MidpointRounding.AwayFromZero).ToString());
                                     cellEmpAll.CellStyle = styleGrey40;
                                     cellAllow++;
                                     k++;
                                 }
+                                
                                 totalCount = cellAllow;
 
                                 #region New total allowances 29th july
                                 if (clientRequirement.CRI_OutStation_Allowance == true)
                                 {
+                                    IsCRI_OutStation_Allowance = true;
                                     totalCount = totalCount + 1;
                                     ICell cellTotOutstation = row.CreateCell(totalCount);
                                     cellTotOutstation.CellStyle = styleGrey40;
@@ -694,6 +710,7 @@ namespace RMERP.Controllers
                                 }
                                 if (clientRequirement.CRI_Attendance_Allowance == true)
                                 {
+                                    IsCRI_Attendance_Allowance = true;
                                     totalCount = totalCount + 1;
                                     ICell cellTotAttendance = row.CreateCell(totalCount);
                                     cellTotAttendance.CellStyle = styleGrey40;
@@ -701,6 +718,7 @@ namespace RMERP.Controllers
                                 }
                                 if (clientRequirement.CRI_Nightshift_Allowance == true)
                                 {
+                                    IsCRI_Nightshift_Allowance = true;
                                     totalCount = totalCount + 1;
                                     ICell cellTotNightshift = row.CreateCell(totalCount);
                                     cellTotNightshift.CellStyle = styleGrey40;
@@ -708,6 +726,7 @@ namespace RMERP.Controllers
                                 }
                                 if (clientRequirement.CRI_Performance_Allowance == true)
                                 {
+                                    IsCRI_Performance_Allowance = true;
                                     totalCount = totalCount + 1;
                                     ICell cellTotPerformance = row.CreateCell(totalCount);
                                     cellTotPerformance.CellStyle = styleGrey40;
@@ -715,6 +734,7 @@ namespace RMERP.Controllers
                                 }
                                 if (!clientRequirement.CRI_OT_Calculate_Payableday)
                                 {
+                                    IsCRI_OT_Calculate_Payableday = true;
                                     totalCount = totalCount + 1;
                                     ICell cellTot5 = row.CreateCell(totalCount);
                                     cellTot5.CellStyle = styleGrey40;
@@ -735,6 +755,7 @@ namespace RMERP.Controllers
                                 int totalCount1 = totalCount + 3;
                                 if (clientRequirement.CRI_ProfessionalTax)
                                 {
+                                    IsCRI_ProfessionalTax = true;
                                     totalCount1 = totalCount1 + 1;
                                     ICell cellTot9 = row.CreateCell(totalCount1);
                                     cellTot9.SetCellValue(Math.Round(TotalProfTax, MidpointRounding.AwayFromZero).ToString());
@@ -742,6 +763,7 @@ namespace RMERP.Controllers
                                 }
                                 if (clientRequirement.CRI_RevenueDeduction)
                                 {
+                                    IsCRI_RevenueDeduction = true;
                                     totalCount1 = totalCount1 + 1;
                                     ICell cellTot10 = row.CreateCell(totalCount1);
                                     cellTot10.SetCellValue(Math.Round(TotalRevenue, MidpointRounding.AwayFromZero).ToString());
@@ -749,6 +771,7 @@ namespace RMERP.Controllers
                                 }
                                 if (clientRequirement.CRI_CanteenFacility)
                                 {
+                                    IsCRI_CanteenFacility = true;
                                     totalCount1 = totalCount1 + 1;
                                     ICell cellTot11 = row.CreateCell(totalCount1);
                                     cellTot11.SetCellValue(Math.Round(TotalCanteenFacility, MidpointRounding.AwayFromZero).ToString());
@@ -762,6 +785,7 @@ namespace RMERP.Controllers
                                 int TotCount = totalCount1 + 2;
                                 if (!dd.DES_Exclude_LWF)
                                 {
+                                    IsDES_Include_LWF = true;
                                     ICell cellTotLWF = row.CreateCell(TotCount);
                                     cellTotLWF.SetCellValue(Math.Round(TotalLWF, MidpointRounding.AwayFromZero).ToString());
                                     cellTotLWF.CellStyle = styleGrey50;
@@ -777,13 +801,243 @@ namespace RMERP.Controllers
                                 #endregion
 
                                 DesCount = DesCount + 1;
+
+                                Final_TotalPaybleDays = Final_TotalPaybleDays + TotalPaybleDays;
+                                Final_TotalBasic = Final_TotalBasic + TotalBasic;
+                                Final_TotalDA = Final_TotalDA + TotalDA;
+                                Final_TotalHRA = Final_TotalHRA + TotalHRA;
+                                Final_TotalOT = Final_TotalOT + TotalOT;
+                                Final_TotalGrossTotal = Final_TotalGrossTotal + TotalGrossTotal;
+                                Final_TotalPF = Final_TotalPF + TotalPF;
+                                Final_TotalESIC = Final_TotalESIC + TotalESIC;
+                                Final_TotalProfTax = Final_TotalProfTax + TotalProfTax;
+                                Final_TotalRevenue = Final_TotalRevenue + TotalRevenue;
+                                Final_TotalCanteenFacility = Final_TotalCanteenFacility + TotalCanteenFacility;
+                                Final_TotalAdvance = Final_TotalAdvance + TotalAdvance;
+                                Final_TotalDeduct = Final_TotalDeduct + TotalDeduct;
+                                Final_TotalFinal = Final_TotalFinal + TotalFinal;
+                                Final_TotalOutStation = Final_TotalOutStation + TotalOutStation;
+                                Final_TotalAttendance = Final_TotalAttendance + TotalAttendance;
+                                Final_TotalNightshift = Final_TotalNightshift + TotalNightshift;
+                                Final_TotalPerformance = Final_TotalPerformance + TotalPerformance;
+                                Final_TotalLWF = Final_TotalLWF + TotalLWF;
                             }
 
+                            DesCount = DesCount + 1;
+                            IRow frow = excelSheet.CreateRow(DesCount);
+                            IRow frowSecond = excelSheet.CreateRow(DesCount+1);
+                            excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount+1, 0, 4));                            
+                                                       
+                            ICell fcellTot = frow.CreateCell(0);
+                            fcellTot.SetCellValue("GRAND TOTAL");
+                            fcellTot.CellStyle = styleGrey25;
+                            ICell fcellTot_1 = frow.CreateCell(1);
+                            fcellTot_1.CellStyle = styleGrey25;
+                            ICell fcellTot_2 = frow.CreateCell(2);
+                            fcellTot_2.CellStyle = styleGrey25;
+                            ICell fcellTot_3 = frow.CreateCell(3);
+                            fcellTot_3.CellStyle = styleGrey25;
+                            ICell fcellTot_4 = frow.CreateCell(4);
+                            fcellTot_4.CellStyle = styleGrey25;
+                            CellUtil.SetAlignment(fcellTot, workbook, (short)HorizontalAlignment.Center);
+                            ICell fcellTots = frowSecond.CreateCell(0);                            
+                            fcellTots.CellStyle = styleGrey25;
+                            ICell fcellTot_1s = frowSecond.CreateCell(1);
+                            fcellTot_1s.CellStyle = styleGrey25;
+                            ICell fcellTot_2s = frowSecond.CreateCell(2);
+                            fcellTot_2s.CellStyle = styleGrey25;
+                            ICell fcellTot_3s = frowSecond.CreateCell(3);
+                            fcellTot_3s.CellStyle = styleGrey25;
+                            ICell fcellTot_4s = frowSecond.CreateCell(4);
+                            fcellTot_4s.CellStyle = styleGrey25;
+
+                            int ftotalCount = 4;
+                            ICell fcellTot1 = frow.CreateCell(ftotalCount + 1);
+                            fcellTot1.SetCellValue("Total Payable Days");
+                            fcellTot1.CellStyle = styleGrey25;
+                            ICell fcellTot1s = frowSecond.CreateCell(ftotalCount + 1);
+                            fcellTot1s.SetCellValue(Final_TotalPaybleDays.ToString());
+                            fcellTot1s.CellStyle = styleGrey25;
+
+                            ICell fcellTot2 = frow.CreateCell(ftotalCount + 2);
+                            fcellTot2.SetCellValue("Total Basic");
+                            fcellTot2.CellStyle = styleGrey40;
+                            ICell fcellTot2s = frowSecond.CreateCell(ftotalCount + 2);
+                            fcellTot2s.SetCellValue(Math.Round(Final_TotalBasic, MidpointRounding.AwayFromZero).ToString());
+                            fcellTot2s.CellStyle = styleGrey40;
+
+
+                            ICell fcellTot3 = frow.CreateCell(ftotalCount + 3);
+                            fcellTot3.SetCellValue("Total DA");
+                            fcellTot3.CellStyle = styleGrey40;
+                            ICell fcellTot3s = frowSecond.CreateCell(ftotalCount + 3);
+                            fcellTot3s.SetCellValue(Math.Round(Final_TotalDA, MidpointRounding.AwayFromZero).ToString());
+                            fcellTot3s.CellStyle = styleGrey40;
+
+                            ICell fcellTot4 = frow.CreateCell(ftotalCount + 4);
+                            fcellTot4.SetCellValue("Total HRA");
+                            fcellTot4.CellStyle = styleGrey40;
+                            ICell fcellTot4s = frowSecond.CreateCell(ftotalCount + 4);
+                            fcellTot4s.SetCellValue(Math.Round(Final_TotalHRA, MidpointRounding.AwayFromZero).ToString());
+                            fcellTot4s.CellStyle = styleGrey40;
+
+                            int fk = 0;
+                            int fcellAllow = ftotalCount + 4;
+                            foreach (var all in WageAllowancesTotalVMs.GroupBy(m=> new { m.ALL_Id ,m.Parameter}).Select(g=>new { Total= g.Sum(m=>m.Value), ALL_Title=g.Key.Parameter }))
+                            {
+                                ICell fcellEmpAll = frow.CreateCell(fcellAllow + 1);
+                                fcellEmpAll.SetCellValue(all.ALL_Title);
+                                fcellEmpAll.CellStyle = styleGrey40;
+                                ICell fcellEmpAlls = frowSecond.CreateCell(fcellAllow + 1);
+                                fcellEmpAlls.SetCellValue(Math.Round(all.Total, MidpointRounding.AwayFromZero).ToString());
+                                fcellEmpAlls.CellStyle = styleGrey40;
+                                fcellAllow++;
+                                fk++;
+                            }
+                            ftotalCount = fcellAllow;
+
+                            #region New grand total allowances
+                            if (IsCRI_OutStation_Allowance)
+                            {
+                                ftotalCount = ftotalCount + 1;
+                                ICell cellTotOutstation = frow.CreateCell(ftotalCount);
+                                cellTotOutstation.CellStyle = styleGrey40;
+                                cellTotOutstation.SetCellValue("Total OutStation");
+                                ICell cellTotOutstations = frowSecond.CreateCell(ftotalCount);
+                                cellTotOutstations.CellStyle = styleGrey40;
+                                cellTotOutstations.SetCellValue(Math.Round(Final_TotalOutStation, MidpointRounding.AwayFromZero).ToString());
+                            }
+                            if (IsCRI_Attendance_Allowance)
+                            {
+                                ftotalCount = ftotalCount + 1;
+                                ICell cellTotAttendance = frow.CreateCell(ftotalCount);
+                                cellTotAttendance.CellStyle = styleGrey40;
+                                cellTotAttendance.SetCellValue("Total Attendance");
+                                ICell cellTotAttendances = frowSecond.CreateCell(ftotalCount);
+                                cellTotAttendances.CellStyle = styleGrey40;
+                                cellTotAttendances.SetCellValue(Math.Round(Final_TotalAttendance, MidpointRounding.AwayFromZero).ToString());
+                            }
+                            if (IsCRI_Nightshift_Allowance)
+                            {
+                                ftotalCount = ftotalCount + 1;
+                                ICell cellTotNightshift = frow.CreateCell(ftotalCount);
+                                cellTotNightshift.CellStyle = styleGrey40;
+                                cellTotNightshift.SetCellValue("Total Nightshift");
+                                ICell cellTotNightshifts = frowSecond.CreateCell(ftotalCount);
+                                cellTotNightshifts.CellStyle = styleGrey40;
+                                cellTotNightshifts.SetCellValue(Math.Round(Final_TotalNightshift, MidpointRounding.AwayFromZero).ToString());
+                            }
+                            if (IsCRI_Performance_Allowance)
+                            {
+                                ftotalCount = ftotalCount + 1;
+                                ICell cellTotPerformance = frow.CreateCell(ftotalCount);
+                                cellTotPerformance.CellStyle = styleGrey40;
+                                cellTotPerformance.SetCellValue("Total Performance");
+                                ICell cellTotPerformances = frowSecond.CreateCell(ftotalCount);
+                                cellTotPerformances.CellStyle = styleGrey40;
+                                cellTotPerformances.SetCellValue(Math.Round(Final_TotalPerformance, MidpointRounding.AwayFromZero).ToString());
+                            }
+                            if (IsCRI_OT_Calculate_Payableday)
+                            {
+                                ftotalCount = ftotalCount + 1;
+                                ICell cellTot5 = frow.CreateCell(ftotalCount);
+                                cellTot5.CellStyle = styleGrey40;
+                                cellTot5.SetCellValue("Total OT");
+                                ICell cellTot5s = frowSecond.CreateCell(ftotalCount);
+                                cellTot5s.CellStyle = styleGrey40;
+                                cellTot5s.SetCellValue(Math.Round(Final_TotalOT, MidpointRounding.AwayFromZero).ToString());
+                            }
+                            #endregion
+
+                            ICell fcellTotGross = frow.CreateCell(ftotalCount + 1);
+                            fcellTotGross.SetCellValue("Total Gross");
+                            fcellTotGross.CellStyle = styleGrey40;
+                            ICell fcellTotGrosss = frowSecond.CreateCell(ftotalCount + 1);
+                            fcellTotGrosss.SetCellValue(Math.Round(Final_TotalGrossTotal, MidpointRounding.AwayFromZero).ToString());
+                            fcellTotGrosss.CellStyle = styleGrey40;
+
+                            ICell fcellTotPF = frow.CreateCell(ftotalCount + 2);
+                            fcellTotPF.SetCellValue("Total PF");
+                            fcellTotPF.CellStyle = styleGrey50;
+                            ICell fcellTotPFs = frowSecond.CreateCell(ftotalCount + 2);
+                            fcellTotPFs.SetCellValue(Math.Round(Final_TotalPF, MidpointRounding.AwayFromZero).ToString());
+                            fcellTotPFs.CellStyle = styleGrey50;
+
+                            ICell fcellTotEsic = frow.CreateCell(ftotalCount + 3);
+                            fcellTotEsic.SetCellValue("Total ESIC");
+                            fcellTotEsic.CellStyle = styleGrey50;
+                            ICell fcellTotEsics = frowSecond.CreateCell(ftotalCount + 3);
+                            fcellTotEsics.SetCellValue(Math.Round(Final_TotalESIC, MidpointRounding.AwayFromZero).ToString());
+                            fcellTotEsics.CellStyle = styleGrey50;
+
+                            int ftotalCount1 = ftotalCount + 3;
+                            if (IsCRI_ProfessionalTax)
+                            {
+                                ftotalCount1 = ftotalCount1 + 1;
+                                ICell cellTot9 = frow.CreateCell(ftotalCount1);
+                                cellTot9.SetCellValue("Total Professional Tax");
+                                cellTot9.CellStyle = styleGrey50;
+                                ICell cellTot9s = frowSecond.CreateCell(ftotalCount1);
+                                cellTot9s.SetCellValue(Math.Round(Final_TotalProfTax, MidpointRounding.AwayFromZero).ToString());
+                                cellTot9s.CellStyle = styleGrey50;
+                            }
+                            if (IsCRI_RevenueDeduction)
+                            {
+                                ftotalCount1 = ftotalCount1 + 1;
+                                ICell cellTot10 = frow.CreateCell(ftotalCount1);
+                                cellTot10.SetCellValue("Total Revenue Deduction");
+                                cellTot10.CellStyle = styleGrey50;
+                                ICell cellTot10s = frowSecond.CreateCell(ftotalCount1);
+                                cellTot10s.SetCellValue(Math.Round(Final_TotalRevenue, MidpointRounding.AwayFromZero).ToString());
+                                cellTot10s.CellStyle = styleGrey50;
+                            }
+                            if (IsCRI_CanteenFacility)
+                            {
+                                ftotalCount1 = ftotalCount1 + 1;
+                                ICell cellTot11 = frow.CreateCell(ftotalCount1);
+                                cellTot11.SetCellValue("Total Canteen Facility");
+                                cellTot11.CellStyle = styleGrey50;
+                                ICell cellTot11s = frowSecond.CreateCell(ftotalCount1);
+                                cellTot11s.SetCellValue(Math.Round(Final_TotalCanteenFacility, MidpointRounding.AwayFromZero).ToString());
+                                cellTot11s.CellStyle = styleGrey50;
+                            }
+
+                            ICell cellTotAdvance = frow.CreateCell(ftotalCount1 + 1);
+                            cellTotAdvance.SetCellValue("Total Advance Installment");
+                            cellTotAdvance.CellStyle = styleGrey50;
+                            ICell cellTotAdvances = frowSecond.CreateCell(ftotalCount1 + 1);
+                            cellTotAdvances.SetCellValue(Math.Round(Final_TotalAdvance, MidpointRounding.AwayFromZero).ToString());
+                            cellTotAdvances.CellStyle = styleGrey50;
+
+                            int fTotCount = ftotalCount1 + 2;
+                            if (IsDES_Include_LWF)
+                            {
+                                ICell cellTotLWF = frow.CreateCell(fTotCount);
+                                cellTotLWF.SetCellValue("Total MLWF Deduction");
+                                cellTotLWF.CellStyle = styleGrey50;
+                                ICell cellTotLWFs = frowSecond.CreateCell(fTotCount);
+                                cellTotLWFs.SetCellValue(Math.Round(Final_TotalLWF, MidpointRounding.AwayFromZero).ToString());
+                                cellTotLWFs.CellStyle = styleGrey50;
+                                fTotCount = fTotCount + 1;
+                            }
+
+                            ICell fcellTotDeduct = frow.CreateCell(fTotCount);
+                            fcellTotDeduct.SetCellValue("Deduction");
+                            fcellTotDeduct.CellStyle = styleGrey50;
+                            ICell fcellTotDeducts = frowSecond.CreateCell(fTotCount);
+                            fcellTotDeducts.SetCellValue(Math.Round(Final_TotalDeduct, MidpointRounding.AwayFromZero).ToString());
+                            fcellTotDeducts.CellStyle = styleGrey50;
+
+                            ICell fcellTotFinal = frow.CreateCell(fTotCount + 1);
+                            fcellTotFinal.SetCellValue("Grand Total");
+                            fcellTotFinal.CellStyle = styleGrey80;
+                            ICell fcellTotFinals = frowSecond.CreateCell(fTotCount + 1);
+                            fcellTotFinals.SetCellValue(Math.Round(Final_TotalFinal, MidpointRounding.AwayFromZero).ToString());
+                            fcellTotFinals.CellStyle = styleGrey80;
                         }
                     }
 
-                }
-
+                }               
                 workbook.Write(fs);
             }
             using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
@@ -794,7 +1048,12 @@ namespace RMERP.Controllers
             new FileInfo(Path.Combine(newPath, fileName)).Delete();
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
-
+        public class WageAllowancesTotalVM
+        {
+            public int ALL_Id { get; set; }
+            public string Parameter { get; set; }
+            public decimal Value { get; set; }
+        }
         [HttpPost]
         public JsonResult Calculate_PF_ESIC([FromBody]CalculationEditVM CalculationEditVM)
         {
