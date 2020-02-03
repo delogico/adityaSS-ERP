@@ -49,35 +49,28 @@
     <div class="container custom-border" style="margin-top: 10px;">
 
         <div class="row">
-            <div class="col-xs-12">
-                <center>
-                    <h1><strong>@Model.FRM_.FRM_Name</strong></h1>
-                    <strong>
-                        @Model.FRM_.FRM_Address1<br>
-                        @Model.FRM_.FRM_Address2<br>
-                        GSTIN/UIN : @Model.FRM_.FRM_GST_No<br>
-                        State Name: @Model.FRM_.STA_.STA_Name , Code: @Model.FRM_.STA_.STA_GST_Code<br>
-                        E-Mail : @Model.FRM_.FRM_Email<br>
-                    </strong>
-                </center>
-            </div>
+            <center>
+                <span style="font-size:30px;"><strong>@Model.FRM_.FRM_Name</strong><br/></span>
+                <strong>
+                    @Model.FRM_.FRM_Address1<br>
+                    @Model.FRM_.FRM_Address2<br>
+                    GSTIN/UIN : @Model.FRM_.FRM_GST_No<br>
+                    State Name: @Model.FRM_.STA_.STA_Name , Code: @Model.FRM_.STA_.STA_GST_Code<br>
+                    E-Mail : @Model.FRM_.FRM_Email<br>
+                </strong>
+            </center>
         </div>
-
         <div class="row">
-            <div class="col-xs-12">
-                <hr/>
-                <div class="invoice-title text-center">
-                    <h1><strong>TAX INVOICE</strong></h1>
-                </div>
-                <hr />
-                <div class="row">
-
-                    <div class="col-sm-12">
-                        <table width="100%" style="font-size:inherit">
+            <div class="col-xs-12">                                              
+                <table width="100%" style="font-size:inherit">
                             <tr>
-                                <td width="75%">
-                                    <span style="font-size: 12px;font-weight:bold">Buyer: </span>
-                                    <br>
+                                <td colspan="2" class="invoice-title text-center" style="border-top:1px solid;border-bottom:1px solid;">
+                                    <span style="font-size:32px;"><strong>TAX INVOICE</strong></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="75%" rowspan="2" style="border-right:1px solid;">
+                                    <p style="font-size: 12px;font-weight:bold;padding-top: 5px;">Buyer: </p>                                    
                                     <address>
                                         <strong>@Model.CLI_.CLI_Invoicing_Name</strong> <br>
                                         @if (!string.IsNullOrEmpty(Model.CLI_.CLI_Invoicing_Address1))
@@ -115,43 +108,51 @@
                                     </address>
                                 </td>
                                 <td class="text-right" width="25%" style="vertical-align:top;">
-                                    <address>
-                                        <strong>Invoice No: @Model.INV_Number</strong><br>
-                                        <strong>Date :</strong> @DateHelper.getLongDateFormat(Model.INV_Date)<hr />
-                                        @if (Model.INV_ClientOrder_Number != null && Model.INV_ClientOrder_Number != "0")
-                                        {
-                                            <span>Order No. : </span>@Model.INV_ClientOrder_Number<br>
-                                        }
-                                        @{
-                                            var dt = "";
-                                            if (Model.INV_ClientOrder_Date != null)
-                                            {
-                                                dt = DateHelper.getLongDateFormat(Model.INV_ClientOrder_Date.Value);
-                                            }
-                                        }
-                                        @if (dt != "")
-                                        {
-                                            <span>Date :</span> @dt<br>
-                                        }
-
-                                    </address>
-                                </td>
+                                    <address style="border-bottom:1px solid;padding:10px;">
+                                        <span style="font-size:18px;font-weight:bold;">Invoice No: @Model.INV_Number</span><br>
+                                        <strong>Date :</strong> @DateHelper.getLongDateFormat(Model.INV_Date)
+                                    </address>                                   
+                                </td>                                
                             </tr>
-                        </table>
-                    </div>
-                </div>
+                    <tr>
+                        <td style="vertical-align:top;">
+                            <address style="padding:10px;">
+                                
+                                @if (Model.INV_ClientOrder_Number != null && Model.INV_ClientOrder_Number != "0")
+                                {
+                                    <span>Order No. : </span>@Model.INV_ClientOrder_Number<br>
+                                }
+                                @{
+                                    var dt = "";
+                                    if (Model.INV_ClientOrder_Date != null)
+                                    {
+                                        dt = DateHelper.getLongDateFormat(Model.INV_ClientOrder_Date.Value);
+                                    }
+                                }
+                                @if (dt != "")
+                                {
+                                    <span>Date :</span> @dt<br>
+                                }
+
+                            </address>
+                           
+                        </td>
+
+                    </tr>
+                    
+                        </table>                    
             </div>
         </div>
+
 
         <div class="row">
             <div class="col-md-12">
                 <table class="gst-table" width="100%">
-
                     <thead>
                         <tr>
-                            <td width="10%"><strong>Sr.No</strong></td>
-                            <td class="text-left"><strong>Description</strong></td>
-                            <td width="20%" class="text-right"><strong>Amount</strong></td>
+                            <td width="10%" class="text-center"><strong>Sr.No</strong></td>
+                            <td class="text-center"><strong>Description</strong></td>
+                            <td width="20%" class="text-center"><strong>Amount</strong></td>
                         </tr>
                     </thead>
                     <tbody>
@@ -204,7 +205,7 @@
 
                         <tr>
                             <td class="thick-line"></td>
-                            <td class="thick-line text-right"><strong>Total</strong></td>                            
+                            <td class="thick-line text-right"><strong>Total</strong></td>
                             <td class="thick-line text-right"><i class="fa fa-rupee"></i>@RoundFigure(Model.INV_Total).ToString("#,##0.00")</td>
                         </tr>
                     </tbody>
@@ -283,26 +284,26 @@
                 </tr>
             </table>
         }
-            <table width="100%" style="font-size:inherit" class="gst-table">
-                <tr>
-                    <td colspan="3"> <strong>Amount in Word: </strong>@ConvertNumbertoWords(Model.INV_Total) Only</td>
-                </tr>
-                <tr>
-                    <td colspan="3"><strong>Company GST No: </strong> @Model.FRM_.FRM_GST_No</td>
-                </tr>
-                <tr>
-                    <td colspan="3"><strong>Company's Bank Details </strong><br /></td>
-                </tr>
-                <tr>                   
-                    <td class="text-left" width="33%"> <strong>Bank Name:</strong>  @Model.FRM_.FRM_BankName</td>
-                    <td class="text-center" width="33%">  <strong> A/c No. :</strong>  @Model.FRM_.FRM_AccountNumber</td>
-                    <td class="text-right" width="33%"> <strong>IFSC Code:</strong>  @Model.FRM_.FRM_IFSC_Code</td>                    
-                </tr>
-                <tr>
-                    <td colspan="3"> <strong>Remark: </strong> @Model.INV_Remark</td>
-                </tr>
-            </table>
-        
+        <table width="100%" style="font-size:inherit" class="gst-table">
+            <tr>
+                <td colspan="3"> <strong>Amount in Word: </strong>@ConvertNumbertoWords(Model.INV_Total) Only</td>
+            </tr>
+            <tr>
+                <td colspan="3"><strong>Company GST No: </strong> @Model.FRM_.FRM_GST_No</td>
+            </tr>
+            <tr>
+                <td colspan="3"><strong>Company's Bank Details </strong><br /></td>
+            </tr>
+            <tr>
+                <td class="text-left" width="33%"> <strong>Bank Name:</strong>  @Model.FRM_.FRM_BankName</td>
+                <td class="text-center" width="33%">  <strong> A/c No. :</strong>  @Model.FRM_.FRM_AccountNumber</td>
+                <td class="text-right" width="33%"> <strong>IFSC Code:</strong>  @Model.FRM_.FRM_IFSC_Code</td>
+            </tr>
+            <tr>
+                <td colspan="3"> <strong>Remark: </strong> @Model.INV_Remark</td>
+            </tr>
+        </table>
+
         <div class="row">
             <div class="col-sm-12">
                 <p class="text-right"><strong> For @Model.FRM_.FRM_Name</strong> </p>
@@ -320,7 +321,7 @@
                             <td class="text-left" width="25%"><strong>Customer Seal and Signature </strong></td>
                             <td class="text-center" width="25%"> <strong>Prepared by </strong></td>
                             <td class="text-center" width="25%"> <strong>Verified by </strong></td>
-                            <td class="text-right" width="25%"><strong>Propriator </strong></td>
+                            <td class="text-right" width="25%"><strong>Proprietor </strong></td>
                         </tr>
                     </tbody>
                 </table>

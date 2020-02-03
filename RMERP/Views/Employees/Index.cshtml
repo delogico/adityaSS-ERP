@@ -2,8 +2,7 @@
 @using RMERP.Helpers;
 @using RMERP.DAL.Helpers;
 @{
-    ViewData["Title"] = "Employees";
-    Layout = "~/Views/Shared/_RMLayout.cshtml";
+    ViewData["Title"] = "Employees";    
 }
 @section Breadcrumbs{
     <li class="breadcrumb-item">Employees</li>
@@ -24,8 +23,7 @@
                 a=a.slice(0, 11);
                 var ukDatea = a.split('-');               
                 var months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];                
-                var monthNo = months.indexOf(ukDatea[1].toLowerCase()) + 1;   
-                debugger;
+                var monthNo = months.indexOf(ukDatea[1].toLowerCase()) + 1;                  
                 return (ukDatea[2] + monthNo + ukDatea[0]) * 1;
             }
     }); 
