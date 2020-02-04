@@ -21,7 +21,7 @@
             //    liveSearch: true,
             //    showSubtext: true
             //});
-
+            
             var items = "<option value='0'>Select City</option>";
             $("#EMP_City").html(items);
             if (@Model.EMP_City != null && @Model.EMP_City!= 0) {
@@ -129,23 +129,16 @@
                 $("#EMP_City").html(item);
             });
         };
-
+        
     </script>
-    @*@if (TempData["message"] != null)
-        {
-            <script>
-                $(document).ready(function () {
-                alert('@TempData["message"]');
-            });
-            </script>
-        };*@
+    
 
 }
 
 <h3>@Model.EMP_FullName</h3>
 @if (TempData["message"] != null)
 {
- <div class="alert alert-danger">@TempData["message"]</div> 
+    <div class="alert alert-danger">@TempData["message"]</div>
 }
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#AddEditEmployee">Edit data</a></li>
@@ -259,7 +252,7 @@
                                                 @Html.RadioButtonFor(m => m.EMP_Gender, true) Male
                                             </label>
                                             <label class="radio-inline">
-                                                @Html.RadioButtonFor(m => m.EMP_Gender,false) Female
+                                                @Html.RadioButtonFor(m => m.EMP_Gender, false) Female
                                             </label>
 
                                         </label>
@@ -342,7 +335,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.EMP_ESIC_Number, new { @class = "control-label" })
-                                        @Html.TextBoxFor(m => m.EMP_ESIC_Number, new { @class = "form-control", @maxlength=10 })
+                                        @Html.TextBoxFor(m => m.EMP_ESIC_Number, new { @class = "form-control", @maxlength = 10 })
                                         @Html.ValidationMessageFor(m => m.EMP_ESIC_Number, "", new { @class = "text-danger" })
                                     </div>
                                 </div>

@@ -176,5 +176,19 @@ namespace RMERP.DAL.ManagerClasses
             }
             return list;
         }
+
+        public IEnumerable<Wage_Process> GetWagFromDate(DateTime date,int FRM_Id)
+        {
+            if (FRM_Id > 0)
+            {
+                return _context.Wage_Process.Where(m => m.WAG_Month.Month.Equals(date.Month) && m.WAG_Month.Year.Equals(date.Year) && m.FRM_Id.Equals(FRM_Id)).Include(m=>m.FRM_);
+            }
+            else
+            {
+                return _context.Wage_Process.Where(m => m.WAG_Month.Month.Equals(date.Month) && m.WAG_Month.Year.Equals(date.Year)).Include(m=>m.FRM_);
+            }
+            
+            
+        }
     }
 }

@@ -510,7 +510,30 @@ namespace RMERP.Controllers
             return RedirectToAction("Index");
         }
 
+        public string IsWageSaved(DateTime date,int EMP_Id)
+        {
+            string res = string.Empty;
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
+            WageProcessManager wageProcessManager = new WageProcessManager(_context);
+            WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
 
+            IEnumerable<Wage_Process> wageProcesses = wageProcessManager.GetWagFromDate(date, (sessionUtils.GetLoggedFirmID().HasValue ? sessionUtils.GetLoggedFirmID().Value:0));
+            if (wageProcesses.Count()>0)
+            {
+                foreach(var wag in wageProcesses)
+                {
+                    IEnumerable<Wage_Register> list = wageRegisterManager.GetWageFrom_WAG_Id_EMP_Id(wag.WAG_Id, EMP_Id);
+                    if (list.ToList().Count() > 0)
+                    {
+                        res += "Wage of <b>" + wag.WAG_Month.ToString("MMM-yyyy") + " ("+wag.FRM_.FRM_ShortName+")</b> is already saved for client <b>" + string.Join(",", list.Select(m => m.CLI_.CLI_Name)) + "</b>.<br/>";
+                        res += "So you have to reset wage register first.<br/><br/>";
+                    }                  
+                       
+                }
+                
+            }            
+            return res;
+        }
 
     }
 }

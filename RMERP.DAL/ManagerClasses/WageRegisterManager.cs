@@ -670,5 +670,10 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id).Select(m=>m.EMP_).ToList();
         }        
+
+        public IEnumerable<Wage_Register> GetWageFrom_WAG_Id_EMP_Id(int WAG_Id, int EMP_Id)
+        {
+            return _context.Wage_Register.Where(m => m.WAG_Id.Equals(WAG_Id) && m.EMP_Id.Equals(EMP_Id)).Include(m=>m.CLI_);
+        }
     }
 }
