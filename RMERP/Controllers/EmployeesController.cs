@@ -132,7 +132,7 @@ namespace RMERP.Controllers
             SessionUtils sessionUtils = new SessionUtils(Request, Response);            
             if (ModelState.IsValid)
             {
-                if(!employeeManager.CheckExistingAadhar(employeeVM.EMP_Aadhar_Number, employeeVM.EMP_Id))
+                if(!employeeManager.CheckExistingAadhar(employeeVM.EMP_Aadhar_Number, employeeVM.EMP_Id, employeeVM.FRM_Id))
                 {
                     Employees employee = new Employees();
                     employee = EmployeesMapper.MapMeModel(employeeVM);
@@ -477,14 +477,14 @@ namespace RMERP.Controllers
         }
         
                 
-        public IActionResult CheckExistingAadhar(string EMP_Aadhar_Number, int EMP_Id)
+        public IActionResult CheckExistingAadhar(string EMP_Aadhar_Number, int EMP_Id,int FRM_Id)
         {
             EMP_Aadhar_Number=EMP_Aadhar_Number.Trim().Replace(@"\", string.Empty);
             EmployeeManager employeeManager = new EmployeeManager(_context);
             bool ExistingAadhar = false;
             try
             {
-                ExistingAadhar = !employeeManager.CheckExistingAadhar(EMP_Aadhar_Number, EMP_Id);
+                ExistingAadhar = !employeeManager.CheckExistingAadhar(EMP_Aadhar_Number, EMP_Id, FRM_Id);
                 return Json(ExistingAadhar);
             }
             catch (Exception)

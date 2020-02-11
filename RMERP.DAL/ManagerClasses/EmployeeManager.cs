@@ -142,9 +142,9 @@ namespace RMERP.DAL.ManagerClasses
             return list.Count() > 0;
         }
 
-        public bool CheckExistingAadhar(string AadharNumber, int EMP_Id)
+        public bool CheckExistingAadhar(string AadharNumber, int EMP_Id,int FRM_Id)
         {
-            return _context.Employees.Any(m => m.EMP_Aadhar_Number.Equals(AadharNumber) && m.EMP_Id != EMP_Id);
+            return _context.Employees.Any(m => m.EMP_Aadhar_Number.Equals(AadharNumber) && m.EMP_Id != EMP_Id && m.FRM_Id== FRM_Id);
         }
 
         public List<Employees> SearchEmployees(int FRM_Id, bool EMP_UAN_Number, bool EMP_ESIC_Number,string EMP_Aadhar_Number)

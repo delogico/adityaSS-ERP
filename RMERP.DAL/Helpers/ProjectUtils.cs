@@ -174,6 +174,11 @@ namespace RMERP.DAL.Helpers
             Assign = 0,
             Unassign = 1
         }
+        public enum Left_Working
+        {
+            Left = 0,
+            Working = 1
+        }
         public enum WagePaySlip
         {
             NotGenerated=0,
