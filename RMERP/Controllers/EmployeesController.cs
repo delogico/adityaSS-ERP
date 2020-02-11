@@ -501,11 +501,10 @@ namespace RMERP.Controllers
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             try
             {
-                employeeManager.RejoinEmployee(EMP_Id, EMP_Rejoin_Date);
-                //if (!employeeManager.RejoinEmployee(EMP_Id, EMP_Rejoin_Date, sessionUtils.GetLoggedAdminID()))
-                //{
-                //    TempData["message"] = "We can not rejoin employee on same month. Please Try Again!";
-                //}
+                if (!employeeManager.RejoinEmployee(EMP_Id, EMP_Rejoin_Date, sessionUtils.GetLoggedAdminID()))
+                {
+                    TempData["message"] = "We can not rejoin employee on same month. Please Try Again!";
+                }
             }
             catch (Exception)
             {
@@ -538,6 +537,11 @@ namespace RMERP.Controllers
             }            
             return res;
         }
-
+        public ActionResult EmployeeHistory(int EMP_Id)
+        {
+            EmployeeManager employeeManager = new EmployeeManager(_context);
+            IEnumerable<EmployeeVM> EmployeeVMs = EmployeesMapper.MapEmployees(employeeManager.EmployeeHistory(EMP_Id).ToList());
+            return View(EmployeeVMs);
+        }
     }
 }

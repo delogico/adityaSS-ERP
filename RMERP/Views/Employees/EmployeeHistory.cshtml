@@ -1,0 +1,75 @@
+﻿@model IEnumerable<RMERP.DAL.ViewModel.EmployeeVM>
+@using RMERP.DAL.Helpers;
+@using RMERP.Helpers;
+@{
+    ViewData["Title"] = "EmployeeHistory";
+}
+@section Breadcrumbs{
+    <li class="breadcrumb-item">Employees</li>
+    <li class="breadcrumb-item">Employees History</li>
+}
+<div class="content container-fluid">
+    <div class="row">
+        <div class="col-sm-8">
+            <h4 class="page-title">@ViewData["Title"]</h4>
+        </div>
+        <div class="col-sm-4 text-right">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @if (Model.Count() > 0)
+            {
+                <div>
+                    <table class="table table-striped custom-table tblEmp">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Designation</th>
+                                <th>Joining date</th>
+                                <th>Leaving date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.FRM_.FRM_ShortName</td>
+                                    <td>@item.EMP_Id.ToString("D5")</td>
+                                    <td>@item.EMP_FullName</td>
+                                    <td>@item.EMP_Designation</td>
+                                    <td>@DateHelper.getLongDateFormat(@item.EMP_DateOfJoining) </td>
+                                    <td>
+                                        @if (item.EMP_IsActive.Equals(false))
+                                        {
+                                            <div>@(item.EMP_InactivatedOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_InactivatedOn.Value) : "") (@ProjectUtils.GetStringValue((ProjectUtils.EMPLOYEE_LEFT_REASON_CODE)item.EMP_ReasonCode))</div>
+                                        }
+                                        else if (item.EMP_RejoinOn != null)
+                                        {
+                                            <div>Rejoin on @(item.EMP_RejoinOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_RejoinOn.Value) : "")</div>
+                                        }
+                                        else
+                                        {
+                                            <div style="color:green;">Currently working in @item.FRM_.FRM_ShortName</div>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <P>No Employees History.</P>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+

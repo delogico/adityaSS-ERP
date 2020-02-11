@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using RMERP.DAL.App_Code;
 using RMERP.DAL.ViewModel;
+using RMERP.DAL.Mappers;
 
 namespace RMERP.DAL.ManagerClasses
 {
@@ -135,7 +136,6 @@ namespace RMERP.DAL.ManagerClasses
             return employee_Advances;
         }
 
-        
         public bool IsAssignedEmployee(int EMP_Id)
         {
             List<Clients_Employees> list = _context.Clients_Employees.Where(m => m.EMP_Id.Equals(EMP_Id) && m.CLE_UnassignedOn != null).ToList();
@@ -192,45 +192,41 @@ namespace RMERP.DAL.ManagerClasses
             return _context.Cities_all.Where(m => m.STA_Id.Equals(STA_Id)).ToList();
         }
 
-        public void RejoinEmployee(int EMP_Id, DateTime EMP_Rejoin_Date)
+        public bool RejoinEmployee(int EMP_Id, DateTime EMP_Rejoin_Date, int ADM_Id)
         {
+            bool rejoinSuccess = false;
             Employees emp = GetEmployeeById(EMP_Id);
-            emp.EMP_IsActive = true;
-            emp.EMP_RejoinOn = EMP_Rejoin_Date;
-            _context.SaveChanges();
+            IEnumerable<Employees> emps = _context.Employees.Where(m => m.EMP_Aadhar_Number.Equals(emp.EMP_Aadhar_Number)).OrderByDescending(m => m.EMP_InactivatedOn);
+            if (emps.Count() > 0)
+            {
+                if (emps.First().EMP_InactivatedOn.HasValue)
+                {
+                    DateTime EMP_InactivatedOn_first = new DateTime(emps.First().EMP_InactivatedOn.Value.Year, emps.First().EMP_InactivatedOn.Value.Month, 1);
+                    DateTime EMP_Rejoin_Date_first = new DateTime(EMP_Rejoin_Date.Year, EMP_Rejoin_Date.Month, 1);
+                    if (EMP_InactivatedOn_first != EMP_Rejoin_Date_first) //emp can't assign on same month bcz we can't diff on wage
+                    {
+                        emp.EMP_IsActive = false;
+                        emp.EMP_RejoinOn = EMP_Rejoin_Date;
+                        _context.Employees.Update(emp);
+
+                        Employees employee = new Employees();
+                        employee = EmployeesMapper.MapMeObject(emp, ADM_Id);
+                        employee.EMP_DateOfJoining = DateTime.Today;
+
+                        _context.Employees.Add(employee);
+                        _context.SaveChanges();
+                        rejoinSuccess = true;
+                    }
+                }
+            }
+            return rejoinSuccess;
         }
 
-        //public bool RejoinEmployee(int EMP_Id, DateTime EMP_Rejoin_Date, int ADM_Id)
-        //{
-        //    bool rejoinSuccess = false;
-        //    Employees emp = GetEmployeeById(EMP_Id);
-        //    IEnumerable<Employees> emps = _context.Employees.Where(m => m.EMP_Aadhar_Number.Equals(emp.EMP_Aadhar_Number)).OrderByDescending(m => m.EMP_InactivatedOn);
-        //    if (emps.Count() > 0)
-        //    {
-        //        if (emps.First().EMP_InactivatedOn.HasValue)
-        //        {
-        //            DateTime EMP_InactivatedOn_first = new DateTime(emps.First().EMP_InactivatedOn.Value.Year, emps.First().EMP_InactivatedOn.Value.Month, 1);
-        //            DateTime EMP_Rejoin_Date_first = new DateTime(EMP_Rejoin_Date.Year, EMP_Rejoin_Date.Month, 1);
-        //            if (EMP_InactivatedOn_first != EMP_Rejoin_Date_first) //emp can't assign on same month bcz we can't diff on wage
-        //            {
-        //                emp.EMP_IsActive = false;
-        //                emp.EMP_RejoinOn = EMP_Rejoin_Date;
-        //                _context.Employees.Update(emp);
-
-        //                Employees employee = new Employees();
-        //                employee = EmployeesMapper.MapMeObject(emp, ADM_Id);
-        //                employee.EMP_DateOfJoining = DateTime.Today;
-
-        //                _context.Employees.Add(employee);
-        //                _context.SaveChanges();
-        //                rejoinSuccess = true;
-        //            }
-        //        }
-        //    }
-        //    return rejoinSuccess;
-        //}
-
-
+        public IEnumerable<Employees> EmployeeHistory(int EMP_Id)
+        {
+            string EMP_AadharNo = GetEmployeeById(EMP_Id).EMP_Aadhar_Number;
+            return _context.Employees.Include(m=>m.FRM_).Where(m => m.EMP_Aadhar_Number.Equals(EMP_AadharNo));
+        }
     }
 }
 
