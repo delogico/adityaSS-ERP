@@ -502,6 +502,10 @@ namespace RMERP.Controllers
             try
             {
                 employeeManager.RejoinEmployee(EMP_Id, EMP_Rejoin_Date);
+                //if (!employeeManager.RejoinEmployee(EMP_Id, EMP_Rejoin_Date, sessionUtils.GetLoggedAdminID()))
+                //{
+                //    TempData["message"] = "We can not rejoin employee on same month. Please Try Again!";
+                //}
             }
             catch (Exception)
             {

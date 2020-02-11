@@ -131,5 +131,52 @@ namespace RMERP.DAL.Mappers
             emp.EMP_RejoinOn = employee.EMP_RejoinOn;
             return emp;
         }
+
+
+        public static Employees MapMeObject(Employees employee,int ADM_Id)
+        {
+            Employees emp = new Employees();            
+            emp.EMP_FirstName = employee.EMP_FirstName.Trim();
+            emp.EMP_MiddleName = employee.EMP_MiddleName;
+            emp.EMP_SurName = employee.EMP_SurName;
+            emp.EMP_Aadhar_Name = employee.EMP_Aadhar_Name;
+            emp.EMP_Aadhar_Number = employee.EMP_Aadhar_Number;
+            emp.EMP_DOB = employee.EMP_DOB;
+            emp.EMP_Married = employee.EMP_Married;            
+            emp.EMP_Gender = employee.EMP_Gender;
+            emp.EMP_Contact_Primary = employee.EMP_Contact_Primary;
+            emp.EMP_Contact_Secondry = employee.EMP_Contact_Secondry;
+            emp.EMP_Address = employee.EMP_Address;
+            emp.EMP_Designation = employee.EMP_Designation;
+            emp.EMP_Pan_Number = employee.EMP_Pan_Number;
+            emp.EMP_ESIC_Number = employee.EMP_ESIC_Number;
+            emp.EMP_UAN_Number = employee.EMP_UAN_Number;
+            emp.EMP_EmployeeNumber_Office = employee.EMP_EmployeeNumber_Office;
+            emp.EMP_TPC_EmployeeId = employee.EMP_TPC_EmployeeId;
+            emp.EMP_Account_Name = employee.EMP_Account_Name;
+            emp.EMP_Account_Number = employee.EMP_Account_Number;
+            emp.EMP_Bank = employee.EMP_Bank;
+            emp.EMP_Branch = employee.EMP_Branch;
+            emp.EMP_Bank_IFSC = employee.EMP_Bank_IFSC;            
+                        
+            emp.FRM_Id = employee.FRM_Id;           
+            emp.EMP_Payment_Type = employee.EMP_Payment_Type;
+            emp.EMP_Is_IDBI_Other = employee.EMP_Is_IDBI_Other;
+            emp.EMP_UAN_Remark = employee.EMP_UAN_Remark;
+            emp.EMP_ESIC_Remark = employee.EMP_ESIC_Remark;            
+            emp.EMP_State = employee.EMP_State;
+            emp.EMP_City = employee.EMP_City;
+
+
+            emp.EMP_DateOfJoining = employee.EMP_DateOfJoining;
+            emp.EMP_RegisteredOn = DateTime.Now;
+            emp.ADM_Id_RegisteredBy = ADM_Id;
+            emp.EMP_RejoinOn = null;
+            emp.EMP_IsActive = true;
+            emp.EMP_InactivatedOn = null;
+            emp.ADM_Id_InactivatedBy = null;
+            emp.EMP_ReasonCode = null;
+            return emp;
+        }
     }
 }

@@ -72,5 +72,10 @@ namespace RMERP.DAL.ManagerClasses
         //    return clients_Employees;
         //}        
         #endregion
+
+        public bool IsAttendanceAlreadyUploaded(int WAG_Id, int CLI_Id)
+        {            
+            return _context.Attendance.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(CLI_Id)).Count() > 0;            
+        }
     }
 }

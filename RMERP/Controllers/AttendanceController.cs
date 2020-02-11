@@ -831,43 +831,53 @@ namespace RMERP.Controllers
         {
             int WAG_Id = Convert.ToInt32(frm["WAG_Id"]);
             int CLI_Id = Convert.ToInt32(frm["CLI_Id"]);
-            string strFilePath = frm["fileName"];
-            ClientsManager clientManager = new ClientsManager(_context, _configuration);
-            WageProcessManager wageManager = new WageProcessManager(_context);
-            Wage_Process wageProcess = wageManager.getWageProcessById(WAG_Id);
-            Clients client = clientManager.GetClientById(CLI_Id);
-            StringBuilder sb = new StringBuilder();
-            ISheet sheet;
-            using (var stream = new FileStream(strFilePath, FileMode.Open))
+            AttendanceManager attendanceManager = new AttendanceManager(_context);
+            if (!attendanceManager.IsAttendanceAlreadyUploaded(WAG_Id, CLI_Id))
             {
-                string sFileExtension = Path.GetExtension(strFilePath).ToLower();
-                stream.Position = 0;
-                if (sFileExtension == ".xls")
+                string strFilePath = frm["fileName"];
+                ClientsManager clientManager = new ClientsManager(_context, _configuration);
+                WageProcessManager wageManager = new WageProcessManager(_context);
+                Wage_Process wageProcess = wageManager.getWageProcessById(WAG_Id);
+                Clients client = clientManager.GetClientById(CLI_Id);
+                StringBuilder sb = new StringBuilder();
+                ISheet sheet;
+                using (var stream = new FileStream(strFilePath, FileMode.Open))
                 {
-                    HSSFWorkbook hssfwb = new HSSFWorkbook(stream); //This will read the Excel 97-2000 formats  
-                    sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook  
+                    string sFileExtension = Path.GetExtension(strFilePath).ToLower();
+                    stream.Position = 0;
+                    if (sFileExtension == ".xls")
+                    {
+                        HSSFWorkbook hssfwb = new HSSFWorkbook(stream); //This will read the Excel 97-2000 formats  
+                        sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook  
+                    }
+                    else
+                    {
+                        XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
+                        sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook   
+                    }
+                    switch (frm["Template"])
+                    {
+                        case "0":
+                            saveAttendance_BASIC_WithoutShifts(sheet, wageProcess, client);
+                            break;
+                        case "1":
+                            saveAttendance_BASIC_WithShifts(sheet, wageProcess, client);
+                            break;
+                        case "2":
+                            saveAttendance_ONEROW_WithoutShift(sheet, wageProcess, client);
+                            break;
+                    }
+                    new FileInfo(strFilePath).Delete();
                 }
-                else
-                {
-                    XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
-                    sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook   
-                }
-                switch (frm["Template"])
-                {
-                    case "0":
-                        saveAttendance_BASIC_WithoutShifts(sheet, wageProcess, client);
-                        break;
-                    case "1":
-                        saveAttendance_BASIC_WithShifts(sheet, wageProcess, client);
-                        break;
-                    case "2":
-                        saveAttendance_ONEROW_WithoutShift(sheet, wageProcess, client);
-                        break;
-                }
-                new FileInfo(strFilePath).Delete();
+                return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id });
             }
-            return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id });
+            else
+            {
+                return RedirectToAction("WageAttendanceList", new { WAG_Id = WAG_Id });
+            }
+        
         }
+
 
         public void saveAttendance_BASIC_WithoutShifts(ISheet sheet, Wage_Process wageProcess, Clients client)
         {

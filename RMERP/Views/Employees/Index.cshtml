@@ -224,15 +224,16 @@
                                             <ul class="dropdown-menu pull-right">
                                                 <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
                                                 @if (!item.EMP_IsActive)
-                                                            {
-                                                <li><a class="empRejoinModal" style="cursor:pointer" title="Employee Rejoin" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empRejoinModal"><i class="fa fa-plus-square-o m-r-5"></i>Employee Rejoin</a></li>
-                                                            }
-                                                            else
-                                                            {
-                                                <li><a class="empModal" style="cursor:pointer" title="Employee Left" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empModal"><i class="fa fa-trash-o m-r-5"></i>Employee Left</a></li>
-                                                            }
+                                                {
+                                                    <li><a class="empRejoinModal" style="cursor:pointer" title="Employee Rejoin" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empRejoinModal"><i class="fa fa-plus-square-o m-r-5"></i>Employee Rejoin</a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li><a class="empModal" style="cursor:pointer" title="Employee Left" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empModal"><i class="fa fa-trash-o m-r-5"></i>Employee Left</a></li>
+                                                }
 
                                                 <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-eye m-r-5"></i> View</a></li>
+ 
                                             </ul>
                                         </div>
                                     </td>
