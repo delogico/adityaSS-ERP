@@ -19,25 +19,24 @@
     <script>
 
         $.extend(jQuery.fn.dataTableExt.oSort, {            
-            "date-uk-pre": function (a) {   
+            "date-uk-pre": function (a) {               
                 a=a.slice(0, 11);
                 var ukDatea = a.split('-');               
                 var months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];                
-                var monthNo = months.indexOf(ukDatea[1].toLowerCase()) + 1;                  
-                return (ukDatea[2] + monthNo + ukDatea[0]) * 1;
+                var monthNo = months.indexOf(ukDatea[1].toLowerCase()) + 1;                 
+                return (ukDatea[2] + monthNo + ukDatea[0]);
             }
     }); 
     $(document).ready(function () {
             $('#tblEmp').dataTable({
                 "paging": true,                  
                 columnDefs: [
+                    { orderable: true,targets: [1]},
                     {
                         targets: [3,5],
                         orderable: true,
                         type: 'date-uk'
-                    },
-                    { targets: [1], orderable: true },
-                    { orderable: true }
+                    },                                      
                 ],
 
             });
@@ -278,7 +277,6 @@
 
 <div id="empRejoinModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
