@@ -677,7 +677,7 @@ namespace RMERP.DAL.ManagerClasses
                 {
                     m.CLI_Id,
                     m.CLI_.CLI_Name,
-                    m.CRI_.CRI_ESIC_Employer_Cont_Rate
+                  //  m.CRI_.CRI_ESIC_Employer_Cont_Rate
                 }).Distinct();
             }
             else
@@ -686,10 +686,9 @@ namespace RMERP.DAL.ManagerClasses
                 {
                     m.CLI_Id,
                     m.CLI_.CLI_Name,
-                    m.CRI_.CRI_ESIC_Employer_Cont_Rate
+                  //  m.CRI_.CRI_ESIC_Employer_Cont_Rate
                 }).Distinct();
             }
-
             List<ESICReportVM> reportVMs = new List<ESICReportVM>();
             List<Wage_Register> wage_Register = new List<Wage_Register>();
             foreach (var client in ESICClientList)
@@ -698,7 +697,7 @@ namespace RMERP.DAL.ManagerClasses
                 wage_Register = wage_Registers.Where(m => m.CLI_Id.Equals(client.CLI_Id)).ToList();
                 reportVM.NAME_OF_COMPANY = client.CLI_Name;
                 reportVM.NO_OF_EMPLOYEE = wage_Register.Select(m => m.EMP_Id).Count();
-                decimal TOTAL_WAGES = 0M, EMPLOYEES_CONTRIBUTION = 0M;
+                decimal TOTAL_WAGES = 0M, EMPLOYEES_CONTRIBUTION = 0M, EMPLOYERS_CONTRI = 0m;
                 foreach (var item in wage_Register)
                 {                    
                     List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
@@ -717,14 +716,19 @@ namespace RMERP.DAL.ManagerClasses
                         (item.WAR_Performance_Allowance_Calculated != null ? Math.Round(item.WAR_Performance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0));
                   
                      EMPLOYEES_CONTRIBUTION = EMPLOYEES_CONTRIBUTION + Math.Round(item.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero);
+                     if (item.CRI_.CRI_ESIC_Employer_Cont_Rate != null)
+                         EMPLOYERS_CONTRI = EMPLOYERS_CONTRI + (AppSalary * Convert.ToDecimal(item.CRI_.CRI_ESIC_Employer_Cont_Rate) / 100);
+
                     TOTAL_WAGES = AppSalary + TOTAL_WAGES;
+                    
                 }
                
                 reportVM.TOTAL_WAGES = Math.Round(TOTAL_WAGES, MidpointRounding.AwayFromZero);
                 reportVM.EMPLOYEES_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION, MidpointRounding.AwayFromZero);
-                decimal EMPLOYERS_CONTRI = 0m;
-                if (client.CRI_ESIC_Employer_Cont_Rate != null)
-                    EMPLOYERS_CONTRI = TOTAL_WAGES * Convert.ToDecimal(client.CRI_ESIC_Employer_Cont_Rate) / 100;
+                
+                //if (client.CRI_ESIC_Employer_Cont_Rate != null)
+                //    EMPLOYERS_CONTRI = TOTAL_WAGES * Convert.ToDecimal(client.CRI_ESIC_Employer_Cont_Rate) / 100;
+
                 reportVM.EMPLOYERS_CONTRIBUTION = Math.Round(EMPLOYERS_CONTRI, MidpointRounding.AwayFromZero);
                 reportVM.TOTAL_CONTRIBUTION = Math.Round(EMPLOYEES_CONTRIBUTION + EMPLOYERS_CONTRI, MidpointRounding.AwayFromZero);
                 reportVMs.Add(reportVM);
