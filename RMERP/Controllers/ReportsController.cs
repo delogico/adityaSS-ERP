@@ -1642,7 +1642,7 @@ namespace RMERP.Controllers
                     decimal EPS_CONTRIBUTION = Math.Round(item.EPS_CONTRIBUTION, MidpointRounding.AwayFromZero);
                     decimal DIFF_EPF_EPS = Math.Round(EPF_CONTRIBUTION- EPS_CONTRIBUTION);
 
-                    Byte[] title = new UTF8Encoding(true).GetBytes(item.UAN_Number + "#~#" + item.EMP_FullName + "#~#" + PF_APPLICABLE_SALARY + "#~#" + PF_APPLICABLE_SALARY + "#~#" + PF_APPLICABLE_SALARY + "#~#" + PF_APPLICABLE_SALARY);
+                    Byte[] title = new UTF8Encoding(true).GetBytes(item.UAN_Number + "#~#" + item.EMP_FullName + "#~#" + PF_APPLICABLE_SALARY + "#~#" + PF_APPLICABLE_SALARY + "#~#" + PF_APPLICABLE_SALARY + "#~#" + PF_APPLICABLE_SALARY + "#~#");
                     fs.Write(title, 0, title.Length);
                     byte[] br = new UTF8Encoding(true).GetBytes(EPF_CONTRIBUTION + "#~#" + EPS_CONTRIBUTION + "#~#" + DIFF_EPF_EPS + "#~#");
                     fs.Write(br, 0, br.Length);

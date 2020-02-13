@@ -410,6 +410,26 @@ namespace RMERP.Controllers
             return res;
             // return RedirectToAction("Index","Clients",true);
         }
+        [HttpPost]
+        public string ReActiveClient(int ClientID)
+        {
+            string res = string.Empty;
+            ClientsViewModel clientsViewModel = new ClientsViewModel();
+            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+            if (ModelState.IsValid)
+            {
+                if (ClientID > 0)
+                {
+                    res = clientsManager.ReActiveClient(ClientID);
+                    if (res != string.Empty)
+                    {
+                        TempData["message"] = "Client data can not Deleted";
+                    }
+                }
+            }
+            return res;
+            // return RedirectToAction("Index","Clients",true);
+        }
 
         [HttpGet]
         public ActionResult AddEditRequirement(int CLI_Id, int CRI_Id = -1, bool IsHistory = false)

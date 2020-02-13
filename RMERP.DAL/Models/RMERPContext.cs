@@ -20,6 +20,7 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Attendance> Attendance { get; set; }
         public virtual DbSet<Cities> Cities { get; set; }
         public virtual DbSet<Cities_all> Cities_all { get; set; }
+        public virtual DbSet<Client_ActivationHistory> Client_ActivationHistory { get; set; }
         public virtual DbSet<Client_Contacts> Client_Contacts { get; set; }
         public virtual DbSet<Client_Requirement_Allowances> Client_Requirement_Allowances { get; set; }
         public virtual DbSet<Client_Requirements> Client_Requirements { get; set; }
@@ -181,6 +182,20 @@ namespace RMERP.DAL.Models
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Client_ActivationHistory>(entity =>
+            {
+                entity.HasKey(e => e.CAH_Id);
+
+                entity.Property(e => e.CAH_ActiveOn).HasColumnType("datetime");
+
+                entity.Property(e => e.CAH_InactiveOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.CLI_)
+                    .WithMany(p => p.Client_ActivationHistory)
+                    .HasForeignKey(d => d.CLI_Id)
+                    .HasConstraintName("FK_Client_ActivationHistory_Clients");
             });
 
             modelBuilder.Entity<Client_Contacts>(entity =>

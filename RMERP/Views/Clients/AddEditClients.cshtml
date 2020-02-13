@@ -521,6 +521,7 @@
                         <div class="m-t-20">
                             <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
                             <span id="btnSubmit" type="submit" class="btn btn-danger"></span>
+                            @*<span id="btnActive" type="submit" class="btn btn-success"></span>*@
                         </div>
                     </div>
                 </form>
@@ -579,6 +580,9 @@
             ClientID = $('#clientsModel_CLI_Id').val();
             CLI_IsActive = $('#clientsModel_CLI_IsActive').val();
             CLI_IsActive_bool = (CLI_IsActive == "True");
+
+            $("#btnActive").hide();
+
             if (CLI_IsActive.toString()=="False") {
                 //$("#ActiveClient").hide();
                 //$("#InActiveClient").show();
@@ -594,7 +598,10 @@
                 var string = "Client is inactivated on " + $("#CLI_InActivatedOn").val();
                 $("#activeTitle").html(string);
                 $("#activeBody").html("Are you sure want to Change Inactivation date of this Client?");
-                $("#btnSubmit").html("Change");
+                $("#btnSubmit").html("Change Date");
+
+                $("#btnActive").show();
+                $("#btnActive").html("Active Client");
             }
             if (CLI_IsActive.toString()=="True") {
                // $("#ActiveClient").show();
@@ -688,6 +695,25 @@
                         }
                     });
             });
+
+        $("#btnActive").click(function () {
+            debugger;
+            bootbox.confirm({                
+                message: "Are You Sure You Want To Active?",
+                callback: function (result) {
+                    var Url = siteUrl + "Clients/ReActiveClient?ClientID=" + ClientID;
+                    $.ajax({
+                        type: "POST",
+                        url: Url,
+                        success: function (data) {
+                            if (data.d == null) {
+                                window.location.replace(siteUrl + "Clients/Index");
+                            }
+                        }
+                    })
+                }
+            });
+        });
 
         function GetParameterValues(param) {
             var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');

@@ -12,11 +12,11 @@
 @section scripts{
     @if (TempData["message"] != null)
     {
-    <script>
+        <script>
             $(document).ready(function () {
             alert('@TempData["message"]');
         });
-    </script>
+        </script>
     };
     <script>
 
@@ -117,50 +117,50 @@
         </div>
         <div class="col-md-4 well">
             @using (Html.BeginForm("SearchEmployee", "Employees", FormMethod.Post))
-                {
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        @if (Model.Item2 > 0)
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @if (Model.Item2 > 0)
                             {
-                        @Html.Hidden("FRM_Id", Model.Item2)
-                        @Html.DropDownList("FRM_Id", new SelectList(ViewBag.FirmList, "FRM_Id", "FRM_Name", Model.Item2), "Select Firm", new { @class = "form-control", disabled = "disabled" })
+                                @Html.Hidden("FRM_Id", Model.Item2)
+                                @Html.DropDownList("FRM_Id", new SelectList(ViewBag.FirmList, "FRM_Id", "FRM_Name", Model.Item2), "Select Firm", new { @class = "form-control", disabled = "disabled" })
                             }
                             else
                             {
-                        @Html.DropDownList("FRM_Id", new SelectList(ViewBag.FirmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control" })
+                                @Html.DropDownList("FRM_Id", new SelectList(ViewBag.FirmList, "FRM_Id", "FRM_Name"), "Select Firm", new { @class = "form-control" })
                             }
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        @Html.CheckBox("EMP_UAN_Number", false)Employee without UAN Number
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.CheckBox("EMP_UAN_Number", false)Employee without UAN Number
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        @Html.CheckBox("EMP_ESIC_Number", false)Employee without ESIC Number
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.CheckBox("EMP_ESIC_Number", false)Employee without ESIC Number
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group">
-                        @Html.Label("Aadhar Number")
-                        @Html.TextBox("EMP_Aadhar_Number","", new { @class = "form-control" })
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.Label("Aadhar Number")
+                            @Html.TextBox("EMP_Aadhar_Number", "", new { @class = "form-control" })
+                        </div>
                     </div>
-                </div>
 
-            </div>
-            <div class="m-t-20 text-center">
-                <input type="submit" id="submit" class="btn btn-primary" value="Search" />
-            </div>
-                }
+                </div>
+                <div class="m-t-20 text-center">
+                    <input type="submit" id="submit" class="btn btn-primary" value="Search" />
+                </div>
+            }
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             @{
-                    IEnumerable<EmployeeVM> ActiveEmps = Model.Item1.Where(m => m.EMP_IsActive);
-                    IEnumerable<EmployeeVM> LeftEmps = Model.Item1.Where(m => m.EMP_IsActive==false);
+                IEnumerable<EmployeeVM> ActiveEmps = Model.Item1.Where(m => m.EMP_IsActive);
+                IEnumerable<EmployeeVM> LeftEmps = Model.Item1.Where(m => m.EMP_IsActive == false);
             }
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#working">Working Employees</a></li>
@@ -170,165 +170,165 @@
             <div class="tab-content">
                 <div id="working" class="tab-pane fade in active">
                     @if (ActiveEmps.Count() > 0)
-                        {
-                    <div>
-                        <table class="table table-striped custom-table tblEmp">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>DOB</th>
-                                    <th>Designation</th>
-                                    <th>Joining date</th>
-                                    <th>M/F</th>
-                                    <th>Mobile</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in ActiveEmps)
+                    {
+                        <div>
+                            <table class="table table-striped custom-table tblEmp">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>DOB</th>
+                                        <th>Designation</th>
+                                        <th>Joining date</th>
+                                        <th>M/F</th>
+                                        <th>Mobile</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ActiveEmps)
+                                    {
+                                        var style = "";
+                                        var lable = "Employee Left";
+                                        if (item.EMP_IsActive.Equals(false))
                                         {
-                                            var style = "";
-                                            var lable = "Employee Left";
-                                            if (item.EMP_IsActive.Equals(false))
-                                            {
-                                                style = "style=color:orangered;";
-                                                lable = "Employee left";
-                                            }
-                                <tr @style>
-                                    <td>@item.FRM_.FRM_ShortName</td>
-                                    <td>@item.EMP_Id.ToString("D5")</td>
-                                    <td>@item.EMP_FullName</td>
-                                    <td>@DateHelper.getLongDateFormat(@item.EMP_DOB)</td>
-                                    <td>@item.EMP_Designation</td>
-                                    <td>
-
-                                        @DateHelper.getLongDateFormat(@item.EMP_DateOfJoining)
-                                        @*@item.EMP_DateOfJoining*@
-                                        @if (item.EMP_IsActive.Equals(false))
-                                                    {
-                                        <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_InactivatedOn.Value) : "") (@ProjectUtils.GetStringValue((ProjectUtils.EMPLOYEE_LEFT_REASON_CODE)item.EMP_ReasonCode))</div>
-                                                    }
-                                                    else if (item.EMP_RejoinOn != null)
-                                                    {
-                                        <div style="font-size:10px;color:green">Rejoin on @(item.EMP_RejoinOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_RejoinOn.Value) : "")</div>
-                                                    }
-
-                                    </td>
-                                    <td>@item.EMP_MoF</td>
-                                    <td>@item.EMP_Contact_Primary</td>
-                                    <td class="text-right">
-                                        <div class="dropdown">
-                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
-                                                @if (!item.EMP_IsActive)
-                                                {
-                                                <li><a class="empRejoinModal" style="cursor:pointer" title="Employee Rejoin" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empRejoinModal"><i class="fa fa-plus-square-o m-r-5"></i>Employee Rejoin</a></li>
-                                                }
-                                                else
-                                                {
-                                                <li><a class="empModal" style="cursor:pointer" title="Employee Left" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empModal"><i class="fa fa-trash-o m-r-5"></i>Employee Left</a></li>
-                                                }
-
-                                                <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-eye m-r-5"></i> View</a></li>
-                                                @*<li><a href='@Url.Action("EmployeeHistory","Employees",new { EMP_Id=item.EMP_Id})' title="History"><i class="fa fa-history m-r-5"></i> History</a></li>*@
-
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                                            style = "style=color:orangered;";
+                                            lable = "Employee left";
                                         }
+                                        <tr @style>
+                                            <td>@item.FRM_.FRM_ShortName</td>
+                                            <td>@item.EMP_Id.ToString("D5")</td>
+                                            <td>@item.EMP_FullName</td>
+                                            <td>@DateHelper.getLongDateFormat(@item.EMP_DOB)</td>
+                                            <td>@item.EMP_Designation</td>
+                                            <td>
 
-                            </tbody>
-                        </table>
-                    </div>
-                        }
-                        else
-                        {
-                    <P>No Employees registered.</P>
-                        }
+                                                @DateHelper.getLongDateFormat(@item.EMP_DateOfJoining)
+                                                @*@item.EMP_DateOfJoining*@
+                                                @if (item.EMP_IsActive.Equals(false))
+                                                {
+                                                    <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_InactivatedOn.Value) : "") (@ProjectUtils.GetStringValue((ProjectUtils.EMPLOYEE_LEFT_REASON_CODE)item.EMP_ReasonCode))</div>
+                                                }
+                                                else if (item.EMP_RejoinOn != null)
+                                                {
+                                                    <div style="font-size:10px;color:green">Rejoin on @(item.EMP_RejoinOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_RejoinOn.Value) : "")</div>
+                                                }
+
+                                            </td>
+                                            <td>@item.EMP_MoF</td>
+                                            <td>@item.EMP_Contact_Primary</td>
+                                            <td class="text-right">
+                                                <div class="dropdown">
+                                                    <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                    <ul class="dropdown-menu pull-right">
+                                                        <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
+                                                        @if (!item.EMP_IsActive)
+                                                        {
+                                                            <li><a class="empRejoinModal" style="cursor:pointer" title="Employee Rejoin" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empRejoinModal"><i class="fa fa-plus-square-o m-r-5"></i>Employee Rejoin</a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><a class="empModal" style="cursor:pointer" title="Employee Left" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empModal"><i class="fa fa-trash-o m-r-5"></i>Employee Left</a></li>
+                                                        }
+
+                                                        <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-eye m-r-5"></i> View</a></li>
+                                                        @*<li><a href='@Url.Action("EmployeeHistory","Employees",new { EMP_Id=item.EMP_Id})' title="History"><i class="fa fa-history m-r-5"></i> History</a></li>*@
+
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <P>No Employees registered.</P>
+                    }
                 </div>
                 <div id="left" class="tab-pane fade">
                     @if (LeftEmps.Count() > 0)
-                        {
-                    <div>
-                        <table class="table table-striped custom-table tblEmp">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>DOB</th>
-                                    <th>Designation</th>
-                                    <th>Joining date</th>
-                                    <th>M/F</th>
-                                    <th>Mobile</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in LeftEmps)
+                    {
+                        <div>
+                            <table class="table table-striped custom-table tblEmp">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>DOB</th>
+                                        <th>Designation</th>
+                                        <th>Joining date</th>
+                                        <th>M/F</th>
+                                        <th>Mobile</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in LeftEmps)
+                                    {
+                                        var style = "";
+                                        var lable = "Employee Left";
+                                        if (item.EMP_IsActive.Equals(false))
                                         {
-                                            var style = "";
-                                            var lable = "Employee Left";
-                                            if (item.EMP_IsActive.Equals(false))
-                                            {
-                                                style = "style=color:orangered;";
-                                                lable = "Employee left";
-                                            }
-                                <tr @style>
-                                    <td>@item.FRM_.FRM_ShortName</td>
-                                    <td>@item.EMP_Id.ToString("D5")</td>
-                                    <td>@item.EMP_FullName</td>
-                                    <td>@DateHelper.getLongDateFormat(@item.EMP_DOB)</td>
-                                    <td>@item.EMP_Designation</td>
-                                    <td>
-
-                                        @DateHelper.getLongDateFormat(@item.EMP_DateOfJoining)
-                                        @*@item.EMP_DateOfJoining*@
-                                        @if (item.EMP_IsActive.Equals(false))
-                                                    {
-                                        <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_InactivatedOn.Value) : "") (@ProjectUtils.GetStringValue((ProjectUtils.EMPLOYEE_LEFT_REASON_CODE)item.EMP_ReasonCode))</div>
-                                                    }
-                                                    else if (item.EMP_RejoinOn != null)
-                                                    {
-                                        <div style="font-size:10px;color:green">Rejoin on @(item.EMP_RejoinOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_RejoinOn.Value) : "")</div>
-                                                    }
-
-                                    </td>
-                                    <td>@item.EMP_MoF</td>
-                                    <td>@item.EMP_Contact_Primary</td>
-                                    <td class="text-right">
-                                        <div class="dropdown">
-                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
-                                                @if (!item.EMP_IsActive)
-                                                            {
-                                                <li><a class="empRejoinModal" style="cursor:pointer" title="Employee Rejoin" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empRejoinModal"><i class="fa fa-plus-square-o m-r-5"></i>Employee Rejoin</a></li>
-                                                            }
-                                                            else
-                                                            {
-                                                <li><a class="empModal" style="cursor:pointer" title="Employee Left" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empModal"><i class="fa fa-trash-o m-r-5"></i>Employee Left</a></li>
-                                                            }
-
-                                                <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-eye m-r-5"></i> View</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                                            style = "style=color:orangered;";
+                                            lable = "Employee left";
                                         }
+                                        <tr @style>
+                                            <td>@item.FRM_.FRM_ShortName</td>
+                                            <td>@item.EMP_Id.ToString("D5")</td>
+                                            <td>@item.EMP_FullName</td>
+                                            <td>@DateHelper.getLongDateFormat(@item.EMP_DOB)</td>
+                                            <td>@item.EMP_Designation</td>
+                                            <td>
 
-                            </tbody>
-                        </table>
-                    </div>
-                        }
-                        else
-                        {
-                    <P>No Employees registered.</P>
-                        }
+                                                @DateHelper.getLongDateFormat(@item.EMP_DateOfJoining)
+                                                @*@item.EMP_DateOfJoining*@
+                                                @if (item.EMP_IsActive.Equals(false))
+                                                {
+                                                    <div style="font-size:10px;">left on @(item.EMP_InactivatedOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_InactivatedOn.Value) : "") (@ProjectUtils.GetStringValue((ProjectUtils.EMPLOYEE_LEFT_REASON_CODE)item.EMP_ReasonCode))</div>
+                                                }
+                                                else if (item.EMP_RejoinOn != null)
+                                                {
+                                                    <div style="font-size:10px;color:green">Rejoin on @(item.EMP_RejoinOn.HasValue ? DateHelper.getLongDateFormat(item.EMP_RejoinOn.Value) : "")</div>
+                                                }
+
+                                            </td>
+                                            <td>@item.EMP_MoF</td>
+                                            <td>@item.EMP_Contact_Primary</td>
+                                            <td class="text-right">
+                                                <div class="dropdown">
+                                                    <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                    <ul class="dropdown-menu pull-right">
+                                                        <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a></li>
+                                                        @if (!item.EMP_IsActive)
+                                                        {
+                                                            <li><a class="empRejoinModal" style="cursor:pointer" title="Employee Rejoin" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empRejoinModal"><i class="fa fa-plus-square-o m-r-5"></i>Employee Rejoin</a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><a class="empModal" style="cursor:pointer" title="Employee Left" data-id="@item.EMP_Id" data-toggle="modal" data-target="#empModal"><i class="fa fa-trash-o m-r-5"></i>Employee Left</a></li>
+                                                        }
+
+                                                        <li><a href='@Url.Action("AddEditEmployee","Employees",new { EMP_Id=item.EMP_Id, tab="View"})' title="Edit"><i class="fa fa-eye m-r-5"></i> View</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <P>No Employees registered.</P>
+                    }
                 </div>
 
             </div>
@@ -350,23 +350,23 @@
             <div class="modal-body">
                 @using (Html.BeginForm("LeftEmployee", "Employees", FormMethod.Post))
                 {
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <input type="hidden" name="EMP_Id" id="EMP_Id" value="" />
-                <div class="form-group">
-                    @Html.Label("Choose Date")
-                    @Html.TextBox("EMP_Left_Date", "", new { @class = "form-control", @type = "date" })
-                    @Html.ValidationMessage("EMP_Left_Date", "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group">
-                    @Html.Label("Choose Reason")
-                    @Html.DropDownList("EMP_Reason_Code", new SelectList(ViewBag.Reason_Code, "Value", "Text"), "Select Reason", new { @class = "form-control" })
-                    @Html.ValidationMessage("EMP_Reason_Code", "", new { @class = "text-danger" })
-                </div>
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <input type="hidden" name="EMP_Id" id="EMP_Id" value="" />
+                    <div class="form-group">
+                        @Html.Label("Choose Date")
+                        @Html.TextBox("EMP_Left_Date", "", new { @class = "form-control", @type = "date" })
+                        @Html.ValidationMessage("EMP_Left_Date", "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Choose Reason")
+                        @Html.DropDownList("EMP_Reason_Code", new SelectList(ViewBag.Reason_Code, "Value", "Text"), "Select Reason", new { @class = "form-control" })
+                        @Html.ValidationMessage("EMP_Reason_Code", "", new { @class = "text-danger" })
+                    </div>
 
-                <div class="m-t-20 text-center">
-                    <input type="submit" name="Submit" id="btnSubmit" class="btn btn-primary" />
-                </div>
+                    <div class="m-t-20 text-center">
+                        <input type="submit" name="Submit" id="btnSubmit" class="btn btn-primary" />
+                    </div>
                 }
             </div>
         </div>
@@ -385,18 +385,18 @@
             <div class="modal-body">
                 @using (Html.BeginForm("RejoinEmployee", "Employees", FormMethod.Post))
                 {
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <input type="hidden" name="EMP_Id" id="EMP_Id" value="" />
-                <div class="form-group">
-                    @Html.Label("Choose Rejoin Date")
-                    @Html.TextBox("EMP_Rejoin_Date", "", new { @class = "form-control", @type = "date" })
-                    @Html.ValidationMessage("EMP_Rejoin_Date", "", new { @class = "text-danger" })
-                </div>
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <input type="hidden" name="EMP_Id" id="EMP_Id" value="" />
+                    <div class="form-group">
+                        @Html.Label("Choose Rejoin Date")
+                        @Html.TextBox("EMP_Rejoin_Date", "", new { @class = "form-control", @type = "date" })
+                        @Html.ValidationMessage("EMP_Rejoin_Date", "", new { @class = "text-danger" })
+                    </div>
 
-                <div class="m-t-20 text-center">
-                    <input type="submit" name="Submit" id="btnSubmit" class="btn btn-primary" />
-                </div>
+                    <div class="m-t-20 text-center">
+                        <input type="submit" name="Submit" id="btnSubmit" class="btn btn-primary" />
+                    </div>
                 }
             </div>
         </div>

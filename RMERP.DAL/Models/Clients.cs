@@ -8,6 +8,7 @@ namespace RMERP.DAL.Models
         public Clients()
         {
             Attendance = new HashSet<Attendance>();
+            Client_ActivationHistory = new HashSet<Client_ActivationHistory>();
             Client_Contacts = new HashSet<Client_Contacts>();
             Client_Requirements = new HashSet<Client_Requirements>();
             Clients_Employees = new HashSet<Clients_Employees>();
@@ -67,6 +68,7 @@ namespace RMERP.DAL.Models
         public Firms FRM_ { get; set; }
         public States STA_ { get; set; }
         public ICollection<Attendance> Attendance { get; set; }
+        public ICollection<Client_ActivationHistory> Client_ActivationHistory { get; set; }
         public ICollection<Client_Contacts> Client_Contacts { get; set; }
         public ICollection<Client_Requirements> Client_Requirements { get; set; }
         public ICollection<Clients_Employees> Clients_Employees { get; set; }

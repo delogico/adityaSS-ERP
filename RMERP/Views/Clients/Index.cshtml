@@ -6,6 +6,11 @@
 @section Breadcrumbs{    
     <li class="breadcrumb-item">Clients</li>
 }
+<style>
+    .InActiveProfile{
+        background-color:#bfbdbd94;
+    }
+</style>
 @section scripts{
     @if (TempData["message"] != null)
     {
@@ -28,7 +33,12 @@
             $.ajax({
                 type: "GET",
                 url: Url,
+                beforeSend: function () {
+                    $("#loading-image").show();
+                    //$('#divClientList').html("");                    
+                },
                 success: function (data) {
+                    $("#loading-image").hide();
                     $('#divClientList').html(data);
                     if (active == false) {
                         $(".ClientProfile").addClass("InActiveProfile");
@@ -69,15 +79,15 @@
                 </div>
             </div>
             @*<div class="col-sm-3 col-xs-6">
-                    <div class="form-group form-focus select-focus">
-                        <label class="control-label">Active Clients</label>
+                <div class="form-group form-focus select-focus">
+                    <label class="control-label">Active Clients</label>
 
-                        @Html.DropDownListFor(m => m.clientsModel.CLI_Id, new SelectList(ViewBag.List, "CLI_Id", "CLI_Name"), "Select Client", new { @class = "select floating",@onchange= "searchClientList(this)" })
-                    </div>
-                </div>*@
+                    @Html.DropDownListFor(m => m.clientsModel.CLI_Id, new SelectList(ViewBag.List, "CLI_Id", "CLI_Name"), "Select Client", new { @class = "select floating",@onchange= "searchClientList(this)" })
+                </div>
+            </div>*@
             @*<div class="col-sm-3 col-xs-6">
-                    <a href="#" class="btn btn-success btn-block"> Search </a>
-                </div>*@
+                <a href="#" class="btn btn-success btn-block"> Search </a>
+            </div>*@
             <div class="col-sm-3 col-xs-6">
                 <div class="container">
                     <div class="row">
@@ -97,7 +107,7 @@
                 </div>
             </div>
         </div>
-
+        <img id="loading-image" src="~/assets/img/25.gif" style="display:none;position: fixed;left: 50%;top: 50%;z-index: 1000000; background-position:center;" />
         <div id="divClientList">
             @{Html.RenderPartial("_ClientList", Model.Listclients);}
         </div>

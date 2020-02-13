@@ -198,6 +198,10 @@ namespace RMERP.DAL.ManagerClasses
                 client.ADM_Id_InactivatedBy = AdminId;
                 if (Active)
                 {
+                    Client_ActivationHistory client_ActivationHistory = new Client_ActivationHistory();
+                    client_ActivationHistory.CAH_ActiveOn = On;
+                    client_ActivationHistory.CLI_Id = ClientId;
+                    _contaxt.Client_ActivationHistory.Add(client_ActivationHistory);
                     client.CLI_IsActive = !Active;
                     client.CLI_InActivatedOn = On;
                 }
@@ -206,6 +210,26 @@ namespace RMERP.DAL.ManagerClasses
                     client.CLI_InActivatedOn = On;                   
                 }
                // client.CLI_IsActive = Convert.ToBoolean((Active.ToLower() == "false" ? "true" : "false"));
+                _contaxt.Clients.Update(client);
+                _contaxt.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                res = ex.Message;
+            }
+            return res;
+        }
+        public string ReActiveClient(int ClientId)
+        {
+            string res = string.Empty;
+            try
+            {
+                Clients client =  _contaxt.Clients.Find(ClientId);
+                client.ADM_Id_InactivatedBy = null;
+               
+                    client.CLI_IsActive = true;
+                    client.CLI_InActivatedOn = null;
+               
                 _contaxt.Clients.Update(client);
                 _contaxt.SaveChanges();
             }
