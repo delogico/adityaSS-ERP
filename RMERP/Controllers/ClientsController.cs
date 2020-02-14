@@ -168,14 +168,6 @@ namespace RMERP.Controllers
                 cv.clientsModel.CLI_RegisteredOn = clients.CLI_RegisteredOn;
                 cv.clientsModel.CliLogoImage = clients.CLI_Logo;
 
-                //if (clients.CLI_PF_Employer_Cont_Rate != null)
-                //    cv.clientsModel.CLI_PF_Employer_Cont_Rate = clients.CLI_PF_Employer_Cont_Rate.Value;
-                //if (clients.CLI_ESIC_Employer_Cont_Rate != null)
-                //    cv.clientsModel.CLI_ESIC_Employer_Cont_Rate = clients.CLI_ESIC_Employer_Cont_Rate.Value;
-                //cv.clientsModel.CLI_EPF_Rate = clients.CLI_EPF_Rate;
-                //cv.clientsModel.CLI_EPS_Rate = clients.CLI_EPS_Rate;
-                //if(clients.CLI_MLWF_Contribution!=null)
-                //    cv.clientsModel.CLI_MLWF_Contribution = clients.CLI_MLWF_Contribution.Value;
 
                 cv.contacts = ClientContactMapper.mapContacts(clientsManager.GetClientContactsListById(id).ToList());
                 cv.requirements = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsofClient(id, true).ToList());
@@ -246,10 +238,6 @@ namespace RMERP.Controllers
                 clients.ADM_Id_RegisterBy = cv.clientsModel.ADM_Id_RegisterBy;
                 clients.CLI_RegisteredOn = cv.clientsModel.CLI_RegisteredOn;
 
-                //clients.CLI_PF_Employer_Cont_Rate = cv.clientsModel.CLI_PF_Employer_Cont_Rate;
-                //clients.CLI_ESIC_Employer_Cont_Rate = cv.clientsModel.CLI_ESIC_Employer_Cont_Rate;              
-                //clients.CLI_EPF_Rate = cv.clientsModel.CLI_EPF_Rate;
-                //clients.CLI_EPS_Rate = cv.clientsModel.CLI_EPS_Rate;
                 clients.STA_Id = cv.clientsModel.STA_Id;
 
                 if (cv.clientsModel.CLI_Logo != null)
@@ -261,6 +249,7 @@ namespace RMERP.Controllers
                     clients.CLI_Logo = cv.clientsModel.CliLogoImage;
                 }
                 var tuple = clientsManager.saveAddEditClients(clients);
+
                 if (tuple.Item1 != "")
                 {
                     TempData["message"] = "Client data can not Inserted";
@@ -270,8 +259,22 @@ namespace RMERP.Controllers
                     clientID = tuple.Item2;
                     TempData["message"] = "Successfull Done!";
                 }
+                if (cv.clientsModel.CLI_Id <= 0)
+                {
+                    Client_ActivationHistory activationHistory = new Client_ActivationHistory();
+                    activationHistory.CAH_ActiveOn = DateNow();
+                    activationHistory.CLI_Id = clientID;
+                    clientsManager.AddEditActivationHistory(activationHistory);
+                }
+                else
+                {
+                    Client_ActivationHistory activationHistory = clientsManager.GetLatestActiveHistory(clientID);
+                    activationHistory.CAH_ActiveOn = cv.clientsModel.CLI_RegisteredOn;
+                    clientsManager.AddEditActivationHistory(activationHistory);
+                }
+                
                 #region Image adding
-              //  string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+                //  string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
                 string ImagePath = Configuration.GetSection("DEFAULT_FOLDER_PATH").Value + Configuration.GetSection("CLIENTS_LOGO_PATH").Value;
 
                 if (!Directory.Exists(ImagePath + "/" + clientID))
@@ -391,16 +394,22 @@ namespace RMERP.Controllers
         }
 
         [HttpPost]
-        public string InActiveClient(int ClientID, bool Active,DateTime On)
+        public string InActiveClient(int ClientID, bool Active,DateTime On,bool IsChangeDate=false)
         {
-            string res = string.Empty;
-            ClientsViewModel clientsViewModel = new ClientsViewModel();
+            string res = string.Empty;            
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             if (ModelState.IsValid)
             {
                 if (ClientID > 0)
                 {
                     res = clientsManager.InActiveClient(ClientID, Convert.ToInt32(Request.Cookies["AdminID"]), Active, On);
+                    Client_ActivationHistory client_ActivationHistory = clientsManager.GetLatestActiveHistory(ClientID);
+                    if (client_ActivationHistory == null)
+                    {
+                        client_ActivationHistory = clientsManager.GetLatestHistory(ClientID);
+                    }
+                    client_ActivationHistory.CAH_InactiveOn = On;                    
+                    clientsManager.AddEditActivationHistory(client_ActivationHistory);
                     if (res != string.Empty)
                     {
                         TempData["message"] = "Client data can not Deleted";
@@ -411,16 +420,19 @@ namespace RMERP.Controllers
             // return RedirectToAction("Index","Clients",true);
         }
         [HttpPost]
-        public string ReActiveClient(int ClientID)
+        public string ReActiveClient(int ClientID,DateTime On)
         {
-            string res = string.Empty;
-            ClientsViewModel clientsViewModel = new ClientsViewModel();
+            string res = string.Empty;            
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             if (ModelState.IsValid)
             {
                 if (ClientID > 0)
                 {
-                    res = clientsManager.ReActiveClient(ClientID);
+                    res = clientsManager.ReActiveClient(ClientID, On);
+                    Client_ActivationHistory client_ActivationHistory = new Client_ActivationHistory();
+                    client_ActivationHistory.CAH_ActiveOn = On;
+                    client_ActivationHistory.CLI_Id = ClientID;
+                    clientsManager.AddEditActivationHistory(client_ActivationHistory);
                     if (res != string.Empty)
                     {
                         TempData["message"] = "Client data can not Deleted";

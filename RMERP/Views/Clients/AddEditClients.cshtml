@@ -521,7 +521,7 @@
                         <div class="m-t-20">
                             <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
                             <span id="btnSubmit" type="submit" class="btn btn-danger"></span>
-                            @*<span id="btnActive" type="submit" class="btn btn-success"></span>*@
+                            <span id="btnActive" type="submit" class="btn btn-success"></span>
                         </div>
                     </div>
                 </form>
@@ -601,7 +601,7 @@
                 $("#btnSubmit").html("Change Date");
 
                 $("#btnActive").show();
-                $("#btnActive").html("Active Client");
+                $("#btnActive").html("Reactive Client");
             }
             if (CLI_IsActive.toString()=="True") {
                // $("#ActiveClient").show();
@@ -682,7 +682,7 @@
                         title: active,
                         inputType: 'date',
                         callback: function (result) {
-                               var Url = siteUrl + "Clients/InActiveClient?ClientID=" + ClientID + "&Active=" + CLI_IsActive_bool+"&On="+result;
+                               var Url = siteUrl + "Clients/InActiveClient?ClientID=" + ClientID + "&Active=" + CLI_IsActive_bool+"&On="+result+"&IsChangeDate="+true;
                                     $.ajax({
                                         type: "POST",
                                         url: Url,
@@ -696,22 +696,40 @@
                     });
             });
 
-        $("#btnActive").click(function () {            
-            bootbox.confirm({                
-                message: "Are You Sure You Want To Active?",
-                callback: function (result) {
-                    var Url = siteUrl + "Clients/ReActiveClient?ClientID=" + ClientID;
-                    $.ajax({
-                        type: "POST",
-                        url: Url,
-                        success: function (data) {
-                            if (data.d == null) {
-                                window.location.replace(siteUrl + "Clients/Index");
-                            }
+        $("#btnActive").click(function () { 
+            
+            //bootbox.confirm({                
+            //    message: "Are You Sure You Want To Active?",
+            //    callback: function (result) {
+            //        var Url = siteUrl + "Clients/ReActiveClient?ClientID=" + ClientID;
+            //        $.ajax({
+            //            type: "POST",
+            //            url: Url,
+            //            success: function (data) {
+            //                if (data.d == null) {
+            //                    window.location.replace(siteUrl + "Clients/Index");
+            //                }
+            //            }
+            //        })
+            //    }
+            //});
+           
+            bootbox.prompt({
+                        title: "Choose Reactive Date",
+                        inputType: 'date',
+                        callback: function (result) {
+                               var Url = siteUrl + "Clients/ReActiveClient?ClientID=" + ClientID + "&On="+result;
+                                    $.ajax({
+                                        type: "POST",
+                                        url: Url,
+                                        success: function (data) {
+                                            if (data.d == null) {
+                                                window.location.replace(siteUrl + "Clients/Index");
+                                            }
+                                        }
+                                    })
                         }
-                    })
-                }
-            });
+                    });
         });
 
         function GetParameterValues(param) {

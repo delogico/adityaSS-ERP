@@ -211,7 +211,7 @@ namespace RMERP.DAL.ManagerClasses
 
                         Employees employee = new Employees();
                         employee = EmployeesMapper.MapMeObject(emp, ADM_Id);
-                        employee.EMP_DateOfJoining = DateTime.Today;
+                        employee.EMP_DateOfJoining = EMP_Rejoin_Date;
 
                         _context.Employees.Add(employee);
                         _context.SaveChanges();
