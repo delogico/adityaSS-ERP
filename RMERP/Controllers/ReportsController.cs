@@ -2764,7 +2764,7 @@ namespace RMERP.Controllers
                 cell5.CellStyle = style;
                 excelSheet.SetColumnWidth(5, (int)((22 + 0.72) * 256));
 
-                List<ESICReportEmpWiseVM> ESICReportEmpWiseVMs = manager.ESICReportEmpWise(WAG_Id, selectionVMs.Where(m => m.IsSelect.Equals(true)).ToList(), IsSelected);
+                List<ESICReportEmpWiseVM> ESICReportEmpWiseVMs = manager.ESICReportEmpWise(WAG_Id, firm.FRM_Id, selectionVMs.Where(m => m.IsSelect.Equals(true)).ToList(), IsSelected);
                 int rowCount = 1;
                 foreach (var item in ESICReportEmpWiseVMs)
                 {

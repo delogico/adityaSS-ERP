@@ -652,11 +652,11 @@ namespace RMERP.DAL.ManagerClasses
             //                              && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
             //                              select a;
             IQueryable<Clients> cliList = from a in _contaxt.Clients
-                                           join b in _contaxt.Client_ActivationHistory on a.CLI_Id equals b.CLI_Id
-                                           where b.CAH_ActiveOn.Date <= lastDate.Date
-                                           && a.FRM_Id.Equals(FirmId)
-                                           && ((b.CAH_InactiveOn==null) || !( b.CAH_InactiveOn.Value.Date < startdate.Date))
-                                           select a;
+                                          join b in _contaxt.Client_ActivationHistory on a.CLI_Id equals b.CLI_Id
+                                          where b.CAH_ActiveOn.Date <= lastDate.Date
+                                          && a.FRM_Id.Equals(FirmId)
+                                          && ((b.CAH_InactiveOn == null) || !(b.CAH_InactiveOn.Value.Date < startdate.Date))
+                                          select a;
             return cliList.ToList();
         }
                   
