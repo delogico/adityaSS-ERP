@@ -83,6 +83,26 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_MLWF_Employer_Max_Base = requirement.CRI_MLWF_Employer_Base;
             clientRequirementVM.CRI_MLWF_Employee_Max_Base = requirement.CRI_MLWF_Employee_Base;
 
+            clientRequirementVM.CRI_ProffTax_M_From_1 = requirement.CRI_ProffTax_M_From_1;
+            clientRequirementVM.CRI_ProffTax_M_To_1 = requirement.CRI_ProffTax_M_To_1;
+            clientRequirementVM.CRI_ProffTax_M_Amount_1 = requirement.CRI_ProffTax_M_Amount_1;
+            clientRequirementVM.CRI_ProffTax_M_From_2 = requirement.CRI_ProffTax_M_From_2;
+            clientRequirementVM.CRI_ProffTax_M_To_2 = requirement.CRI_ProffTax_M_To_2;
+            clientRequirementVM.CRI_ProffTax_M_Amount_2 = requirement.CRI_ProffTax_M_Amount_2;
+            clientRequirementVM.CRI_ProffTax_M_From_3 = requirement.CRI_ProffTax_M_From_3;
+            clientRequirementVM.CRI_ProffTax_M_To_3 = requirement.CRI_ProffTax_M_To_3;
+            clientRequirementVM.CRI_ProffTax_M_Amount_3 = requirement.CRI_ProffTax_M_Amount_3;
+
+            clientRequirementVM.CRI_ProffTax_F_From_1 = requirement.CRI_ProffTax_F_From_1;
+            clientRequirementVM.CRI_ProffTax_F_To_1 = requirement.CRI_ProffTax_F_To_1;
+            clientRequirementVM.CRI_ProffTax_F_Amount_1 = requirement.CRI_ProffTax_F_Amount_1;
+            clientRequirementVM.CRI_ProffTax_F_From_2 = requirement.CRI_ProffTax_F_From_2;
+            clientRequirementVM.CRI_ProffTax_F_To_2 = requirement.CRI_ProffTax_F_To_2;
+            clientRequirementVM.CRI_ProffTax_F_Amount_2 = requirement.CRI_ProffTax_F_Amount_2;
+            clientRequirementVM.CRI_ProffTax_F_From_3 = requirement.CRI_ProffTax_F_From_3;
+            clientRequirementVM.CRI_ProffTax_F_To_3 = requirement.CRI_ProffTax_F_To_3;
+            clientRequirementVM.CRI_ProffTax_F_Amount_3 = requirement.CRI_ProffTax_F_Amount_3;
+
             return clientRequirementVM;
         }       
         public static Client_Requirements mapMeModel(ClientRequirementVM requirementVM)
@@ -146,6 +166,26 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_MLWF_Employee_LThen = requirementVM.CRI_MLWF_Employee_LThen;
             requirement.CRI_MLWF_Employer_Base = requirementVM.CRI_MLWF_Employer_Base;
             requirement.CRI_MLWF_Employee_Base = requirementVM.CRI_MLWF_Employee_Base;
+
+            requirement.CRI_ProffTax_M_From_1 = requirementVM.CRI_ProffTax_M_From_1;
+            requirement.CRI_ProffTax_M_To_1 = requirementVM.CRI_ProffTax_M_To_1;
+            requirement.CRI_ProffTax_M_Amount_1 = requirementVM.CRI_ProffTax_M_Amount_1;
+            requirement.CRI_ProffTax_M_From_2 = requirementVM.CRI_ProffTax_M_From_2;
+            requirement.CRI_ProffTax_M_To_2 = requirementVM.CRI_ProffTax_M_To_2;
+            requirement.CRI_ProffTax_M_Amount_2 = requirementVM.CRI_ProffTax_M_Amount_2;
+            requirement.CRI_ProffTax_M_From_3 = requirementVM.CRI_ProffTax_M_From_3;
+            requirement.CRI_ProffTax_M_To_3 = requirementVM.CRI_ProffTax_M_To_3;
+            requirement.CRI_ProffTax_M_Amount_3 = requirementVM.CRI_ProffTax_M_Amount_3;
+
+            requirement.CRI_ProffTax_F_From_1 = requirementVM.CRI_ProffTax_F_From_1;
+            requirement.CRI_ProffTax_F_To_1 = requirementVM.CRI_ProffTax_F_To_1;
+            requirement.CRI_ProffTax_F_Amount_1 = requirementVM.CRI_ProffTax_F_Amount_1;
+            requirement.CRI_ProffTax_F_From_2 = requirementVM.CRI_ProffTax_F_From_2;
+            requirement.CRI_ProffTax_F_To_2 = requirementVM.CRI_ProffTax_F_To_2;
+            requirement.CRI_ProffTax_F_Amount_2 = requirementVM.CRI_ProffTax_F_Amount_2;
+            requirement.CRI_ProffTax_F_From_3 = requirementVM.CRI_ProffTax_F_From_3;
+            requirement.CRI_ProffTax_F_To_3 = requirementVM.CRI_ProffTax_F_To_3;
+            requirement.CRI_ProffTax_F_Amount_3 = requirementVM.CRI_ProffTax_F_Amount_3;
 
             return requirement;
         }        

@@ -454,6 +454,26 @@ namespace RMERP.Controllers
             Clients client = clientsManager.GetClientById(CLI_Id);
             ViewBag.client = client;
             List<Client_Requirement_Allowances> listClientReqAllowances = new List<Client_Requirement_Allowances>();
+
+            clientRequirement.CRI_ProffTax_M_From_1 = 0;
+            clientRequirement.CRI_ProffTax_M_To_1 = 7500;
+            clientRequirement.CRI_ProffTax_M_Amount_1 = 0;
+            clientRequirement.CRI_ProffTax_M_From_2 = 7501;
+            clientRequirement.CRI_ProffTax_M_To_2 = 10000;
+            clientRequirement.CRI_ProffTax_M_Amount_2 = 175;
+            clientRequirement.CRI_ProffTax_M_From_3 = 10001;
+            clientRequirement.CRI_ProffTax_M_To_3 = 1000000;
+            clientRequirement.CRI_ProffTax_M_Amount_3 = 200;
+
+            clientRequirement.CRI_ProffTax_F_From_1 = 0;
+            clientRequirement.CRI_ProffTax_F_To_1 = 7500;
+            clientRequirement.CRI_ProffTax_F_Amount_1 = 0;
+            clientRequirement.CRI_ProffTax_F_From_2 = 7501;
+            clientRequirement.CRI_ProffTax_F_To_2 = 10000;
+            clientRequirement.CRI_ProffTax_F_Amount_2 = 0;
+            clientRequirement.CRI_ProffTax_F_From_3 = 10001;
+            clientRequirement.CRI_ProffTax_F_To_3 = 1000000;
+            clientRequirement.CRI_ProffTax_F_Amount_3 = 200;
             if (CRI_Id > 0)
             {
                 clientRequirement = ClientRequirementMapper.mapMe(clientsManager.GetRequirementsById(CRI_Id));
@@ -524,6 +544,7 @@ namespace RMERP.Controllers
                     clientRequirementVM.CRI_Billing_Amount = null;                    
                 }
                 cr = ClientRequirementMapper.mapMeModel(clientRequirementVM);
+
                 if (clientRequirementVM.IsHistory)
                 {
                     res = clientsManager.EditHistoryRequirement(cr, lst, sessionUtils.GetLoggedAdminID());

@@ -353,15 +353,7 @@ namespace RMERP.DAL.ManagerClasses
                         bool flag = false;
                         int clients = attManager.getAttendance_Wage_Employee(wageProcess.WAG_Id, employee.EMP_Id).Select(m => m.CLI_Id).Distinct().Count();
                         if (clients > 1)
-                        {
-                            //if (employee.EMP_.Wage_Register_Advances.Where(m => m.WAG_Id.Equals(wageProcess.WAG_Id) && m.WAD_Status.Equals(true) && m.WAD_ClosedOn!=null) != null)
-                            //{
-                            //    flag = true;
-                            //}
-                            //else
-                            //{
-
-                            //}
+                        {                            
                             IEnumerable<Clients_Employees> clientList = clientsManager.listActiveClientsEmployees_clients(employee.EMP_Id, wageProcess.WAG_Month);
                             Client_Requirements requirementMax = null;
                             decimal Basic_Paybaleday_Max = 0;
@@ -443,9 +435,9 @@ namespace RMERP.DAL.ManagerClasses
                     {
                         if (cr.CRI_ProfessionalTax == true)
                         {
-                            ProfessionalTaxCalculationManager ptcManager = new ProfessionalTaxCalculationManager(_context);
-
-                            WAR_ProffesionalTax_Calculated = Math.Round(ptcManager.GetPT((employee.EMP_.EMP_Gender ? "M" : "F"), WAR_GrossTotal), MidpointRounding.AwayFromZero);
+                            //ProfessionalTaxCalculationManager ptcManager = new ProfessionalTaxCalculationManager(_context);
+                            // WAR_ProffesionalTax_Calculated = Math.Round(ptcManager.GetPT((employee.EMP_.EMP_Gender ? "M" : "F"), WAR_GrossTotal), MidpointRounding.AwayFromZero);
+                            WAR_ProffesionalTax_Calculated=clientsManager.GetProffessionalTax(employee.EMP_.EMP_Gender, WAR_GrossTotal, cr);
                         }
                     }
                     

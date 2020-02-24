@@ -217,15 +217,14 @@ namespace RMERP.DAL.ManagerClasses
         {
             string res = string.Empty;
             try
-            {
-                
+            {                
                 if (clientRequirements.CRI_Id > 0)
                 {
                     List<Client_Requirements> list = _contaxt.Client_Requirements.Where(m => m.CLI_Id.Equals(clientRequirements.CLI_Id) && m.DES_Id.Equals(clientRequirements.DES_Id) && m.CRI_Active == true).ToList();
                     list.ForEach(m =>
                     {
                         m.CRI_Active = false;
-                        m.CRI_InactivatedOn = ProjectUtils.DateNow();
+                        m.CRI_InactivatedOn = clientRequirements.CRI_RegisteredOn.AddDays(-1);
                         m.ADM_Id_InactivatedBy = ADM_Id;
                     });
                     _contaxt.SaveChanges();
@@ -844,6 +843,42 @@ namespace RMERP.DAL.ManagerClasses
                 _contaxt.Clients_Employees.Update(clientEmployee);
                 _contaxt.SaveChanges();
             }
+        }
+
+        public decimal GetProffessionalTax(bool EMP_Gender,decimal WAR_GrossTotal,Client_Requirements cr)
+        {
+            decimal ProffessionalTax = 0;
+            if (EMP_Gender)
+            {
+                if(WAR_GrossTotal >= cr.CRI_ProffTax_M_From_1 && WAR_GrossTotal <= cr.CRI_ProffTax_M_To_1)
+                {
+                    ProffessionalTax = cr.CRI_ProffTax_M_Amount_1;
+                }
+                else if (WAR_GrossTotal >= cr.CRI_ProffTax_M_From_2 && WAR_GrossTotal <= cr.CRI_ProffTax_M_To_2)
+                {
+                    ProffessionalTax = cr.CRI_ProffTax_M_Amount_2;
+                }
+                else if (WAR_GrossTotal >= cr.CRI_ProffTax_M_From_3 && WAR_GrossTotal <= cr.CRI_ProffTax_M_To_3)
+                {
+                    ProffessionalTax = cr.CRI_ProffTax_M_Amount_3;
+                }
+            }
+            else 
+            {
+                if (WAR_GrossTotal >= cr.CRI_ProffTax_F_From_1 && WAR_GrossTotal <= cr.CRI_ProffTax_F_To_1)
+                {
+                    ProffessionalTax = cr.CRI_ProffTax_F_Amount_1;
+                }
+                else if (WAR_GrossTotal >= cr.CRI_ProffTax_F_From_2 && WAR_GrossTotal <= cr.CRI_ProffTax_F_To_2)
+                {
+                    ProffessionalTax = cr.CRI_ProffTax_F_Amount_2;
+                }
+                else if (WAR_GrossTotal >= cr.CRI_ProffTax_F_From_3 && WAR_GrossTotal <= cr.CRI_ProffTax_F_To_3)
+                {
+                    ProffessionalTax = cr.CRI_ProffTax_F_Amount_3;
+                }
+            }
+            return ProffessionalTax;
         }
 
     }

@@ -555,17 +555,56 @@
                                 <div class=" col-md-6">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            @Html.CheckBoxFor(s => s.CRI_ProfessionalTax) Professional Tax
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
                                             @Html.CheckBoxFor(s => s.CRI_RevenueDeduction) Revenue Deduction
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             @Html.CheckBoxFor(s => s.CRI_CanteenFacility) Canteen Facility
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.CheckBoxFor(s => s.CRI_ProfessionalTax, new { @id = "CRI_ProfessionalTax" }) Professional Tax
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" id="divProffTax">
+                                        <div class="form-group well">
+                                            @Html.Label("Male Professional Tax")
+                                            <div class="form-group">
+                                                <p>
+                                                    If Basic &ge; &nbsp; @Html.TextBoxFor(m => m.CRI_ProffTax_M_From_1, new { @style = "width: 80px" })&nbsp;INR To Basic &le; &nbsp; @Html.TextBoxFor(m => m.CRI_ProffTax_M_To_1, new { @style = "width: 80px" })&nbsp;INR,
+                                                    Proffesional Tax will be @Html.TextBoxFor(m => m.CRI_ProffTax_M_Amount_1, new { @style = "width: 80px" }) INR
+                                                </p> <hr />
+                                                <p>
+                                                    If Basic &ge; &nbsp; @Html.TextBoxFor(m => m.CRI_ProffTax_M_From_2, new { @style = "width: 80px" })&nbsp;INR To Basic &le; &nbsp; @Html.TextBoxFor(m => m.CRI_ProffTax_M_To_2, new { @style = "width: 80px" })&nbsp;INR,
+                                                    Proffesional Tax will be @Html.TextBoxFor(m => m.CRI_ProffTax_M_Amount_2, new { @style = "width: 80px" }) INR
+                                                </p>
+                                                <hr />
+                                                <p>
+                                                    If Basic &ge; &nbsp; @Html.TextBoxFor(m => m.CRI_ProffTax_M_From_3, new { @style = "width: 80px" })&nbsp;INR To Basic &le; &nbsp; @Html.TextBoxFor(m => m.CRI_ProffTax_M_To_3, new { @style = "width: 80px" })&nbsp;INR,
+                                                    Proffesional Tax will be @Html.TextBoxFor(m => m.CRI_ProffTax_M_Amount_3, new { @style = "width: 80px" }) INR
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group well">
+                                            @Html.Label("Female Professional Tax")
+                                            <div class="form-group">
+                                                <p>
+                                                    If Basic &ge; &nbsp; @Html.TextBoxFor(m => m.CRI_ProffTax_F_From_1, new { @style = "width: 80px" })&nbsp;INR To Basic &le; &nbsp; @Html.TextBoxFor(m => m.CRI_ProffTax_F_To_1, new { @style = "width: 80px" })&nbsp;INR,
+                                                    Proffesional Tax will be @Html.TextBoxFor(m => m.CRI_ProffTax_F_Amount_1, new { @style = "width: 80px" }) INR
+                                                </p> <hr />
+                                                <p>
+                                                    If Basic &ge; &nbsp; @Html.TextBoxFor(m => m.CRI_ProffTax_F_From_2, new { @style = "width: 80px" })&nbsp;INR To Basic &le; &nbsp; @Html.TextBoxFor(m => m.CRI_ProffTax_F_To_2, new { @style = "width: 80px" })&nbsp;INR,
+                                                    Proffesional Tax will be @Html.TextBoxFor(m => m.CRI_ProffTax_F_Amount_2, new { @style = "width: 80px" }) INR
+                                                </p>
+                                                <hr />
+                                                <p>
+                                                    If Basic &ge; &nbsp; @Html.TextBoxFor(m => m.CRI_ProffTax_F_From_3, new { @style = "width: 80px" })&nbsp;INR To Basic &le; &nbsp; @Html.TextBoxFor(m => m.CRI_ProffTax_F_To_3, new { @style = "width: 80px" })&nbsp;INR,
+                                                    Proffesional Tax will be @Html.TextBoxFor(m => m.CRI_ProffTax_F_Amount_3, new { @style = "width: 80px" }) INR
+                                                </p>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -576,7 +615,7 @@
                                             @Html.TextBoxFor(m => m.CRI_EPS_Rate, new { @class = "form-control" })
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 well">
                                         <div class="form-group">
                                             @Html.Label("Employer LWF Contribution")
                                             <p>
@@ -584,7 +623,7 @@
                                                 LWF will be @Html.TextBoxFor(m => m.CRI_MLWF_Employer_LThen, new { @style = "width: 80px" }) INR
                                             </p>
                                             <p>
-                                                If Basic &ge; &nbsp;@Html.TextBoxFor(m => m.CRI_MLWF_Employer_Max_Base, new { @style = "width: 80px" ,@disabled="disabled"})&nbsp;INR,
+                                                If Basic &ge; &nbsp;@Html.TextBoxFor(m => m.CRI_MLWF_Employer_Max_Base, new { @style = "width: 80px", @disabled = "disabled" })&nbsp;INR,
                                                 LWF will be @Html.TextBoxFor(m => m.CRI_MLWF_Employer_GThen, new { @style = "width: 80px" })&nbsp;INR
                                             </p>
 
@@ -594,14 +633,13 @@
                                                 LWF will be @Html.TextBoxFor(m => m.CRI_MLWF_Employee_LThen, new { @style = "width: 80px" })&nbsp;INR
                                             </p>
                                             <p>
-                                                If Basic &ge; &nbsp;@Html.TextBoxFor(m => m.CRI_MLWF_Employee_Max_Base, new { @style = "width: 80px",@disabled="disabled"})&nbsp;INR,
-                                                LWF will be @Html.TextBoxFor(m => m.CRI_MLWF_Employee_GThen, new { @style = "width: 80px"})&nbsp;INR
+                                                If Basic &ge; &nbsp;@Html.TextBoxFor(m => m.CRI_MLWF_Employee_Max_Base, new { @style = "width: 80px", @disabled = "disabled" })&nbsp;INR,
+                                                LWF will be @Html.TextBoxFor(m => m.CRI_MLWF_Employee_GThen, new { @style = "width: 80px" })&nbsp;INR
                                             </p>
 
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div id="OverTime" class="tab-pane">
@@ -1035,7 +1073,6 @@
         $(document).ready(function () {
 
             var tab = GetParameterValues("tab");
-
             function GetParameterValues(param) {
                 var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
                 for (var i = 0; i < url.length; i++) {
@@ -1046,13 +1083,16 @@
                 }
             };
 
+            $("#divProffTax").hide();
+            if ($("#CRI_ProfessionalTax").prop("checked")) {
+                $("#divProffTax").show();
+            }
+            
             if (tab == "History" || tab == "ViewRequirement") {
                 $('select', 'form').attr('disabled', true).attr('readonly', true);
                 $('input', 'form').attr('disabled', true).attr('readonly', true);
                 $('button', 'form').attr('disabled', true).attr('readonly', true);
             }
-
-
             $('input[class="Allselection"]').click(function () {
                 if ($(this).prop("checked") == true) {
                     $("#divReqAllow_" + this.id).show();
@@ -1240,6 +1280,16 @@
                 $("#CRI_Performance_Allowance").val("false");
             }
         });
+
+        $("input[id='CRI_ProfessionalTax']").click(function () {
+            debugger;
+            if ($(this).prop("checked") == true) {
+                $("#divProffTax").show();
+            } else {
+                $("#divProffTax").hide();
+            }
+        });
+
         function addCheckboxNewAllowance(allowance) {
             var container = $('#PFlist');
             var containerEsic = $('#ESIClist');
@@ -1307,10 +1357,10 @@
                 $("#div_service_change_basic").show();
             }
         });
-        function ChangeEmployerMLWF(EmployerMLWF) {        
+        function ChangeEmployerMLWF(EmployerMLWF) {
             $("#CRI_MLWF_Employer_Max_Base").val(EmployerMLWF.value);
         }
-        function ChangeEmployeeMLWF(EmployeeMLWF) {           
+        function ChangeEmployeeMLWF(EmployeeMLWF) {
             $("#CRI_MLWF_Employee_Max_Base").val(EmployeeMLWF.value);
         }
     </script>

@@ -307,6 +307,68 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.CRI_PF_Formula).HasMaxLength(200);
 
+                entity.Property(e => e.CRI_ProffTax_F_Amount_1).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.CRI_ProffTax_F_Amount_2).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.CRI_ProffTax_F_Amount_3)
+                    .HasColumnType("decimal(9, 2)")
+                    .HasDefaultValueSql("((200))");
+
+                entity.Property(e => e.CRI_ProffTax_F_From_1).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.CRI_ProffTax_F_From_2)
+                    .HasColumnType("decimal(9, 2)")
+                    .HasDefaultValueSql("((7501))");
+
+                entity.Property(e => e.CRI_ProffTax_F_From_3)
+                    .HasColumnType("decimal(9, 2)")
+                    .HasDefaultValueSql("((10001))");
+
+                entity.Property(e => e.CRI_ProffTax_F_To_1)
+                    .HasColumnType("decimal(9, 2)")
+                    .HasDefaultValueSql("((7500))");
+
+                entity.Property(e => e.CRI_ProffTax_F_To_2)
+                    .HasColumnType("decimal(9, 2)")
+                    .HasDefaultValueSql("((10000))");
+
+                entity.Property(e => e.CRI_ProffTax_F_To_3)
+                    .HasColumnType("decimal(9, 2)")
+                    .HasDefaultValueSql("((1000000))");
+
+                entity.Property(e => e.CRI_ProffTax_M_Amount_1).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.CRI_ProffTax_M_Amount_2)
+                    .HasColumnType("decimal(9, 2)")
+                    .HasDefaultValueSql("((175))");
+
+                entity.Property(e => e.CRI_ProffTax_M_Amount_3)
+                    .HasColumnType("decimal(9, 2)")
+                    .HasDefaultValueSql("((200))");
+
+                entity.Property(e => e.CRI_ProffTax_M_From_1).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.CRI_ProffTax_M_From_2)
+                    .HasColumnType("decimal(9, 2)")
+                    .HasDefaultValueSql("((7501))");
+
+                entity.Property(e => e.CRI_ProffTax_M_From_3)
+                    .HasColumnType("decimal(9, 2)")
+                    .HasDefaultValueSql("((10001))");
+
+                entity.Property(e => e.CRI_ProffTax_M_To_1)
+                    .HasColumnType("decimal(9, 2)")
+                    .HasDefaultValueSql("((7500))");
+
+                entity.Property(e => e.CRI_ProffTax_M_To_2)
+                    .HasColumnType("decimal(9, 2)")
+                    .HasDefaultValueSql("((10000))");
+
+                entity.Property(e => e.CRI_ProffTax_M_To_3)
+                    .HasColumnType("decimal(9, 2)")
+                    .HasDefaultValueSql("((1000000))");
+
                 entity.Property(e => e.CRI_RegisteredOn)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");

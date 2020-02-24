@@ -59,6 +59,24 @@ namespace RMERP.DAL.Models
         public decimal? CRI_MLWF_Employee_LThen { get; set; }
         public decimal? CRI_MLWF_Employer_Base { get; set; }
         public decimal? CRI_MLWF_Employee_Base { get; set; }
+        public decimal CRI_ProffTax_M_From_1 { get; set; }
+        public decimal CRI_ProffTax_M_To_1 { get; set; }
+        public decimal CRI_ProffTax_M_Amount_1 { get; set; }
+        public decimal CRI_ProffTax_M_From_2 { get; set; }
+        public decimal CRI_ProffTax_M_To_2 { get; set; }
+        public decimal CRI_ProffTax_M_Amount_2 { get; set; }
+        public decimal CRI_ProffTax_M_From_3 { get; set; }
+        public decimal CRI_ProffTax_M_To_3 { get; set; }
+        public decimal CRI_ProffTax_M_Amount_3 { get; set; }
+        public decimal CRI_ProffTax_F_From_1 { get; set; }
+        public decimal CRI_ProffTax_F_To_1 { get; set; }
+        public decimal CRI_ProffTax_F_Amount_1 { get; set; }
+        public decimal CRI_ProffTax_F_From_2 { get; set; }
+        public decimal CRI_ProffTax_F_To_2 { get; set; }
+        public decimal CRI_ProffTax_F_Amount_2 { get; set; }
+        public decimal CRI_ProffTax_F_From_3 { get; set; }
+        public decimal CRI_ProffTax_F_To_3 { get; set; }
+        public decimal CRI_ProffTax_F_Amount_3 { get; set; }
 
         public Clients CLI_ { get; set; }
         public Designations DES_ { get; set; }
