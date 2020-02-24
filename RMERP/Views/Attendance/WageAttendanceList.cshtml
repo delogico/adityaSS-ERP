@@ -9,6 +9,17 @@
     <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.wageProcess.FRM_Id })</li>
     <li class="breadcrumb-item">Wage Attendance</li>
 }
+@section scripts{
+    @if (TempData["err"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+            alert('@TempData["err"]');
+        });
+        </script>
+    };
+    
+}
 <div>
     <div class="content container-fluid">
         <div class="row">
