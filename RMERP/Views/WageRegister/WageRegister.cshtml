@@ -357,7 +357,7 @@
 
                                     @if (item.wageProcessClientVM != null && item.wageProcessVM.WageStatus == false)
                                     {
-                                        <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id, FRM_Id = wage.FRM_Id }, new { @class = "myClass" })</td>
+                                        <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id, FRM_Id = wage.FRM_Id }, new { @class = "myClass",@target="_blank" })</td>
                                     }
                                     <td>@employee.clientRequirementVM.CRI_Id</td>
                                 }

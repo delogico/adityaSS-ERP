@@ -226,7 +226,8 @@ namespace RMERP.DAL.ManagerClasses
                 }
                 else
                 {
-                    StartDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month - 1, client.CLI_Att_Month_Start.Value);
+                    DateTime dt = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, 1).AddMonths(-1);
+                    StartDate = new DateTime(dt.Year, dt.Month, client.CLI_Att_Month_Start.Value);
                     EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
                     DatePeriod = "From " + StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy");
                     daysInMonth = (int)(EndDate - StartDate).TotalDays + 1;
@@ -336,7 +337,8 @@ namespace RMERP.DAL.ManagerClasses
                 }
                 else
                 {
-                    StartDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_Start.Value);
+                    DateTime dt = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, 1).AddMonths(-1);
+                    StartDate = new DateTime(dt.Year, dt.Month, client.CLI_Att_Month_Start.Value);                    
                     EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
                     DatePeriod = "From " + StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
                 }
@@ -400,7 +402,8 @@ namespace RMERP.DAL.ManagerClasses
                 }
                 else
                 {
-                    StartDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_Start.Value);
+                    DateTime dt = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, 1).AddMonths(-1);
+                    StartDate = new DateTime(dt.Year, dt.Month, client.CLI_Att_Month_Start.Value);
                     EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
                     DatePeriod = "From " + StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
                 }

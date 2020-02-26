@@ -90,8 +90,8 @@ namespace RMERP.Controllers
                 List<Employees> empListExtraInExcel = new List<Employees>();
                 List<Employees> empListExtraInDb = new List<Employees>();
                 List<Attendance> attandanceList = new List<Attendance>();
-                string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
-                StringBuilder sb = new StringBuilder();
+                string newPath = GetTempFolderPath(_hostingEnvironment.WebRootPath);
+                StringBuilder sb = new StringBuilder();                
                 if (file != null)
                 {
                     if (file.Length > 0)
@@ -184,7 +184,7 @@ namespace RMERP.Controllers
                 excelViewModel.FRM_Id = uvm.wageProcessVM.FRM_Id;
                 return View(excelViewModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 TempData["err"]="Try Again....";
                 return RedirectToAction("WageAttendanceList", new { WAG_Id = uvm.wageProcessVM.WAG_Id });
@@ -194,6 +194,7 @@ namespace RMERP.Controllers
 
         public ExcelViewModel GetAttendance_BASIC_WithoutShifts(ISheet sheet, Wage_Process wageProcess, Clients client)
         {
+            List<string> errors = new List<string>();
             ExcelViewModel excelViewModel = new ExcelViewModel();
             List<Attendance> attandanceList = new List<Attendance>();
             List<ExcelRowViewModel> rows = new List<ExcelRowViewModel>();
@@ -201,191 +202,195 @@ namespace RMERP.Controllers
             {
                 IRow headerRow = sheet.GetRow(0);
                 IRow secondRow = sheet.GetRow(4);
-                int cellCount = secondRow.LastCellNum;
 
-                #region added bcz MON-TUE in added in excel            
-                int intStartDate = GetNumberFromString(secondRow.GetCell(4).ToString());
-                #endregion
-
-                //int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
-                int TotEmp = 0;
-                DateTime startDate = DateTime.Now, endDate = DateTime.Now;
-                if (intStartDate > 1)
+                if (secondRow != null)
                 {
-                    DateTime lastMonth = wageProcess.WAG_Month.AddMonths(-1);
-                    startDate = new DateTime(lastMonth.Year, lastMonth.Month, intStartDate);
-                }
-                else
-                {
-                    startDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, intStartDate);
-                }
-                endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, GetNumberFromString(secondRow.GetCell(cellCount - 1).ToString()));
-                int totalPublicHolidays = 0;
+                    int cellCount = secondRow.LastCellNum;
 
-                for (int i = (sheet.FirstRowNum + 5); i <= sheet.LastRowNum; i += 2)
-                {
-                    ExcelRowViewModel excelRow = new ExcelRowViewModel();
-                    IRow row = sheet.GetRow(i);
-                    IRow rowExtra = sheet.GetRow(i + 1);
+                    #region added bcz MON-TUE in added in excel            
+                    int intStartDate = GetNumberFromString(secondRow.GetCell(4).ToString());
+                    #endregion
 
-                    if (row == null) continue;
-                    if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
-                    excelRow.EMP_Id = row.GetCell(1).ToString();
-                    int EMP_Id = Convert.ToInt32(row.GetCell(1).ToString());
-                    excelRow.EMP_Name = row.GetCell(3).ToString();
-                    excelRow.Designation = row.GetCell(2).ToString();
-                    TotEmp++;
-                    int totalWeeklyOff = 0, totalPublicHoliday = 0, totalEarnLeave = 0, totalNightShift = 0;
-                    Double totalExtraHours = 0, totalPresence = 0, totalHalfdays = 0;
-                    DateTime tmpDate = startDate;
-                    for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
+                    //int intStartDate = Convert.ToInt16(secondRow.GetCell(4).ToString());
+                    int TotEmp = 0;
+                    DateTime startDate = DateTime.Now, endDate = DateTime.Now;
+                    if (intStartDate > 1)
                     {
-                        Attendance attendance = new Attendance();
-                        attendance.EMP_Id = EMP_Id;
-                        attendance.CLI_Id = client.CLI_Id;
-                        attendance.ATT_Date = tmpDate;
-                        tmpDate = tmpDate.AddDays(1);
-
-                        switch (row.GetCell(j).ToString().Replace(" ", ""))
-                        {
-                            case "P":
-                                attendance.ATT_IsPresent = true;
-                                totalPresence++;
-                                break;
-                            case "PL":
-                                attendance.ATT_IsPresent = false;
-                                attendance.ATT_IsEarnLeave = true;
-                                totalEarnLeave++;
-                                break;
-                            case "WO":
-                                attendance.ATT_IsPresent = false;
-                                attendance.ATT_IsWeeklyOff = true;
-                                totalWeeklyOff++;
-                                break;
-                            case "W/O":
-                                attendance.ATT_IsPresent = false;
-                                attendance.ATT_IsWeeklyOff = true;
-                                totalWeeklyOff++;
-                                break;
-                            case "PW":
-                                attendance.ATT_IsPresent = true;
-                                attendance.ATT_IsWeeklyOff = true;
-                                totalPresence++;
-                                totalWeeklyOff++;
-                                break;
-                            case "CO":
-                                attendance.ATT_IsPresent = false;
-                                attendance.ATT_IsEarnLeave = true;
-                                totalEarnLeave++;
-                                break;
-                            case "C/O":
-                                attendance.ATT_IsPresent = false;
-                                attendance.ATT_IsEarnLeave = true;
-                                totalEarnLeave++;
-                                break;
-                            case "HO":
-                                attendance.ATT_IsPresent = false;
-                                attendance.ATT_IsPublicHoliday = true;
-                                totalPublicHoliday++;
-                                break;
-                            case "PO":
-                                attendance.ATT_IsPresent = true;
-                                attendance.ATT_IsPublicHoliday = true;
-                                totalPresence++;
-                                totalPublicHoliday++;
-                                break;
-                            case "NH":
-                                attendance.ATT_IsPresent = false;
-                                attendance.ATT_IsPublicHoliday = true;
-                                totalPublicHoliday++;
-                                break;
-                            case "PN":
-                                attendance.ATT_IsPresent = true;
-                                attendance.ATT_IsPublicHoliday = true;
-                                totalPresence++;
-                                totalPublicHoliday++;
-                                break;
-                            case "P/2":
-                                attendance.ATT_IsPresent = true;
-                                attendance.ATT_IsHalfday = true;
-                                totalPresence++;
-                                totalHalfdays++;
-                                break;
-                            case "HF":
-                                attendance.ATT_IsPresent = true;
-                                attendance.ATT_IsHalfday = true;
-                                totalPresence++;
-                                totalHalfdays++;
-                                break;
-                            case "A":
-                                attendance.ATT_IsPresent = false;
-                                break;
-                            case "CP":
-                                attendance.ATT_IsPresent = true;
-                                attendance.ATT_NightShift = true;
-                                totalPresence++;
-                                totalNightShift++;
-                                break;
-                            case "NC":
-                                attendance.ATT_IsPresent = true;
-                                attendance.ATT_NightShift = true;
-                                attendance.ATT_IsPublicHoliday = true;
-                                totalPresence++;
-                                totalNightShift++;
-                                totalPublicHoliday++;
-                                break;
-                            case "CW":
-                                attendance.ATT_IsPresent = true;
-                                attendance.ATT_NightShift = true;
-                                attendance.ATT_IsWeeklyOff = true;
-                                totalPresence++;
-                                totalNightShift++;
-                                totalWeeklyOff++;
-                                break;
-                            case "EL":
-                                attendance.ATT_IsPresent = false;
-                                attendance.ATT_IsEarnLeave = true;
-                                totalEarnLeave++;
-                                break;
-                            case "E/L":
-                                attendance.ATT_IsPresent = false;
-                                attendance.ATT_IsEarnLeave = true;
-                                totalEarnLeave++;
-                                break;
-                            case "PH":
-                                attendance.ATT_IsPresent = false;
-                                attendance.ATT_IsPublicHoliday = true;
-                                totalPublicHoliday++;
-                                break;
-                        }
-
-                        if (rowExtra.GetCell(j) != null)
-                            if (!rowExtra.GetCell(j).ToString().Equals(""))
-                            {
-                                if (double.TryParse(rowExtra.GetCell(j).ToString(), out double value))
-                                {
-                                    attendance.ATT_ExtraHoursWorked = value;
-                                    totalExtraHours += value;
-                                }
-
-                            }
-                        attandanceList.Add(attendance);
+                        DateTime lastMonth = wageProcess.WAG_Month.AddMonths(-1);
+                        startDate = new DateTime(lastMonth.Year, lastMonth.Month, intStartDate);
                     }
-                    excelRow.totalPresenceDays = totalPresence + (totalHalfdays / 2) - totalHalfdays;
-                    excelRow.totalWeeklyOff = totalWeeklyOff;
-                    excelRow.totalHolidays = totalPublicHoliday;
-                    excelRow.TotalEarnLeave = totalEarnLeave;
-                    excelRow.TotalNightshift = totalNightShift;
-                    excelRow.TotalExtraHours = totalExtraHours;
-                    rows.Add(excelRow);
-                    totalPublicHolidays += totalPublicHoliday;
+                    else
+                    {
+                        startDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, intStartDate);
+                    }
+                    endDate = new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, GetNumberFromString(secondRow.GetCell(cellCount - 1).ToString()));
+                    int totalPublicHolidays = 0;
+
+                    for (int i = (sheet.FirstRowNum + 5); i <= sheet.LastRowNum; i += 2)
+                    {
+                        ExcelRowViewModel excelRow = new ExcelRowViewModel();
+                        IRow row = sheet.GetRow(i);
+                        IRow rowExtra = sheet.GetRow(i + 1);
+
+                        if (row == null) continue;
+                        if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
+                        excelRow.EMP_Id = row.GetCell(1).ToString();
+                        int EMP_Id = Convert.ToInt32(row.GetCell(1).ToString());
+                        excelRow.EMP_Name = row.GetCell(3).ToString();
+                        excelRow.Designation = row.GetCell(2).ToString();
+                        TotEmp++;
+                        int totalWeeklyOff = 0, totalPublicHoliday = 0, totalEarnLeave = 0, totalNightShift = 0;
+                        Double totalExtraHours = 0, totalPresence = 0, totalHalfdays = 0;
+                        DateTime tmpDate = startDate;
+                        for (int j = (row.FirstCellNum + 4); j <= row.LastCellNum - 1; j++)
+                        {
+                            Attendance attendance = new Attendance();
+                            attendance.EMP_Id = EMP_Id;
+                            attendance.CLI_Id = client.CLI_Id;
+                            attendance.ATT_Date = tmpDate;
+                            tmpDate = tmpDate.AddDays(1);
+
+                            switch (row.GetCell(j).ToString().Replace(" ", ""))
+                            {
+                                case "P":
+                                    attendance.ATT_IsPresent = true;
+                                    totalPresence++;
+                                    break;
+                                case "PL":
+                                    attendance.ATT_IsPresent = false;
+                                    attendance.ATT_IsEarnLeave = true;
+                                    totalEarnLeave++;
+                                    break;
+                                case "WO":
+                                    attendance.ATT_IsPresent = false;
+                                    attendance.ATT_IsWeeklyOff = true;
+                                    totalWeeklyOff++;
+                                    break;
+                                case "W/O":
+                                    attendance.ATT_IsPresent = false;
+                                    attendance.ATT_IsWeeklyOff = true;
+                                    totalWeeklyOff++;
+                                    break;
+                                case "PW":
+                                    attendance.ATT_IsPresent = true;
+                                    attendance.ATT_IsWeeklyOff = true;
+                                    totalPresence++;
+                                    totalWeeklyOff++;
+                                    break;
+                                case "CO":
+                                    attendance.ATT_IsPresent = false;
+                                    attendance.ATT_IsEarnLeave = true;
+                                    totalEarnLeave++;
+                                    break;
+                                case "C/O":
+                                    attendance.ATT_IsPresent = false;
+                                    attendance.ATT_IsEarnLeave = true;
+                                    totalEarnLeave++;
+                                    break;
+                                case "HO":
+                                    attendance.ATT_IsPresent = false;
+                                    attendance.ATT_IsPublicHoliday = true;
+                                    totalPublicHoliday++;
+                                    break;
+                                case "PO":
+                                    attendance.ATT_IsPresent = true;
+                                    attendance.ATT_IsPublicHoliday = true;
+                                    totalPresence++;
+                                    totalPublicHoliday++;
+                                    break;
+                                case "NH":
+                                    attendance.ATT_IsPresent = false;
+                                    attendance.ATT_IsPublicHoliday = true;
+                                    totalPublicHoliday++;
+                                    break;
+                                case "PN":
+                                    attendance.ATT_IsPresent = true;
+                                    attendance.ATT_IsPublicHoliday = true;
+                                    totalPresence++;
+                                    totalPublicHoliday++;
+                                    break;
+                                case "P/2":
+                                    attendance.ATT_IsPresent = true;
+                                    attendance.ATT_IsHalfday = true;
+                                    totalPresence++;
+                                    totalHalfdays++;
+                                    break;
+                                case "HF":
+                                    attendance.ATT_IsPresent = true;
+                                    attendance.ATT_IsHalfday = true;
+                                    totalPresence++;
+                                    totalHalfdays++;
+                                    break;
+                                case "A":
+                                    attendance.ATT_IsPresent = false;
+                                    break;
+                                case "CP":
+                                    attendance.ATT_IsPresent = true;
+                                    attendance.ATT_NightShift = true;
+                                    totalPresence++;
+                                    totalNightShift++;
+                                    break;
+                                case "NC":
+                                    attendance.ATT_IsPresent = true;
+                                    attendance.ATT_NightShift = true;
+                                    attendance.ATT_IsPublicHoliday = true;
+                                    totalPresence++;
+                                    totalNightShift++;
+                                    totalPublicHoliday++;
+                                    break;
+                                case "CW":
+                                    attendance.ATT_IsPresent = true;
+                                    attendance.ATT_NightShift = true;
+                                    attendance.ATT_IsWeeklyOff = true;
+                                    totalPresence++;
+                                    totalNightShift++;
+                                    totalWeeklyOff++;
+                                    break;
+                                case "EL":
+                                    attendance.ATT_IsPresent = false;
+                                    attendance.ATT_IsEarnLeave = true;
+                                    totalEarnLeave++;
+                                    break;
+                                case "E/L":
+                                    attendance.ATT_IsPresent = false;
+                                    attendance.ATT_IsEarnLeave = true;
+                                    totalEarnLeave++;
+                                    break;
+                                case "PH":
+                                    attendance.ATT_IsPresent = false;
+                                    attendance.ATT_IsPublicHoliday = true;
+                                    totalPublicHoliday++;
+                                    break;
+                            }
+
+                            if (rowExtra.GetCell(j) != null)
+                                if (!rowExtra.GetCell(j).ToString().Equals(""))
+                                {
+                                    if (double.TryParse(rowExtra.GetCell(j).ToString(), out double value))
+                                    {
+                                        attendance.ATT_ExtraHoursWorked = value;
+                                        totalExtraHours += value;
+                                    }
+
+                                }
+                            attandanceList.Add(attendance);
+                        }
+                        excelRow.totalPresenceDays = totalPresence + (totalHalfdays / 2) - totalHalfdays;
+                        excelRow.totalWeeklyOff = totalWeeklyOff;
+                        excelRow.totalHolidays = totalPublicHoliday;
+                        excelRow.TotalEarnLeave = totalEarnLeave;
+                        excelRow.TotalNightshift = totalNightShift;
+                        excelRow.TotalExtraHours = totalExtraHours;
+                        rows.Add(excelRow);
+                        totalPublicHolidays += totalPublicHoliday;
+                    }
+                    excelViewModel.listAttendance = attandanceList;
+                    excelViewModel.excelRows = rows;
+                    excelViewModel.totalEmployees = TotEmp;
+                    excelViewModel.startDate = startDate;
+                    excelViewModel.endDate = endDate;
+                    excelViewModel.totalPublicHolidays = totalPublicHolidays;
                 }
-                excelViewModel.listAttendance = attandanceList;
-                excelViewModel.excelRows = rows;
-                excelViewModel.totalEmployees = TotEmp;
-                excelViewModel.startDate = startDate;
-                excelViewModel.endDate = endDate;
-                excelViewModel.totalPublicHolidays = totalPublicHolidays;
             }
             catch (Exception ex)
             {

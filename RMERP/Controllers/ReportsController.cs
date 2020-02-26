@@ -3219,7 +3219,7 @@ namespace RMERP.Controllers
                 {
                     FileName = FileName,
                     SaveOnServerPath = path,
-                    PageSize = Rotativa.AspNetCore.Options.Size.A4
+                    PageSize = Size.A4
                 };
                 #region Add Payslip
                 paySlip.WPS_Id = WPS_Id;
