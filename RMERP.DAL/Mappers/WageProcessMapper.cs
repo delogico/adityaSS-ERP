@@ -65,7 +65,7 @@ namespace RMERP.DAL.Mappers
             return wageProcessVMs;
         }
 
-        public static List<WageProcessClientAttendanceVM> mapClientToAttendanceWages(List<Clients> clients, Wage_Process wage, List<Attendance> lstAttendance)
+        public static List<WageProcessClientAttendanceVM> mapClientToAttendanceWages(List<Clients> clients, Wage_Process wage, IEnumerable<Attendance> lstAttendance)
         {
             List<WageProcessClientAttendanceVM> lst = new List<WageProcessClientAttendanceVM>();
             foreach (Clients client in clients){
@@ -74,13 +74,74 @@ namespace RMERP.DAL.Mappers
             return lst;
         }
 
-        public static WageProcessClientAttendanceVM mapClientToAttendanceWage(Clients client, Wage_Process wage, List<Attendance> lstAttendance)
+        public static WageProcessClientAttendanceVM mapClientToAttendanceWage(Clients client, Wage_Process wage, IEnumerable<Attendance> lstAttendance)
         {
             WageProcessClientAttendanceVM obj = new WageProcessClientAttendanceVM();
             obj.CLI_Id = client.CLI_Id;
             obj.CLI_Name = client.CLI_Name;
             obj.totalEmployees = lstAttendance.Where(a => a.CLI_Id == client.CLI_Id).Select(a=>a.EMP_Id).Distinct().Count();
             return obj;
+        }
+
+        public static WageProcessListVM mapMeList(Wage_Process wageProcess)
+        {
+            WageProcessListVM wageProcessVM = new WageProcessListVM();
+            wageProcessVM.WAG_Id = wageProcess.WAG_Id;
+            wageProcessVM.WAG_Month = wageProcess.WAG_Month;
+            wageProcessVM.WageStatus = wageProcess.WAG_Status;
+            wageProcessVM.FRM_Id = wageProcess.FRM_Id;
+            wageProcessVM.FRM_Title = wageProcess.FRM_.FRM_ShortName;            
+            if (wageProcess.Wage_Register_Advances != null)
+                wageProcessVM.wage_Register_Advances = wageProcess.Wage_Register_Advances.ToList();
+            return wageProcessVM;
+        }
+
+        public static WageProcessListVM mapMeWageProcessListVM(Wage_Process wageProcess, Firms firm, RMERPContext _context, IConfiguration _configuration)
+        {
+            WageProcessListVM wageProcessVM = new WageProcessListVM();
+            ClientsManager clientsManager = new ClientsManager(_context, _configuration);
+            WageProcessManager wageProcessManager = new WageProcessManager(_context);
+            AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
+            wageProcessVM.WAG_Id = wageProcess.WAG_Id;
+            wageProcessVM.WageStatus = wageProcess.WAG_Status;
+            wageProcessVM.WAG_Month = wageProcess.WAG_Month;
+            wageProcessVM.FRM_Id = wageProcess.FRM_Id;
+            wageProcessVM.FRM_Title = firm.FRM_ShortName;
+            wageProcessVM.totEmpTakeAdvance = advance.AdvanceRptForBank(wageProcess.WAG_Month, firm.FRM_Id).Select(m => m.EMP_Id).Distinct().Count();
+            List<Clients> clients = clientsManager.GetActiveClientOfMonthByFirmId(wageProcess.WAG_Month, firm.FRM_Id);
+
+            if (clients != null)
+                wageProcessVM.ActiveClients = clients.Count();
+            int imported = 0,wageRegSaved = 0;
+            if (wageProcess.Attendance!=null)
+                imported= wageProcess.Attendance.Where(m => m.WAG_Id.Equals(wageProcess.WAG_Id)).Select(m => m.CLI_Id).Distinct().Count();
+            if (wageProcess.Wage_Process_Clients != null)
+                wageRegSaved = wageProcess.Wage_Process_Clients.Where(m => m.WAG_Id.Equals(wageProcess.WAG_Id)).Select(m => m.CLI_Id).Distinct().Count();
+            int Notimported = clients.Count() - imported;
+            
+            wageProcessVM.ImportedClients = imported;
+            wageProcessVM.NotImportedClients = Notimported;
+
+            if (wageProcess.Wage_Process_Clients != null)
+                wageRegSaved = wageProcess.Wage_Process_Clients.Where(m => m.WAG_Id.Equals(wageProcess.WAG_Id)).Select(m => m.CLI_Id).Distinct().Count();
+
+            wageProcessVM.WageRegisterSaved = wageRegSaved;
+            wageProcessVM.WageRegisterNotSaved = clients.Count()- wageRegSaved;
+
+            //if (wageProcess.Wage_Register_Advances != null)
+            //    wageProcessVM.wage_Register_Advances = wageProcess.Wage_Register_Advances.ToList();
+
+            return wageProcessVM;
+        }
+
+        public static IEnumerable<WageProcessListVM> mapMeListVMs(IEnumerable<Wage_Process> wage_Processes, Firms firm, RMERPContext _context, IConfiguration _configuration)
+        {
+            List<WageProcessListVM> wageProcessVMs = new List<WageProcessListVM>();
+            foreach (Wage_Process item in wage_Processes)
+            {
+                wageProcessVMs.Add(mapMeWageProcessListVM(item, firm, _context, _configuration));
+            }
+            return wageProcessVMs;
         }
     }
 }

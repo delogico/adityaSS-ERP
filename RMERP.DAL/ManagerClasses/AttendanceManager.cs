@@ -14,9 +14,9 @@ namespace RMERP.DAL.ManagerClasses
             _context = context;
         }
 
-        public List<Attendance> getAttendance_Wage(int WAG_Id)
+        public IEnumerable<Attendance> getAttendance_Wage(int WAG_Id)
         {
-            return _context.Attendance.Include(m=>m.DES_).Where(a => a.WAG_Id == WAG_Id).ToList();
+            return _context.Attendance.Include(m=>m.DES_).Where(a => a.WAG_Id == WAG_Id);
         }
 
         public List<Attendance> getAttendance_Wage_Client(int WAG_Id, int CLI_Id)

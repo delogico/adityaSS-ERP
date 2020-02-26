@@ -61,12 +61,12 @@ namespace RMERP.Controllers
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID(), FRM_Id);
             FirmsManager firmsManager = new FirmsManager(_context);
+            AttendanceManager attendanceManager = new AttendanceManager(_context);
             ViewBag.month = nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
             ViewBag.FRM_Id = FRM_Id;
             Firms firm = firmsManager.GetFirm(FRM_Id);
-            ViewBag.FRM_Name = firm.FRM_ShortName;
-            IEnumerable<Wage_Process> wage_Processes = wpm.getWageProcessList(FRM_Id);
-            return View(WageProcessMapper.mapMeVMs(wage_Processes, firm, _context, _configuration));
+            ViewBag.FRM_Name = firm.FRM_ShortName;              
+            return View(WageProcessMapper.mapMeListVMs(wpm.getWageProcessList(FRM_Id), firm, _context, _configuration));
         }
 
         public IActionResult CreateNextMonthWage(int FRM_Id)

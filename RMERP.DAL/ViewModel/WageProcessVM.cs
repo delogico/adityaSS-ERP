@@ -50,7 +50,32 @@ namespace RMERP.DAL.ViewModel
         public string FRM_Title { get; set; }
         public List<Clients> clients { get; set; }
     }
-    
+
+    public class WageProcessListVM
+    {
+        public int WAG_Id { get; set; }
+        public DateTime WAG_Month { get; set; }
+        /*public List<Attendance> Attendance { get; set; }*/
+        //public List<Wage_Process_Clients> wage_Process_Clients { get; set; }
+        public List<Wage_Register_Advances> wage_Register_Advances { get; set; }
+        public bool WageStatus { get; set; }
+        public int ActiveClients { get; set; }
+
+        public int ImportedClients { get; set; }
+        public int NotImportedClients { get; set; }
+        public int WageRegisterSaved { get; set; }
+        public int WageRegisterNotSaved { get; set; }               
+               
+        public string WAG_Full_Month()
+        {
+            return WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
+        }
+        public int totEmpTakeAdvance { get; set; }
+        public int FRM_Id { get; set; }
+        public string FRM_Title { get; set; }
+        public List<Clients> clients { get; set; }
+    }
+
     public class WageProcessClientAttendancePageVM
     {
         public WageProcessVM wageProcess { get; set; }

@@ -1,4 +1,4 @@
-﻿@model RMERP.DAL.ViewModel.WageProcessVM
+﻿@model RMERP.DAL.ViewModel.WageProcessListVM
 @using RMERP.DAL.Helpers;
 
 <div class="row wage_raw">
@@ -10,13 +10,13 @@
         <h6>Attendance:</h6>
         <b>@Html.ActionLink("Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = Model.WAG_Id })</b>
         <div style="font-size:10px;">
-            @if (Model.ImportedClients() == Model.ActiveClients)
+            @if (Model.ImportedClients == Model.ActiveClients)
             {
                 <span class="done" style="color:green;">Attendence Imported for all clients.</span>
             }
             else
             {
-                <span style="color:orangered;">@Model.NotImportedClients() client's attendence Pending to import.</span>
+                <span style="color:orangered;">@Model.NotImportedClients client's attendence Pending to import.</span>
             }
         </div>
     </div>
@@ -38,7 +38,7 @@
             }
             else
             {
-                @if (Model.WageRegisterSaved() == Model.ActiveClients)
+                @if (Model.WageRegisterSaved == Model.ActiveClients)
                 {
                     <span style="color:green;">Wage Register for all Clients is Finalize.</span><br />
                     <a onclick="return window.confirm('Are you sure, you want to finalize wage Register for this month? Now onwards wage register can not be able to modify.')"
@@ -48,7 +48,7 @@
                 }
                 else
                 {
-                    <span style="color:orangered;">@Model.WageRegisterNotSaved() client's Wage register Pending to finalize.</span>
+                    <span style="color:orangered;">@Model.WageRegisterNotSaved client's Wage register Pending to finalize.</span>
                 }
 
             }
@@ -58,7 +58,7 @@
         <h6>Reports:</h6>
 
         <div class="raw">
-            @if (Model.WageRegisterSaved() > 0)
+            @if (Model.WageRegisterSaved > 0)
             {
                 <div class="col-md-6">
                     <ul style="font-size:10px;padding-left: 10px !important;margin-bottom:0px;list-style-type:none;">
