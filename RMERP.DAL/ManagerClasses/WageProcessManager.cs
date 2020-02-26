@@ -23,18 +23,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public IEnumerable<Wage_Process> getWageProcessList(int FRM_Id)
         {
-            IEnumerable<Wage_Process> list = null;
-            if (FRM_Id > 0)
-            {
-                list = _context.Wage_Process.Where(m => m.FRM_Id == FRM_Id).Include(m => m.Attendance).Include(m => m.Wage_Process_Clients).OrderBy(m => m.WAG_Month).ToList();
-
-            }
-            else
-            {
-                list = _context.Wage_Process.Include(m => m.Attendance).Include(m => m.Wage_Process_Clients).OrderBy(m => m.WAG_Month).ToList();
-
-            }
-            return list;
+            return _context.Wage_Process.Where(m => m.FRM_Id == FRM_Id).Include(m => m.Attendance).Include(m => m.Wage_Process_Clients).OrderBy(m => m.WAG_Month);
         }
         public Wage_Process getWageProcessById(int WAG_Id)
         {
@@ -71,16 +60,25 @@ namespace RMERP.DAL.ManagerClasses
         }
         public DateTime nextWageMonth(int AdminId,int FirmId)
         {
-            int count = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.FRM_Id.Equals(FirmId)).Count();
-            if (count > 0)
+            var wp = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.FRM_Id.Equals(FirmId)).OrderByDescending(m => m.WAG_Month).FirstOrDefault();
+            if(wp != null)
             {
-                var wp = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.FRM_Id.Equals(FirmId)).OrderByDescending(m => m.WAG_Month).First();
                 return wp.WAG_Month.AddMonths(1);
             }
             else
             {
                 return ProjectUtils.DateNow();
             }
+            //int count = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.FRM_Id.Equals(FirmId)).Count();
+            //if (count > 0)
+            //{
+            //    var wp = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.FRM_Id.Equals(FirmId)).OrderByDescending(m => m.WAG_Month).First();
+            //    return wp.WAG_Month.AddMonths(1);
+            //}
+            //else
+            //{
+            //    return ProjectUtils.DateNow();
+            //}
         }
 
         public string GetMonthFromID(int WagId)

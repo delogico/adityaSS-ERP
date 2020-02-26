@@ -645,11 +645,6 @@ namespace RMERP.DAL.ManagerClasses
         {
             DateTime lastDate = new DateTime(wageDate.Year, wageDate.Month, 1).AddMonths(1).AddDays(-1);
             DateTime startdate = new DateTime(wageDate.Year, wageDate.Month, 1);
-            //IQueryable<Clients> cliList = from a in _contaxt.Clients
-            //                              where a.CLI_RegisteredOn.Date <= lastDate.Date
-            //                              && a.FRM_Id.Equals(FirmId)
-            //                              && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
-            //                              select a;
             IQueryable<Clients> cliList = from a in _contaxt.Clients
                                           join b in _contaxt.Client_ActivationHistory on a.CLI_Id equals b.CLI_Id
                                           where b.CAH_ActiveOn.Date <= lastDate.Date

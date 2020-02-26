@@ -277,7 +277,7 @@ namespace RMERP.Controllers
         {
             AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
             FirmsManager firmsManager = new FirmsManager(_context);
-            List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.AdvanceRptForBank(WAG_Month, FRM_Id));
+            List<EmployeeAdvanceVM> advancesVM = EmployeeAdvanceMapper.mapAdvances(advance.AdvanceRptForBank(WAG_Month, FRM_Id).ToList());
             ViewBag.WAG_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
             ViewBag.FRM_Name = firmsManager.GetFirm(FRM_Id).FRM_ShortName;
             ViewBag.FRM_Id = FRM_Id;

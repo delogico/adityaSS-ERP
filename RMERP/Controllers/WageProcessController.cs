@@ -60,18 +60,13 @@ namespace RMERP.Controllers
         {            
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID(), FRM_Id);
-            WageProcessManager wageProcessManager = new WageProcessManager(_context);
             FirmsManager firmsManager = new FirmsManager(_context);
             ViewBag.month = nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
             ViewBag.FRM_Id = FRM_Id;
-            ViewBag.FRM_Name = firmsManager.GetFirm(FRM_Id).FRM_ShortName;
+            Firms firm = firmsManager.GetFirm(FRM_Id);
+            ViewBag.FRM_Name = firm.FRM_ShortName;
             IEnumerable<Wage_Process> wage_Processes = wpm.getWageProcessList(FRM_Id);
-
-            //WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
-            //List<Clients> clients = wageRegisterManager.GetWageRegisters(WAG_Id).Where(m => m.WAG_.FRM_Id.Equals(FRM_Id)).Select(m => m.).Distinct().ToList();
-            //return View(new Tuple<IEnumerable<WageProcessVM>, List<Clients>>(WageProcessMapper.mapMeVMs(wage_Processes, firmsManager.GetFirm(FRM_Id), _context, _configuration), clients));
-
-            return View(WageProcessMapper.mapMeVMs(wage_Processes, firmsManager.GetFirm(FRM_Id), _context, _configuration));
+            return View(WageProcessMapper.mapMeVMs(wage_Processes, firm, _context, _configuration));
         }
 
         public IActionResult CreateNextMonthWage(int FRM_Id)

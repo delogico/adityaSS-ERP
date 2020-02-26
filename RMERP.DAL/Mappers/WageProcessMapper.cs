@@ -44,7 +44,6 @@ namespace RMERP.DAL.Mappers
             wageProcessVM.FRM_Title = firm.FRM_ShortName;
             wageProcessVM.totEmpTakeAdvance = advance.AdvanceRptForBank(wageProcess.WAG_Month, firm.FRM_Id).Select(m=>m.EMP_Id).Distinct().Count();            
             List<Clients> clients = clientsManager.GetActiveClientOfMonthByFirmId(wageProcess.WAG_Month, firm.FRM_Id);
-           // wageProcessVM.clients = clients;
             if (clients!=null)
                 wageProcessVM.ActiveClients = clients.Count();
             if (wageProcess.Attendance != null)
