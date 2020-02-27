@@ -57,7 +57,7 @@ namespace RMERP.DAL.ViewModel
         public DateTime WAG_Month { get; set; }
         /*public List<Attendance> Attendance { get; set; }*/
         //public List<Wage_Process_Clients> wage_Process_Clients { get; set; }
-        public List<Wage_Register_Advances> wage_Register_Advances { get; set; }
+       // public List<Wage_Register_Advances> wage_Register_Advances { get; set; }
         public bool WageStatus { get; set; }
         public int ActiveClients { get; set; }
 
@@ -73,7 +73,7 @@ namespace RMERP.DAL.ViewModel
         public int totEmpTakeAdvance { get; set; }
         public int FRM_Id { get; set; }
         public string FRM_Title { get; set; }
-        public List<Clients> clients { get; set; }
+      //  public List<Clients> clients { get; set; }
     }
 
     public class WageProcessClientAttendancePageVM

@@ -1057,6 +1057,7 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Wage_PaySlips.Find(WPS_Id);
         }
+
         public List<EmployeePaySlipVM> GeneratePaySlipForAll(int WAG_Id)
         {
             WageRegisterManager registerManager = new WageRegisterManager(_context);

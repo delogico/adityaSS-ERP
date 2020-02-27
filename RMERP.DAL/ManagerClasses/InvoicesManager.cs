@@ -89,6 +89,7 @@ namespace RMERP.DAL.ManagerClasses
         {
             ClientsManager clientsManager = new ClientsManager(_context);
             WageProcessManager processManager = new WageProcessManager(_context);
+            AttendanceManager attendanceManager = new AttendanceManager(_context);
             Invoice_Concepts invoice_Concept = new Invoice_Concepts();
             Clients client = clientsManager.GetClientById(CLI_Id);
             List<Wage_Register> list = new List<Wage_Register>();            
@@ -212,7 +213,6 @@ namespace RMERP.DAL.ManagerClasses
                 double TotalPaybleDays = list.Select(m => m.WAR_TotalPaybleDays).Sum();
                 decimal MLWF = (list[0].WAR_LWF_Deduction_Employer != null ? list[0].WAR_LWF_Deduction_Employer.Value : 0);
                 int Nos = list.Where(m => m.CRI_.DES_.DES_Exclude_LWF == false).Select(m => m.EMP_Id).Count();
-
                 Wage_Process wage = list[0].WAG_;
                 string DatePeriod = "";
                 decimal Total = 0;
@@ -226,9 +226,13 @@ namespace RMERP.DAL.ManagerClasses
                 }
                 else
                 {
-                    DateTime dt = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, 1).AddMonths(-1);
-                    StartDate = new DateTime(dt.Year, dt.Month, client.CLI_Att_Month_Start.Value);
-                    EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
+                    //DateTime dt = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, 1).AddMonths(-1);
+                    //StartDate = new DateTime(dt.Year, dt.Month, client.CLI_Att_Month_Start.Value);
+                    //EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
+                    Tuple<DateTime, DateTime> dates = attendanceManager.GetFirstLastDateFromAttendance(WAG_Id, CLI_Id, list.First().EMP_Id);
+                    StartDate = dates.Item1;
+                    EndDate = dates.Item2;
+
                     DatePeriod = "From " + StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy");
                     daysInMonth = (int)(EndDate - StartDate).TotalDays + 1;
                 }
@@ -296,12 +300,12 @@ namespace RMERP.DAL.ManagerClasses
         {
             ClientsManager clientsManager = new ClientsManager(_context);
             WageProcessManager processManager = new WageProcessManager(_context);
+            AttendanceManager attendanceManager = new AttendanceManager(_context);
+
             Invoice_Concepts invoice_Concept = new Invoice_Concepts();
             Clients client = clientsManager.GetClientById(CLI_Id);
-
             List<Wage_Register> list = _context.Wage_Register.Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id)).ToList();
-
-
+            
             decimal PF_Calculated = 0;
             StringBuilder sb = new StringBuilder();
             if (list.Count() > 0)
@@ -336,10 +340,13 @@ namespace RMERP.DAL.ManagerClasses
                     DatePeriod = "For Month Of " + wage.WAG_Month.ToString("MMM-yyyy");
                 }
                 else
-                {
-                    DateTime dt = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, 1).AddMonths(-1);
-                    StartDate = new DateTime(dt.Year, dt.Month, client.CLI_Att_Month_Start.Value);                    
-                    EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
+                {                    
+                    Tuple<DateTime, DateTime> dates = attendanceManager.GetFirstLastDateFromAttendance(WAG_Id, CLI_Id, list.First().EMP_Id);
+                    StartDate = dates.Item1;
+                    EndDate = dates.Item2;
+                    //DateTime dt = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, 1).AddMonths(-1);
+                    //StartDate = new DateTime(dt.Year, dt.Month, client.CLI_Att_Month_Start.Value);                    
+                    //EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
                     DatePeriod = "From " + StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
                 }
                 //decimal PF_Calculated1 = list.Select(m => m.WAR_PF_Calculated).Sum();
@@ -348,14 +355,11 @@ namespace RMERP.DAL.ManagerClasses
                 sb.Append("Rembursment Of Company Contribution <br/>");
                 //sb.Append("To The P.F @" + 12 + "% and Other Charges @" + 1 + "%<br/>");
                 //sb.Append("As Per The Act " + DatePeriod + "</br/>");
-                sb.Append("(Total=" + String.Format("{0:0.##}", ProjectUtils.RoundFigure(PF_Calculated * (decimal)list[0].CRI_.CRI_PF_Employer_Cont_Rate / 100)) + "/-)");
-                
+                sb.Append("(Total=" + String.Format("{0:0.##}", ProjectUtils.RoundFigure(PF_Calculated * (decimal)list[0].CRI_.CRI_PF_Employer_Cont_Rate / 100)) + "/-)");                
             }
-
             invoice_Concept.INC_Description = sb.ToString();
             if (list.Count() > 0)
                 invoice_Concept.INC_Total = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(PF_Calculated * (decimal)list[0].CRI_.CRI_PF_Employer_Cont_Rate / 100)));
-
             return invoice_Concept;
         }
 
@@ -363,9 +367,10 @@ namespace RMERP.DAL.ManagerClasses
         {
             ClientsManager clientsManager = new ClientsManager(_context);
             WageProcessManager processManager = new WageProcessManager(_context);
+            AttendanceManager attendanceManager = new AttendanceManager(_context);
+
             Invoice_Concepts invoice_Concept = new Invoice_Concepts();
             Clients client = clientsManager.GetClientById(CLI_Id);
-
             List<Wage_Register> list = _context.Wage_Register.Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id)).ToList();
             decimal ESIC_Calculated = 0M, GrossTotal = 0M;
             StringBuilder sb = new StringBuilder();
@@ -402,20 +407,20 @@ namespace RMERP.DAL.ManagerClasses
                 }
                 else
                 {
-                    DateTime dt = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, 1).AddMonths(-1);
-                    StartDate = new DateTime(dt.Year, dt.Month, client.CLI_Att_Month_Start.Value);
-                    EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
+                    Tuple<DateTime, DateTime> dates = attendanceManager.GetFirstLastDateFromAttendance(WAG_Id, CLI_Id, list.First().EMP_Id);
+                    StartDate = dates.Item1;
+                    EndDate = dates.Item2;
+                    //DateTime dt = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, 1).AddMonths(-1);
+                    //StartDate = new DateTime(dt.Year, dt.Month, client.CLI_Att_Month_Start.Value);
+                    //EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
                     DatePeriod = "From " + StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
                 }
                 sb.Append("<b>Company Contribution Towards ESIC @" + list[0].CRI_.CRI_ESIC_Employer_Cont_Rate + "%</b></br>");
                 sb.Append("Rembursment Of Company Contribution <br/>");
-                sb.Append("On Gross Salary= Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(GrossTotal) + "/-<br/>"));
-                //sb.Append("@" + list[0].CRI_.CRI_ESIC_Employer_Cont_Rate + "% = " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(ESIC_Calculated * (decimal)list[0].CRI_.CRI_ESIC_Employer_Cont_Rate / 100)));
+                sb.Append("On Gross Salary= Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(GrossTotal) + "/-<br/>"));                
                 sb.Append("@" + list[0].CRI_.CRI_ESIC_Employer_Cont_Rate + "% = " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(ProjectUtils.RoundFigure(GrossTotal) * (decimal)list[0].CRI_.CRI_ESIC_Employer_Cont_Rate / 100)));
-                //sb.Append("As Per The Act " + DatePeriod + "<br/>");
-                
+                                
             }
-
             invoice_Concept.INC_Description = sb.ToString();
             if(list.Count()>0)
                 invoice_Concept.INC_Total = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(ProjectUtils.RoundFigure(GrossTotal) * (decimal)list[0].CRI_.CRI_ESIC_Employer_Cont_Rate / 100)));
@@ -449,15 +454,12 @@ namespace RMERP.DAL.ManagerClasses
                             sb.Append("Total = <br/>");
                         }
                     }
-                }
-
-                
+                }                
                 invoice_Concept.INC_Total = INC_Total;
                 invoice_Concept.INC_Description = sb.ToString();
             }
             return invoice_Concept;
         }
-
     }
 }
 public class ExtraService

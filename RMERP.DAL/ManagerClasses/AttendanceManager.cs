@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using RMERP.DAL.Models;
 using System.Collections.Generic;
+using RMERP.DAL.Helpers;
 
 namespace RMERP.DAL.ManagerClasses
 {
@@ -77,5 +78,14 @@ namespace RMERP.DAL.ManagerClasses
         {            
             return _context.Attendance.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(CLI_Id)).Count() > 0;            
         }
+
+        public Tuple<DateTime,DateTime> GetFirstLastDateFromAttendance(int WAG_Id,int CLI_Id,int EMP_Id)
+        {
+            IEnumerable<Attendance> attendances = _context.Attendance.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id)).OrderBy(m=>m.ATT_Date);
+            DateTime startDate = attendances.First().ATT_Date;
+            DateTime lastDate = attendances.Last().ATT_Date;
+            return new Tuple<DateTime, DateTime>(startDate,lastDate);
+        }
+        
     }
 }

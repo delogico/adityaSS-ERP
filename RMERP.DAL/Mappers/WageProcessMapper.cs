@@ -91,8 +91,8 @@ namespace RMERP.DAL.Mappers
             wageProcessVM.WageStatus = wageProcess.WAG_Status;
             wageProcessVM.FRM_Id = wageProcess.FRM_Id;
             wageProcessVM.FRM_Title = wageProcess.FRM_.FRM_ShortName;            
-            if (wageProcess.Wage_Register_Advances != null)
-                wageProcessVM.wage_Register_Advances = wageProcess.Wage_Register_Advances.ToList();
+           // if (wageProcess.Wage_Register_Advances != null)
+            //    wageProcessVM.wage_Register_Advances = wageProcess.Wage_Register_Advances.ToList();
             return wageProcessVM;
         }
 

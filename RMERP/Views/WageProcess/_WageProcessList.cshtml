@@ -111,11 +111,7 @@
                         <li>
                             <div class="dropdown">
                                 <a href="#" style="font-size:10px;color:#009ce7;padding-left: 0px;" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-file-excel-o m-r-5"></i>Advance Reports</a>
-                                @*<ul class="dropdown-menu pull-right">
-            <li><a style="font-size:10px;color:#009ce7;" href="javascript:void(0)" onclick="return window.alert('No Wages Saved For This Report')" title="IDBI To IDBI Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI To IDBI Advance Report.xlsx</a></li>
-            <li><a style="font-size:10px;color:#009ce7;" href="javascript:void(0)" onclick="return window.alert('No Wages Saved For This Report')" title="IDBI To Others Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI To Others Advance Report.xlsx</a></li>
-            <li><a style="font-size:10px;color:#009ce7;" href="javascript:void(0)" onclick="return window.alert('No Wages Saved For This Report')" title="CHEQUE/CASH Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>CHEQUE/CASH Advance Report.xlsx</a></li>
-        </ul>*@
+                               
                                 <ul class="dropdown-menu pull-right">
                                     <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "IDBI_To_IDBI_AdvanceReportExcel","Reports",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id })' title="IDBI To IDBI Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI To IDBI Advance Report.xlsx</a></li>
                                     <li><a style="font-size:10px;color:#009ce7;" href='@Url.Action( "IDBI_To_Other_AdvanceReportExcel","Reports",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id })' title="IDBI To Others Advance Report"><i class="fa fa-file-excel-o m-r-5"></i>IDBI To Others Advance Report.xlsx</a></li>
