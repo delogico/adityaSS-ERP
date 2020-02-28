@@ -1860,6 +1860,7 @@ namespace RMERP.Controllers
                 cell2.CellStyle = style;
                 ICell cell3 = row.CreateCell(3);
                 cell3.SetCellValue("SERVICE \r\n OUTLET");
+                excelSheet.SetColumnWidth(3, (int)((15 + 0.72) * 256));//A
                 cell3.CellStyle = style;
                 ICell cell4 = row.CreateCell(4);
                 cell4.SetCellValue("PART \r\n TRAN \r\n TYPE");

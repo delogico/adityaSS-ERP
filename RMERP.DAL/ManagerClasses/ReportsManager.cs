@@ -549,10 +549,11 @@ namespace RMERP.DAL.ManagerClasses
                     rptEmployee.EMP_FirstName = wage.EMP_.EMP_FirstName;
                     rptEmployee.EMP_MiddleName = wage.EMP_.EMP_MiddleName;
                     rptEmployee.EMP_SurName = wage.EMP_.EMP_SurName;
-                    rptEmployee.EMP_Account_Number = "";
+                    rptEmployee.EMP_Account_Number = (wage.EMP_.EMP_Account_Number==null?"-":wage.EMP_.EMP_Account_Number);
                     rptEmployee.CURRENCY_CODE = "-";
                     rptEmployee.PART_TRAN_TYPE = "-";
                     rptEmployee.TRANSACTION_AMOUNT = wage.WAR_FinalTotal;
+                    rptEmployee.SERVICE_OUTLET= (wage.EMP_.EMP_Bank_IFSC == null ? "-" : wage.EMP_.EMP_Bank_IFSC);
                     DateTime WAG_Month = wage_Registers.First().WAG_.WAG_Month;
                     rptEmployee.TRANSACTION_PARTICULARS = "Salary " + WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
                     rptEmployees.Add(rptEmployee);
