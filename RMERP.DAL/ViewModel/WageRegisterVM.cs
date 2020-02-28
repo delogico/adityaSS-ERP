@@ -29,7 +29,7 @@ namespace RMERP.DAL.ViewModel
 
         public int CLE_Id { get; set; }
 
-        public WageProcessVM wageProcessVM { get; set; }
+       // public WageProcessVM wageProcessVM { get; set; }
         public int CLI_Id { get; set; }
         public ClientsModel clientVM { get; set; }
         public int EMP_Id { get; set; }
@@ -66,7 +66,6 @@ namespace RMERP.DAL.ViewModel
         public string WAR_OverTime_Formula { get; set; }
         [Display(Name = "OverTime Payment Times")]
         public int? WAR_OverTime_Payment { get; set; }   
-
         [Display(Name = "Calculated Extra Working Amount")]
         public decimal WAR_OverTime_Calculated { get; set; }
         [Display(Name = "WorkingHrs in day")]
@@ -85,7 +84,6 @@ namespace RMERP.DAL.ViewModel
         public string WAR_ESIC_Formula { get; set; }
         [Display(Name = "Calculated ESIC")]
         public decimal WAR_ESIC_Calculated { get; set; }
-
         [Display(Name = "Calculated Proffesional Tax")]
         public string WAR_ProffesionalTax_Calculated { get; set; }
         [Display(Name = "Calculated Revenue Deduction")]
@@ -115,16 +113,18 @@ namespace RMERP.DAL.ViewModel
         public decimal? WAR_LWF_Deduction_Employee { get; set; }
 
     }
-
-
     public class ClientWageRegisterVM
     {
         public List<WageRegisterVM> wageRegisterVMs { get; set; }
-        public ClientsModel client { get; set; }
+        public ClientsWagModel client { get; set; }
         public WageProcessVM wageProcessVM { get; set; }
         public WageProcessClientVM wageProcessClientVM { get; set; }
     }
-
+    public class ClientsWagModel
+    {
+        public int CLI_Id { get; set; }
+        public string CLI_Name { get; set; }
+    }
     public class EditWageRegisterVM
     {
         public WageRegisterVM wageRegisterVM { get; set; }

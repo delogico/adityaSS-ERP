@@ -158,7 +158,7 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.WAG_Id = wageProcess.WAG_Id;
                     wageRegisterVM.CLI_Id = CLI_Id;
                     wageRegisterVM.EMP_Id = employee.EMP_Id;
-                    wageRegisterVM.wageProcessVM = WageProcessMapper.mapMe(wageProcess);
+                  //  wageRegisterVM.wageProcessVM = WageProcessMapper.mapMe(wageProcess);
                     wageRegisterVM.employeeVM = EmployeesMapper.MapMe(employee.EMP_);
                     wageRegisterVM.designation = employee.DES_;
                                         
