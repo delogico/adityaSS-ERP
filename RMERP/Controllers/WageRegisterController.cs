@@ -1119,6 +1119,12 @@ namespace RMERP.Controllers
 
             return Json(Calculated_OT);
         }
+
+        public bool IsWageSaved(int EMP_id, int CLI_id, int WAG_Id)
+        {
+            return _context.Wage_Register.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(CLI_id) && m.EMP_Id.Equals(EMP_id)).Count() > 0;
+            
+        }
     }
     
 }

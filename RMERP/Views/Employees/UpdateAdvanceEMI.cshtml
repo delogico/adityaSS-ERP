@@ -93,6 +93,7 @@
                                             {
                                                 <a onclick="AddAdvanceEMI(@item.EMP_Id)" class="btn btn-success btn-xs" title="Add">Add</a>
                                             }
+                                            <div class="m-t-10 label label-danger-border msg " id="msg_@item.EMP_Id"></div>
                                         }
                                     }
                                     else
@@ -118,6 +119,10 @@
 
 @section scripts{
     <script>
+        $(document).ready(function () {
+            $(".msg").hide();
+        });
+
         function AddAdvanceEMI(EMP_Id) {
           var WAD_Id = $("#WAD_Id_" + EMP_Id).val();
           var WAD_Amount = $("#WAD_Amount_" + EMP_Id).val();
@@ -149,16 +154,20 @@
                 }
         };
 
-        function callAPI(WAD_Id, EMP_Id, WAD_Amount, WAD_Is_LoanCompleted) {
+        function callAPI(WAD_Id, EMP_Id, WAD_Amount, WAD_Is_LoanCompleted) {            
             var Url = siteUrl + "Employees/AddAdvanceEMI?WAD_Id=" + WAD_Id + "&EMP_Id=" + EMP_Id + "&WAG_Id=" +@Model.WAG_.WAG_Id+"&WAD_Amount=" + WAD_Amount + "&WAD_Is_LoanCompleted=" + WAD_Is_LoanCompleted;
                 $.ajax({
                     type: "GET",
                     url: Url,
-                    success: function (data) {
+                    success: function (data) {                      
                         if (data == "ok") {
                             location.reload();
-                        } else {
+                        } else if (data == "ko") {
+                            $("#msg_"+EMP_Id).val("").hide();
                             alert("Try Again!");
+                        } else {
+                             $("#msg_"+EMP_Id).show();
+                                 $("#msg_"+EMP_Id).html(data);
                         }
                         
                     }

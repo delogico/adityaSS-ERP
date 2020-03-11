@@ -83,8 +83,8 @@ namespace RMERP.Controllers
             AttendanceManager attManager = new AttendanceManager(_context);
             EmployeeManager empManager = new EmployeeManager(_context);
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);
-            try
-            {
+            //try
+            //{
                 Wage_Process wageProcess = wageManager.getWageProcessById(uvm.wageProcessVM.WAG_Id);
                 IFormFile file = uvm.ExcelFile;
                 List<Employees> empListExtraInExcel = new List<Employees>();
@@ -183,12 +183,12 @@ namespace RMERP.Controllers
                 }
                 excelViewModel.FRM_Id = uvm.wageProcessVM.FRM_Id;
                 return View(excelViewModel);
-            }
-            catch (Exception ex)
-            {
-                TempData["err"]="Try Again....";
-                return RedirectToAction("WageAttendanceList", new { WAG_Id = uvm.wageProcessVM.WAG_Id });
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    TempData["err"]="Try Again....";
+            //    return RedirectToAction("WageAttendanceList", new { WAG_Id = uvm.wageProcessVM.WAG_Id });
+            //}
                        
         }
 
@@ -644,8 +644,8 @@ namespace RMERP.Controllers
             ExcelViewModel excelViewModel = new ExcelViewModel();
             List<Attendance> attandanceList = new List<Attendance>();
             List<ExcelRowViewModel> rows = new List<ExcelRowViewModel>();
-            try
-            {
+            //try
+            //{
                 IRow headerRow = sheet.GetRow(0);
                 IRow secondRow = sheet.GetRow(4);
                 int cellCount = secondRow.LastCellNum;
@@ -847,11 +847,11 @@ namespace RMERP.Controllers
                 excelViewModel.startDate = startDate;
                 excelViewModel.endDate = endDate;
                 excelViewModel.totalPublicHolidays = totalPublicHolidays;
-            }
-            catch (Exception ex)
-            {
-                TempData["error"] = ex.Message;                
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    TempData["error"] = ex.Message;                
+            //}
             
             return excelViewModel;
         }

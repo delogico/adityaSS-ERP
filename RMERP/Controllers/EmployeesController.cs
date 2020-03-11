@@ -358,22 +358,32 @@ namespace RMERP.Controllers
         }
         public string AddAdvanceEMI(int WAD_Id, int EMP_id, int WAG_Id, decimal WAD_Amount, bool WAD_Is_LoanCompleted)
         {
+            WageRegisterController wageRegisterController = new WageRegisterController(_context,_hostingEnvironment);
             AdvanceWageRegisterManager advanceManager = new AdvanceWageRegisterManager(_context);
             try
             {
-                if (WAD_Id > 0)
+                WageProcessManager wageProcessManager = new WageProcessManager(_context);
+                ClientsManager clients = new ClientsManager(_context, _configuration);
+
+                DateTime WAG_Month = wageProcessManager.getWageProcessById(WAG_Id).WAG_Month;
+                int CLI_id = clients.GetClientIDByEmpID(EMP_id, WAG_Month);
+
+                if(!wageRegisterController.IsWageSaved(EMP_id, CLI_id, WAG_Id))
                 {
-                    advanceManager.editWageRegisterAdvances(WAD_Id, WAD_Amount, WAD_Is_LoanCompleted);
+                    if (WAD_Id > 0)
+                    {
+                        advanceManager.editWageRegisterAdvances(WAD_Id, WAD_Amount, WAD_Is_LoanCompleted);
+                    }
+                    else
+                    {
+                        advanceManager.addWageRegisterAdvances(EMP_id, WAG_Id, CLI_id, WAD_Amount, WAG_Month, WAD_Is_LoanCompleted);
+                    }
+                    return "ok";
                 }
                 else
                 {
-                    WageProcessManager wageProcessManager = new WageProcessManager(_context);
-                    ClientsManager clients = new ClientsManager(_context, _configuration);
-                    DateTime WAG_Month = wageProcessManager.getWageProcessById(WAG_Id).WAG_Month;
-                    int CLI_id = clients.GetClientIDByEmpID(EMP_id, WAG_Month);
-                    advanceManager.addWageRegisterAdvances(EMP_id, WAG_Id, CLI_id, WAD_Amount, WAG_Month, WAD_Is_LoanCompleted);
-                }
-                return "ok";
+                    return "You have to reset wage register first.";
+                }                                
             }
             catch (Exception)
             {
