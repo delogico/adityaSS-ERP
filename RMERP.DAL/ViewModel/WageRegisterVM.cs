@@ -96,7 +96,7 @@ namespace RMERP.DAL.ViewModel
         public DateTime WAR_LastModifiedOn { get; set; }
         public int ADM_LastModifiedBy { get; set; }
         public Designations designation { get; set; }
-        public decimal WAR_Advance_Amount { get; set; }
+        
         public List<WageRegisterAllowanceVM> allowanceVMs { get; set; }
 
         [Display(Name = "Outstation Allowance")]
@@ -111,7 +111,8 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "MLWF Deduction")]
         public decimal? WAR_LWF_Deduction_Employer { get; set; }
         public decimal? WAR_LWF_Deduction_Employee { get; set; }
-
+        [Display(Name = "Advance Amount")]
+        public decimal WAR_Advance_Amount { get; set; }
     }
     public class ClientWageRegisterVM
     {
@@ -129,7 +130,7 @@ namespace RMERP.DAL.ViewModel
     {
         public WageRegisterVM wageRegisterVM { get; set; }
         public List<Wage_Register_Allowances> wage_Register_Allowances { get; set; }
-        public int FRM_Id { get; set; }
+        public int FRM_Id { get; set; }        
     }
 
 }
