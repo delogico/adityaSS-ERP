@@ -145,43 +145,81 @@ namespace RMERP.DAL.ManagerClasses
                 report.CLI_Name = item.CLI_Name;
                 List<Wage_Register> register = registerManager.GetWageRegisters(WAG_Id, item.CLI_Id);
                 int UpTo7500 = 0, UpTo7500Ladies = 0, UpTo10000 = 0, UpTo10000Ladies = 0, Above10000 = 0, Above10000Ladies = 0;
+                decimal AMOUNT = 0;
                 foreach (var emp in register)
                 {
                     emp.WAR_FinalTotal = emp.WAR_GrossTotal;
-                    if (emp.WAR_FinalTotal > 0 && emp.WAR_FinalTotal <= 7500)
+
+                    if (emp.EMP_.EMP_Gender.Equals(true)) //Male
                     {
-                        if (emp.EMP_.EMP_Gender.Equals(true)) //Male
+                        if(emp.WAR_FinalTotal >= emp.CRI_.CRI_ProffTax_M_From_1 && emp.WAR_FinalTotal <= emp.CRI_.CRI_ProffTax_M_To_1)
                         {
                             UpTo7500++;
+                            AMOUNT = AMOUNT + emp.CRI_.CRI_ProffTax_M_Amount_1;
                         }
-                        else
-                        {
-                            UpTo7500Ladies++;
-                        }
-
-                    }
-                    else if (emp.WAR_FinalTotal > 7500 && emp.WAR_FinalTotal <= 10000)
-                    {
-                        if (emp.EMP_.EMP_Gender.Equals(true)) //Male
+                        else if (emp.WAR_FinalTotal >= emp.CRI_.CRI_ProffTax_M_From_2 && emp.WAR_FinalTotal <= emp.CRI_.CRI_ProffTax_M_To_2)
                         {
                             UpTo10000++;
+                            AMOUNT = AMOUNT + emp.CRI_.CRI_ProffTax_M_Amount_2;
                         }
-                        else
-                        {
-                            UpTo10000Ladies++;
-                        }
-                    }
-                    else if (emp.WAR_FinalTotal > 10000)
-                    {
-                        if (emp.EMP_.EMP_Gender.Equals(true)) //Male
+                        else if (emp.WAR_FinalTotal >= emp.CRI_.CRI_ProffTax_M_From_3 && emp.WAR_FinalTotal <= emp.CRI_.CRI_ProffTax_M_To_3)
                         {
                             Above10000++;
-                        }
-                        else
-                        {
-                            Above10000Ladies++;
+                            AMOUNT = AMOUNT + emp.CRI_.CRI_ProffTax_M_Amount_3;
                         }
                     }
+                    else
+                    {
+                        if (emp.WAR_FinalTotal >= emp.CRI_.CRI_ProffTax_F_From_1 && emp.WAR_FinalTotal <= emp.CRI_.CRI_ProffTax_F_To_1)
+                        {
+                            UpTo7500Ladies++;
+                            AMOUNT = AMOUNT + emp.CRI_.CRI_ProffTax_F_Amount_1;
+                        }
+                        else if (emp.WAR_FinalTotal >= emp.CRI_.CRI_ProffTax_F_From_2 && emp.WAR_FinalTotal <= emp.CRI_.CRI_ProffTax_F_To_2)
+                        {
+                            UpTo10000Ladies++;
+                            AMOUNT = AMOUNT + emp.CRI_.CRI_ProffTax_F_Amount_2;
+                        }
+                        else if (emp.WAR_FinalTotal >= emp.CRI_.CRI_ProffTax_F_From_3 && emp.WAR_FinalTotal <= emp.CRI_.CRI_ProffTax_F_To_3)
+                        {
+                            Above10000Ladies++;
+                            AMOUNT = AMOUNT + emp.CRI_.CRI_ProffTax_F_Amount_3;
+                        }
+                    }
+                    //if (emp.WAR_FinalTotal > 0 && emp.WAR_FinalTotal <= 7500)
+                    //{
+                    //    if (emp.EMP_.EMP_Gender.Equals(true)) //Male
+                    //    {
+                    //        UpTo7500++;
+                    //    }
+                    //    else
+                    //    {
+                    //        UpTo7500Ladies++;
+                    //    }
+
+                        //}
+                        //else if (emp.WAR_FinalTotal > 7500 && emp.WAR_FinalTotal <= 10000)
+                        //{
+                        //    if (emp.EMP_.EMP_Gender.Equals(true)) //Male
+                        //    {
+                        //        UpTo10000++;
+                        //    }
+                        //    else
+                        //    {
+                        //        UpTo10000Ladies++;
+                        //    }
+                        //}
+                        //else if (emp.WAR_FinalTotal > 10000)
+                        //{
+                        //    if (emp.EMP_.EMP_Gender.Equals(true)) //Male
+                        //    {
+                        //        Above10000++;
+                        //    }
+                        //    else
+                        //    {
+                        //        Above10000Ladies++;
+                        //    }
+                        //}
                 }
                 report.UpTo7500 = UpTo7500;
                 report.UpTo7500Ladies = UpTo7500Ladies;
@@ -189,6 +227,7 @@ namespace RMERP.DAL.ManagerClasses
                 report.UpTo10000Ladies = UpTo10000Ladies;
                 report.Above10000 = Above10000;
                 report.Above10000Ladies = Above10000Ladies;
+                report.AMOUNT = AMOUNT;
                 reports.Add(report);
             }
             return reports;

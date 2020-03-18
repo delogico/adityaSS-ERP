@@ -15,197 +15,205 @@
     };
     <script>
 
-        function calculateTotal() {                   
-        var totalPaybleDays = $("#wageRegisterVM_WAR_TotalPaybleDays").val();
-        var totalWorkingDays = $("#wageRegisterVM_WAR_TotalWorkingDays").val();
-        //if (totalPaybleDays > totalWorkingDays) {
-        //    $("#wageRegisterVM_WAR_TotalPaybleDays").val(0);
-        //}
-        var WAR_ExtraWorkingHours = $("#wageRegisterVM_WAR_ExtraWorkingHours").val();
-        var CRI_Basic = $("#wageRegisterVM_WAR_Basic").val();
-        var CRI_DA = $("#wageRegisterVM_WAR_DA").val();
-        var CRI_HRA = $("#wageRegisterVM_WAR_HRA").val();
-        var WAR_PF = $("#wageRegisterVM_WAR_PF").val();
-        var WAR_ESIC = $("#wageRegisterVM_WAR_ESIC").val();
-        var WAR_OverTime_Calculated = $("#wageRegisterVM_WAR_OverTime_Calculated").val();
+    function calculateTotal() {
+    var totalPaybleDays = $("#wageRegisterVM_WAR_TotalPaybleDays").val();
+    var totalWorkingDays = $("#wageRegisterVM_WAR_TotalWorkingDays").val();
+    //if (totalPaybleDays > totalWorkingDays) {
+    //    $("#wageRegisterVM_WAR_TotalPaybleDays").val(0);
+    //}
+    var WAR_ExtraWorkingHours = $("#wageRegisterVM_WAR_ExtraWorkingHours").val();
+    var CRI_Basic = $("#wageRegisterVM_WAR_Basic").val();
+    var CRI_DA = $("#wageRegisterVM_WAR_DA").val();
+    var CRI_HRA = $("#wageRegisterVM_WAR_HRA").val();
+    var WAR_PF = $("#wageRegisterVM_WAR_PF").val();
+    var WAR_ESIC = $("#wageRegisterVM_WAR_ESIC").val();
+    var WAR_OverTime_Calculated = $("#wageRegisterVM_WAR_OverTime_Calculated").val();
 
-        var BasicDa = parseInt(CRI_Basic) + parseInt(CRI_DA);
+    var BasicDa = parseInt(CRI_Basic) + parseInt(CRI_DA);
 
-        var Percentage = document.getElementById("Percentage").checked;
-        var Fixed = document.getElementById("Fixed").checked;
-        var CRI_HRA_Calculated = 0, WAR_Basic_Calculated = 0,  CRI_DA_Calculated=0;
-        if (totalWorkingDays != 0) {
-            CRI_DA_Calculated = (CRI_DA * totalPaybleDays) / totalWorkingDays;
-            WAR_Basic_Calculated = (CRI_Basic * totalPaybleDays) / totalWorkingDays;
-            var BasicDaCalculated = parseInt(WAR_Basic_Calculated) + parseInt(CRI_DA_Calculated);
-            CRI_HRA_Calculated = (Percentage == true ? ((BasicDaCalculated * CRI_HRA) / 100) : ((CRI_HRA * totalPaybleDays) / totalWorkingDays));
-        }
-        var WAR_PF_Calculated = parseFloat($("#wageRegisterVM_WAR_PF_Calculated").val());
-        var WAR_ESIC_Calculated = parseFloat($("#wageRegisterVM_WAR_ESIC_Calculated").val());
+    var Percentage = document.getElementById("Percentage").checked;
+    var Fixed = document.getElementById("Fixed").checked;
+    var CRI_HRA_Calculated = 0,
+        WAR_Basic_Calculated = 0,
+        CRI_DA_Calculated = 0;
+    if (totalWorkingDays != 0) {
+        CRI_DA_Calculated = (CRI_DA * totalPaybleDays) / totalWorkingDays;
+        WAR_Basic_Calculated = (CRI_Basic * totalPaybleDays) / totalWorkingDays;
+        var BasicDaCalculated = parseInt(WAR_Basic_Calculated) + parseInt(CRI_DA_Calculated);
+        CRI_HRA_Calculated = (Percentage == true ? ((BasicDaCalculated * CRI_HRA) / 100) : ((CRI_HRA * totalPaybleDays) / totalWorkingDays));
+    }
+    var WAR_PF_Calculated = parseFloat($("#wageRegisterVM_WAR_PF_Calculated").val());
+    var WAR_ESIC_Calculated = parseFloat($("#wageRegisterVM_WAR_ESIC_Calculated").val());
 
-        var WAR_CanteenFacility_Calculation = 0, WAR_RevenueDeduction_Calculated=0;
-        var WAR_ProffesionalTax_Calculated = parseFloat($("#wageRegisterVM_WAR_ProffesionalTax_Calculated").val());
+    var WAR_CanteenFacility_Calculation = 0,
+        WAR_RevenueDeduction_Calculated = 0;
+    var WAR_ProffesionalTax_Calculated = parseFloat($("#wageRegisterVM_WAR_ProffesionalTax_Calculated").val());
 
-        if ($("#wageRegisterVM_WAR_RevenueDeduction_Calculated").val() != null) {
-            WAR_RevenueDeduction_Calculated = parseFloat($("#wageRegisterVM_WAR_RevenueDeduction_Calculated").val());
-        }
-        if ($("#wageRegisterVM_WAR_CanteenFacility_Calculation").val() != null) {
-            WAR_CanteenFacility_Calculation = parseFloat($("#wageRegisterVM_WAR_CanteenFacility_Calculation").val());
-        }
+    if ($("#wageRegisterVM_WAR_RevenueDeduction_Calculated").val() != null) {
+        WAR_RevenueDeduction_Calculated = parseFloat($("#wageRegisterVM_WAR_RevenueDeduction_Calculated").val());
+    }
+    if ($("#wageRegisterVM_WAR_CanteenFacility_Calculation").val() != null) {
+        WAR_CanteenFacility_Calculation = parseFloat($("#wageRegisterVM_WAR_CanteenFacility_Calculation").val());
+    }
 
-        var AllowancesTotal = 0;
+    var AllowancesTotal = 0;
 
 
-        for (var i = 0; i < @Model.wage_Register_Allowances.Count(); i++) {
+    for (var i = 0; i < @Model.wage_Register_Allowances.Count(); i++) {
 
-        var CRA_Dayswise = document.getElementById("CRA_Dayswise["+i+"]").checked;
+        var CRA_Dayswise = document.getElementById("CRA_Dayswise[" + i + "]").checked;
         var CRA_Full = document.getElementById("CRA_Full[" + i + "]").checked;
 
-        var WAA_Amount = $("#wage_Register_Allowances_"+i+"__WAA_Amount").val();
+        var WAA_Amount = $("#wage_Register_Allowances_" + i + "__WAA_Amount").val();
         var fullAmt = 0;
         var WAA_Amount_Calculated = 0;
 
         if (totalWorkingDays != 0)
-        fullAmt = (WAA_Amount * totalPaybleDays) / totalWorkingDays;
+            fullAmt = (WAA_Amount * totalPaybleDays) / totalWorkingDays;
 
-        if (CRA_Dayswise == true && CRA_Full == false)
-        {
-        WAA_Amount_Calculated = fullAmt.toFixed(2);
-        AllowancesTotal = parseInt(AllowancesTotal) + parseInt(fullAmt);
-        var d = parseInt(WAA_Amount_Calculated);
-        $("#wage_Register_Allowances_" + i + "__WAA_Amount_Calculated").val(d.toFixed(2));
-        }
-        else if (CRA_Dayswise == false && CRA_Full == true)
-        {
-        WAA_Amount_Calculated = WAA_Amount;
-        AllowancesTotal = parseInt(AllowancesTotal) + parseInt(WAA_Amount);
-        var d = parseInt(WAA_Amount_Calculated);
-        $("#wage_Register_Allowances_" + i + "__WAA_Amount_Calculated").val(d.toFixed(2));
+        if (CRA_Dayswise == true && CRA_Full == false) {
+            WAA_Amount_Calculated = fullAmt.toFixed(2);
+            AllowancesTotal = parseInt(AllowancesTotal) + parseInt(fullAmt);
+            var d = parseInt(WAA_Amount_Calculated);
+            $("#wage_Register_Allowances_" + i + "__WAA_Amount_Calculated").val(d.toFixed(2));
+        } else if (CRA_Dayswise == false && CRA_Full == true) {
+            WAA_Amount_Calculated = WAA_Amount;
+            AllowancesTotal = parseInt(AllowancesTotal) + parseInt(WAA_Amount);
+            var d = parseInt(WAA_Amount_Calculated);
+            $("#wage_Register_Allowances_" + i + "__WAA_Amount_Calculated").val(d.toFixed(2));
         }
 
-        }
+    }
 
-        /////////Extra Allowances////////
-        var WAR_OutStation_Allowance_Calculated = 0, WAR_Attendance_Allowance_Calculated = 0, WAR_Performance_Allowance_Calculated = 0, WAR_Nightshift_Allowance_Calculated = 0, WAR_LWF_Deduction_Calculated=0;
+    /////////Extra Allowances////////
+    var WAR_OutStation_Allowance_Calculated = 0,
+        WAR_Attendance_Allowance_Calculated = 0,
+        WAR_Performance_Allowance_Calculated = 0,
+        WAR_Nightshift_Allowance_Calculated = 0,
+        WAR_LWF_Deduction_Calculated = 0;
 
-        if ($("#wageRegisterVM_WAR_OutStation_Allowance_Calculated").val() != null){
+    if ($("#wageRegisterVM_WAR_OutStation_Allowance_Calculated").val() != null || $("#wageRegisterVM_WAR_OutStation_Allowance_Calculated").val() != "") {
         WAR_OutStation_Allowance_Calculated = $("#wageRegisterVM_WAR_OutStation_Allowance_Calculated").val();
-        }
-        if ($("#wageRegisterVM_WAR_Attendance_Allowance_Calculated").val()!= null) {
+    }
+    if ($("#wageRegisterVM_WAR_Attendance_Allowance_Calculated").val() != null || $("#wageRegisterVM_WAR_Attendance_Allowance_Calculated").val() != "") {
         WAR_Attendance_Allowance_Calculated = $("#wageRegisterVM_WAR_Attendance_Allowance_Calculated").val();
-        }
-        if ($("#wageRegisterVM_WAR_Performance_Allowance_Calculated").val()!= null) {
+    }
+    if ($("#wageRegisterVM_WAR_Performance_Allowance_Calculated").val() != null || $("#wageRegisterVM_WAR_Performance_Allowance_Calculated").val() != "") {
         WAR_Performance_Allowance_Calculated = $("#wageRegisterVM_WAR_Performance_Allowance_Calculated").val();
-        }
-        if ($("#wageRegisterVM_WAR_Nightshift_Allowance_Calculated").val() != null) {
+    }
+    if ($("#wageRegisterVM_WAR_Nightshift_Allowance_Calculated").val() != null || $("#wageRegisterVM_WAR_Nightshift_Allowance_Calculated").val() != "") {
         WAR_Nightshift_Allowance_Calculated = $("#wageRegisterVM_WAR_Nightshift_Allowance_Calculated").val();
-        }
-        if ($("#wageRegisterVM_WAR_LWF_Deduction_Calculated").val() != null) {
+    }
+    if ($("#wageRegisterVM_WAR_LWF_Deduction_Calculated").val() != null || $("#wageRegisterVM_WAR_LWF_Deduction_Calculated").val() != "") {
         WAR_LWF_Deduction_Calculated = $("#wageRegisterVM_WAR_LWF_Deduction_Calculated").val();
-        }
+    }
 
-        ////////////End//////////////////
-        var Total_Advance = $("#wageRegisterVM_WAR_Advance_Amount").val();
-        var WAR_GrossTotal = WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + parseFloat(WAR_OverTime_Calculated) + AllowancesTotal + parseFloat(WAR_OutStation_Allowance_Calculated) + parseFloat(WAR_Nightshift_Allowance_Calculated) + parseFloat(WAR_Performance_Allowance_Calculated) + parseFloat(WAR_Attendance_Allowance_Calculated);
-        var WAR_FinalTotal = parseFloat(WAR_GrossTotal) - (WAR_PF_Calculated + WAR_ESIC_Calculated + WAR_ProffesionalTax_Calculated + WAR_RevenueDeduction_Calculated + WAR_CanteenFacility_Calculation+ parseFloat(WAR_LWF_Deduction_Calculated+Total_Advance));
+    ////////////End//////////////////
+    var Total_Advance = $("#wageRegisterVM_WAR_Advance_Amount").val();
+    var WAR_GrossTotal = WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + parseFloat(WAR_OverTime_Calculated) + AllowancesTotal + parseFloat(WAR_OutStation_Allowance_Calculated) + parseFloat(WAR_Nightshift_Allowance_Calculated) + parseFloat(WAR_Performance_Allowance_Calculated) + parseFloat(WAR_Attendance_Allowance_Calculated);
+    var WAR_FinalTotal = parseFloat(WAR_GrossTotal) - (WAR_PF_Calculated + WAR_ESIC_Calculated + WAR_ProffesionalTax_Calculated + WAR_RevenueDeduction_Calculated + WAR_CanteenFacility_Calculation + parseFloat(WAR_LWF_Deduction_Calculated + Total_Advance));
 
-        $("#wageRegisterVM_WAR_DA_Calculated").val(Math.round(CRI_DA_Calculated));
-        $("#wageRegisterVM_WAR_HRA_Calculated").val(Math.round(CRI_HRA_Calculated));
-        $("#wageRegisterVM_WAR_Basic_Calculated").val(Math.round(WAR_Basic_Calculated));
+    $("#wageRegisterVM_WAR_DA_Calculated").val(Math.round(CRI_DA_Calculated));
+    $("#wageRegisterVM_WAR_HRA_Calculated").val(Math.round(CRI_HRA_Calculated));
+    $("#wageRegisterVM_WAR_Basic_Calculated").val(Math.round(WAR_Basic_Calculated));
 
 
-        $("#wageRegisterVM_WAR_GrossTotal").val(Math.round(WAR_GrossTotal));
-        $("#wageRegisterVM_WAR_FinalTotal").val(Math.round(WAR_FinalTotal));
-        };
+    $("#wageRegisterVM_WAR_GrossTotal").val(Math.round(WAR_GrossTotal));
+    $("#wageRegisterVM_WAR_FinalTotal").val(Math.round(WAR_FinalTotal));
+};
 
-        function Calculate_PF_ESIC(WAR_Id) {
-        var CalculationEditVM = {};
-        CalculationEditVM = GetCalculationData(WAR_Id);
-        var Url = siteUrl + "WageRegister/Calculate_PF_ESIC";
-        $.ajax({
+function Calculate_PF_ESIC(WAR_Id) {
+    var CalculationEditVM = {};
+    CalculationEditVM = GetCalculationData(WAR_Id);
+    var Url = siteUrl + "WageRegister/Calculate_PF_ESIC";
+    $.ajax({
         type: "POST",
         url: Url,
         contentType: "application/json",
         async: true,
         data: JSON.stringify(CalculationEditVM),
-        success: function (data) {
-        if (data.d == null) {
-        $("#wageRegisterVM_WAR_PF_Calculated").val(data.waR_PF_Calculated);
-        $("#wageRegisterVM_WAR_ESIC_Calculated").val(data.waR_ESIC_Calculated);
-        calculateTotal();
+        success: function(data) {
+            if (data.d == null) {
+                $("#wageRegisterVM_WAR_PF_Calculated").val(data.waR_PF_Calculated);
+                $("#wageRegisterVM_WAR_ESIC_Calculated").val(data.waR_ESIC_Calculated);
+                calculateTotal();
+            }
         }
-        }
-        });
+    });
 
-        };
+};
 
-        function Calculate_OT(WAR_Id){
-        var CalculationEditVM = {};
-        CalculationEditVM = GetCalculationData(WAR_Id);
-        var Url = siteUrl + "WageRegister/Calculate_OT1";
-        $.ajax({
+function Calculate_OT(WAR_Id) {
+    var CalculationEditVM = {};
+    CalculationEditVM = GetCalculationData(WAR_Id);
+    var Url = siteUrl + "WageRegister/Calculate_OT1";
+    $.ajax({
         type: "POST",
         url: Url,
         contentType: "application/json",
         async: true,
         data: JSON.stringify(CalculationEditVM),
-        success: function (data) {
-        if (data != null) {
-        $("#wageRegisterVM_WAR_OverTime_Calculated").val(data);
+        success: function(data) {
+            if (data != null) {
+                $("#wageRegisterVM_WAR_OverTime_Calculated").val(data);
 
-        calculateTotal();
+                calculateTotal();
+            }
         }
-        }
-        });
-        };
+    });
+};
 
-        function GetCalculationData(WAR_Id) {
-        var CalculatedAllowanceVM = new Array();
-        for (var i = 0; i < @Model.wage_Register_Allowances.Count(); i++) {
+function GetCalculationData(WAR_Id) {
+    var CalculatedAllowanceVM = new Array();
+    for (var i = 0; i < @Model.wage_Register_Allowances.Count(); i++) {
         var allowance = {};
         allowance.ALL_Shortform = $("#wage_Register_Allowances_" + i + "__CRA__ALL__ALL_Shortform").val();
         allowance.WAA_Id = parseInt($("#wage_Register_Allowances_" + i + "__WAA_Id").val());
         allowance.WAA_Amount = parseFloat($("#wage_Register_Allowances_" + i + "__WAA_Amount").val());
         allowance.WAA_Amount_Calculated = parseFloat($("#wage_Register_Allowances_" + i + "__WAA_Amount_Calculated").val());
         CalculatedAllowanceVM.push(allowance);
-        }
+    }
 
-        var WAR_Performance_Allowance_Calculated = 0, WAR_Outstation_Allowance_Calculated = 0, WAR_Attendance_Allowance_Calculated = 0, WAR_Nightshift_Allowance_Calculated = 0, ExtraWorkingHours =0;
-        var CalculationEditVM = {};
-        CalculationEditVM.WAR_Id = parseInt(WAR_Id);
-        CalculationEditVM.CRI_PF_Percentage = parseFloat($("#wageRegisterVM_WAR_PF").val());
-        CalculationEditVM.CRI_ESIC_Percentage = parseFloat($("#wageRegisterVM_WAR_ESIC").val());
-        CalculationEditVM.WAR_Basic_Calculated = parseFloat($("#wageRegisterVM_WAR_Basic_Calculated").val());
-        CalculationEditVM.CRI_DA_Calculated = parseFloat($("#wageRegisterVM_WAR_DA_Calculated").val());
-        CalculationEditVM.CRI_HRA_Calculated = parseFloat($("#wageRegisterVM_WAR_HRA_Calculated").val());
-        CalculationEditVM.totalWorkingDays = parseInt($("#wageRegisterVM_WAR_TotalWorkingDays").val());
-        CalculationEditVM.totalPaybleDays = parseFloat($("#wageRegisterVM_WAR_TotalPaybleDays").val());
+    var WAR_Performance_Allowance_Calculated = 0,
+        WAR_Outstation_Allowance_Calculated = 0,
+        WAR_Attendance_Allowance_Calculated = 0,
+        WAR_Nightshift_Allowance_Calculated = 0,
+        ExtraWorkingHours = 0;
+    var CalculationEditVM = {};
+    CalculationEditVM.WAR_Id = parseInt(WAR_Id);
+    CalculationEditVM.CRI_PF_Percentage = parseFloat($("#wageRegisterVM_WAR_PF").val());
+    CalculationEditVM.CRI_ESIC_Percentage = parseFloat($("#wageRegisterVM_WAR_ESIC").val());
+    CalculationEditVM.WAR_Basic_Calculated = parseFloat($("#wageRegisterVM_WAR_Basic_Calculated").val());
+    CalculationEditVM.CRI_DA_Calculated = parseFloat($("#wageRegisterVM_WAR_DA_Calculated").val());
+    CalculationEditVM.CRI_HRA_Calculated = parseFloat($("#wageRegisterVM_WAR_HRA_Calculated").val());
+    CalculationEditVM.totalWorkingDays = parseInt($("#wageRegisterVM_WAR_TotalWorkingDays").val());
+    CalculationEditVM.totalPaybleDays = parseFloat($("#wageRegisterVM_WAR_TotalPaybleDays").val());
 
-        CalculationEditVM.WAR_OverTime_Calculated = parseFloat($("#wageRegisterVM_WAR_OverTime_Calculated").val());
+    CalculationEditVM.WAR_OverTime_Calculated = parseFloat($("#wageRegisterVM_WAR_OverTime_Calculated").val());
 
-        if (typeof $("#wageRegisterVM_WAR_OutStation_Allowance_Calculated").val() != "undefined") {
+    if (typeof $("#wageRegisterVM_WAR_OutStation_Allowance_Calculated").val() != "undefined") {
         WAR_Outstation_Allowance_Calculated = parseFloat($("#wageRegisterVM_WAR_OutStation_Allowance_Calculated").val());
-        }
-        if (typeof $("#wageRegisterVM_WAR_Attendance_Allowance_Calculated").val() != "undefined") {
+    }
+    if (typeof $("#wageRegisterVM_WAR_Attendance_Allowance_Calculated").val() != "undefined") {
         WAR_Attendance_Allowance_Calculated = parseFloat($("#wageRegisterVM_WAR_Attendance_Allowance_Calculated").val());
-        }
-        if (typeof $("#wageRegisterVM_WAR_Nightshift_Allowance_Calculated").val() != "undefined") {
+    }
+    if (typeof $("#wageRegisterVM_WAR_Nightshift_Allowance_Calculated").val() != "undefined") {
         WAR_Nightshift_Allowance_Calculated = parseFloat($("#wageRegisterVM_WAR_Nightshift_Allowance_Calculated").val());
-        }
-        if (typeof $("#wageRegisterVM_WAR_Performance_Allowance_Calculated").val() != "undefined") {
+    }
+    if (typeof $("#wageRegisterVM_WAR_Performance_Allowance_Calculated").val() != "undefined") {
         WAR_Performance_Allowance_Calculated = parseFloat($("#wageRegisterVM_WAR_Performance_Allowance_Calculated").val());
-        }
-        if (typeof $("#wageRegisterVM_WAR_ExtraWorkingHours").val() != "undefined") {
+    }
+    if (typeof $("#wageRegisterVM_WAR_ExtraWorkingHours").val() != "undefined") {
         ExtraWorkingHours = parseFloat($("#wageRegisterVM_WAR_ExtraWorkingHours").val());
-        }
-        CalculationEditVM.ExtraWorkingHours = ExtraWorkingHours;
-        CalculationEditVM.WAR_Performance_Allowance_Calculated = WAR_Performance_Allowance_Calculated;
-        CalculationEditVM.WAR_Outstation_Allowance_Calculated = WAR_Outstation_Allowance_Calculated;
-        CalculationEditVM.WAR_Attendance_Allowance_Calculated = WAR_Attendance_Allowance_Calculated;
-        CalculationEditVM.WAR_Nightshift_Allowance_Calculated = WAR_Nightshift_Allowance_Calculated;
-        CalculationEditVM.CalculatedAllowanceVM = CalculatedAllowanceVM;
-        return CalculationEditVM;
-        };
+    }
+    CalculationEditVM.ExtraWorkingHours = ExtraWorkingHours;
+    CalculationEditVM.WAR_Performance_Allowance_Calculated = WAR_Performance_Allowance_Calculated;
+    CalculationEditVM.WAR_Outstation_Allowance_Calculated = WAR_Outstation_Allowance_Calculated;
+    CalculationEditVM.WAR_Attendance_Allowance_Calculated = WAR_Attendance_Allowance_Calculated;
+    CalculationEditVM.WAR_Nightshift_Allowance_Calculated = WAR_Nightshift_Allowance_Calculated;
+    CalculationEditVM.CalculatedAllowanceVM = CalculatedAllowanceVM;
+    return CalculationEditVM;
+};
 
     </script>
 }

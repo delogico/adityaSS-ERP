@@ -225,7 +225,7 @@ namespace RMERP.Controllers
                     row.CreateCell(6).SetCellValue(item.Above10000);
                     row.CreateCell(7).SetCellValue(item.Above10000Ladies);
                     row.CreateCell(8).SetCellValue(item.STREGNTH());
-                    row.CreateCell(9).SetCellValue(Convert.ToDouble(item.AMOUNT()));
+                    row.CreateCell(9).SetCellValue(Convert.ToDouble(item.AMOUNT));
                     UpTo7500 = UpTo7500 + item.UpTo7500;
                     UpTo7500Ladies = UpTo7500Ladies + item.UpTo7500Ladies;
                     UpTo10000 = UpTo10000 + item.UpTo10000;
@@ -233,7 +233,7 @@ namespace RMERP.Controllers
                     Above10000 = Above10000 + item.Above10000;
                     Above10000Ladies = Above10000Ladies + item.Above10000Ladies;
                     Strength = Strength + item.STREGNTH();
-                    Amount = Amount + item.AMOUNT();
+                    Amount = Amount + item.AMOUNT;
                     rowCount++;
                     count++;
                 }

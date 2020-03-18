@@ -17,14 +17,10 @@ namespace RMERP.DAL.ViewModel
         public int STREGNTH() {
             return (this.UpTo7500 +this.UpTo7500Ladies+this.UpTo10000+this.UpTo10000Ladies+this.Above10000+this.Above10000Ladies);
         }
-        public decimal AMOUNT() {
-            //SUM(UpTo10000*175)+(Above10000*200)+(Above10000Ladies*200)
-            return ((this.UpTo10000 * 175) + (this.Above10000 *200)+ (this.Above10000Ladies * 200));
-        }
+        public decimal AMOUNT { get; set; }
+        //public decimal AMOUNT() {            
+        //    return ((this.UpTo10000 * 175) + (this.Above10000 *200)+ (this.Above10000Ladies * 200));
+        //}
     }
-
-    //public class SummaryPayPaxVM
-    //{
-
-    //}
+    
 }
