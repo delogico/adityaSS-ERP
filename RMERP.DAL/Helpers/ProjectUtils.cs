@@ -6,6 +6,8 @@ using RMERP.DAL.ViewModel;
 using RMERP.DAL.Models;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Globalization;
 
 namespace RMERP.DAL.Helpers
 {
@@ -702,6 +704,42 @@ namespace RMERP.DAL.Helpers
                 {".gif", "image/gif"},
                 {".csv", "text/csv"}
             };
+        }
+
+        public static SelectList GetYears(int? iSelectedYear)
+        {
+            List<SelectListItem> ddlYears = new List<SelectListItem>();
+            int CurrentYear = DateTime.Now.Year;
+
+            for (int i = 2018; i <= CurrentYear; i++)
+            {
+                ddlYears.Add(new SelectListItem
+                {
+                    Text = i.ToString(),
+                    Value = i.ToString()
+                });
+            }
+            return new SelectList(ddlYears, "Value", "Text", iSelectedYear);
+        }
+        public static SelectList GetMonths(int? iSelectedYear)
+        {
+            List<SelectListItem> ddlMonths = new List<SelectListItem>();
+            var months = Enumerable.Range(1, 12).Select(i => new
+            {
+                A = i,
+                B = DateTimeFormatInfo.CurrentInfo.GetMonthName(i)
+            });
+
+            int CurrentMonth = 1; //January  
+
+            foreach (var item in months)
+            {
+                ddlMonths.Add(new SelectListItem { Text = item.B.ToString(), Value = item.A.ToString() });
+            }
+
+            //Default It will Select Current Month  
+            return new SelectList(ddlMonths, "Value", "Text", CurrentMonth);
+
         }
     }
 }

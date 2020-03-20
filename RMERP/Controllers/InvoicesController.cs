@@ -43,48 +43,14 @@ namespace RMERP.Controllers
             masterVM.InvoiceVMs = InvoiceMapper.mapMe(invoices.Where(m => DateTime.Compare(m.INV_CreatedOn.Date, DateTime.Now.Date.AddMonths(-2)) > 0).ToList());           
             ViewBag.ClientList =clientsManager.listClients(true, FRM_Id).OrderBy(m=>m.CLI_Name);
 
-            DateTime dt = DateTime.Now;           
+            DateTime dt = DateTime.Now;          
 
             ViewBag.linktoYearId = GetYears(dt.Year);
             ViewBag.linktoMonthId = GetMonths(dt.Year);
             return View(masterVM);
         }
                       
-        private SelectList GetYears(int? iSelectedYear)
-        {
-            List<SelectListItem> ddlYears = new List<SelectListItem>();
-            int CurrentYear = DateTime.Now.Year;
-
-            for (int i = 2018; i <= CurrentYear; i++)
-            {
-                ddlYears.Add(new SelectListItem
-                {
-                    Text = i.ToString(),
-                    Value = i.ToString()
-                });
-            }         
-            return new SelectList(ddlYears, "Value", "Text", iSelectedYear);
-        }      
-        private SelectList GetMonths(int? iSelectedYear)
-        {
-            List<SelectListItem> ddlMonths = new List<SelectListItem>();
-            var months = Enumerable.Range(1, 12).Select(i => new
-            {
-                A = i,
-                B = DateTimeFormatInfo.CurrentInfo.GetMonthName(i)
-            });
-
-            int CurrentMonth = 1; //January  
-
-            foreach (var item in months)
-            {
-                ddlMonths.Add(new SelectListItem { Text = item.B.ToString(), Value = item.A.ToString() });
-            }
-
-            //Default It will Select Current Month  
-            return new SelectList(ddlMonths, "Value", "Text", CurrentMonth);
-
-        }
+       
         public ActionResult DeleteInvoice(int INV_Id)
         {
             InvoicesManager invoicesManager = new InvoicesManager(_context);

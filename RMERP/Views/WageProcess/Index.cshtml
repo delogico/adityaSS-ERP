@@ -54,9 +54,27 @@
                 });
                     }
                 })
-        };
-        
+        };   
 
+        function searchCompletedWageProcess() {           
+            var FRM_Id = @ViewBag.FRM_Id;
+            var Year = $("#Year").val();
+            var Month = $("#Month").val();
+            var Url = siteUrl + "WageProcess/searchCompletedWageProcess?FRM_Id="+FRM_Id+"&Year=" + Year + "&Month=" + Month;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                beforeSend: function () {
+                    $("#loading-image").show();
+                    $('#div_completed').html("");                    
+                },
+                success: function (data) {
+                    debugger;
+                    $('#div_completed').html(data);
+                    $("#loading-image").hide();
+                }
+            })
+        }
     </script>
 }
 <style>
@@ -102,31 +120,33 @@
                     <div class="tab-content">
                         <div class="content-full tab-pane active" id="pending_tab">
                             <table class="table table-striped custom-table m-b-0">
-                                <tbody>
-                                    @foreach (var item in Model.Where(m => m.WageStatus == false).ToList())
-                                    {
-                                        var style = (item.WageStatus == true ? "#ccffdd;" : "none");
-                                        <tr style="background-color:@style;">
-                                            <td>
-                                                @{Html.RenderPartial("_WageProcessList", item);}
-                                            </td>
-                                        </tr>
-                                    }
+                                <tbody>                                    
+                                    @{Html.RenderPartial("_WageProcessList", Model.Where(m => m.WageStatus == false).OrderByDescending(m => m.WAG_Month).ToList());}
                                 </tbody>
                             </table>
                         </div>
                         <div class="content-full tab-pane" id="completed_tab">
+                            <div class="row filter-row">
+                                <div class="col-sm-3 col-xs-4">
+                                    <div class="form-group form-focus select-focus">
+                                        <label class="control-label">Year</label>
+                                        @Html.DropDownList("Year", new SelectList(ViewBag.linktoYearId, "Value", "Text"), "Select Year", new { @class = "select floating" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-4">
+                                    <div class="form-group form-focus select-focus">
+                                        <label class="control-label">Month</label>
+                                        @Html.DropDownList("Month", new SelectList(ViewBag.linktoMonthId, "Value", "Text"), "Select Month", new { @class = "select floating" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-4">
+                                    <a class="btn btn-success" onclick="searchCompletedWageProcess()"> Search </a>
+                                </div>
+                            </div>
+                            <img id="loading-image" src="~/assets/img/25.gif" style="display:none;position: fixed;left: 50%;top: 50%;z-index: 1000000; background-position:center;" />
                             <table class="table table-striped custom-table m-b-0">
-                                <tbody>
-                                    @foreach (var item in Model.Where(m => m.WageStatus == true).ToList())
-                                    {
-                                        var style = (item.WageStatus == true ? "#ccffdd;" : "none");
-                                        <tr style="background-color:@style;">
-                                            <td>
-                                                @{Html.RenderPartial("_WageProcessList", item);}
-                                            </td>
-                                        </tr>
-                                    }
+                                <tbody id="div_completed">
+                                    @{Html.RenderPartial("_WageProcessList", Model.Where(m => m.WageStatus == true).ToList());}
                                 </tbody>
                             </table>
                         </div>

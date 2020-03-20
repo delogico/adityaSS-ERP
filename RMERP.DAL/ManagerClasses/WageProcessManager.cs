@@ -188,5 +188,20 @@ namespace RMERP.DAL.ManagerClasses
             
             
         }
+
+        public IEnumerable<Wage_Process> getCompletedWageProcessListByYearMonth(int FRM_Id,int Year,int Month)
+        {
+            IEnumerable<Wage_Process> list=null;
+            list = _context.Wage_Process.Where(m => m.FRM_Id == FRM_Id && m.WAG_Status).Include(m => m.Attendance).Include(m => m.Wage_Process_Clients).OrderBy(m => m.WAG_Month);
+            if (Year > 0)
+            {
+                list = list.Where(m => m.WAG_Month.Year.Equals(Year));
+            }
+            if (Month > 0)
+            {
+                list = list.Where(m => m.WAG_Month.Month.Equals(Month));
+            }
+            return list;
+        }
     }
 }

@@ -65,7 +65,12 @@ namespace RMERP.Controllers
             ViewBag.month = nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
             ViewBag.FRM_Id = FRM_Id;
             Firms firm = firmsManager.GetFirm(FRM_Id);
-            ViewBag.FRM_Name = firm.FRM_ShortName;              
+            ViewBag.FRM_Name = firm.FRM_ShortName;
+
+            DateTime dt = DateTime.Now;
+            ViewBag.linktoYearId = GetYears(dt.Year);
+            ViewBag.linktoMonthId = GetMonths(dt.Year);
+
             return View(WageProcessMapper.mapMeListVMs(wpm.getWageProcessList(FRM_Id), firm, _context, _configuration));
         }
 
@@ -245,6 +250,13 @@ namespace RMERP.Controllers
                 TempData["message"] = "Wage Process status is not changed!";
             }
             return RedirectToAction("Index", new { FRM_Id = wage.FRM_Id });
+        }
+
+        public ActionResult searchCompletedWageProcess(int FRM_Id,int Year,int Month)
+        {
+            FirmsManager firmsManager = new FirmsManager(_context);
+            Firms firm = firmsManager.GetFirm(FRM_Id);            
+            return PartialView("_WageProcessList", WageProcessMapper.mapMeListVMs(wpm.getCompletedWageProcessListByYearMonth(FRM_Id,Year,Month), firm, _context, _configuration));            
         }
 
     }
