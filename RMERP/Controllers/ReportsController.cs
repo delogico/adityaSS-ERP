@@ -3276,7 +3276,9 @@ namespace RMERP.Controllers
             {
                 return Json(new { data = "ko" });
             }
-        }    
+        }
+
+
         public FileResult GetFile(byte[] byteArray)
         {
             return File(byteArray, "application/pdf");
