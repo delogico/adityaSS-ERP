@@ -50,7 +50,6 @@ namespace RMERP.DAL.Models
         public decimal? WAR_LWF_Deduction_Employee { get; set; }
         public int? CLE_Id { get; set; }
 
-        public Clients_Employees CLE_ { get; set; }
         public Clients CLI_ { get; set; }
         public Client_Requirements CRI_ { get; set; }
         public Employees EMP_ { get; set; }

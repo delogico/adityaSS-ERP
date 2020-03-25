@@ -52,7 +52,7 @@ namespace RMERP.DAL.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=PC_41;Database=RMERP;User Id=sa;password=Perfect;Trusted_Connection=False;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-OMKP2RL;Database=RMERP;User Id=sa;password=Health@25;Trusted_Connection=False;MultipleActiveResultSets=true");
             }
         }
 
@@ -246,7 +246,7 @@ namespace RMERP.DAL.Models
                     .WithMany(p => p.Client_Requirement_Allowances)
                     .HasForeignKey(d => d.ALL_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Client_Requirement_Allowances_Allowances1");
+                    .HasConstraintName("FK_Client_Requirement_Allowances_Allowances");
 
                 entity.HasOne(d => d.CRI_)
                     .WithMany(p => p.Client_Requirement_Allowances)
@@ -412,6 +412,8 @@ namespace RMERP.DAL.Models
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CLI_GST_Info).IsUnicode(false);
+
                 entity.Property(e => e.CLI_GST_Number)
                     .HasMaxLength(20)
                     .IsUnicode(false);
@@ -479,8 +481,6 @@ namespace RMERP.DAL.Models
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.CLI_WorkingHours_In_Day).HasDefaultValueSql("((8))");
-
-                entity.Property(e => e.STA_Id).HasDefaultValueSql("((12))");
 
                 entity.HasOne(d => d.CITY_)
                     .WithMany(p => p.Clients)
@@ -1021,11 +1021,6 @@ namespace RMERP.DAL.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.WAR_WorkingHrs_In_Day).HasDefaultValueSql("((8))");
-
-                entity.HasOne(d => d.CLE_)
-                    .WithMany(p => p.Wage_Register)
-                    .HasForeignKey(d => d.CLE_Id)
-                    .HasConstraintName("FK_Wage_Register_Clients_Employees");
 
                 entity.HasOne(d => d.CLI_)
                     .WithMany(p => p.Wage_Register)

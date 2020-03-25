@@ -3167,6 +3167,21 @@ namespace RMERP.Controllers
         #endregion
 
         #region PaySlip
+        //public ActionResult PaySlipGenerate_old(int WAG_Id)
+        //{
+        //    WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
+        //    WageProcessManager wageProcessManager = new WageProcessManager(_context);
+        //    Wage_Process wage_Process = wageProcessManager.getWageProcessById(WAG_Id);
+        //    WagePaySlipMasterVM paySlipMasterVM = new WagePaySlipMasterVM();
+        //    paySlipMasterVM.WAG_Id = WAG_Id;
+        //    paySlipMasterVM.FRM_Id = wage_Process.FRM_Id; ;
+        //    paySlipMasterVM.FRM_Name = wage_Process.FRM_.FRM_Name;
+        //    paySlipMasterVM.WAG_Month = wage_Process.WAG_Month.ToString("MMM-yyyy");
+
+        //    List<Employees> emps = wageRegisterManager.GetEmployeesForWage(WAG_Id).ToList();
+        //    paySlipMasterVM.EmpPaySlipVMs = EmployeePaySlipMapper.mapMe(emps, WAG_Id);
+        //    return View(paySlipMasterVM);
+        //}
         public ActionResult PaySlipGenerate(int WAG_Id)
         {
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
@@ -3174,12 +3189,21 @@ namespace RMERP.Controllers
             Wage_Process wage_Process = wageProcessManager.getWageProcessById(WAG_Id);
             WagePaySlipMasterVM paySlipMasterVM = new WagePaySlipMasterVM();
             paySlipMasterVM.WAG_Id = WAG_Id;
-            paySlipMasterVM.FRM_Id = wage_Process.FRM_Id; ;
+            paySlipMasterVM.FRM_Id = wage_Process.FRM_Id;
             paySlipMasterVM.FRM_Name = wage_Process.FRM_.FRM_Name;
             paySlipMasterVM.WAG_Month = wage_Process.WAG_Month.ToString("MMM-yyyy");
 
-            List<Employees> emps = wageRegisterManager.GetEmployeesForWage(WAG_Id).ToList();
-            paySlipMasterVM.EmpPaySlipVMs = EmployeePaySlipMapper.mapMe(emps, WAG_Id);
+            List<ClientWiseEmp> clientWiseEmps = new List<ClientWiseEmp>();
+            IEnumerable<Clients> clients = wageRegisterManager.GetDistinctClientsForWage(WAG_Id);
+            foreach (var client in clients)
+            {
+                ClientWiseEmp cli = new ClientWiseEmp();
+                cli.CLI_Id = client.CLI_Id;
+                cli.CLI_Name = client.CLI_Name;
+                cli.EmpPaySlipVMs = EmployeePaySlipMapper.mapMe(wageRegisterManager.GetEmployeesForWage(client.CLI_Id, WAG_Id).ToList(), client.CLI_Id, WAG_Id);
+                clientWiseEmps.Add(cli);
+            }
+            paySlipMasterVM.ClientWiseEmps = clientWiseEmps;
             return View(paySlipMasterVM);
         }
 

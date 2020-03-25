@@ -10,9 +10,10 @@ namespace RMERP.DAL.Mappers
 {
     public class EmployeePaySlipMapper
     {
-        public static EmpPaySlipVM mapMe(Employees employee,int WAG_Id)
+        public static EmpPaySlipVM mapMe(Employees employee,int CLI_Id,int WAG_Id)
         {
             EmpPaySlipVM paySlipVM = new EmpPaySlipVM();
+            paySlipVM.CLI_Id= CLI_Id;
             paySlipVM.EMP_Id = employee.EMP_Id;
             paySlipVM.EMP_FirstName = employee.EMP_FirstName;
             paySlipVM.EMP_MiddleName = employee.EMP_MiddleName;
@@ -34,12 +35,12 @@ namespace RMERP.DAL.Mappers
             
             return paySlipVM;
         }
-        public static List<EmpPaySlipVM> mapMe(List<Employees> employees,int WAG_Id)
+        public static List<EmpPaySlipVM> mapMe(List<Employees> employees,int CLI_Id,int WAG_Id)
         {
             List<EmpPaySlipVM> paySlipVMs = new List<EmpPaySlipVM>();
             foreach(Employees employee in employees)
             {
-                paySlipVMs.Add(mapMe(employee, WAG_Id));
+                paySlipVMs.Add(mapMe(employee, CLI_Id, WAG_Id));
             }
             return paySlipVMs;
         }

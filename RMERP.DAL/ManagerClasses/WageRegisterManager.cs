@@ -646,13 +646,7 @@ namespace RMERP.DAL.ManagerClasses
         {
             int CLI_Id = 0;
             return CLI_Id;
-        }
-
-        public List<Employees> GetEmployeesForWage(int WAG_Id)
-        {
-            int[] EMP_Ids= _context.Wage_Register.Include(m => m.EMP_).Where(m => m.WAG_Id.Equals(WAG_Id)).Select(m => m.EMP_Id).ToArray();
-            return _context.Employees.Where(m=>EMP_Ids.Contains(m.EMP_Id)).Include(m=>m.Wage_PaySlips).ToList();
-        }
+        }        
 
         public List<Wage_Register> GetWageRegistersForSalarySlip(int WAG_Id, int EMP_Id)
         {
@@ -667,5 +661,18 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Wage_Register.Where(m => m.WAG_Id.Equals(WAG_Id) && m.EMP_Id.Equals(EMP_Id)).Include(m=>m.CLI_);
         }
+
+        public List<Employees> GetEmployeesForWage(int CLI_Id,int WAG_Id)
+        {
+            int[] EMP_Ids = _context.Wage_Register.Where(m=>m.CLI_Id.Equals(CLI_Id)).Include(m => m.EMP_).Where(m => m.WAG_Id.Equals(WAG_Id)).Select(m => m.EMP_Id).ToArray();
+            return _context.Employees.Where(m => EMP_Ids.Contains(m.EMP_Id)).Include(m => m.Wage_PaySlips).ToList();
+        }
+
+        public IEnumerable<Clients> GetDistinctClientsForWage(int WAG_Id)
+        {
+            return _context.Wage_Register.Include(m => m.CLI_).Where(m => m.WAG_Id.Equals(WAG_Id)).Select(m => m.CLI_).Distinct();            
+        }
+
+        
     }
 }

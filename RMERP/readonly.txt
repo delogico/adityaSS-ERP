@@ -3,3 +3,7 @@
 
 
 Scaffold-DbContext "Server=localhost\SQLEXPRESS2017;Database=RMERP;User Id=sa;password=Perfect;Trusted_Connection=False;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -UseDatabaseNames -f
+
+
+
+Scaffold-DbContext "Server=DESKTOP-OMKP2RL;Database=RMERP;User Id=sa;password=Health@25;Trusted_Connection=False;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -UseDatabaseNames -f

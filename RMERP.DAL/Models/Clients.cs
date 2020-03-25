@@ -56,6 +56,7 @@ namespace RMERP.DAL.Models
         public double? CLI_CGST { get; set; }
         public bool? CLI_IsSGST { get; set; }
         public double? CLI_SGST { get; set; }
+        public string CLI_GST_Info { get; set; }
         public string CLI_Place_Of_Supply { get; set; }
         public double? CLI_PF_Employer_Cont_Rate { get; set; }
         public double CLI_EPF_Rate { get; set; }
