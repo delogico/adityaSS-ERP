@@ -186,6 +186,12 @@ namespace RMERP.DAL.Helpers
             NotGenerated=0,
             Generated = 1
         }
+        public enum SalaryslipsGenerated
+        {
+            Generated=0,
+            Pending=1,
+            NotGenerated=2
+        }
         public static DateTime DateNow()
         {
             DateTime utcTime = DateTime.UtcNow;

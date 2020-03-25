@@ -1,5 +1,6 @@
 ﻿@model RMERP.DAL.ViewModel.WagePaySlipMasterVM
 @using RMERP.Helpers
+@using RMERP.DAL.Helpers
 
 @{
     ViewData["Title"] = "PaySlipGenerate";
@@ -9,6 +10,19 @@
     <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id })</li>
     <li class="breadcrumb-item">Pay Slips</li>
 }
+
+<style>
+    .fa-check-circle {
+        color: green;
+    }
+
+    .fa-times-circle {
+        color: red;
+    }
+    .fa-info-circle {
+        color: #ff9b44;
+    }
+</style>
     <div>
         <div class="content container-fluid">
             <div class="row">
@@ -55,7 +69,12 @@
                                 {
                                     cls = "active";
                                 }
-                                <li class="@cls"><a data-toggle="tab" href="#@item.CLI_Id">@item.CLI_Name</a></li>
+                                
+                                <li class="@cls"><a data-toggle="tab" href="#@item.CLI_Id">
+    <i class="fa fa-@(item.AllSalaryslipsGenerated==(int)ProjectUtils.SalaryslipsGenerated.Generated ? "check-circle" 
+                                    :(item.AllSalaryslipsGenerated==(int)ProjectUtils.SalaryslipsGenerated.NotGenerated?"times-circle" : "info-circle") )"></i>
+    @item.CLI_Name
+</a></li>
                             }
                         </ul>
 
@@ -141,8 +160,7 @@
 
     @section scripts{
         <script>
-            function GeneratePaySlip(WAG_Id, EMP_Id, WPS_Id) {
-                debugger;
+            function GeneratePaySlip(WAG_Id, EMP_Id, WPS_Id) {              
                 var Url = siteUrl + "Reports/GeneratedPaySlip?WAG_Id=" + WAG_Id + "&EMP_Id=" + EMP_Id+"&WPS_Id="+WPS_Id;
                 $.ajax({
                     type: "GET",
@@ -158,10 +176,9 @@
                     }
                 })
             };
-            function GeneratePaySlip_All(WAG_Id, id) {
-                debugger;
+            function GeneratePaySlip_All(WAG_Id, id) {                
                 var emps = @Html.Raw(Json.Serialize(Model.ClientWiseEmps.SelectMany(m=>m.EmpPaySlipVMs)));
-                 var EMP_Id= emps[id].emP_Id;
+                var EMP_Id= emps[id].emP_Id;
                 var WPS_Id= emps[id].wpS_Id;
                 var Url = siteUrl + "Reports/GeneratedPaySlip?WAG_Id=" + WAG_Id + "&EMP_Id=" + EMP_Id + "&WPS_Id=" + WPS_Id;
                 $.ajax({

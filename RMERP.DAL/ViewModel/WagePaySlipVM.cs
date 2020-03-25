@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using RMERP.DAL.Models;
+using static RMERP.DAL.Helpers.ProjectUtils;
 
 namespace RMERP.DAL.ViewModel
 {
@@ -46,6 +47,7 @@ namespace RMERP.DAL.ViewModel
     {
         public int CLI_Id { get; set; }
         public string CLI_Name { get; set; }
+        public int AllSalaryslipsGenerated { get; set; }= (int)SalaryslipsGenerated.NotGenerated;
         public List<EmpPaySlipVM> EmpPaySlipVMs { get; set; }
     }
     public class EmpPaySlipVM

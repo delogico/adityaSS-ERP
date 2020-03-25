@@ -3200,7 +3200,20 @@ namespace RMERP.Controllers
                 ClientWiseEmp cli = new ClientWiseEmp();
                 cli.CLI_Id = client.CLI_Id;
                 cli.CLI_Name = client.CLI_Name;
-                cli.EmpPaySlipVMs = EmployeePaySlipMapper.mapMe(wageRegisterManager.GetEmployeesForWage(client.CLI_Id, WAG_Id).ToList(), client.CLI_Id, WAG_Id);
+                List<Employees> emps = wageRegisterManager.GetEmployeesForWage(client.CLI_Id, WAG_Id).ToList();
+                cli.EmpPaySlipVMs = EmployeePaySlipMapper.mapMe(emps, client.CLI_Id, WAG_Id);
+                if (cli.EmpPaySlipVMs.Where(m => m.IsPaySlipGenerated).Count()== 0)
+                {
+                    cli.AllSalaryslipsGenerated = (int)ProjectUtils.SalaryslipsGenerated.NotGenerated;
+                }
+                else if (cli.EmpPaySlipVMs.Where(m => m.IsPaySlipGenerated).Count() == emps.Count())
+                {
+                    cli.AllSalaryslipsGenerated = (int)ProjectUtils.SalaryslipsGenerated.Generated;
+                }
+                else
+                {
+                    cli.AllSalaryslipsGenerated = (int)ProjectUtils.SalaryslipsGenerated.Pending;
+                }
                 clientWiseEmps.Add(cli);
             }
             paySlipMasterVM.ClientWiseEmps = clientWiseEmps;
