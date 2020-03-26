@@ -280,9 +280,9 @@
                                                 <div class="dropdown">
                                                     <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                     <ul class="dropdown-menu pull-right">
-                                                        <li><a href='@Url.Action("AddEditRequirement","Clients",new { CRI_Id=item.CRI_Id,CLI_Id =  Model.clientsModel.CLI_Id})' title="ChangeRequirement"><i class="fa fa-plus-square-o m-r-5"></i> Create new With Major Modifications</a></li>
+                                                        <li><a href='@Url.Action("AddEditRequirement", "Clients", new { CRI_Id = item.CRI_Id, CLI_Id = Model.clientsModel.CLI_Id,IsHistory=false, IsMajorModified = true })' title="ChangeRequirement"><i class="fa fa-plus-square-o m-r-5"></i> Create new With Major Modifications</a></li>
                                                         <li><a href='@Url.Action("AddEditRequirement","Clients",new { CRI_Id=item.CRI_Id,CLI_Id =  Model.clientsModel.CLI_Id,tab="ViewRequirement"})' title="ViewRequirement"><i class="fa fa-eye m-r-5"></i> View</a></li>
-                                                        <li><a href='@Url.Action("AddEditRequirement","Clients",new { CRI_Id=item.CRI_Id,CLI_Id =  Model.clientsModel.CLI_Id,IsHistory=true})' title="Edit"><i class="fa fa-edit m-r-5"></i> Edit</a></li>
+                                                        <li><a href='@Url.Action("AddEditRequirement","Clients",new { CRI_Id=item.CRI_Id,CLI_Id =  Model.clientsModel.CLI_Id,IsHistory=true,IsMajorModified=false})' title="Edit"><i class="fa fa-edit m-r-5"></i> Edit</a></li>
                                                         <li><a href='@Url.Action("HistoryRequirement","Clients",new { DES_Id=item.DES_Id,CLI_Id=item.CLI_Id})' title="History"><i class="fa fa-history m-r-5"></i> History</a></li>
                                                         <li><a href='@Url.Action("InactiveRequirement","Clients",new { CRI_Id=item.CRI_Id})' title="Inactive"><i class="fa fa-trash m-r-5"></i> Inactive</a></li>
                                                     </ul>

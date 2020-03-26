@@ -5,7 +5,6 @@
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
 @section Breadcrumbs{
-    @*<li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess")</li>*@
     <li class="breadcrumb-item">Wage Process</li>
 }
 @section scripts{
@@ -68,8 +67,7 @@
                     $("#loading-image").show();
                     $('#div_completed').html("");                    
                 },
-                success: function (data) {
-                    debugger;
+                success: function (data) {                   
                     $('#div_completed').html(data);
                     $("#loading-image").hide();
                 }

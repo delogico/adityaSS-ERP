@@ -444,7 +444,7 @@ namespace RMERP.Controllers
         }
 
         [HttpGet]
-        public ActionResult AddEditRequirement(int CLI_Id, int CRI_Id = -1, bool IsHistory = false)
+        public ActionResult AddEditRequirement(int CLI_Id, int CRI_Id = -1, bool IsHistory = false,bool IsMajorModified=false)
         {
             ClientId = CLI_Id;
             DesignationManager designationManager = new DesignationManager(_context);
@@ -485,13 +485,19 @@ namespace RMERP.Controllers
                 clientRequirement.CRI_Id = -1;
                 clientRequirement.CLI_Id = CLI_Id;
                 clientRequirement.CRI_Active = true;
-                clientRequirement.CRI_RegisteredOn = ProjectUtils.DateNow();
+                clientRequirement.CRI_RegisteredOn = DateNow();
             }
 
             clientRequirement.allAllowances = AllowanceMapper.mapMeAllowancesWithClientReq(AllowanceManager.GetAllowanceList(), listClientReqAllowances);
             ViewBag.ADList = designationManager.getRemainingDesignationsList(CLI_Id).Select(m => new SelectListItem { Value = Convert.ToString(m.DES_Id), Text = m.DES_Title });
 
             clientRequirement.IsHistory = IsHistory;
+            if (IsMajorModified)
+            {
+                clientRequirement.LastRecordRegOn = clientRequirement.CRI_RegisteredOn;
+                clientRequirement.CRI_RegisteredOn = DateNow();
+                clientRequirement.IsMajorModified = true;
+            }
             return View(clientRequirement);
         }
 

@@ -65,7 +65,11 @@ namespace RMERP.DAL.ViewModel
         public DateTime CRI_RegisteredOn { get; set; }
         [Required]
         public bool? CRI_Active { get; set; }
+
+        [Display(Name = "Inactivated On")]
+        [DataType(DataType.Date)]
         public DateTime? CRI_InactivatedOn { get; set; }
+
         public int? ADM_Id_InactivatedBy { get; set; }
 
         public string tabName { get; set; }
@@ -118,6 +122,7 @@ namespace RMERP.DAL.ViewModel
         public string Edit_History { get; set; }
         public DateTime LastRecordRegOn { get; set; }
         public bool IsHistory { get; set; }
+        public bool IsMajorModified { get; set; }
 
 
         [Display(Name = "Employer PF Contribution Rate(%)")]

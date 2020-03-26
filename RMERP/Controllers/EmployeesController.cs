@@ -136,6 +136,31 @@ namespace RMERP.Controllers
                 {
                     Employees employee = new Employees();
                     employee = EmployeesMapper.MapMeModel(employeeVM);
+                    #region Bank Info
+                    employee.EMP_Payment_Type = employeeVM.EMP_Payment_Type;
+                    employee.EMP_Is_IDBI_Other = employeeVM.EMP_Is_IDBI_Other;
+                    if (employeeVM.EMP_Payment_Type == (int)PAYMENT_TYPE.Cheque_Cash)
+                    {
+                        employee.EMP_Bank = null;
+                        employee.EMP_Account_Name = null;
+                        employee.EMP_Account_Number = null;
+                        employee.EMP_Branch = null;
+                        employee.EMP_Bank_IFSC = null;
+                        employee.EMP_Is_IDBI_Other = (int)PAYMENT_BANK_TYPE.IDBI_To_IDBI;
+                    }
+                    else
+                    {
+                        employee.EMP_Bank = employeeVM.EMP_Bank;
+                        employee.EMP_Account_Name = employeeVM.EMP_Account_Name;
+                        employee.EMP_Account_Number = employeeVM.EMP_Account_Number;
+                        employee.EMP_Branch = employeeVM.EMP_Branch;
+                        employee.EMP_Bank_IFSC = employeeVM.EMP_Bank_IFSC;
+                    }
+                    if (employeeVM.EMP_Is_IDBI_Other == (int)PAYMENT_BANK_TYPE.IDBI_To_IDBI)
+                    {
+                        employee.EMP_Bank = "IDBI BANK";
+                    }
+                    #endregion
                     employee.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
                     res = employeeManager.AddEditEmployee(employee);
                 }                
@@ -147,7 +172,6 @@ namespace RMERP.Controllers
             else
             {
                 TempData["message"] = "Employee data can not Inserted.";
-                //return RedirectToAction("AddEditEmployee", new { EMP_Id = employeeVM.EMP_Id });
                 DocumentTypesManager typesManager = new DocumentTypesManager(_context);
                 FirmsManager firmsManager = new FirmsManager(_context);
                 IEnumerable<Firms> listFirms = new List<Firms>();

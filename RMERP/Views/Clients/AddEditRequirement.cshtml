@@ -3,6 +3,7 @@
 @using static RMERP.DAL.Helpers.ProjectUtils;
 @using RMERP.DAL.Models;
 @using RMERP.DAL.ViewModel;
+@using RMERP.Helpers;
 @{
     ViewData["Title"] = "Client Requirement Detail";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
@@ -59,10 +60,9 @@
                 {
                     @Html.AntiForgeryToken()
                     @Html.HiddenFor(m => m.CRI_Id)
-                    @Html.HiddenFor(m => m.IsHistory)
-                    @Html.HiddenFor(m => m.CRI_InactivatedOn)
-
+                    @Html.HiddenFor(m => m.IsHistory)                    
                     @Html.HiddenFor(m => m.CRI_Active)
+
                     if (Model.CRI_Id > 0)
                     {
                         @Html.HiddenFor(m => m.DES_Id, new { @id = "designationID" })
@@ -1036,10 +1036,23 @@
                             <div class="row">
                                 <div class="col-md-10">
                                     <div class="alert alert-info">This Version of Requirement will be effective from the Month selected in this date. And will be being effective till we have a New Version.</div>
+                                    @if (Model.IsMajorModified)
+                                    {
+                                        <div class="alert alert-warning">Last Record Registerd on @DateHelper.getDateWithFormat(Model.LastRecordRegOn)</div>
+                                    }
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.CRI_RegisteredOn, new { @class = "control-label" })
                                         @Html.EditorFor(m => m.CRI_RegisteredOn, new { htmlAttributes = new { @class = "form -control" } })
                                     </div>
+
+                                    @if (Model.CRI_InactivatedOn != null)
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.CRI_InactivatedOn, new { @class = "control-label" })
+                                            @Html.EditorFor(m => m.CRI_InactivatedOn, new { htmlAttributes = new { @class = "form -control" } })
+                                        </div>
+                                    }
+
                                 </div>
                             </div>
                         </div>
@@ -1087,7 +1100,7 @@
             if ($("#CRI_ProfessionalTax").prop("checked")) {
                 $("#divProffTax").show();
             }
-            
+
             if (tab == "History" || tab == "ViewRequirement") {
                 $('select', 'form').attr('disabled', true).attr('readonly', true);
                 $('input', 'form').attr('disabled', true).attr('readonly', true);
@@ -1282,7 +1295,7 @@
         });
 
         $("input[id='CRI_ProfessionalTax']").click(function () {
-        
+
             if ($(this).prop("checked") == true) {
                 $("#divProffTax").show();
             } else {
