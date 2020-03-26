@@ -1038,7 +1038,7 @@
                                     <div class="alert alert-info">This Version of Requirement will be effective from the Month selected in this date. And will be being effective till we have a New Version.</div>
                                     @if (Model.IsMajorModified)
                                     {
-                                        <div class="alert alert-warning">Last Record Registerd on @DateHelper.getDateWithFormat(Model.LastRecordRegOn)</div>
+                                        <div class="alert alert-warning">Last Record Registerd on @DateHelper.getLongDateFormat(Model.LastRecordRegOn)</div>
                                     }
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.CRI_RegisteredOn, new { @class = "control-label" })

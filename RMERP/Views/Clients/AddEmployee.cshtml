@@ -22,9 +22,18 @@
                 liveSearch: true,
                 showSubtext: true
             });
-            $("#submit").click(function (event) {
-                $('select', 'form').attr('disabled', false).attr('readonly', false);
-                $("#frm").submit();
+
+            $(document).on('invalid-form.validate', 'form', function () {               
+                var button = $(this).find('input[type="submit"]');
+                setTimeout(function () {
+                    button.removeAttr('disabled');
+                }, 1);
+            });
+            $(document).on('submit', 'form', function () {                
+                var button = $(this).find('input[type="submit"]');
+                setTimeout(function () {
+                    button.attr('disabled', 'disabled');
+                }, 0);
             });
         });
 
@@ -53,7 +62,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(m => m.EMP_Id, new { @class = "control-label" })
                                 @Html.DropDownListFor(x => x.EMP_Id, new SelectList(ViewBag.EmployeeList, "EMP_Id", "EMP_FullName"), "Select Employee", new { @class = "form-control selectpicker",
-                               onchange = "this.form.submit();",
+                               //onchange = "this.form.submit();",
                                data_show_subtext = "true",
                                data_live_search = "true"
                            })
@@ -65,7 +74,7 @@
                             <div class="form-group">
                                 @Html.LabelFor(m => m.DES_Id, new { @class = "control-label" })
                                 @Html.DropDownListFor(x => x.DES_Id, new SelectList(ViewBag.designationList, "DES_Id", "DES_Title"), "Select Designation", new { @class = "form-control selectpicker" ,
-                               onchange = "this.form.submit();",
+                               //onchange = "this.form.submit();",
                                data_show_subtext = "true",
                                data_live_search = "true"
                            })
