@@ -54,8 +54,7 @@ namespace RMERP.Controllers
                 FirmsManager frmManager = new FirmsManager(_context);
                 return View(frmManager.getFirmList());
             }
-        }
-
+        }        
         public IActionResult Index(int FRM_Id)
         {            
             SessionUtils sessionUtils = new SessionUtils(Request, Response);

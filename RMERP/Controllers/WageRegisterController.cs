@@ -31,7 +31,7 @@ namespace RMERP.Controllers
             _context = context;
             _hostingEnvironment = hostingEnvironment;
         }
-
+        //[OutputCache(Duration = 60, VaryByParam = "WAG_Id,FRM_Id")]
         public ActionResult WageRegister(int WAG_Id, int FRM_Id)
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);

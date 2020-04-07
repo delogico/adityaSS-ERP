@@ -272,17 +272,29 @@ namespace RMERP.DAL.ManagerClasses
             _contaxt.Update(requirement);
             _contaxt.SaveChanges();
         }
-        public string EditHistoryRequirement(Client_Requirements clientRequirements, List<Client_Requirement_Allowances> lst, int ADM_Id)
+        
+        public string EditHistoryRequirement(Client_Requirements clientRequirements, List<Client_Requirement_Allowances> lst, List<Client_Requirement_Allowances> Removelst, int ADM_Id)
         {
             string res = string.Empty;
             try
-            {               
-                if (clientRequirements.CRI_Id > 0)
-                {                    
+            {
+                 if (clientRequirements.CRI_Id > 0)
+                {
                     _contaxt.Client_Requirements.Update(clientRequirements);
                     _contaxt.SaveChanges();
-                }                
+                }
                 CRI_Id = clientRequirements.CRI_Id;
+
+
+                int[] existingId = _contaxt.Client_Requirement_Allowances.Where(m => m.CRI_Id.Equals(clientRequirements.CRI_Id)).Select(m => m.CRA_Id).ToArray();
+                int[] NeedToRemoveId = existingId.Intersect(Removelst.Select(m=>m.CRA_Id).ToArray()).ToArray();
+                List<Client_Requirement_Allowances> needToRemove = _contaxt.Client_Requirement_Allowances.Where(m => NeedToRemoveId.Contains(m.CRA_Id)).ToList();
+
+                if (needToRemove.Count() > 0)
+                {
+                    _contaxt.Client_Requirement_Allowances.RemoveRange(needToRemove);
+                    _contaxt.SaveChanges();
+                }
 
                 foreach (var item in lst)
                 {

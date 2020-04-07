@@ -507,6 +507,7 @@ namespace RMERP.Controllers
             string res = string.Empty;
             Client_Requirements cr = new Client_Requirements();
             List<Client_Requirement_Allowances> lst = AllowanceMapper.mapMeClientReqAllowances(clientRequirementVM.allAllowances);
+            List<Client_Requirement_Allowances> Removelst = AllowanceMapper.mapMeClientReqAllowancesRemove(clientRequirementVM.allAllowances);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
 
@@ -553,11 +554,11 @@ namespace RMERP.Controllers
 
                 if (clientRequirementVM.IsHistory)
                 {
-                    res = clientsManager.EditHistoryRequirement(cr, lst, sessionUtils.GetLoggedAdminID());
+                    res = clientsManager.EditHistoryRequirement(cr, lst, Removelst, sessionUtils.GetLoggedAdminID());
                 }
                 else
                 {
-                    res = clientsManager.AddEditRequirement(cr, lst, sessionUtils.GetLoggedAdminID());
+                    res = clientsManager.AddEditRequirement(cr, lst,  sessionUtils.GetLoggedAdminID());
                 }
                
             }

@@ -74,6 +74,18 @@ namespace RMERP.DAL.Mappers
             }
             return lst;
         }
+         public static List<Client_Requirement_Allowances> mapMeClientReqAllowancesRemove(List<ClientReqAllowanceVM> clientReqAllowanceVMs)
+        {
+            List<Client_Requirement_Allowances> lst = new List<Client_Requirement_Allowances>();
+            foreach (var item in clientReqAllowanceVMs)
+            {
+                if (!item.flagClientRequirement)
+                {
+                    lst.Add(mapMeModel(item));
+                }               
+            }
+            return lst;
+        }
         public static List<ClientReqAllowanceVM> mapMeAllowancesWithClientReq(List<Allowances> allowances, IEnumerable<Client_Requirement_Allowances> cRAllowances)
         {
             List<ClientReqAllowanceVM> lst = new List<ClientReqAllowanceVM>();
