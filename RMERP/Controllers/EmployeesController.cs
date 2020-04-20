@@ -285,11 +285,21 @@ namespace RMERP.Controllers
             return RedirectToAction("AddEditEmployee", new { EMP_Id = employeeAdvanceVM.EMP_Id, tab = "AddEditAdvance" });
         }
 
+        public ActionResult DeleteAdvanceModel(int ADV_Id, int EMP_Id)
+        {
+            EmployeeManager employeeManager = new EmployeeManager(_context);
+            return PartialView("_DeleteAdvance", new Tuple<IEnumerable<Wage_Register_Advances>,int,int>(employeeManager.ActiveAdvances(EMP_Id), ADV_Id,EMP_Id));
+        }
+
         public ActionResult DeleteAdvance(int ADV_Id, int EMP_Id)
         {
-            string res = string.Empty;
+            string res = string.Empty;          
             EmployeeManager employeeManager = new EmployeeManager(_context);
-            res = employeeManager.DeleteAdvance(ADV_Id);
+
+            
+                res = employeeManager.DeleteAdvance(ADV_Id);
+            
+            
             if (res != string.Empty)
             {
                 TempData["message"] = "Advance data can not Deleted";

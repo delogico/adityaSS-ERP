@@ -6,10 +6,15 @@
 @section Breadcrumbs{    
 <li class="breadcrumb-item">Choose Firm</li>
 }
-<div class="btn-group-vertical">
+<style>
+    .firms a {
+        color: white ;
+    }
+</style>
+<div class="btn-group-vertical firms">
     @foreach (var item in Model)
     {
-        <button type="button" class="btn btn-lg btn-primary">@Html.ActionLink(item.FRM_Name, "Index", new { FRM_Id = item.FRM_Id })</button>
+        <button type="button" class="btn btn-lg btn-primary">@Html.ActionLink(item.FRM_Name, "Index", new { FRM_Id = item.FRM_Id})</button>
     }
 
 </div>

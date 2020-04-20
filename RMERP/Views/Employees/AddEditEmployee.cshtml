@@ -7,7 +7,11 @@
     ViewData["Title"] = "Add-Edit Employee";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-
+<style>
+    .modal-dialog {
+        padding-top: 50px;
+    }
+</style>
 @section Breadcrumbs{
     <li class="breadcrumb-item">@Html.ActionLink("Employees", "Index", "Employees")</li>
     <li class="breadcrumb-item">Employee Info</li>
@@ -125,7 +129,18 @@
                 $("#EMP_City").html(item);
             });
         };
-        
+        function DeleteAdvance(ADV_Id,EMP_Id) {
+            $(".modal-backdrop").removeClass("modal-backdrop").addClass("modal");
+            var Url = siteUrl + "Employees/DeleteAdvanceModel?ADV_Id=" + ADV_Id + "&EMP_Id=" + EMP_Id;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                success: function (data) {
+                    $('#divDeleteAdvance').html(data);
+                    $('#DeleteAdvanceModal').modal('show');
+                }
+            })
+        };
     </script>
     
 
@@ -136,6 +151,9 @@
 {
     <div class="alert alert-danger">@TempData["message"]</div>
 }
+<div id="divDeleteAdvance">
+
+</div>
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#AddEditEmployee">Edit data</a></li>
     <li><a data-toggle="tab" href="#EmployeeDocuments">Employee Documents</a></li>
@@ -553,7 +571,7 @@
                                                 {
                                                     <td>
                                                         <a href='@Url.Action("AddEditAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit Amount</a> |
-                                                        <a href='@Url.Action("DeleteAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Remove</a>
+                                                        <a title="Delete"  style="cursor:pointer;" onclick="DeleteAdvance(@item.ADV_Id,@item.EMP_Id)"><i class="fa fa-trash m-r-5"></i> Remove</a>
                                                     </td>
                                                 }
 

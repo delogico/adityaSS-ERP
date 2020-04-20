@@ -1,0 +1,30 @@
+﻿@model Tuple<IEnumerable<RMERP.DAL.Models.Wage_Register_Advances>,int,int>
+
+<div id="DeleteAdvanceModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content modal-md">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"> Active EMI</h4>
+            </div>
+            <div class="modal-body">
+
+                <ul>
+                    @foreach (var item in Model.Item1)
+                    {
+                        <li>Employee is paying advance of <b>Rs.@item.WAD_Amount</b> in month of <b>@item.WAG_.WAG_Month.ToString("MMM-yyyy")</b></li>
+                    }
+                </ul>
+
+                <div class="alert alert-danger">
+                    Are you sure you wants to delete this advance ?
+                    <a class="btn btn-danger" href='@Url.Action("DeleteAdvance","Employees",new { ADV_Id = Model.Item2,EMP_Id=Model.Item3})' title="Delete" onclick="return confirm('Are you sure?');">
+                    <i class="fa fa-trash m-r-5"></i> Delete</a>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

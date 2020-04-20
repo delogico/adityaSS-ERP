@@ -227,6 +227,22 @@ namespace RMERP.DAL.ManagerClasses
             string EMP_AadharNo = GetEmployeeById(EMP_Id).EMP_Aadhar_Number;
             return _context.Employees.Include(m=>m.FRM_).Where(m => m.EMP_Aadhar_Number.Equals(EMP_AadharNo));
         }
+
+        //public bool IsAdvanceAbleToDelete(int ADV_Id,int EMP_Id, DateTime RegisteredOn)
+        //{
+        //    if(
+        //        _context.Employee_Advance.Where(m=>m.EMP_Id.Equals(EMP_Id) && m.WAG_Id_Closed_On==null).Sum(m=>m.ADV_Amount)
+        //        ==
+        //        _context.Wage_Register_Advances.Where(m=>m.EMP_Id.Equals(EMP_Id) && m.WAD_ClosedOn == null).Sum(m => m.WAD_Amount))
+        //    {
+
+        //    }
+        //    return true;
+        //}
+        public IEnumerable<Wage_Register_Advances> ActiveAdvances(int EMP_Id)
+        {
+            return _context.Wage_Register_Advances.Where(m => m.EMP_Id.Equals(EMP_Id) && m.WAD_Status.Equals(false) && m.WAD_ClosedOn == null && m.WAD_Amount > 0).Include(m => m.WAG_);
+        }
     }
 }
 
