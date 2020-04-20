@@ -510,7 +510,7 @@ namespace RMERP.Controllers
             List<Client_Requirement_Allowances> Removelst = AllowanceMapper.mapMeClientReqAllowancesRemove(clientRequirementVM.allAllowances);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-
+                        
             if (ModelState.IsValid)
             {
                 if (clientRequirementVM.CRI_OT_Calculate_Payableday)
@@ -564,8 +564,8 @@ namespace RMERP.Controllers
             }
             if (res != "")
             {
-                TempData["message"] = "Error In Client Requirement! Please Check";
-                return View();
+                TempData["message"] = "Error In Client Requirement Or Reset Wage Register!";
+                return RedirectToAction("AddEditClients", new { id = ClientId });
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
         }

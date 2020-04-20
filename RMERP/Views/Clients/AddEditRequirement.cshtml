@@ -60,7 +60,7 @@
                 {
                     @Html.AntiForgeryToken()
                     @Html.HiddenFor(m => m.CRI_Id)
-                    @Html.HiddenFor(m => m.IsHistory)                    
+                    @Html.HiddenFor(m => m.IsHistory)
                     @Html.HiddenFor(m => m.CRI_Active)
 
                     if (Model.CRI_Id > 0)
@@ -1081,9 +1081,18 @@
     }
     <script src="@Url.Content("~/assets/lib/jquery-validation/dist/jquery.validate.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/assets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
-
+    @if (TempData["message"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+            alert('@TempData["message"]');
+        });
+        </script>
+    };
     <script>
+
         $(document).ready(function () {
+
 
             var tab = GetParameterValues("tab");
             function GetParameterValues(param) {

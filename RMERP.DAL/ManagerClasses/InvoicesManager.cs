@@ -61,13 +61,16 @@ namespace RMERP.DAL.ManagerClasses
         public string GetNextInvoiceNumber()
         {
             string InvoiceNumber = string.Empty;
-            int number = 1;
-            Invoices invoice = _context.Invoices.OrderByDescending(m => m.INV_Id).FirstOrDefault();
-            if (invoice != null)
-            {
-                number = Convert.ToInt32(invoice.INV_Number) + 1;
-            }
-            InvoiceNumber = number.ToString("D6");
+            //int number = 1;
+            //Invoices invoice = _context.Invoices.OrderByDescending(m => m.INV_Id).FirstOrDefault();
+            //if (invoice != null)
+            //{
+            //    number = Convert.ToInt32(invoice.INV_Number) + 1;
+            //}
+            //InvoiceNumber = number.ToString("D6");
+            
+            int count = _context.Invoices.Count() + 1;
+            InvoiceNumber = "INV" + DateTime.Now.Year + "_" + count.ToString("D6");
             return InvoiceNumber;
         }
 

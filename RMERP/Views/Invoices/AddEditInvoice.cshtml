@@ -44,7 +44,7 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         @Html.LabelFor(m => m.INV_Number, new { @class = "control-label" })
-                        @Html.TextBoxFor(m => m.INV_Number, new { @readonly = "readonly", @class = "form-control" })
+                        @Html.TextBoxFor(m => m.INV_Number, new {@class = "form-control" })
                         @Html.ValidationMessageFor(m => m.INV_Number, "", new { @class = "text-danger" })
                     </div>
                 </div>

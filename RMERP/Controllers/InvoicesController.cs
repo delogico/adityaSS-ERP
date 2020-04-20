@@ -73,7 +73,9 @@ namespace RMERP.Controllers
             InvoicesManager invoicesManager = new InvoicesManager(_context);
             ViewBag.Clients = clientsManager.listClients(true, sessionUtils.GetLoggedFirmID()).OrderBy(m=>m.CLI_Name);
             InvoiceVM invoiceVM = new InvoiceVM();
-            invoiceVM.INV_Number = invoicesManager.GetNextInvoiceNumber();           
+
+            invoiceVM.INV_Number = invoicesManager.GetNextInvoiceNumber(); 
+            
             invoiceVM.INV_Date = DateNow();            
             invoiceVM.Invoice_Concepts = new List<Invoice_ConceptsVM>();
             if (INV_Id > 0)
