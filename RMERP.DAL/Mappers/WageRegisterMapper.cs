@@ -24,7 +24,7 @@ namespace RMERP.DAL.Mappers
             wageRegisterVM.WAR_ESIC = wageRegister.WAR_ESIC;
             wageRegisterVM.WAR_ESIC_Calculated = wageRegister.WAR_ESIC_Calculated;
             wageRegisterVM.WAR_ExtraWorkingHours = wageRegister.WAR_ExtraWorkingHours;
-            wageRegisterVM.WAR_FinalTotal = wageRegister.WAR_FinalTotal;
+            wageRegisterVM.WAR_FinalTotal = (wageRegister.WAR_FinalTotal != null ? wageRegister.WAR_FinalTotal.Value : 0); ;
             wageRegisterVM.WAR_GrossTotal = wageRegister.WAR_GrossTotal;
             wageRegisterVM.WAR_HRA = wageRegister.WAR_HRA;
             wageRegisterVM.WAR_HRA_Calculated = wageRegister.WAR_HRA_Calculated;

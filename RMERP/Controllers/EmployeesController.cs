@@ -288,9 +288,10 @@ namespace RMERP.Controllers
         public ActionResult DeleteAdvanceModel(int ADV_Id, int EMP_Id)
         {
             EmployeeManager employeeManager = new EmployeeManager(_context);
-            return PartialView("_DeleteAdvance", new Tuple<IEnumerable<Wage_Register_Advances>,int,int>(employeeManager.ActiveAdvances(EMP_Id), ADV_Id,EMP_Id));
+            Employee_Advance employee_Advance = employeeManager.GetEmployeeAdvanceById(ADV_Id);
+            //return PartialView("_DeleteAdvance", new Tuple<IEnumerable<Wage_Register_Advances>, Employee_Advance>(employeeManager.ActiveAdvances(EMP_Id), employee_Advance));
+            return PartialView("_DeleteAdvance",new Tuple<IEnumerable<Wage_Register_Advances>, Employee_Advance>(employeeManager.ActiveAdvances(EMP_Id), employee_Advance));
         }
-
         public ActionResult DeleteAdvance(int ADV_Id, int EMP_Id)
         {
             string res = string.Empty;          

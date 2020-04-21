@@ -65,6 +65,8 @@
             }
 
         });
+
+
         function GetParameterValues(param) {
             var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
             for (var i = 0; i < url.length; i++) {
@@ -129,9 +131,10 @@
                 $("#EMP_City").html(item);
             });
         };
-        function DeleteAdvance(ADV_Id,EMP_Id) {
+        function DeleteAdvanceEmployee(ADV_Id, EMP_Id) {
+            debugger;
             $(".modal-backdrop").removeClass("modal-backdrop").addClass("modal");
-            var Url = siteUrl + "Employees/DeleteAdvanceModel?ADV_Id=" + ADV_Id + "&EMP_Id=" + EMP_Id;
+            var Url = siteUrl + "Employees/DeleteAdvanceModel?ADV_Id=" + ADV_Id + "&EMP_Id=" + EMP_Id ;
             $.ajax({
                 type: "GET",
                 url: Url,
@@ -571,7 +574,8 @@
                                                 {
                                                     <td>
                                                         <a href='@Url.Action("AddEditAdvance","Employees",new { ADV_Id=item.ADV_Id, EMP_Id = Model.EMP_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit Amount</a> |
-                                                        <a title="Delete"  style="cursor:pointer;" onclick="DeleteAdvance(@item.ADV_Id,@item.EMP_Id)"><i class="fa fa-trash m-r-5"></i> Remove</a>
+                                                        <a title="Delete" style="cursor:pointer;" onclick="DeleteAdvanceEmployee(@item.ADV_Id,@item.EMP_Id)"><i class="fa fa-trash m-r-5"></i> Remove</a>
+                                                       
                                                     </td>
                                                 }
 

@@ -505,9 +505,6 @@ namespace RMERP.DAL.Models
             {
                 entity.HasKey(e => e.CLE_Id);
 
-                entity.HasIndex(e => e.CLE_Id)
-                    .HasName("IX_Clients_Employees");
-
                 entity.Property(e => e.CLE_ReassignedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.CLE_RegisteredOn)

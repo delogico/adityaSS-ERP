@@ -591,7 +591,7 @@ namespace RMERP.DAL.ManagerClasses
                     rptEmployee.EMP_Account_Number = (wage.EMP_.EMP_Account_Number==null?"-":wage.EMP_.EMP_Account_Number);
                     rptEmployee.CURRENCY_CODE = "-";
                     rptEmployee.PART_TRAN_TYPE = "-";
-                    rptEmployee.TRANSACTION_AMOUNT = wage.WAR_FinalTotal;
+                    rptEmployee.TRANSACTION_AMOUNT = (wage.WAR_FinalTotal!=null? wage.WAR_FinalTotal.Value:0);
                     rptEmployee.SERVICE_OUTLET= (wage.EMP_.EMP_Bank_IFSC == null ? "-" : wage.EMP_.EMP_Bank_IFSC);
                     DateTime WAG_Month = wage_Registers.First().WAG_.WAG_Month;
                     rptEmployee.TRANSACTION_PARTICULARS = "Salary " + WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
@@ -632,7 +632,7 @@ namespace RMERP.DAL.ManagerClasses
                 }                
                 bankReport.EMP_SERVICE_OUTLET = IFSC;
                 bankReport.EMP_PART_TRAN_TYPE = "C";
-                bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
+                bankReport.EMP_TRANSACTION_AMOUNT = (item.WAR_FinalTotal!=null? item.WAR_FinalTotal.Value:0);
                 DateTime WAG_Month = wage_Registers.First().WAG_.WAG_Month;
                 bankReport.EMP_TRANSACTION_PARTICULARS = "Salary " + WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
                 bankReportVMs.Add(bankReport);
@@ -655,7 +655,7 @@ namespace RMERP.DAL.ManagerClasses
             foreach (var item in wage_Registers)
             {
                 BankReportVM bankReport = new BankReportVM();
-                bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
+                bankReport.EMP_TRANSACTION_AMOUNT = (item.WAR_FinalTotal != null ? item.WAR_FinalTotal.Value : 0);
                 bankReport.ACCOUNT_SENDER_NUMBER = item.WAG_.FRM_.FRM_AccountNumber;
                 bankReport.ACCOUNT_IFSC_CODE = item.EMP_.EMP_Bank_IFSC;
                 bankReport.ACCOUNT_RECEIVERS_NUMBER = item.EMP_.EMP_Account_Number;
@@ -695,7 +695,7 @@ namespace RMERP.DAL.ManagerClasses
                 bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
                 bankReport.EMP_SurName = item.EMP_.EMP_SurName;
                 bankReport.EMP_ADDRESS = item.CLI_.CLI_Invoicing_Location;
-                bankReport.EMP_TRANSACTION_AMOUNT = item.WAR_FinalTotal;
+                bankReport.EMP_TRANSACTION_AMOUNT = (item.WAR_FinalTotal != null ? item.WAR_FinalTotal.Value : 0);
                 bankReportVMs.Add(bankReport);
             }
             return bankReportVMs;
@@ -1004,7 +1004,7 @@ namespace RMERP.DAL.ManagerClasses
                 WAR_TotalWorkingDays = WAR_TotalWorkingDays+wage.WAR_TotalWorkingDays;
 
                 WAR_GrossTotal = WAR_GrossTotal + wage.WAR_GrossTotal;
-                WAR_FinalTotal = WAR_FinalTotal+ wage.WAR_FinalTotal;
+                WAR_FinalTotal = WAR_FinalTotal+ (wage.WAR_FinalTotal != null ? wage.WAR_FinalTotal.Value : 0); ;
 
                 if (wage.WAR_TotalPaybleDays > Max_TotalPaybleDays)
                 {

@@ -38,7 +38,7 @@ namespace RMERP.DAL.Models
         public string WAR_ProffesionalTax_Calculated { get; set; }
         public string WAR_RevenueDeduction_Calculated { get; set; }
         public string WAR_CanteenFacility_Calculation { get; set; }
-        public decimal WAR_FinalTotal { get; set; }
+        public decimal? WAR_FinalTotal { get; set; }
         public DateTime? WAR_LastModifiedOn { get; set; }
         public int? ADM_LastModifiedBy { get; set; }
         public decimal? WAR_Advance_Amount { get; set; }
