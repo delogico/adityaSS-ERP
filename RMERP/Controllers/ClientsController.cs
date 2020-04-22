@@ -741,29 +741,30 @@ namespace RMERP.Controllers
                 //    clients.CLI_Att_Month_End = cvm.ParametersClientsModel.CLI_Att_Month_End;
                 //}
 
-                Attendance_Parameter attendance = new Attendance_Parameter();
-                attendance.CLI_Id = cvm.clientsModel.CLI_Id;
-                attendance.ATP_RegisteredOn = cvm.attendanceParameter.ATP_RegisteredOn;
-                if (cvm.attendanceParameter.ATP_Att_MonthReal == true)
-                {
-                    attendance.ATP_Att_MonthReal = true;
-                    attendance.ATP_Att_Month_Start = null;
-                    attendance.ATP_Att_Month_End = null;
-                }
-                else
-                {
-                    attendance.ATP_Att_MonthReal = false;
-                    attendance.ATP_Att_Month_Start = cvm.attendanceParameter.ATP_Att_Month_Start;
-                    attendance.ATP_Att_Month_End = cvm.attendanceParameter.ATP_Att_Month_End;
-                }
+                //Attendance_Parameter attendance = new Attendance_Parameter();
+                //attendance.CLI_Id = cvm.clientsModel.CLI_Id;
+                //attendance.ATP_RegisteredOn = cvm.attendanceParameter.ATP_RegisteredOn;
+                //if (cvm.attendanceParameter.ATP_Att_MonthReal == true)
+                //{
+                //    attendance.ATP_Att_MonthReal = true;
+                //    attendance.ATP_Att_Month_Start = null;
+                //    attendance.ATP_Att_Month_End = null;
+                //}
+                //else
+                //{
+                //    attendance.ATP_Att_MonthReal = false;
+                //    attendance.ATP_Att_Month_Start = cvm.attendanceParameter.ATP_Att_Month_Start;
+                //    attendance.ATP_Att_Month_End = cvm.attendanceParameter.ATP_Att_Month_End;
+                //}
+
                 //clients.CLI_PF_Employer_Cont_Rate = cvm.clientsModel.CLI_PF_Employer_Cont_Rate;
                 //clients.CLI_ESIC_Employer_Cont_Rate = cvm.clientsModel.CLI_ESIC_Employer_Cont_Rate;
                 //clients.CLI_EPF_Rate = cvm.clientsModel.CLI_EPF_Rate;
                 //clients.CLI_EPS_Rate = cvm.clientsModel.CLI_EPS_Rate;
                 //clients.CLI_MLWF_Contribution = cvm.clientsModel.CLI_MLWF_Contribution;
                 string res = clientsManager.UpdateParameters(clients);
-                string att=clientsManager.AddAttendanceParameter(attendance);
-                if (res != string.Empty || att!=string.Empty)
+               // string att=clientsManager.AddAttendanceParameter(attendance);
+                if (res != string.Empty)
                 {
                     TempData["message"] = "data can not updated";
                 }
@@ -1412,7 +1413,7 @@ namespace RMERP.Controllers
             {
                 TempData["message"] = "Try Again";
             }
-            return RedirectToAction("AddEditClients", new { id = ClientId });
+            return RedirectToAction("AddEditClients", new { id = ClientId,tab = "Parameters" });
         }
     }
 }
