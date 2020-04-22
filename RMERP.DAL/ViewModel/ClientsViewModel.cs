@@ -17,7 +17,42 @@ namespace RMERP.DAL.ViewModel
         public List<ClientRequirementVM> requirements { get; set; }
         public List<ClientEmployeeVM> employees { get; set; }        
         public int WageID { get; set; }
-      
+        public AttendanceParameterVM attendanceParameter { get; set; }
+        public IEnumerable<Attendance_Parameter> attendanceParameters { get; set; }
+
+    }
+    public class AttendanceParameterVM
+    {
+        public int ATP_Id { get; set; }
+        public bool? ATP_Att_MonthReal { get; set; }
+        public int? ATP_Att_Month_Start { get; set; }
+        public int? ATP_Att_Month_End { get; set; }
+        public int? CLI_Id { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime ATP_RegisteredOn { get; set; } 
+        
+        public static Attendance_Parameter mapMe(AttendanceParameterVM attendanceParameterVM)
+        {
+            Attendance_Parameter attendance_Parameter = new Attendance_Parameter();
+            attendance_Parameter.ATP_Id = attendanceParameterVM.ATP_Id;
+            attendance_Parameter.ATP_Att_MonthReal = attendanceParameterVM.ATP_Att_MonthReal;
+            attendance_Parameter.ATP_Att_Month_Start = attendanceParameterVM.ATP_Att_Month_Start;
+            attendance_Parameter.ATP_Att_Month_End = attendanceParameterVM.ATP_Att_Month_End;
+            attendance_Parameter.CLI_Id = attendanceParameterVM.CLI_Id;
+            attendance_Parameter.ATP_RegisteredOn = attendanceParameterVM.ATP_RegisteredOn;
+            return attendance_Parameter;
+        }
+        public static AttendanceParameterVM mapMeModel(Attendance_Parameter attendanceParameterVM)
+        {
+            AttendanceParameterVM attendance_Parameter = new AttendanceParameterVM();
+            attendance_Parameter.ATP_Id = attendanceParameterVM.ATP_Id;
+            attendance_Parameter.ATP_Att_MonthReal = attendanceParameterVM.ATP_Att_MonthReal;
+            attendance_Parameter.ATP_Att_Month_Start = attendanceParameterVM.ATP_Att_Month_Start;
+            attendance_Parameter.ATP_Att_Month_End = attendanceParameterVM.ATP_Att_Month_End;
+            attendance_Parameter.CLI_Id = attendanceParameterVM.CLI_Id;
+            attendance_Parameter.ATP_RegisteredOn = attendanceParameterVM.ATP_RegisteredOn;
+            return attendance_Parameter;
+        }
     }
     public class ClientsModel
     {

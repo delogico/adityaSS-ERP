@@ -16,18 +16,34 @@ namespace RMERP.Helpers
             return dt.ToString("dd-MMM-yyyy");
         }
 
-        public static DateTime[] getStartEndDatePeriodForAttendance(Clients client, DateTime wageDate)
-        {
+        //public static DateTime[] getStartEndDatePeriodForAttendance(Clients client, DateTime wageDate)
+        //{
+        //    DateTime startDate = wageDate, endDate = wageDate;
+        //    if (client.CLI_Att_MonthReal == true)
+        //    {
+        //        startDate = new DateTime(wageDate.Year, wageDate.Month, 1);
+        //        endDate = startDate.AddMonths(1).AddDays(-1);
+        //    }
+        //    else if (client.CLI_Att_MonthReal == false)
+        //    {
+        //        startDate = new DateTime(wageDate.AddMonths(-1).Year, wageDate.AddMonths(-1).Month, client.CLI_Att_Month_Start.Value);
+        //        endDate = new DateTime(wageDate.Year, wageDate.Month, client.CLI_Att_Month_End.Value); ;
+        //    }
+        //    DateTime[] arr = { startDate, endDate };
+        //    return arr;
+        //}
+        public static DateTime[] getStartEndDatePeriodForAttendance(Clients client, Attendance_Parameter attendance_Parameter, DateTime wageDate)
+        {            
             DateTime startDate = wageDate, endDate = wageDate;
-            if (client.CLI_Att_MonthReal == true)
+            if (attendance_Parameter.ATP_Att_MonthReal == true)
             {
                 startDate = new DateTime(wageDate.Year, wageDate.Month, 1);
                 endDate = startDate.AddMonths(1).AddDays(-1);
             }
-            else if (client.CLI_Att_MonthReal == false)
+            else if (attendance_Parameter.ATP_Att_MonthReal == false)
             {
-                startDate = new DateTime(wageDate.AddMonths(-1).Year, wageDate.AddMonths(-1).Month, client.CLI_Att_Month_Start.Value);
-                endDate = new DateTime(wageDate.Year, wageDate.Month, client.CLI_Att_Month_End.Value); ;
+                startDate = new DateTime(wageDate.AddMonths(-1).Year, wageDate.AddMonths(-1).Month, attendance_Parameter.ATP_Att_Month_Start.Value);
+                endDate = new DateTime(wageDate.Year, wageDate.Month, attendance_Parameter.ATP_Att_Month_End.Value); ;
             }
             DateTime[] arr = { startDate, endDate };
             return arr;

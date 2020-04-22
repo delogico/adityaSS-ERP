@@ -222,7 +222,8 @@ namespace RMERP.DAL.ManagerClasses
                 DateTime StartDate = DateTime.Now;
                 DateTime EndDate = DateTime.Now;
                 int daysInMonth = 0;
-                if (client.CLI_Att_MonthReal.Value)
+                Attendance_Parameter attendance = clientsManager.GetAttendanceParameterByMonth(CLI_Id,wage.WAG_Month);
+                if(attendance.ATP_Att_MonthReal.Value)
                 {
                     DatePeriod = "For The Month Of " + wage.WAG_Month.ToString("MMM-yyyy");
                     daysInMonth = DateTime.DaysInMonth(wage.WAG_Month.Year, wage.WAG_Month.Month);
@@ -338,7 +339,8 @@ namespace RMERP.DAL.ManagerClasses
                 string DatePeriod = "";
                 DateTime StartDate = DateTime.Now;
                 DateTime EndDate = DateTime.Now;
-                if (client.CLI_Att_MonthReal.Value)
+                Attendance_Parameter attendance = clientsManager.GetAttendanceParameterByMonth(CLI_Id, wage.WAG_Month);
+                if (attendance.ATP_Att_MonthReal.Value)
                 {
                     DatePeriod = "For Month Of " + wage.WAG_Month.ToString("MMM-yyyy");
                 }
@@ -404,7 +406,8 @@ namespace RMERP.DAL.ManagerClasses
                 string DatePeriod = "";
                 DateTime StartDate = DateTime.Now;
                 DateTime EndDate = DateTime.Now;
-                if (client.CLI_Att_MonthReal.Value)
+                Attendance_Parameter attendance = clientsManager.GetAttendanceParameterByMonth(CLI_Id, wage.WAG_Month);
+                if (attendance.ATP_Att_MonthReal.Value)
                 {
                     DatePeriod = "For The Month Of " + wage.WAG_Month.ToString("MMM-yyyy");
                 }

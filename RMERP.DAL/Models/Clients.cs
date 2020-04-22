@@ -38,9 +38,6 @@ namespace RMERP.DAL.Models
         public bool? CLI_IsActive { get; set; }
         public DateTime? CLI_InActivatedOn { get; set; }
         public int? ADM_Id_InactivatedBy { get; set; }
-        public bool? CLI_Att_MonthReal { get; set; }
-        public int? CLI_Att_Month_Start { get; set; }
-        public int? CLI_Att_Month_End { get; set; }
         public byte CLI_Total_WorkingDays { get; set; }
         public int? CLI_No_Reduce_Days { get; set; }
         public int CLI_WorkingHours_In_Day { get; set; }

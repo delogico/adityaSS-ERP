@@ -134,8 +134,9 @@ namespace RMERP.Controllers
                         excelViewModel.CLI_Id = uvm.client.CLI_Id;
                         if (excelViewModel.excelRows.Count() > 0)
                         {
-                            /***************** CHECK DATETIME MATCH ***************************/
-                            DateTime[] arr = DateHelper.getStartEndDatePeriodForAttendance(client, wageProcess.WAG_Month);
+                        /***************** CHECK DATETIME MATCH ***************************/
+                        Attendance_Parameter attendance_Parameter = clientsManager.GetAttendanceParameterByMonth(client.CLI_Id, wageProcess.WAG_Month); 
+                        DateTime[] arr = DateHelper.getStartEndDatePeriodForAttendance(client, attendance_Parameter, wageProcess.WAG_Month);
                             if (excelViewModel.startDate.Date != arr[0].Date || excelViewModel.endDate.Date != arr[1].Date)
                             {
                                 excelViewModel.datePeriod = false;
@@ -1402,7 +1403,9 @@ namespace RMERP.Controllers
             ViewBag.ClientName = client.CLI_Name;
             ViewBag.CLI_Id = client.CLI_Id;
             ViewBag.CLI_Total_WorkingDays = client.CLI_Total_WorkingDays;
-            DateTime[] arrDate = DateHelper.getStartEndDatePeriodForAttendance(client, wage.WAG_Month);
+
+            Attendance_Parameter attendance_Parameter = clientsManager.GetAttendanceParameterByMonth(client.CLI_Id, wage.WAG_Month);
+            DateTime[] arrDate = DateHelper.getStartEndDatePeriodForAttendance(client, attendance_Parameter, wage.WAG_Month);
             ViewBag.startDate = arrDate[0];
             ViewBag.endDate = arrDate[1];
             List<AttendanceVM> list = AttendanceMapper.mapAttendances(attendanceManager.getAttendance_Wage_Client(WAG_Id, CLI_Id));

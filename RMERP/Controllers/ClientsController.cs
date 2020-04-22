@@ -104,6 +104,11 @@ namespace RMERP.Controllers
             listCity = adminUserManager.getCityList();
             ViewBag.firmList = listFirms;
             ViewBag.cityList = listCity;
+
+            cv.attendanceParameter = new AttendanceParameterVM();
+            cv.attendanceParameter.ATP_Att_MonthReal = true;
+            cv.attendanceParameter.ATP_RegisteredOn = ProjectUtils.DateNow();
+            cv.attendanceParameters = null;
             if (id > 0)
             {
                 clients = clientsManager.GetClientById(id);
@@ -123,6 +128,7 @@ namespace RMERP.Controllers
                 cv.clientsModel.CLI_Total_WorkingDays = clients.CLI_Total_WorkingDays;
                 cv.clientsModel.CLI_No_Reduce_Days = clients.CLI_No_Reduce_Days;
                 cv.clientsModel.CLI_WorkingHours_In_Day = clients.CLI_WorkingHours_In_Day;
+
                 if(clients.CLI_InActivatedOn!=null)
                     cv.clientsModel.CLI_InActivatedOn = clients.CLI_InActivatedOn.Value;
 
@@ -130,9 +136,22 @@ namespace RMERP.Controllers
                 cv.ParametersClientsModel.clientsModel.CLI_GST_Rate = clients.CLI_GST_Rate;
                 cv.ParametersClientsModel.clientsModel.CLI_HSN_Code = clients.CLI_HSN_Code;
                 cv.ParametersClientsModel.clientsModel.CLI_TDS_Rate = clients.CLI_TDS_Rate;
-                cv.ParametersClientsModel.CLI_Att_Month_Start = clients.CLI_Att_Month_Start;
-                cv.ParametersClientsModel.CLI_Att_Month_End = clients.CLI_Att_Month_End;
-                cv.ParametersClientsModel.CLI_Att_MonthReal = clients.CLI_Att_MonthReal;
+
+                //cv.ParametersClientsModel.CLI_Att_Month_Start = clients.CLI_Att_Month_Start;
+                //cv.ParametersClientsModel.CLI_Att_Month_End = clients.CLI_Att_Month_End;
+                //cv.ParametersClientsModel.CLI_Att_MonthReal = clients.CLI_Att_MonthReal;
+
+                Attendance_Parameter parameter = clientsManager.GetLatestAttendanceParameter(id);
+                if (parameter != null)
+                {
+                    cv.attendanceParameter.ATP_Id = parameter.ATP_Id;
+                    cv.attendanceParameter.ATP_Att_MonthReal = parameter.ATP_Att_MonthReal;
+                    cv.attendanceParameter.CLI_Id = parameter.CLI_Id;
+                    cv.attendanceParameter.ATP_Att_Month_Start = parameter.ATP_Att_Month_Start;
+                    cv.attendanceParameter.ATP_Att_Month_End = parameter.ATP_Att_Month_End;
+                    cv.attendanceParameter.ATP_RegisteredOn = parameter.ATP_RegisteredOn;
+                }
+                cv.attendanceParameters = clientsManager.getAttendanceParameters(id);
 
                 cv.ParametersClientsModel.clientsModel.CLI_Invoicing_Name = clients.CLI_Invoicing_Name;
                 cv.ParametersClientsModel.clientsModel.STA_Id = clients.STA_Id;
@@ -249,7 +268,14 @@ namespace RMERP.Controllers
                     clients.CLI_Logo = cv.clientsModel.CliLogoImage;
                 }
                 var tuple = clientsManager.saveAddEditClients(clients);
-
+                if (clientsManager.GetLatestAttendanceParameter(tuple.Item2)==null)
+                {
+                    Attendance_Parameter attendance_Parameter = new Attendance_Parameter();
+                    attendance_Parameter.CLI_Id = tuple.Item2;
+                    attendance_Parameter.ATP_Att_MonthReal = true;
+                    attendance_Parameter.ATP_RegisteredOn = clients.CLI_RegisteredOn;
+                    clientsManager.AddAttendanceParameter(attendance_Parameter);
+                }
                 if (tuple.Item1 != "")
                 {
                     TempData["message"] = "Client data can not Inserted";
@@ -315,6 +341,29 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("AddEditClients", new { id = clientID });
         }
+
+        [HttpPost]
+        public ActionResult AttendanceParameters(ClientsViewModel cv)
+        {
+            try
+            {
+                ClientsManager clientsManager = new ClientsManager(_context);
+                Attendance_Parameter attendance = new Attendance_Parameter();
+                attendance.CLI_Id = cv.attendanceParameter.CLI_Id;
+                attendance.ATP_Att_Month_End = cv.attendanceParameter.ATP_Att_Month_End;
+                attendance.ATP_Att_Month_Start = cv.attendanceParameter.ATP_Att_Month_Start;
+                attendance.ATP_Att_MonthReal = cv.attendanceParameter.ATP_Att_MonthReal;
+                attendance.ATP_RegisteredOn = cv.attendanceParameter.ATP_RegisteredOn;
+                clientsManager.AddAttendanceParameter(attendance);
+            }
+            catch (Exception)
+            {
+                TempData["message"] = "Data can not Inserted";
+            }
+            
+            return RedirectToAction("AddEditClients", new { id = cv.attendanceParameter.CLI_Id });
+        }
+
         [HttpGet]
         public ActionResult AddEditContacts(int CLI_Id, int CON_Id = -1)
         {
@@ -679,17 +728,33 @@ namespace RMERP.Controllers
                 }                
                 clients.CLI_Place_Of_Supply = cvm.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply;
 
-                if (cvm.ParametersClientsModel.CLI_Att_MonthReal == true)
+                //if (cvm.ParametersClientsModel.CLI_Att_MonthReal == true)
+                //{
+                //    clients.CLI_Att_MonthReal = true;
+                //    clients.CLI_Att_Month_Start = null;
+                //    clients.CLI_Att_Month_End = null;
+                //}
+                //else
+                //{
+                //    clients.CLI_Att_MonthReal = false;
+                //    clients.CLI_Att_Month_Start = cvm.ParametersClientsModel.CLI_Att_Month_Start;
+                //    clients.CLI_Att_Month_End = cvm.ParametersClientsModel.CLI_Att_Month_End;
+                //}
+
+                Attendance_Parameter attendance = new Attendance_Parameter();
+                attendance.CLI_Id = cvm.clientsModel.CLI_Id;
+                attendance.ATP_RegisteredOn = cvm.attendanceParameter.ATP_RegisteredOn;
+                if (cvm.attendanceParameter.ATP_Att_MonthReal == true)
                 {
-                    clients.CLI_Att_MonthReal = true;
-                    clients.CLI_Att_Month_Start = null;
-                    clients.CLI_Att_Month_End = null;
+                    attendance.ATP_Att_MonthReal = true;
+                    attendance.ATP_Att_Month_Start = null;
+                    attendance.ATP_Att_Month_End = null;
                 }
                 else
                 {
-                    clients.CLI_Att_MonthReal = false;
-                    clients.CLI_Att_Month_Start = cvm.ParametersClientsModel.CLI_Att_Month_Start;
-                    clients.CLI_Att_Month_End = cvm.ParametersClientsModel.CLI_Att_Month_End;
+                    attendance.ATP_Att_MonthReal = false;
+                    attendance.ATP_Att_Month_Start = cvm.attendanceParameter.ATP_Att_Month_Start;
+                    attendance.ATP_Att_Month_End = cvm.attendanceParameter.ATP_Att_Month_End;
                 }
                 //clients.CLI_PF_Employer_Cont_Rate = cvm.clientsModel.CLI_PF_Employer_Cont_Rate;
                 //clients.CLI_ESIC_Employer_Cont_Rate = cvm.clientsModel.CLI_ESIC_Employer_Cont_Rate;
@@ -697,7 +762,8 @@ namespace RMERP.Controllers
                 //clients.CLI_EPS_Rate = cvm.clientsModel.CLI_EPS_Rate;
                 //clients.CLI_MLWF_Contribution = cvm.clientsModel.CLI_MLWF_Contribution;
                 string res = clientsManager.UpdateParameters(clients);
-                if (res != string.Empty)
+                string att=clientsManager.AddAttendanceParameter(attendance);
+                if (res != string.Empty || att!=string.Empty)
                 {
                     TempData["message"] = "data can not updated";
                 }
@@ -796,151 +862,151 @@ namespace RMERP.Controllers
         }
                
 
-        public FileResult BASIC_WithShifts()
-        {
-            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            Clients client = clientsManager.GetClientById(ClientId);
-            int totalEmployee = clientsManager.listClientsEmployees(ClientId).Count();
-            string sWebRootFolder = _hostingEnvironment.WebRootPath;
-            string fileName = DateTime.Now.ToString("ddMMyyyyHHmm") + "_ClientId_" + ClientId + ".xlsx";
-            string sFileName = fileName;
-            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
-            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
-            var memory = new MemoryStream();
-            using (var fs = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.Write))
-            {
-                IWorkbook workbook;
-                workbook = new XSSFWorkbook();
-                ISheet excelSheet = workbook.CreateSheet("BASIC_WithShifts");
+        //public FileResult BASIC_WithShifts()
+        //{
+        //    ClientsManager clientsManager = new ClientsManager(_context, Configuration);
+        //    Clients client = clientsManager.GetClientById(ClientId);
+        //    int totalEmployee = clientsManager.listClientsEmployees(ClientId).Count();
+        //    string sWebRootFolder = _hostingEnvironment.WebRootPath;
+        //    string fileName = DateTime.Now.ToString("ddMMyyyyHHmm") + "_ClientId_" + ClientId + ".xlsx";
+        //    string sFileName = fileName;
+        //    string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+        //    FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+        //    var memory = new MemoryStream();
+        //    using (var fs = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.Write))
+        //    {
+        //        IWorkbook workbook;
+        //        workbook = new XSSFWorkbook();
+        //        ISheet excelSheet = workbook.CreateSheet("BASIC_WithShifts");
 
-                IFont font = workbook.CreateFont();
-                font.IsBold = true;
-                font.FontHeightInPoints = ((short)16);
-                font.FontName = ("Trebuchet MS");
+        //        IFont font = workbook.CreateFont();
+        //        font.IsBold = true;
+        //        font.FontHeightInPoints = ((short)16);
+        //        font.FontName = ("Trebuchet MS");
 
-                ICellStyle styleHeader = workbook.CreateCellStyle();
-                styleHeader.FillBackgroundColor = HSSFColor.BlueGrey.Index;
-                styleHeader.SetFont(font);
-                ICellStyle style = workbook.CreateCellStyle();
-                style.BorderBottom = (BorderStyle.Thin);
-                style.BottomBorderColor = (IndexedColors.Black.Index);
-                style.BorderLeft = (BorderStyle.Thin);
-                style.LeftBorderColor = (IndexedColors.Black.Index);
-                style.BorderRight = (BorderStyle.Thin);
-                style.RightBorderColor = (IndexedColors.Black.Index);
-                style.BorderTop = (BorderStyle.Thin);
-                style.TopBorderColor = (IndexedColors.Black.Index);
+        //        ICellStyle styleHeader = workbook.CreateCellStyle();
+        //        styleHeader.FillBackgroundColor = HSSFColor.BlueGrey.Index;
+        //        styleHeader.SetFont(font);
+        //        ICellStyle style = workbook.CreateCellStyle();
+        //        style.BorderBottom = (BorderStyle.Thin);
+        //        style.BottomBorderColor = (IndexedColors.Black.Index);
+        //        style.BorderLeft = (BorderStyle.Thin);
+        //        style.LeftBorderColor = (IndexedColors.Black.Index);
+        //        style.BorderRight = (BorderStyle.Thin);
+        //        style.RightBorderColor = (IndexedColors.Black.Index);
+        //        style.BorderTop = (BorderStyle.Thin);
+        //        style.TopBorderColor = (IndexedColors.Black.Index);
 
-                IRow row = excelSheet.CreateRow(0);
-                row.Height = 500;
+        //        IRow row = excelSheet.CreateRow(0);
+        //        row.Height = 500;
 
-                DateTime startDate = DateTime.Now, endDate = DateTime.Now;
+        //        DateTime startDate = DateTime.Now, endDate = DateTime.Now;
 
-                if (client.CLI_Att_MonthReal == true)
-                {
-                    startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                    endDate = startDate.AddMonths(1).AddDays(-1);
-                }
-                else if (client.CLI_Att_MonthReal == false)
-                {
-                    startDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CLI_Att_Month_Start.Value);
-                    endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CLI_Att_Month_End.Value); ;
-                }
-                int TotalDays = Convert.ToInt32((endDate - startDate).TotalDays) + 6;
+        //        if (client.CLI_Att_MonthReal == true)
+        //        {
+        //            startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+        //            endDate = startDate.AddMonths(1).AddDays(-1);
+        //        }
+        //        else if (client.CLI_Att_MonthReal == false)
+        //        {
+        //            startDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CLI_Att_Month_Start.Value);
+        //            endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CLI_Att_Month_End.Value); ;
+        //        }
+        //        int TotalDays = Convert.ToInt32((endDate - startDate).TotalDays) + 6;
 
 
-                string fullMonthName = DateTime.Now.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
-                ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue(client.CLI_Name);
-                CellHeader.CellStyle = styleHeader;
-                CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 2));
+        //        string fullMonthName = DateTime.Now.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
+        //        ICell CellHeader = row.CreateCell(0);
+        //        CellHeader.SetCellValue(client.CLI_Name);
+        //        CellHeader.CellStyle = styleHeader;
+        //        CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 2));
 
-                ICell CellMonth = row.CreateCell(TotalDays - 1);
-                CellMonth.SetCellValue(fullMonthName + "," + DateTime.Now.ToString("yyyy"));
-                CellMonth.CellStyle = styleHeader;
-                CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 1, TotalDays));
+        //        ICell CellMonth = row.CreateCell(TotalDays - 1);
+        //        CellMonth.SetCellValue(fullMonthName + "," + DateTime.Now.ToString("yyyy"));
+        //        CellMonth.CellStyle = styleHeader;
+        //        CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
+        //        excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 1, TotalDays));
 
-                row = excelSheet.CreateRow(1);
+        //        row = excelSheet.CreateRow(1);
 
-                ICell cell0 = row.CreateCell(0);
-                cell0.SetCellValue("SR.NO");
-                cell0.CellStyle = style;
-                ICell cell1 = row.CreateCell(1);
-                cell1.SetCellValue("EMP_Id");
-                cell1.CellStyle = style;
-                ICell cell2 = row.CreateCell(2);
-                cell2.SetCellValue("Designation");
-                cell2.CellStyle = style;
-                ICell cell3 = row.CreateCell(3);
-                cell3.SetCellValue("NAME");
-                cell3.CellStyle = style;
-                int i = 4;
-                DateTime tmpDate = startDate;
-                while (endDate >= tmpDate)
-                {
-                    ICell c = row.CreateCell(i);
-                    c.SetCellValue(tmpDate.Day);
-                    c.CellStyle = style;
-                    excelSheet.AutoSizeColumn(i);
-                    tmpDate = tmpDate.AddDays(1);
-                    i++;
-                }
+        //        ICell cell0 = row.CreateCell(0);
+        //        cell0.SetCellValue("SR.NO");
+        //        cell0.CellStyle = style;
+        //        ICell cell1 = row.CreateCell(1);
+        //        cell1.SetCellValue("EMP_Id");
+        //        cell1.CellStyle = style;
+        //        ICell cell2 = row.CreateCell(2);
+        //        cell2.SetCellValue("Designation");
+        //        cell2.CellStyle = style;
+        //        ICell cell3 = row.CreateCell(3);
+        //        cell3.SetCellValue("NAME");
+        //        cell3.CellStyle = style;
+        //        int i = 4;
+        //        DateTime tmpDate = startDate;
+        //        while (endDate >= tmpDate)
+        //        {
+        //            ICell c = row.CreateCell(i);
+        //            c.SetCellValue(tmpDate.Day);
+        //            c.CellStyle = style;
+        //            excelSheet.AutoSizeColumn(i);
+        //            tmpDate = tmpDate.AddDays(1);
+        //            i++;
+        //        }
 
-                ICell cellx = row.CreateCell(i);
-                cellx.SetCellValue("TOTAL DAYS");
-                cellx.CellStyle = style;
-                excelSheet.AutoSizeColumn(i);
-                ICell celly = row.CreateCell(i + 1);
-                celly.SetCellValue("FULL OT(HRS.)");
-                celly.CellStyle = style;
-                excelSheet.AutoSizeColumn(i + 1);
+        //        ICell cellx = row.CreateCell(i);
+        //        cellx.SetCellValue("TOTAL DAYS");
+        //        cellx.CellStyle = style;
+        //        excelSheet.AutoSizeColumn(i);
+        //        ICell celly = row.CreateCell(i + 1);
+        //        celly.SetCellValue("FULL OT(HRS.)");
+        //        celly.CellStyle = style;
+        //        excelSheet.AutoSizeColumn(i + 1);
 
-                int rowCount = 2;
-                int j = 1;
-                foreach (var item in clientsManager.listClientsEmployees(ClientId))
-                {
-                    row = excelSheet.CreateRow(rowCount);
-                    row.CreateCell(0).SetCellValue(j);
-                    //row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
-                    row.CreateCell(1).SetCellValue(item.EMP_Id.ToString("D5"));
-                    row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
-                    // row.CreateCell(3).SetCellValue(item.EMP_.EMP_FullName);
-                    row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + " " + item.EMP_.EMP_MiddleName + " " + item.EMP_.EMP_SurName);
+        //        int rowCount = 2;
+        //        int j = 1;
+        //        foreach (var item in clientsManager.listClientsEmployees(ClientId))
+        //        {
+        //            row = excelSheet.CreateRow(rowCount);
+        //            row.CreateCell(0).SetCellValue(j);
+        //            //row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
+        //            row.CreateCell(1).SetCellValue(item.EMP_Id.ToString("D5"));
+        //            row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
+        //            // row.CreateCell(3).SetCellValue(item.EMP_.EMP_FullName);
+        //            row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + " " + item.EMP_.EMP_MiddleName + " " + item.EMP_.EMP_SurName);
 
-                    excelSheet.SetColumnWidth(2, 6000);
-                    excelSheet.SetColumnWidth(3, 6000);
+        //            excelSheet.SetColumnWidth(2, 6000);
+        //            excelSheet.SetColumnWidth(3, 6000);
 
-                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 0, 0));
-                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 1, 1));
-                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 2, 2));
-                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 3, 3));
+        //            excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 0, 0));
+        //            excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 1, 1));
+        //            excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 2, 2));
+        //            excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 3, 3));
 
-                    int k = 4;
-                    DateTime tmp1Date = startDate;
-                    while (endDate >= tmp1Date)
-                    {
-                        ICell c = row.CreateCell(k);
-                        tmp1Date = tmp1Date.AddDays(1);
-                        k++;
-                    }
-                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, k, k));
-                    excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, k + 1, k + 1));
-                    rowCount = rowCount + 2;
+        //            int k = 4;
+        //            DateTime tmp1Date = startDate;
+        //            while (endDate >= tmp1Date)
+        //            {
+        //                ICell c = row.CreateCell(k);
+        //                tmp1Date = tmp1Date.AddDays(1);
+        //                k++;
+        //            }
+        //            excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, k, k));
+        //            excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, k + 1, k + 1));
+        //            rowCount = rowCount + 2;
 
-                    j++;
-                }
+        //            j++;
+        //        }
 
-                workbook.Write(fs);
-            }
-            using (var stream = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Open))
-            {
-                stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
-            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sFileName);
-        }
+        //        workbook.Write(fs);
+        //    }
+        //    using (var stream = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Open))
+        //    {
+        //        stream.CopyToAsync(memory);
+        //    }
+        //    memory.Position = 0;
+        //    return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sFileName);
+        //}
 
         public async Task<FileResult> GenerateExcelTemplate_TwoRow(DateTime month)
         {
@@ -995,7 +1061,8 @@ namespace RMERP.Controllers
                 IRow row = excelSheet.CreateRow(0);
                 row.Height = 500;
 
-                DateTime[] period = DateHelper.getStartEndDatePeriodForAttendance(client, month);
+                Attendance_Parameter attendance_Parameter = clientsManager.GetAttendanceParameterByMonth(client.CLI_Id, month);
+                DateTime[] period = DateHelper.getStartEndDatePeriodForAttendance(client, attendance_Parameter, month);
                 int TotalDays = Convert.ToInt32((period[1] - period[0]).TotalDays) + 4;
 
 
@@ -1165,7 +1232,8 @@ namespace RMERP.Controllers
                 IRow row = excelSheet.CreateRow(0);
                 row.Height = 500;
 
-                DateTime[] period = DateHelper.getStartEndDatePeriodForAttendance(client, month);
+                Attendance_Parameter attendance_Parameter = clientsManager.GetAttendanceParameterByMonth(client.CLI_Id, month);
+                DateTime[] period = DateHelper.getStartEndDatePeriodForAttendance(client, attendance_Parameter, month);
                 int TotalDays = Convert.ToInt32((period[1] - period[0]).TotalDays) + 4;
 
 
@@ -1325,6 +1393,26 @@ namespace RMERP.Controllers
                 TempData["message"] = "Employee is not able to Unassigned! Try Again";
             }
             return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
+        }
+
+        public ActionResult EditAttRegDate(int ATP_Id)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context);            
+            return PartialView("_EditAttRegistrationDate", AttendanceParameterVM.mapMeModel(clientsManager.getAttendanceParameter(ATP_Id)));
+        }
+        [HttpPost]
+        public ActionResult EditAttRegDate(AttendanceParameterVM attendance_Parameter)
+        {
+            ClientsManager clientsManager = new ClientsManager(_context);
+            try
+            {
+                clientsManager.EditAttendanceParameter(AttendanceParameterVM.mapMe(attendance_Parameter));
+            }
+            catch (Exception)
+            {
+                TempData["message"] = "Try Again";
+            }
+            return RedirectToAction("AddEditClients", new { id = ClientId });
         }
     }
 }

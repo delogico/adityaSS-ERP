@@ -131,8 +131,7 @@
                 $("#EMP_City").html(item);
             });
         };
-        function DeleteAdvanceEmployee(ADV_Id, EMP_Id) {
-            debugger;
+        function DeleteAdvanceEmployee(ADV_Id, EMP_Id) {            
             $(".modal-backdrop").removeClass("modal-backdrop").addClass("modal");
             var Url = siteUrl + "Employees/DeleteAdvanceModel?ADV_Id=" + ADV_Id + "&EMP_Id=" + EMP_Id ;
             $.ajax({

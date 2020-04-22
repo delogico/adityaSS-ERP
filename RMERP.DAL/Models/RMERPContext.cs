@@ -18,6 +18,7 @@ namespace RMERP.DAL.Models
         public virtual DbSet<AdminUsers> AdminUsers { get; set; }
         public virtual DbSet<Allowances> Allowances { get; set; }
         public virtual DbSet<Attendance> Attendance { get; set; }
+        public virtual DbSet<Attendance_Parameter> Attendance_Parameter { get; set; }
         public virtual DbSet<Cities> Cities { get; set; }
         public virtual DbSet<Cities_all> Cities_all { get; set; }
         public virtual DbSet<Client_ActivationHistory> Client_ActivationHistory { get; set; }
@@ -162,6 +163,17 @@ namespace RMERP.DAL.Models
                     .HasForeignKey(d => d.WAG_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Attendance_Wage_Process");
+            });
+
+            modelBuilder.Entity<Attendance_Parameter>(entity =>
+            {
+                entity.HasKey(e => e.ATP_Id);
+
+                entity.Property(e => e.ATP_Att_MonthReal)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.ATP_RegisteredOn).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Cities>(entity =>
@@ -395,10 +407,6 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.CLI_Address)
                     .HasMaxLength(1000)
                     .IsUnicode(false);
-
-                entity.Property(e => e.CLI_Att_MonthReal)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.CLI_Email)
                     .HasMaxLength(250)
