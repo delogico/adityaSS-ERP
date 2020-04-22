@@ -24,7 +24,7 @@ namespace RMERP.DAL.ViewModel
     public class AttendanceParameterVM
     {
         public int ATP_Id { get; set; }
-        public bool? ATP_Att_MonthReal { get; set; }
+        public bool ATP_Att_MonthReal { get; set; }
         public int? ATP_Att_Month_Start { get; set; }
         public int? ATP_Att_Month_End { get; set; }
         public int? CLI_Id { get; set; }
@@ -46,7 +46,7 @@ namespace RMERP.DAL.ViewModel
         {
             AttendanceParameterVM attendance_Parameter = new AttendanceParameterVM();
             attendance_Parameter.ATP_Id = attendanceParameterVM.ATP_Id;
-            attendance_Parameter.ATP_Att_MonthReal = attendanceParameterVM.ATP_Att_MonthReal;
+            attendance_Parameter.ATP_Att_MonthReal = (attendanceParameterVM.ATP_Att_MonthReal==null?false:true);
             attendance_Parameter.ATP_Att_Month_Start = attendanceParameterVM.ATP_Att_Month_Start;
             attendance_Parameter.ATP_Att_Month_End = attendanceParameterVM.ATP_Att_Month_End;
             attendance_Parameter.CLI_Id = attendanceParameterVM.CLI_Id;

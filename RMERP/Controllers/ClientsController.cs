@@ -107,7 +107,8 @@ namespace RMERP.Controllers
 
             cv.attendanceParameter = new AttendanceParameterVM();
             cv.attendanceParameter.ATP_Att_MonthReal = true;
-            cv.attendanceParameter.ATP_RegisteredOn = ProjectUtils.DateNow();
+            cv.attendanceParameter.ATP_RegisteredOn = DateNow();
+            
             cv.attendanceParameters = null;
             if (id > 0)
             {
@@ -141,12 +142,12 @@ namespace RMERP.Controllers
                 //cv.ParametersClientsModel.CLI_Att_Month_End = clients.CLI_Att_Month_End;
                 //cv.ParametersClientsModel.CLI_Att_MonthReal = clients.CLI_Att_MonthReal;
 
+                cv.attendanceParameter.CLI_Id = id;
                 Attendance_Parameter parameter = clientsManager.GetLatestAttendanceParameter(id);
                 if (parameter != null)
                 {
                     cv.attendanceParameter.ATP_Id = parameter.ATP_Id;
-                    cv.attendanceParameter.ATP_Att_MonthReal = parameter.ATP_Att_MonthReal;
-                    cv.attendanceParameter.CLI_Id = parameter.CLI_Id;
+                    cv.attendanceParameter.ATP_Att_MonthReal = (parameter.ATP_Att_MonthReal==null?false:true);                    
                     cv.attendanceParameter.ATP_Att_Month_Start = parameter.ATP_Att_Month_Start;
                     cv.attendanceParameter.ATP_Att_Month_End = parameter.ATP_Att_Month_End;
                     cv.attendanceParameter.ATP_RegisteredOn = parameter.ATP_RegisteredOn;
@@ -350,9 +351,16 @@ namespace RMERP.Controllers
                 ClientsManager clientsManager = new ClientsManager(_context);
                 Attendance_Parameter attendance = new Attendance_Parameter();
                 attendance.CLI_Id = cv.attendanceParameter.CLI_Id;
+
+                attendance.ATP_Att_MonthReal = cv.attendanceParameter.ATP_Att_MonthReal;
                 attendance.ATP_Att_Month_End = cv.attendanceParameter.ATP_Att_Month_End;
                 attendance.ATP_Att_Month_Start = cv.attendanceParameter.ATP_Att_Month_Start;
-                attendance.ATP_Att_MonthReal = cv.attendanceParameter.ATP_Att_MonthReal;
+                if (cv.attendanceParameter.ATP_Att_MonthReal)
+                {
+                    attendance.ATP_Att_Month_End = null;
+                    attendance.ATP_Att_Month_Start = null;
+                }               
+                
                 attendance.ATP_RegisteredOn = cv.attendanceParameter.ATP_RegisteredOn;
                 clientsManager.AddAttendanceParameter(attendance);
             }
