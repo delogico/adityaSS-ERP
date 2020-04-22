@@ -25,7 +25,8 @@ namespace RMERP.DAL.Mappers
             emp.EMP_Gender = employee.EMP_Gender.ToString();
             emp.EMP_Contact_Primary = employee.EMP_Contact_Primary;
             emp.EMP_Contact_Secondry = employee.EMP_Contact_Secondry;
-            emp.EMP_Address = employee.EMP_Address;
+            emp.EMP_Temporary_Address = employee.EMP_Temporary_Address;
+            emp.EMP_Permanent_Address = employee.EMP_Permanent_Address;
             emp.EMP_Designation = employee.EMP_Designation;
             emp.EMP_Pan_Number = employee.EMP_Pan_Number;
             emp.EMP_ESIC_Number = employee.EMP_ESIC_Number;
@@ -101,7 +102,8 @@ namespace RMERP.DAL.Mappers
             emp.EMP_Gender = Convert.ToBoolean(employee.EMP_Gender);
             emp.EMP_Contact_Primary = employee.EMP_Contact_Primary;
             emp.EMP_Contact_Secondry = employee.EMP_Contact_Secondry;
-            emp.EMP_Address = employee.EMP_Address;
+            emp.EMP_Temporary_Address = employee.EMP_Temporary_Address;
+            emp.EMP_Permanent_Address = employee.EMP_Permanent_Address;
             emp.EMP_Designation = employee.EMP_Designation;
             emp.EMP_Pan_Number = employee.EMP_Pan_Number;
             emp.EMP_ESIC_Number = employee.EMP_ESIC_Number;
@@ -146,7 +148,8 @@ namespace RMERP.DAL.Mappers
             emp.EMP_Gender = employee.EMP_Gender;
             emp.EMP_Contact_Primary = employee.EMP_Contact_Primary;
             emp.EMP_Contact_Secondry = employee.EMP_Contact_Secondry;
-            emp.EMP_Address = employee.EMP_Address;
+            emp.EMP_Temporary_Address = employee.EMP_Temporary_Address;
+            emp.EMP_Permanent_Address = employee.EMP_Permanent_Address;
             emp.EMP_Designation = employee.EMP_Designation;
             emp.EMP_Pan_Number = employee.EMP_Pan_Number;
             emp.EMP_ESIC_Number = employee.EMP_ESIC_Number;

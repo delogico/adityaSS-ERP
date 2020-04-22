@@ -644,10 +644,6 @@ namespace RMERP.DAL.Models
                     .HasMaxLength(25)
                     .IsUnicode(false);
 
-                entity.Property(e => e.EMP_Address)
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.EMP_Bank)
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -706,6 +702,10 @@ namespace RMERP.DAL.Models
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
+                entity.Property(e => e.EMP_Permanent_Address)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.EMP_RegisteredOn)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
@@ -719,6 +719,10 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.EMP_TPC_EmployeeId)
                     .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EMP_Temporary_Address)
+                    .HasMaxLength(500)
                     .IsUnicode(false);
 
                 entity.Property(e => e.EMP_UAN_Number)

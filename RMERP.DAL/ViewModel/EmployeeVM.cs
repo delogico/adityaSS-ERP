@@ -56,8 +56,11 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Secondry contact number")]
         public string EMP_Contact_Secondry { get; set; }
 
-        [Display(Name = "Address")]
-        public string EMP_Address { get; set; }
+        [Display(Name = "Temporary Address")]
+        public string EMP_Temporary_Address { get; set; }
+
+        [Display(Name = "Permanent Address")]
+        public string EMP_Permanent_Address { get; set; }
 
         [Display(Name = "Designation")]
         public string EMP_Designation { get; set; }
