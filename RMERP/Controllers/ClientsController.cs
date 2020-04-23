@@ -147,7 +147,7 @@ namespace RMERP.Controllers
                 if (parameter != null)
                 {
                     cv.attendanceParameter.ATP_Id = parameter.ATP_Id;
-                    cv.attendanceParameter.ATP_Att_MonthReal = (parameter.ATP_Att_MonthReal==null?false:true);                    
+                    cv.attendanceParameter.ATP_Att_MonthReal = (parameter.ATP_Att_MonthReal!=null? parameter.ATP_Att_MonthReal.Value:false);        
                     cv.attendanceParameter.ATP_Att_Month_Start = parameter.ATP_Att_Month_Start;
                     cv.attendanceParameter.ATP_Att_Month_End = parameter.ATP_Att_Month_End;
                     cv.attendanceParameter.ATP_RegisteredOn = parameter.ATP_RegisteredOn;
