@@ -83,6 +83,20 @@ namespace RMERP.DAL.ManagerClasses
 
             return clients;
         }
+        public Clients GetClientByIdNoTracking(int CLI_Id)
+        {
+            Clients clients = new Clients();
+            try
+            {
+                clients = _contaxt.Clients.Where(m => m.CLI_Id.Equals(CLI_Id)).Include(m => m.FRM_).AsNoTracking().First();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return clients;
+        }
         public Client_Contacts GetClientContactsById(int CON_Id)
         {
             return _contaxt.Client_Contacts.Where(c => c.CON_Id.Equals(CON_Id)).Include(c => c.CLI_).FirstOrDefault();

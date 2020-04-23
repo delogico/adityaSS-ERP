@@ -268,6 +268,23 @@ namespace RMERP.Controllers
                 {
                     clients.CLI_Logo = cv.clientsModel.CliLogoImage;
                 }
+
+                #region Invoicing parameter
+                if (cv.clientsModel.CLI_Id > 0) { 
+                Clients newClient = clientsManager.GetClientByIdNoTracking(cv.clientsModel.CLI_Id);
+                clients.CLI_Invoicing_Name = newClient.CLI_Invoicing_Name;
+                clients.STA_Id = newClient.STA_Id;
+                clients.CLI_Invoicing_City = newClient.CLI_Invoicing_City;
+                clients.CLI_Invoicing_Address1 = newClient.CLI_Invoicing_Address1;
+                clients.CLI_Invoicing_Address2 = newClient.CLI_Invoicing_Address2;
+                clients.CLI_Invoicing_ZipCode = newClient.CLI_Invoicing_ZipCode;
+                clients.CLI_Invoicing_Location = newClient.CLI_Invoicing_Location;
+                clients.CLI_GST_Number = newClient.CLI_GST_Number;
+                clients.CLI_Place_Of_Supply = newClient.CLI_Place_Of_Supply;
+                clients.CLI_HSN_Code = newClient.CLI_HSN_Code;
+                clients.CLI_TDS_Rate = newClient.CLI_TDS_Rate;
+                }
+                #endregion
                 var tuple = clientsManager.saveAddEditClients(clients);
                 if (clientsManager.GetLatestAttendanceParameter(tuple.Item2)==null)
                 {
@@ -285,60 +302,62 @@ namespace RMERP.Controllers
                 {
                     clientID = tuple.Item2;
                     TempData["message"] = "Successfull Done!";
-                }
-                if (cv.clientsModel.CLI_Id <= 0)
-                {
-                    Client_ActivationHistory activationHistory = new Client_ActivationHistory();
-                    activationHistory.CAH_ActiveOn = DateNow();
-                    activationHistory.CLI_Id = clientID;
-                    clientsManager.AddEditActivationHistory(activationHistory);
-                }
-                else
-                {
-                    Client_ActivationHistory activationHistory = clientsManager.GetLatestActiveHistory(clientID);
-                    activationHistory.CAH_ActiveOn = cv.clientsModel.CLI_RegisteredOn;
-                    clientsManager.AddEditActivationHistory(activationHistory);
-                }
-                
-                #region Image adding
-                //  string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
-                string ImagePath = Configuration.GetSection("DEFAULT_FOLDER_PATH").Value + Configuration.GetSection("CLIENTS_LOGO_PATH").Value;
 
-                if (!Directory.Exists(ImagePath + "/" + clientID))
-                {
-                    Directory.CreateDirectory(ImagePath + "/" + clientID);
-                }
-                else
-                {
-                    string[] files = Directory.GetFiles(ImagePath + "/" + clientID);
-                    if (file != null)
+                    if (cv.clientsModel.CLI_Id <= 0)
                     {
-                        foreach (string s in files)
-                        {
-                            string fileName = Path.GetFileName(s);
-                            System.IO.File.Delete(ImagePath + "/" + clientID + "/" + fileName);
-                        }
+                        Client_ActivationHistory activationHistory = new Client_ActivationHistory();
+                        activationHistory.CAH_ActiveOn = DateNow();
+                        activationHistory.CLI_Id = clientID;
+                        clientsManager.AddEditActivationHistory(activationHistory);
                     }
-                }
-                if (file == null || file.Length <= 0)
-                {
-                }
-                else
-                {
-                    using (Image img = Image.FromStream(file.OpenReadStream()))
+                    else
                     {
-                        Stream ms = new MemoryStream(img.Resize(100, 100).ToByteArray());
-                        var path = Path.Combine(ImagePath + "\\" + clientID, file.FileName);
-                        using (var stream = new FileStream(path, FileMode.Create))
-                        {
-                            ms.CopyTo(stream);                          
-                            await file.CopyToAsync(stream);
-                            stream.Flush();
-                        }
+                        Client_ActivationHistory activationHistory = clientsManager.GetLatestActiveHistory(clientID);
+                        activationHistory.CAH_ActiveOn = cv.clientsModel.CLI_RegisteredOn;
+                        clientsManager.AddEditActivationHistory(activationHistory);
                     }
 
+                    #region Image adding
+                    //  string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+                    string ImagePath = Configuration.GetSection("DEFAULT_FOLDER_PATH").Value + Configuration.GetSection("CLIENTS_LOGO_PATH").Value;
+
+                    if (!Directory.Exists(ImagePath + "/" + clientID))
+                    {
+                        Directory.CreateDirectory(ImagePath + "/" + clientID);
+                    }
+                    else
+                    {
+                        string[] files = Directory.GetFiles(ImagePath + "/" + clientID);
+                        if (file != null)
+                        {
+                            foreach (string s in files)
+                            {
+                                string fileName = Path.GetFileName(s);
+                                System.IO.File.Delete(ImagePath + "/" + clientID + "/" + fileName);
+                            }
+                        }
+                    }
+                    if (file == null || file.Length <= 0)
+                    {
+                    }
+                    else
+                    {
+                        using (Image img = Image.FromStream(file.OpenReadStream()))
+                        {
+                            Stream ms = new MemoryStream(img.Resize(100, 100).ToByteArray());
+                            var path = Path.Combine(ImagePath + "\\" + clientID, file.FileName);
+                            using (var stream = new FileStream(path, FileMode.Create))
+                            {
+                                ms.CopyTo(stream);
+                                await file.CopyToAsync(stream);
+                                stream.Flush();
+                            }
+                        }
+
+                    }
+                    #endregion
                 }
-                #endregion            
+
             }
             return RedirectToAction("AddEditClients", new { id = clientID });
         }
@@ -369,7 +388,7 @@ namespace RMERP.Controllers
                 TempData["message"] = "Data can not Inserted";
             }
             
-            return RedirectToAction("AddEditClients", new { id = cv.attendanceParameter.CLI_Id });
+            return RedirectToAction("AddEditClients", new { id = cv.attendanceParameter.CLI_Id , tab = "Parameters" });
         }
 
         [HttpGet]
