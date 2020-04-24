@@ -236,7 +236,7 @@ namespace RMERP.Controllers
             }
             else 
             {
-                string FileName = "Invoice_" + invoices.INV_Number + "_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";
+                string FileName = "Invoice_" + invoices.INV_Id + "_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";
                 DateTime toDay = DateNow();
                 string PaySlipPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("RMERP_CLIENTS_INVOICE_PATH").Value;
                 var root = PaySlipPath + "\\" + toDay.Year + "\\" + toDay.Month;
