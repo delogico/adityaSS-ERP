@@ -849,8 +849,8 @@ namespace RMERP.DAL.ManagerClasses
         {
             List<Client_Requirements> cli_Req_List = new List<Client_Requirements>();
             DateTime LastDate = ProjectUtils.GetLastDateOfMonth(date);
-
-            var query = from n in _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.CRI_RegisteredOn.Date <= LastDate.Date)
+            DateTime FirstDate = GetFirstDateOfMonth(date);
+            var query = from n in _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.CRI_RegisteredOn.Date <= LastDate.Date && (r.CRI_InactivatedOn==null || r.CRI_InactivatedOn.Value.Date > FirstDate.Date))
                         group n by n.DES_Id into g
                         select g.OrderByDescending(t => t.CRI_RegisteredOn).ThenByDescending(m => m.CRI_Id).FirstOrDefault();
 
