@@ -482,7 +482,7 @@ namespace RMERP.DAL.ManagerClasses
                                                 .Where(m => m.CLI_Id.Equals(ClientId)
                                                 && m.CLE_RegisteredOn.Date <= lastDate.Date
                                                 && (m.CLE_UnassignedOn == null || m.CLE_UnassignedOn >= lastDate.Date)
-                                                && (m.EMP_.EMP_IsActive == true || (m.EMP_.EMP_IsActive == false && m.EMP_.EMP_InactivatedOn != null && (m.EMP_.EMP_InactivatedOn.Value.Date >= firstDate.Date))))
+                                                && (m.EMP_.EMP_IsActive == true || (m.EMP_.EMP_IsActive == false && m.EMP_.EMP_InactivatedOn != null && (m.EMP_.EMP_InactivatedOn.Value.Date >= firstDate.Date)) || (m.EMP_.EMP_RejoinOn.Value.Date <= firstDate.Date)))
                                                 .Include(m => m.EMP_).ThenInclude(m => m.Wage_Register_Advances).ThenInclude(m => m.WAG_)
                                                 .Include(m => m.DES_).ToList();
             return list;
