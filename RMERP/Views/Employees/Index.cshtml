@@ -10,6 +10,7 @@
     <li class="breadcrumb-item">Employees</li>
 }
 @section scripts{
+
     @if (TempData["message"] != null)
     {
         <script>
@@ -19,7 +20,6 @@
         </script>
     };
     <script>
-
         $.extend(jQuery.fn.dataTableExt.oSort, {
             "date-uk-pre": function (a) {
                 a=a.slice(0, 11);
@@ -28,8 +28,9 @@
                 var monthNo = months.indexOf(ukDatea[1].toLowerCase()) + 1;
                 return (ukDatea[2] + monthNo + ukDatea[0]);
             }
-    });
-    $(document).ready(function () {
+        });
+
+        $(document).ready(function () {
             $('.tblEmp').dataTable({
                 "paging": true,
                 columnDefs: [

@@ -70,7 +70,7 @@ namespace RMERP.DAL.ManagerClasses
             //InvoiceNumber = number.ToString("D6");
             
             int count = _context.Invoices.Count() + 1;
-            InvoiceNumber = "INV" + DateTime.Now.Year + "_" + count.ToString("D6");
+            InvoiceNumber = DateTime.Now.Year + "_" + count.ToString("D6");
             return InvoiceNumber;
         }
 

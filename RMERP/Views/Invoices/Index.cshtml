@@ -30,7 +30,32 @@
                     $("#loading-image").hide();
                 }
             })
-        }
+        };
+        $.extend(jQuery.fn.dataTableExt.oSort, {
+            "num-html-pre": function (a) {
+                var x = String(a).replace(/(?!^-)[^0-9.]/g, "");
+                var c = x.substr(x.length - 8);
+                return c;
+            }
+        });
+
+        $(document).ready(function () {
+            $('.invoiceTable').dataTable({
+                "paging": true,
+                columnDefs: [
+                    { orderable: true, targets: [1] },
+                    {
+                        targets: [2],
+                        orderable: true,
+                        type: 'num-html'
+                    },
+                ],
+
+            });
+
+        });
+   
+
     </script>
 }
 <div class="row">
