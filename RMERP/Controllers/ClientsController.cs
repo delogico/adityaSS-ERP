@@ -371,6 +371,12 @@ namespace RMERP.Controllers
                 Attendance_Parameter attendance = new Attendance_Parameter();
                 attendance.CLI_Id = cv.attendanceParameter.CLI_Id;
 
+                Attendance_Parameter atp = clientsManager.GetAttendanceParameterByDate(cv.attendanceParameter.CLI_Id.Value, cv.attendanceParameter.ATP_RegisteredOn);
+
+                if (atp != null)
+                {
+                    attendance.ATP_Id = atp.ATP_Id;
+                }
                 attendance.ATP_Att_MonthReal = cv.attendanceParameter.ATP_Att_MonthReal;
                 attendance.ATP_Att_Month_End = cv.attendanceParameter.ATP_Att_Month_End;
                 attendance.ATP_Att_Month_Start = cv.attendanceParameter.ATP_Att_Month_Start;

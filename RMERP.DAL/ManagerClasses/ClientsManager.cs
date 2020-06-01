@@ -929,7 +929,15 @@ namespace RMERP.DAL.ManagerClasses
             string str = string.Empty;
             try
             {
-                _contaxt.Attendance_Parameter.Add(attendanceParameter);
+                if (attendanceParameter.ATP_Id>0)
+                {
+                    _contaxt.Attendance_Parameter.Update(attendanceParameter);
+                }
+                else
+                {
+                    _contaxt.Attendance_Parameter.Add(attendanceParameter);
+                }
+               
                 _contaxt.SaveChanges();
             }
             catch (Exception ex)
@@ -943,6 +951,10 @@ namespace RMERP.DAL.ManagerClasses
             _contaxt.Attendance_Parameter.Update(attendanceParameter);
             _contaxt.SaveChanges();
 
+        }
+        public Attendance_Parameter GetAttendanceParameterByDate(int CLI_Id, DateTime AttDate)
+        {
+            return _contaxt.Attendance_Parameter.AsNoTracking().Where(m => m.CLI_Id.Equals(CLI_Id) && m.ATP_RegisteredOn.Date.Equals(AttDate.Date)).FirstOrDefault();
         }
 
     }
