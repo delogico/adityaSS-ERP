@@ -553,7 +553,7 @@ namespace RMERP.DAL.ManagerClasses
         {
             List<NEFT_BankReportVM> reports = new List<NEFT_BankReportVM>();
             WageRegisterManager registerManager = new WageRegisterManager(_context);
-            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersByWAG_Id(WAG_Id);
+            List<Wage_Register> wage_Registers = registerManager.GetWageRegistersForBankByWAG_Id(WAG_Id);
             dynamic BankClientList = null;
             if (IsSelected == true)
             {
@@ -580,7 +580,7 @@ namespace RMERP.DAL.ManagerClasses
                 NEFT_BankReportVM bankReportVM = new NEFT_BankReportVM();
                 bankReportVM.CLI_Id = cli.CLI_Id;
                 bankReportVM.CLI_Name = cli.CLI_Name;
-                List<Wage_Register> register = registerManager.GetWageRegisters(WAG_Id, cli.CLI_Id);
+                List<Wage_Register> register = registerManager.GetWageRegistersForBank(WAG_Id, cli.CLI_Id);
                 List<NEFTBank_EMP_ReportVM> rptEmployees = new List<NEFTBank_EMP_ReportVM>();
                 foreach (var wage in register)
                 {
