@@ -244,7 +244,7 @@ namespace RMERP.DAL.ManagerClasses
                     wageRegisterVM.WAR_HRA = CRI_HRA;
                     wageRegisterVM.WAR_LastModifiedOn = ProjectUtils.DateNow();
 
-                    if (totalWorkingDays != 0)
+                    if (totalWorkingDays >0)
                     {
                         double OvertimeInDay = WAR_ExtraWorkingHours / Convert.ToDouble(cli.CLI_WorkingHours_In_Day);
 
@@ -447,32 +447,35 @@ namespace RMERP.DAL.ManagerClasses
                             WAR_ProffesionalTax_Calculated=clientsManager.GetProffessionalTax(employee.EMP_.EMP_Gender, WAR_GrossTotal, cr);
                         }
                     }
-                    
+
                     #endregion
 
                     #region LWF Calculation   
-                    if (wageProcess.WAG_Month.Month == (int)Month.June || wageProcess.WAG_Month.Month == (int)Month.December)
+                    if (totalPaybleDays > 0)
                     {
-                        if (!employee.DES_.DES_Exclude_LWF)
+                        if (wageProcess.WAG_Month.Month == (int)Month.June || wageProcess.WAG_Month.Month == (int)Month.December)
                         {
-                            if (WAR_GrossTotal < cr.CRI_MLWF_Employer_Base)
+                            if (!employee.DES_.DES_Exclude_LWF)
                             {
-                                WAR_LWF_Deduction_Employer  = (cr.CRI_MLWF_Employer_LThen!=null? cr.CRI_MLWF_Employer_LThen.Value:0); //Rs.6
-                            }
-                            else if (WAR_GrossTotal >= cr.CRI_MLWF_Employer_Base)
-                            {
-                                WAR_LWF_Deduction_Employer = (cr.CRI_MLWF_Employer_GThen != null ? cr.CRI_MLWF_Employer_GThen.Value : 0); ;  //Rs.12
-                            }
+                                if (WAR_GrossTotal < cr.CRI_MLWF_Employer_Base)
+                                {
+                                    WAR_LWF_Deduction_Employer = (cr.CRI_MLWF_Employer_LThen != null ? cr.CRI_MLWF_Employer_LThen.Value : 0); //Rs.6
+                                }
+                                else if (WAR_GrossTotal >= cr.CRI_MLWF_Employer_Base)
+                                {
+                                    WAR_LWF_Deduction_Employer = (cr.CRI_MLWF_Employer_GThen != null ? cr.CRI_MLWF_Employer_GThen.Value : 0); ;  //Rs.12
+                                }
 
-                            if (WAR_GrossTotal < cr.CRI_MLWF_Employee_Base)
-                            {
-                                WAR_LWF_Deduction_Employee = (cr.CRI_MLWF_Employee_LThen != null ? cr.CRI_MLWF_Employee_LThen.Value : 0); ; //Rs.6
+                                if (WAR_GrossTotal < cr.CRI_MLWF_Employee_Base)
+                                {
+                                    WAR_LWF_Deduction_Employee = (cr.CRI_MLWF_Employee_LThen != null ? cr.CRI_MLWF_Employee_LThen.Value : 0); ; //Rs.6
+                                }
+                                else if (WAR_GrossTotal >= cr.CRI_MLWF_Employee_Base)
+                                {
+                                    WAR_LWF_Deduction_Employee = (cr.CRI_MLWF_Employee_GThen != null ? cr.CRI_MLWF_Employee_GThen.Value : 0); ;  //Rs.12
+                                }
                             }
-                            else if (WAR_GrossTotal >= cr.CRI_MLWF_Employee_Base)
-                            {
-                                WAR_LWF_Deduction_Employee = (cr.CRI_MLWF_Employee_GThen != null ? cr.CRI_MLWF_Employee_GThen.Value : 0); ;  //Rs.12
-                            }
-                        }
+                        }                       
                     }
                     wageRegisterVM.WAR_LWF_Deduction_Employee = WAR_LWF_Deduction_Employee;
                     wageRegisterVM.WAR_LWF_Deduction_Employer = WAR_LWF_Deduction_Employer;
@@ -482,7 +485,8 @@ namespace RMERP.DAL.ManagerClasses
                     {
                         if (cr.CRI_RevenueDeduction == true)
                         {
-                            WAR_RevenueDeduction_Calculated = 1;
+                            if(totalPaybleDays>0)
+                                WAR_RevenueDeduction_Calculated = 1;
                         }
                         if (cr.CRI_CanteenFacility == true)
                         {
