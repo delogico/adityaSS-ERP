@@ -61,14 +61,6 @@ namespace RMERP.DAL.ManagerClasses
         public string GetNextInvoiceNumber()
         {
             string InvoiceNumber = string.Empty;
-            //int number = 1;
-            //Invoices invoice = _context.Invoices.OrderByDescending(m => m.INV_Id).FirstOrDefault();
-            //if (invoice != null)
-            //{
-            //    number = Convert.ToInt32(invoice.INV_Number) + 1;
-            //}
-            //InvoiceNumber = number.ToString("D6");
-            
             int count = _context.Invoices.Count() + 1;
             InvoiceNumber = DateTime.Now.Year + "_" + count.ToString("D6");
             return InvoiceNumber;
@@ -216,6 +208,21 @@ namespace RMERP.DAL.ManagerClasses
                 double TotalPaybleDays = list.Select(m => m.WAR_TotalPaybleDays).Sum();
                 decimal MLWF = (list[0].WAR_LWF_Deduction_Employer != null ? list[0].WAR_LWF_Deduction_Employer.Value : 0);
                 int Nos = list.Where(m => m.CRI_.DES_.DES_Exclude_LWF == false).Select(m => m.EMP_Id).Count();
+
+                decimal Total_MLWF = list.Select(m => (m.WAR_LWF_Deduction_Employer!=null? m.WAR_LWF_Deduction_Employer.Value:0)).Sum();
+
+                var LWF_Deductions = list.Select(m => m.WAR_LWF_Deduction_Employer).Distinct();
+                StringBuilder str_MLWF = new StringBuilder();
+                decimal tot_MLWF = 0;
+                foreach (decimal WAR_LWF_Deduction_Employer in LWF_Deductions)
+                {
+                    int emps = list.Where(m => m.WAR_LWF_Deduction_Employer.Equals(WAR_LWF_Deduction_Employer) && m.CRI_.DES_.DES_Exclude_LWF == false).Count();
+                  
+                    decimal TotMLWF = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure((WAR_LWF_Deduction_Employer * emps))));
+                    str_MLWF.Append("<br/>[Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(WAR_LWF_Deduction_Employer) + " x " + emps + " Nos = " + TotMLWF + "/-] "));
+                    tot_MLWF = tot_MLWF + TotMLWF;
+                }
+
                 Wage_Process wage = list[0].WAG_;
                 string DatePeriod = "";
                 decimal Total = 0;
@@ -262,13 +269,12 @@ namespace RMERP.DAL.ManagerClasses
                     sb.Append("<br/>("+ count + ") Service Charges @ " + CRI_Billing_ServiceCharge + "%= " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(ServiceCharge)) + "/-");
                     if (wage.WAG_Month.Month == (int)ProjectUtils.Month.June || wage.WAG_Month.Month == (int)ProjectUtils.Month.December)
                     {
-                        if (MLWF != 0)
+                        if (tot_MLWF>0)
                         {
                             count++;
-                            decimal TotMLWF = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure((MLWF * Nos))));
-                            sb.Append("</br>(" + count+") MLWF Contribution </br>");
-                            sb.Append("[Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(MLWF) + " x " + Nos + " Nos = " + TotMLWF + "/-]"));
-                            Total = Total + TotMLWF;
+                            sb.Append("(" + count+") MLWF Contribution : Rs."+ String.Format("{0:0.##}", ProjectUtils.RoundFigure(tot_MLWF)));
+                            sb.Append(str_MLWF);
+                            Total = Total + tot_MLWF;
                         }
                     }
                 }
@@ -283,12 +289,18 @@ namespace RMERP.DAL.ManagerClasses
 
                     if (wage.WAG_Month.Month == (int)ProjectUtils.Month.June || wage.WAG_Month.Month == (int)ProjectUtils.Month.December)
                     {
-                        if (MLWF != 0)
-                        {
-                            decimal TotMLWF = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(MLWF * Nos)));
-                            sb.Append("(C) MLWF Contribution </br>");
-                            sb.Append("[Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(MLWF)) + " x " + Nos + " Nos = " + TotMLWF + "/-]");
-                            Total = Total + TotMLWF;
+                        //if (MLWF != 0)
+                        //{
+                        //    decimal TotMLWF = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(MLWF * Nos)));
+                        //    sb.Append("(C) MLWF Contribution </br>");
+                        //    sb.Append("[Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(MLWF)) + " x " + Nos + " Nos = " + TotMLWF + "/-]");
+                        //    Total = Total + TotMLWF;
+                        //}     
+                        if (tot_MLWF > 0)
+                        {    
+                            sb.Append("(C) MLWF Contribution : Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(tot_MLWF)));
+                            sb.Append(str_MLWF);
+                            Total = Total + tot_MLWF;
                         }
                     }
                 }
