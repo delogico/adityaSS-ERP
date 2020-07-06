@@ -306,7 +306,8 @@ namespace RMERP.Controllers
                     if (cv.clientsModel.CLI_Id <= 0)
                     {
                         Client_ActivationHistory activationHistory = new Client_ActivationHistory();
-                        activationHistory.CAH_ActiveOn = DateNow();
+                        //activationHistory.CAH_ActiveOn = DateNow();
+                        activationHistory.CAH_ActiveOn = cv.clientsModel.CLI_RegisteredOn;
                         activationHistory.CLI_Id = clientID;
                         clientsManager.AddEditActivationHistory(activationHistory);
                     }
