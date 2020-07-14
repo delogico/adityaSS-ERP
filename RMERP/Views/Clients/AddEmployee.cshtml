@@ -51,6 +51,8 @@
                 @using (Html.BeginForm("ClientEmployee", "Clients", FormMethod.Post, new { @id = "frm" }))
                 {
                     @Html.HiddenFor(m => m.CLE_Id)
+                    @Html.HiddenFor(m => m.EMP_Id)
+                    @Html.HiddenFor(m => m.DES_Id)
                     @Html.HiddenFor(m => m.CLI_Id)
                     @Html.HiddenFor(m => m.Old_DES_Id)
                     @Html.HiddenFor(m => m.CLE_UnassignedOn)
