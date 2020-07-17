@@ -2630,7 +2630,7 @@ namespace RMERP.Controllers
                 List<ESICReportVM> ESICReportVMS = manager.Client_Wise_ESIC(WAG_Id, selectionVMs.Where(m => m.IsSelect.Equals(true)).ToList(), IsSelected);
                 int rowCount = 4, SrNo = 0, NO_OF_EMPLOYEE = 0;
                 decimal TOTAL_WAGES = 0M, EMPLOYEES_CONTRIBUTION = 0M, EMPLOYERS_CONTRIBUTION = 0M, TOTAL_CONTRIBUTION = 0M;
-                foreach (var item in ESICReportVMS)
+                foreach (var item in ESICReportVMS.Where(m=>m.TOTAL_WAGES>0))
                 {
                     SrNo++;
                     row = excelSheet.CreateRow(rowCount);
