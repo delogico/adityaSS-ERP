@@ -847,15 +847,21 @@ namespace RMERP.Controllers
             if (ModelState.IsValid)
             {
                 Clients_Employees clientsEmployees = new Clients_Employees();
-                clientsEmployees.CLE_Id = cvm.CLE_Id;
-                clientsEmployees.CLI_Id = cvm.CLI_Id;
-                clientsEmployees.EMP_Id = cvm.EMP_Id;
-                clientsEmployees.DES_Id = cvm.DES_Id;
-                clientsEmployees.CLE_RegisteredOn = cvm.CLE_RegisteredOn;
-                clientsEmployees.CLE_UnassignedOn = cvm.CLE_UnassignedOn;
-                clientsEmployees.ADM_Id_UnassignedBy = cvm.ADM_Id_UnassignedBy;
-                clientsEmployees.CLE_ReassignedOn = cvm.CLE_ReassignedOn;
-                SessionUtils sessionUtils = new SessionUtils(Request, Response);               
+                SessionUtils sessionUtils = new SessionUtils(Request, Response);
+
+                if (cvm.CLE_Id > 0)
+                {
+                    clientsEmployees = clientsManager.ClientEmployeeById(cvm.CLE_Id);
+                    clientsEmployees.CLE_RegisteredOn = cvm.CLE_RegisteredOn;
+                }
+                else
+                {                    
+                    clientsEmployees.CLI_Id = cvm.CLI_Id;
+                    clientsEmployees.EMP_Id = cvm.EMP_Id;
+                    clientsEmployees.DES_Id = cvm.DES_Id;
+                    clientsEmployees.CLE_RegisteredOn = DateNow();
+                    clientsEmployees.ADM_Id_RegisteredBy= sessionUtils.GetLoggedAdminID();
+                }        
                 res = clientsManager.ClientEmployee(clientsEmployees, cvm.Old_DES_Id, sessionUtils.GetLoggedAdminID());
                 if (res != string.Empty)
                 {
