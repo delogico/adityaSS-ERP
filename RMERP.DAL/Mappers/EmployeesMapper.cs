@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using RMERP.DAL.ManagerClasses;
 using RMERP.DAL.Models;
 using RMERP.DAL.ViewModel;
@@ -10,14 +9,14 @@ namespace RMERP.DAL.Mappers
 {
     public class EmployeesMapper
     {
-        public static EmployeeVM MapMe(Employees employee, RMERPContext _context = null)
+        public static EmployeeVM MapMe(Employees employee, RMERPContext _context=null)
         {
 
             EmployeeVM emp = new EmployeeVM();
             emp.EMP_Id = employee.EMP_Id;
             emp.EMP_FirstName = employee.EMP_FirstName.Trim();
-            emp.EMP_MiddleName = (employee.EMP_MiddleName != null ? employee.EMP_MiddleName.Trim() : employee.EMP_MiddleName);
-            emp.EMP_SurName = (employee.EMP_SurName != null ? employee.EMP_SurName.Trim() : employee.EMP_SurName);
+            emp.EMP_MiddleName = (employee.EMP_MiddleName!=null? employee.EMP_MiddleName.Trim(): employee.EMP_MiddleName);
+            emp.EMP_SurName = (employee.EMP_SurName!=null? employee.EMP_SurName.Trim(): employee.EMP_SurName);
             emp.EMP_Aadhar_Name = employee.EMP_Aadhar_Name;
             emp.EMP_Aadhar_Number = employee.EMP_Aadhar_Number;
             emp.EMP_DOB = employee.EMP_DOB;
@@ -57,9 +56,9 @@ namespace RMERP.DAL.Mappers
             if (employee.FRM_ != null)
                 emp.FRM_ = employee.FRM_;
 
-            emp.FRM_Id = employee.FRM_Id;
+            emp.FRM_Id = employee.FRM_Id;            
             if (_context != null)
-            {
+            {                
                 EmployeeManager employeeManager = new EmployeeManager(_context);
                 emp.IsAssigned = employeeManager.IsAssignedEmployee(emp.EMP_Id);
             }
@@ -68,9 +67,9 @@ namespace RMERP.DAL.Mappers
 
             emp.EMP_UAN_Remark = employee.EMP_UAN_Remark;
             emp.EMP_ESIC_Remark = employee.EMP_ESIC_Remark;
-            if (employee.EMP_ReasonCode != null)
+            if(employee.EMP_ReasonCode!=null)
                 emp.EMP_ReasonCode = employee.EMP_ReasonCode.Value;
-            if (employee.EMP_State != null)
+            if(employee.EMP_State!=null)
                 emp.EMP_State = employee.EMP_State.Value;
             if (employee.EMP_City != null)
                 emp.EMP_City = employee.EMP_City.Value;
@@ -79,7 +78,7 @@ namespace RMERP.DAL.Mappers
             return emp;
         }
 
-        public static List<EmployeeVM> MapEmployees(List<Employees> employees, RMERPContext _context = null)
+        public static List<EmployeeVM> MapEmployees(List<Employees> employees,RMERPContext _context=null)
         {
             List<EmployeeVM> lst = new List<EmployeeVM>();
             foreach (Employees employee in employees)
@@ -97,7 +96,7 @@ namespace RMERP.DAL.Mappers
             emp.EMP_Aadhar_Name = employee.EMP_Aadhar_Name;
             emp.EMP_Aadhar_Number = employee.EMP_Aadhar_Number;
             emp.EMP_DOB = employee.EMP_DOB;
-            if (!string.IsNullOrEmpty(employee.EMP_Married))
+            if(!string.IsNullOrEmpty(employee.EMP_Married))
                 emp.EMP_Married = Convert.ToByte(employee.EMP_Married);
             emp.EMP_DateOfJoining = employee.EMP_DateOfJoining;
             emp.EMP_Gender = Convert.ToBoolean(employee.EMP_Gender);
@@ -122,7 +121,7 @@ namespace RMERP.DAL.Mappers
             emp.EMP_InactivatedOn = employee.EMP_InactivatedOn;
             emp.ADM_Id_InactivatedBy = employee.ADM_Id_InactivatedBy;
             emp.FRM_Id = employee.FRM_Id;
-            if (employee.FRM_ != null)
+            if (employee.FRM_!=null)
                 emp.FRM_ = employee.FRM_;
             emp.EMP_Payment_Type = employee.EMP_Payment_Type;
             emp.EMP_Is_IDBI_Other = employee.EMP_Is_IDBI_Other;
@@ -136,16 +135,16 @@ namespace RMERP.DAL.Mappers
         }
 
 
-        public static Employees MapMeObject(Employees employee, int ADM_Id)
+        public static Employees MapMeObject(Employees employee,int ADM_Id)
         {
-            Employees emp = new Employees();
+            Employees emp = new Employees();            
             emp.EMP_FirstName = employee.EMP_FirstName.Trim();
             emp.EMP_MiddleName = employee.EMP_MiddleName;
             emp.EMP_SurName = employee.EMP_SurName;
             emp.EMP_Aadhar_Name = employee.EMP_Aadhar_Name;
             emp.EMP_Aadhar_Number = employee.EMP_Aadhar_Number;
             emp.EMP_DOB = employee.EMP_DOB;
-            emp.EMP_Married = employee.EMP_Married;
+            emp.EMP_Married = employee.EMP_Married;            
             emp.EMP_Gender = employee.EMP_Gender;
             emp.EMP_Contact_Primary = employee.EMP_Contact_Primary;
             emp.EMP_Contact_Secondry = employee.EMP_Contact_Secondry;
@@ -161,13 +160,13 @@ namespace RMERP.DAL.Mappers
             emp.EMP_Account_Number = employee.EMP_Account_Number;
             emp.EMP_Bank = employee.EMP_Bank;
             emp.EMP_Branch = employee.EMP_Branch;
-            emp.EMP_Bank_IFSC = employee.EMP_Bank_IFSC;
-
-            emp.FRM_Id = employee.FRM_Id;
+            emp.EMP_Bank_IFSC = employee.EMP_Bank_IFSC;            
+                        
+            emp.FRM_Id = employee.FRM_Id;           
             emp.EMP_Payment_Type = employee.EMP_Payment_Type;
             emp.EMP_Is_IDBI_Other = employee.EMP_Is_IDBI_Other;
             emp.EMP_UAN_Remark = employee.EMP_UAN_Remark;
-            emp.EMP_ESIC_Remark = employee.EMP_ESIC_Remark;
+            emp.EMP_ESIC_Remark = employee.EMP_ESIC_Remark;            
             emp.EMP_State = employee.EMP_State;
             emp.EMP_City = employee.EMP_City;
 
@@ -182,64 +181,5 @@ namespace RMERP.DAL.Mappers
             emp.EMP_ReasonCode = null;
             return emp;
         }
-    }
-
-    public class EmployeeListVM
-    {
-        public string FRM_ShortName { get; set; }
-        public int EMP_Id { get; set; }
-        public string EMP_FullName { get; set; }
-        public DateTime EMP_DOB { get; set; }
-        public string EMP_Designation { get; set; }
-        public DateTime EMP_DateOfJoining { get; set; }
-        public string EMP_MoF { get; set; }
-        public string EMP_Contact_Primary { get; set; }
-        public bool EMP_IsActive { get; set; }
-        public DateTime? EMP_RejoinOn { get; set; }
-        public string btnEvents { get; set; }
-
-
-        public static EmployeeListVM mapMe(Employees employee)
-        {
-
-            EmployeeListVM emp = new EmployeeListVM();
-            emp.FRM_ShortName = employee.FRM_.FRM_ShortName;
-            emp.EMP_Id = employee.EMP_Id;
-            emp.EMP_FullName = employee.EMP_FirstName + " " + employee.EMP_MiddleName + " " + employee.EMP_SurName;
-            emp.EMP_DOB = employee.EMP_DOB;
-            emp.EMP_Designation = employee.EMP_Designation;
-            emp.EMP_DateOfJoining = employee.EMP_DateOfJoining;
-            emp.EMP_MoF = Convert.ToBoolean(employee.EMP_Gender) == true ? "M" : "F";
-            emp.EMP_Contact_Primary = employee.EMP_Contact_Primary;
-            emp.EMP_IsActive = (employee.EMP_IsActive != null ? employee.EMP_IsActive.Value : false);
-            emp.EMP_RejoinOn = employee.EMP_RejoinOn;            
-            StringBuilder strB = new StringBuilder();
-            strB.Append(" <div class='dropdown'>" +
-                                " <a href='#' class='action-icon dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa fa-ellipsis-v'></i></a> " +
-                                " <ul class='dropdown-menu pull-right'> " +
-                                " <li><a style='cursor: pointer;' onclick='EditEmployee(" + employee.EMP_Id + ")' title='Edit'><i class='fa fa-pencil m-r-5'></i> Edit</a></li> ");
-            if (employee.EMP_IsActive!=null? employee.EMP_IsActive.Value:false)
-            {
-                strB.Append(" <li><a style='cursor: pointer;' class='empRejoinModal' style='cursor:pointer' title='Employee Rejoin' data-id='" + employee.EMP_Id + "' data-toggle='modal' data-target='#empRejoinModal'><i class='fa fa-plus-square-o m-r-5'></i>Employee Rejoin</a></li>");                               
-            }
-            else
-            {
-                strB.Append(" <li><a style='cursor: pointer;' class='empModal' style='cursor:pointer' title='Employee Left' data-id='" + employee.EMP_Id + "' data-toggle='modal' data-target='#empModal'><i class='fa fa-trash-o m-r-5'></i>Employee Left</a></li>");
-            }
-            strB.Append(" <li><a style='cursor: pointer;' onclick='AddEditEmployee(" + employee.EMP_Id+",0" + ")' title='Edit'><i class='fa fa-eye m-r-5'></i> View</a></li>" +
-                               "</ul> </div>");
-            emp.btnEvents = strB.ToString();
-            return emp;
-        }
-
-        public static List<EmployeeListVM> mapsMe(List<Employees> employees)
-{
-    List<EmployeeListVM> employeeListVMs = new List<EmployeeListVM>();
-    foreach (Employees employee in employees)
-    {
-        employeeListVMs.Add(mapMe(employee));
-    }
-    return employeeListVMs;
-}
     }
 }

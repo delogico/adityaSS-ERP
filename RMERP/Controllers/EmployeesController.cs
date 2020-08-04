@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,13 +10,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using RMERP.Helpers;
 using RMERP.DAL.Mappers;
 using static RMERP.DAL.Helpers.ProjectUtils;
+using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using RMERP.DAL.Helpers;
 using System.IO;
-using System.Text;
-using Newtonsoft.Json;
+using System.Net;
 
 namespace RMERP.Controllers
 {
@@ -60,89 +60,6 @@ namespace RMERP.Controllers
 
 
         }
-
-        public string GetEmployees(JqueryDatatableParam param)
-        {
-            string test = string.Empty;
-            int FRM_Id = 0;
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            if (sessionUtils.GetLoggedFirmID().HasValue)
-            {
-                FRM_Id = sessionUtils.GetLoggedFirmID().Value;
-            }
-            EmployeeManager employeeManager = new EmployeeManager(_context);
-            IEnumerable<EmployeeListVM> emps = EmployeeListVM.mapsMe(employeeManager.GetEmployees(FRM_Id).ToList());
-
-
-            var sortColumnIndex = param.iSortCol_0;
-            var sortDirection = param.sSortDir_0;
-
-            if (sortColumnIndex == 0)
-            {
-                emps = sortDirection == "asc" ? emps.OrderBy(c => c.FRM_ShortName) : emps.OrderByDescending(c => c.FRM_ShortName);
-            }
-            else if (sortColumnIndex == 1)
-            {
-                emps = sortDirection == "asc" ? emps.OrderBy(c => c.EMP_Id) : emps.OrderByDescending(c => c.EMP_Id);
-            }
-            else if (sortColumnIndex == 2)
-            {
-                emps = sortDirection == "asc" ? emps.OrderBy(c => c.EMP_FullName) : emps.OrderByDescending(c => c.EMP_FullName);
-            }
-            else if (sortColumnIndex == 3)
-            {
-                emps = sortDirection == "asc" ? emps.OrderBy(c => c.EMP_DOB) : emps.OrderByDescending(c => c.EMP_DOB);
-            }
-            else if (sortColumnIndex == 4)
-            {
-                emps = sortDirection == "asc" ? emps.OrderBy(c => c.EMP_Designation) : emps.OrderByDescending(c => c.EMP_Designation);
-            }
-            else if (sortColumnIndex == 5)
-            {
-                emps = sortDirection == "asc" ? emps.OrderBy(c => c.EMP_DateOfJoining) : emps.OrderByDescending(c => c.EMP_DateOfJoining);
-            }
-            else if (sortColumnIndex == 6)
-            {
-                emps = sortDirection == "asc" ? emps.OrderBy(c => c.EMP_MoF) : emps.OrderByDescending(c => c.EMP_MoF);
-            }
-            else if (sortColumnIndex == 6)
-            {
-                emps = sortDirection == "asc" ? emps.OrderBy(c => c.EMP_Contact_Primary) : emps.OrderByDescending(c => c.EMP_Contact_Primary);
-            }
-           
-            int totalRecord = emps.Count();
-            if (!string.IsNullOrEmpty(param.sSearch))
-                emps = emps.Where(a => a.FRM_ShortName.ToLower().Contains(param.sSearch.ToLower())
-                || a.EMP_Id.ToString().Contains(param.sSearch.ToLower())
-                || a.EMP_FullName.ToLower().Contains(param.sSearch.ToLower())
-                || a.EMP_DOB.ToString("dd-MMM-yyyy").ToLower().Contains(param.sSearch.ToLower())
-                || (!string.IsNullOrEmpty(a.EMP_Designation)? a.EMP_Designation.ToLower():"").Contains(param.sSearch.ToLower())
-                || a.EMP_DateOfJoining.ToString("dd-MMM-yyyy").ToLower().Contains(param.sSearch.ToLower())
-                || a.EMP_MoF.ToLower().Contains(param.sSearch.ToLower())
-                || (a.EMP_Contact_Primary != null ? a.EMP_Contact_Primary.ToLower() : "").Contains(param.sSearch.ToLower())
-
-                ).Skip(param.iDisplayStart).Take(param.iDisplayLength).ToList();
-            else
-                emps = emps.Skip(param.iDisplayStart).Take(param.iDisplayLength).ToList();
-
-            StringBuilder sb = new StringBuilder();
-            sb.Clear();
-            sb.Append("{");
-            sb.Append("\"sEcho\": ");
-            sb.Append(param.sEcho);
-            sb.Append(",");
-            sb.Append("\"iTotalRecords\": ");
-            sb.Append(totalRecord);
-            sb.Append(",");
-            sb.Append("\"iTotalDisplayRecords\": ");
-            sb.Append(totalRecord);
-            sb.Append(",");
-            sb.Append("\"aaData\": ");
-            sb.Append(JsonConvert.SerializeObject(emps));
-            sb.Append("}");
-            return sb.ToString();
-        }
-
         [HttpGet]
         public JsonResult GetCity(int STA_Id)
         {
@@ -203,20 +120,9 @@ namespace RMERP.Controllers
                 employeeVM.FRM_Id = sessionUtils.GetLoggedFirmID().Value;
             }
             ViewBag.DocumentTypes = typesManager.GetDocumentTypes();
-            ViewBag.States = employeeManager.GetStates();
+            ViewBag.States = employeeManager.GetStates();            
             return View(employeeVM);
-
-            //return PartialView("_AddEditEmployee", employeeVM);
         }      
-
-        public ActionResult URL_EditEmployee(int EMP_Id)
-        {
-            return Json(new { newUrl = Url.Action("AddEditEmployee", "Employees", new { EMP_Id = EMP_Id }) });
-        }
-        public ActionResult URL_AddEditEmployee(int EMP_Id,string tab)
-        {
-            return Json(new { newUrl = Url.Action("AddEditEmployee", "Employees", new { EMP_Id = EMP_Id, tab= tab }) });
-        }
 
         [HttpPost]
         public ActionResult AddEditEmployees(EmployeeVM employeeVM)
