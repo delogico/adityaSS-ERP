@@ -75,6 +75,8 @@ namespace RMERP.DAL.ManagerClasses
             List<MLWF_ContributionVM> reports = new List<MLWF_ContributionVM>();
             WageRegisterManager registerManager = new WageRegisterManager(_context);
             List<Wage_Register> wage_Registers = registerManager.GetWageRegistersByLWF(WAG_Id);
+            var vv = wage_Registers.Select(m => new { m.CLI_Id, m.CLI_.CLI_Name }).Distinct();
+
             foreach (var item in wage_Registers.Select(m => new { m.CLI_Id, m.CLI_.CLI_Name }).Distinct())
             {
                 MLWF_ContributionVM report = new MLWF_ContributionVM();

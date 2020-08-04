@@ -42,9 +42,13 @@ namespace RMERP.DAL.ManagerClasses
         {
             return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id && r.WAR_FinalTotal > 0).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).ThenInclude(m => m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
         }
+        //public List<Wage_Register> GetWageRegistersByLWF(int WAG_Id)
+        //{
+        //    return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id && r.CRI_.DES_.DES_Exclude_LWF.Equals(false)).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).ThenInclude(m => m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
+        //}
         public List<Wage_Register> GetWageRegistersByLWF(int WAG_Id)
         {
-            return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id && r.CRI_.DES_.DES_Exclude_LWF.Equals(false)).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).ThenInclude(m => m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
+            return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id).Include(m => m.CLI_).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).ThenInclude(m => m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL_).ToList();
         }
         public List<Wage_Register> GetWageRegisters(int WAG_Id)
         {
