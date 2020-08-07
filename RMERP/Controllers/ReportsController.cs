@@ -1646,7 +1646,7 @@ namespace RMERP.Controllers
                     fs.Write(title, 0, title.Length);
                     byte[] br = new UTF8Encoding(true).GetBytes(EPF_CONTRIBUTION + "#~#" + EPS_CONTRIBUTION + "#~#" + DIFF_EPF_EPS + "#~#");
                     fs.Write(br, 0, br.Length);
-                    byte[] author = new UTF8Encoding(true).GetBytes(item.NCP1 + "#~#" + item.NCP1);
+                    byte[] author = new UTF8Encoding(true).GetBytes(item.NCP1 + "#~#" + item.NCP2);
                     fs.Write(author, 0, author.Length);
                     byte[] br2 = new UTF8Encoding(true).GetBytes("\r\n");
                     fs.Write(br2, 0, br2.Length);
