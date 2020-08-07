@@ -2904,6 +2904,7 @@ namespace RMERP.Controllers
         #endregion
 
         #region Labour WelfareFund
+
         public async Task<FileResult> Labour_WelfareFund_Excel(int WAG_Id)
         {
             ReportsManager manager = new ReportsManager(_context);
@@ -3164,6 +3165,7 @@ namespace RMERP.Controllers
             new FileInfo(Path.Combine(newPath, fileName)).Delete();
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
+
         #endregion
 
         #region PaySlip
@@ -3263,12 +3265,12 @@ namespace RMERP.Controllers
                 return Json(new { data = "ko" });
             }
         }
-
-
+        
         public FileResult GetFile(byte[] byteArray)
         {
             return File(byteArray, "application/pdf");
         }
+
         public async Task<FileResult> DownloadPaySlip(int WPS_Id)
         {
             ReportsManager reportsManager = new ReportsManager(_context);

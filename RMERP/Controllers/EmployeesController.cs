@@ -105,6 +105,8 @@ namespace RMERP.Controllers
             EmployeeVM employeeVM = new EmployeeVM();
             employeeVM.EMP_Payment_Type = (int)PAYMENT_TYPE.Cheque_Cash;
             employeeVM.EMP_Is_IDBI_Other = (int)PAYMENT_BANK_TYPE.IDBI_To_Others;
+            employeeVM.EMP_DateOfJoining = ProjectUtils.DateNow();
+            employeeVM.EMP_DOB = ProjectUtils.DateNow();
             if (EMP_Id > 0)
             {
                 Employee_Id = EMP_Id;

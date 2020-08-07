@@ -495,8 +495,11 @@ namespace RMERP.DAL.ManagerClasses
                 pFClient.EMP_SurName = item.EMP_.EMP_SurName;
                 pFClient.PF_APPLICABLE_SALARY = ApplicableSalary;
                 pFClient.EPF_CONTRIBUTION = EPF_CONTRIBUTION;
-                pFClient.EPS_CONTRIBUTION = EPS_CONTRIBUTION;                
-                pFClient.NCP1 = 0;
+                pFClient.EPS_CONTRIBUTION = EPS_CONTRIBUTION;
+                if (ApplicableSalary > 0)
+                    pFClient.NCP1 = 0;
+                else
+                    pFClient.NCP1 = DateTime.DaysInMonth(item.WAG_.WAG_Month.Year, item.WAG_.WAG_Month.Month);
                 pFClient.NCP2 = 0;
                 reportVMs.Add(pFClient);
             }

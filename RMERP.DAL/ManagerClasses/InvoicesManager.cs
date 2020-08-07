@@ -234,6 +234,19 @@ namespace RMERP.DAL.ManagerClasses
                 {
                     DatePeriod = "For The Month Of " + wage.WAG_Month.ToString("MMM-yyyy");
                     daysInMonth = DateTime.DaysInMonth(wage.WAG_Month.Year, wage.WAG_Month.Month);
+                    //switch (client.CLI_Total_WorkingDays)
+                    //{
+                    //    case 0: //  0:Consider_RealDays
+                    //        daysInMonth = daysInMonth;
+                    //        break;
+                    //    case 1://   1:Excluding_WeeklyOff
+                    //        daysInMonth = daysInMonth;
+                    //        break;
+                    //    case 2://   2:Consider StaticDays 
+                    //        daysInMonth = client.CLI_No_Reduce_Days.Value;
+                    //        break;
+                    //    default: break;
+                    //}
                 }
                 else
                 {
