@@ -56,7 +56,8 @@ namespace RMERP.Controllers
             }
         }        
         public IActionResult Index(int FRM_Id)
-        {            
+        {
+            WageProcessManager wageProcessManager=new WageProcessManager(_context,_configuration);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID(), FRM_Id);
             FirmsManager firmsManager = new FirmsManager(_context);
@@ -70,7 +71,7 @@ namespace RMERP.Controllers
             ViewBag.linktoYearId = GetYears(dt.Year);
             ViewBag.linktoMonthId = GetMonths(dt.Year);
 
-            return View(WageProcessMapper.mapMeListVMs(wpm.getWageProcessList(FRM_Id), firm, _context, _configuration));
+            return View(WageProcessMapper.mapMeListVMs(wageProcessManager.getPendingWageProcessList(FRM_Id), firm, _context, _configuration));
         }
 
         public IActionResult CreateNextMonthWage(int FRM_Id)
@@ -254,8 +255,26 @@ namespace RMERP.Controllers
         public ActionResult searchCompletedWageProcess(int FRM_Id,int Year,int Month)
         {
             FirmsManager firmsManager = new FirmsManager(_context);
-            Firms firm = firmsManager.GetFirm(FRM_Id);            
-            return PartialView("_WageProcessList", WageProcessMapper.mapMeListVMs(wpm.getCompletedWageProcessListByYearMonth(FRM_Id,Year,Month), firm, _context, _configuration));            
+            Firms firm = firmsManager.GetFirm(FRM_Id);
+            return PartialView("_WageProcessList", WageProcessMapper.mapMeListVMs(wpm.getCompletedWageProcessListByYearMonth(FRM_Id, Year, Month), firm, _context, _configuration));
+
+        }
+
+        public ActionResult searchPendingWageProcess(int FRM_Id, int Year, int Month)
+        {
+            FirmsManager firmsManager = new FirmsManager(_context);
+            Firms firm = firmsManager.GetFirm(FRM_Id);
+            return PartialView("_WageProcessList", WageProcessMapper.mapMeListVMs(wpm.getPendingWageProcessListByYearMonth(FRM_Id, Year, Month), firm, _context, _configuration));
+
+        }
+        public ActionResult GetTestingWageProcess(int FRM_Id)
+        {
+            WageProcessManager wageProcessManager = new WageProcessManager(_context,_configuration);
+            FirmsManager firmsManager = new FirmsManager(_context);
+            Firms firm = firmsManager.GetFirm(FRM_Id);
+            string dt = _configuration.GetSection("TESTING_MONTH_UPTO").Value;         
+            return PartialView("_WageProcessList", WageProcessMapper.mapMeListVMs(wageProcessManager.getTestingWageProcessList(FRM_Id, Convert.ToDateTime(dt)), firm, _context, _configuration));
+
         }
 
     }

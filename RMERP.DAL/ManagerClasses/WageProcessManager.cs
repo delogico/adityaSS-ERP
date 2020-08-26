@@ -6,24 +6,31 @@ using Microsoft.EntityFrameworkCore;
 using RMERP.DAL.Models;
 using RMERP.DAL.App_Code;
 using System.Globalization;
+using Microsoft.Extensions.Configuration;
 
 namespace RMERP.DAL.ManagerClasses
 {
     public class WageProcessManager
     {
         RMERPContext _context;
-        public WageProcessManager(RMERPContext context)
+        public IConfiguration _configuration;
+        public WageProcessManager(RMERPContext context, IConfiguration configuration=null)
         {
             _context = context;
+            _configuration = configuration;
         }
         public IEnumerable<Wage_Process> getAllWageProcesses()
         {
             IEnumerable<Wage_Process> list = _context.Wage_Process.OrderBy(m => m.WAG_Month).ToList();
             return list;
         }
-        public IEnumerable<Wage_Process> getWageProcessList(int FRM_Id)
+        public IEnumerable<Wage_Process> getPendingWageProcessList(int FRM_Id)
         {
-            return _context.Wage_Process.Where(m => m.FRM_Id == FRM_Id).Include(m => m.Attendance).Include(m => m.Wage_Process_Clients).OrderBy(m => m.WAG_Month);
+            string dtTesting = _configuration.GetSection("TESTING_MONTH_UPTO").Value;
+
+            return _context.Wage_Process.Where(m => m.FRM_Id == FRM_Id && !m.WAG_Status && m.WAG_Month.Date > Convert.ToDateTime(dtTesting).Date)
+                .Include(m => m.Attendance)
+                .Include(m => m.Wage_Process_Clients).OrderByDescending(m => m.WAG_Month);
         }
         public Wage_Process getWageProcessById(int WAG_Id)
         {
@@ -192,7 +199,8 @@ namespace RMERP.DAL.ManagerClasses
         public IEnumerable<Wage_Process> getCompletedWageProcessListByYearMonth(int FRM_Id,int Year,int Month)
         {
             IEnumerable<Wage_Process> list=null;
-            list = _context.Wage_Process.Where(m => m.FRM_Id == FRM_Id && m.WAG_Status).Include(m => m.Attendance).Include(m => m.Wage_Process_Clients).OrderBy(m => m.WAG_Month);
+            list = _context.Wage_Process.Where(m => m.FRM_Id == FRM_Id && m.WAG_Status)
+                .Include(m => m.Attendance).Include(m => m.Wage_Process_Clients).OrderByDescending(m => m.WAG_Month);
             if (Year > 0)
             {
                 list = list.Where(m => m.WAG_Month.Year.Equals(Year));
@@ -202,6 +210,27 @@ namespace RMERP.DAL.ManagerClasses
                 list = list.Where(m => m.WAG_Month.Month.Equals(Month));
             }
             return list;
+        }
+
+        public IEnumerable<Wage_Process> getPendingWageProcessListByYearMonth(int FRM_Id, int Year, int Month)
+        {
+            IEnumerable<Wage_Process> list = getPendingWageProcessList(FRM_Id);                          
+            if (Year > 0)
+            {
+                list = list.Where(m => m.WAG_Month.Year.Equals(Year));
+            }
+            if (Month > 0)
+            {
+                list = list.Where(m => m.WAG_Month.Month.Equals(Month));
+            }
+            return list;
+        }
+        public IEnumerable<Wage_Process> getTestingWageProcessList(int FRM_Id,DateTime dt)
+        {           
+
+            return _context.Wage_Process.Where(m => m.FRM_Id == FRM_Id && m.WAG_Month.Date <= dt.Date)
+                 .Include(m => m.Attendance)
+                 .Include(m => m.Wage_Process_Clients).OrderByDescending(m => m.WAG_Month);
         }
     }
 }
