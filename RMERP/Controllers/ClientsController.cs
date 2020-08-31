@@ -815,6 +815,7 @@ namespace RMERP.Controllers
             DesignationManager designationManager = new DesignationManager(_context);
             IEnumerable<AssignEmployeeVM> listDesignations = designationManager.getDesignationsListInVM(CLI_Id);
             IEnumerable<EmployeeVM> listEmployee = null;
+            cvm.CLE_RegisteredOn = ProjectUtils.DateNow();
             if (CLE_Id > 0)
             {
                 listEmployee = EmployeesMapper.MapEmployees(clientsManager.getEmployeeList(FRM_Id).ToList());
@@ -859,7 +860,7 @@ namespace RMERP.Controllers
                     clientsEmployees.CLI_Id = cvm.CLI_Id;
                     clientsEmployees.EMP_Id = cvm.EMP_Id;
                     clientsEmployees.DES_Id = cvm.DES_Id;
-                    clientsEmployees.CLE_RegisteredOn = DateNow();
+                    clientsEmployees.CLE_RegisteredOn = (cvm.CLE_RegisteredOn!=null? cvm.CLE_RegisteredOn: DateNow());
                     clientsEmployees.ADM_Id_RegisteredBy= sessionUtils.GetLoggedAdminID();
                 }        
                 res = clientsManager.ClientEmployee(clientsEmployees, cvm.Old_DES_Id, sessionUtils.GetLoggedAdminID());

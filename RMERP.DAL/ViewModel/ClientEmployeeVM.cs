@@ -18,7 +18,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Assign On")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Registeration date is required")]
-        public DateTime CLE_RegisteredOn { get; set; } = DateTime.Now;
+        public DateTime CLE_RegisteredOn { get; set; } 
 
         public DateTime? CLE_UnassignedOn { get; set; }
         public DateTime? CLE_ReassignedOn { get; set; }

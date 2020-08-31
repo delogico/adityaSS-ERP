@@ -102,7 +102,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Registered On")]
         [Required(ErrorMessage = "Please select date")]
         [DataType(DataType.Date)]
-        public DateTime CLI_RegisteredOn { get; set; } = DateTime.Now;
+        public DateTime CLI_RegisteredOn { get; set; }
         public bool? CLI_IsActive { get; set; }
 
         [Display(Name = "Logo")]
