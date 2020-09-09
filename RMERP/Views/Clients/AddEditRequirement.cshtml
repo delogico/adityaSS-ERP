@@ -756,11 +756,11 @@
                                                                 <div class="col-md-12">
                                                                     @if (arrOT != null && arrOT.Contains("OSL"))
                                                                     {
-                                                                        @Html.CheckBox("esic_OutStation", new { @class = "OTselection", @value = "OSL", @checked = "checked" })
+                                                                        @Html.CheckBox("OT_OutStation", new { @class = "OTselection", @value = "OSL", @checked = "checked" })
                                                                     }
                                                                     else
                                                                     {
-                                                                        @Html.CheckBox("esic_OutStation", new { @class = "OTselection", @value = "OSL" })
+                                                                        @Html.CheckBox("OT_OutStation", new { @class = "OTselection", @value = "OSL" })
                                                                     }
                                                                     @Html.Raw("OutStation Allowance")
                                                                 </div>
@@ -770,11 +770,11 @@
                                                                 <div class="col-md-12">
                                                                     @if (arrOT != null && arrOT.Contains("AAL"))
                                                                     {
-                                                                        @Html.CheckBox("esic_Attendance", new { @class = "OTselection", @value = "AAL", @checked = "checked" })
+                                                                        @Html.CheckBox("OT_Attendance", new { @class = "OTselection", @value = "AAL", @checked = "checked" })
                                                                     }
                                                                     else
                                                                     {
-                                                                        @Html.CheckBox("esic_Attendance", new { @class = "OTselection", @value = "AAL" })
+                                                                        @Html.CheckBox("OT_Attendance", new { @class = "OTselection", @value = "AAL" })
                                                                     }
                                                                     @Html.Raw("Attendance Allowance")
                                                                 </div>
@@ -784,11 +784,11 @@
                                                                 <div class="col-md-12">
                                                                     @if (arrOT != null && arrOT.Contains("NSL"))
                                                                     {
-                                                                        @Html.CheckBox("esic_Nightshift", new { @class = "OTselection", @value = "NSL", @checked = "checked" })
+                                                                        @Html.CheckBox("OT_Nightshift", new { @class = "OTselection", @value = "NSL", @checked = "checked" })
                                                                     }
                                                                     else
                                                                     {
-                                                                        @Html.CheckBox("esic_Nightshift", new { @class = "OTselection", @value = "NSL" })
+                                                                        @Html.CheckBox("OT_Nightshift", new { @class = "OTselection", @value = "NSL" })
                                                                     }
                                                                     @Html.Raw("Nightshift Allowance")
                                                                 </div>
@@ -798,11 +798,11 @@
                                                                 <div class="col-md-12">
                                                                     @if (arrOT != null && arrOT.Contains("PAL"))
                                                                     {
-                                                                        @Html.CheckBox("esic_Performance", new { @class = "ESICselection", @value = "PAL", @checked = "checked" })
+                                                                        @Html.CheckBox("OT_Performance", new { @class = "OTselection", @value = "PAL", @checked = "checked" })
                                                                     }
                                                                     else
                                                                     {
-                                                                        @Html.CheckBox("esic_Performance", new { @class = "ESICselection", @value = "PAL" })
+                                                                        @Html.CheckBox("OT_Performance", new { @class = "OTselection", @value = "PAL" })
                                                                     }
                                                                     @Html.Raw("Performance Allowance")
                                                                 </div>
