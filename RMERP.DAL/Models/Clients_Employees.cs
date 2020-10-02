@@ -7,6 +7,11 @@ namespace RMERP.DAL.Models
     {
         public Clients_Employees()
         {
+            Wage_Register_Allowances_1 = new HashSet<Wage_Register_Allowances_1>();
+            Wage_Register_Allowances_2 = new HashSet<Wage_Register_Allowances_2>();
+            Wage_Register_Allowances_3 = new HashSet<Wage_Register_Allowances_3>();
+            Wage_Register_Allowances_4 = new HashSet<Wage_Register_Allowances_4>();
+            Wage_Register_Allowances_5 = new HashSet<Wage_Register_Allowances_5>();
             Wage_Register_Canteen = new HashSet<Wage_Register_Canteen>();
             Wage_Register_Outstation = new HashSet<Wage_Register_Outstation>();
             Wage_Register_Performance = new HashSet<Wage_Register_Performance>();
@@ -25,6 +30,11 @@ namespace RMERP.DAL.Models
         public Clients CLI_ { get; set; }
         public Designations DES_ { get; set; }
         public Employees EMP_ { get; set; }
+        public ICollection<Wage_Register_Allowances_1> Wage_Register_Allowances_1 { get; set; }
+        public ICollection<Wage_Register_Allowances_2> Wage_Register_Allowances_2 { get; set; }
+        public ICollection<Wage_Register_Allowances_3> Wage_Register_Allowances_3 { get; set; }
+        public ICollection<Wage_Register_Allowances_4> Wage_Register_Allowances_4 { get; set; }
+        public ICollection<Wage_Register_Allowances_5> Wage_Register_Allowances_5 { get; set; }
         public ICollection<Wage_Register_Canteen> Wage_Register_Canteen { get; set; }
         public ICollection<Wage_Register_Outstation> Wage_Register_Outstation { get; set; }
         public ICollection<Wage_Register_Performance> Wage_Register_Performance { get; set; }

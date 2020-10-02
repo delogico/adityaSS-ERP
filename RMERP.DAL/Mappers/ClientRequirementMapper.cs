@@ -52,6 +52,17 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_Nightshift_Allowance = requirement.CRI_Nightshift_Allowance;
             clientRequirementVM.CRI_Nightshift_Allowance_Rate = requirement.CRI_Nightshift_Allowance_Rate;
 
+            clientRequirementVM.CRI_Allowance_1 = requirement.CRI_Allowance_1;
+            clientRequirementVM.CRI_Allowance_Name_1 = requirement.CRI_Allowance_Name_1;
+            clientRequirementVM.CRI_Allowance_2 = requirement.CRI_Allowance_2;
+            clientRequirementVM.CRI_Allowance_Name_2 = requirement.CRI_Allowance_Name_2;
+            clientRequirementVM.CRI_Allowance_3 = requirement.CRI_Allowance_3;
+            clientRequirementVM.CRI_Allowance_Name_3 = requirement.CRI_Allowance_Name_3;
+            clientRequirementVM.CRI_Allowance_4 = requirement.CRI_Allowance_4;
+            clientRequirementVM.CRI_Allowance_Name_4 = requirement.CRI_Allowance_Name_4;
+            clientRequirementVM.CRI_Allowance_5 = requirement.CRI_Allowance_5;
+            clientRequirementVM.CRI_Allowance_Name_5 = requirement.CRI_Allowance_Name_5;
+
             if (clientRequirementVM.CRI_OT_Formula!=null)
             {
                 clientRequirementVM.CRI_OT_Calculate_Differently = false;
@@ -145,6 +156,17 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_Performance_Allowance = requirementVM.CRI_Performance_Allowance;            
             requirement.CRI_Nightshift_Allowance = requirementVM.CRI_Nightshift_Allowance;
             requirement.CRI_Nightshift_Allowance_Rate = requirementVM.CRI_Nightshift_Allowance_Rate;
+
+            requirement.CRI_Allowance_1 = requirementVM.CRI_Allowance_1;
+            requirement.CRI_Allowance_Name_1 = requirementVM.CRI_Allowance_Name_1;
+            requirement.CRI_Allowance_2 = requirementVM.CRI_Allowance_2;
+            requirement.CRI_Allowance_Name_2 = requirementVM.CRI_Allowance_Name_2;
+            requirement.CRI_Allowance_3 = requirementVM.CRI_Allowance_3;
+            requirement.CRI_Allowance_Name_3 = requirementVM.CRI_Allowance_Name_3;
+            requirement.CRI_Allowance_4 = requirementVM.CRI_Allowance_4;
+            requirement.CRI_Allowance_Name_4 = requirementVM.CRI_Allowance_Name_4;
+            requirement.CRI_Allowance_5 = requirementVM.CRI_Allowance_5;
+            requirement.CRI_Allowance_Name_5 = requirementVM.CRI_Allowance_Name_5;
 
             if (requirementVM.HRAselection ==true)
                 requirement.CRI_HRA_Fixed = requirementVM.CRI_HRA_Fixed;

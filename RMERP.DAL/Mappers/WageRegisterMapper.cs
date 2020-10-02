@@ -71,6 +71,19 @@ namespace RMERP.DAL.Mappers
 
             if (wageRegister.Wage_Register_Allowances != null)
                 wageRegisterVM.allowanceVMs = mapWageAllowances(wageRegister.Wage_Register_Allowances.ToList());
+
+
+            if (wageRegister.WAR_Allowance_Calculated_1 != null)
+                wageRegisterVM.WAR_Allowance_Calculated_1 = wageRegister.WAR_Allowance_Calculated_1.Value;
+            if (wageRegister.WAR_Allowance_Calculated_2 != null)
+                wageRegisterVM.WAR_Allowance_Calculated_2 = wageRegister.WAR_Allowance_Calculated_2.Value;
+            if (wageRegister.WAR_Allowance_Calculated_3 != null)
+                wageRegisterVM.WAR_Allowance_Calculated_3 = wageRegister.WAR_Allowance_Calculated_3.Value;
+            if (wageRegister.WAR_Allowance_Calculated_4 != null)
+                wageRegisterVM.WAR_Allowance_Calculated_4 = wageRegister.WAR_Allowance_Calculated_4.Value;
+            if (wageRegister.WAR_Allowance_Calculated_5 != null)
+                wageRegisterVM.WAR_Allowance_Calculated_5 = wageRegister.WAR_Allowance_Calculated_5.Value;
+
             return wageRegisterVM;
         }
 
@@ -120,6 +133,12 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_Nightshift_Allowance_Calculated = wageRegisterVM.WAR_Nightshift_Allowance_Calculated;
             wageRegister.WAR_LWF_Deduction_Employee = wageRegisterVM.WAR_LWF_Deduction_Employee;
             wageRegister.WAR_LWF_Deduction_Employer = wageRegisterVM.WAR_LWF_Deduction_Employer;
+
+            wageRegister.WAR_Allowance_Calculated_1 = wageRegisterVM.WAR_Allowance_Calculated_1;
+            wageRegister.WAR_Allowance_Calculated_2 = wageRegisterVM.WAR_Allowance_Calculated_2;
+            wageRegister.WAR_Allowance_Calculated_3 = wageRegisterVM.WAR_Allowance_Calculated_3;
+            wageRegister.WAR_Allowance_Calculated_4 = wageRegisterVM.WAR_Allowance_Calculated_4;
+            wageRegister.WAR_Allowance_Calculated_5 = wageRegisterVM.WAR_Allowance_Calculated_5;
 
             wageRegister.WAR_Advance_Amount = wageRegisterVM.WAR_Advance_Amount;
             if (wageRegisterVM.employeeVM != null)
@@ -171,9 +190,16 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_Performance_Allowance_Calculated = wageRegisterVM.WAR_Performance_Allowance_Calculated;
             
             wageRegister.WAR_Attendance_Allowance_Calculated = wageRegisterVM.WAR_Attendance_Allowance_Calculated;
-            wageRegister.WAR_OutStation_Allowance_Calculated = wageRegisterVM.WAR_OutStation_Allowance_Calculated;
+            wageRegister.WAR_OutStation_Allowance_Calculated = wageRegisterVM.WAR_OutStation_Allowance_Calculated;            
             wageRegister.WAR_LWF_Deduction_Employee = wageRegisterVM.WAR_LWF_Deduction_Employee; 
             wageRegister.WAR_LWF_Deduction_Employer = wageRegisterVM.WAR_LWF_Deduction_Employer;
+
+            wageRegister.WAR_Allowance_Calculated_1 = wageRegisterVM.WAR_Allowance_Calculated_1;
+            wageRegister.WAR_Allowance_Calculated_2 = wageRegisterVM.WAR_Allowance_Calculated_2;
+            wageRegister.WAR_Allowance_Calculated_3 = wageRegisterVM.WAR_Allowance_Calculated_3;
+            wageRegister.WAR_Allowance_Calculated_4 = wageRegisterVM.WAR_Allowance_Calculated_4;
+            wageRegister.WAR_Allowance_Calculated_5 = wageRegisterVM.WAR_Allowance_Calculated_5;
+
             return wageRegister;
         }
 
@@ -250,7 +276,14 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_Attendance_Allowance_Calculated = wageRegisterVM.WAR_Attendance_Allowance_Calculated;
             wageRegister.WAR_OutStation_Allowance_Calculated = wageRegisterVM.WAR_OutStation_Allowance_Calculated;
             wageRegister.WAR_Nightshift_Allowance_Calculated = wageRegisterVM.WAR_Nightshift_Allowance_Calculated;
-            wageRegister.WAR_LWF_Deduction_Employee = wageRegisterVM.WAR_LWF_Deduction_Employee;            
+            wageRegister.WAR_LWF_Deduction_Employee = wageRegisterVM.WAR_LWF_Deduction_Employee;
+
+            wageRegister.WAR_Allowance_Calculated_1 = wageRegisterVM.WAR_Allowance_Calculated_1;
+            wageRegister.WAR_Allowance_Calculated_2 = wageRegisterVM.WAR_Allowance_Calculated_2;
+            wageRegister.WAR_Allowance_Calculated_3 = wageRegisterVM.WAR_Allowance_Calculated_3;
+            wageRegister.WAR_Allowance_Calculated_4 = wageRegisterVM.WAR_Allowance_Calculated_4;
+            wageRegister.WAR_Allowance_Calculated_5 = wageRegisterVM.WAR_Allowance_Calculated_5;
+
 
             wageRegister.WAR_Advance_Amount = wageRegisterVM.WAR_Advance_Amount;
 

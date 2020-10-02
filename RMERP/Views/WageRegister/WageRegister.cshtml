@@ -107,7 +107,7 @@
             ClientRequirementVM clientRequirement = wageRegisters.Select(m => m.clientRequirementVM).Where(m => m.CLI_Id.Equals(item.client.CLI_Id) && m.DES_Id.Equals(dd.DES_Id)).FirstOrDefault();
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-5">
                     <h3>@dd.DES_Title</h3>
                 </div>
                 @if (clientRequirement == null)
@@ -115,7 +115,7 @@
                     IsNullCR = true;
                     <div class="col-sm-3">
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <div class="alert alert-danger text-right" role="alert">
                             No Requirement Found For This Wage Month!
                         </div>
@@ -124,12 +124,12 @@
 
                 @if (clientRequirement != null)
                 {
-                    <div class="col-sm-6 text-right">
+                    <div class="col-sm-7 text-right">
                         @if (clientRequirement.CRI_CanteenFacility == true)
                         {
                             @if (item.wageProcessClientVM == null && item.wageProcessVM.WageStatus == false)
                             {
-                                @Html.ActionLink("Update canteen Amount", "UpdateCanteenAmount", "Canteen", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id, FRM_Id = wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded" });
+                                @Html.ActionLink("Update canteen Amount", "UpdateCanteenAmount", "Canteen", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id, FRM_Id = wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded m-b-5" });
                             }
                         }
                         &nbsp;
@@ -137,7 +137,7 @@
                         {
                             @if (item.wageProcessClientVM == null && item.wageProcessVM.WageStatus == false)
                             {
-                                @Html.ActionLink("Update Outstation Hours", "UpdateOutstationHours", "Outstation", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id, FRM_Id = wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded" });
+                                @Html.ActionLink("Update Outstation Hours", "UpdateOutstationHours", "Outstation", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id, FRM_Id = wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded m-b-5" });
                             }
                         }
                         &nbsp;
@@ -145,9 +145,50 @@
                         {
                             @if (item.wageProcessClientVM == null && item.wageProcessVM.WageStatus == false)
                             {
-                                @Html.ActionLink("Update Performance Amount", "UpdatePerformanceAmount", "Performance", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id, FRM_Id = wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded" });
+                                @Html.ActionLink("Update Performance Amount", "UpdatePerformanceAmount", "Performance", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id, FRM_Id = wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded m-b-5" });
                             }
                         }
+                        &nbsp;
+                        @if (clientRequirement.CRI_Allowance_1 == true)
+                        {
+                            @if (item.wageProcessClientVM == null && item.wageProcessVM.WageStatus == false)
+                            {
+                                @Html.ActionLink("Update " + clientRequirement.CRI_Allowance_Name_1 + " Amount", "UpdateAllowanceAmount_1", "Allowances", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id, FRM_Id = wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded m-b-5" });
+                            }
+                        }
+                        &nbsp;
+                        @if (clientRequirement.CRI_Allowance_2 == true)
+                        {
+                            @if (item.wageProcessClientVM == null && item.wageProcessVM.WageStatus == false)
+                            {
+                                @Html.ActionLink("Update " + clientRequirement.CRI_Allowance_Name_2 + " Amount", "UpdateAllowanceAmount_2", "Allowances", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id, FRM_Id = wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded m-b-5" });
+                            }
+                        }
+                        &nbsp;
+                        @if (clientRequirement.CRI_Allowance_3 == true)
+                        {
+                            @if (item.wageProcessClientVM == null && item.wageProcessVM.WageStatus == false)
+                            {
+                                @Html.ActionLink("Update " + clientRequirement.CRI_Allowance_Name_3 + " Amount", "UpdateAllowanceAmount_3", "Allowances", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id, FRM_Id = wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded m-b-5" });
+                            }
+                        }
+                        &nbsp;
+                        @if (clientRequirement.CRI_Allowance_4 == true)
+                        {
+                            @if (item.wageProcessClientVM == null && item.wageProcessVM.WageStatus == false)
+                            {
+                                @Html.ActionLink("Update " + clientRequirement.CRI_Allowance_Name_4 + " Amount", "UpdateAllowanceAmount_4", "Allowances", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id, FRM_Id = wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded m-b-5" });
+                            }
+                        }
+                        &nbsp;
+                        @if (clientRequirement.CRI_Allowance_5 == true)
+                        {
+                            @if (item.wageProcessClientVM == null && item.wageProcessVM.WageStatus == false)
+                            {
+                                @Html.ActionLink("Update " + clientRequirement.CRI_Allowance_Name_5 + " Amount", "UpdateAllowanceAmount_5", "Allowances", new { CRI_Id = clientRequirement.CRI_Id, WAG_Id = wage.WAG_Id, FRM_Id = wage.FRM_Id }, new { @class = "btn btn-sm btn-primary rounded m-b-5" });
+                            }
+                        }
+                        &nbsp;
                     </div>
                 }
 
@@ -174,6 +215,26 @@
                                 @if (clientRequirement.CRI_OutStation_Allowance == true)
                                 {
                                     <td class="lightgray">Outstation Allowance</td>
+                                }
+                                @if (clientRequirement.CRI_Allowance_1 == true)
+                                {
+                                    <td class="lightgray">@clientRequirement.CRI_Allowance_Name_1</td>
+                                }
+                                @if (clientRequirement.CRI_Allowance_2 == true)
+                                {
+                                    <td class="lightgray">@clientRequirement.CRI_Allowance_Name_2</td>
+                                }
+                                @if (clientRequirement.CRI_Allowance_3 == true)
+                                {
+                                    <td class="lightgray">@clientRequirement.CRI_Allowance_Name_3</td>
+                                }
+                                @if (clientRequirement.CRI_Allowance_4 == true)
+                                {
+                                    <td class="lightgray">@clientRequirement.CRI_Allowance_Name_4</td>
+                                }
+                                @if (clientRequirement.CRI_Allowance_5 == true)
+                                {
+                                    <td class="lightgray">@clientRequirement.CRI_Allowance_Name_5</td>
                                 }
                                 @if (clientRequirement.CRI_Attendance_Allowance == true)
                                 {
@@ -235,147 +296,167 @@
 
                         @foreach (var employee in wageRegisters)
                         {
-                            <tr>
-                                <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
-                                <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
-                                <td class="gainsboro">@(Convert.ToBoolean(employee.employeeVM.EMP_Gender) == true ? "M" : "F")</td>
-                                <td class="gainsboro">@DateHelper.getLongDateFormat(employee.employeeVM.EMP_DateOfJoining)</td>
+                        <tr>
+                            <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
+                            <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
+                            <td class="gainsboro">@(Convert.ToBoolean(employee.employeeVM.EMP_Gender) == true ? "M" : "F")</td>
+                            <td class="gainsboro">@DateHelper.getLongDateFormat(employee.employeeVM.EMP_DateOfJoining)</td>
 
-                                @if (clientRequirement != null)
+                            @if (clientRequirement != null)
+                            {
+                                <td class="gainsboro">@employee.WAR_TotalWorkingDays</td>
+                                <td class="gainsboro">@employee.WAR_TotalPaybleDays</td>
+                                <td class="lightgray"><span title="(@(employee.WAR_Basic) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays ">@(Math.Round(employee.WAR_Basic_Calculated, MidpointRounding.AwayFromZero))</span></td>
+                                <td class="lightgray"><span title="(@(employee.WAR_DA) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays">@(Math.Round(employee.WAR_DA_Calculated, MidpointRounding.AwayFromZero))</span></td>
+
+                                string str1 = "";
+                                if (employee.clientRequirementVM.CRI_HRA_Fixed.ToString() == "")
                                 {
-                                    <td class="gainsboro">@employee.WAR_TotalWorkingDays</td>
-                                    <td class="gainsboro">@employee.WAR_TotalPaybleDays</td>
-                                    <td class="lightgray"><span title="(@(employee.WAR_Basic) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays ">@(Math.Round(employee.WAR_Basic_Calculated, MidpointRounding.AwayFromZero))</span></td>
-                                    <td class="lightgray"><span title="(@(employee.WAR_DA) / @employee.WAR_TotalWorkingDays) * @employee.WAR_TotalPaybleDays">@(Math.Round(employee.WAR_DA_Calculated, MidpointRounding.AwayFromZero))</span></td>
-
-                                    string str1 = "";
-                                    if (employee.clientRequirementVM.CRI_HRA_Fixed.ToString() == "")
-                                    {
-                                        str1 = "(" + employee.WAR_Basic_Calculated + "+" + employee.WAR_DA_Calculated + ")*" + employee.WAR_HRA + "%";
-                                    }
-                                    else
-                                    {
-                                        str1 = "(" + employee.WAR_HRA + "/" + employee.WAR_TotalWorkingDays + ")*" + employee.WAR_TotalPaybleDays;
-                                    }
-
-                                    <td class="lightgray"><span title="@str1">@Math.Round(employee.WAR_HRA_Calculated, MidpointRounding.AwayFromZero)</span></td>
-
-                                    foreach (var all in employee.allowanceVMs.OrderBy(m => m.allowanceVM.ALL_Id))
-                                    {
-                                        string str = "";
-                                        if (all.WAA_DayswiseOrFull)
-                                        {
-                                            str = "(" + all.WAA_Amount + "/" + employee.WAR_TotalWorkingDays + ")*" + employee.WAR_TotalPaybleDays;
-                                        }
-                                        else
-                                        {
-                                            str = "Fixed " + all.WAA_Amount;
-                                        }
-                                        <td class="lightgray"><span title="@str">@Math.Round(all.WAA_Amount_Calculated, MidpointRounding.AwayFromZero)</span></td>
-                                    }
-
-                                    @if (clientRequirement.CRI_OutStation_Allowance == true)
-                                    {
-                                        <td class="lightgray">@Math.Round((employee.WAR_OutStation_Allowance_Calculated != null ? employee.WAR_OutStation_Allowance_Calculated.Value : 0), MidpointRounding.AwayFromZero)</td>
-                                    }
-                                    @if (clientRequirement.CRI_Attendance_Allowance == true)
-                                    {
-                                        <td class="lightgray">@Math.Round((employee.WAR_Attendance_Allowance_Calculated != null ? employee.WAR_Attendance_Allowance_Calculated.Value : 0), MidpointRounding.AwayFromZero)</td>
-                                    }
-                                    @if (clientRequirement.CRI_Nightshift_Allowance == true)
-                                    {
-                                        <td class="lightgray">@Math.Round((employee.WAR_Nightshift_Allowance_Calculated != null ? employee.WAR_Nightshift_Allowance_Calculated.Value : 0), MidpointRounding.AwayFromZero)</td>
-                                    }
-                                    @if (clientRequirement.CRI_Performance_Allowance == true)
-                                    {
-                                        <td class="lightgray">@Math.Round((employee.WAR_Performance_Allowance_Calculated != null ? employee.WAR_Performance_Allowance_Calculated.Value : 0), MidpointRounding.AwayFromZero)</td>
-                                    }
-                                    @if (!clientRequirement.CRI_OT_Calculate_Payableday)
-                                    {
-                                        <td class="lightgray">@Math.Round(employee.WAR_OverTime_Calculated, MidpointRounding.AwayFromZero)</td>
-                                    }
-                                    <td class="lightgray">@Math.Round(employee.WAR_GrossTotal, MidpointRounding.AwayFromZero)</td>
-
-                                    string toolPF = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_PF_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
-                                    toolPF = "(" + toolPF + ")*" + employee.WAR_PF + "%";
-
-                                    <td class="silver"><span title="@toolPF">@Math.Round(employee.WAR_PF_Calculated, MidpointRounding.AwayFromZero)</span></td>
-
-                                    string toolESIC = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_ESIC_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
-                                    toolESIC = "(" + toolESIC + ")*" + employee.WAR_ESIC + "%";
-
-                                    <td class="silver"><span title="@toolESIC">@Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero)</span></td>
-
-                                    @if (clientRequirement.CRI_ProfessionalTax == true)
-                                    {
-                                        <td class="silver">
-                                            <span title="toolESIC">
-                                                @Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated), MidpointRounding.AwayFromZero)
-                                            </span>
-                                        </td>
-                                    }
-                                    @if (clientRequirement.CRI_RevenueDeduction == true)
-                                    {
-                                        <td class="silver"><span title="toolESIC">@(employee.WAR_RevenueDeduction_Calculated)</span></td>
-                                    }
-                                    @if (clientRequirement.CRI_CanteenFacility == true)
-                                    {
-                                        @if (employee.WAR_CanteenFacility_Calculation == "-")
-                                        {
-                                            <td class="silver">
-                                                <span style="color:darkred">-</span>
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td class="silver">
-                                                <span>@(employee.WAR_CanteenFacility_Calculation)</span>
-                                            </td>
-                                        }
-
-
-                                    }
-                                    <td class="silver">@Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero)</td>
-
-                                    decimal DeductTotal = @Math.Round(employee.WAR_PF_Calculated) + @Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero) + @Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated) + @Math.Round(employee.WAR_LWF_Deduction_Employee != null ? employee.WAR_LWF_Deduction_Employee.Value : 0), MidpointRounding.AwayFromZero)
-                                    + @Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero);
-                                    if (employee.WAR_RevenueDeduction_Calculated != "-")
-                                    {
-                                        DeductTotal += @Math.Round(Convert.ToDecimal(employee.WAR_RevenueDeduction_Calculated), MidpointRounding.AwayFromZero);
-                                    }
-                                    if (employee.WAR_CanteenFacility_Calculation != "-")
-                                    {
-                                        DeductTotal += @Math.Round(Convert.ToDecimal(employee.WAR_CanteenFacility_Calculation), MidpointRounding.AwayFromZero);
-                                    }
-
-                                    @if ((wage.WAG_Month.Month == (int)ProjectUtils.Month.June || wage.WAG_Month.Month == (int)ProjectUtils.Month.December) && !employee.designation.DES_Exclude_LWF)
-                                    {
-                                        <td class="silver">@Math.Round(employee.WAR_LWF_Deduction_Employee.Value, MidpointRounding.AwayFromZero)</td>
-                                    }
-                                    <td class="silver">@DeductTotal</td>
-                                    <td class="gray">@Math.Round(employee.WAR_FinalTotal, MidpointRounding.AwayFromZero)</td>
-
-                                    @if (item.wageProcessClientVM != null && item.wageProcessVM.WageStatus == false)
-                                    {
-                                        <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id, FRM_Id = wage.FRM_Id }, new { @class = "myClass",@target="_blank" })</td>
-                                    }
-                                    <td>@employee.clientRequirementVM.CRI_Id</td>
+                                    str1 = "(" + employee.WAR_Basic_Calculated + "+" + employee.WAR_DA_Calculated + ")*" + employee.WAR_HRA + "%";
                                 }
                                 else
                                 {
-                                    <td class="gainsboro">-</td>
-                                    <td class="gainsboro">-</td>
-                                    <td class="lightgray">-</td>
-                                    <td class="lightgray">-</td>
-                                    <td class="lightgray">-</td>
-                                    <td class="lightgray">-</td>
-                                    <td class="silver">-</td>
-                                    <td class="silver">-</td>
-                                    <td class="silver">-</td>
-                                    <td class="gray">-</td>
+                                    str1 = "(" + employee.WAR_HRA + "/" + employee.WAR_TotalWorkingDays + ")*" + employee.WAR_TotalPaybleDays;
                                 }
 
-                            </tr>
+                                <td class="lightgray"><span title="@str1">@Math.Round(employee.WAR_HRA_Calculated, MidpointRounding.AwayFromZero)</span></td>
+
+                                foreach (var all in employee.allowanceVMs.OrderBy(m => m.allowanceVM.ALL_Id))
+                                {
+                                    string str = "";
+                                    if (all.WAA_DayswiseOrFull)
+                                    {
+                                        str = "(" + all.WAA_Amount + "/" + employee.WAR_TotalWorkingDays + ")*" + employee.WAR_TotalPaybleDays;
+                                    }
+                                    else
+                                    {
+                                        str = "Fixed " + all.WAA_Amount;
+                                    }
+                                    <td class="lightgray"><span title="@str">@Math.Round(all.WAA_Amount_Calculated, MidpointRounding.AwayFromZero)</span></td>
+                                }
+
+                                @if (clientRequirement.CRI_OutStation_Allowance == true)
+                                {
+                                    <td class="lightgray">@Math.Round((employee.WAR_OutStation_Allowance_Calculated != null ? employee.WAR_OutStation_Allowance_Calculated.Value : 0), MidpointRounding.AwayFromZero)</td>
+                                }
+                                @if (clientRequirement.CRI_Allowance_1 == true)
+                                {
+                                    <td class="lightgray">@Math.Round((employee.WAR_Allowance_Calculated_1 != null ? employee.WAR_Allowance_Calculated_1.Value : 0), MidpointRounding.AwayFromZero)</td>
+                                }
+                                @if (clientRequirement.CRI_Allowance_2 == true)
+                                {
+                                    <td class="lightgray">@Math.Round((employee.WAR_Allowance_Calculated_2 != null ? employee.WAR_Allowance_Calculated_2.Value : 0), MidpointRounding.AwayFromZero)</td>
+                                }
+                                @if (clientRequirement.CRI_Allowance_3 == true)
+                                {
+                                    <td class="lightgray">@Math.Round((employee.WAR_Allowance_Calculated_3 != null ? employee.WAR_Allowance_Calculated_3.Value : 0), MidpointRounding.AwayFromZero)</td>
+                                }
+                                @if (clientRequirement.CRI_Allowance_4 == true)
+                                {
+                                    <td class="lightgray">@Math.Round((employee.WAR_Allowance_Calculated_4 != null ? employee.WAR_Allowance_Calculated_4.Value : 0), MidpointRounding.AwayFromZero)</td>
+                                }
+                                @if (clientRequirement.CRI_Allowance_5 == true)
+                                {
+                                    <td class="lightgray">@Math.Round((employee.WAR_Allowance_Calculated_5 != null ? employee.WAR_Allowance_Calculated_5.Value : 0), MidpointRounding.AwayFromZero)</td>
+                                }
+                                @if (clientRequirement.CRI_Attendance_Allowance == true)
+                                {
+                                    <td class="lightgray">@Math.Round((employee.WAR_Attendance_Allowance_Calculated != null ? employee.WAR_Attendance_Allowance_Calculated.Value : 0), MidpointRounding.AwayFromZero)</td>
+                                }
+                                @if (clientRequirement.CRI_Nightshift_Allowance == true)
+                                {
+                                    <td class="lightgray">@Math.Round((employee.WAR_Nightshift_Allowance_Calculated != null ? employee.WAR_Nightshift_Allowance_Calculated.Value : 0), MidpointRounding.AwayFromZero)</td>
+                                }
+                                @if (clientRequirement.CRI_Performance_Allowance == true)
+                                {
+                                    <td class="lightgray">@Math.Round((employee.WAR_Performance_Allowance_Calculated != null ? employee.WAR_Performance_Allowance_Calculated.Value : 0), MidpointRounding.AwayFromZero)</td>
+                                }
+                                @if (!clientRequirement.CRI_OT_Calculate_Payableday)
+                                {
+                                    <td class="lightgray">@Math.Round(employee.WAR_OverTime_Calculated, MidpointRounding.AwayFromZero)</td>
+                                }
+                                <td class="lightgray">@Math.Round(employee.WAR_GrossTotal, MidpointRounding.AwayFromZero)</td>
+
+                                string toolPF = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_PF_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
+                                toolPF = "(" + toolPF + ")*" + employee.WAR_PF + "%";
+
+                                <td class="silver"><span title="@toolPF">@Math.Round(employee.WAR_PF_Calculated, MidpointRounding.AwayFromZero)</span></td>
+
+                                string toolESIC = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_ESIC_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
+                                toolESIC = "(" + toolESIC + ")*" + employee.WAR_ESIC + "%";
+
+                                <td class="silver"><span title="@toolESIC">@Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero)</span></td>
+
+                                @if (clientRequirement.CRI_ProfessionalTax == true)
+                                {
+                                    <td class="silver">
+                                        <span title="toolESIC">
+                                            @Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated), MidpointRounding.AwayFromZero)
+                                        </span>
+                                    </td>
+                                }
+                                @if (clientRequirement.CRI_RevenueDeduction == true)
+                                {
+                                    <td class="silver"><span title="toolESIC">@(employee.WAR_RevenueDeduction_Calculated)</span></td>
+                                }
+                                @if (clientRequirement.CRI_CanteenFacility == true)
+                                {
+                                    @if (employee.WAR_CanteenFacility_Calculation == "-")
+                                    {
+                                        <td class="silver">
+                                            <span style="color:darkred">-</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="silver">
+                                            <span>@(employee.WAR_CanteenFacility_Calculation)</span>
+                                        </td>
+                                    }
+
+
+                                }
+                                <td class="silver">@Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero)</td>
+
+                                decimal DeductTotal = @Math.Round(employee.WAR_PF_Calculated) + @Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero) + @Math.Round(Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated) + @Math.Round(employee.WAR_LWF_Deduction_Employee != null ? employee.WAR_LWF_Deduction_Employee.Value : 0), MidpointRounding.AwayFromZero)
+                                + @Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero);
+                                if (employee.WAR_RevenueDeduction_Calculated != "-")
+                                {
+                                    DeductTotal += @Math.Round(Convert.ToDecimal(employee.WAR_RevenueDeduction_Calculated), MidpointRounding.AwayFromZero);
+                                }
+                                if (employee.WAR_CanteenFacility_Calculation != "-")
+                                {
+                                    DeductTotal += @Math.Round(Convert.ToDecimal(employee.WAR_CanteenFacility_Calculation), MidpointRounding.AwayFromZero);
+                                }
+
+                                @if ((wage.WAG_Month.Month == (int)ProjectUtils.Month.June || wage.WAG_Month.Month == (int)ProjectUtils.Month.December) && !employee.designation.DES_Exclude_LWF)
+                                {
+                                    <td class="silver">@Math.Round(employee.WAR_LWF_Deduction_Employee.Value, MidpointRounding.AwayFromZero)</td>
+                                }
+                                <td class="silver">@DeductTotal</td>
+                                <td class="gray">@Math.Round(employee.WAR_FinalTotal, MidpointRounding.AwayFromZero)</td>
+
+                                @if (item.wageProcessClientVM != null && item.wageProcessVM.WageStatus == false)
+                                {
+                                    <td class="dimgray my-class">@Html.ActionLink("Edit", "EditWageRegister", "WageRegister", new { WAR_Id = employee.WAR_Id, FRM_Id = wage.FRM_Id }, new { @class = "myClass", @target = "_blank" })</td>
+                                }
+                                <td>@employee.clientRequirementVM.CRI_Id</td>
+                            }
+                            else
+                            {
+                                <td class="gainsboro">-</td>
+                                <td class="gainsboro">-</td>
+                                <td class="lightgray">-</td>
+                                <td class="lightgray">-</td>
+                                <td class="lightgray">-</td>
+                                <td class="lightgray">-</td>
+                                <td class="silver">-</td>
+                                <td class="silver">-</td>
+                                <td class="silver">-</td>
+                                <td class="gray">-</td>
+                            }
+
+                        </tr>
                         }
                     </tbody>
                 </table>

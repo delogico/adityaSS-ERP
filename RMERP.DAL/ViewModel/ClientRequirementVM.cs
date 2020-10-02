@@ -16,7 +16,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Requirement for")]
         [Required(ErrorMessage = "Please select designation")]
         public int DES_Id { get; set; }
-        
+
         [Display(Name = "Total Post")]
         [Required(ErrorMessage = "Please select Total Posts")]
         public int CRI_Total { get; set; }
@@ -59,7 +59,7 @@ namespace RMERP.DAL.ViewModel
         public bool CRI_IsPayable_WeeklyOff { get; set; }
         [Display(Name = "Public holiday is payable?")]
         public bool CRI_IsPayable_PublicHoliday { get; set; }
-        [Required(ErrorMessage ="Date is required")]       
+        [Required(ErrorMessage = "Date is required")]
         [Display(Name = "Effective From")]
         [DataType(DataType.Date)]
         public DateTime CRI_RegisteredOn { get; set; }
@@ -99,7 +99,7 @@ namespace RMERP.DAL.ViewModel
         public bool CRI_OT_Calculate_Payableday { get; set; } = true;
         [Display(Name = "Consider OT differently")]
         public bool CRI_OT_Calculate_Differently { get; set; } = true;
-        [Display(Name = "Consider fixed amount per hour")]       
+        [Display(Name = "Consider fixed amount per hour")]
         public decimal? CRI_OT_Fixed_PerHour { get; set; } = 0;
         [Display(Name = "Calculate by formula")]
         public bool CRI_OT_Calculate_By_Formula { get; set; }
@@ -132,7 +132,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Employee Pension Scheme Rate(%)")]
         public double CRI_EPS_Rate { get; set; }
         [Display(Name = "Employer MLWF Contribution(INR)")]
-       
+
         public decimal? CRI_MLWF_Employer_GThen { get; set; }
         public decimal? CRI_MLWF_Employer_LThen { get; set; }
         public decimal? CRI_MLWF_Employee_GThen { get; set; }
@@ -160,6 +160,22 @@ namespace RMERP.DAL.ViewModel
         public decimal CRI_ProffTax_F_From_3 { get; set; }
         public decimal CRI_ProffTax_F_To_3 { get; set; }
         public decimal CRI_ProffTax_F_Amount_3 { get; set; }
+        
+        [Display(Name = "Allowance 1")]
+        public bool CRI_Allowance_1 { get; set; }
+        public string CRI_Allowance_Name_1 { get; set; }
+        [Display(Name = "Allowance 2")]
+        public bool CRI_Allowance_2 { get; set; }
+        public string CRI_Allowance_Name_2 { get; set; }
+        [Display(Name = "Allowance 3")]
+        public bool CRI_Allowance_3 { get; set; }
+        public string CRI_Allowance_Name_3 { get; set; }
+        [Display(Name = "Allowance 4")]
+        public bool CRI_Allowance_4 { get; set; }
+        public string CRI_Allowance_Name_4 { get; set; }
+        [Display(Name = "Allowance 5")]
+        public bool CRI_Allowance_5 { get; set; }
+        public string CRI_Allowance_Name_5 { get; set; }
 
     }
 }

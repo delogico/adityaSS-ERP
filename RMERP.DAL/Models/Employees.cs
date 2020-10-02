@@ -28,8 +28,8 @@ namespace RMERP.DAL.Models
         public bool EMP_Gender { get; set; }
         public string EMP_Contact_Primary { get; set; }
         public string EMP_Contact_Secondry { get; set; }
-        public string EMP_Temporary_Address { get; set; }
         public string EMP_Permanent_Address { get; set; }
+        public string EMP_Temporary_Address { get; set; }
         public string EMP_Designation { get; set; }
         public string EMP_Pan_Number { get; set; }
         public string EMP_ESIC_Number { get; set; }

@@ -94,6 +94,7 @@ namespace RMERP.DAL.ManagerClasses
             CanteenManager canteenManager = new CanteenManager(_context);
             OutstationManager outstationManager = new OutstationManager(_context);
             PerformanceManager performanceManager = new PerformanceManager(_context);
+            AllowanceManager allowanceManager = new AllowanceManager(_context);
             IEnumerable<Clients_Employees> clientsEmployees = clientsManager.listActiveClientsEmployees(CLI_Id, wageProcess.WAG_Month);
             foreach (Clients_Employees employee in clientsEmployees)
             {
@@ -106,7 +107,15 @@ namespace RMERP.DAL.ManagerClasses
                     double totalPaybleDays = 0;
                     decimal CRI_Basic = 0M, WAR_Basic_Calculated = 0M, BasicDa = 0M, WAR_OverTime_Calculated = 0M, WAR_PF, WAR_PF_Calculated = 0M, WAR_ESIC = 0M, WAR_ESIC_Calculated = 0M, WAR_LWF_Deduction_Employer = 0M, WAR_LWF_Deduction_Employee = 0M;
                     decimal CRI_DA = 0M, CRI_DA_Calculated = 0M, CRI_HRA = 0M, CRI_HRA_Calculated = 0M;
-                    decimal WAR_Attendance_Allowance_Calculated = 0M, WAR_Outstation_Allowance_Calculated = 0M, WAR_Performance_Allowance_Calculated = 0M, WAR_Nightshift_Allowance_Calculated = 0M;
+                    decimal WAR_Attendance_Allowance_Calculated = 0M, 
+                        WAR_Outstation_Allowance_Calculated = 0M, 
+                        WAR_Performance_Allowance_Calculated = 0M, 
+                        WAR_Nightshift_Allowance_Calculated = 0M,
+                        WAR_Allowance_Calculated_1=0M,
+                        WAR_Allowance_Calculated_2=0M,
+                        WAR_Allowance_Calculated_3=0M,
+                        WAR_Allowance_Calculated_4=0M,
+                        WAR_Allowance_Calculated_5=0M;
 
                     #region Total working day calculation
                     Clients cli = clientsManager.GetClientById(CLI_Id);
@@ -147,7 +156,6 @@ namespace RMERP.DAL.ManagerClasses
 
                     if (cr != null)
                     {
-
                         if (cr.CRI_IsPayable_WeeklyOff)
                         {
                             totalPaybleDays = totalPaybleDays + totWeekOffs;
@@ -199,6 +207,7 @@ namespace RMERP.DAL.ManagerClasses
                                 wageRegisterVM.WAR_CanteenFacility_Calculation = "-";
                             }
                         }
+                        
                         if (cr.CRI_Nightshift_Allowance)
                         {
                             // WAR_Nightshift_Allowance_Calculated = Convert.ToDecimal(Convert.ToDouble(cr.CRI_Nightshift_Allowance_Rate.Value) * totNighthours);
@@ -218,6 +227,81 @@ namespace RMERP.DAL.ManagerClasses
                             else
                             {
                                 wageRegisterVM.WAR_Performance_Allowance_Calculated = 0;
+                            }
+                        }
+                        if (cr.CRI_Allowance_1)
+                        {
+                            Wage_Register_Allowances_1 all_1 = new Wage_Register_Allowances_1();
+                            all_1 = allowanceManager.GetAllowances_ByCLE_1(wageProcess.WAG_Id, employee.CLE_Id, employee.CLI_Id);
+                            if (all_1 != null)
+                            {
+                                WAR_Allowance_Calculated_1 = all_1.WRA_Amount_1;
+                                wageRegisterVM.WRA_Id_1 = all_1.WRA_Id_1;
+                                wageRegisterVM.WAR_Allowance_Calculated_1 = WAR_Allowance_Calculated_1;
+                            }
+                            else
+                            {
+                                wageRegisterVM.WAR_Allowance_Calculated_1 = 0;
+                            }
+                        }
+                        if (cr.CRI_Allowance_2)
+                        {
+                            Wage_Register_Allowances_2 all_2 = new Wage_Register_Allowances_2();
+                            all_2 = allowanceManager.GetAllowances_ByCLE_2(wageProcess.WAG_Id, employee.CLE_Id, employee.CLI_Id);
+                            if (all_2 != null)
+                            {
+                                WAR_Allowance_Calculated_2 = all_2.WRA_Amount_2;
+                                wageRegisterVM.WRA_Id_2 = all_2.WRA_Id_2;
+                                wageRegisterVM.WAR_Allowance_Calculated_2 = WAR_Allowance_Calculated_2;
+                            }
+                            else
+                            {
+                                wageRegisterVM.WAR_Allowance_Calculated_2 = 0;
+                            }
+                        }
+                        if (cr.CRI_Allowance_3)
+                        {
+                            Wage_Register_Allowances_3 all_3 = new Wage_Register_Allowances_3();
+                            all_3 = allowanceManager.GetAllowances_ByCLE_3(wageProcess.WAG_Id, employee.CLE_Id, employee.CLI_Id);
+                            if (all_3 != null)
+                            {
+                                WAR_Allowance_Calculated_3 = all_3.WRA_Amount_3;
+                                wageRegisterVM.WRA_Id_3 = all_3.WRA_Id_3;
+                                wageRegisterVM.WAR_Allowance_Calculated_3 = WAR_Allowance_Calculated_3;
+                            }
+                            else
+                            {
+                                wageRegisterVM.WAR_Allowance_Calculated_3 = 0;
+                            }
+                        }
+                        if (cr.CRI_Allowance_4)
+                        {
+                            Wage_Register_Allowances_4 all_4 = new Wage_Register_Allowances_4();
+                            all_4 = allowanceManager.GetAllowances_ByCLE_4(wageProcess.WAG_Id, employee.CLE_Id, employee.CLI_Id);
+                            if (all_4 != null)
+                            {
+                                WAR_Allowance_Calculated_4 = all_4.WRA_Amount_4;
+                                wageRegisterVM.WRA_Id_4 = all_4.WRA_Id_4;
+                                wageRegisterVM.WAR_Allowance_Calculated_4 = WAR_Allowance_Calculated_4;
+                            }
+                            else
+                            {
+                                wageRegisterVM.WAR_Allowance_Calculated_4 = 0;
+                            }
+                        }
+                        if (cr.CRI_Allowance_5)
+                        {
+                            Wage_Register_Allowances_5 all_5 = new Wage_Register_Allowances_5();
+                            all_5 = allowanceManager.GetAllowances_ByCLE_5(wageProcess.WAG_Id, employee.CLE_Id, employee.CLI_Id);
+                            if (all_5 != null)
+                            {
+                                WAR_Allowance_Calculated_5 = all_5.WRA_Amount_5;
+                                wageRegisterVM.WRA_Id_5 = all_5.WRA_Id_5;
+                                wageRegisterVM.WAR_Allowance_Calculated_5 = WAR_Allowance_Calculated_5;
+                            }
+                            else
+                            {
+                                wageRegisterVM.WAR_Allowance_Calculated_5 = 0;
                             }
                         }
                     }
@@ -258,7 +342,7 @@ namespace RMERP.DAL.ManagerClasses
                         if(cr!=null)
                             CRI_HRA_Calculated = (cr.CRI_HRA_Fixed == null ? Math.Round((Math.Round(CalculatedBasicDa * Convert.ToDecimal(cr.CRI_HRA_Percentage))) / 100, MidpointRounding.AwayFromZero) : Math.Round((Decimal.Multiply(cr.CRI_HRA_Fixed.Value, Convert.ToDecimal(totalPaybleDays))) / totalWorkingDays, MidpointRounding.AwayFromZero));
 
-                        #region START PF-ESIC -OT CALCULATION  
+                            #region START PF-ESIC -OT CALCULATION  
                         if (OvertimeInDay > 0)
                         {
                             if (cr != null)
@@ -271,9 +355,20 @@ namespace RMERP.DAL.ManagerClasses
                                     }
                                     else if (cr.CRI_OT_Formula != null)
                                     {
-                                        decimal OTsum = Math.Round(GetAmountBasedOnFormulaOT(cr.CRI_OT_Formula, WAR_Basic_Calculated, CRI_DA_Calculated,
-                                            CRI_HRA_Calculated, cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_Outstation_Allowance_Calculated,
-                                            WAR_Attendance_Allowance_Calculated, WAR_Nightshift_Allowance_Calculated, WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
+                                        decimal OTsum = Math.Round(GetAmountBasedOnFormulaOT(
+                                            cr.CRI_OT_Formula, 
+                                            WAR_Basic_Calculated, 
+                                            CRI_DA_Calculated,
+                                            CRI_HRA_Calculated, 
+                                            cr.Client_Requirement_Allowances.ToList(), 
+                                            totalWorkingDays, 
+                                            totalPaybleDays, 
+                                            WAR_Outstation_Allowance_Calculated,
+                                            WAR_Attendance_Allowance_Calculated, 
+                                            WAR_Nightshift_Allowance_Calculated, 
+                                            WAR_Performance_Allowance_Calculated,
+                                            WAR_Allowance_Calculated_1, WAR_Allowance_Calculated_2, WAR_Allowance_Calculated_3, WAR_Allowance_Calculated_4, WAR_Allowance_Calculated_5
+                                            ), MidpointRounding.AwayFromZero);
 
                                         WAR_OverTime_Calculated = Math.Round(Convert.ToDecimal(((Convert.ToDouble(OTsum) / totalPaybleDays) * OvertimeInDay) * cr.CRI_OT_MultipleTimes), MidpointRounding.AwayFromZero);
                                     }
@@ -287,13 +382,14 @@ namespace RMERP.DAL.ManagerClasses
                             cr.CRI_PF_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated,
                             cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays,
                             WAR_OverTime_Calculated, WAR_Outstation_Allowance_Calculated, WAR_Attendance_Allowance_Calculated,
-                            WAR_Nightshift_Allowance_Calculated, WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
+                            WAR_Nightshift_Allowance_Calculated, WAR_Performance_Allowance_Calculated,
+                             WAR_Allowance_Calculated_1, WAR_Allowance_Calculated_2, WAR_Allowance_Calculated_3, WAR_Allowance_Calculated_4, WAR_Allowance_Calculated_5), MidpointRounding.AwayFromZero);
 
                             decimal ESICsum = Math.Round(GetAmountBasedOnFormula(
                                 cr.CRI_ESIC_Formula, WAR_Basic_Calculated, CRI_DA_Calculated, CRI_HRA_Calculated,
                                 cr.Client_Requirement_Allowances.ToList(), totalWorkingDays, totalPaybleDays, WAR_OverTime_Calculated,
                                 WAR_Outstation_Allowance_Calculated, WAR_Attendance_Allowance_Calculated, WAR_Nightshift_Allowance_Calculated,
-                                WAR_Performance_Allowance_Calculated), MidpointRounding.AwayFromZero);
+                                WAR_Performance_Allowance_Calculated, WAR_Allowance_Calculated_1, WAR_Allowance_Calculated_2, WAR_Allowance_Calculated_3, WAR_Allowance_Calculated_4, WAR_Allowance_Calculated_5), MidpointRounding.AwayFromZero);
 
                             WAR_PF = Convert.ToDecimal(cr.CRI_PF_Percentage);
                             WAR_ESIC = Convert.ToDecimal(cr.CRI_ESIC_Percentage);
@@ -354,7 +450,8 @@ namespace RMERP.DAL.ManagerClasses
                     //************************** ALLOWANCES CALCULATION *****************************/
                     decimal WAR_GrossTotal = Math.Round(WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + WAR_OverTime_Calculated +
                                                         AllowancesTotal + WAR_Outstation_Allowance_Calculated + WAR_Nightshift_Allowance_Calculated +
-                                                        WAR_Performance_Allowance_Calculated + WAR_Attendance_Allowance_Calculated, MidpointRounding.AwayFromZero);
+                                                        WAR_Performance_Allowance_Calculated + WAR_Attendance_Allowance_Calculated+
+                                                         WAR_Allowance_Calculated_1+ WAR_Allowance_Calculated_2+ WAR_Allowance_Calculated_3+ WAR_Allowance_Calculated_4+ WAR_Allowance_Calculated_5, MidpointRounding.AwayFromZero);
 
                     #region EMI Calculation
 

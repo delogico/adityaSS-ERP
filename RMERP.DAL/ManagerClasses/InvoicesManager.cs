@@ -195,7 +195,12 @@ namespace RMERP.DAL.ManagerClasses
                             (wage.WAR_OutStation_Allowance_Calculated != null ? wage.WAR_OutStation_Allowance_Calculated.Value : 0),
                             (wage.WAR_Attendance_Allowance_Calculated != null ? wage.WAR_Attendance_Allowance_Calculated.Value : 0),
                             (wage.WAR_Nightshift_Allowance_Calculated != null ? wage.WAR_Nightshift_Allowance_Calculated.Value : 0),
-                            (wage.WAR_Performance_Allowance_Calculated != null ? wage.WAR_Performance_Allowance_Calculated.Value : 0));
+                            (wage.WAR_Performance_Allowance_Calculated != null ? wage.WAR_Performance_Allowance_Calculated.Value : 0),
+                            (wage.WAR_Allowance_Calculated_1 != null ? wage.WAR_Allowance_Calculated_1.Value : 0),
+                             (wage.WAR_Allowance_Calculated_2 != null ? wage.WAR_Allowance_Calculated_2.Value : 0),
+                              (wage.WAR_Allowance_Calculated_3 != null ? wage.WAR_Allowance_Calculated_3.Value : 0),
+                               (wage.WAR_Allowance_Calculated_4 != null ? wage.WAR_Allowance_Calculated_4.Value : 0),
+                                (wage.WAR_Allowance_Calculated_5 != null ? wage.WAR_Allowance_Calculated_5.Value : 0));
 
                         Tot_OT_Allowances = Tot_OT_Allowances + (wage.WAR_OverTime_Calculated + (wage.Wage_Register_Allowances.Select(m => m.WAA_Amount_Calculated).Sum()));
 
@@ -354,7 +359,12 @@ namespace RMERP.DAL.ManagerClasses
                         (item.WAR_OutStation_Allowance_Calculated != null ? item.WAR_OutStation_Allowance_Calculated.Value : 0),
                         (item.WAR_Attendance_Allowance_Calculated != null ? item.WAR_Attendance_Allowance_Calculated.Value : 0),
                         (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
-                        (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0));
+                        (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0),
+                        (item.WAR_Allowance_Calculated_1 != null ? item.WAR_Allowance_Calculated_1.Value : 0),
+                             (item.WAR_Allowance_Calculated_2 != null ? item.WAR_Allowance_Calculated_2.Value : 0),
+                              (item.WAR_Allowance_Calculated_3 != null ? item.WAR_Allowance_Calculated_3.Value : 0),
+                               (item.WAR_Allowance_Calculated_4 != null ? item.WAR_Allowance_Calculated_4.Value : 0),
+                                (item.WAR_Allowance_Calculated_5 != null ? item.WAR_Allowance_Calculated_5.Value : 0));
 
                     ApplicableSalary = Math.Round(AppSalary + ApplicableSalary, MidpointRounding.AwayFromZero);
                 }
@@ -422,7 +432,12 @@ namespace RMERP.DAL.ManagerClasses
                         (item.WAR_OutStation_Allowance_Calculated != null ? Math.Round(item.WAR_OutStation_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0),
                         (item.WAR_Attendance_Allowance_Calculated != null ? Math.Round(item.WAR_Attendance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0),
                         (item.WAR_Nightshift_Allowance_Calculated != null ? Math.Round(item.WAR_Nightshift_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0),
-                        (item.WAR_Performance_Allowance_Calculated != null ? Math.Round(item.WAR_Performance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0));
+                        (item.WAR_Performance_Allowance_Calculated != null ? Math.Round(item.WAR_Performance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0),
+                        (item.WAR_Allowance_Calculated_1 != null ? item.WAR_Allowance_Calculated_1.Value : 0),
+                             (item.WAR_Allowance_Calculated_2 != null ? item.WAR_Allowance_Calculated_2.Value : 0),
+                              (item.WAR_Allowance_Calculated_3 != null ? item.WAR_Allowance_Calculated_3.Value : 0),
+                               (item.WAR_Allowance_Calculated_4 != null ? item.WAR_Allowance_Calculated_4.Value : 0),
+                                (item.WAR_Allowance_Calculated_5 != null ? item.WAR_Allowance_Calculated_5.Value : 0));
 
                     ApplicableSalary = Math.Round(AppSalary + ApplicableSalary, MidpointRounding.AwayFromZero);
                 }

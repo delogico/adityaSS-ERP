@@ -625,6 +625,7 @@ namespace RMERP.Controllers
                 {
                     clientRequirementVM.CRI_Nightshift_Allowance_Rate = 0;
                 }
+                
                 if (clientRequirementVM.CRI_Billing_Type == (int)ProjectUtils.CRI_BILLING_TYPE.Lump_Sum_Amount)
                 {
                     clientRequirementVM.CRI_Billing_ServiceCharge_Formula = null;

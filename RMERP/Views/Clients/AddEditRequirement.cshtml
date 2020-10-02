@@ -1,8 +1,6 @@
 ﻿@model RMERP.DAL.ViewModel.ClientRequirementVM
-@using static RMERP.DAL.App_Code.ProjectUtils;
 @using static RMERP.DAL.Helpers.ProjectUtils;
 @using RMERP.DAL.Models;
-@using RMERP.DAL.ViewModel;
 @using RMERP.Helpers;
 @{
     ViewData["Title"] = "Client Requirement Detail";
@@ -203,6 +201,99 @@
                                     <hr />
                                 </div>
                                 <div class="col-md-12">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.CRI_Allowance_1, new { @id = "chkAllow_1" })
+                                        &nbsp;@Html.LabelFor(m => m.CRI_Allowance_1, new { @for = "chkAllow_1" })
+                                    </label>
+                                    <div id="divAllow_1" style="display:@(Model.CRI_Allowance_1 ? "block" : "none")">
+                                        <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <div class="col-md-12">
+                                                    <div class="col-md-12">
+                                                        @Html.TextBoxFor(m => m.CRI_Allowance_Name_1, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(m => m.CRI_Allowance_Name_1, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.CRI_Allowance_2, new { @id = "chkAllow_2" })
+                                        &nbsp;@Html.LabelFor(m => m.CRI_Allowance_2, new { @for = "chkAllow_2" })
+                                    </label>
+                                    <div id="divAllow_2" style="display:@(Model.CRI_Allowance_2 ? "block" : "none")">
+                                        <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <div class="col-md-12">
+                                                    <div class="col-md-12">
+                                                        @Html.TextBoxFor(m => m.CRI_Allowance_Name_2, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(m => m.CRI_Allowance_Name_2, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.CRI_Allowance_3, new { @id = "chkAllow_3" })
+                                        &nbsp;@Html.LabelFor(m => m.CRI_Allowance_3, new { @for = "chkAllow_3" })
+                                    </label>
+                                    <div id="divAllow_3" style="display:@(Model.CRI_Allowance_3 ? "block" : "none")">
+                                        <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <div class="col-md-12">
+                                                    <div class="col-md-12">
+                                                        @Html.TextBoxFor(m => m.CRI_Allowance_Name_3, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(m => m.CRI_Allowance_Name_3, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.CRI_Allowance_4, new { @id = "chkAllow_4" })
+                                        &nbsp;@Html.LabelFor(m => m.CRI_Allowance_4, new { @for = "chkAllow_4" })
+                                    </label>
+                                    <div id="divAllow_4" style="display:@(Model.CRI_Allowance_4 ? "block" : "none")">
+                                        <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <div class="col-md-12">
+                                                    <div class="col-md-12">
+                                                        @Html.TextBoxFor(m => m.CRI_Allowance_Name_4, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(m => m.CRI_Allowance_Name_4, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label>
+                                        @Html.CheckBoxFor(m => m.CRI_Allowance_5, new { @id = "chkAllow_5" })
+                                        &nbsp;@Html.LabelFor(m => m.CRI_Allowance_5, new { @for = "chkAllow_5" })
+                                    </label>
+                                    <div id="divAllow_5" style="display:@(Model.CRI_Allowance_5 ? "block" : "none")">
+                                        <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <div class="col-md-12">
+                                                    <div class="col-md-12">
+                                                        @Html.TextBoxFor(m => m.CRI_Allowance_Name_5, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(m => m.CRI_Allowance_Name_5, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <hr />
+                                </div>
+                                <div class="col-md-12">
                                     <b>Other Allowances</b>
                                 </div>
                                 <div class="col-md-12 other-allowance">
@@ -332,6 +423,76 @@
                                                         @Html.CheckBox("pf_OutStation", new { @class = "PFselection", @value = "OSL" })
                                                     }
                                                     @Html.Raw("OutStation Allowance")
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Allowance_1 == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arr != null && arr.Contains("ALL_1"))
+                                                    {
+                                                        @Html.CheckBox("pf_ALL_1", new { @class = "PFselection", @value = "ALL_1", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("pf_ALL_1", new { @class = "PFselection", @value = "ALL_1" })
+                                                    }
+                                                    @Html.Raw(Model.CRI_Allowance_Name_1)
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Allowance_2 == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arr != null && arr.Contains("ALL_2"))
+                                                    {
+                                                        @Html.CheckBox("pf_ALL_2", new { @class = "PFselection", @value = "ALL_2", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("pf_ALL_2", new { @class = "PFselection", @value = "ALL_2" })
+                                                    }
+                                                    @Html.Raw(Model.CRI_Allowance_Name_2)
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Allowance_3 == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arr != null && arr.Contains("ALL_3"))
+                                                    {
+                                                        @Html.CheckBox("pf_ALL_3", new { @class = "PFselection", @value = "ALL_3", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("pf_ALL_3", new { @class = "PFselection", @value = "ALL_3" })
+                                                    }
+                                                    @Html.Raw(Model.CRI_Allowance_Name_3)
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Allowance_4 == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arr != null && arr.Contains("ALL_4"))
+                                                    {
+                                                        @Html.CheckBox("pf_ALL_4", new { @class = "PFselection", @value = "ALL_4", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("pf_ALL_4", new { @class = "PFselection", @value = "ALL_4" })
+                                                    }
+                                                    @Html.Raw(Model.CRI_Allowance_Name_4)
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Allowance_5 == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arr != null && arr.Contains("ALL_5"))
+                                                    {
+                                                        @Html.CheckBox("pf_ALL_5", new { @class = "PFselection", @value = "ALL_5", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("pf_ALL_5", new { @class = "PFselection", @value = "ALL_5" })
+                                                    }
+                                                    @Html.Raw(Model.CRI_Allowance_Name_4)
                                                 </div>
                                             }
                                             @if (Model.CRI_Attendance_Allowance == true)
@@ -482,6 +643,76 @@
                                                         @Html.CheckBox("esic_OutStation", new { @class = "ESICselection", @value = "OSL" })
                                                     }
                                                     @Html.Raw("OutStation Allowance")
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Allowance_1 == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arrEsic != null && arrEsic.Contains("ALL_1"))
+                                                    {
+                                                        @Html.CheckBox("esic_ALL_1", new { @class = "ESICselection", @value = "ALL_1", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("esic_ALL_1", new { @class = "ESICselection", @value = "ALL_1" })
+                                                    }
+                                                    @Html.Raw(Model.CRI_Allowance_Name_1)
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Allowance_2 == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arrEsic != null && arrEsic.Contains("ALL_2"))
+                                                    {
+                                                        @Html.CheckBox("esic_ALL_2", new { @class = "ESICselection", @value = "ALL_2", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("esic_ALL_2", new { @class = "ESICselection", @value = "ALL_2" })
+                                                    }
+                                                    @Html.Raw(Model.CRI_Allowance_Name_2)
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Allowance_3 == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arrEsic != null && arrEsic.Contains("ALL_3"))
+                                                    {
+                                                        @Html.CheckBox("esic_ALL_3", new { @class = "ESICselection", @value = "ALL_3", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("esic_ALL_3", new { @class = "ESICselection", @value = "ALL_3" })
+                                                    }
+                                                    @Html.Raw(Model.CRI_Allowance_Name_3)
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Allowance_4 == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arrEsic != null && arrEsic.Contains("ALL_4"))
+                                                    {
+                                                        @Html.CheckBox("esic_ALL_4", new { @class = "ESICselection", @value = "ALL_4", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("esic_ALL_4", new { @class = "ESICselection", @value = "ALL_4" })
+                                                    }
+                                                    @Html.Raw(Model.CRI_Allowance_Name_4)
+                                                </div>
+                                            }
+                                            @if (Model.CRI_Allowance_5 == true)
+                                            {
+                                                <div class="col-md-12">
+                                                    @if (arrEsic != null && arrEsic.Contains("ALL_5"))
+                                                    {
+                                                        @Html.CheckBox("esic_ALL_5", new { @class = "ESICselection", @value = "ALL_5", @checked = "checked" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.CheckBox("esic_ALL_5", new { @class = "ESICselection", @value = "ALL_5" })
+                                                    }
+                                                    @Html.Raw(Model.CRI_Allowance_Name_5)
                                                 </div>
                                             }
                                             @if (Model.CRI_Attendance_Allowance == true)
@@ -765,6 +996,77 @@
                                                                     @Html.Raw("OutStation Allowance")
                                                                 </div>
                                                             }
+                                                            @if (Model.CRI_Allowance_1 == true)
+                                                            {
+                                                                <div class="col-md-12">
+                                                                    @if (arrOT != null && arrOT.Contains("ALL_1"))
+                                                                    {
+                                                                        @Html.CheckBox("OT_ALL_1", new { @class = "OTselection", @value = "ALL_1", @checked = "checked" })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.CheckBox("OT_ALL_1", new { @class = "OTselection", @value = "ALL_1" })
+                                                                    }
+                                                                    @Html.Raw(Model.CRI_Allowance_Name_1)
+                                                                </div>
+                                                            }
+                                                            @if (Model.CRI_Allowance_2 == true)
+                                                            {
+                                                                <div class="col-md-12">
+                                                                    @if (arrOT != null && arrOT.Contains("ALL_2"))
+                                                                    {
+                                                                        @Html.CheckBox("OT_ALL_2", new { @class = "OTselection", @value = "ALL_2", @checked = "checked" })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.CheckBox("OT_ALL_2", new { @class = "OTselection", @value = "ALL_2" })
+                                                                    }
+                                                                    @Html.Raw(Model.CRI_Allowance_Name_2)
+                                                                </div>
+                                                            }
+                                                            @if (Model.CRI_Allowance_3 == true)
+                                                            {
+                                                                <div class="col-md-12">
+                                                                    @if (arrOT != null && arrOT.Contains("ALL_3"))
+                                                                    {
+                                                                        @Html.CheckBox("OT_ALL_3", new { @class = "OTselection", @value = "ALL_3", @checked = "checked" })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.CheckBox("OT_ALL_3", new { @class = "OTselection", @value = "ALL_3" })
+                                                                    }
+                                                                    @Html.Raw(Model.CRI_Allowance_Name_3)
+                                                                </div>
+                                                            }
+                                                            @if (Model.CRI_Allowance_4 == true)
+                                                            {
+                                                                <div class="col-md-12">
+                                                                    @if (arrOT != null && arrOT.Contains("ALL_4"))
+                                                                    {
+                                                                        @Html.CheckBox("OT_ALL_4", new { @class = "OTselection", @value = "ALL_4", @checked = "checked" })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.CheckBox("OT_ALL_4", new { @class = "OTselection", @value = "ALL_4" })
+                                                                    }
+                                                                    @Html.Raw(Model.CRI_Allowance_Name_4)
+                                                                </div>
+                                                            }
+                                                            @if (Model.CRI_Allowance_5 == true)
+                                                            {
+                                                                <div class="col-md-12">
+                                                                    @if (arrOT != null && arrOT.Contains("ALL_5"))
+                                                                    {
+                                                                        @Html.CheckBox("OT_ALL_5", new { @class = "OTselection", @value = "ALL_5", @checked = "checked" })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.CheckBox("OT_ALL_5", new { @class = "OTselection", @value = "ALL_5" })
+                                                                    }
+                                                                    @Html.Raw(Model.CRI_Allowance_Name_5)
+                                                                </div>
+                                                            }
+                                                           
                                                             @if (Model.CRI_Attendance_Allowance == true)
                                                             {
                                                                 <div class="col-md-12">
@@ -960,6 +1262,76 @@
                                                             @Html.CheckBox("Billing_OutStation", new { @class = "Billingselection", @value = "OSL" })
                                                         }
                                                         @Html.Raw("OutStation Allowance")
+                                                    </div>
+                                                }
+                                                @if (Model.CRI_Allowance_1 == true)
+                                                {
+                                                    <div class="col-md-12">
+                                                        @if (arrBilling != null && arrBilling.Contains("ALL_1"))
+                                                        {
+                                                            @Html.CheckBox("Billing_ALL_1", new { @class = "Billingselection", @value = "ALL_1", @checked = "checked" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBox("Billing_ALL_1", new { @class = "Billingselection", @value = "ALL_1" })
+                                                        }
+                                                        @Html.Raw(Model.CRI_Allowance_Name_1)
+                                                    </div>
+                                                }
+                                                @if (Model.CRI_Allowance_2 == true)
+                                                {
+                                                    <div class="col-md-12">
+                                                        @if (arrBilling != null && arrBilling.Contains("ALL_2"))
+                                                        {
+                                                            @Html.CheckBox("Billing_ALL_2", new { @class = "Billingselection", @value = "ALL_2", @checked = "checked" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBox("Billing_ALL_2", new { @class = "Billingselection", @value = "ALL_2" })
+                                                        }
+                                                        @Html.Raw(Model.CRI_Allowance_Name_2)
+                                                    </div>
+                                                }
+                                                @if (Model.CRI_Allowance_3 == true)
+                                                {
+                                                    <div class="col-md-12">
+                                                        @if (arrBilling != null && arrBilling.Contains("ALL_3"))
+                                                        {
+                                                            @Html.CheckBox("Billing_ALL_3", new { @class = "Billingselection", @value = "ALL_3", @checked = "checked" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBox("Billing_ALL_3", new { @class = "Billingselection", @value = "ALL_3" })
+                                                        }
+                                                        @Html.Raw(Model.CRI_Allowance_Name_3)
+                                                    </div>
+                                                }
+                                                @if (Model.CRI_Allowance_4 == true)
+                                                {
+                                                    <div class="col-md-12">
+                                                        @if (arrBilling != null && arrBilling.Contains("ALL_4"))
+                                                        {
+                                                            @Html.CheckBox("Billing_ALL_4", new { @class = "Billingselection", @value = "ALL_4", @checked = "checked" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBox("Billing_ALL_4", new { @class = "Billingselection", @value = "ALL_4" })
+                                                        }
+                                                        @Html.Raw(Model.CRI_Allowance_Name_4)
+                                                    </div>
+                                                }
+                                                @if (Model.CRI_Allowance_5 == true)
+                                                {
+                                                    <div class="col-md-12">
+                                                        @if (arrBilling != null && arrBilling.Contains("ALL_5"))
+                                                        {
+                                                            @Html.CheckBox("Billing_ALL_5", new { @class = "Billingselection", @value = "ALL_5", @checked = "checked" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBox("Billing_ALL_5", new { @class = "Billingselection", @value = "ALL_5" })
+                                                        }
+                                                        @Html.Raw(Model.CRI_Allowance_Name_5)
                                                     </div>
                                                 }
                                                 @if (Model.CRI_Attendance_Allowance == true)
@@ -1267,6 +1639,7 @@
                 $("#CRI_OutStation_Allowance").val("false");
             }
         });
+        
         $('input[id="chkNightshift"]').click(function () {
 
             if ($(this).prop("checked") == true) {
@@ -1312,6 +1685,71 @@
             }
         });
 
+        $('input[id="chkAllow_1"]').click(function () {
+
+            if ($(this).prop("checked") == true) {
+                $("#divAllow_1").show();                
+                var name = "ALL_1";
+                addCheckboxNewAllowance(name);
+                $("#CRI_Allowance_1").val("true");
+            }
+            else if ($(this).prop("checked") == false) {
+                $("#divAllow_1").hide();
+                $("#CRI_Allowance_1").val("false");
+            }
+        });
+        $('input[id="chkAllow_2"]').click(function () {
+
+            if ($(this).prop("checked") == true) {
+                $("#divAllow_2").show();
+                var name = "ALL_2";
+                addCheckboxNewAllowance(name);
+                $("#CRI_Allowance_2").val("true");
+            }
+            else if ($(this).prop("checked") == false) {
+                $("#divAllow_2").hide();
+                $("#CRI_Allowance_2").val("false");
+            }
+        });
+        $('input[id="chkAllow_3"]').click(function () {
+
+            if ($(this).prop("checked") == true) {
+                $("#divAllow_3").show();
+                var name = "ALL_3";
+                addCheckboxNewAllowance(name);
+                $("#CRI_Allowance_3").val("true");
+            }
+            else if ($(this).prop("checked") == false) {
+                $("#divAllow_3").hide();
+                $("#CRI_Allowance_3").val("false");
+            }
+        });
+        $('input[id="chkAllow_4"]').click(function () {
+
+            if ($(this).prop("checked") == true) {
+                $("#divAllow_4").show();
+                var name = "ALL_4";
+                addCheckboxNewAllowance(name);
+                $("#CRI_Allowance_4").val("true");
+            }
+            else if ($(this).prop("checked") == false) {
+                $("#divAllow_4").hide();
+                $("#CRI_Allowance_4").val("false");
+            }
+        });
+        $('input[id="chkAllow_5"]').click(function () {
+
+            if ($(this).prop("checked") == true) {
+                $("#divAllow_5").show();
+                var name = "ALL_5";
+                addCheckboxNewAllowance(name);
+                $("#CRI_Allowance_5").val("true");
+            }
+            else if ($(this).prop("checked") == false) {
+                $("#divAllow_5").hide();
+                $("#CRI_Allowance_5").val("false");
+            }
+        });
         function addCheckboxNewAllowance(allowance) {
             var container = $('#PFlist');
             var containerEsic = $('#ESIClist');
@@ -1335,6 +1773,21 @@
                     break;
                 case "PAL":
                     return "Performance Allowance";
+                    break;
+                case "ALL_1":
+                    return "Allowance 1";
+                    break;
+                case "ALL_2":
+                    return "Allowance 2";
+                    break;
+                case "ALL_3":
+                    return "Allowance 3";
+                    break;
+                case "ALL_4":
+                    return "Allowance 4";
+                    break;
+                case "ALL_5":
+                    return "Allowance 5";
                     break;
                 default:
                     return "";

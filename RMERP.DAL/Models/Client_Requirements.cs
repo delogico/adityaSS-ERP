@@ -77,6 +77,16 @@ namespace RMERP.DAL.Models
         public decimal CRI_ProffTax_F_From_3 { get; set; }
         public decimal CRI_ProffTax_F_To_3 { get; set; }
         public decimal CRI_ProffTax_F_Amount_3 { get; set; }
+        public bool CRI_Allowance_1 { get; set; }
+        public string CRI_Allowance_Name_1 { get; set; }
+        public bool CRI_Allowance_2 { get; set; }
+        public string CRI_Allowance_Name_2 { get; set; }
+        public bool CRI_Allowance_3 { get; set; }
+        public string CRI_Allowance_Name_3 { get; set; }
+        public bool CRI_Allowance_4 { get; set; }
+        public string CRI_Allowance_Name_4 { get; set; }
+        public bool CRI_Allowance_5 { get; set; }
+        public string CRI_Allowance_Name_5 { get; set; }
 
         public Clients CLI_ { get; set; }
         public Designations DES_ { get; set; }

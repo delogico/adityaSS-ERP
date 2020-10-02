@@ -44,6 +44,11 @@ namespace RMERP.DAL.Models
         public virtual DbSet<Wage_Register> Wage_Register { get; set; }
         public virtual DbSet<Wage_Register_Advances> Wage_Register_Advances { get; set; }
         public virtual DbSet<Wage_Register_Allowances> Wage_Register_Allowances { get; set; }
+        public virtual DbSet<Wage_Register_Allowances_1> Wage_Register_Allowances_1 { get; set; }
+        public virtual DbSet<Wage_Register_Allowances_2> Wage_Register_Allowances_2 { get; set; }
+        public virtual DbSet<Wage_Register_Allowances_3> Wage_Register_Allowances_3 { get; set; }
+        public virtual DbSet<Wage_Register_Allowances_4> Wage_Register_Allowances_4 { get; set; }
+        public virtual DbSet<Wage_Register_Allowances_5> Wage_Register_Allowances_5 { get; set; }
         public virtual DbSet<Wage_Register_Canteen> Wage_Register_Canteen { get; set; }
         public virtual DbSet<Wage_Register_Outstation> Wage_Register_Outstation { get; set; }
         public virtual DbSet<Wage_Register_Performance> Wage_Register_Performance { get; set; }
@@ -274,6 +279,26 @@ namespace RMERP.DAL.Models
                 entity.Property(e => e.CRI_Active)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.CRI_Allowance_Name_1)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CRI_Allowance_Name_2)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CRI_Allowance_Name_3)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CRI_Allowance_Name_4)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CRI_Allowance_Name_5)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.CRI_Attendance_Allowance_Rate).HasColumnType("decimal(9, 2)");
 
@@ -512,6 +537,9 @@ namespace RMERP.DAL.Models
             modelBuilder.Entity<Clients_Employees>(entity =>
             {
                 entity.HasKey(e => e.CLE_Id);
+
+                entity.HasIndex(e => e.CLE_Id)
+                    .HasName("IX_Clients_Employees");
 
                 entity.Property(e => e.CLE_ReassignedOn).HasColumnType("datetime");
 
@@ -969,6 +997,16 @@ namespace RMERP.DAL.Models
 
                 entity.Property(e => e.WAR_Advance_Amount).HasColumnType("decimal(9, 2)");
 
+                entity.Property(e => e.WAR_Allowance_Calculated_1).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_Allowance_Calculated_2).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_Allowance_Calculated_3).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_Allowance_Calculated_4).HasColumnType("decimal(9, 2)");
+
+                entity.Property(e => e.WAR_Allowance_Calculated_5).HasColumnType("decimal(9, 2)");
+
                 entity.Property(e => e.WAR_Attendance_Allowance_Calculated).HasColumnType("decimal(9, 2)");
 
                 entity.Property(e => e.WAR_Basic).HasColumnType("decimal(9, 2)");
@@ -1096,6 +1134,101 @@ namespace RMERP.DAL.Models
                     .HasForeignKey(d => d.WAR_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Wage_Register_Allowances_Wage_Register");
+            });
+
+            modelBuilder.Entity<Wage_Register_Allowances_1>(entity =>
+            {
+                entity.HasKey(e => e.WRA_Id_1);
+
+                entity.Property(e => e.WRA_Amount_1).HasColumnType("decimal(9, 2)");
+
+                entity.HasOne(d => d.CLE_)
+                    .WithMany(p => p.Wage_Register_Allowances_1)
+                    .HasForeignKey(d => d.CLE_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Allowances_1_Clients_Employees");
+
+                entity.HasOne(d => d.WAG_)
+                    .WithMany(p => p.Wage_Register_Allowances_1)
+                    .HasForeignKey(d => d.WAG_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Allowances_1_Wage_Process");
+            });
+
+            modelBuilder.Entity<Wage_Register_Allowances_2>(entity =>
+            {
+                entity.HasKey(e => e.WRA_Id_2);
+
+                entity.Property(e => e.WRA_Amount_2).HasColumnType("decimal(9, 2)");
+
+                entity.HasOne(d => d.CLE_)
+                    .WithMany(p => p.Wage_Register_Allowances_2)
+                    .HasForeignKey(d => d.CLE_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Allowances_2_Clients_Employees");
+
+                entity.HasOne(d => d.WAG_)
+                    .WithMany(p => p.Wage_Register_Allowances_2)
+                    .HasForeignKey(d => d.WAG_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Allowances_2_Wage_Process");
+            });
+
+            modelBuilder.Entity<Wage_Register_Allowances_3>(entity =>
+            {
+                entity.HasKey(e => e.WRA_Id_3);
+
+                entity.Property(e => e.WRA_Amount_3).HasColumnType("decimal(9, 3)");
+
+                entity.HasOne(d => d.CLE_)
+                    .WithMany(p => p.Wage_Register_Allowances_3)
+                    .HasForeignKey(d => d.CLE_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Allowances_3_Clients_Employees");
+
+                entity.HasOne(d => d.WAG_)
+                    .WithMany(p => p.Wage_Register_Allowances_3)
+                    .HasForeignKey(d => d.WAG_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Allowances_3_Wage_Process");
+            });
+
+            modelBuilder.Entity<Wage_Register_Allowances_4>(entity =>
+            {
+                entity.HasKey(e => e.WRA_Id_4);
+
+                entity.Property(e => e.WRA_Amount_4).HasColumnType("decimal(9, 4)");
+
+                entity.HasOne(d => d.CLE_)
+                    .WithMany(p => p.Wage_Register_Allowances_4)
+                    .HasForeignKey(d => d.CLE_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Allowances_4_Clients_Employees");
+
+                entity.HasOne(d => d.WAG_)
+                    .WithMany(p => p.Wage_Register_Allowances_4)
+                    .HasForeignKey(d => d.WAG_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Allowances_4_Wage_Process");
+            });
+
+            modelBuilder.Entity<Wage_Register_Allowances_5>(entity =>
+            {
+                entity.HasKey(e => e.WRA_Id_5);
+
+                entity.Property(e => e.WRA_Amount_5).HasColumnType("decimal(9, 5)");
+
+                entity.HasOne(d => d.CLE_)
+                    .WithMany(p => p.Wage_Register_Allowances_5)
+                    .HasForeignKey(d => d.CLE_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Allowances_5_Clients_Employees");
+
+                entity.HasOne(d => d.WAG_)
+                    .WithMany(p => p.Wage_Register_Allowances_5)
+                    .HasForeignKey(d => d.WAG_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wage_Register_Allowances_5_Wage_Process");
             });
 
             modelBuilder.Entity<Wage_Register_Canteen>(entity =>

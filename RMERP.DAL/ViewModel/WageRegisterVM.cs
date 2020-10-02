@@ -27,6 +27,13 @@ namespace RMERP.DAL.ViewModel
         public int WRO_Id { get; set; }
         public int WRP_Id { get; set; }
 
+        public int WRA_Id_1 { get; set; }
+        public int WRA_Id_2 { get; set; }
+        public int WRA_Id_3 { get; set; }
+        public int WRA_Id_4 { get; set; }
+        public int WRA_Id_5 { get; set; }
+
+
         public int CLE_Id { get; set; }
 
        // public WageProcessVM wageProcessVM { get; set; }
@@ -104,6 +111,17 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Attendance Allowance")]
         public decimal? WAR_Attendance_Allowance_Calculated { get; set; }
 
+        [Display(Name = "Allowance 1")]
+        public decimal? WAR_Allowance_Calculated_1 { get; set; }
+        [Display(Name = "Allowance 2")]
+        public decimal? WAR_Allowance_Calculated_2 { get; set; }
+        [Display(Name = "Allowance 3")]
+        public decimal? WAR_Allowance_Calculated_3 { get; set; }
+        [Display(Name = "Allowance 4")]
+        public decimal? WAR_Allowance_Calculated_4 { get; set; }
+        [Display(Name = "Allowance 5")]
+        public decimal? WAR_Allowance_Calculated_5 { get; set; }
+                       
         [Display(Name = "Performance Allowance")]
         public decimal? WAR_Performance_Allowance_Calculated { get; set; }
         [Display(Name = "Calculated Nightshift")]

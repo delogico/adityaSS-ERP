@@ -27,7 +27,12 @@ namespace RMERP.DAL.ViewModel
         public decimal WAR_Attendance_Allowance_Calculated { get; set; }
         public decimal WAR_Nightshift_Allowance_Calculated { get; set; }
         public decimal WAR_Performance_Allowance_Calculated { get; set; }
-             
+
+        public decimal WAR_Allowance_Calculated_1 { get; set; }
+        public decimal WAR_Allowance_Calculated_2 { get; set; }
+        public decimal WAR_Allowance_Calculated_3 { get; set; }
+        public decimal WAR_Allowance_Calculated_4 { get; set; }
+        public decimal WAR_Allowance_Calculated_5 { get; set; }
 
         public List<CalculatedAllowanceVM> CalculatedAllowanceVM { get; set; }
     }
