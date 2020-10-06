@@ -100,9 +100,12 @@
         <hr />
         @{
             var distinceDesignations = item.wageRegisterVMs.Select(q => new { q.designation.DES_Id, q.designation.DES_Title, q.designation.DES_Exclude_LWF }).Distinct();
-        }
+           
+            }
+        
         @foreach (var dd in distinceDesignations)
         {
+            int srNo = 0;
             List<WageRegisterVM> wageRegisters = item.wageRegisterVMs.Where(r => r.designation.DES_Id.Equals(dd.DES_Id)).OrderBy(m => m.EMP_Id).ToList();
             ClientRequirementVM clientRequirement = wageRegisters.Select(m => m.clientRequirementVM).Where(m => m.CLI_Id.Equals(item.client.CLI_Id) && m.DES_Id.Equals(dd.DES_Id)).FirstOrDefault();
 
@@ -197,6 +200,7 @@
                 <table class="table table-border">
                     <thead style="font-weight:500">
                         <tr>
+                            <td class="gainsboro">Sr.No.</td>
                             <td class="gainsboro">ID</td>
                             <td class="gainsboro">Name</td>
                             <td class="gainsboro">M/F</td>
@@ -250,6 +254,7 @@
                                 }
                                 @if (!clientRequirement.CRI_OT_Calculate_Payableday)
                                 {
+                                    <td class="lightgray">OT Hours</td>
                                     <td class="lightgray">OT Amount</td>
                                 }
                             }
@@ -296,7 +301,9 @@
 
                         @foreach (var employee in wageRegisters)
                         {
+                            srNo = srNo + 1;
                         <tr>
+                            <td class="gainsboro">@srNo</td>
                             <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
                             <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
                             <td class="gainsboro">@(Convert.ToBoolean(employee.employeeVM.EMP_Gender) == true ? "M" : "F")</td>
@@ -373,6 +380,7 @@
                                 }
                                 @if (!clientRequirement.CRI_OT_Calculate_Payableday)
                                 {
+                                    <td class="lightgray">@employee.WAR_ExtraWorkingHours</td>
                                     <td class="lightgray">@Math.Round(employee.WAR_OverTime_Calculated, MidpointRounding.AwayFromZero)</td>
                                 }
                                 <td class="lightgray">@Math.Round(employee.WAR_GrossTotal, MidpointRounding.AwayFromZero)</td>
