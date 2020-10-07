@@ -683,7 +683,7 @@ namespace RMERP.DAL.ManagerClasses
                                           && a.FRM_Id.Equals(FirmId)
                                           && ((b.CAH_InactiveOn == null) || !(b.CAH_InactiveOn.Value.Date < startdate.Date))
                                           select a;
-            return cliList.ToList();
+            return cliList.Distinct().ToList();
         }
 
         public Client_Requirements getActiveClientRequirement(int CLI_Id, int DES_Id, DateTime WAG_Month)

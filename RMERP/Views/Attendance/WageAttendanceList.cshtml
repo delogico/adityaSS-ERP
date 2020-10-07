@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Attendance status";
     Layout = "~/Views/Shared/_RMLayout.cshtml";
+    int cnt = 0;
 }
 @section Breadcrumbs{
     <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.wageProcess.FRM_Id })</li>
@@ -34,6 +35,7 @@
                     <table class="table table-striped custom-table m-b-0">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Client Name</th>
                                 <th>Status</th>
                                 <th>Total Employee</th>
@@ -41,10 +43,12 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody>                           
                             @foreach (var item in Model.lstClient)
                             {
+                                cnt = cnt + 1;
                                 <tr>
+                                    <td>@cnt</td>
                                     <td><b>@item.CLI_Name</b></td>
                                     <td>@Html.Raw((item.totalEmployees > 0 ? "<span class='label label-success-border'>Imported</span>" : "<span class='label label-danger-border'>Not Imported yet</span>"))</td>
                                     <td>@(item.totalEmployees > 0 ? item.totalEmployees.ToString() : "-")</td>
