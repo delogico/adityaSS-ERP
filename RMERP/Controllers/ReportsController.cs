@@ -2266,7 +2266,7 @@ namespace RMERP.Controllers
                     row.CreateCell(3).SetCellValue(item.ACCOUNT_RECEIVERS_NUMBER);
                     row.CreateCell(4).SetCellValue(item.ACCOUNT_TYPE);
                     row.CreateCell(5).SetCellValue(item.EMP_NAME);
-                    row.CreateCell(6).SetCellValue(item.EMP_ADDRESS);
+                    row.CreateCell(6).SetCellValue(item.CLI_ADDRESS);
                     row.CreateCell(7).SetCellValue(item.MESSAGE);
                     row.CreateCell(8).SetCellValue(item.ORIGINETOR);
                     TRANSACTION_AMOUNT = TRANSACTION_AMOUNT + item.EMP_TRANSACTION_AMOUNT;

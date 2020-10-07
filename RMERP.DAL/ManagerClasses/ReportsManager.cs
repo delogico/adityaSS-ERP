@@ -685,8 +685,11 @@ namespace RMERP.DAL.ManagerClasses
                 bankReport.EMP_MiddleName = item.EMP_.EMP_MiddleName;
                 bankReport.EMP_SurName = item.EMP_.EMP_SurName;
 
-                if (item.EMP_.EMP_CityNavigation != null)
-                    bankReport.EMP_ADDRESS = item.EMP_.EMP_CityNavigation?.CITY_Name;
+                //if (item.EMP_.EMP_CityNavigation != null)
+                //    bankReport.EMP_ADDRESS = item.EMP_.EMP_CityNavigation?.CITY_Name;
+
+                if (item.CLI_ != null)
+                    bankReport.CLI_ADDRESS = item.CLI_.CLI_Place_Of_Supply;
                 bankReport.MESSAGE = "SALARY";
                 bankReport.ORIGINETOR = "RELIABLE";
 

@@ -31,6 +31,7 @@ namespace RMERP.DAL.ViewModel
         public string ACCOUNT_RECEIVERS_NUMBER { get; set; }
         public string ACCOUNT_TYPE { get; set; }
         public string EMP_ADDRESS { get; set; }
+        public string CLI_ADDRESS { get; set; }
         public string MESSAGE { get; set; }
         public string ORIGINETOR { get; set; }
 
