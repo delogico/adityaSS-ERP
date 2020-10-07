@@ -291,7 +291,7 @@ namespace RMERP.Controllers
 
                             DesCount = DesCount + 4;
 
-                            double Final_TotalPaybleDays = 0;
+                            double Final_TotalPaybleDays = 0, Final_TotalOTHrs=0;
                             decimal Final_TotalBasic = 0M, Final_TotalDA = 0M, Final_TotalHRA = 0M, Final_TotalOT = 0M, Final_TotalGrossTotal = 0M, Final_TotalPF = 0M, Final_TotalESIC = 0M;
                             decimal Final_TotalProfTax = 0m, Final_TotalRevenue = 0M, Final_TotalCanteenFacility = 0M, Final_TotalAdvance = 0M, Final_TotalDeduct = 0M, Final_TotalFinal = 0M;
                             decimal Final_TotalOutStation = 0M, Final_TotalAttendance = 0M, Final_TotalNightshift = 0M, Final_TotalPerformance = 0M, Final_TotalLWF = 0M;
@@ -318,35 +318,49 @@ namespace RMERP.Controllers
 
                                 row = excelSheet.CreateRow(DesCount + 1);
                                 row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
+
                                 ICell cell0 = row.CreateCell(0);
-                                cell0.SetCellValue("ID");
+                                cell0.SetCellValue("Sr.No");
                                 cell0.CellStyle = styleGrey25;
+
                                 ICell cell1 = row.CreateCell(1);
-                                cell1.SetCellValue("Name");
-                                excelSheet.SetColumnWidth(1, (int)((25 + 0.72) * 256));
+                                cell1.SetCellValue("ID");
                                 cell1.CellStyle = styleGrey25;
+
                                 ICell cell2 = row.CreateCell(2);
-                                cell2.SetCellValue("M/F");
+                                cell2.SetCellValue("Name");
+                                excelSheet.SetColumnWidth(2, (int)((25 + 0.72) * 256));
                                 cell2.CellStyle = styleGrey25;
+
                                 ICell cell3 = row.CreateCell(3);
-                                cell3.SetCellValue("Date Of Joining");
+                                cell3.SetCellValue("M/F");
                                 cell3.CellStyle = styleGrey25;
+
                                 ICell cell4 = row.CreateCell(4);
-                                cell4.SetCellValue("Total Working Days");
+                                cell4.SetCellValue("Date Of Joining");
                                 cell4.CellStyle = styleGrey25;
+
                                 ICell cell5 = row.CreateCell(5);
-                                cell5.SetCellValue("Total Payble Days");
+                                cell5.SetCellValue("Total Working Days");
                                 cell5.CellStyle = styleGrey25;
+
                                 ICell cell6 = row.CreateCell(6);
-                                cell6.SetCellValue("Basic");
-                                cell6.CellStyle = styleGrey40;
+                                cell6.SetCellValue("Total Payble Days");
+                                cell6.CellStyle = styleGrey25;
+
                                 ICell cell7 = row.CreateCell(7);
-                                cell7.SetCellValue("DA");
+                                cell7.SetCellValue("Basic");
                                 cell7.CellStyle = styleGrey40;
+
                                 ICell cell8 = row.CreateCell(8);
-                                cell8.SetCellValue("HRA");
+                                cell8.SetCellValue("DA");
                                 cell8.CellStyle = styleGrey40;
-                                int cell = 8;
+
+                                ICell cell9 = row.CreateCell(9);
+                                cell9.SetCellValue("HRA");
+                                cell9.CellStyle = styleGrey40;
+
+                                int cell = 9;
                                 List<string> allowance = new List<string>();
                                 int i = 0;
                                 foreach (var all in wageRegisters[0].allowanceVMs.OrderBy(m => m.allowanceVM.ALL_Id))
@@ -389,6 +403,11 @@ namespace RMERP.Controllers
                                 }
                                 if(!clientRequirement.CRI_OT_Calculate_Payableday)
                                 {
+                                    cell = cell + 1;
+                                    ICell cellotHrs = row.CreateCell(cell);
+                                    cellotHrs.SetCellValue("OT Hrs");
+                                    cellotHrs.CellStyle = styleGrey40;
+
                                     cell = cell + 1;
                                     ICell cell10 = row.CreateCell(cell);
                                     cell10.SetCellValue("OT Amount");
@@ -455,47 +474,64 @@ namespace RMERP.Controllers
                                 #endregion
 
                                 DesCount = DesCount + 2;
-                                double TotalPaybleDays = 0;
+                                double TotalPaybleDays = 0, TotalOTHrs=0;
                                 decimal TotalBasic = 0M, TotalDA = 0M, TotalHRA = 0M, TotalOT = 0M, TotalGrossTotal = 0M, TotalPF = 0M, TotalESIC = 0M, TotalProfTax = 0m, TotalRevenue = 0M, TotalCanteenFacility = 0M, TotalAdvance = 0M, TotalDeduct = 0M, TotalFinal = 0M;
                                 decimal TotalOutStation = 0M, TotalAttendance = 0M, TotalNightshift = 0M, TotalPerformance = 0M, TotalLWF=0M;
-                               
+
+                                int srno = 0;
                                 foreach (var employee in wageRegisters)
                                 {
+                                    srno = srno + 1;
                                     #region Employee Data
+
                                     row = excelSheet.CreateRow(DesCount);
                                     ICell cellEmp0 = row.CreateCell(0);
-                                    cellEmp0.SetCellValue(employee.employeeVM.EMP_Id.ToString("D5"));
+                                    cellEmp0.SetCellValue(srno);
                                     cellEmp0.CellStyle = styleGrey25;
+                                                                        
                                     ICell cellEmp1 = row.CreateCell(1);
-                                    cellEmp1.SetCellValue(employee.employeeVM.EMP_FirstName + " " + employee.employeeVM.EMP_MiddleName + " " + employee.employeeVM.EMP_SurName);
+                                    cellEmp1.SetCellValue(employee.employeeVM.EMP_Id.ToString("D5"));
                                     cellEmp1.CellStyle = styleGrey25;
+
                                     ICell cellEmp2 = row.CreateCell(2);
-                                    cellEmp2.SetCellValue(Convert.ToBoolean(employee.employeeVM.EMP_Gender) == true ? "M" : "F");
+                                    cellEmp2.SetCellValue(employee.employeeVM.EMP_FirstName + " " + employee.employeeVM.EMP_MiddleName + " " + employee.employeeVM.EMP_SurName);
                                     cellEmp2.CellStyle = styleGrey25;
+
                                     ICell cellEmp3 = row.CreateCell(3);
-                                    cellEmp3.SetCellValue(DateHelper.getDateWithFormat(employee.employeeVM.EMP_DateOfJoining));
+                                    cellEmp3.SetCellValue(Convert.ToBoolean(employee.employeeVM.EMP_Gender) == true ? "M" : "F");
                                     cellEmp3.CellStyle = styleGrey25;
+
                                     ICell cellEmp4 = row.CreateCell(4);
-                                    cellEmp4.SetCellValue(employee.WAR_TotalWorkingDays);
+                                    cellEmp4.SetCellValue(DateHelper.getDateWithFormat(employee.employeeVM.EMP_DateOfJoining));
                                     cellEmp4.CellStyle = styleGrey25;
+
                                     ICell cellEmp5 = row.CreateCell(5);
-                                    cellEmp5.SetCellValue(employee.WAR_TotalPaybleDays);
+                                    cellEmp5.SetCellValue(employee.WAR_TotalWorkingDays);
                                     cellEmp5.CellStyle = styleGrey25;
-                                    TotalPaybleDays = TotalPaybleDays + employee.WAR_TotalPaybleDays;
+
                                     ICell cellEmp6 = row.CreateCell(6);
-                                    cellEmp6.SetCellValue(Math.Round(employee.WAR_Basic_Calculated, MidpointRounding.AwayFromZero).ToString());
-                                    cellEmp6.CellStyle = styleGrey40;
-                                    TotalBasic = TotalBasic + Math.Round(employee.WAR_Basic_Calculated, MidpointRounding.AwayFromZero);
+                                    cellEmp6.SetCellValue(employee.WAR_TotalPaybleDays);
+                                    cellEmp6.CellStyle = styleGrey25;
+                                    TotalPaybleDays = TotalPaybleDays + employee.WAR_TotalPaybleDays;
+
                                     ICell cellEmp7 = row.CreateCell(7);
-                                    cellEmp7.SetCellValue(Math.Round(employee.WAR_DA_Calculated, MidpointRounding.AwayFromZero).ToString());
+                                    cellEmp7.SetCellValue(Math.Round(employee.WAR_Basic_Calculated, MidpointRounding.AwayFromZero).ToString());
                                     cellEmp7.CellStyle = styleGrey40;
-                                    TotalDA = TotalDA + Math.Round(employee.WAR_DA_Calculated, MidpointRounding.AwayFromZero);
+                                    TotalBasic = TotalBasic + Math.Round(employee.WAR_Basic_Calculated, MidpointRounding.AwayFromZero);
+
                                     ICell cellEmp8 = row.CreateCell(8);
-                                    cellEmp8.SetCellValue(Math.Round(employee.WAR_HRA_Calculated, MidpointRounding.AwayFromZero).ToString());
-                                    TotalHRA = TotalHRA + Math.Round(employee.WAR_HRA_Calculated, MidpointRounding.AwayFromZero);
+                                    cellEmp8.SetCellValue(Math.Round(employee.WAR_DA_Calculated, MidpointRounding.AwayFromZero).ToString());
                                     cellEmp8.CellStyle = styleGrey40;
-                                    int cellAllowance = 8;
+                                    TotalDA = TotalDA + Math.Round(employee.WAR_DA_Calculated, MidpointRounding.AwayFromZero);
+
+                                    ICell cellEmp9 = row.CreateCell(9);
+                                    cellEmp9.SetCellValue(Math.Round(employee.WAR_HRA_Calculated, MidpointRounding.AwayFromZero).ToString());
+                                    TotalHRA = TotalHRA + Math.Round(employee.WAR_HRA_Calculated, MidpointRounding.AwayFromZero);
+                                    cellEmp9.CellStyle = styleGrey40;
+
+                                    int cellAllowance = 9;
                                     int j = 0;
+
                                     foreach (var all in employee.allowanceVMs.OrderBy(m => m.allowanceVM.ALL_Id))
                                     {
                                         arrAllowancesTotal[j] = arrAllowancesTotal[j] + all.WAA_Amount_Calculated;                                        
@@ -562,6 +598,12 @@ namespace RMERP.Controllers
                                     }
                                     if (!clientRequirement.CRI_OT_Calculate_Payableday)
                                     {
+                                        ICell cellEmpotHrs = row.CreateCell(cellNxt);
+                                        cellEmpotHrs.SetCellValue(employee.WAR_ExtraWorkingHours);
+                                        TotalOTHrs = TotalOTHrs + employee.WAR_ExtraWorkingHours;
+                                        cellEmpotHrs.CellStyle = styleGrey40;
+                                        cellNxt = cellNxt + 1;
+
                                         ICell cellEmp10 = row.CreateCell(cellNxt);
                                         cellEmp10.SetCellValue(Math.Round(employee.WAR_OverTime_Calculated, MidpointRounding.AwayFromZero).ToString());
                                         TotalOT = TotalOT + Math.Round(employee.WAR_OverTime_Calculated, MidpointRounding.AwayFromZero);
@@ -653,7 +695,7 @@ namespace RMERP.Controllers
 
                                 #region Total in Excel
                                 row = excelSheet.CreateRow(DesCount);
-                                excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount, 0, 4));
+                                excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount, 0, 5));
                                 ICell cellTot = row.CreateCell(0);
                                 cellTot.CellStyle = styleGrey25;
                                 ICell cellTot_1 = row.CreateCell(1);
@@ -664,9 +706,11 @@ namespace RMERP.Controllers
                                 cellTot_3.CellStyle = styleGrey25;
                                 ICell cellTot_4 = row.CreateCell(4);
                                 cellTot_4.CellStyle = styleGrey25;
+                                ICell cellTot_5 = row.CreateCell(5);
+                                cellTot_5.CellStyle = styleGrey25;
                                 CellUtil.SetAlignment(cellTot, workbook, (short)HorizontalAlignment.Center);
 
-                                int totalCount = 4;
+                                int totalCount = 5;
                                 ICell cellTot1 = row.CreateCell(totalCount + 1);
                                 cellTot1.SetCellValue(TotalPaybleDays.ToString());
                                 cellTot1.CellStyle = styleGrey25;
@@ -733,7 +777,12 @@ namespace RMERP.Controllers
                                     cellTotPerformance.SetCellValue(Math.Round(TotalPerformance, MidpointRounding.AwayFromZero).ToString());
                                 }
                                 if (!clientRequirement.CRI_OT_Calculate_Payableday)
-                                {
+                                {                                   
+                                    totalCount = totalCount + 1;
+                                    ICell cellTotOtHrs = row.CreateCell(totalCount);
+                                    cellTotOtHrs.CellStyle = styleGrey40;
+                                    cellTotOtHrs.SetCellValue(TotalOTHrs);
+
                                     IsCRI_OT_Calculate_Payableday = true;
                                     totalCount = totalCount + 1;
                                     ICell cellTot5 = row.CreateCell(totalCount);
@@ -806,6 +855,7 @@ namespace RMERP.Controllers
                                 Final_TotalBasic = Final_TotalBasic + TotalBasic;
                                 Final_TotalDA = Final_TotalDA + TotalDA;
                                 Final_TotalHRA = Final_TotalHRA + TotalHRA;
+                                Final_TotalOTHrs = Final_TotalOTHrs + TotalOTHrs;
                                 Final_TotalOT = Final_TotalOT + TotalOT;
                                 Final_TotalGrossTotal = Final_TotalGrossTotal + TotalGrossTotal;
                                 Final_TotalPF = Final_TotalPF + TotalPF;
@@ -826,7 +876,7 @@ namespace RMERP.Controllers
                             DesCount = DesCount + 1;
                             IRow frow = excelSheet.CreateRow(DesCount);
                             IRow frowSecond = excelSheet.CreateRow(DesCount+1);
-                            excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount+1, 0, 4));                            
+                            excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount+1, 0, 5));                            
                                                        
                             ICell fcellTot = frow.CreateCell(0);
                             fcellTot.SetCellValue("GRAND TOTAL");
@@ -839,6 +889,8 @@ namespace RMERP.Controllers
                             fcellTot_3.CellStyle = styleGrey25;
                             ICell fcellTot_4 = frow.CreateCell(4);
                             fcellTot_4.CellStyle = styleGrey25;
+                            ICell fcellTot_5 = frow.CreateCell(5);
+                            fcellTot_5.CellStyle = styleGrey25;
                             CellUtil.SetAlignment(fcellTot, workbook, (short)HorizontalAlignment.Center);
                             ICell fcellTots = frowSecond.CreateCell(0);                            
                             fcellTots.CellStyle = styleGrey25;
@@ -850,8 +902,10 @@ namespace RMERP.Controllers
                             fcellTot_3s.CellStyle = styleGrey25;
                             ICell fcellTot_4s = frowSecond.CreateCell(4);
                             fcellTot_4s.CellStyle = styleGrey25;
+                            ICell fcellTot_5s = frowSecond.CreateCell(5);
+                            fcellTot_5s.CellStyle = styleGrey25;
 
-                            int ftotalCount = 4;
+                            int ftotalCount = 5;
                             ICell fcellTot1 = frow.CreateCell(ftotalCount + 1);
                             fcellTot1.SetCellValue("Total Payable Days");
                             fcellTot1.CellStyle = styleGrey25;
@@ -939,6 +993,14 @@ namespace RMERP.Controllers
                             }
                             if (IsCRI_OT_Calculate_Payableday)
                             {
+                                ftotalCount = ftotalCount + 1;
+                                ICell cellTotOtHr = frow.CreateCell(ftotalCount);
+                                cellTotOtHr.CellStyle = styleGrey40;
+                                cellTotOtHr.SetCellValue("Total OT Hrs");
+                                ICell cellTotOtHrs = frowSecond.CreateCell(ftotalCount);
+                                cellTotOtHrs.CellStyle = styleGrey40;
+                                cellTotOtHrs.SetCellValue(Final_TotalOTHrs);
+
                                 ftotalCount = ftotalCount + 1;
                                 ICell cellTot5 = frow.CreateCell(ftotalCount);
                                 cellTot5.CellStyle = styleGrey40;
