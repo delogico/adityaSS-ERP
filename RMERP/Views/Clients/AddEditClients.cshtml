@@ -566,8 +566,8 @@
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle btn btn-success rounded" data-toggle="dropdown" aria-expanded="false">Get Excel</a>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href='#' title="Generate Excel Template / Double rows" onclick="onConfirmClick()"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Double Rows</a></li>
-                        <li><a href='#' title="Generate Excel Template / Single row" onclick="onConfirmClickSingle()"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Single Row</a></li>
+                        <li><a href='#' title="Generate Excel Template / Double rows" onclick="onConfirmClick(@Model.clientsModel.CLI_Id)"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Double Rows</a></li>
+                        <li><a href='#' title="Generate Excel Template / Single row" onclick="onConfirmClickSingle(@Model.clientsModel.CLI_Id)"><i class="fa fa-file-excel-o m-r-5"></i>  Generate Excel Template - Single Row</a></li>
                     </ul>
                 </div>
             </div>
@@ -834,7 +834,7 @@
                 $("#clientsModel_CLI_No_Reduce_Days").val(0);
             }
         }
-        function onConfirmClick() {
+        function onConfirmClick(CLI_Id) {
             bootbox.prompt({
                 title: "Choose Month!",
                 inputType: 'date',
@@ -843,12 +843,12 @@
                     if (result != null) {
                         $.ajax({
                             type: "POST",
-                            url: "/Clients/GenerateExcelTemplate_TwoRow?month=" + result,
+                            url: "/Clients/GenerateExcelTemplate_TwoRow?month=" + result + "&CLI_Id=" + CLI_Id,
                             contentType: 'application/json; charset=utf-8',
                             datatype: 'json',
                             type: "GET",
                             success: function () {
-                                window.location = '@Url.Action("GenerateExcelTemplate_TwoRow", "Clients")?month='+result;
+                                window.location = "@Url.Action("GenerateExcelTemplate_TwoRow", "Clients")?month=" + result + "&CLI_Id=" + CLI_Id;
                             }
 
                         })
@@ -859,7 +859,8 @@
             });
         };
 
-        function onConfirmClickSingle() {
+        function onConfirmClickSingle(CLI_Id) {
+            debugger;
             bootbox.prompt({
                 title: "Choose Month!",
                 inputType: 'date',
@@ -868,12 +869,12 @@
                     if (result != null) {
                         $.ajax({
                             type: "POST",
-                            url: "/Clients/GenerateExcelTemplate_OneRow?month=" + result,
+                            url: "/Clients/GenerateExcelTemplate_OneRow?month=" + result + "&CLI_Id=" + CLI_Id,
                             contentType: 'application/json; charset=utf-8',
                             datatype: 'json',
                             type: "GET",
                             success: function () {
-                                window.location = '@Url.Action("GenerateExcelTemplate_OneRow", "Clients")?month='+result;
+                                window.location = "@Url.Action("GenerateExcelTemplate_OneRow", "Clients")?month=" + result + "&CLI_Id=" + CLI_Id;
                             }
 
                         })
@@ -884,8 +885,8 @@
             });
         };
 
-        function EditUnassignDate(CLE_Id, action) {
-            var Url = siteUrl + "Clients/EditUnassignDate?CLE_Id=" + CLE_Id+ "&act=" + action;
+        function EditUnassignDate(CLE_Id,CLI_Id, action) {
+            var Url = siteUrl + "Clients/EditUnassignDate?CLE_Id=" + CLE_Id + "&CLI_Id=" + CLI_Id+"&act=" + action;
             $.ajax({
                 type: "GET",
                 url: Url,

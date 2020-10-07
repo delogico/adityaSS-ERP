@@ -142,12 +142,13 @@ namespace RMERP.DAL.ManagerClasses
 
             return clientContactsList;
         }
-        public string deleteContacts(int ContactId)
+        public Tuple<string,int> deleteContacts(int ContactId)
         {
             string res = string.Empty;
+            Client_Contacts ClientContact = new Client_Contacts();
             try
             {
-                var ClientContact = _contaxt.Client_Contacts.Find(ContactId);
+                ClientContact = _contaxt.Client_Contacts.Find(ContactId);
                 _contaxt.Client_Contacts.Remove(ClientContact);
                 _contaxt.SaveChanges();
             }
@@ -155,7 +156,7 @@ namespace RMERP.DAL.ManagerClasses
             {
                 res = ex.Message;
             }
-            return res;
+            return new Tuple<string,int>(res, ClientContact.CLI_Id);
         }
         public string InActiveClient(int ClientId, int AdminId, bool Active, DateTime On)
         {
@@ -545,12 +546,14 @@ namespace RMERP.DAL.ManagerClasses
             return res;
         }
 
-        public string ReassignClientEmployee(int id)
+        public Tuple<string,int> ReassignClientEmployee(int id)
         {
+            int CLI_Id = 0;
             string res = string.Empty;
             try
             {
                 Clients_Employees clients_Employees = _contaxt.Clients_Employees.Find(id);
+                CLI_Id = clients_Employees.CLI_Id;
                 clients_Employees.CLE_UnassignedOn = null;
                 clients_Employees.ADM_Id_UnassignedBy = null;
                 clients_Employees.CLE_ReassignedOn = ProjectUtils.DateNow();
@@ -561,7 +564,7 @@ namespace RMERP.DAL.ManagerClasses
             {
                 res = ex.Message;
             }
-            return res;
+            return new Tuple<string, int>(res, CLI_Id);
         }
 
         #region commented by rinku on 14th feb 2020 as It seems like now no need for this functions
@@ -757,12 +760,14 @@ namespace RMERP.DAL.ManagerClasses
             return res;
         }
 
-        public string InactiveRequirement(int CRI_Id, int ADM_Id)
+        public Tuple<string,int> InactiveRequirement(int CRI_Id, int ADM_Id)
         {
             string res = string.Empty;
+            int CLI_Id = 0;
             try
             {
                 Client_Requirements requirement = _contaxt.Client_Requirements.Find(CRI_Id);
+                CLI_Id = requirement.CLI_Id;
                 if (!this.IsActiveAssignedEmployee(requirement.CLI_Id, requirement.DES_Id))
                 {
                     requirement.CRI_Active = false;
@@ -780,7 +785,7 @@ namespace RMERP.DAL.ManagerClasses
             {
                 res = "Requirement can not deleted!";
             }
-            return res;
+            return new Tuple<string, int>(res, CLI_Id);
         }
         private bool IsActiveAssignedEmployee(int CLI_Id, int DES_Id)
         {
@@ -857,7 +862,7 @@ namespace RMERP.DAL.ManagerClasses
             return query.ToList();
         }
 
-        public void RevertAssignEmployee(int CLE_Id)
+        public Clients_Employees RevertAssignEmployee(int CLE_Id)
         {
             Clients_Employees clientEmployee = _contaxt.Clients_Employees.Where(m => m.CLE_Id.Equals(CLE_Id)).FirstOrDefault();
             if (clientEmployee != null)
@@ -867,6 +872,7 @@ namespace RMERP.DAL.ManagerClasses
                 _contaxt.Clients_Employees.Update(clientEmployee);
                 _contaxt.SaveChanges();
             }
+            return clientEmployee;
         }
 
         public decimal GetProffessionalTax(bool EMP_Gender, decimal WAR_GrossTotal, Client_Requirements cr)

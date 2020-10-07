@@ -161,5 +161,6 @@ namespace RMERP.DAL.ViewModel
         [Required(ErrorMessage = "Date is required")]
         public DateTime UnassignedOn { get; set; }
         public int CLE_Id { get; set; }
+        public int CLI_Id { get; set; }
     }
 }

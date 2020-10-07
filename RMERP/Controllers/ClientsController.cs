@@ -30,8 +30,8 @@ namespace RMERP.Controllers
     {
         private readonly RMERPContext _context;
         public IConfiguration Configuration;
-        public static int ClientId;
-        public static bool IsActive;
+       // public static int ClientId;
+       // public static bool IsActive;
         private IHostingEnvironment _hostingEnvironment;
 
         public ClientsController(RMERPContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
@@ -43,8 +43,7 @@ namespace RMERP.Controllers
 
         [HttpGet]
         public IActionResult Index(bool IsActive = true)
-        {
-            ClientId = -1;
+        {           
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             ClientsViewModel cvm = new ClientsViewModel();
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
@@ -75,9 +74,7 @@ namespace RMERP.Controllers
 
         [HttpGet]
         public ActionResult AddEditClients(int id = -1)
-        {
-            ClientId = (id <= 0 ? ClientId : id);
-            id = ClientId;
+        {           
             int FRM_Id = 0;
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             if (sessionUtils.GetLoggedFirmID().HasValue)
@@ -112,8 +109,7 @@ namespace RMERP.Controllers
             cv.attendanceParameters = null;
             if (id > 0)
             {
-                clients = clientsManager.GetClientById(id);
-                ClientId = id;
+                clients = clientsManager.GetClientById(id);               
                 cv.clientsModel.CLI_Id = clients.CLI_Id;
                 cv.clientsModel.CLI_IsActive = clients.CLI_IsActive;
                 cv.clientsModel.FRM_Id = clients.FRM_Id;
@@ -225,8 +221,8 @@ namespace RMERP.Controllers
         [HttpPost]
         public async Task<ActionResult> AddEditClient(ClientsViewModel cv)
         {
-            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            int clientID = 0;
+            int newClientID = cv.clientsModel.CLI_Id;
+            ClientsManager clientsManager = new ClientsManager(_context, Configuration);            
             if (ModelState.IsValid)
             {
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
@@ -300,7 +296,7 @@ namespace RMERP.Controllers
                 }
                 else
                 {
-                    clientID = tuple.Item2;
+                    newClientID = tuple.Item2;
                     TempData["message"] = "Successfull Done!";
 
                     if (cv.clientsModel.CLI_Id <= 0)
@@ -308,12 +304,12 @@ namespace RMERP.Controllers
                         Client_ActivationHistory activationHistory = new Client_ActivationHistory();
                         //activationHistory.CAH_ActiveOn = DateNow();
                         activationHistory.CAH_ActiveOn = cv.clientsModel.CLI_RegisteredOn;
-                        activationHistory.CLI_Id = clientID;
+                        activationHistory.CLI_Id = newClientID;
                         clientsManager.AddEditActivationHistory(activationHistory);
                     }
                     else
                     {
-                        Client_ActivationHistory activationHistory = clientsManager.GetLatestActiveHistory(clientID);
+                        Client_ActivationHistory activationHistory = clientsManager.GetLatestActiveHistory(newClientID);
                         activationHistory.CAH_ActiveOn = cv.clientsModel.CLI_RegisteredOn;
                         clientsManager.AddEditActivationHistory(activationHistory);
                     }
@@ -322,19 +318,19 @@ namespace RMERP.Controllers
                     //  string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
                     string ImagePath = Configuration.GetSection("DEFAULT_FOLDER_PATH").Value + Configuration.GetSection("CLIENTS_LOGO_PATH").Value;
 
-                    if (!Directory.Exists(ImagePath + "/" + clientID))
+                    if (!Directory.Exists(ImagePath + "/" + newClientID))
                     {
-                        Directory.CreateDirectory(ImagePath + "/" + clientID);
+                        Directory.CreateDirectory(ImagePath + "/" + newClientID);
                     }
                     else
                     {
-                        string[] files = Directory.GetFiles(ImagePath + "/" + clientID);
+                        string[] files = Directory.GetFiles(ImagePath + "/" + newClientID);
                         if (file != null)
                         {
                             foreach (string s in files)
                             {
                                 string fileName = Path.GetFileName(s);
-                                System.IO.File.Delete(ImagePath + "/" + clientID + "/" + fileName);
+                                System.IO.File.Delete(ImagePath + "/" + newClientID + "/" + fileName);
                             }
                         }
                     }
@@ -346,7 +342,7 @@ namespace RMERP.Controllers
                         using (Image img = Image.FromStream(file.OpenReadStream()))
                         {
                             Stream ms = new MemoryStream(img.Resize(100, 100).ToByteArray());
-                            var path = Path.Combine(ImagePath + "\\" + clientID, file.FileName);
+                            var path = Path.Combine(ImagePath + "\\" + newClientID, file.FileName);
                             using (var stream = new FileStream(path, FileMode.Create))
                             {
                                 ms.CopyTo(stream);
@@ -360,7 +356,7 @@ namespace RMERP.Controllers
                 }
 
             }
-            return RedirectToAction("AddEditClients", new { id = clientID });
+            return RedirectToAction("AddEditClients", new { id = newClientID });
         }
 
         [HttpPost]
@@ -404,7 +400,7 @@ namespace RMERP.Controllers
             ClientContactVM contactVM = new ClientContactVM();
             if (CLI_Id > 0)
             {
-                ClientId = CLI_Id;
+                contactVM.CLI_Id = CLI_Id;
                 ClientsManager clientsManager = new ClientsManager(_context, Configuration);
                 Clients clients = clientsManager.GetClientById(CLI_Id);
                 ViewBag.ClientName = clients.CLI_Name;
@@ -416,8 +412,7 @@ namespace RMERP.Controllers
                 else
                 {
                     contactVM = new ClientContactVM();
-                    contactVM.CON_Id = 0;
-                    contactVM.CLI_Id = CLI_Id;
+                    contactVM.CON_Id = 0;                    
                     contactVM.CON_RegisteredOn = ProjectUtils.DateNow();
                     SessionUtils sessionUtils = new SessionUtils(Request, Response);
                     contactVM.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
@@ -433,10 +428,10 @@ namespace RMERP.Controllers
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             if (ModelState.IsValid)
             {
-                if (ClientId > 0)
+                if (contactVM.CLI_Id > 0)
                 {
                     Client_Contacts clientContacts = new Client_Contacts();
-                    clientContacts.CLI_Id = ClientId;
+                    clientContacts.CLI_Id = contactVM.CLI_Id;
                     clientContacts.CON_Id = contactVM.CON_Id;
                     clientContacts.CON_FirstName = contactVM.CON_FirstName;
                     clientContacts.CON_SurName = contactVM.CON_SurName;
@@ -455,25 +450,27 @@ namespace RMERP.Controllers
                     }
                 }
             }
-            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ContactInfo" });
+            return RedirectToAction("AddEditClients", new { id = contactVM.CLI_Id, tab = "ContactInfo" });
         }
 
         public ActionResult DeleteContact(int id = -1)
         {
+            int CLI_Id = 0;
             ClientsViewModel clientsViewModel = new ClientsViewModel();
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             if (ModelState.IsValid)
             {
                 if (id > 0)
                 {
-                    string res = clientsManager.deleteContacts(id);
-                    if (res != string.Empty)
+                    var tuple = clientsManager.deleteContacts(id);
+                    CLI_Id = tuple.Item2;
+                    if (tuple.Item1 != string.Empty)
                     {
                         TempData["message"] = "Contacts data can not Deleted";
                     }
                 }
             }
-            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ContactInfo" });
+            return RedirectToAction("AddEditClients", new { id = CLI_Id, tab = "ContactInfo" });
         }
 
         [HttpPost]
@@ -528,8 +525,7 @@ namespace RMERP.Controllers
 
         [HttpGet]
         public ActionResult AddEditRequirement(int CLI_Id, int CRI_Id = -1, bool IsHistory = false,bool IsMajorModified=false)
-        {
-            ClientId = CLI_Id;
+        {            
             DesignationManager designationManager = new DesignationManager(_context);
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             AllowanceManager AllowanceManager = new AllowanceManager(_context);
@@ -649,14 +645,13 @@ namespace RMERP.Controllers
             if (res != "")
             {
                 TempData["message"] = "Error In Client Requirement Or Reset Wage Register!";
-                return RedirectToAction("AddEditClients", new { id = ClientId });
+                return RedirectToAction("AddEditClients", new { id = clientRequirementVM.CLI_Id });
             }
-            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
+            return RedirectToAction("AddEditClients", new { id = clientRequirementVM.CLI_Id, tab = "ClientRequirement" });
         }
 
         public ActionResult HistoryRequirement(int DES_Id, int CLI_Id)
-        {
-            ClientId = CLI_Id;
+        {         
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             DesignationManager designationManager = new DesignationManager(_context);
             List<ClientRequirementVM> lst = ClientRequirementMapper.mapRequirements(clientsManager.GetClient_RequirementsList(DES_Id, CLI_Id, false).ToList());
@@ -670,12 +665,12 @@ namespace RMERP.Controllers
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            string res = clientsManager.InactiveRequirement(CRI_Id, sessionUtils.GetLoggedAdminID());
-            if (res != string.Empty)
+            var tuple = clientsManager.InactiveRequirement(CRI_Id, sessionUtils.GetLoggedAdminID());
+            if (tuple.Item1 != string.Empty)
             {
                 TempData["message"] = "Requirement can not deleted! Please remove assigned employees of this requirement.";
             }
-            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
+            return RedirectToAction("AddEditClients", new { id = tuple.Item2, tab = "ClientRequirement" });
         }
 
         public ActionResult EditRegistrationDate(int CRI_Id, string Act = "")
@@ -715,7 +710,7 @@ namespace RMERP.Controllers
             }
             else
             {
-                return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientRequirement" });
+                return RedirectToAction("AddEditClients", new { id = requirementVM.CLI_Id, tab = "ClientRequirement" });
             }
 
         }
@@ -762,41 +757,7 @@ namespace RMERP.Controllers
                     clients.CLI_SGST = 0;
                 }                
                 clients.CLI_Place_Of_Supply = cvm.ParametersClientsModel.clientsModel.CLI_Place_Of_Supply;
-
-                //if (cvm.ParametersClientsModel.CLI_Att_MonthReal == true)
-                //{
-                //    clients.CLI_Att_MonthReal = true;
-                //    clients.CLI_Att_Month_Start = null;
-                //    clients.CLI_Att_Month_End = null;
-                //}
-                //else
-                //{
-                //    clients.CLI_Att_MonthReal = false;
-                //    clients.CLI_Att_Month_Start = cvm.ParametersClientsModel.CLI_Att_Month_Start;
-                //    clients.CLI_Att_Month_End = cvm.ParametersClientsModel.CLI_Att_Month_End;
-                //}
-
-                //Attendance_Parameter attendance = new Attendance_Parameter();
-                //attendance.CLI_Id = cvm.clientsModel.CLI_Id;
-                //attendance.ATP_RegisteredOn = cvm.attendanceParameter.ATP_RegisteredOn;
-                //if (cvm.attendanceParameter.ATP_Att_MonthReal == true)
-                //{
-                //    attendance.ATP_Att_MonthReal = true;
-                //    attendance.ATP_Att_Month_Start = null;
-                //    attendance.ATP_Att_Month_End = null;
-                //}
-                //else
-                //{
-                //    attendance.ATP_Att_MonthReal = false;
-                //    attendance.ATP_Att_Month_Start = cvm.attendanceParameter.ATP_Att_Month_Start;
-                //    attendance.ATP_Att_Month_End = cvm.attendanceParameter.ATP_Att_Month_End;
-                //}
-
-                //clients.CLI_PF_Employer_Cont_Rate = cvm.clientsModel.CLI_PF_Employer_Cont_Rate;
-                //clients.CLI_ESIC_Employer_Cont_Rate = cvm.clientsModel.CLI_ESIC_Employer_Cont_Rate;
-                //clients.CLI_EPF_Rate = cvm.clientsModel.CLI_EPF_Rate;
-                //clients.CLI_EPS_Rate = cvm.clientsModel.CLI_EPS_Rate;
-                //clients.CLI_MLWF_Contribution = cvm.clientsModel.CLI_MLWF_Contribution;
+                                
                 string res = clientsManager.UpdateParameters(clients);
                // string att=clientsManager.AddAttendanceParameter(attendance);
                 if (res != string.Empty)
@@ -804,7 +765,7 @@ namespace RMERP.Controllers
                     TempData["message"] = "data can not updated";
                 }
             }
-            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "Parameters" });
+            return RedirectToAction("AddEditClients", new { id = cvm.clientsModel.CLI_Id, tab = "Parameters" });
         }
 
         [HttpGet]
@@ -876,6 +837,7 @@ namespace RMERP.Controllers
 
         public ActionResult ReassignClientEmployee(int CLE_Id = -1)
         {
+            int CLI_Id = 0;
             ClientsViewModel clientsViewModel = new ClientsViewModel();
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
@@ -883,14 +845,15 @@ namespace RMERP.Controllers
             {
                 if (CLE_Id > 0)
                 {
-                    string res = clientsManager.ReassignClientEmployee(CLE_Id);
-                    if (res != string.Empty)
+                    var tuple = clientsManager.ReassignClientEmployee(CLE_Id);
+                    CLI_Id = tuple.Item2;
+                    if (tuple.Item1 != string.Empty)
                     {
                         TempData["message"] = "Employee is not able to Resssign!Try Again";
                     }
                 }
             }
-            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
+            return RedirectToAction("AddEditClients", new { id = CLI_Id, tab = "ClientEmployee" });
         }
 
         public ActionResult DeleteAssignEmployee(int CLE_Id, int CLI_ID, int EMP_Id, int DES_Id)
@@ -901,161 +864,16 @@ namespace RMERP.Controllers
             {
                 TempData["message"] = "Assign employee can not deleted!";
             }
-            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
+            return RedirectToAction("AddEditClients", new { id = CLI_ID, tab = "ClientEmployee" });
         }
-               
-
-        //public FileResult BASIC_WithShifts()
-        //{
-        //    ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-        //    Clients client = clientsManager.GetClientById(ClientId);
-        //    int totalEmployee = clientsManager.listClientsEmployees(ClientId).Count();
-        //    string sWebRootFolder = _hostingEnvironment.WebRootPath;
-        //    string fileName = DateTime.Now.ToString("ddMMyyyyHHmm") + "_ClientId_" + ClientId + ".xlsx";
-        //    string sFileName = fileName;
-        //    string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
-        //    FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
-        //    var memory = new MemoryStream();
-        //    using (var fs = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.Write))
-        //    {
-        //        IWorkbook workbook;
-        //        workbook = new XSSFWorkbook();
-        //        ISheet excelSheet = workbook.CreateSheet("BASIC_WithShifts");
-
-        //        IFont font = workbook.CreateFont();
-        //        font.IsBold = true;
-        //        font.FontHeightInPoints = ((short)16);
-        //        font.FontName = ("Trebuchet MS");
-
-        //        ICellStyle styleHeader = workbook.CreateCellStyle();
-        //        styleHeader.FillBackgroundColor = HSSFColor.BlueGrey.Index;
-        //        styleHeader.SetFont(font);
-        //        ICellStyle style = workbook.CreateCellStyle();
-        //        style.BorderBottom = (BorderStyle.Thin);
-        //        style.BottomBorderColor = (IndexedColors.Black.Index);
-        //        style.BorderLeft = (BorderStyle.Thin);
-        //        style.LeftBorderColor = (IndexedColors.Black.Index);
-        //        style.BorderRight = (BorderStyle.Thin);
-        //        style.RightBorderColor = (IndexedColors.Black.Index);
-        //        style.BorderTop = (BorderStyle.Thin);
-        //        style.TopBorderColor = (IndexedColors.Black.Index);
-
-        //        IRow row = excelSheet.CreateRow(0);
-        //        row.Height = 500;
-
-        //        DateTime startDate = DateTime.Now, endDate = DateTime.Now;
-
-        //        if (client.CLI_Att_MonthReal == true)
-        //        {
-        //            startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-        //            endDate = startDate.AddMonths(1).AddDays(-1);
-        //        }
-        //        else if (client.CLI_Att_MonthReal == false)
-        //        {
-        //            startDate = new DateTime(DateTime.Now.AddMonths(-1).Year, DateTime.Now.AddMonths(-1).Month, client.CLI_Att_Month_Start.Value);
-        //            endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, client.CLI_Att_Month_End.Value); ;
-        //        }
-        //        int TotalDays = Convert.ToInt32((endDate - startDate).TotalDays) + 6;
+              
 
 
-        //        string fullMonthName = DateTime.Now.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
-        //        ICell CellHeader = row.CreateCell(0);
-        //        CellHeader.SetCellValue(client.CLI_Name);
-        //        CellHeader.CellStyle = styleHeader;
-        //        CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-        //        excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, TotalDays - 2));
-
-        //        ICell CellMonth = row.CreateCell(TotalDays - 1);
-        //        CellMonth.SetCellValue(fullMonthName + "," + DateTime.Now.ToString("yyyy"));
-        //        CellMonth.CellStyle = styleHeader;
-        //        CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
-        //        excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 1, TotalDays));
-
-        //        row = excelSheet.CreateRow(1);
-
-        //        ICell cell0 = row.CreateCell(0);
-        //        cell0.SetCellValue("SR.NO");
-        //        cell0.CellStyle = style;
-        //        ICell cell1 = row.CreateCell(1);
-        //        cell1.SetCellValue("EMP_Id");
-        //        cell1.CellStyle = style;
-        //        ICell cell2 = row.CreateCell(2);
-        //        cell2.SetCellValue("Designation");
-        //        cell2.CellStyle = style;
-        //        ICell cell3 = row.CreateCell(3);
-        //        cell3.SetCellValue("NAME");
-        //        cell3.CellStyle = style;
-        //        int i = 4;
-        //        DateTime tmpDate = startDate;
-        //        while (endDate >= tmpDate)
-        //        {
-        //            ICell c = row.CreateCell(i);
-        //            c.SetCellValue(tmpDate.Day);
-        //            c.CellStyle = style;
-        //            excelSheet.AutoSizeColumn(i);
-        //            tmpDate = tmpDate.AddDays(1);
-        //            i++;
-        //        }
-
-        //        ICell cellx = row.CreateCell(i);
-        //        cellx.SetCellValue("TOTAL DAYS");
-        //        cellx.CellStyle = style;
-        //        excelSheet.AutoSizeColumn(i);
-        //        ICell celly = row.CreateCell(i + 1);
-        //        celly.SetCellValue("FULL OT(HRS.)");
-        //        celly.CellStyle = style;
-        //        excelSheet.AutoSizeColumn(i + 1);
-
-        //        int rowCount = 2;
-        //        int j = 1;
-        //        foreach (var item in clientsManager.listClientsEmployees(ClientId))
-        //        {
-        //            row = excelSheet.CreateRow(rowCount);
-        //            row.CreateCell(0).SetCellValue(j);
-        //            //row.CreateCell(1).SetCellValue(ProjectUtils.convertDigit(item.EMP_Id));
-        //            row.CreateCell(1).SetCellValue(item.EMP_Id.ToString("D5"));
-        //            row.CreateCell(2).SetCellValue(item.DES_.DES_Title);
-        //            // row.CreateCell(3).SetCellValue(item.EMP_.EMP_FullName);
-        //            row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + " " + item.EMP_.EMP_MiddleName + " " + item.EMP_.EMP_SurName);
-
-        //            excelSheet.SetColumnWidth(2, 6000);
-        //            excelSheet.SetColumnWidth(3, 6000);
-
-        //            excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 0, 0));
-        //            excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 1, 1));
-        //            excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 2, 2));
-        //            excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, 3, 3));
-
-        //            int k = 4;
-        //            DateTime tmp1Date = startDate;
-        //            while (endDate >= tmp1Date)
-        //            {
-        //                ICell c = row.CreateCell(k);
-        //                tmp1Date = tmp1Date.AddDays(1);
-        //                k++;
-        //            }
-        //            excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, k, k));
-        //            excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount + 1, k + 1, k + 1));
-        //            rowCount = rowCount + 2;
-
-        //            j++;
-        //        }
-
-        //        workbook.Write(fs);
-        //    }
-        //    using (var stream = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Open))
-        //    {
-        //        stream.CopyToAsync(memory);
-        //    }
-        //    memory.Position = 0;
-        //    return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sFileName);
-        //}
-
-        public async Task<FileResult> GenerateExcelTemplate_TwoRow(DateTime month)
+        public async Task<FileResult> GenerateExcelTemplate_TwoRow(DateTime month,int CLI_Id)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            Clients client = clientsManager.GetClientById(ClientId);
-            IEnumerable<Clients_Employees> employees = clientsManager.listActiveClientsEmployees(ClientId, month);
+            Clients client = clientsManager.GetClientById(CLI_Id);
+            IEnumerable<Clients_Employees> employees = clientsManager.listActiveClientsEmployees(CLI_Id, month);
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
             string fileName = "Template_" + month.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_TwoRow.xlsx";
             string fullMonthName = month.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
@@ -1138,13 +956,6 @@ namespace RMERP.Controllers
 
                 #endregion
 
-                //ICell CellMonth = row.CreateCell(TotalDays - 6);
-               
-                //CellMonth.SetCellValue(fullMonthName + "-" + month.ToString("yy"));
-                //CellMonth.CellStyle = styleHeader;
-                //CellUtil.SetAlignment(CellMonth, workbook, (short)HorizontalAlignment.Center);
-                //excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, TotalDays - 6, TotalDays));
-
                 row = excelSheet.CreateRow(4);
                 row.HeightInPoints = ((5 * excelSheet.DefaultRowHeightInPoints));
                 //excelSheet.AutoSizeColumn(1);
@@ -1221,14 +1032,14 @@ namespace RMERP.Controllers
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
 
-        public async Task<FileResult> GenerateExcelTemplate_OneRow(DateTime month)
+        public async Task<FileResult> GenerateExcelTemplate_OneRow(DateTime month,int CLI_Id)
         {
             try
             {
                 ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-                Clients client = clientsManager.GetClientById(ClientId);
+                Clients client = clientsManager.GetClientById(CLI_Id);
                 //IEnumerable<Clients_Employees> employees = clientsManager.listClientsEmployees(ClientId);
-                IEnumerable<Clients_Employees> employees = clientsManager.listActiveClientsEmployees(ClientId, month);
+                IEnumerable<Clients_Employees> employees = clientsManager.listActiveClientsEmployees(CLI_Id, month);
                 string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
                 string fileName = "Template_" + month.ToString("ddMMyyyyHHmm") + "_" + client.CLI_Name + "_OneRow.xlsx";
                 string fullMonthName = month.ToString("MMM", CultureInfo.CreateSpecificCulture("IN"));
@@ -1399,10 +1210,11 @@ namespace RMERP.Controllers
             return PartialView("_ClientEmployee", ClientEmployeeVMs);
         }
                        
-        public IActionResult EditUnassignDate(int CLE_Id, string act)
+        public IActionResult EditUnassignDate(int CLE_Id,int CLI_Id,string act)
         {
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             UnassignVM unassignVM = new UnassignVM();
+            unassignVM.CLI_Id = CLI_Id;
             if (CLE_Id > 0)
             {
                 unassignVM.CLE_Id = CLE_Id;
@@ -1410,7 +1222,7 @@ namespace RMERP.Controllers
                 if (act == "edit")
                 {
                     Clients_Employees clientEmp = clientsManager.ClientEmployeeById(CLE_Id);                    
-                    unassignVM.UnassignedOn = clientEmp.CLE_UnassignedOn.Value;
+                    unassignVM.UnassignedOn = clientEmp.CLE_UnassignedOn.Value;                   
                 }               
                 
             }
@@ -1431,20 +1243,22 @@ namespace RMERP.Controllers
                     }
                 }
             }
-            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
+            return RedirectToAction("AddEditClients", new { id = unassignVM.CLI_Id, tab = "ClientEmployee" });
         }
         public ActionResult RevertAssignEmployee(int CLE_Id)
         {
+            int CLI_Id = 0;
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             try
             {
-                clientsManager.RevertAssignEmployee(CLE_Id);
+                Clients_Employees clientEmployee = clientsManager.RevertAssignEmployee(CLE_Id);
+                CLI_Id = clientEmployee.CLI_Id;
             }
             catch (Exception)
             {
                 TempData["message"] = "Employee is not able to Unassigned! Try Again";
             }
-            return RedirectToAction("AddEditClients", new { id = ClientId, tab = "ClientEmployee" });
+            return RedirectToAction("AddEditClients", new { id = CLI_Id, tab = "ClientEmployee" });
         }
 
         public ActionResult EditAttRegDate(int ATP_Id)
@@ -1464,7 +1278,7 @@ namespace RMERP.Controllers
             {
                 TempData["message"] = "Try Again";
             }
-            return RedirectToAction("AddEditClients", new { id = ClientId,tab = "Parameters" });
+            return RedirectToAction("AddEditClients", new { id = attendance_Parameter.CLI_Id, tab = "Parameters" });
         }
     }
 }
