@@ -19,6 +19,23 @@
     };
     <script>
         function onConfirmClick() {
+              bootbox.prompt({
+                title: "Select Date For Creating Wage",
+                inputType: 'date',
+                callback: function (result) {
+                    $.ajax({
+                        type: "GET",
+                        url: siteUrl + 'WageProcess/CreateNextMonthWage?FRM_Id=' + @ViewBag.FRM_Id + '&date=' + result,
+                         data: "",
+                         success: function (data) {
+                             location.reload();
+                        }
+                    })
+                }
+            });
+        };   
+
+       @*function onConfirmClick() {
             $.ajax({
                 type: "GET",
                 url:  '@Url.Action("nextWageMonth", "WageProcess", new { FRM_Id = ViewBag.FRM_Id })',
@@ -53,9 +70,7 @@
                 });
                     }
                 })
-        };   
-
-       
+        };*@ 
         function searchCompletedWageProcess() {           
             var FRM_Id = @ViewBag.FRM_Id;
             var Year = $("#Year").val();

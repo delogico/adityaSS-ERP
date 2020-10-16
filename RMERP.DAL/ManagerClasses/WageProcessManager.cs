@@ -38,11 +38,23 @@ namespace RMERP.DAL.ManagerClasses
             return wageProcess;
         }
 
-        public string CreateNextMonthWage(int AdminId,int FRM_Id)
+        //public string CreateNextMonthWage(int AdminId,int FRM_Id)
+        //{
+        //    string res = string.Empty;
+        //    Wage_Process wageProcess = new Wage_Process();           
+        //    wageProcess.WAG_Month = nextWageMonth(AdminId, FRM_Id);            
+        //    wageProcess.WAG_RegisteredOn = ProjectUtils.DateNow();
+        //    wageProcess.ADM_Id_RegisteredBy = AdminId;
+        //    wageProcess.FRM_Id = FRM_Id;
+        //    _context.Wage_Process.Add(wageProcess);
+        //    _context.SaveChanges();
+        //    return res;
+        //}
+        public string CreateNextMonthWage(int AdminId, int FRM_Id,DateTime date)
         {
             string res = string.Empty;
-            Wage_Process wageProcess = new Wage_Process();           
-            wageProcess.WAG_Month = nextWageMonth(AdminId, FRM_Id);            
+            Wage_Process wageProcess = new Wage_Process();
+            wageProcess.WAG_Month = date;
             wageProcess.WAG_RegisteredOn = ProjectUtils.DateNow();
             wageProcess.ADM_Id_RegisteredBy = AdminId;
             wageProcess.FRM_Id = FRM_Id;
@@ -65,28 +77,18 @@ namespace RMERP.DAL.ManagerClasses
             }
             return "";
         }
-        public DateTime nextWageMonth(int AdminId,int FirmId)
-        {
-            var wp = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.FRM_Id.Equals(FirmId)).OrderByDescending(m => m.WAG_Month).FirstOrDefault();
-            if(wp != null)
-            {
-                return wp.WAG_Month.AddMonths(1);
-            }
-            else
-            {
-                return ProjectUtils.DateNow();
-            }
-            //int count = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.FRM_Id.Equals(FirmId)).Count();
-            //if (count > 0)
-            //{
-            //    var wp = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.FRM_Id.Equals(FirmId)).OrderByDescending(m => m.WAG_Month).First();
-            //    return wp.WAG_Month.AddMonths(1);
-            //}
-            //else
-            //{
-            //    return ProjectUtils.DateNow();
-            //}
-        }
+        //public DateTime nextWageMonth(int AdminId,int FirmId)
+        //{
+        //    var wp = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.FRM_Id.Equals(FirmId)).OrderByDescending(m => m.WAG_Month).FirstOrDefault();
+        //    if(wp != null)
+        //    {
+        //        return wp.WAG_Month.AddMonths(1);
+        //    }
+        //    else
+        //    {
+        //        return ProjectUtils.DateNow();
+        //    }           
+        //}
 
         public string GetMonthFromID(int WagId)
         {

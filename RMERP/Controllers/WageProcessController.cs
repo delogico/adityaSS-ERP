@@ -59,10 +59,10 @@ namespace RMERP.Controllers
         {
             WageProcessManager wageProcessManager=new WageProcessManager(_context,_configuration);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID(), FRM_Id);
+            //DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID(), FRM_Id);
             FirmsManager firmsManager = new FirmsManager(_context);
             AttendanceManager attendanceManager = new AttendanceManager(_context);
-            ViewBag.month = nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
+           // ViewBag.month = nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
             ViewBag.FRM_Id = FRM_Id;
             Firms firm = firmsManager.GetFirm(FRM_Id);
             ViewBag.FRM_Name = firm.FRM_ShortName;
@@ -74,10 +74,16 @@ namespace RMERP.Controllers
             return View(WageProcessMapper.mapMeListVMs(wageProcessManager.getPendingWageProcessList(FRM_Id), firm, _context, _configuration));
         }
 
-        public IActionResult CreateNextMonthWage(int FRM_Id)
+        //public IActionResult CreateNextMonthWage(int FRM_Id)
+        //{
+        //    SessionUtils sessionUtils = new SessionUtils(Request, Response);
+        //    string rse = wpm.CreateNextMonthWage(sessionUtils.GetLoggedAdminID(), FRM_Id);
+        //    return RedirectToAction("Index", new { FRM_Id = FRM_Id });
+        //}
+        public IActionResult CreateNextMonthWage(int FRM_Id,DateTime date)
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            string rse = wpm.CreateNextMonthWage(sessionUtils.GetLoggedAdminID(), FRM_Id);
+            string rse = wpm.CreateNextMonthWage(sessionUtils.GetLoggedAdminID(), FRM_Id, date);
             return RedirectToAction("Index", new { FRM_Id = FRM_Id });
         }
 
@@ -93,13 +99,13 @@ namespace RMERP.Controllers
             return RedirectToAction("Index", new { FRM_Id = FRM_Id });
         }
 
-        [HttpGet]
-        public IActionResult nextWageMonth(int FRM_Id)
-        {
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID(), FRM_Id);
-            return Content(nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")));
-        }
+        //[HttpGet]
+        //public IActionResult nextWageMonth(int FRM_Id)
+        //{
+        //    SessionUtils sessionUtils = new SessionUtils(Request, Response);
+        //    DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID(), FRM_Id);
+        //    return Content(nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN")));
+        //}
 
         public ActionResult ImportWageProcessData(UploadExcelViewModel uvm)
         {
