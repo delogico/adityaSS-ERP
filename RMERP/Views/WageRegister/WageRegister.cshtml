@@ -202,7 +202,10 @@
                         <tr>
                             <td class="gainsboro">Sr.No.</td>
                             <td class="gainsboro">ID</td>
+                            <td class="gainsboro">UAN No</td>
+                            <td class="gainsboro">ESIC No</td>
                             <td class="gainsboro">Name</td>
+                            <td class="gainsboro">Designation</td>
                             <td class="gainsboro">M/F</td>
                             <td class="gainsboro">Date Of Joining</td>
                             <td class="gainsboro">Total Working Days</td>
@@ -294,7 +297,7 @@
                                 }
                                 <td>CR Ref</td>
                             }
-
+                            @*<td>Signature</td>*@
                         </tr>
                     </thead>
                     <tbody>
@@ -305,7 +308,10 @@
                         <tr>
                             <td class="gainsboro">@srNo</td>
                             <td class="gainsboro">@employee.employeeVM.EMP_Id.ToString("D5")</td>
+                            <td class="gainsboro">@employee.employeeVM.EMP_UAN_Number</td>
+                            <td class="gainsboro">@employee.employeeVM.EMP_ESIC_Number</td>
                             <td class="gainsboro">@employee.employeeVM.EMP_FirstName @employee.employeeVM.EMP_MiddleName @employee.employeeVM.EMP_SurName</td>
+                            <td class="gainsboro">@employee.employeeVM.EMP_Designation</td>
                             <td class="gainsboro">@(Convert.ToBoolean(employee.employeeVM.EMP_Gender) == true ? "M" : "F")</td>
                             <td class="gainsboro">@DateHelper.getLongDateFormat(employee.employeeVM.EMP_DateOfJoining)</td>
 
@@ -463,7 +469,7 @@
                                 <td class="silver">-</td>
                                 <td class="gray">-</td>
                             }
-
+                            @*<td></td>*@
                         </tr>
                         }
                     </tbody>
