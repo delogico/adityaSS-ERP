@@ -295,8 +295,9 @@ namespace RMERP.Controllers
                             decimal Final_TotalBasic = 0M, Final_TotalDA = 0M, Final_TotalHRA = 0M, Final_TotalOT = 0M, Final_TotalGrossTotal = 0M, Final_TotalPF = 0M, Final_TotalESIC = 0M;
                             decimal Final_TotalProfTax = 0m, Final_TotalRevenue = 0M, Final_TotalCanteenFacility = 0M, Final_TotalAdvance = 0M, Final_TotalDeduct = 0M, Final_TotalFinal = 0M;
                             decimal Final_TotalOutStation = 0M, Final_TotalAttendance = 0M, Final_TotalNightshift = 0M, Final_TotalPerformance = 0M, Final_TotalLWF = 0M;
-
+                            decimal Final_TotalAllowance_1 = 0M, Final_TotalAllowance_2 = 0M, Final_TotalAllowance_3 = 0M, Final_TotalAllowance_4 = 0M, Final_TotalAllowance_5 = 0M;
                             bool IsCRI_OutStation_Allowance=false, IsCRI_Attendance_Allowance = false, IsCRI_Nightshift_Allowance = false, IsCRI_Performance_Allowance = false, IsCRI_OT_Calculate_Payableday = false;
+                            bool IsCRI_Allowance_1 = false, IsCRI_Allowance_2 = false, IsCRI_Allowance_3 = false, IsCRI_Allowance_4 = false, IsCRI_Allowance_5 = false;
                             bool IsCRI_ProfessionalTax = false, IsCRI_RevenueDeduction = false, IsCRI_CanteenFacility = false, IsDES_Include_LWF = false;
                             List<WageAllowancesTotalVM> WageAllowancesTotalVMs = new List<WageAllowancesTotalVM>();
                             foreach (var dd in distinceDesignations)
@@ -385,7 +386,44 @@ namespace RMERP.Controllers
                                     excelSheet.SetColumnWidth(cell + 1, (int)((25 + 0.72) * 140));
                                     cellAll.CellStyle = styleGrey40;
                                     cell++; i++;
-                                }              
+                                }
+                                //custom allowance
+                                if (clientRequirement.CRI_Allowance_1 == true)
+                                {
+                                    cell = cell + 1;
+                                    ICell celOutAllow = row.CreateCell(cell);
+                                    celOutAllow.SetCellValue(clientRequirement.CRI_Allowance_Name_1+"Allowance");
+                                    celOutAllow.CellStyle = styleGrey40;
+                                }
+                                if (clientRequirement.CRI_Allowance_2 == true)
+                                {
+                                    cell = cell + 1;
+                                    ICell celOutAllow = row.CreateCell(cell);
+                                    celOutAllow.SetCellValue(clientRequirement.CRI_Allowance_Name_2 + "Allowance");
+                                    celOutAllow.CellStyle = styleGrey40;
+                                }
+                                if (clientRequirement.CRI_Allowance_3 == true)
+                                {
+                                    cell = cell + 1;
+                                    ICell celOutAllow = row.CreateCell(cell);
+                                    celOutAllow.SetCellValue(clientRequirement.CRI_Allowance_Name_3 + "Allowance");
+                                    celOutAllow.CellStyle = styleGrey40;
+                                }
+                                if (clientRequirement.CRI_Allowance_4 == true)
+                                {
+                                    cell = cell + 1;
+                                    ICell celOutAllow = row.CreateCell(cell);
+                                    celOutAllow.SetCellValue(clientRequirement.CRI_Allowance_Name_4 + "Allowance");
+                                    celOutAllow.CellStyle = styleGrey40;
+                                }
+                                if (clientRequirement.CRI_Allowance_5 == true)
+                                {
+                                    cell = cell + 1;
+                                    ICell celOutAllow = row.CreateCell(cell);
+                                    celOutAllow.SetCellValue(clientRequirement.CRI_Allowance_Name_5 + "Allowance");
+                                    celOutAllow.CellStyle = styleGrey40;
+                                }
+                                //end custom allowance
                                 if (clientRequirement.CRI_OutStation_Allowance == true)
                                 {
                                     cell = cell + 1;
@@ -495,7 +533,7 @@ namespace RMERP.Controllers
                                 double TotalPaybleDays = 0, TotalOTHrs=0;
                                 decimal TotalBasic = 0M, TotalDA = 0M, TotalHRA = 0M, TotalOT = 0M, TotalGrossTotal = 0M, TotalPF = 0M, TotalESIC = 0M, TotalProfTax = 0m, TotalRevenue = 0M, TotalCanteenFacility = 0M, TotalAdvance = 0M, TotalDeduct = 0M, TotalFinal = 0M;
                                 decimal TotalOutStation = 0M, TotalAttendance = 0M, TotalNightshift = 0M, TotalPerformance = 0M, TotalLWF=0M;
-
+                                decimal TotalAllowance1 = 0M, TotalAllowance2 = 0M, TotalAllowance3 = 0M, TotalAllowance4 = 0M, TotalAllowance5 = 0M;
                                 int srno = 0;
                                 foreach (var employee in wageRegisters)
                                 {
@@ -572,6 +610,75 @@ namespace RMERP.Controllers
                                         j++;
                                     }
                                     int cellNxt = cellAllowance + 1;
+
+
+                                    //custom allowance value
+                                    if (clientRequirement.CRI_Allowance_1 == true)
+                                    {
+                                        ICell cellOutstation = row.CreateCell(cellNxt);
+                                        decimal WAR_Allowance_Calculated_1 = 0M;
+                                        if (employee.WAR_Allowance_Calculated_1 != null)
+                                        {
+                                            WAR_Allowance_Calculated_1 = Math.Round(employee.WAR_Allowance_Calculated_1.Value, MidpointRounding.AwayFromZero);
+                                        }
+                                        cellOutstation.SetCellValue(WAR_Allowance_Calculated_1.ToString());
+                                        TotalAllowance1 = TotalAllowance1 + WAR_Allowance_Calculated_1;
+                                        cellOutstation.CellStyle = styleGrey40;
+                                        cellNxt = cellNxt + 1;
+                                    }
+                                    if (clientRequirement.CRI_Allowance_2 == true)
+                                    {
+                                        ICell cellOutstation = row.CreateCell(cellNxt);
+                                        decimal WAR_Allowance_Calculated_2 = 0M;
+                                        if (employee.WAR_Allowance_Calculated_2 != null)
+                                        {
+                                            WAR_Allowance_Calculated_2 = Math.Round(employee.WAR_Allowance_Calculated_2.Value, MidpointRounding.AwayFromZero);
+                                        }
+                                        cellOutstation.SetCellValue(WAR_Allowance_Calculated_2.ToString());
+                                        TotalAllowance2 = TotalAllowance2 + WAR_Allowance_Calculated_2;
+                                        cellOutstation.CellStyle = styleGrey40;
+                                        cellNxt = cellNxt + 1;
+                                    }
+                                    if (clientRequirement.CRI_Allowance_3 == true)
+                                    {
+                                        ICell cellOutstation = row.CreateCell(cellNxt);
+                                        decimal WAR_Allowance_Calculated_3 = 0M;
+                                        if (employee.WAR_Allowance_Calculated_3 != null)
+                                        {
+                                            WAR_Allowance_Calculated_3 = Math.Round(employee.WAR_Allowance_Calculated_3.Value, MidpointRounding.AwayFromZero);
+                                        }
+                                        cellOutstation.SetCellValue(WAR_Allowance_Calculated_3.ToString());
+                                        TotalAllowance3 = TotalAllowance3 + WAR_Allowance_Calculated_3;
+                                        cellOutstation.CellStyle = styleGrey40;
+                                        cellNxt = cellNxt + 1;
+                                    }
+                                    if (clientRequirement.CRI_Allowance_4 == true)
+                                    {
+                                        ICell cellOutstation = row.CreateCell(cellNxt);
+                                        decimal WAR_Allowance_Calculated_4 = 0M;
+                                        if (employee.WAR_Allowance_Calculated_4 != null)
+                                        {
+                                            WAR_Allowance_Calculated_4 = Math.Round(employee.WAR_Allowance_Calculated_4.Value, MidpointRounding.AwayFromZero);
+                                        }
+                                        cellOutstation.SetCellValue(WAR_Allowance_Calculated_4.ToString());
+                                        TotalAllowance4 = TotalAllowance4 + WAR_Allowance_Calculated_4;
+                                        cellOutstation.CellStyle = styleGrey40;
+                                        cellNxt = cellNxt + 1;
+                                    }
+                                    if (clientRequirement.CRI_Allowance_5 == true)
+                                    {
+                                        ICell cellOutstation = row.CreateCell(cellNxt);
+                                        decimal WAR_Allowance_Calculated_5 = 0M;
+                                        if (employee.WAR_Allowance_Calculated_5 != null)
+                                        {
+                                            WAR_Allowance_Calculated_5 = Math.Round(employee.WAR_Allowance_Calculated_5.Value, MidpointRounding.AwayFromZero);
+                                        }
+                                        cellOutstation.SetCellValue(WAR_Allowance_Calculated_5.ToString());
+                                        TotalAllowance5 = TotalAllowance5 + WAR_Allowance_Calculated_5;
+                                        cellOutstation.CellStyle = styleGrey40;
+                                        cellNxt = cellNxt + 1;
+                                    }
+                                    //end cutsom allowance
 
                                     #region New allowances 29th july
                                     if (clientRequirement.CRI_OutStation_Allowance == true)
@@ -783,6 +890,49 @@ namespace RMERP.Controllers
                                 
                                 totalCount = cellAllow;
 
+                                //custom allow
+                                if (clientRequirement.CRI_Allowance_1 == true)
+                                {
+                                    IsCRI_Allowance_1 = true;
+                                    totalCount = totalCount + 1;
+                                    ICell cellTotAllowance_1 = row.CreateCell(totalCount);
+                                    cellTotAllowance_1.CellStyle = styleGrey40;
+                                    cellTotAllowance_1.SetCellValue(Math.Round(TotalAllowance1, MidpointRounding.AwayFromZero).ToString());
+                                }
+                                if (clientRequirement.CRI_Allowance_2 == true)
+                                {
+                                    IsCRI_Allowance_2 = true;
+                                    totalCount = totalCount + 1;
+                                    ICell cellTotAllowance_2 = row.CreateCell(totalCount);
+                                    cellTotAllowance_2.CellStyle = styleGrey40;
+                                    cellTotAllowance_2.SetCellValue(Math.Round(TotalAllowance2, MidpointRounding.AwayFromZero).ToString());
+                                }
+                                if (clientRequirement.CRI_Allowance_3 == true)
+                                {
+                                    IsCRI_Allowance_3 = true;
+                                    totalCount = totalCount + 1;
+                                    ICell cellTotAllowance_3 = row.CreateCell(totalCount);
+                                    cellTotAllowance_3.CellStyle = styleGrey40;
+                                    cellTotAllowance_3.SetCellValue(Math.Round(TotalAllowance3, MidpointRounding.AwayFromZero).ToString());
+                                }
+                                if (clientRequirement.CRI_Allowance_4 == true)
+                                {
+                                    IsCRI_Allowance_4 = true;
+                                    totalCount = totalCount + 1;
+                                    ICell cellTotAllowance_4 = row.CreateCell(totalCount);
+                                    cellTotAllowance_4.CellStyle = styleGrey40;
+                                    cellTotAllowance_4.SetCellValue(Math.Round(TotalAllowance4, MidpointRounding.AwayFromZero).ToString());
+                                }
+                                if (clientRequirement.CRI_Allowance_5 == true)
+                                {
+                                    IsCRI_Allowance_1 = true;
+                                    totalCount = totalCount + 1;
+                                    ICell cellTotAllowance_5 = row.CreateCell(totalCount);
+                                    cellTotAllowance_5.CellStyle = styleGrey40;
+                                    cellTotAllowance_5.SetCellValue(Math.Round(TotalAllowance5, MidpointRounding.AwayFromZero).ToString());
+                                }
+                                //end custom allow
+
                                 #region New total allowances 29th july
                                 if (clientRequirement.CRI_OutStation_Allowance == true)
                                 {
@@ -914,6 +1064,11 @@ namespace RMERP.Controllers
                                 Final_TotalAttendance = Final_TotalAttendance + TotalAttendance;
                                 Final_TotalNightshift = Final_TotalNightshift + TotalNightshift;
                                 Final_TotalPerformance = Final_TotalPerformance + TotalPerformance;
+                                Final_TotalAllowance_1 = Final_TotalAllowance_1 + TotalAllowance1;
+                                Final_TotalAllowance_2 = Final_TotalAllowance_2 + TotalAllowance2;
+                                Final_TotalAllowance_3 = Final_TotalAllowance_3 + TotalAllowance3;
+                                Final_TotalAllowance_4 = Final_TotalAllowance_4 + TotalAllowance4;
+                                Final_TotalAllowance_5 = Final_TotalAllowance_5 + TotalAllowance5;
                                 Final_TotalLWF = Final_TotalLWF + TotalLWF;
                             }
 
@@ -1006,6 +1161,58 @@ namespace RMERP.Controllers
                             }
                             ftotalCount = fcellAllow;
 
+                            //custom
+                            if (IsCRI_Allowance_1)
+                            {
+                                ftotalCount = ftotalCount + 1;
+                                ICell cellTot_Allowance_1 = frow.CreateCell(ftotalCount);
+                                cellTot_Allowance_1.CellStyle = styleGrey40;
+                                cellTot_Allowance_1.SetCellValue("Total Allowance 1");
+                                ICell cellTotAllowance_1 = frowSecond.CreateCell(ftotalCount);
+                                cellTotAllowance_1.CellStyle = styleGrey40;
+                                cellTotAllowance_1.SetCellValue(Math.Round(Final_TotalAllowance_1, MidpointRounding.AwayFromZero).ToString());
+                            }
+                            if (IsCRI_Allowance_2)
+                            {
+                                ftotalCount = ftotalCount + 1;
+                                ICell cellTot_Allowance_2 = frow.CreateCell(ftotalCount);
+                                cellTot_Allowance_2.CellStyle = styleGrey40;
+                                cellTot_Allowance_2.SetCellValue("Total Allowance 2");
+                                ICell cellTotAllowance_2 = frowSecond.CreateCell(ftotalCount);
+                                cellTotAllowance_2.CellStyle = styleGrey40;
+                                cellTotAllowance_2.SetCellValue(Math.Round(Final_TotalAllowance_2, MidpointRounding.AwayFromZero).ToString());
+                            }
+                            if (IsCRI_Allowance_3)
+                            {
+                                ftotalCount = ftotalCount + 1;
+                                ICell cellTot_Allowance_3 = frow.CreateCell(ftotalCount);
+                                cellTot_Allowance_3.CellStyle = styleGrey40;
+                                cellTot_Allowance_3.SetCellValue("Total Allowance 3");
+                                ICell cellTotAllowance_3 = frowSecond.CreateCell(ftotalCount);
+                                cellTotAllowance_3.CellStyle = styleGrey40;
+                                cellTotAllowance_3.SetCellValue(Math.Round(Final_TotalAllowance_3, MidpointRounding.AwayFromZero).ToString());
+                            }
+                            if (IsCRI_Allowance_4)
+                            {
+                                ftotalCount = ftotalCount + 1;
+                                ICell cellTot_Allowance_4 = frow.CreateCell(ftotalCount);
+                                cellTot_Allowance_4.CellStyle = styleGrey40;
+                                cellTot_Allowance_4.SetCellValue("Total Allowance 4");
+                                ICell cellTotAllowance_4 = frowSecond.CreateCell(ftotalCount);
+                                cellTotAllowance_4.CellStyle = styleGrey40;
+                                cellTotAllowance_4.SetCellValue(Math.Round(Final_TotalAllowance_4, MidpointRounding.AwayFromZero).ToString());
+                            }
+                            if (IsCRI_Allowance_5)
+                            {
+                                ftotalCount = ftotalCount + 1;
+                                ICell cellTot_Allowance_5 = frow.CreateCell(ftotalCount);
+                                cellTot_Allowance_5.CellStyle = styleGrey40;
+                                cellTot_Allowance_5.SetCellValue("Total Allowance 5");
+                                ICell cellTotAllowance_5 = frowSecond.CreateCell(ftotalCount);
+                                cellTotAllowance_5.CellStyle = styleGrey40;
+                                cellTotAllowance_5.SetCellValue(Math.Round(Final_TotalAllowance_5, MidpointRounding.AwayFromZero).ToString());
+                            }
+                            //end custom
                             #region New grand total allowances
                             if (IsCRI_OutStation_Allowance)
                             {
