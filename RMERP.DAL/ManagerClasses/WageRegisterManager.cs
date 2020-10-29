@@ -86,8 +86,7 @@ namespace RMERP.DAL.ManagerClasses
         }
 
         public List<WageRegisterVM> GetWageRegisterCalculated(Wage_Process wageProcess, int CLI_Id, int AdminID)
-        {
-
+        {            
             List<WageRegisterVM> lstRegister = new List<WageRegisterVM>();
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);
             AttendanceManager attManager = new AttendanceManager(_context);
@@ -625,6 +624,8 @@ namespace RMERP.DAL.ManagerClasses
             return lstRegister;
         }
 
+
+
         public string SaveWageRegister(List<Wage_Register> wage_Registers, int WAG_Id, string CLI_Id, int AdminID)
         {
             string res = string.Empty;
@@ -642,21 +643,31 @@ namespace RMERP.DAL.ManagerClasses
                     }
                 }
                 _context.Wage_Register.AddRange(wage_Registers);
-                Wage_Process_Clients process_Client = new Wage_Process_Clients();
-                process_Client.WAG_Id = WAG_Id;
-                process_Client.CLI_Id = Convert.ToInt32(CLI_Id);
-                process_Client.WPC_WageRegisterSaved = true;
-                process_Client.ADM_Id_SavedBy = AdminID;
-                process_Client.WPC_SavedOn = ProjectUtils.DateNow();
-                _context.Wage_Process_Clients.Add(process_Client);
 
-                _context.SaveChanges();
+                if (!this.isWageAlredySave(WAG_Id,Convert.ToInt32(CLI_Id)))
+                {
+                    Wage_Process_Clients process_Client = new Wage_Process_Clients();
+                    process_Client.WAG_Id = WAG_Id;
+                    process_Client.CLI_Id = Convert.ToInt32(CLI_Id);
+                    process_Client.WPC_WageRegisterSaved = true;
+                    process_Client.ADM_Id_SavedBy = AdminID;
+                    process_Client.WPC_SavedOn = ProjectUtils.DateNow();
+                    _context.Wage_Process_Clients.Add(process_Client);
+
+                    _context.SaveChanges();
+                }
+                
             }
             catch (Exception ex)
             {
                 res = ex.Message;
             }
             return res;
+        }
+
+        public bool isWageAlredySave(int WAG_Id,int CLI_Id)
+        {
+            return _context.Wage_Register.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(CLI_Id)).Count() > 0;
         }
 
         public string ResetWageRegister(int WAG_Id, string CLI_Id)
@@ -671,8 +682,8 @@ namespace RMERP.DAL.ManagerClasses
                     _context.Wage_Register_Allowances.RemoveRange(wra);
                 }
                 _context.Wage_Register.RemoveRange(lst);
-                Wage_Process_Clients wg = _context.Wage_Process_Clients.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(Convert.ToInt32(CLI_Id))).FirstOrDefault();
-                _context.Wage_Process_Clients.RemoveRange(wg);
+                IEnumerable<Wage_Process_Clients> wgs = _context.Wage_Process_Clients.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(Convert.ToInt32(CLI_Id)));
+                _context.Wage_Process_Clients.RemoveRange(wgs);
                 _context.SaveChanges();
             }
             catch (Exception ex)
