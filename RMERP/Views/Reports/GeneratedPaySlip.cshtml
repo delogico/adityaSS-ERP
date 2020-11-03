@@ -215,6 +215,42 @@
                                             <td class="text-right">@Model.WAR_Attendance_Allowance_Calculated</td>
                                         </tr>
                                     }
+                                    @if (Model.WAR_Allowance_Calculated_1 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_1</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_1</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_2 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_2</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_2</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_3 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_3</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_3</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_4 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_4</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_4</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_5 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_5</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_5</td>
+                                        </tr>
+                                    }
+
                                     @if (totDeduction > totEarning)
                                     {
                                         for (int i = 0; i < (totDeduction - totEarning); i++)

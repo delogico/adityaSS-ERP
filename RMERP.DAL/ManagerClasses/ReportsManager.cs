@@ -1022,6 +1022,7 @@ namespace RMERP.DAL.ManagerClasses
             decimal WAR_Basic_Calculated = 0M, WAR_DA_Calculated = 0M, WAR_ESIC_Calculated = 0M, WAR_FinalTotal = 0M, WAR_GrossTotal = 0M, WAR_HRA_Calculated = 0M, WAR_PF_Calculated = 0M, WAR_ProffesionalTax_Calculated = 0M;
             decimal WAR_LWF_Deduction_Calculated = 0M, WAR_Advance_Amount = 0M, WAR_RevenueDeduction_Calculated = 0M, WAR_CanteenFacility_Calculation = 0M;
             decimal WAR_OverTime_Calculated = 0M, WAR_Outstation_Allowance_Calculated = 0M, WAR_Nightshift_Allowance_Calculated = 0M, WAR_Performance_Allowance_Calculated = 0M, WAR_Attendance_Allowance_Calculated = 0M;
+            decimal WAR_Allowance_Calculated_1 = 0M, WAR_Allowance_Calculated_2 = 0M, WAR_Allowance_Calculated_3 = 0M, WAR_Allowance_Calculated_4 = 0M, WAR_Allowance_Calculated_5 = 0M;
             double WAR_TotalPaybleDays = 0, WAR_TotalWorkingDays = 0, Max_TotalPaybleDays=0;
             List<Wage_Register_Allowances> allowances = new List<Wage_Register_Allowances>();
             foreach (Wage_Register wage in wage_Registers)
@@ -1065,9 +1066,51 @@ namespace RMERP.DAL.ManagerClasses
                     WAR_Performance_Allowance_Calculated = WAR_Performance_Allowance_Calculated + wage.WAR_Performance_Allowance_Calculated.Value;
                 if(wage.WAR_Attendance_Allowance_Calculated!=null)
                     WAR_Attendance_Allowance_Calculated = WAR_Attendance_Allowance_Calculated + wage.WAR_Attendance_Allowance_Calculated.Value;
+
+                if (wage.WAR_Allowance_Calculated_1 != null)
+                {
+                    WAR_Allowance_Calculated_1 = WAR_Allowance_Calculated_1 + wage.WAR_Allowance_Calculated_1.Value;                   
+                }
+                if (wage.WAR_Allowance_Calculated_2 != null)
+                {
+                    WAR_Allowance_Calculated_2 = WAR_Allowance_Calculated_2 + wage.WAR_Allowance_Calculated_2.Value;
+                }
+                if (wage.WAR_Allowance_Calculated_3 != null)
+                {
+                    WAR_Allowance_Calculated_3 = WAR_Allowance_Calculated_3 + wage.WAR_Allowance_Calculated_3.Value;
+                }
+                if (wage.WAR_Allowance_Calculated_4 != null)
+                {
+                    WAR_Allowance_Calculated_4 = WAR_Allowance_Calculated_4 + wage.WAR_Allowance_Calculated_4.Value;
+                }
+                if (wage.WAR_Allowance_Calculated_5 != null)
+                {
+                    WAR_Allowance_Calculated_5 = WAR_Allowance_Calculated_5 + wage.WAR_Allowance_Calculated_5.Value;
+                }
                 allowances.AddRange(wage.Wage_Register_Allowances);
-                
             }
+
+            if (WAR_Allowance_Calculated_1 >0)
+            {
+                paySlipVM.CRI_Allowance_Name_1 = wage_Registers[0].CRI_.CRI_Allowance_Name_1;
+            }
+            if (WAR_Allowance_Calculated_2 > 0)
+            {
+                paySlipVM.CRI_Allowance_Name_2 = wage_Registers[0].CRI_.CRI_Allowance_Name_2;
+            }
+            if (WAR_Allowance_Calculated_3 > 0)
+            {
+                paySlipVM.CRI_Allowance_Name_3 = wage_Registers[0].CRI_.CRI_Allowance_Name_3;
+            }
+            if (WAR_Allowance_Calculated_4 > 0)
+            {
+                paySlipVM.CRI_Allowance_Name_4 = wage_Registers[0].CRI_.CRI_Allowance_Name_4;
+            }
+            if (WAR_Allowance_Calculated_5 > 0)
+            {
+                paySlipVM.CRI_Allowance_Name_5 = wage_Registers[0].CRI_.CRI_Allowance_Name_5;
+            }
+
             paySlipVM.ArrearsDays = 0;
             paySlipVM.firm = wage_Registers[0].WAG_.FRM_;
             paySlipVM.EMP_Account_Number = wage_Registers[0].EMP_.EMP_Account_Number;           
@@ -1105,7 +1148,13 @@ namespace RMERP.DAL.ManagerClasses
             paySlipVM.WAR_Nightshift_Allowance_Calculated = WAR_Nightshift_Allowance_Calculated;
             paySlipVM.WAR_Performance_Allowance_Calculated = WAR_Performance_Allowance_Calculated;
             paySlipVM.WAR_Attendance_Allowance_Calculated = WAR_Attendance_Allowance_Calculated;
-            
+
+            paySlipVM.WAR_Allowance_Calculated_1 = WAR_Allowance_Calculated_1;
+            paySlipVM.WAR_Allowance_Calculated_2 = WAR_Allowance_Calculated_2;
+            paySlipVM.WAR_Allowance_Calculated_3 = WAR_Allowance_Calculated_3;
+            paySlipVM.WAR_Allowance_Calculated_4 = WAR_Allowance_Calculated_4;
+            paySlipVM.WAR_Allowance_Calculated_5 = WAR_Allowance_Calculated_5;
+
             decimal DeductTotal = WAR_PF_Calculated + WAR_ESIC_Calculated + WAR_ProffesionalTax_Calculated + WAR_LWF_Deduction_Calculated + WAR_Advance_Amount+ WAR_RevenueDeduction_Calculated+ WAR_CanteenFacility_Calculation;
             paySlipVM.DeductTotal = DeductTotal;
 
