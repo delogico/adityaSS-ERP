@@ -2010,7 +2010,7 @@ namespace RMERP.Controllers
 
                                         if (employee.clientRequirementVM.CRI_Allowance_Name_1 == allownce.C_ALL_Title)
                                         {
-                                            WAR_Allowance_Calculated = Math.Round(employee.WAR_Allowance_Calculated_1.Value, MidpointRounding.AwayFromZero);
+                                            WAR_Allowance_Calculated = Math.Round(employee.WAR_Allowance_Calculated_1!=null? employee.WAR_Allowance_Calculated_1.Value:0, MidpointRounding.AwayFromZero);
                                             cellCustom.SetCellValue(WAR_Allowance_Calculated.ToString());
                                            // TotalAllowance1 = TotalAllowance1 + WAR_Allowance_Calculated;
                                             allownce.C_ALL_Value = allownce.C_ALL_Value + WAR_Allowance_Calculated;
@@ -2018,7 +2018,7 @@ namespace RMERP.Controllers
                                         else
                                         if (employee.clientRequirementVM.CRI_Allowance_Name_2 == allownce.C_ALL_Title)
                                         {
-                                            WAR_Allowance_Calculated = Math.Round(employee.WAR_Allowance_Calculated_2.Value, MidpointRounding.AwayFromZero);
+                                            WAR_Allowance_Calculated = Math.Round(employee.WAR_Allowance_Calculated_2!=null?employee.WAR_Allowance_Calculated_2.Value:0, MidpointRounding.AwayFromZero);
                                             cellCustom.SetCellValue(WAR_Allowance_Calculated.ToString());
                                             // TotalAllowance2 = TotalAllowance2 + WAR_Allowance_Calculated;
                                             allownce.C_ALL_Value = allownce.C_ALL_Value + WAR_Allowance_Calculated;
@@ -2026,7 +2026,7 @@ namespace RMERP.Controllers
                                         else
                                         if (employee.clientRequirementVM.CRI_Allowance_Name_3 == allownce.C_ALL_Title)
                                         {
-                                            WAR_Allowance_Calculated = Math.Round(employee.WAR_Allowance_Calculated_3.Value, MidpointRounding.AwayFromZero);
+                                            WAR_Allowance_Calculated = Math.Round(employee.WAR_Allowance_Calculated_3!=null?employee.WAR_Allowance_Calculated_3.Value:0, MidpointRounding.AwayFromZero);
                                             cellCustom.SetCellValue(WAR_Allowance_Calculated.ToString());
                                             //TotalAllowance3 = TotalAllowance3 + WAR_Allowance_Calculated;
                                             allownce.C_ALL_Value = allownce.C_ALL_Value + WAR_Allowance_Calculated;
@@ -2034,7 +2034,7 @@ namespace RMERP.Controllers
                                         else
                                         if (employee.clientRequirementVM.CRI_Allowance_Name_4 == allownce.C_ALL_Title)
                                         {
-                                            WAR_Allowance_Calculated = Math.Round(employee.WAR_Allowance_Calculated_4.Value, MidpointRounding.AwayFromZero);
+                                            WAR_Allowance_Calculated = Math.Round(employee.WAR_Allowance_Calculated_4!=null?employee.WAR_Allowance_Calculated_4.Value:0, MidpointRounding.AwayFromZero);
                                             cellCustom.SetCellValue(WAR_Allowance_Calculated.ToString());
                                             //TotalAllowance4 = TotalAllowance4 + WAR_Allowance_Calculated;
                                             allownce.C_ALL_Value = allownce.C_ALL_Value + WAR_Allowance_Calculated;
@@ -2042,7 +2042,7 @@ namespace RMERP.Controllers
                                         else
                                         if (employee.clientRequirementVM.CRI_Allowance_Name_5 == allownce.C_ALL_Title)
                                         {
-                                            WAR_Allowance_Calculated = Math.Round(employee.WAR_Allowance_Calculated_5.Value, MidpointRounding.AwayFromZero);
+                                            WAR_Allowance_Calculated = Math.Round(employee.WAR_Allowance_Calculated_5!=null?employee.WAR_Allowance_Calculated_5.Value:0, MidpointRounding.AwayFromZero);
                                             cellCustom.SetCellValue(WAR_Allowance_Calculated.ToString());
                                             //TotalAllowance5 = TotalAllowance5 + WAR_Allowance_Calculated;
                                             allownce.C_ALL_Value = allownce.C_ALL_Value + WAR_Allowance_Calculated;

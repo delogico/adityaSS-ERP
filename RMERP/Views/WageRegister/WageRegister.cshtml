@@ -100,7 +100,7 @@
         <hr />
         @{
             var distinceDesignations = item.wageRegisterVMs.Select(q => new { q.designation.DES_Id, q.designation.DES_Title, q.designation.DES_Exclude_LWF }).Distinct();
-           
+         
             }
         
         @foreach (var dd in distinceDesignations)

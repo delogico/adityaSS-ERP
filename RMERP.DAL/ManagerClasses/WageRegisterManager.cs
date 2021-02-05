@@ -355,19 +355,34 @@ namespace RMERP.DAL.ManagerClasses
                                     else if (cr.CRI_OT_Formula != null)
                                     {
                                         decimal OTsum = Math.Round(GetAmountBasedOnFormulaOT(
-                                            cr.CRI_OT_Formula, 
-                                            WAR_Basic_Calculated, 
+                                            cr.CRI_OT_Formula,
+                                            WAR_Basic_Calculated,
                                             CRI_DA_Calculated,
-                                            CRI_HRA_Calculated, 
-                                            cr.Client_Requirement_Allowances.ToList(), 
-                                            totalWorkingDays, 
-                                            totalPaybleDays, 
+                                            CRI_HRA_Calculated,
+                                            cr.Client_Requirement_Allowances.ToList(),
+                                            totalWorkingDays,
+                                            totalPaybleDays,
                                             WAR_Outstation_Allowance_Calculated,
-                                            WAR_Attendance_Allowance_Calculated, 
-                                            WAR_Nightshift_Allowance_Calculated, 
+                                            WAR_Attendance_Allowance_Calculated,
+                                            WAR_Nightshift_Allowance_Calculated,
                                             WAR_Performance_Allowance_Calculated,
                                             WAR_Allowance_Calculated_1, WAR_Allowance_Calculated_2, WAR_Allowance_Calculated_3, WAR_Allowance_Calculated_4, WAR_Allowance_Calculated_5
                                             ), MidpointRounding.AwayFromZero);
+
+                                        //decimal OTsum = Math.Round(GetAmountBasedOnFormulaOT(
+                                        //    cr.CRI_OT_Formula,
+                                        //    Convert.ToDecimal(cr.CRI_Basic),
+                                        //    Convert.ToDecimal(cr.CRI_DA),
+                                        //    cr.CRI_HRA_Fixed != null ? cr.CRI_HRA_Fixed.Value : ((Convert.ToDecimal(cr.CRI_Basic) + Convert.ToDecimal(cr.CRI_DA)) * Convert.ToDecimal(cr.CRI_HRA_Percentage) / 100),
+                                        //    cr.Client_Requirement_Allowances.ToList(),
+                                        //    totalWorkingDays,
+                                        //    totalPaybleDays,
+                                        //    WAR_Outstation_Allowance_Calculated,
+                                        //    WAR_Attendance_Allowance_Calculated,
+                                        //    WAR_Nightshift_Allowance_Calculated,
+                                        //    WAR_Performance_Allowance_Calculated,
+                                        //    WAR_Allowance_Calculated_1, WAR_Allowance_Calculated_2, WAR_Allowance_Calculated_3, WAR_Allowance_Calculated_4, WAR_Allowance_Calculated_5
+                                        //    ), MidpointRounding.AwayFromZero);
 
                                         WAR_OverTime_Calculated = Math.Round(Convert.ToDecimal(((Convert.ToDouble(OTsum) / totalPaybleDays) * OvertimeInDay) * cr.CRI_OT_MultipleTimes), MidpointRounding.AwayFromZero);
                                     }
@@ -543,8 +558,8 @@ namespace RMERP.DAL.ManagerClasses
                         if (cr.CRI_ProfessionalTax == true)
                         {
                             //ProfessionalTaxCalculationManager ptcManager = new ProfessionalTaxCalculationManager(_context);
-                            // WAR_ProffesionalTax_Calculated = Math.Round(ptcManager.GetPT((employee.EMP_.EMP_Gender ? "M" : "F"), WAR_GrossTotal), MidpointRounding.AwayFromZero);
-                            WAR_ProffesionalTax_Calculated=clientsManager.GetProffessionalTax(employee.EMP_.EMP_Gender, WAR_GrossTotal, cr);
+                            // WAR_ProffesionalTax_Calculated = Math.Round(ptcManager.GetPT((employee.EMP_.EMP_Gender ? "M" : "F"), WAR_GrossTotal), MidpointRounding.AwayFromZero);                           
+                            WAR_ProffesionalTax_Calculated =clientsManager.GetProffessionalTax(employee.EMP_.EMP_Gender, WAR_GrossTotal, cr);
                         }
                     }
 
