@@ -7,6 +7,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <_PublishTargetUrl>C:\Publish\RMERP</_PublishTargetUrl>
+    <History>True|2021-12-23T07:02:30.6127457Z;True|2021-09-02T15:19:41.5123924+05:30;</History>
   </PropertyGroup>
   <ItemGroup>
     <DestinationConnectionStrings Include="RMERP">
