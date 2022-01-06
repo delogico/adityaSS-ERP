@@ -70,21 +70,15 @@ namespace RMERP.Controllers
             DateTime dt = DateTime.Now;
             ViewBag.linktoYearId = GetYears(dt.Year);
             ViewBag.linktoMonthId = GetMonths(dt.Year);
-
+            
             return View(WageProcessMapper.mapMeListVMs(wageProcessManager.getPendingWageProcessList(FRM_Id), firm, _context, _configuration));
         }
-
-        //public IActionResult CreateNextMonthWage(int FRM_Id)
-        //{
-        //    SessionUtils sessionUtils = new SessionUtils(Request, Response);
-        //    string rse = wpm.CreateNextMonthWage(sessionUtils.GetLoggedAdminID(), FRM_Id);
-        //    return RedirectToAction("Index", new { FRM_Id = FRM_Id });
-        //}
+        
         public IActionResult CreateNextMonthWage(int FRM_Id,DateTime date)
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            string rse = wpm.CreateNextMonthWage(sessionUtils.GetLoggedAdminID(), FRM_Id, date);
-            return RedirectToAction("Index", new { FRM_Id = FRM_Id });
+            string res = wpm.CreateNextMonthWage(sessionUtils.GetLoggedAdminID(), FRM_Id, date);
+            return Content(res);
         }
 
         public IActionResult DeleteWageProcess(int WagId)

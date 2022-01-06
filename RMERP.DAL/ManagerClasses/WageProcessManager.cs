@@ -37,25 +37,13 @@ namespace RMERP.DAL.ManagerClasses
             Wage_Process wageProcess = _context.Wage_Process.Where(m => m.WAG_Id == WAG_Id).Include(m=>m.Wage_Process_Clients).Include(m=>m.Wage_Register_Advances).Include(m=>m.Attendance).Include(m=>m.FRM_).FirstOrDefault();
             return wageProcess;
         }
-
-        //public string CreateNextMonthWage(int AdminId,int FRM_Id)
-        //{
-        //    string res = string.Empty;
-        //    Wage_Process wageProcess = new Wage_Process();           
-        //    wageProcess.WAG_Month = nextWageMonth(AdminId, FRM_Id);            
-        //    wageProcess.WAG_RegisteredOn = ProjectUtils.DateNow();
-        //    wageProcess.ADM_Id_RegisteredBy = AdminId;
-        //    wageProcess.FRM_Id = FRM_Id;
-        //    _context.Wage_Process.Add(wageProcess);
-        //    _context.SaveChanges();
-        //    return res;
-        //}
+        
         public string CreateNextMonthWage(int AdminId, int FRM_Id,DateTime date)
-        {
+        {           
             string res = string.Empty;
-            var v = _context.Wage_Process.Where(m => m.FRM_Id == FRM_Id && m.WAG_Month.Month == date.Month && m.WAG_Month.Year==date.Year).FirstOrDefault();
             if (_context.Wage_Process.Where(m => m.FRM_Id == FRM_Id && m.WAG_Month.Month == date.Month && m.WAG_Month.Year == date.Year).FirstOrDefault() == null)
             {
+               
                 Wage_Process wageProcess = new Wage_Process();
                 wageProcess.WAG_Month = date;
                 wageProcess.WAG_RegisteredOn = ProjectUtils.DateNow();
@@ -65,8 +53,10 @@ namespace RMERP.DAL.ManagerClasses
                 _context.SaveChanges();
             }
             else
-            {
-                res = "Wage Register for "+ date.ToString("MMMM") + " is already available";
+            {             
+                FirmsManager firmsManager = new FirmsManager(_context);
+                Firms firm = firmsManager.GetFirm(FRM_Id);
+                res = "Wage Register for "+ date.ToString("MMMM") + " is already available in "+ firm.FRM_ShortName;
             }            
             return res;
         }
@@ -85,19 +75,7 @@ namespace RMERP.DAL.ManagerClasses
             }
             return "";
         }
-        //public DateTime nextWageMonth(int AdminId,int FirmId)
-        //{
-        //    var wp = _context.Wage_Process.Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.FRM_Id.Equals(FirmId)).OrderByDescending(m => m.WAG_Month).FirstOrDefault();
-        //    if(wp != null)
-        //    {
-        //        return wp.WAG_Month.AddMonths(1);
-        //    }
-        //    else
-        //    {
-        //        return ProjectUtils.DateNow();
-        //    }           
-        //}
-
+        
         public string GetMonthFromID(int WagId)
         {
             string res = string.Empty;
