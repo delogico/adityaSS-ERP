@@ -26,15 +26,15 @@ namespace RMERP.DAL.ManagerClasses
         }
         public IEnumerable<Wage_Process> getPendingWageProcessList(int FRM_Id)
         {
-            string dtTesting = _configuration.GetSection("TESTING_MONTH_UPTO").Value;
-
+            string dtTesting = _configuration.GetSection("TESTING_MONTH_UPTO").Value;            
+            
             return _context.Wage_Process.Where(m => m.FRM_Id == FRM_Id && !m.WAG_Status && m.WAG_Month.Date > Convert.ToDateTime(dtTesting).Date)
                 .Include(m => m.Attendance)
                 .Include(m => m.Wage_Process_Clients).OrderByDescending(m => m.WAG_Month);
         }
         public Wage_Process getWageProcessById(int WAG_Id)
         {
-            Wage_Process wageProcess = _context.Wage_Process.Include(m=>m.Wage_Process_Clients).Include(m=>m.Wage_Register_Advances).Include(m=>m.Attendance).Include(m=>m.FRM_).Where(m => m.WAG_Id == WAG_Id).FirstOrDefault();
+            Wage_Process wageProcess = _context.Wage_Process.Where(m => m.WAG_Id == WAG_Id).Include(m=>m.Wage_Process_Clients).Include(m=>m.Wage_Register_Advances).Include(m=>m.Attendance).Include(m=>m.FRM_).FirstOrDefault();
             return wageProcess;
         }
 
@@ -53,13 +53,21 @@ namespace RMERP.DAL.ManagerClasses
         public string CreateNextMonthWage(int AdminId, int FRM_Id,DateTime date)
         {
             string res = string.Empty;
-            Wage_Process wageProcess = new Wage_Process();
-            wageProcess.WAG_Month = date;
-            wageProcess.WAG_RegisteredOn = ProjectUtils.DateNow();
-            wageProcess.ADM_Id_RegisteredBy = AdminId;
-            wageProcess.FRM_Id = FRM_Id;
-            _context.Wage_Process.Add(wageProcess);
-            _context.SaveChanges();
+            var v = _context.Wage_Process.Where(m => m.FRM_Id == FRM_Id && m.WAG_Month.Month == date.Month && m.WAG_Month.Year==date.Year).FirstOrDefault();
+            if (_context.Wage_Process.Where(m => m.FRM_Id == FRM_Id && m.WAG_Month.Month == date.Month && m.WAG_Month.Year == date.Year).FirstOrDefault() == null)
+            {
+                Wage_Process wageProcess = new Wage_Process();
+                wageProcess.WAG_Month = date;
+                wageProcess.WAG_RegisteredOn = ProjectUtils.DateNow();
+                wageProcess.ADM_Id_RegisteredBy = AdminId;
+                wageProcess.FRM_Id = FRM_Id;
+                _context.Wage_Process.Add(wageProcess);
+                _context.SaveChanges();
+            }
+            else
+            {
+                res = "Wage Register for "+ date.ToString("MMMM") + " is already available";
+            }            
             return res;
         }
         public string DeleteWageProcess(int WagId)
@@ -234,5 +242,6 @@ namespace RMERP.DAL.ManagerClasses
                  .Include(m => m.Attendance)
                  .Include(m => m.Wage_Process_Clients).OrderByDescending(m => m.WAG_Month);
         }
+
     }
 }

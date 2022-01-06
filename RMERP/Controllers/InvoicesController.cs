@@ -40,11 +40,9 @@ namespace RMERP.Controllers
             InvoiceMasterVM masterVM = new InvoiceMasterVM();
             int FRM_Id = (sessionUtils.GetLoggedFirmID()!=null? sessionUtils.GetLoggedFirmID().Value:0);           
             List<Invoices> invoices = invoicesManager.GetInvoices(FRM_Id);
-            masterVM.InvoiceVMs = InvoiceMapper.mapMe(invoices.Where(m => DateTime.Compare(m.INV_CreatedOn.Date, DateTime.Now.Date.AddMonths(-2)) > 0).ToList());           
+            DateTime dt = DateTime.Now;
+            masterVM.InvoiceVMs = InvoiceMapper.mapMe(invoices.Where(m => DateTime.Compare(m.INV_CreatedOn.Date, DateTime.Now.Date.AddMonths(-2)) > 0).ToList());
             ViewBag.ClientList =clientsManager.listClients(true, FRM_Id).OrderBy(m=>m.CLI_Name);
-
-            DateTime dt = DateTime.Now;          
-
             ViewBag.linktoYearId = GetYears(dt.Year);
             ViewBag.linktoMonthId = GetMonths(dt.Year);
             return View(masterVM);
@@ -280,7 +278,7 @@ namespace RMERP.Controllers
             }
             else
             {
-                invoiceVMs = InvoiceMapper.mapMe(invoicesManager.GetInvoices(FRM_Id).Where(m => DateTime.Compare(m.INV_CreatedOn.Date, DateTime.Now.Date.AddMonths(-2)) > 0).ToList());
+                invoiceVMs = InvoiceMapper.mapMe(invoicesManager.GetInvoices(FRM_Id).ToList());
             }
             if (Year > 0)
             {
