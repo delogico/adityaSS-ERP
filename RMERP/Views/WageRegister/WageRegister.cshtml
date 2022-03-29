@@ -76,7 +76,15 @@
     int DaysInMonth = DateTime.DaysInMonth(wage.WAG_Month.Year, wage.WAG_Month.Month);   
 }
 
-<h3 class="page-title">@ViewData["Title"]  (@wage.FRM_Title/@wage.WAG_Full_Month() )<a class="btn btn-success pull-right" href='@Url.Action( "WageRegisterExcel","WageRegister",new { WAG_Id = wage.WAG_Id,FRM_Id=wage.FRM_Id})' title="Download Excel"><i class="fa fa-file-excel-o m-r-5"></i>Download Excel</a></h3>
+<h3 class="page-title">
+    @ViewData["Title"]  (@wage.FRM_Title/@wage.WAG_Full_Month() )
+    <a class="btn btn-success pull-right" href='@Url.Action( "WageRegisterExcel","WageRegister",new { WAG_Id = wage.WAG_Id,FRM_Id=wage.FRM_Id})' title="Download Excel">
+        <i class="fa fa-file-excel-o m-r-5"></i>Download Excel
+    </a>
+    <a class="btn btn-warning pull-right" href='@Url.Action( "WageRegisterNewExcel","WageRegister",new { WAG_Id = wage.WAG_Id,FRM_Id=wage.FRM_Id})' title="Download New Excel">
+        <i class="fa fa-file-excel-o m-r-5"></i>Download New Excel
+    </a>
+</h3>
 <ul class="nav nav-tabs" id="myTab">
     @foreach (var client in Model.Select(m => new { m.client, m.wageProcessClientVM, m.wageProcessVM.Attendance }).Distinct())
     {       
