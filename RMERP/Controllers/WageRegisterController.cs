@@ -3891,7 +3891,7 @@ namespace RMERP.Controllers
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp181 = row.CreateCell(cellNxt1);
-									cellEmp181.SetCellValue("-"); //Profit/Income Tax/PT								
+									cellEmp181.SetCellValue(Convert.ToString(employee.WAR_ProffesionalTax_Calculated)); //Profit/Income Tax/PT								
 									cellEmp181.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
