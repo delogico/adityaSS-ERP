@@ -8,9 +8,11 @@ using RMERP.DAL.ViewModel;
 using RMERP.DAL.Mappers;
 using RMERP.DAL.ManagerClasses;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RMERP.Controllers
 {
+    [Authorize]
     public class AllowancesController : Controller
     {
         private readonly RMERPContext _context;

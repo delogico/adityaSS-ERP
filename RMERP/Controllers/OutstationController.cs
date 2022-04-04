@@ -11,9 +11,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using SmartBreadcrumbs.Attributes;
 using static RMERP.DAL.Helpers.ProjectUtils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RMERP.Controllers
 {
+    [Authorize]
     public class OutstationController : Controller
     {
         private readonly RMERPContext _context;

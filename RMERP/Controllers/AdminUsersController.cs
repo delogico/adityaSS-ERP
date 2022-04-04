@@ -47,8 +47,9 @@ namespace RMERP.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }        
 
@@ -65,7 +66,22 @@ namespace RMERP.Controllers
                 {
                     SessionUtils sessionUtils = new SessionUtils(Request,Response);
                     sessionUtils.Login(user);
-                    return RedirectToAction("DashBoard", "AdminUsers");
+                    if (!string.IsNullOrEmpty(Request.Form["ReturnUrl"]) && Request.Form["ReturnUrl"].ToString().Split('/').Count() >= 3)
+                    {
+                       
+                        if (Request.Form["ReturnUrl"].ToString().Split('/','?')[1] == "erp.reliableservices.co.in")
+                            return RedirectToAction(Request.Form["ReturnUrl"].ToString().Split('/', '?')[3], Request.Form["ReturnUrl"].ToString().Split('/', '?')[2]);
+                        else
+                        {
+                               return RedirectToAction(Request.Form["ReturnUrl"].ToString().Split('/', '?')[2], Request.Form["ReturnUrl"].ToString().Split('/', '?')[1]);
+                        }
+                            
+                    }
+                    else
+                    {
+                        return RedirectToAction("DashBoard", "AdminUsers");
+                    }
+                    
                 }
                 else
                 {

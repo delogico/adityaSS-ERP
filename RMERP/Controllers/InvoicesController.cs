@@ -17,9 +17,11 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RMERP.Controllers
 {
+    [Authorize]
     public class InvoicesController : Controller
     {
         public IConfiguration _configuration;

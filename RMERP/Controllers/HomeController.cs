@@ -19,10 +19,12 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 using DataTable = System.Data.DataTable;
 using NPOI.SS.Util;
+using Microsoft.AspNetCore.Authorization;
 //using Microsoft.Office.Interop.Excel;
 
 namespace RMERP.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private RMERPContext _context;

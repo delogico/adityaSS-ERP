@@ -9,9 +9,11 @@ using RMERP.DAL.ManagerClasses;
 using RMERP.DAL.Mappers;
 using Microsoft.AspNetCore.Http;
 using SmartBreadcrumbs.Attributes;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RMERP.Controllers
 {
+    [Authorize]
     public class DesignationsController : Controller
     {
         private readonly RMERPContext _context;

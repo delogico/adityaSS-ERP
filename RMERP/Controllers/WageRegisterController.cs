@@ -2977,31 +2977,19 @@ namespace RMERP.Controllers
 							#region style of excel
 							ICellStyle style = workbook.CreateCellStyle();
 							ICellStyle styleDesignation = workbook.CreateCellStyle();
-							ICellStyle styleHeading = workbook.CreateCellStyle();
 							ICellStyle styleTotal = workbook.CreateCellStyle();
 
 							ICellStyle styleGrey25 = workbook.CreateCellStyle();
-							ICellStyle styleGrey40 = workbook.CreateCellStyle();
-							ICellStyle styleGrey50 = workbook.CreateCellStyle();
-							ICellStyle styleGrey80 = workbook.CreateCellStyle();
+							ICellStyle styleYellowBg = workbook.CreateCellStyle();
+							ICellStyle styleExtra = workbook.CreateCellStyle();
 
 							IFont fontcell = workbook.CreateFont();
-							//fontcell.IsBold = true;
+							fontcell.FontHeight = 11;
 
 							IFont font = workbook.CreateFont();
 							font.IsBold = true;
 							font.FontHeightInPoints = ((short)14);
 							font.FontName = ("Cambria");
-
-							IFont fontTotal = workbook.CreateFont();
-							fontTotal.IsBold = true;
-							fontTotal.FontHeightInPoints = ((short)10);
-							fontTotal.FontName = ("Cambria");
-
-							IFont fontHeading = workbook.CreateFont();
-							fontHeading.IsBold = true;
-							fontHeading.FontHeightInPoints = ((short)24);
-							fontHeading.FontName = ("Cambria");
 
 							styleGrey25.WrapText = true;
 							styleGrey25.VerticalAlignment = VerticalAlignment.Center;
@@ -3013,117 +3001,84 @@ namespace RMERP.Controllers
 							styleGrey25.RightBorderColor = (IndexedColors.Black.Index);
 							styleGrey25.BorderTop = (BorderStyle.Thin);
 							styleGrey25.TopBorderColor = (IndexedColors.Black.Index);
-							//styleGrey25.FillForegroundColor = IndexedColors.White.Index;
+							styleGrey25.SetFont(fontcell);
+
+							styleYellowBg.WrapText = true;
+							styleYellowBg.VerticalAlignment = VerticalAlignment.Center;
+							styleYellowBg.BorderBottom = (BorderStyle.Thin);
+							styleYellowBg.BottomBorderColor = (IndexedColors.Black.Index);
+							styleYellowBg.BorderLeft = (BorderStyle.Thin);
+							styleYellowBg.LeftBorderColor = (IndexedColors.Black.Index);
+							styleYellowBg.BorderRight = (BorderStyle.Thin);
+							styleYellowBg.RightBorderColor = (IndexedColors.Black.Index);
+							styleYellowBg.BorderTop = (BorderStyle.Thin);
+							styleYellowBg.TopBorderColor = (IndexedColors.Black.Index);
+							styleYellowBg.SetFont(fontcell);
+							styleYellowBg.FillForegroundColor = IndexedColors.Yellow.Index;
+							styleYellowBg.FillPattern = FillPattern.SolidForeground;
+							styleYellowBg.FillBackgroundColor = HSSFColor.Yellow.Index;
+
+							styleExtra.WrapText = true;
+							styleExtra.VerticalAlignment = VerticalAlignment.Center;
+							styleExtra.SetFont(fontcell);
+
+							//styleGrey25.WrapText = true;
+							//styleGrey25.VerticalAlignment = VerticalAlignment.Center;
+							//styleGrey25.BorderBottom = (BorderStyle.Thin);
+							//styleGrey25.BottomBorderColor = (IndexedColors.Black.Index);
+							//styleGrey25.BorderLeft = (BorderStyle.Thin);
+							//styleGrey25.LeftBorderColor = (IndexedColors.Black.Index);
+							//styleGrey25.BorderRight = (BorderStyle.Thin);
+							//styleGrey25.RightBorderColor = (IndexedColors.Black.Index);
+							//styleGrey25.BorderTop = (BorderStyle.Thin);
+							//styleGrey25.TopBorderColor = (IndexedColors.Black.Index);
+							//styleGrey25.FillForegroundColor = IndexedColors.Grey25Percent.Index;
 							//styleGrey25.FillPattern = FillPattern.SolidForeground;
-							//styleGrey25.FillBackgroundColor = HSSFColor.White.Index;
+							//styleGrey25.FillBackgroundColor = HSSFColor.Grey25Percent.Index;
 
-
-							styleGrey40.WrapText = true;
-							styleGrey40.VerticalAlignment = VerticalAlignment.Center;
-							styleGrey40.BorderBottom = (BorderStyle.Thin);
-							styleGrey40.BottomBorderColor = (IndexedColors.Black.Index);
-							styleGrey40.BorderLeft = (BorderStyle.Thin);
-							styleGrey40.LeftBorderColor = (IndexedColors.Black.Index);
-							styleGrey40.BorderRight = (BorderStyle.Thin);
-							styleGrey40.RightBorderColor = (IndexedColors.Black.Index);
-							styleGrey40.BorderTop = (BorderStyle.Thin);
-							styleGrey40.TopBorderColor = (IndexedColors.Black.Index);
-							//styleGrey40.FillForegroundColor = IndexedColors.Grey25Percent.Index;
-							//styleGrey40.FillPattern = FillPattern.SolidForeground;
-							//styleGrey40.FillBackgroundColor = HSSFColor.Grey25Percent.Index;
-
-							styleGrey50.WrapText = true;
-							styleGrey50.VerticalAlignment = VerticalAlignment.Center;
-							styleGrey50.BorderBottom = (BorderStyle.Thin);
-							styleGrey50.BottomBorderColor = (IndexedColors.Black.Index);
-							styleGrey50.BorderLeft = (BorderStyle.Thin);
-							styleGrey50.LeftBorderColor = (IndexedColors.Black.Index);
-							styleGrey50.BorderRight = (BorderStyle.Thin);
-							styleGrey50.RightBorderColor = (IndexedColors.Black.Index);
-							styleGrey50.BorderTop = (BorderStyle.Thin);
-							styleGrey50.TopBorderColor = (IndexedColors.Black.Index);
-							//styleGrey50.FillForegroundColor = IndexedColors.Grey40Percent.Index;
-							//styleGrey50.FillPattern = FillPattern.SolidForeground;
-							//styleGrey50.FillBackgroundColor = HSSFColor.Grey40Percent.Index;
-
-							styleGrey80.WrapText = true;
-							styleGrey80.VerticalAlignment = VerticalAlignment.Center;
-							styleGrey80.BorderBottom = (BorderStyle.Thin);
-							styleGrey80.BottomBorderColor = (IndexedColors.Black.Index);
-							styleGrey80.BorderLeft = (BorderStyle.Thin);
-							styleGrey80.LeftBorderColor = (IndexedColors.Black.Index);
-							styleGrey80.BorderRight = (BorderStyle.Thin);
-							styleGrey80.RightBorderColor = (IndexedColors.Black.Index);
-							styleGrey80.BorderTop = (BorderStyle.Thin);
-							styleGrey80.TopBorderColor = (IndexedColors.Black.Index);
-							//styleGrey80.FillForegroundColor = IndexedColors.Grey50Percent.Index;
-							//styleGrey80.FillPattern = FillPattern.SolidForeground;
-							//styleGrey80.FillBackgroundColor = HSSFColor.Grey50Percent.Index;
-
-							style.WrapText = true;
-							style.VerticalAlignment = VerticalAlignment.Center;
-							style.BorderBottom = (BorderStyle.Thin);
-							style.BottomBorderColor = (IndexedColors.Black.Index);
-							style.BorderLeft = (BorderStyle.Thin);
-							style.LeftBorderColor = (IndexedColors.Black.Index);
-							style.BorderRight = (BorderStyle.Thin);
-							style.RightBorderColor = (IndexedColors.Black.Index);
-							style.BorderTop = (BorderStyle.Thin);
-							style.TopBorderColor = (IndexedColors.Black.Index);
-							//style.FillForegroundColor = IndexedColors.Grey25Percent.Index;
-							//style.FillPattern = FillPattern.SolidForeground;
-							//style.FillBackgroundColor = HSSFColor.Grey25Percent.Index;
-
-
-							style.SetFont(fontcell);
-
-							//styleDesignation.FillBackgroundColor = HSSFColor.BlueGrey.Index;
 							styleDesignation.SetFont(font);
-							styleHeading.WrapText = true;
-							styleHeading.VerticalAlignment = VerticalAlignment.Center;
-							styleHeading.SetFont(fontHeading);
-
-							styleTotal.SetFont(fontTotal);
 
 							#endregion
 
 							int DesCount = 0;
 
 							#region Title structure in excel
-							//IRow rowHeading = excelSheet.CreateRow(DesCount);
-							//rowHeading.HeightInPoints = (float)(2.8 * excelSheet.DefaultRowHeightInPoints);
-							//ICell CellHeading = rowHeading.CreateCell(0);
-							//CellHeading.SetCellValue(wage_Process.FRM_.FRM_Name.ToUpper());
-							//excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 28));
-							//CellHeading.CellStyle = styleHeading;
-							//CellUtil.SetAlignment(CellHeading, workbook, (short)HorizontalAlignment.Center);
-
-							//IRow rowAdd1 = excelSheet.CreateRow(DesCount + 1);
-							//ICell CellAdd1 = rowAdd1.CreateCell(0);
-							//CellAdd1.SetCellValue(wage_Process.FRM_.FRM_Address1.ToUpper() + "," + wage_Process.FRM_.FRM_Address2.ToUpper() + ",");
-							//CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
-							//excelSheet.AddMergedRegion(new CellRangeAddress(DesCount + 1, DesCount + 1, 0, 28));
 							IRow rowClientBlank = excelSheet.CreateRow(DesCount);
 							ICell CellClientBlank = rowClientBlank.CreateCell(0);
 							CellClientBlank.SetCellValue("");
 
-							IRow rowSubHeading = excelSheet.CreateRow(DesCount+1);
+							IRow rowSubHeading = excelSheet.CreateRow(DesCount + 1);
 							ICell CellSubHeading = rowSubHeading.CreateCell(0);
-							CellSubHeading.SetCellValue("Name of Establishment :"+ client.client.CLI_Name.ToString());
+							CellSubHeading.SetCellValue("Name of Establishment :" + client.client.CLI_Name.ToString());
 							CellSubHeading.CellStyle = styleDesignation;
-							excelSheet.AddMergedRegion(new CellRangeAddress(DesCount+1,DesCount+1, 0, 28));
+							excelSheet.AddMergedRegion(new CellRangeAddress(DesCount + 1, DesCount + 1, 0, 6));
+
+							ICell CellSubHeadExtra = rowSubHeading.CreateCell(52);
+							CellSubHeadExtra.SetCellValue("The Minumum Wages Rules,1963");
+							CellSubHeadExtra.CellStyle = styleExtra;
+							excelSheet.AddMergedRegion(new CellRangeAddress(DesCount + 1, DesCount + 1, 52, 55));
+
 
 							IRow rowClient = excelSheet.CreateRow(DesCount + 2);
 							ICell CellClient = rowClient.CreateCell(0);
-							CellClient.SetCellValue("Name of Employer / Contractor:Shrikrupa Services Pvt.Ltd.");
-							CellClient.CellStyle = styleDesignation;						
-							excelSheet.AddMergedRegion(new CellRangeAddress(DesCount + 2, DesCount + 2, 0, 28));
+							CellClient.SetCellValue("Name of Employer / Contractor:" + wage_Process.FRM_?.FRM_Name);
+							CellClient.CellStyle = styleDesignation;
+							excelSheet.AddMergedRegion(new CellRangeAddress(DesCount + 2, DesCount + 2, 0, 7));
+
+							ICell CellSubHeadExtra2 = rowClient.CreateCell(52);
+							CellSubHeadExtra2.SetCellValue("Form II");
+							CellSubHeadExtra2.CellStyle = styleExtra;
+							excelSheet.AddMergedRegion(new CellRangeAddress(DesCount + 2, DesCount + 2, 52, 55));
 
 							IRow rowClient2 = excelSheet.CreateRow(DesCount + 3);
 							ICell CellClient2 = rowClient2.CreateCell(0);
-							CellClient2.SetCellValue("For the Month   :" +WAG_Month);
-							CellClient2.CellStyle = styleDesignation;
-							excelSheet.AddMergedRegion(new CellRangeAddress(DesCount + 3, DesCount + 3, 0, 28));
+							CellClient2.SetCellValue("For the Month   :" + wageMonth.ToString("MMM").ToUpper());
+							CellClient2.CellStyle = styleExtra;
+							excelSheet.AddMergedRegion(new CellRangeAddress(DesCount + 3, DesCount + 3, 0, 2));
+
+							ICell CellClient22 = rowClient2.CreateCell(5);
+							CellClient22.SetCellValue("YEAR : " + wageMonth.ToString("yyyy"));
+							CellClient22.CellStyle = styleExtra;
 
 							IRow rowClient3 = excelSheet.CreateRow(DesCount + 4);
 							ICell CellClient3 = rowClient3.CreateCell(0);
@@ -3169,157 +3124,158 @@ namespace RMERP.Controllers
 								int TotalAllowances = 0;
 								List<WageRegisterVM> wageRegisters = item.wageRegisterVMs.Where(r => r.designation.DES_Id.Equals(dd.DES_Id)).ToList();
 								ClientRequirementVM clientRequirement = wageRegisters.Select(m => m.clientRequirementVM).Where(m => m.CLI_Id.Equals(item.client.CLI_Id) && m.DES_Id.Equals(dd.DES_Id)).First();
-								
+
 								TotalAllowances = wageRegisters[0].allowanceVMs.Count();
 								decimal[] arrAllowancesTotal = new decimal[TotalAllowances];
 
 								#region Headings
-								IRow row = excelSheet.CreateRow(DesCount);								
+								IRow row = excelSheet.CreateRow(DesCount);
 								ICell cell0 = row.CreateCell(0);
-								row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
-								cell0.SetCellValue("Sr.No");								
+								//row.HeightInPoints = (float)(3 * excelSheet.DefaultRowHeightInPoints);
+								cell0.SetCellValue("Sr.No");
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, 0, 0));
-								cell0.CellStyle = styleGrey25;
+								cell0.CellStyle = styleYellowBg;
 
 								ICell cell1 = row.CreateCell(1);
-								cell1.SetCellValue("Employee Code");																
-								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, 1,1));
-								cell1.CellStyle = styleGrey25;
+								cell1.SetCellValue("Employee Code");
+								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, 1, 1));
+								cell1.CellStyle = styleYellowBg;
 
 								ICell cell2 = row.CreateCell(2);
 								cell2.SetCellValue("Employee Name");
-								excelSheet.SetColumnWidth(2, (int)((25 + 0.72) * 256));								
+								excelSheet.SetColumnWidth(2, (int)((25 + 0.72) * 256));
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, 2, 2));
-								cell2.CellStyle = styleGrey25;
+								cell2.CellStyle = styleYellowBg;
 
 								ICell cell3 = row.CreateCell(3);
-								cell3.SetCellValue("Age");								
+								cell3.SetCellValue("Age");
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, 3, 3));
-								cell3.CellStyle = styleGrey25;
+								cell3.CellStyle = styleYellowBg;
 
 								ICell cell4 = row.CreateCell(4);
 								cell4.SetCellValue("Gender");
 								excelSheet.SetColumnWidth(2, (int)((4 + 0.72) * 256));
-								cell4.CellStyle = styleGrey25;
+								cell4.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, 4, 4));
 
 								ICell cell5 = row.CreateCell(5);
 								excelSheet.SetColumnWidth(5, (int)((13 + 0.72) * 256));
 								cell5.SetCellValue("Date of Entry");
-								cell5.CellStyle = styleGrey25;
+								cell5.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, 5, 5));
 
 								ICell cell6 = row.CreateCell(6);
 								cell6.SetCellValue("Designation");
 								excelSheet.SetColumnWidth(6, (int)((13 + 0.72) * 256));
-								cell6.CellStyle = styleGrey25;
+								cell6.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, 6, 6));
 
 								ICell cell7 = row.CreateCell(7);
 								cell7.SetCellValue("Working Hours");
-								cell7.CellStyle = styleGrey25;
+								cell7.CellStyle = styleYellowBg;
 								ICell cell327 = row.CreateCell(8);
-								cell327.CellStyle = styleGrey25;
+								cell327.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount, 7, 8));
 
 								ICell cell8 = row.CreateCell(9);
 								cell8.SetCellValue("Interval for Rest");
-								cell8.CellStyle = styleGrey25;
+								cell8.CellStyle = styleYellowBg;
 								ICell cell328 = row.CreateCell(10);
-								cell328.CellStyle = styleGrey25;
+								cell328.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount, 9, 10));
 
-								IRow row2 = excelSheet.CreateRow(DesCount+1);
+								IRow row2 = excelSheet.CreateRow(DesCount + 1);
 								ICell cell27 = row2.CreateCell(7);
 								cell27.SetCellValue("From");
-								cell27.CellStyle = styleGrey25;
+								cell27.CellStyle = styleYellowBg;
 								ICell cell28 = row2.CreateCell(8);
 								cell28.SetCellValue("To");
-								cell28.CellStyle = styleGrey25;
+								cell28.CellStyle = styleYellowBg;
 								ICell cell29 = row2.CreateCell(9);
 								cell29.SetCellValue("From");
-								cell29.CellStyle = styleGrey25;
+								cell29.CellStyle = styleYellowBg;
 								ICell cell220 = row2.CreateCell(10);
 								cell220.SetCellValue("To");
-								cell220.CellStyle = styleGrey25;
+								cell220.CellStyle = styleYellowBg;
 
 								ICell cell221 = row.CreateCell(11);
 								cell221.SetCellValue("No of Hours Worked");
-								cell221.CellStyle = styleGrey25;							
+								cell221.CellStyle = styleYellowBg;
+								CellUtil.SetAlignment(cell221, workbook, (short)HorizontalAlignment.Center);
 								int totalday = Convert.ToInt32((arr[1] - arr[0]).TotalDays);
 								ICell cell329;
-								for (int j = 12; j <= totalday+12; j++)
-                                {
+								for (int j = 12; j <= totalday + 12; j++)
+								{
 									cell329 = row.CreateCell(j);
-									cell329.CellStyle = styleGrey25;
+									cell329.CellStyle = styleYellowBg;
 								}
-								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount, 11, totalday+11));
+								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount, 11, totalday + 11));
 								int cellCount = 11;
-								if (arr.Count()>=2)
-								{	
+								if (arr.Count() >= 2)
+								{
 									int end = DateTime.DaysInMonth(wageMonth.Year, wageMonth.Month);
 									ICell cellday;
 									for (var day = arr[0].Date; day <= arr[1].Date; day = day.AddDays(1))
 									{
-										
+
 										cellday = row2.CreateCell(cellCount);
-                                        cellday.SetCellValue(day.Day);
-										excelSheet.SetColumnWidth(cellCount, (int)((3 +0.72) * 256));
-										cellday.CellStyle = styleGrey25;
-                                        cellCount++;
-                                    }
+										cellday.SetCellValue(day.Day);
+										excelSheet.SetColumnWidth(cellCount, (int)((3 + 0.72) * 256));
+										cellday.CellStyle = styleYellowBg;
+										cellCount++;
+									}
 								}
-                                ICell cell31 = row.CreateCell(cellCount);
-                                cell31.SetCellValue("Total Days worked");
-                                cell31.CellStyle = styleGrey25;
+								ICell cell31 = row.CreateCell(cellCount);
+								cell31.SetCellValue("Total Days worked");
+								cell31.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cellCount, cellCount));
 
 								cellCount = cellCount + 1;
 								ICell cell32 = row.CreateCell(cellCount);
 								cell32.SetCellValue("Weekly Off");
-								cell32.CellStyle = styleGrey25;
+								cell32.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cellCount, cellCount));
 
 								cellCount = cellCount + 1;
 								ICell cell33 = row.CreateCell(cellCount);
 								cell33.SetCellValue("Paid Holiday");
-								cell33.CellStyle = styleGrey25;
+								cell33.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cellCount, cellCount));
 
 								cellCount = cellCount + 1;
 								ICell cell34 = row.CreateCell(cellCount);
 								cell34.SetCellValue("Leave");
-								cell34.CellStyle = styleGrey25;
+								cell34.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cellCount, cellCount));
 
 								cellCount = cellCount + 1;
 								ICell cell35 = row.CreateCell(cellCount);
 								cell35.SetCellValue("Extra Day");
-								cell35.CellStyle = styleGrey25;
+								cell35.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cellCount, cellCount));
 
 								cellCount = cellCount + 1;
 								ICell cell36 = row.CreateCell(cellCount);
 								cell36.SetCellValue("Comp Off");
-								cell36.CellStyle = styleGrey25;
+								cell36.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cellCount, cellCount));
 
 								cellCount = cellCount + 1;
 								ICell cell37 = row.CreateCell(cellCount);
 								cell37.SetCellValue("Adjustment");
-								cell37.CellStyle = styleGrey25;
+								cell37.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cellCount, cellCount));
 
 								cellCount = cellCount + 1;
 								ICell cell38 = row.CreateCell(cellCount);
 								cell38.SetCellValue("Absent");
-								cell38.CellStyle = styleGrey25;
+								cell38.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cellCount, cellCount));
 
 								cellCount = cellCount + 1;
 								ICell cell39 = row.CreateCell(cellCount);
 								cell39.SetCellValue("Total Payable Days");
-								cell39.CellStyle = styleGrey25;
+								cell39.CellStyle = styleYellowBg;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cellCount, cellCount));
 
 								cellCount = cellCount + 1;
@@ -3341,209 +3297,214 @@ namespace RMERP.Controllers
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cellCount, cellCount));
 
 								int cell = cellCount;
-                                List<string> allowance = new List<string>();
-                                int i = 0;
-                                foreach (var all in wageRegisters[0].allowanceVMs.OrderBy(m => m.allowanceVM.ALL_Id))
-                                {
-                                    arrAllowancesTotal[i] = 0;
-                                    allowance.Add(all.allowanceVM.ALL_Alias);
-                                    ICell cellAll = row.CreateCell(cell + 1);
-                                    cellAll.SetCellValue(all.allowanceVM.ALL_Alias);
+								List<string> allowance = new List<string>();
+								int i = 0;
+								foreach (var all in wageRegisters[0].allowanceVMs.OrderBy(m => m.allowanceVM.ALL_Id))
+								{
+									arrAllowancesTotal[i] = 0;
+									allowance.Add(all.allowanceVM.ALL_Alias);
+									ICell cellAll = row.CreateCell(cell + 1);
+									cellAll.SetCellValue(all.allowanceVM.ALL_Alias);
 									excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cell + 1, cell + 1));
 									excelSheet.SetColumnWidth(cell + 1, (int)((25 + 0.72) * 140));
-                                    cellAll.CellStyle = styleGrey40;
-                                    cell++; i++;
-                                }
-                                //custom allowance
-                                foreach (CustomAllowanceVM allownce in allowanceVMs)
-                                {
-                                    cell = cell + 1;
-                                    ICell celOutAllow = row.CreateCell(cell);
-                                    celOutAllow.SetCellValue(allownce.C_ALL_Title);
+									cellAll.CellStyle = styleGrey25;
+									cell++; i++;
+								}
+								//custom allowance
+								foreach (CustomAllowanceVM allownce in allowanceVMs)
+								{
+									cell = cell + 1;
+									ICell celOutAllow = row.CreateCell(cell);
+									celOutAllow.SetCellValue(allownce.C_ALL_Title);
 									excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cell, cell));
-									celOutAllow.CellStyle = styleGrey40;
-                                }
-                                //end custom allowance
-                                if (clientRequirement.CRI_OutStation_Allowance == true)
-                                {
-                                    cell = cell + 1;
-                                    ICell celOutAllow = row.CreateCell(cell);
+									celOutAllow.CellStyle = styleGrey25;
+								}
+								//end custom allowance
+								if (clientRequirement.CRI_OutStation_Allowance == true)
+								{
+									cell = cell + 1;
+									ICell celOutAllow = row.CreateCell(cell);
 									celOutAllow.SetCellValue("Outstation Allowance");
 									excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cell, cell));
-									celOutAllow.CellStyle = styleGrey40;
-                                }
-                                if (clientRequirement.CRI_Attendance_Allowance == true)
-                                {
-                                    cell = cell + 1;
-                                    ICell cellAttAllow = row.CreateCell(cell);
-                                    cellAttAllow.SetCellValue("Attendance Allowance");
+									celOutAllow.CellStyle = styleGrey25;
+								}
+								if (clientRequirement.CRI_Attendance_Allowance == true)
+								{
+									cell = cell + 1;
+									ICell cellAttAllow = row.CreateCell(cell);
+									cellAttAllow.SetCellValue("Attendance Allowance");
 									excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cell, cell));
-									cellAttAllow.CellStyle = styleGrey40;
-                                }
-                                if (clientRequirement.CRI_Nightshift_Allowance == true)
-                                {
-                                    cell = cell + 1;
-                                    ICell cellNightAllow = row.CreateCell(cell);
-                                    cellNightAllow.SetCellValue("Night Allowance");
+									cellAttAllow.CellStyle = styleGrey25;
+								}
+								if (clientRequirement.CRI_Nightshift_Allowance == true)
+								{
+									cell = cell + 1;
+									ICell cellNightAllow = row.CreateCell(cell);
+									cellNightAllow.SetCellValue("Night Allowance");
 									excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cell, cell));
-									cellNightAllow.CellStyle = styleGrey40;
-                                }
-                                if (clientRequirement.CRI_Performance_Allowance == true)
-                                {
-                                    cell = cell + 1;
-                                    ICell cellPerformanceAllow = row.CreateCell(cell);
-                                    cellPerformanceAllow.SetCellValue("Performance Allowance");
+									cellNightAllow.CellStyle = styleGrey25;
+								}
+								if (clientRequirement.CRI_Performance_Allowance == true)
+								{
+									cell = cell + 1;
+									ICell cellPerformanceAllow = row.CreateCell(cell);
+									cellPerformanceAllow.SetCellValue("Performance Allowance");
 									excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cell, cell));
-									cellPerformanceAllow.CellStyle = styleGrey40;
-                                }
+									cellPerformanceAllow.CellStyle = styleGrey25;
+								}
 								//if (!clientRequirement.CRI_OT_Calculate_Payableday)
 								//{
 								//    cell = cell + 1;
 								//    ICell cellotHrs = row.CreateCell(cell);
 								//    cellotHrs.SetCellValue("OT Hrs");
-								//    cellotHrs.CellStyle = styleGrey40;
+								//    cellotHrs.CellStyle = styleGrey25;
 
 								//    cell = cell + 1;
 								//    ICell cell13 = row.CreateCell(cell);
 								//    cell13.SetCellValue("OT Amount");
-								//    cell13.CellStyle = styleGrey40;
+								//    cell13.CellStyle = styleGrey25;
 								//}
 								cell = cell + 1;
 								ICell cell50 = row.CreateCell(cell);
 								cell50.SetCellValue("Arrs.");
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cell, cell));
-								cell50.CellStyle = styleGrey40;
+								cell50.CellStyle = styleGrey25;
 
 								cell = cell + 1;
 								ICell cell51 = row.CreateCell(cell);
 								cell51.SetCellValue("Gross Wages Payable");
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cell, cell));
-								cell51.CellStyle = styleGrey40;
+								cell51.CellStyle = styleGrey25;
 
 								cell = cell + 1;
 								ICell cell52 = row.CreateCell(cell);
 								cell52.SetCellValue("Deductions");
-								ICell cellx51 = row.CreateCell(cell+1);
-								cellx51.CellStyle = styleGrey40;
+								CellUtil.SetAlignment(cell52, workbook, (short)HorizontalAlignment.Center);
+								ICell cellx51 = row.CreateCell(cell + 1);
+								cellx51.CellStyle = styleGrey25;
 								ICell cellx52 = row.CreateCell(cell + 2);
-								cellx52.CellStyle = styleGrey40;
+								cellx52.CellStyle = styleGrey25;
 								ICell cellx53 = row.CreateCell(cell + 3);
-								cellx53.CellStyle = styleGrey40;
+								cellx53.CellStyle = styleGrey25;
 								ICell cellx54 = row.CreateCell(cell + 4);
-								cellx54.CellStyle = styleGrey40;
+								cellx54.CellStyle = styleGrey25;
 								ICell cellx55 = row.CreateCell(cell + 5);
-								cellx55.CellStyle = styleGrey40;
+								cellx55.CellStyle = styleGrey25;
 								ICell cellx56 = row.CreateCell(cell + 6);
-								cellx56.CellStyle = styleGrey40;
+								cellx56.CellStyle = styleGrey25;
 								ICell cellx57 = row.CreateCell(cell + 7);
-								cellx57.CellStyle = styleGrey40;
-								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount, cell, cell+7));
-								cell52.CellStyle = styleGrey40;
-																
+								cellx57.CellStyle = styleGrey25;
+								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount, cell, cell + 7));
+								cell52.CellStyle = styleGrey25;
+
 								ICell cell53 = row2.CreateCell(cell);
 								cell53.SetCellValue("Advance");
-								cell53.CellStyle = styleGrey40;
+								cell53.CellStyle = styleGrey25;
 
 								cell = cell + 1;
 								ICell cell54 = row2.CreateCell(cell);
 								cell54.SetCellValue("HRA");
-								cell54.CellStyle = styleGrey40;
+								cell54.CellStyle = styleGrey25;
 
 								cell = cell + 1;
 								ICell cell55 = row2.CreateCell(cell);
 								cell55.SetCellValue("Profit/Income Tax/PT");
-								cell55.CellStyle = styleGrey40;
+								cell55.CellStyle = styleGrey25;
+								excelSheet.SetColumnWidth(cell, (int)((13 + 0.72) * 256));
 
 								cell = cell + 1;
 								ICell cell561 = row2.CreateCell(cell);
 								cell561.SetCellValue("PF");
-								cell561.CellStyle = styleGrey40;
+								cell561.CellStyle = styleGrey25;
 
 								cell = cell + 1;
 								ICell cell562 = row2.CreateCell(cell);
 								cell562.SetCellValue("ESIC");
-								cell562.CellStyle = styleGrey40;
+								cell562.CellStyle = styleGrey25;
 
 								cell = cell + 1;
 								ICell cell56 = row2.CreateCell(cell);
 								cell56.SetCellValue("MLWF");
-								cell56.CellStyle = styleGrey40;
+								cell56.CellStyle = styleGrey25;
 
 								cell = cell + 1;
 								ICell cell57 = row2.CreateCell(cell);
 								cell57.SetCellValue("Other Ded.");
-								cell57.CellStyle = styleGrey40;
+								cell57.CellStyle = styleGrey25;
 
 								cell = cell + 1;
 								ICell cell58 = row2.CreateCell(cell);
 								cell58.SetCellValue("Tot.Ded");
-								cell58.CellStyle = styleGrey40;
+								cell58.CellStyle = styleGrey25;
 
 								cell = cell + 1;
 								ICell cell60 = row.CreateCell(cell);
 								cell60.SetCellValue("Net Wages Paid");
-								cell60.CellStyle = styleGrey40;
+								cell60.CellStyle = styleGrey25;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cell, cell));
 
 								cell = cell + 1;
 								ICell cell61 = row.CreateCell(cell);
 								cell61.SetCellValue("Leave with Wages");
-								cell61.CellStyle = styleGrey40;
+								cell61.CellStyle = styleYellowBg;
 								ICell cellx61;
-								for (int ii =1; ii <=4; ii++)
-                                {
-									cellx61 = row.CreateCell(cell+ii);
-									cellx61.CellStyle = styleGrey40;
+								for (int ii = 1; ii <= 4; ii++)
+								{
+									cellx61 = row.CreateCell(cell + ii);
+									cellx61.CellStyle = styleGrey25;
 								}
-								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount, cell, cell+4));
-																
+								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount, cell, cell + 4));
+
 								ICell cell62 = row2.CreateCell(cell);
 								cell62.SetCellValue("Previous Balance");
-								cell62.CellStyle = styleGrey40;
+								cell62.CellStyle = styleYellowBg;
 
 								cell = cell + 1;
 								ICell cell63 = row2.CreateCell(cell);
 								cell63.SetCellValue("Earned During Month");
-								cell63.CellStyle = styleGrey40;
+								cell63.CellStyle = styleYellowBg;
+								excelSheet.SetColumnWidth(cell, (int)((14 + 0.72) * 256));
 
 								cell = cell + 1;
 								ICell cell64 = row2.CreateCell(cell);
 								cell64.SetCellValue("Further Enjoyed");
-								cell64.CellStyle = styleGrey40;
+								cell64.CellStyle = styleYellowBg;
+								excelSheet.SetColumnWidth(cell, (int)((14 + 0.72) * 256));
 
 								cell = cell + 1;
 								ICell cell65 = row2.CreateCell(cell);
 								cell65.SetCellValue("Refused");
-								cell65.CellStyle = styleGrey40;
+								cell65.CellStyle = styleYellowBg;
 
 								cell = cell + 1;
 								ICell cell66 = row2.CreateCell(cell);
 								cell66.SetCellValue("Balance at the end of month");
-								cell66.CellStyle = styleGrey40;
+								cell66.CellStyle = styleYellowBg;
+								excelSheet.SetColumnWidth(cell, (int)((14 + 0.72) * 256));
 
 								cell = cell + 1;
 								ICell cell67 = row.CreateCell(cell);
 								cell67.SetCellValue("Date of Payment of wages");
-								cell67.CellStyle = styleGrey40;
-								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount+1, cell, cell));
+								cell67.CellStyle = styleGrey25;
+								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cell, cell));
 
 								cell = cell + 1;
 								ICell cell68 = row.CreateCell(cell);
 								cell68.SetCellValue("Signature of Thumb Impression of the Employee");
-								cell68.CellStyle = styleGrey40;
+								cell68.CellStyle = styleGrey25;
 								excelSheet.AddMergedRegion(new CellRangeAddress(DesCount, DesCount + 1, cell, cell));
-
+								excelSheet.SetColumnWidth(cell, (int)((20 + 0.72) * 256));
 
 								//int count = cell + 1;
 								//ICell cell14 = row.CreateCell(cell + 1);
 								//cell14.SetCellValue("Gross Total");
-								//cell14.CellStyle = styleGrey40;
+								//cell14.CellStyle = styleGrey25;
 								//ICell cell15 = row.CreateCell(cell + 2);
 								//cell15.SetCellValue("PF");
-								//cell15.CellStyle = styleGrey50;
+								//cell15.CellStyle = styleGrey25;
 								//ICell cell16 = row.CreateCell(cell + 3);
 								//cell16.SetCellValue("ESIC");
-								//cell16.CellStyle = styleGrey50;
+								//cell16.CellStyle = styleGrey25;
 
 								//int cellNext = cell + 3;
 								//if (clientRequirement.CRI_ProfessionalTax == true)
@@ -3552,7 +3513,7 @@ namespace RMERP.Controllers
 								//	ICell cellTax = row.CreateCell(cellNext);
 								//	cellTax.SetCellValue("Proffesional Tax");
 								//	excelSheet.SetColumnWidth(cellNext, (int)((25 + 0.72) * 140));
-								//	cellTax.CellStyle = styleGrey50;
+								//	cellTax.CellStyle = styleGrey25;
 								//}
 								//if (clientRequirement.CRI_RevenueDeduction == true)
 								//{
@@ -3560,7 +3521,7 @@ namespace RMERP.Controllers
 								//	ICell cellRevenue = row.CreateCell(cellNext);
 								//	cellRevenue.SetCellValue("Revenue Deduction");
 								//	excelSheet.SetColumnWidth(cellNext, (int)((25 + 0.72) * 140));
-								//	cellRevenue.CellStyle = styleGrey50;
+								//	cellRevenue.CellStyle = styleGrey25;
 								//}
 								//if (clientRequirement.CRI_CanteenFacility == true)
 								//{
@@ -3568,13 +3529,13 @@ namespace RMERP.Controllers
 								//	ICell cellCanteen = row.CreateCell(cellNext);
 								//	cellCanteen.SetCellValue("Canteen Facility");
 								//	excelSheet.SetColumnWidth(cellNext, (int)((25 + 0.72) * 140));
-								//	cellCanteen.CellStyle = styleGrey50;
+								//	cellCanteen.CellStyle = styleGrey25;
 								//}
 								//int cellNext1 = cellNext + 1;
 								//ICell cell17 = row.CreateCell(cellNext1);
 								//cell17.SetCellValue("Advance Installment");
 								//excelSheet.SetColumnWidth(cellNext1, (int)((25 + 0.72) * 140));
-								//cell17.CellStyle = styleGrey50;
+								//cell17.CellStyle = styleGrey25;
 
 								//int cellLWFNext = cellNext1 + 1;
 								//if (!dd.DES_Exclude_LWF)
@@ -3582,21 +3543,21 @@ namespace RMERP.Controllers
 								//	ICell cell_LWF = row.CreateCell(cellLWFNext);
 								//	cell_LWF.SetCellValue("MLWF Deduction");
 								//	excelSheet.SetColumnWidth(cellLWFNext, (int)((25 + 0.72) * 140));
-								//	cell_LWF.CellStyle = styleGrey50;
+								//	cell_LWF.CellStyle = styleGrey25;
 								//	cellLWFNext = cellLWFNext + 1;
 								//}
 
 								//ICell cell18 = row.CreateCell(cellLWFNext);
 								//cell18.SetCellValue("Deduct Total");
-								//cell18.CellStyle = styleGrey50;
+								//cell18.CellStyle = styleGrey25;
 								//ICell cell19 = row.CreateCell(cellLWFNext + 1);
 								//cell19.SetCellValue("Final Amount");
-								//cell19.CellStyle = styleGrey80;
+								//cell19.CellStyle = styleGrey25;
 
 								//ICell cell20 = row.CreateCell(cellLWFNext + 2);
 								//cell20.SetCellValue("Signaure");
 								//excelSheet.SetColumnWidth(cellLWFNext + 2, (int)((20 + 0.72) * 256));
-								//cell20.CellStyle = styleGrey80;
+								//cell20.CellStyle = styleGrey25;
 								#endregion
 
 								DesCount = DesCount + 2;
@@ -3625,7 +3586,7 @@ namespace RMERP.Controllers
 									excelSheet.SetColumnWidth(2, (int)((25 + 0.72) * 256));
 
 									ICell cellEmp3 = row.CreateCell(3);
-									cellEmp3.SetCellValue((int)((DateTime.Now.Subtract(employee.employeeVM.EMP_DOB).TotalDays)/365));
+									cellEmp3.SetCellValue((int)((DateTime.Now.Subtract(employee.employeeVM.EMP_DOB).TotalDays) / 365));
 									cellEmp3.CellStyle = styleGrey25;
 
 									ICell cellEmp4 = row.CreateCell(4);
@@ -3661,13 +3622,12 @@ namespace RMERP.Controllers
 									if (arr.Count() >= 2)
 									{
 										Attendance attendance;
-										//rinku
 										ICell cellday;
 										for (var day = arr[0].Date; day <= arr[1].Date; day = day.AddDays(1))
 										{
 											attendance = att.Where(m => m.ATT_Date == day).First();
 											cellday = row.CreateCell(cellEmpCount);
-											if(string.IsNullOrEmpty(attendance.ATT_Orignal_Row2))
+											if (string.IsNullOrEmpty(attendance.ATT_Orignal_Row2))
 												cellday.SetCellValue(attendance.ATT_Orignal_Row1);
 											else
 												cellday.SetCellValue(attendance.ATT_Orignal_Row1 + "/" + attendance.ATT_Orignal_Row2);
@@ -3679,42 +3639,43 @@ namespace RMERP.Controllers
 
 									ICell cellEmp22 = row.CreateCell(cellEmpCount);
 									cellEmp22.SetCellValue(employee.WAR_TotalWorkingDays);
-									cellEmp22.CellStyle = styleGrey40;
+									cellEmp22.CellStyle = styleGrey25;
 
+									//rinku
 									cellEmpCount = cellEmpCount + 1;
 									ICell cellEmp23 = row.CreateCell(cellEmpCount); //weekly off
-									cellEmp23.SetCellValue(att.Where(m=>m.ATT_IsWeeklyOff).Count());
-									cellEmp23.CellStyle = styleGrey40;
+									cellEmp23.SetCellValue(att.Where(m => m.ATT_IsWeeklyOff && !m.ATT_IsPresent).Count());
+									cellEmp23.CellStyle = styleGrey25;
 
 									cellEmpCount = cellEmpCount + 1;
 									ICell cellEmp24 = row.CreateCell(cellEmpCount); //paid holiday
-									cellEmp24.SetCellValue(att.Where(m => !m.ATT_IsPresent).Count());
-									cellEmp24.CellStyle = styleGrey40;
+									cellEmp24.SetCellValue(att.Where(m => !m.ATT_IsPresent && m.ATT_IsPublicHoliday).Count());
+									cellEmp24.CellStyle = styleGrey25;
 
 									cellEmpCount = cellEmpCount + 1;
 									ICell cellEmp244 = row.CreateCell(cellEmpCount); //Leave
-									cellEmp244.SetCellValue(att.Where(m => !m.ATT_IsPresent).Count());
-									cellEmp244.CellStyle = styleGrey40;
+									cellEmp244.SetCellValue(att.Where(m => m.ATT_IsEarnLeave).Count());
+									cellEmp244.CellStyle = styleGrey25;
 
 									cellEmpCount = cellEmpCount + 1;
 									ICell cellEmp25 = row.CreateCell(cellEmpCount); //Extra Day
-									cellEmp25.SetCellValue(att.Where(m => m.ATT_IsEarnLeave).Count());
-									cellEmp25.CellStyle = styleGrey40;
+									cellEmp25.SetCellValue("-");
+									cellEmp25.CellStyle = styleGrey25;
 
 									cellEmpCount = cellEmpCount + 1;
 									ICell cellEmp26 = row.CreateCell(cellEmpCount); //Comp Off
-									cellEmp26.SetCellValue(att.Where(m => m.ATT_IsEarnLeave).Count());
-									cellEmp26.CellStyle = styleGrey40;
+									cellEmp26.SetCellValue(att.Where(m => !m.ATT_IsPresent && m.ATT_IsEarnLeave).Count());
+									cellEmp26.CellStyle = styleGrey25;
 
 									cellEmpCount = cellEmpCount + 1;
 									ICell cellEmp27 = row.CreateCell(cellEmpCount); //Adjustment
 									cellEmp27.SetCellValue("-");
-									cellEmp27.CellStyle = styleGrey40;
+									cellEmp27.CellStyle = styleGrey25;
 
 									cellEmpCount = cellEmpCount + 1;
 									ICell cellEmp28 = row.CreateCell(cellEmpCount); //Absent
 									cellEmp28.SetCellValue(att.Where(m => !m.ATT_IsPresent).Count());
-									cellEmp28.CellStyle = styleGrey40;
+									cellEmp28.CellStyle = styleGrey25;
 
 									TotalPaybleDays = TotalPaybleDays + employee.WAR_TotalPaybleDays;
 									TotalBasic = TotalBasic + Math.Round(employee.WAR_Basic_Calculated, MidpointRounding.AwayFromZero);
@@ -3722,22 +3683,22 @@ namespace RMERP.Controllers
 									cellEmpCount = cellEmpCount + 1;
 									ICell cellEmp29 = row.CreateCell(cellEmpCount); //Total Payable Days
 									cellEmp29.SetCellValue(employee.WAR_TotalPaybleDays);
-									cellEmp29.CellStyle = styleGrey40;
+									cellEmp29.CellStyle = styleGrey25;
 
 									cellEmpCount = cellEmpCount + 1;
 									ICell cellEmp30 = row.CreateCell(cellEmpCount); //Earned Basic
-									cellEmp30.SetCellValue(Math.Round(employee.WAR_Basic_Calculated, MidpointRounding.AwayFromZero).ToString());
-									cellEmp30.CellStyle = styleGrey40;
+									cellEmp30.SetCellValue(Math.Round(employee.WAR_Basic_Calculated + employee.WAR_DA_Calculated, MidpointRounding.AwayFromZero).ToString());
+									cellEmp30.CellStyle = styleGrey25;
 
 									cellEmpCount = cellEmpCount + 1;
 									ICell cellEmp31 = row.CreateCell(cellEmpCount); //Earned HRA
 									cellEmp31.SetCellValue(Math.Round(employee.WAR_HRA_Calculated, MidpointRounding.AwayFromZero).ToString());
-									cellEmp31.CellStyle = styleGrey40;
+									cellEmp31.CellStyle = styleGrey25;
 
 									cellEmpCount = cellEmpCount + 1;
 									ICell cellEmp32 = row.CreateCell(cellEmpCount); //Earned CCA
 									cellEmp32.SetCellValue("-");
-									cellEmp32.CellStyle = styleGrey40;
+									cellEmp32.CellStyle = styleGrey25;
 
 
 									int cellAllowance = cellEmpCount;
@@ -3748,7 +3709,7 @@ namespace RMERP.Controllers
 										arrAllowancesTotal[j] = arrAllowancesTotal[j] + all.WAA_Amount_Calculated;
 										ICell cellEmpAll = row.CreateCell(cellAllowance + 1);
 										cellEmpAll.SetCellValue(Math.Round(all.WAA_Amount_Calculated, MidpointRounding.AwayFromZero).ToString());
-										cellEmpAll.CellStyle = styleGrey40;
+										cellEmpAll.CellStyle = styleGrey25;
 										cellAllowance++;
 										j++;
 									}
@@ -3804,7 +3765,7 @@ namespace RMERP.Controllers
 										{
 											cellCustom.SetCellValue(0);
 										}
-										cellCustom.CellStyle = styleGrey40;
+										cellCustom.CellStyle = styleGrey25;
 										cellNxt = cellNxt + 1;
 									}
 
@@ -3819,7 +3780,7 @@ namespace RMERP.Controllers
 										}
 										cellOutstation.SetCellValue(WAR_OutStation_Allowance_Calculated.ToString());
 										TotalOutStation = TotalOutStation + WAR_OutStation_Allowance_Calculated;
-										cellOutstation.CellStyle = styleGrey40;
+										cellOutstation.CellStyle = styleGrey25;
 										cellNxt = cellNxt + 1;
 									}
 									if (clientRequirement.CRI_Attendance_Allowance == true)
@@ -3832,7 +3793,7 @@ namespace RMERP.Controllers
 										}
 										cellAttendance.SetCellValue(WAR_Attendance_Allowance_Calculated.ToString());
 										TotalAttendance = TotalAttendance + WAR_Attendance_Allowance_Calculated;
-										cellAttendance.CellStyle = styleGrey40;
+										cellAttendance.CellStyle = styleGrey25;
 										cellNxt = cellNxt + 1;
 									}
 									if (clientRequirement.CRI_Nightshift_Allowance == true)
@@ -3845,7 +3806,7 @@ namespace RMERP.Controllers
 										}
 										cellNightshift.SetCellValue(WAR_Nightshift_Allowance_Calculated.ToString());
 										TotalNightshift = TotalNightshift + WAR_Nightshift_Allowance_Calculated;
-										cellNightshift.CellStyle = styleGrey40;
+										cellNightshift.CellStyle = styleGrey25;
 										cellNxt = cellNxt + 1;
 									}
 									if (clientRequirement.CRI_Performance_Allowance == true)
@@ -3858,7 +3819,7 @@ namespace RMERP.Controllers
 										}
 										cellPerformance.SetCellValue(WAR_Performance_Allowance_Calculated.ToString());
 										TotalPerformance = TotalPerformance + WAR_Performance_Allowance_Calculated;
-										cellPerformance.CellStyle = styleGrey40;
+										cellPerformance.CellStyle = styleGrey25;
 										cellNxt = cellNxt + 1;
 									}
 									//if (!clientRequirement.CRI_OT_Calculate_Payableday)
@@ -3866,13 +3827,13 @@ namespace RMERP.Controllers
 									//	ICell cellEmpotHrs = row.CreateCell(cellNxt);
 									//	cellEmpotHrs.SetCellValue(employee.WAR_ExtraWorkingHours);
 									//	TotalOTHrs = TotalOTHrs + employee.WAR_ExtraWorkingHours;
-									//	cellEmpotHrs.CellStyle = styleGrey40;
+									//	cellEmpotHrs.CellStyle = styleGrey25;
 									//	cellNxt = cellNxt + 1;
 
 									//	ICell cellEmp13 = row.CreateCell(cellNxt);
 									//	cellEmp13.SetCellValue(Math.Round(employee.WAR_OverTime_Calculated, MidpointRounding.AwayFromZero).ToString());
 									//	TotalOT = TotalOT + Math.Round(employee.WAR_OverTime_Calculated, MidpointRounding.AwayFromZero);
-									//	cellEmp13.CellStyle = styleGrey40;
+									//	cellEmp13.CellStyle = styleGrey25;
 									//	cellNxt = cellNxt + 1;
 									//}
 									#endregion
@@ -3886,15 +3847,15 @@ namespace RMERP.Controllers
 
 									ICell cellEmp14 = row.CreateCell(cellNxt);
 									cellEmp14.SetCellValue("-"); //Arrs.									
-									cellEmp14.CellStyle = styleGrey40;
+									cellEmp14.CellStyle = styleGrey25;
 
 									ICell cellEmp15 = row.CreateCell(cellNxt + 1);
 									cellEmp15.SetCellValue(Math.Round(employee.WAR_GrossTotal, MidpointRounding.AwayFromZero).ToString()); //Gross Wages Payable
-									cellEmp15.CellStyle = styleGrey50;
+									cellEmp15.CellStyle = styleGrey25;
 
 									ICell cellEmp16 = row.CreateCell(cellNxt + 2);
 									cellEmp16.SetCellValue(Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero).ToString()); //Advance									
-									cellEmp16.CellStyle = styleGrey50;
+									cellEmp16.CellStyle = styleGrey25;
 
 									int cellNxt1 = cellNxt + 2;
 									//if (clientRequirement.CRI_ProfessionalTax == true)
@@ -3903,7 +3864,7 @@ namespace RMERP.Controllers
 									//	ICell cellEmpTax = row.CreateCell(cellNxt1);
 									//	cellEmpTax.SetCellValue(Convert.ToString(employee.WAR_ProffesionalTax_Calculated));
 									//	TotalProfTax = TotalProfTax + Convert.ToDecimal(employee.WAR_ProffesionalTax_Calculated);
-									//	cellEmpTax.CellStyle = styleGrey50;
+									//	cellEmpTax.CellStyle = styleGrey25;
 									//}
 									//if (clientRequirement.CRI_RevenueDeduction == true)
 									//{
@@ -3912,7 +3873,7 @@ namespace RMERP.Controllers
 									//	cellRevenue.SetCellValue(employee.WAR_RevenueDeduction_Calculated);
 									//	if (employee.WAR_RevenueDeduction_Calculated != "-")
 									//		TotalRevenue = TotalRevenue + Convert.ToDecimal(employee.WAR_RevenueDeduction_Calculated);
-									//	cellRevenue.CellStyle = styleGrey50;
+									//	cellRevenue.CellStyle = styleGrey25;
 									//}
 									//if (clientRequirement.CRI_CanteenFacility == true)
 									//{
@@ -3921,100 +3882,100 @@ namespace RMERP.Controllers
 									//	cellCanteen.SetCellValue(employee.WAR_CanteenFacility_Calculation);
 									//	if (employee.WAR_CanteenFacility_Calculation != "-")
 									//		TotalCanteenFacility = TotalCanteenFacility + Convert.ToDecimal(employee.WAR_CanteenFacility_Calculation);
-									//	cellCanteen.CellStyle = styleGrey50;
+									//	cellCanteen.CellStyle = styleGrey25;
 									//}
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp17 = row.CreateCell(cellNxt1);
 									cellEmp17.SetCellValue(Math.Round(employee.WAR_HRA_Calculated, MidpointRounding.AwayFromZero).ToString()); //HRA							
-									cellEmp17.CellStyle = styleGrey50;
+									cellEmp17.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp181 = row.CreateCell(cellNxt1);
 									cellEmp181.SetCellValue("-"); //Profit/Income Tax/PT								
-									cellEmp181.CellStyle = styleGrey50;
+									cellEmp181.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp182 = row.CreateCell(cellNxt1);
 									cellEmp182.SetCellValue(Math.Round(employee.WAR_PF_Calculated, MidpointRounding.AwayFromZero).ToString()); //PF								
-									cellEmp182.CellStyle = styleGrey50;
+									cellEmp182.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp183 = row.CreateCell(cellNxt1);
 									cellEmp183.SetCellValue(Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero).ToString()); //ESIC								
-									cellEmp183.CellStyle = styleGrey50;
+									cellEmp183.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp19 = row.CreateCell(cellNxt1);
-									cellEmp19.SetCellValue(Math.Round(employee.WAR_LWF_Deduction_Employee!=null? employee.WAR_LWF_Deduction_Employee.Value:0, MidpointRounding.AwayFromZero).ToString()); //MLWF							
-									cellEmp19.CellStyle = styleGrey50;
+									cellEmp19.SetCellValue(Math.Round(employee.WAR_LWF_Deduction_Employee != null ? employee.WAR_LWF_Deduction_Employee.Value : 0, MidpointRounding.AwayFromZero).ToString()); //MLWF							
+									cellEmp19.CellStyle = styleGrey25;
 
-                                    #region Total Deduction
-                                    if (employee.WAR_RevenueDeduction_Calculated != "-")
-                                    {
-                                        DeductTotal += Math.Round(Convert.ToDecimal(employee.WAR_RevenueDeduction_Calculated), MidpointRounding.AwayFromZero);
-                                    }
-                                    if (employee.WAR_CanteenFacility_Calculation != "-")
-                                    {
-                                        DeductTotal += Math.Round(Convert.ToDecimal(employee.WAR_CanteenFacility_Calculation), MidpointRounding.AwayFromZero);
-                                    }
-                                    #endregion
+									#region Total Deduction
+									if (employee.WAR_RevenueDeduction_Calculated != "-")
+									{
+										DeductTotal += Math.Round(Convert.ToDecimal(employee.WAR_RevenueDeduction_Calculated), MidpointRounding.AwayFromZero);
+									}
+									if (employee.WAR_CanteenFacility_Calculation != "-")
+									{
+										DeductTotal += Math.Round(Convert.ToDecimal(employee.WAR_CanteenFacility_Calculation), MidpointRounding.AwayFromZero);
+									}
+									#endregion
 
-                                    cellNxt1 = cellNxt1 + 1;
-									ICell cellEmp20 = row.CreateCell(cellNxt1);									
+									cellNxt1 = cellNxt1 + 1;
+									ICell cellEmp20 = row.CreateCell(cellNxt1);
 									cellEmp20.SetCellValue(DeductTotal.ToString()); //Other Ded.							
-									cellEmp20.CellStyle = styleGrey50;
+									cellEmp20.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp21 = row.CreateCell(cellNxt1);
 									cellEmp21.SetCellValue(DeductTotal.ToString()); //Tot.Ded.							
-									cellEmp21.CellStyle = styleGrey50;
+									cellEmp21.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp222 = row.CreateCell(cellNxt1);
 									cellEmp222.SetCellValue(Math.Round(Convert.ToDecimal(employee.WAR_FinalTotal), MidpointRounding.AwayFromZero).ToString()); //Net Wages Paid							
-									cellEmp222.CellStyle = styleGrey50;
+									cellEmp222.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp223 = row.CreateCell(cellNxt1);
 									cellEmp223.SetCellValue("0"); //Previous Balance							
-									cellEmp223.CellStyle = styleGrey50;
+									cellEmp223.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp224 = row.CreateCell(cellNxt1);
 									cellEmp224.SetCellValue("0"); //Earned During Month						
-									cellEmp224.CellStyle = styleGrey50;
+									cellEmp224.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp225 = row.CreateCell(cellNxt1);
 									cellEmp225.SetCellValue("0"); //Further Enjoyed					
-									cellEmp225.CellStyle = styleGrey50;
+									cellEmp225.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp226 = row.CreateCell(cellNxt1);
 									cellEmp226.SetCellValue("0"); //Refused							
-									cellEmp226.CellStyle = styleGrey50;
+									cellEmp226.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp227 = row.CreateCell(cellNxt1);
 									cellEmp227.SetCellValue("0"); //Balance at the end of month							
-									cellEmp227.CellStyle = styleGrey50;
+									cellEmp227.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp228 = row.CreateCell(cellNxt1);
-									cellEmp228.SetCellValue(employee.WAR_LastModifiedOn.ToString("dd-MMM-yyyy")); //Date of Payment of wages							
-									cellEmp228.CellStyle = styleGrey50;
+									cellEmp228.SetCellValue(new DateTime(wageMonth.Year, wageMonth.Month, 1).AddMonths(1).AddDays(-1).ToString("dd-MMM-yyyy")); //Date of Payment of wages (Last date of month)							
+									cellEmp228.CellStyle = styleGrey25;
 
 									cellNxt1 = cellNxt1 + 1;
 									ICell cellEmp229 = row.CreateCell(cellNxt1);
 									cellEmp229.SetCellValue(""); //Signature of Thumb Impression of the Employee							
-									cellEmp229.CellStyle = styleGrey50;
+									cellEmp229.CellStyle = styleGrey25;
 									//TotalLWF                                    
 									//if (!dd.DES_Exclude_LWF)
 									//{
 									//	ICell cell_LWF = row.CreateCell(cellNext2);
 									//	cell_LWF.SetCellValue(Convert.ToString(Math.Round((employee.WAR_LWF_Deduction_Employee != null ? employee.WAR_LWF_Deduction_Employee.Value : 0), MidpointRounding.AwayFromZero).ToString()));
 									//	excelSheet.SetColumnWidth(cellNext2, (int)((25 + 0.72) * 140));
-									//	cell_LWF.CellStyle = styleGrey50;
+									//	cell_LWF.CellStyle = styleGrey25;
 									//	TotalLWF = TotalLWF + Convert.ToDecimal(employee.WAR_LWF_Deduction_Employee);
 									//	cellNext2 = cellNext2 + 1;
 									//}
@@ -4052,13 +4013,13 @@ namespace RMERP.Controllers
 								//cellTot1.CellStyle = styleGrey25;
 								//ICell cellTot2 = row.CreateCell(totalCount + 2);
 								//cellTot2.SetCellValue(Math.Round(TotalBasic, MidpointRounding.AwayFromZero).ToString());
-								//cellTot2.CellStyle = styleGrey40;
+								//cellTot2.CellStyle = styleGrey25;
 								//ICell cellTot3 = row.CreateCell(totalCount + 3);
 								//cellTot3.SetCellValue(Math.Round(TotalDA, MidpointRounding.AwayFromZero).ToString());
-								//cellTot3.CellStyle = styleGrey40;
+								//cellTot3.CellStyle = styleGrey25;
 								//ICell cellTot4 = row.CreateCell(totalCount + 4);
 								//cellTot4.SetCellValue(Math.Round(TotalHRA, MidpointRounding.AwayFromZero).ToString());
-								//cellTot4.CellStyle = styleGrey40;
+								//cellTot4.CellStyle = styleGrey25;
 
 								//int k = 0;
 								//int cellAllow = totalCount + 4;
@@ -4072,7 +4033,7 @@ namespace RMERP.Controllers
 								//	WageAllowancesTotalVMs.Add(wageTotalVM);
 								//	ICell cellEmpAll = row.CreateCell(cellAllow + 1);
 								//	cellEmpAll.SetCellValue(Math.Round(arrAllowancesTotal[k], MidpointRounding.AwayFromZero).ToString());
-								//	cellEmpAll.CellStyle = styleGrey40;
+								//	cellEmpAll.CellStyle = styleGrey25;
 								//	cellAllow++;
 								//	k++;
 								//}
@@ -4084,7 +4045,7 @@ namespace RMERP.Controllers
 								//{
 								//	totalCount = totalCount + 1;
 								//	ICell cellTotAllowance_1 = row.CreateCell(totalCount);
-								//	cellTotAllowance_1.CellStyle = styleGrey40;
+								//	cellTotAllowance_1.CellStyle = styleGrey25;
 								//	cellTotAllowance_1.SetCellValue(Math.Round(allownce.C_ALL_Value, MidpointRounding.AwayFromZero).ToString());
 								//}
 
@@ -4093,7 +4054,7 @@ namespace RMERP.Controllers
 								////    IsCRI_Allowance_1 = true;
 								////    totalCount = totalCount + 1;
 								////    ICell cellTotAllowance_1 = row.CreateCell(totalCount);
-								////    cellTotAllowance_1.CellStyle = styleGrey40;
+								////    cellTotAllowance_1.CellStyle = styleGrey25;
 								////    cellTotAllowance_1.SetCellValue(Math.Round(TotalAllowance1, MidpointRounding.AwayFromZero).ToString());
 								////}
 								////if (clientRequirement.CRI_Allowance_2 == true)
@@ -4101,7 +4062,7 @@ namespace RMERP.Controllers
 								////    IsCRI_Allowance_2 = true;
 								////    totalCount = totalCount + 1;
 								////    ICell cellTotAllowance_2 = row.CreateCell(totalCount);
-								////    cellTotAllowance_2.CellStyle = styleGrey40;
+								////    cellTotAllowance_2.CellStyle = styleGrey25;
 								////    cellTotAllowance_2.SetCellValue(Math.Round(TotalAllowance2, MidpointRounding.AwayFromZero).ToString());
 								////}
 								////if (clientRequirement.CRI_Allowance_3 == true)
@@ -4109,7 +4070,7 @@ namespace RMERP.Controllers
 								////    IsCRI_Allowance_3 = true;
 								////    totalCount = totalCount + 1;
 								////    ICell cellTotAllowance_3 = row.CreateCell(totalCount);
-								////    cellTotAllowance_3.CellStyle = styleGrey40;
+								////    cellTotAllowance_3.CellStyle = styleGrey25;
 								////    cellTotAllowance_3.SetCellValue(Math.Round(TotalAllowance3, MidpointRounding.AwayFromZero).ToString());
 								////}
 								////if (clientRequirement.CRI_Allowance_4 == true)
@@ -4117,7 +4078,7 @@ namespace RMERP.Controllers
 								////    IsCRI_Allowance_4 = true;
 								////    totalCount = totalCount + 1;
 								////    ICell cellTotAllowance_4 = row.CreateCell(totalCount);
-								////    cellTotAllowance_4.CellStyle = styleGrey40;
+								////    cellTotAllowance_4.CellStyle = styleGrey25;
 								////    cellTotAllowance_4.SetCellValue(Math.Round(TotalAllowance4, MidpointRounding.AwayFromZero).ToString());
 								////}
 								////if (clientRequirement.CRI_Allowance_5 == true)
@@ -4125,7 +4086,7 @@ namespace RMERP.Controllers
 								////    IsCRI_Allowance_1 = true;
 								////    totalCount = totalCount + 1;
 								////    ICell cellTotAllowance_5 = row.CreateCell(totalCount);
-								////    cellTotAllowance_5.CellStyle = styleGrey40;
+								////    cellTotAllowance_5.CellStyle = styleGrey25;
 								////    cellTotAllowance_5.SetCellValue(Math.Round(TotalAllowance5, MidpointRounding.AwayFromZero).ToString());
 								////}
 								////end custom allow
@@ -4136,7 +4097,7 @@ namespace RMERP.Controllers
 								//	IsCRI_OutStation_Allowance = true;
 								//	totalCount = totalCount + 1;
 								//	ICell cellTotOutstation = row.CreateCell(totalCount);
-								//	cellTotOutstation.CellStyle = styleGrey40;
+								//	cellTotOutstation.CellStyle = styleGrey25;
 								//	cellTotOutstation.SetCellValue(Math.Round(TotalOutStation, MidpointRounding.AwayFromZero).ToString());
 								//}
 								//if (clientRequirement.CRI_Attendance_Allowance == true)
@@ -4144,7 +4105,7 @@ namespace RMERP.Controllers
 								//	IsCRI_Attendance_Allowance = true;
 								//	totalCount = totalCount + 1;
 								//	ICell cellTotAttendance = row.CreateCell(totalCount);
-								//	cellTotAttendance.CellStyle = styleGrey40;
+								//	cellTotAttendance.CellStyle = styleGrey25;
 								//	cellTotAttendance.SetCellValue(Math.Round(TotalAttendance, MidpointRounding.AwayFromZero).ToString());
 								//}
 								//if (clientRequirement.CRI_Nightshift_Allowance == true)
@@ -4152,7 +4113,7 @@ namespace RMERP.Controllers
 								//	IsCRI_Nightshift_Allowance = true;
 								//	totalCount = totalCount + 1;
 								//	ICell cellTotNightshift = row.CreateCell(totalCount);
-								//	cellTotNightshift.CellStyle = styleGrey40;
+								//	cellTotNightshift.CellStyle = styleGrey25;
 								//	cellTotNightshift.SetCellValue(Math.Round(TotalNightshift, MidpointRounding.AwayFromZero).ToString());
 								//}
 								//if (clientRequirement.CRI_Performance_Allowance == true)
@@ -4160,33 +4121,33 @@ namespace RMERP.Controllers
 								//	IsCRI_Performance_Allowance = true;
 								//	totalCount = totalCount + 1;
 								//	ICell cellTotPerformance = row.CreateCell(totalCount);
-								//	cellTotPerformance.CellStyle = styleGrey40;
+								//	cellTotPerformance.CellStyle = styleGrey25;
 								//	cellTotPerformance.SetCellValue(Math.Round(TotalPerformance, MidpointRounding.AwayFromZero).ToString());
 								//}
 								//if (!clientRequirement.CRI_OT_Calculate_Payableday)
 								//{
 								//	totalCount = totalCount + 1;
 								//	ICell cellTotOtHrs = row.CreateCell(totalCount);
-								//	cellTotOtHrs.CellStyle = styleGrey40;
+								//	cellTotOtHrs.CellStyle = styleGrey25;
 								//	cellTotOtHrs.SetCellValue(TotalOTHrs);
 
 								//	IsCRI_OT_Calculate_Payableday = true;
 								//	totalCount = totalCount + 1;
 								//	ICell cellTot5 = row.CreateCell(totalCount);
-								//	cellTot5.CellStyle = styleGrey40;
+								//	cellTot5.CellStyle = styleGrey25;
 								//	cellTot5.SetCellValue(Math.Round(TotalOT, MidpointRounding.AwayFromZero).ToString());
 								//}
 								//#endregion
 
 								//ICell cellTot6 = row.CreateCell(totalCount + 1);
 								//cellTot6.SetCellValue(Math.Round(TotalGrossTotal, MidpointRounding.AwayFromZero).ToString());
-								//cellTot6.CellStyle = styleGrey40;
+								//cellTot6.CellStyle = styleGrey25;
 								//ICell cellTot7 = row.CreateCell(totalCount + 2);
 								//cellTot7.SetCellValue(Math.Round(TotalPF, MidpointRounding.AwayFromZero).ToString());
-								//cellTot7.CellStyle = styleGrey50;
+								//cellTot7.CellStyle = styleGrey25;
 								//ICell cellTot8 = row.CreateCell(totalCount + 3);
 								//cellTot8.SetCellValue(Math.Round(TotalESIC, MidpointRounding.AwayFromZero).ToString());
-								//cellTot8.CellStyle = styleGrey50;
+								//cellTot8.CellStyle = styleGrey25;
 
 								//int totalCount1 = totalCount + 3;
 								//if (clientRequirement.CRI_ProfessionalTax)
@@ -4195,7 +4156,7 @@ namespace RMERP.Controllers
 								//	totalCount1 = totalCount1 + 1;
 								//	ICell cellTot9 = row.CreateCell(totalCount1);
 								//	cellTot9.SetCellValue(Math.Round(TotalProfTax, MidpointRounding.AwayFromZero).ToString());
-								//	cellTot9.CellStyle = styleGrey50;
+								//	cellTot9.CellStyle = styleGrey25;
 								//}
 								//if (clientRequirement.CRI_RevenueDeduction)
 								//{
@@ -4203,7 +4164,7 @@ namespace RMERP.Controllers
 								//	totalCount1 = totalCount1 + 1;
 								//	ICell cellTot10 = row.CreateCell(totalCount1);
 								//	cellTot10.SetCellValue(Math.Round(TotalRevenue, MidpointRounding.AwayFromZero).ToString());
-								//	cellTot10.CellStyle = styleGrey50;
+								//	cellTot10.CellStyle = styleGrey25;
 								//}
 								//if (clientRequirement.CRI_CanteenFacility)
 								//{
@@ -4211,12 +4172,12 @@ namespace RMERP.Controllers
 								//	totalCount1 = totalCount1 + 1;
 								//	ICell cellTot11 = row.CreateCell(totalCount1);
 								//	cellTot11.SetCellValue(Math.Round(TotalCanteenFacility, MidpointRounding.AwayFromZero).ToString());
-								//	cellTot11.CellStyle = styleGrey50;
+								//	cellTot11.CellStyle = styleGrey25;
 								//}
 
 								//ICell cellTot12 = row.CreateCell(totalCount1 + 1);
 								//cellTot12.SetCellValue(Math.Round(TotalAdvance, MidpointRounding.AwayFromZero).ToString());
-								//cellTot12.CellStyle = styleGrey50;
+								//cellTot12.CellStyle = styleGrey25;
 
 								//int TotCount = totalCount1 + 2;
 								//if (!dd.DES_Exclude_LWF)
@@ -4224,20 +4185,20 @@ namespace RMERP.Controllers
 								//	IsDES_Include_LWF = true;
 								//	ICell cellTotLWF = row.CreateCell(TotCount);
 								//	cellTotLWF.SetCellValue(Math.Round(TotalLWF, MidpointRounding.AwayFromZero).ToString());
-								//	cellTotLWF.CellStyle = styleGrey50;
+								//	cellTotLWF.CellStyle = styleGrey25;
 								//	TotCount = TotCount + 1;
 								//}
 
 								//ICell cellTot13 = row.CreateCell(TotCount);
 								//cellTot13.SetCellValue(Math.Round(TotalDeduct, MidpointRounding.AwayFromZero).ToString());
-								//cellTot13.CellStyle = styleGrey50;
+								//cellTot13.CellStyle = styleGrey25;
 								//ICell cellTot14 = row.CreateCell(TotCount + 1);
 								//cellTot14.SetCellValue(Math.Round(TotalFinal, MidpointRounding.AwayFromZero).ToString());
-								//cellTot14.CellStyle = styleGrey80;
+								//cellTot14.CellStyle = styleGrey25;
 
 								//ICell cellTot15 = row.CreateCell(TotCount + 2);
 								//cellTot15.SetCellValue("");
-								//cellTot15.CellStyle = styleGrey80;
+								//cellTot15.CellStyle = styleGrey25;
 								//#endregion
 
 								DesCount = DesCount + 1;
@@ -4270,7 +4231,7 @@ namespace RMERP.Controllers
 							}
 
 							DesCount = DesCount + 1;
-							
+
 						}
 					}
 

@@ -10,9 +10,11 @@ using RMERP.DAL.Mappers;
 using Microsoft.AspNetCore.Http;
 using static RMERP.DAL.Helpers.ProjectUtils;
 using SmartBreadcrumbs.Attributes;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RMERP.Controllers
 {
+    [Authorize]
     public class CitiesController : Controller
     {
         private readonly RMERPContext _context;

@@ -19,9 +19,11 @@ using RMERP.Helpers;
 using Rotativa.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Rotativa.AspNetCore.Options;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RMERP.Controllers
 {
+    [Authorize]
     public class ReportsController : Controller
     {
         public IConfiguration _configuration;
