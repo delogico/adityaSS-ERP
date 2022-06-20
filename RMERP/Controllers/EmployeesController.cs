@@ -548,10 +548,20 @@ namespace RMERP.Controllers
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             try
             {
-                if (!employeeManager.RejoinEmployee(EMP_Id, EMP_Rejoin_Date, sessionUtils.GetLoggedAdminID()))
+                Employees emp = employeeManager.GetEmployeeById(EMP_Id);
+                int count = _context.Employees.Where(m => m.EMP_Aadhar_Number.Equals(emp.EMP_Aadhar_Number) && m.FRM_Id == emp.FRM_Id && m.EMP_IsActive.Value).Count();
+                if (count > 0)
                 {
-                    TempData["message"] = "We can not rejoin employee on same month. Please Try Again!";
+                    TempData["message"] = "Employee is already active in "+emp.FRM_.FRM_Name;
                 }
+                else
+                {
+                    if (!employeeManager.RejoinEmployee(emp, EMP_Rejoin_Date, sessionUtils.GetLoggedAdminID()))
+                    {
+                        TempData["message"] = "We can not rejoin employee on same month. Please Try Again!";
+                    }
+                }
+                
             }
             catch (Exception)
             {

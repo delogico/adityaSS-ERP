@@ -144,7 +144,9 @@ namespace RMERP.DAL.ManagerClasses
 
         public bool CheckExistingAadhar(string AadharNumber, int EMP_Id,int FRM_Id)
         {
+            if(EMP_Id>0)
             return _context.Employees.Any(m => m.EMP_Aadhar_Number.Equals(AadharNumber) && m.EMP_Id != EMP_Id && m.FRM_Id== FRM_Id);
+            else return _context.Employees.Any(m => m.EMP_Aadhar_Number.Equals(AadharNumber) && m.FRM_Id == FRM_Id);
         }
 
         public List<Employees> SearchEmployees(int FRM_Id, bool EMP_UAN_Number, bool EMP_ESIC_Number,string EMP_Aadhar_Number)
@@ -192,11 +194,10 @@ namespace RMERP.DAL.ManagerClasses
             return _context.Cities_all.Where(m => m.STA_Id.Equals(STA_Id)).ToList();
         }
 
-        public bool RejoinEmployee(int EMP_Id, DateTime EMP_Rejoin_Date, int ADM_Id)
+        public bool RejoinEmployee(Employees emp, DateTime EMP_Rejoin_Date, int ADM_Id)
         {
-            bool rejoinSuccess = false;
-            Employees emp = GetEmployeeById(EMP_Id);
-            IEnumerable<Employees> emps = _context.Employees.Where(m => m.EMP_Aadhar_Number.Equals(emp.EMP_Aadhar_Number)).OrderByDescending(m => m.EMP_InactivatedOn);
+            bool rejoinSuccess = false;            
+            IEnumerable<Employees> emps = _context.Employees.Where(m => m.EMP_Aadhar_Number.Equals(emp.EMP_Aadhar_Number)).OrderByDescending(m => m.EMP_InactivatedOn);            
             if (emps.Count() > 0)
             {
                 if (emps.First().EMP_InactivatedOn.HasValue)
