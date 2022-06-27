@@ -23,19 +23,20 @@ namespace RMERP.DAL.ViewModel
         [Required(AllowEmptyStrings = false, ErrorMessage = "Last name is required")]
         public string EMP_SurName { get; set; }
 
+        [Display(Name = "Date of birth")]
+        [Required(ErrorMessage = "Date of birth is required")]
+        [DataType(DataType.Date)]
+        public DateTime EMP_DOB { get; set; }
         [Display(Name = "Name as per aadhar card")]
         public string EMP_Aadhar_Name { get; set; }
 
         [Display(Name = "Aadhar number")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Aadhar number is required")]
         [MaxLength(12, ErrorMessage = "length must be maximum 12 characters long")]
-        [Remote("CheckExistingAadhar", "Employees", ErrorMessage = "Aadhar number is already exists!",AdditionalFields ="EMP_Id,FRM_Id")]
+        [Remote("CheckExistingAadhar", "Employees", ErrorMessage = "Aadhar number is already exists!",AdditionalFields = "EMP_Id,FRM_Id,EMP_DOB")]
         public string EMP_Aadhar_Number { get; set; }
 
-        [Display(Name = "Date of birth")]
-        [Required(ErrorMessage = "Date of birth is required")]
-        [DataType(DataType.Date)]
-        public DateTime EMP_DOB { get; set; }
+       
 
         [Display(Name = "Marital status")]
         [Required(ErrorMessage = "Marital status is required")]

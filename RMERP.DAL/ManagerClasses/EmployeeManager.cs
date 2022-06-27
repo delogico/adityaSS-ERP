@@ -142,11 +142,19 @@ namespace RMERP.DAL.ManagerClasses
             return list.Count() > 0;
         }
 
-        public bool CheckExistingAadhar(string AadharNumber, int EMP_Id,int FRM_Id)
+        public bool CheckExistingAadhar(string AadharNumber, int EMP_Id,int FRM_Id,DateTime DOB)
         {
-            if(EMP_Id>0)
-            return _context.Employees.Any(m => m.EMP_Aadhar_Number.Equals(AadharNumber) && m.EMP_Id != EMP_Id && m.FRM_Id== FRM_Id);
-            else return _context.Employees.Any(m => m.EMP_Aadhar_Number.Equals(AadharNumber) && m.FRM_Id == FRM_Id);
+            if (EMP_Id > 0)
+                return _context.Employees.Any(m => m.EMP_Aadhar_Number.Equals(AadharNumber) && m.EMP_Id != EMP_Id && m.EMP_DOB != DOB && m.EMP_RejoinOn == null && m.FRM_Id == FRM_Id);
+            else
+                return _context.Employees.Any(m => m.EMP_Aadhar_Number.Equals(AadharNumber) && m.FRM_Id == FRM_Id);
+        }
+        public Employees CheckExistingAadharEmployee(string AadharNumber, int EMP_Id, int FRM_Id, DateTime DOB)
+        {
+            if (EMP_Id > 0)
+                return _context.Employees.Where(m => m.EMP_Aadhar_Number.Equals(AadharNumber) && m.EMP_Id != EMP_Id && m.EMP_DOB != DOB && m.EMP_RejoinOn == null && m.FRM_Id == FRM_Id).FirstOrDefault();
+            else
+                return _context.Employees.Where(m => m.EMP_Aadhar_Number.Equals(AadharNumber) && m.FRM_Id == FRM_Id).FirstOrDefault();
         }
 
         public List<Employees> SearchEmployees(int FRM_Id, bool EMP_UAN_Number, bool EMP_ESIC_Number,string EMP_Aadhar_Number)

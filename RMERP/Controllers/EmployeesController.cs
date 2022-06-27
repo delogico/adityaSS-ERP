@@ -134,7 +134,7 @@ namespace RMERP.Controllers
             SessionUtils sessionUtils = new SessionUtils(Request, Response);            
             if (ModelState.IsValid)
             {
-                if(!employeeManager.CheckExistingAadhar(employeeVM.EMP_Aadhar_Number, employeeVM.EMP_Id, employeeVM.FRM_Id))
+                if(!employeeManager.CheckExistingAadhar(employeeVM.EMP_Aadhar_Number, employeeVM.EMP_Id, employeeVM.FRM_Id,employeeVM.EMP_DOB))
                 {
                     Employees employee = new Employees();
                     employee = EmployeesMapper.MapMeModel(employeeVM);
@@ -524,15 +524,26 @@ namespace RMERP.Controllers
         }
         
                 
-        public IActionResult CheckExistingAadhar(string EMP_Aadhar_Number, int EMP_Id,int FRM_Id)
+        public IActionResult CheckExistingAadhar(string EMP_Aadhar_Number, int EMP_Id,int FRM_Id,DateTime EMP_DOB)
         {
             EMP_Aadhar_Number=EMP_Aadhar_Number.Trim().Replace(@"\", string.Empty);
             EmployeeManager employeeManager = new EmployeeManager(_context);
-            bool ExistingAadhar = false;
+           // bool ExistingAadhar = false;
             try
             {
-                ExistingAadhar = !employeeManager.CheckExistingAadhar(EMP_Aadhar_Number, EMP_Id, FRM_Id);
-                return Json(ExistingAadhar);
+                if (FRM_Id > 0)
+                {
+                    Employees emp = employeeManager.CheckExistingAadharEmployee(EMP_Aadhar_Number, EMP_Id, FRM_Id, EMP_DOB);
+                    if (emp != null)
+                        return Json("Aadhar number is already exists for employee ID: " + emp.EMP_Id);
+                    else return Json(true);
+
+                }
+                else
+                {
+                    return Json("Select Firm First, Then Enter Aadhar Number");
+                }
+                
             }
             catch (Exception)
             {
