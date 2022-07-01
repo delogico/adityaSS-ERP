@@ -3900,6 +3900,7 @@ namespace RMERP.Controllers
 									ICell cellEmp16 = row.CreateCell(cellNxt + 2);
 									cellEmp16.SetCellValue(Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero).ToString()); //Advance									
 									cellEmp16.CellStyle = styleGrey25;
+									TotalAdvance = TotalAdvance + Math.Round(employee.WAR_Advance_Amount, MidpointRounding.AwayFromZero);
 
 									int cellNxt1 = cellNxt + 2;
 									//if (clientRequirement.CRI_ProfessionalTax == true)
@@ -3956,7 +3957,7 @@ namespace RMERP.Controllers
 									decimal mlwf = employee.WAR_LWF_Deduction_Employee != null ? employee.WAR_LWF_Deduction_Employee.Value : 0;
 									cellEmp19.SetCellValue(Math.Round(mlwf, MidpointRounding.AwayFromZero).ToString()); //MLWF							
 									cellEmp19.CellStyle = styleGrey25;
-									TotalMLWF = TotalMLWF + mlwf;
+									TotalLWF = TotalLWF + Convert.ToDecimal(employee.WAR_LWF_Deduction_Employee);
 
 									#region Total Deduction
 									if (employee.WAR_RevenueDeduction_Calculated != "-")
@@ -4195,7 +4196,7 @@ namespace RMERP.Controllers
 								cellTot83.SetCellValue(Math.Round(TotalESIC, MidpointRounding.AwayFromZero).ToString());
 								cellTot83.CellStyle = styleTotal;
 								ICell cellTot84 = row.CreateCell(totalCount + 7);
-								cellTot84.SetCellValue(Math.Round(TotalMLWF, MidpointRounding.AwayFromZero).ToString());
+								cellTot84.SetCellValue(Math.Round(TotalLWF, MidpointRounding.AwayFromZero).ToString());
 								cellTot84.CellStyle = styleTotal;
 								ICell cellTot85 = row.CreateCell(totalCount + 8);
 								cellTot85.SetCellValue(Math.Round(TotalOtherDeduction, MidpointRounding.AwayFromZero).ToString());
@@ -4520,7 +4521,7 @@ namespace RMERP.Controllers
 							fcellTotMLWF.SetCellValue("Total MLWF");
 							fcellTotMLWF.CellStyle = styleTotal;
 							ICell fcellTotMLWFs = frowSecond.CreateCell(ftotalCount + 7);
-							fcellTotMLWFs.SetCellValue(Math.Round(Final_TotalMLWF, MidpointRounding.AwayFromZero).ToString());
+							fcellTotMLWFs.SetCellValue(Math.Round(Final_TotalLWF, MidpointRounding.AwayFromZero).ToString());
 							fcellTotMLWFs.CellStyle = styleTotal;
 
 							ICell fcellTotOtherDed = frow.CreateCell(ftotalCount + 8);
