@@ -6,7 +6,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>C:\Publish1\RMERP</_PublishTargetUrl>
+    <_PublishTargetUrl>C:\Publish\RMERP</_PublishTargetUrl>
     <History>True|2022-06-27T07:35:46.0266488Z;True|2022-06-21T17:27:02.8085998+05:30;True|2022-06-21T17:24:11.2042779+05:30;True|2022-06-21T17:03:33.2623931+05:30;True|2022-06-21T17:02:04.8528607+05:30;True|2022-06-21T16:24:22.2285855+05:30;True|2022-06-21T16:18:11.5091668+05:30;True|2022-06-21T16:15:55.7146063+05:30;True|2022-06-21T16:10:11.4960096+05:30;True|2022-06-20T18:42:29.5190157+05:30;True|2022-06-20T18:41:36.4278273+05:30;True|2022-06-20T18:18:32.6509823+05:30;True|2022-04-08T14:45:30.3005511+05:30;True|2022-04-08T14:44:47.9169398+05:30;True|2022-04-04T16:52:53.1643699+05:30;True|2022-04-04T16:37:36.0349372+05:30;True|2022-02-17T15:57:24.2480210+05:30;True|2022-01-06T12:37:16.0952890+05:30;True|2022-01-04T16:39:24.4511395+05:30;True|2021-12-23T12:32:30.6127457+05:30;True|2021-09-02T15:19:41.5123924+05:30;</History>
   </PropertyGroup>
   <ItemGroup>

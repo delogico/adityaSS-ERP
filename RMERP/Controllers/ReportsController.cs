@@ -186,22 +186,22 @@ namespace RMERP.Controllers
                 excelSheet.SetColumnWidth(1, (int)((25 + 0.72) * 256));//A
                 cell1.CellStyle = style;
                 ICell cell2 = row.CreateCell(2);
-                cell2.SetCellValue("Upto 7500");
+                cell2.SetCellValue("Upto 7500 Males");
                 cell2.CellStyle = style;
                 ICell cell3 = row.CreateCell(3);
-                cell3.SetCellValue("Upto 7500 Ladies");
+                cell3.SetCellValue("Upto 7500 Females");
                 cell3.CellStyle = style;
                 ICell cell4 = row.CreateCell(4);
-                cell4.SetCellValue("Upto 10000");
+                cell4.SetCellValue("Upto 10000 Males");
                 cell4.CellStyle = style;
                 ICell cell5 = row.CreateCell(5);
-                cell5.SetCellValue("Upto 10000 Ladies");
+                cell5.SetCellValue("Upto 25000 Females");
                 cell5.CellStyle = style;
                 ICell cell6 = row.CreateCell(6);
-                cell6.SetCellValue("Above 10000");
+                cell6.SetCellValue("Above 10000 Males");
                 cell6.CellStyle = style;
                 ICell cell7 = row.CreateCell(7);
-                cell7.SetCellValue("Above 10000 Ladies");
+                cell7.SetCellValue("Above 25000 Females");
                 cell7.CellStyle = style;
                 ICell cell8 = row.CreateCell(8);
                 cell8.SetCellValue("STREGNTH");
@@ -289,7 +289,7 @@ namespace RMERP.Controllers
 
                 row = excelSheet.CreateRow(rowCount + 3);
                 ICell cellSummary1 = row.CreateCell(1);
-                cellSummary1.SetCellValue("UP TO 7500");
+                cellSummary1.SetCellValue("Up to 7500 Males");
                 cellSummary1.CellStyle = styleBorder;
                 CellUtil.SetAlignment(cellSummary1, workbook, (short)HorizontalAlignment.Center);
                 ICell cellEmp1 = row.CreateCell(2);
@@ -304,7 +304,7 @@ namespace RMERP.Controllers
 
                 row = excelSheet.CreateRow(rowCount + 4);
                 ICell cellSummary2 = row.CreateCell(1);
-                cellSummary2.SetCellValue("UP TO 7500 Ladies");
+                cellSummary2.SetCellValue("Up to 7500 Females");
                 cellSummary2.CellStyle = style;
                 CellUtil.SetAlignment(cellSummary2, workbook, (short)HorizontalAlignment.Center);
                 ICell cellEmp2 = row.CreateCell(2);
@@ -319,7 +319,7 @@ namespace RMERP.Controllers
 
                 row = excelSheet.CreateRow(rowCount + 5);
                 ICell cellSummary3 = row.CreateCell(1);
-                cellSummary3.SetCellValue("7500 TO 10000");
+                cellSummary3.SetCellValue("7500 to 10000 Males");
                 cellSummary3.CellStyle = styleBorder;
                 CellUtil.SetAlignment(cellSummary3, workbook, (short)HorizontalAlignment.Center);
                 ICell cellEmp3 = row.CreateCell(2);
@@ -334,7 +334,7 @@ namespace RMERP.Controllers
 
                 row = excelSheet.CreateRow(rowCount + 6);
                 ICell cellSummary4 = row.CreateCell(1);
-                cellSummary4.SetCellValue("UP TO 10000 Ladies");
+                cellSummary4.SetCellValue("7500 to 25000 Females");
                 cellSummary4.CellStyle = style;
                 CellUtil.SetAlignment(cellSummary4, workbook, (short)HorizontalAlignment.Center);
                 ICell cellEmp4 = row.CreateCell(2);
@@ -349,7 +349,7 @@ namespace RMERP.Controllers
 
                 row = excelSheet.CreateRow(rowCount + 7);
                 ICell cellSummary5 = row.CreateCell(1);
-                cellSummary5.SetCellValue("ABOVE 10000");
+                cellSummary5.SetCellValue("Above 10000 Males");
                 cellSummary5.CellStyle = styleBorder;
                 CellUtil.SetAlignment(cellSummary5, workbook, (short)HorizontalAlignment.Center);
                 ICell cellEmp5 = row.CreateCell(2);
@@ -364,7 +364,7 @@ namespace RMERP.Controllers
 
                 row = excelSheet.CreateRow(rowCount + 8);
                 ICell cellSummary6 = row.CreateCell(1);
-                cellSummary6.SetCellValue("ABOVE 10000 Ladies");
+                cellSummary6.SetCellValue("Above 25000 Females");
                 cellSummary6.CellStyle = style;
                 CellUtil.SetAlignment(cellSummary6, workbook, (short)HorizontalAlignment.Center);
                 ICell cellEmp6 = row.CreateCell(2);
@@ -3290,6 +3290,129 @@ namespace RMERP.Controllers
             return File(memory, ProjectUtils.GetContentType(DocumentPath), paySlip.WPS_FileName);
         }
 
+        #endregion
+
+        #region EmployeesReport
+        public async Task<FileResult> EmployeesReport(int WAG_Id)
+        {
+            ReportsManager manager = new ReportsManager(_context);
+            WageProcessManager wageProcess = new WageProcessManager(_context);
+            Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
+            ClientsManager clientsManager = new ClientsManager(_context);
+            DateTime wageMonth = wage_Process.WAG_Month;
+            string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
+
+            string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
+            string fileName = "Employee_Data_" + WAG_Month + "_" + DateTime.Now.ToString("ddMMyyyyHHmm") + ".xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, fileName);
+            FileInfo file = new FileInfo(Path.Combine(newPath, fileName));
+            var memory = new MemoryStream();
+            using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+            {
+                 List<Clients> clients = clientsManager.GetActiveClientOfMonthByFirmId(wageMonth, wage_Process.FRM_Id);
+                DateTime lastDate = new DateTime(wageMonth.Year, wageMonth.Month, 1).AddMonths(1).AddDays(-1);
+                DateTime startdate = new DateTime(wageMonth.Year, wageMonth.Month, 1);
+                List<Clients_Employees> current = new List<Clients_Employees>();
+                List<Clients_Employees> left = new List<Clients_Employees>();
+                foreach (Clients client in clients)
+                {
+                    List<Clients_Employees> all = clientsManager.listClientsEmployees(client.CLI_Id,null).ToList();
+                    current.AddRange(all.Where(ce => ce.CLE_UnassignedOn == null && ce.CLE_RegisteredOn <= lastDate));
+                    left.AddRange(all.Where(ce => ce.CLE_UnassignedOn != null && ce.CLE_UnassignedOn >= startdate && ce.CLE_UnassignedOn <= lastDate));
+                }
+
+                IWorkbook workbook;
+                workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("EMPLOYEE DETAIL EXISTING");
+                excelSheet = CreateEmployeesSheet(excelSheet, workbook, current);
+
+                ISheet excelSheet2 = workbook.CreateSheet("EMPLOYEE DETAIL LEFT");
+                excelSheet2 = CreateEmployeesSheet(excelSheet2, workbook, left);
+                workbook.Write(fs);
+            }
+            using (var stream = new FileStream(Path.Combine(newPath, fileName), FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            new FileInfo(Path.Combine(newPath, fileName)).Delete();
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
+        public ISheet CreateEmployeesSheet(ISheet excelSheet, IWorkbook workbook, List<Clients_Employees> lst)
+        {
+            ICellStyle styleHeader = workbook.CreateCellStyle();
+            IFont fontHead = workbook.CreateFont();
+            fontHead.IsBold = true;
+            styleHeader.Alignment = HorizontalAlignment.Center;
+            styleHeader.VerticalAlignment = VerticalAlignment.Center;
+            styleHeader.SetFont(fontHead);
+
+            ICellStyle style = workbook.CreateCellStyle();
+             style.BorderBottom = (BorderStyle.Thin);
+            style.BottomBorderColor = (IndexedColors.Black.Index);
+            style.BorderLeft = (BorderStyle.Thin);
+            style.LeftBorderColor = (IndexedColors.Black.Index);
+            style.BorderRight = (BorderStyle.Thin);
+            style.RightBorderColor = (IndexedColors.Black.Index);
+            style.BorderTop = (BorderStyle.Thin);
+            style.TopBorderColor = (IndexedColors.Black.Index);
+
+            IRow row = excelSheet.CreateRow(0);
+            row.HeightInPoints = 30.5F;
+            row.CreateCell(0).SetCellValue("SR NO");
+            row.CreateCell(1).SetCellValue("Location");
+            row.CreateCell(2).SetCellValue("Emp Code");
+            row.CreateCell(3).SetCellValue("Emp Name");
+            row.CreateCell(4).SetCellValue("Aadhar Number");
+            row.CreateCell(5).SetCellValue("Pan No");
+            row.CreateCell(6).SetCellValue("ESIC Number");
+            row.CreateCell(7).SetCellValue("UAN Number");
+            row.CreateCell(8).SetCellValue("DOJ");
+            row.CreateCell(9).SetCellValue("DOL If any");
+            row.CreateCell(10).SetCellValue("Remark If any");
+
+
+            row.Cells.ForEach(c => c.CellStyle = styleHeader);
+
+            int count = 1;
+            foreach (var item in lst)
+            {
+                row = excelSheet.CreateRow(count);
+                row.HeightInPoints = (float)(1.5 * excelSheet.DefaultRowHeightInPoints);
+                row.CreateCell(0).SetCellValue(count);
+                row.CreateCell(1).SetCellValue(item.CLI_.CLI_Name);
+                row.CreateCell(2).SetCellValue(item.EMP_.EMP_Id.ToString("####"));
+                row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + " " + item.EMP_.EMP_MiddleName + " " + item.EMP_.EMP_SurName);
+                row.CreateCell(4).SetCellValue(item.EMP_.EMP_Aadhar_Number);
+                row.CreateCell(5).SetCellValue(item.EMP_.EMP_Pan_Number);
+                row.CreateCell(6).SetCellValue(item.EMP_.EMP_ESIC_Number);
+                row.CreateCell(7).SetCellValue(item.EMP_.EMP_UAN_Number);
+                row.CreateCell(8).SetCellValue(item.CLE_RegisteredOn.ToString("dd-MM-yyyy"));
+                row.CreateCell(9).SetCellValue(item.CLE_UnassignedOn.HasValue?item.CLE_UnassignedOn.Value.ToString("dd-MM-yyyy"):"");
+                row.CreateCell(10).SetCellValue("");
+                row.Cells.ForEach(c => c.CellStyle = style);
+                    count++;
+            }
+
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    excelSheet.AutoSizeColumn(i);
+            //}
+
+            excelSheet.SetColumnWidth(0, (int)((5 + 0.72) * 256));
+            excelSheet.SetColumnWidth(1, (int)((30 + 0.72) * 256));
+            excelSheet.SetColumnWidth(2, (int)((10 + 0.72) * 256));
+            excelSheet.SetColumnWidth(3, (int)((30 + 0.72) * 256));
+            excelSheet.SetColumnWidth(4, (int)((15 + 0.72) * 256));
+            excelSheet.SetColumnWidth(5, (int)((15 + 0.72) * 256));
+            excelSheet.SetColumnWidth(6, (int)((15 + 0.72) * 256));
+            excelSheet.SetColumnWidth(7, (int)((15 + 0.72) * 256));
+            excelSheet.SetColumnWidth(8, (int)((15 + 0.72) * 256));
+            excelSheet.SetColumnWidth(9, (int)((15 + 0.72) * 256));
+
+            return excelSheet;
+        }
+        
         #endregion
     }
 

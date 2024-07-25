@@ -164,6 +164,11 @@ namespace RMERP.DAL.ViewModel
         public DateTime? EMP_RejoinOn { get; set; }
 
         public bool IsSalarySlipGenerate { get; set; }
+
+        [Display(Name = "LIN Number")]
+        public string EMP_LIN_Number { get; set; }
+        [Display(Name = "LIN Remark")]
+        public string EMP_LIN_Remark { get; set; }
     }
 
     public class EmployeePaymentVM

@@ -67,7 +67,9 @@ namespace RMERP.DAL.Mappers
 
             emp.EMP_UAN_Remark = employee.EMP_UAN_Remark;
             emp.EMP_ESIC_Remark = employee.EMP_ESIC_Remark;
-            if(employee.EMP_ReasonCode!=null)
+            emp.EMP_LIN_Number = employee.EMP_LIN_Number;
+            emp.EMP_LIN_Remark = employee.EMP_LIN_Remark;
+            if (employee.EMP_ReasonCode!=null)
                 emp.EMP_ReasonCode = employee.EMP_ReasonCode.Value;
             if(employee.EMP_State!=null)
                 emp.EMP_State = employee.EMP_State.Value;
@@ -131,6 +133,8 @@ namespace RMERP.DAL.Mappers
             emp.EMP_State = employee.EMP_State;
             emp.EMP_City = employee.EMP_City;
             emp.EMP_RejoinOn = employee.EMP_RejoinOn;
+            emp.EMP_LIN_Number = employee.EMP_LIN_Number;
+            emp.EMP_LIN_Remark = employee.EMP_LIN_Remark;
             return emp;
         }
 
