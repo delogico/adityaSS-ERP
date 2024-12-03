@@ -165,7 +165,14 @@ namespace RMERP.Controllers
                     #endregion
                     employee.ADM_Id_RegisteredBy = sessionUtils.GetLoggedAdminID();
                     res = employeeManager.AddEditEmployee(employee);
-                }                
+                }
+            }
+            else
+            {
+                var errors = ModelState.Select(x => x.Value.Errors)
+                           .Where(y => y.Count > 0)
+                           .ToList();
+                res = errors.ToString();
             }
             if (res == string.Empty)
             {
@@ -173,7 +180,7 @@ namespace RMERP.Controllers
             }
             else
             {
-                TempData["message"] = "Employee data can not Inserted.";
+                TempData["message"] = "Employee data can not Inserted." + res;
                 DocumentTypesManager typesManager = new DocumentTypesManager(_context);
                 FirmsManager firmsManager = new FirmsManager(_context);
                 IEnumerable<Firms> listFirms = new List<Firms>();
