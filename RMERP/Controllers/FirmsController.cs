@@ -48,7 +48,7 @@ namespace RMERP.Controllers
         public ActionResult AddEditFirms(FirmVM firmVM)
         {
             FirmsManager firmsManager = new FirmsManager(_context);
-            Firms firms = FirmMapper.mapMeModel(firmVM);            
+            Firm firms = FirmMapper.mapMeModel(firmVM);            
             if (ModelState.IsValid)
             {
                 string res = firmsManager.saveEditFirm(firms);

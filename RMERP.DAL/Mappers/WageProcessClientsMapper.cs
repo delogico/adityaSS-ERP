@@ -8,13 +8,14 @@ namespace RMERP.DAL.Mappers
 {
     public class WageProcessClientsMapper
     {
-        public static WageProcessClientVM mapMe(Wage_Process_Clients wageProcess)
+        public static WageProcessClientVM MapMe(Wage_Process_Client wageProcess)
         {
-            WageProcessClientVM wageProcessClientVM = new WageProcessClientVM();
-            wageProcessClientVM.WPC_Id = wageProcess.WPC_Id;
-            wageProcessClientVM.WPC_SavedOn = wageProcess.WPC_SavedOn;
-            wageProcessClientVM.WPC_WageRegisterSaved = wageProcess.WPC_WageRegisterSaved;
-            return wageProcessClientVM;
+            return new WageProcessClientVM
+            {
+                WPC_Id = wageProcess.WPC_Id,
+                WPC_SavedOn = wageProcess.WPC_SavedOn,
+                WPC_WageRegisterSaved = wageProcess.WPC_WageRegisterSaved
+            };
         }
     }
 }

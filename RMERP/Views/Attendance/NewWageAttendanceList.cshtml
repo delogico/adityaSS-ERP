@@ -1,0 +1,95 @@
+﻿@model RMERP.DAL.ViewModel.WageProcessClientAttendancePageVM
+@using RMERP.DAL.Models;
+@using RMERP.Helpers;
+@{
+   ViewData["Title"] = "Attendance status";
+   Layout = "~/Views/Shared/_RMLayout.cshtml";
+   int cnt = 0;
+}
+@section Breadcrumbs {
+   <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "NewIndex", "WageProcess", new { FRM_Id = Model.wageProcess.FRM_Id })</li>
+   <li class="breadcrumb-item">Wage Attendance</li>
+}
+@section scripts {
+   @if (TempData["err"] != null)
+   {
+      <script>
+                    $(document).ready(function () {
+                    alert('@TempData["err"]');
+                });
+      </script>
+   };
+
+}
+<div class="content container-fluid">
+   <div class="row">
+      <div class="col-sm-8">
+         <h3 class="page-title">@ViewData["Title"]  (@Model.wageProcess.FRM_Title/@Model.wageProcess.WAG_Full_Month() )</h3>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-md-12">
+         <div>
+            <table class="table table-striped custom-table m-b-0">
+               <thead>
+                  <tr>
+                     <th>#</th>
+                     <th>Client Name</th>
+                     <th>Status</th>
+                     <th>Total Employee</th>
+                     <th></th>
+                     <th></th>
+                  </tr>
+               </thead>
+               <tbody>
+                  @foreach (var item in Model.lstClient)
+                  {
+                     cnt = cnt + 1;
+                     <tr>
+                        <td>@cnt</td>
+                        <td><b>@item.CLI_Name</b></td>
+                        <td>@Html.Raw((item.totalEmployees > 0 ? "<span class='label label-success-border'>Imported</span>" : "<span class='label label-danger-border'>Not Imported yet</span>"))</td>
+                        <td>@(item.totalEmployees > 0 ? item.totalEmployees.ToString() : "-")</td>
+                        <td>
+                           @{
+                              if (item.totalEmployees > 0)
+                              {
+                                 <a href='@Url.Action("NewViewAttendance", "Attendance", new { WAG_Id = Model.wageProcess.WAG_Id, CLI_Id = item.CLI_Id })' title="View"><i class="fa fa-eye m-r-5"></i> View</a>
+                              }
+                              else
+                              {
+                                 <span>
+                                    <a href='@Url.Action("NewUploadExcel", "Attendance", new { WAG_Id = Model.wageProcess.WAG_Id, CLI_Id = item.CLI_Id })' title="Upload"><i class="fa fa-upload m-r-5"></i> Upload</a> |
+                                    <a href='@Url.Action("AttendanceSummaryTemplate", "Attendance", new { WAG_Id = Model.wageProcess.WAG_Id, CLI_Id = item.CLI_Id })' title="Upload"><i class="fa fa-download m-r-5"></i>Template</a>
+                                 </span>
+                              }
+                           }
+                        </td>
+                        <td>
+                           @{
+                              if (item.totalEmployees > 0)
+                              {
+                                 Wage_Process_Client wage = Model.wageProcess.wage_Process_Clients.Where(m => m.CLI_Id.Equals(item.CLI_Id)).FirstOrDefault();
+                                 if (wage != null)
+                                 {
+                                    <span class='label label-warning-border'>Wage is already registed on  @DateHelper.getLongDateFormat(wage.WPC_SavedOn)</span>
+                                 }
+                                 else
+                                 {
+                                    <a onclick="return window.confirm('Are you sure, All attendance of this client will be deleted for this Wage Month?')"
+                                       href='@Url.Action("DeleteWageClientAttendances", "Attendance", new { WAG_Id = Model.wageProcess.WAG_Id, CLI_Id = item.CLI_Id })' title="Reset" class="text-danger">
+                                       <i class="fa fa-undo m-r-5"></i> Reset Attendance
+                                    </a>
+                                 }
+                              }
+                           }
+                        </td>
+                     </tr>
+                  }
+
+               </tbody>
+            </table>
+         </div>
+      </div>
+   </div>
+</div>

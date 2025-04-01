@@ -1,4 +1,4 @@
-﻿@model Tuple<IEnumerable<RMERP.DAL.Models.Wage_Register_Advances>, RMERP.DAL.Models.Employee_Advance>
+﻿@model Tuple<IEnumerable<RMERP.DAL.Models.Wage_Register_Advance>, RMERP.DAL.Models.Employee_Advance>
 @*@model Tuple<IEnumerable<RMERP.DAL.Models.Wage_Register_Advances>,int,int,DateTime>*@
 
 <div id="DeleteAdvanceModal" class="modal fade" role="dialog">
@@ -14,12 +14,12 @@
                     @foreach (var item in Model.Item1)
                     {
                         var cls = "";
-                        if (DateTime.Compare(new DateTime(item.WAG_.WAG_Month.Year, item.WAG_.WAG_Month.Month, 1), new DateTime(Model.Item2.ADV_RegisteredOn.Year, Model.Item2.ADV_RegisteredOn.Month, 1)) == 0)
+                        if (DateTime.Compare(new DateTime(item.WAG.WAG_Month.Year, item.WAG.WAG_Month.Month, 1), new DateTime(Model.Item2.ADV_RegisteredOn.Year, Model.Item2.ADV_RegisteredOn.Month, 1)) == 0)
                         {
                             cls = "text-danger";
                         }
                         <li class="@cls">
-                            Employee is paying advance of <b>Rs.@item.WAD_Amount</b> in month of <b>@item.WAG_.WAG_Month.ToString("MMM-yyyy")</b>
+                            Employee is paying advance of <b>Rs.@item.WAD_Amount</b> in month of <b>@item.WAG.WAG_Month.ToString("MMM-yyyy")</b>
                         </li>
                     }
                 </ul>

@@ -26,15 +26,15 @@ namespace RMERP.Controllers
     {
         private readonly RMERPContext _context;
         public IConfiguration _configuration;
-        private IHostingEnvironment _hostingEnvironment;
+        private IWebHostEnvironment _hostingEnvironment;
         private static int Employee_Id;
-        public EmployeesController(RMERPContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public EmployeesController(RMERPContext context, IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
             _configuration = configuration;
             _hostingEnvironment = hostingEnvironment;
         }
-        
+
         public IActionResult Index()
         {
             int FRM_Id = 0;
@@ -50,12 +50,12 @@ namespace RMERP.Controllers
             IEnumerable<EMPLOYEE_LEFT_REASON_CODE> REASON_CODE = Enum.GetValues(typeof(EMPLOYEE_LEFT_REASON_CODE))
                                                        .Cast<EMPLOYEE_LEFT_REASON_CODE>();
             ViewBag.Reason_Code = from action in REASON_CODE
-                                       select new SelectListItem
-                                       {
-                                           Text = ProjectUtils.GetStringValue(action),
-                                           Value = ((int)action).ToString()
-                                       };           
-         
+                                  select new SelectListItem
+                                  {
+                                      Text = ProjectUtils.GetStringValue(action),
+                                      Value = ((int)action).ToString()
+                                  };
+
             return View(new Tuple<IEnumerable<EmployeeVM>, int>(EmployeesMapper.MapEmployees(employeeManager.GetEmployees(FRM_Id).ToList(), _context), FRM_Id));
 
 
@@ -69,14 +69,14 @@ namespace RMERP.Controllers
 
         }
         [HttpPost]
-        public IActionResult SearchEmployee(int FRM_Id, bool EMP_UAN_Number, bool EMP_ESIC_Number,string EMP_Aadhar_Number)
+        public IActionResult SearchEmployee(int FRM_Id, bool EMP_UAN_Number, bool EMP_ESIC_Number, string EMP_Aadhar_Number)
         {
             EmployeeManager employeeManager = new EmployeeManager(_context);
             List<EmployeeVM> listVM = EmployeesMapper.MapEmployees(employeeManager.SearchEmployees(FRM_Id, EMP_UAN_Number, EMP_ESIC_Number, EMP_Aadhar_Number));
             FirmsManager firmsManager = new FirmsManager(_context);
             ViewBag.FirmList = firmsManager.getFirmList();
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            int Firm_Id=0;
+            int Firm_Id = 0;
             if (sessionUtils.GetLoggedFirmID().HasValue)
             {
                 Firm_Id = sessionUtils.GetLoggedFirmID().Value;
@@ -92,14 +92,14 @@ namespace RMERP.Controllers
             return View("Index", new Tuple<IEnumerable<EmployeeVM>, int>(listVM, Firm_Id));
         }
 
-        [HttpGet]        
+        [HttpGet]
         public ActionResult AddEditEmployee(int EMP_Id = 0)
-        {          
+        {
             EmployeeManager employeeManager = new EmployeeManager(_context);
             DocumentTypesManager typesManager = new DocumentTypesManager(_context);
             FirmsManager firmsManager = new FirmsManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            IEnumerable<Firms> listFirms = new List<Firms>();
+            IEnumerable<Firm> listFirms = new List<Firm>();
             listFirms = firmsManager.getFirmList();
             ViewBag.firmList = listFirms;
             EmployeeVM employeeVM = new EmployeeVM();
@@ -110,7 +110,7 @@ namespace RMERP.Controllers
             if (EMP_Id > 0)
             {
                 Employee_Id = EMP_Id;
-                Employees emp = employeeManager.GetEmployeeById(EMP_Id);
+                Employee emp = employeeManager.GetEmployeeById(EMP_Id);
                 employeeVM = EmployeesMapper.MapMe(emp);
             }
             else
@@ -122,21 +122,21 @@ namespace RMERP.Controllers
                 employeeVM.FRM_Id = sessionUtils.GetLoggedFirmID().Value;
             }
             ViewBag.DocumentTypes = typesManager.GetDocumentTypes();
-            ViewBag.States = employeeManager.GetStates();            
+            ViewBag.States = employeeManager.GetStates();
             return View(employeeVM);
-        }      
+        }
 
         [HttpPost]
         public ActionResult AddEditEmployees(EmployeeVM employeeVM)
         {
             string res = string.Empty;
             EmployeeManager employeeManager = new EmployeeManager(_context);
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);            
+            SessionUtils sessionUtils = new SessionUtils(Request, Response);
             if (ModelState.IsValid)
             {
-                if(!employeeManager.CheckExistingAadhar(employeeVM.EMP_Aadhar_Number, employeeVM.EMP_Id, employeeVM.FRM_Id,employeeVM.EMP_DOB))
+                if (!employeeManager.CheckExistingAadhar(employeeVM.EMP_Aadhar_Number, employeeVM.EMP_Id, employeeVM.FRM_Id, employeeVM.EMP_DOB))
                 {
-                    Employees employee = new Employees();
+                    Employee employee = new Employee();
                     employee = EmployeesMapper.MapMeModel(employeeVM);
                     #region Bank Info
                     employee.EMP_Payment_Type = employeeVM.EMP_Payment_Type;
@@ -183,12 +183,12 @@ namespace RMERP.Controllers
                 TempData["message"] = "Employee data can not Inserted." + res;
                 DocumentTypesManager typesManager = new DocumentTypesManager(_context);
                 FirmsManager firmsManager = new FirmsManager(_context);
-                IEnumerable<Firms> listFirms = new List<Firms>();
+                IEnumerable<Firm> listFirms = new List<Firm>();
                 listFirms = firmsManager.getFirmList();
                 ViewBag.firmList = listFirms;
                 ViewBag.DocumentTypes = typesManager.GetDocumentTypes();
                 ViewBag.States = employeeManager.GetStates();
-                return View("AddEditEmployee",employeeVM);
+                return View("AddEditEmployee", employeeVM);
             }
 
         }
@@ -201,7 +201,7 @@ namespace RMERP.Controllers
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             if (ModelState.IsValid)
             {
-                Employees employee = employeeManager.GetEmployeeById(employeePaymentVM.EMP_Id);                
+                Employee employee = employeeManager.GetEmployeeById(employeePaymentVM.EMP_Id);
                 employee.EMP_Payment_Type = employeePaymentVM.EMP_Payment_Type;
                 employee.EMP_Is_IDBI_Other = employeePaymentVM.EMP_Is_IDBI_Other;
                 if (employeePaymentVM.EMP_Payment_Type == (int)PAYMENT_TYPE.Cheque_Cash)
@@ -240,8 +240,8 @@ namespace RMERP.Controllers
 
         }
 
-        
-        public ActionResult LeftEmployee(int EMP_Id,DateTime EMP_Left_Date, int EMP_Reason_Code)
+
+        public ActionResult LeftEmployee(int EMP_Id, DateTime EMP_Left_Date, int EMP_Reason_Code)
         {
             EmployeeManager employeeManager = new EmployeeManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
@@ -254,7 +254,7 @@ namespace RMERP.Controllers
         }
 
 
-        [HttpGet]        
+        [HttpGet]
         public ActionResult AddEditAdvance(int EMP_Id, int ADV_Id = -1)
         {
             EmployeeAdvanceVM employeeAdvanceVM = new EmployeeAdvanceVM();
@@ -299,25 +299,25 @@ namespace RMERP.Controllers
             EmployeeManager employeeManager = new EmployeeManager(_context);
             Employee_Advance employee_Advance = employeeManager.GetEmployeeAdvanceById(ADV_Id);
             //return PartialView("_DeleteAdvance", new Tuple<IEnumerable<Wage_Register_Advances>, Employee_Advance>(employeeManager.ActiveAdvances(EMP_Id), employee_Advance));
-            return PartialView("_DeleteAdvance",new Tuple<IEnumerable<Wage_Register_Advances>, Employee_Advance>(employeeManager.ActiveAdvances(EMP_Id), employee_Advance));
+            return PartialView("_DeleteAdvance", new Tuple<IEnumerable<Wage_Register_Advance>, Employee_Advance>(employeeManager.ActiveAdvances(EMP_Id), employee_Advance));
         }
         public ActionResult DeleteAdvance(int ADV_Id, int EMP_Id)
         {
-            string res = string.Empty;          
+            string res = string.Empty;
             EmployeeManager employeeManager = new EmployeeManager(_context);
 
-            
-                res = employeeManager.DeleteAdvance(ADV_Id);
-            
-            
+
+            res = employeeManager.DeleteAdvance(ADV_Id);
+
+
             if (res != string.Empty)
             {
                 TempData["message"] = "Advance data can not Deleted";
             }
             return RedirectToAction("AddEditEmployee", new { EMP_Id = EMP_Id, tab = "AddEditAdvance" });
         }
-        
-        public ActionResult AdvanceRptForBank(DateTime WAG_Month,int FRM_Id)
+
+        public ActionResult AdvanceRptForBank(DateTime WAG_Month, int FRM_Id)
         {
             AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
             FirmsManager firmsManager = new FirmsManager(_context);
@@ -326,19 +326,15 @@ namespace RMERP.Controllers
             ViewBag.FRM_Name = firmsManager.GetFirm(FRM_Id).FRM_ShortName;
             ViewBag.FRM_Id = FRM_Id;
             return View(advancesVM);
-        }        
+        }
 
         public ActionResult UpdateAdvanceEMI(DateTime WAG_Month, int WAG_Id, int FRM_Id)
         {
-            WageProcessManager processManager = new WageProcessManager(_context);
-            FirmsManager firmsManager = new FirmsManager(_context);
-            UpdateAdvancesVM updateAdvancesVM = new UpdateAdvancesVM();          
-            updateAdvancesVM.WAG_ = processManager.getWageProcessById(WAG_Id);
-            Firms firm = firmsManager.GetFirm(FRM_Id);
-            updateAdvancesVM.FRM_Name = firm.FRM_ShortName;
-            updateAdvancesVM.FRM_Id = firm.FRM_Id;            
-            List<AdvanceVM> AdvanceVMs = GetAdvanceVMs(WAG_Month, WAG_Id, FRM_Id);           
-            updateAdvancesVM.AdvanceVMs = AdvanceVMs;
+            WageProcessManager processManager = new(_context);
+            UpdateAdvancesVM updateAdvancesVM = new() { WAG_ = processManager.GetWageProcessByWAG_Id(WAG_Id, false, false, false, true) };
+            updateAdvancesVM.FRM_Name = updateAdvancesVM.WAG_.FRM.FRM_ShortName;
+            updateAdvancesVM.FRM_Id = updateAdvancesVM.WAG_.FRM.FRM_Id;
+            updateAdvancesVM.AdvanceVMs = GetAdvanceVMs(WAG_Month, WAG_Id, FRM_Id);
             return View(updateAdvancesVM);
         }
 
@@ -357,22 +353,22 @@ namespace RMERP.Controllers
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             AdvanceWageRegisterManager advance = new AdvanceWageRegisterManager(_context);
             List<Employee_Advance> advancesVM = advance.NotCompletedAdvanceLst(WAG_Month, FRM_Id, WAG_Id);
-            List<Wage_Register_Advances> wage_Register_Advances = wageRegisterManager.GetWageRegisterAdvances();
+            List<Wage_Register_Advance> wage_Register_Advances = wageRegisterManager.GetWageRegisterAdvances();
             var advances = advancesVM.GroupBy(l => l.EMP_Id)
                                              .Select(cl => new EmployeeAdvanceVM
                                              {
                                                  EMP_Id = cl.First().EMP_Id,
-                                                 EmployeeName = cl.First().EMP_.EMP_FirstName+" "+ cl.First().EMP_.EMP_MiddleName+" "+ cl.First().EMP_.EMP_SurName,
+                                                 EmployeeName = cl.First().EMP.EMP_FirstName + " " + cl.First().EMP.EMP_MiddleName + " " + cl.First().EMP.EMP_SurName,
                                                  ADV_Amount = cl.Sum(c => c.ADV_Amount),
-                                                 minDateAdvanceTaken = cl.Min(c=>c.ADV_RegisteredOn)
+                                                 minDateAdvanceTaken = cl.Min(c => c.ADV_RegisteredOn)
                                              }).ToList();
 
             List<AdvanceVM> AdvanceVMs = new List<AdvanceVM>();
             foreach (var item in advances)
             {
-                Wage_Register_Advances register_Advance = wage_Register_Advances.Where(m => m.EMP_Id.Equals(item.EMP_Id) && m.WAG_Id.Equals(WAG_Id)).FirstOrDefault();
-                               
-                var TotalPaid = wage_Register_Advances.Where(m => m.EMP_Id.Equals(item.EMP_Id) && LastDayOfMonth(m.WAG_.WAG_Month) >= item.minDateAdvanceTaken && FirstDayOfMonth(m.WAG_.WAG_Month) <= LastDayOfMonth(WAG_Month)).Sum(m => m.WAD_Amount);
+                Wage_Register_Advance register_Advance = wage_Register_Advances.Where(m => m.EMP_Id.Equals(item.EMP_Id) && m.WAG_Id.Equals(WAG_Id)).FirstOrDefault();
+
+                var TotalPaid = wage_Register_Advances.Where(m => m.EMP_Id.Equals(item.EMP_Id) && LastDayOfMonth(ProjectUtils.DateToDateTime(m.WAG.WAG_Month)) >= item.minDateAdvanceTaken && FirstDayOfMonth(ProjectUtils.DateToDateTime(m.WAG.WAG_Month)) <= LastDayOfMonth(WAG_Month)).Sum(m => m.WAD_Amount);
                 AdvanceVM advanceVM = new AdvanceVM();
                 if (register_Advance != null)
                 {
@@ -386,9 +382,9 @@ namespace RMERP.Controllers
                 {
                     advanceVM.WAD_Id = -1;
                     advanceVM.WAD_Amount = 0;
-                    advanceVM.WAD_Is_LoanCompleted = false;                    
+                    advanceVM.WAD_Is_LoanCompleted = false;
                 }
-              
+
 
                 advanceVM.EMP_Id = item.EMP_Id;
                 advanceVM.EMP_Name = item.EmployeeName;
@@ -402,17 +398,17 @@ namespace RMERP.Controllers
         }
         public string AddAdvanceEMI(int WAD_Id, int EMP_id, int WAG_Id, decimal WAD_Amount, bool WAD_Is_LoanCompleted)
         {
-            WageRegisterController wageRegisterController = new WageRegisterController(_context,_hostingEnvironment);
+            WageRegisterController wageRegisterController = new WageRegisterController(_context, _hostingEnvironment);
             AdvanceWageRegisterManager advanceManager = new AdvanceWageRegisterManager(_context);
             try
             {
                 WageProcessManager wageProcessManager = new WageProcessManager(_context);
                 ClientsManager clients = new ClientsManager(_context, _configuration);
 
-                DateTime WAG_Month = wageProcessManager.getWageProcessById(WAG_Id).WAG_Month;
+                DateTime WAG_Month = DAL.Helpers.ProjectUtils.DateToDateTime(wageProcessManager.GetWageProcessByWAG_Id(WAG_Id).WAG_Month);
                 int CLI_id = clients.GetClientIDByEmpID(EMP_id, WAG_Month);
 
-                if(!wageRegisterController.IsWageSaved(EMP_id, CLI_id, WAG_Id))
+                if (!wageRegisterController.IsWageSaved(EMP_id, CLI_id, WAG_Id))
                 {
                     if (WAD_Id > 0)
                     {
@@ -427,14 +423,14 @@ namespace RMERP.Controllers
                 else
                 {
                     return "You have to reset wage register first.";
-                }                                
+                }
             }
             catch (Exception)
             {
                 return "ko";
             }
-            
-                 
+
+
         }
 
         public string DeleteAdvanceEMI(int WAD_Id)
@@ -513,7 +509,7 @@ namespace RMERP.Controllers
         public async Task<FileResult> DownloadDocument(int EMD_Id)
         {
             EmployeeDocumentManager documentManager = new EmployeeDocumentManager(_context);
-            Employee_Documents document = documentManager.GetEmployeeDocumenyById(EMD_Id);
+            Employee_Document document = documentManager.GetEmployeeDocumenyById(EMD_Id);
             //  WebClient wc = new WebClient();
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
             string DocumentPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("EMPLOYEE_DOCUMENT_PATH").Value;
@@ -529,18 +525,18 @@ namespace RMERP.Controllers
             return File(memory, ProjectUtils.GetContentType(DocumentPath), document.EMD_Name);
 
         }
-        
-                
-        public IActionResult CheckExistingAadhar(string EMP_Aadhar_Number, int EMP_Id,int FRM_Id,DateTime EMP_DOB)
+
+
+        public IActionResult CheckExistingAadhar(string EMP_Aadhar_Number, int EMP_Id, int FRM_Id, DateTime EMP_DOB)
         {
-            EMP_Aadhar_Number=EMP_Aadhar_Number.Trim().Replace(@"\", string.Empty);
+            EMP_Aadhar_Number = EMP_Aadhar_Number.Trim().Replace(@"\", string.Empty);
             EmployeeManager employeeManager = new EmployeeManager(_context);
-           // bool ExistingAadhar = false;
+            // bool ExistingAadhar = false;
             try
             {
                 if (FRM_Id > 0)
                 {
-                    Employees emp = employeeManager.CheckExistingAadharEmployee(EMP_Aadhar_Number, EMP_Id, FRM_Id, EMP_DOB);
+                    Employee emp = employeeManager.CheckExistingAadharEmployee(EMP_Aadhar_Number, EMP_Id, FRM_Id, EMP_DOB);
                     if (emp != null)
                         return Json("Aadhar number is already exists for employee ID: " + emp.EMP_Id);
                     else return Json(true);
@@ -550,7 +546,7 @@ namespace RMERP.Controllers
                 {
                     return Json("Select Firm First, Then Enter Aadhar Number");
                 }
-                
+
             }
             catch (Exception)
             {
@@ -566,11 +562,11 @@ namespace RMERP.Controllers
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             try
             {
-                Employees emp = employeeManager.GetEmployeeById(EMP_Id);
-                int count = _context.Employees.Where(m => m.EMP_Aadhar_Number.Equals(emp.EMP_Aadhar_Number) && m.FRM_Id == emp.FRM_Id && m.EMP_IsActive.Value).Count();
+                Employee emp = employeeManager.GetEmployeeById(EMP_Id);
+                int count = _context.Employees.Where(m => m.EMP_Aadhar_Number.Equals(emp.EMP_Aadhar_Number) && m.FRM_Id == emp.FRM_Id && m.EMP_IsActive).Count();
                 if (count > 0)
                 {
-                    TempData["message"] = "Employee is already active in "+emp.FRM_.FRM_Name;
+                    TempData["message"] = "Employee is already active in " + emp.FRM.FRM_Name;
                 }
                 else
                 {
@@ -579,7 +575,7 @@ namespace RMERP.Controllers
                         TempData["message"] = "We can not rejoin employee on same month. Please Try Again!";
                     }
                 }
-                
+
             }
             catch (Exception)
             {
@@ -588,28 +584,28 @@ namespace RMERP.Controllers
             return RedirectToAction("Index");
         }
 
-        public string IsWageSaved(DateTime date,int EMP_Id)
+        public string IsWageSaved(DateTime date, int EMP_Id)
         {
             string res = string.Empty;
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
 
-            IEnumerable<Wage_Process> wageProcesses = wageProcessManager.GetWagFromDate(date, (sessionUtils.GetLoggedFirmID().HasValue ? sessionUtils.GetLoggedFirmID().Value:0));
-            if (wageProcesses.Count()>0)
+            IEnumerable<Wage_Process> wageProcesses = wageProcessManager.GetWagFromDate(date, (sessionUtils.GetLoggedFirmID().HasValue ? sessionUtils.GetLoggedFirmID().Value : 0));
+            if (wageProcesses.Count() > 0)
             {
-                foreach(var wag in wageProcesses)
+                foreach (var wag in wageProcesses)
                 {
                     IEnumerable<Wage_Register> list = wageRegisterManager.GetWageFrom_WAG_Id_EMP_Id(wag.WAG_Id, EMP_Id);
                     if (list.ToList().Count() > 0)
                     {
-                        res += "Wage of <b>" + wag.WAG_Month.ToString("MMM-yyyy") + " ("+wag.FRM_.FRM_ShortName+")</b> is already saved for client <b>" + string.Join(",", list.Select(m => m.CLI_.CLI_Name)) + "</b>.<br/>";
+                        res += "Wage of <b>" + wag.WAG_Month.ToString("MMM-yyyy") + " (" + wag.FRM.FRM_ShortName + ")</b> is already saved for client <b>" + string.Join(",", list.Select(m => m.CLI.CLI_Name)) + "</b>.<br/>";
                         res += "So you have to reset wage register first.<br/><br/>";
-                    }                  
-                       
+                    }
+
                 }
-                
-            }            
+
+            }
             return res;
         }
         public ActionResult EmployeeHistory(int EMP_Id)

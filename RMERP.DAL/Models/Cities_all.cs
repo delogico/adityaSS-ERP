@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RMERP.DAL.Models
+namespace RMERP.DAL.Models;
+
+public partial class Cities_all
 {
-    public partial class Cities_all
-    {
-        public Cities_all()
-        {
-            Employees = new HashSet<Employees>();
-        }
+    public int CITY_Id { get; set; }
 
-        public int CITY_Id { get; set; }
-        public string CITY_Name { get; set; }
-        public int STA_Id { get; set; }
+    public string CITY_Name { get; set; }
 
-        public ICollection<Employees> Employees { get; set; }
-    }
+    public int STA_Id { get; set; }
+
+    public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 }

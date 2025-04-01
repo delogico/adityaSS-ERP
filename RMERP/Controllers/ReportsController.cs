@@ -20,6 +20,7 @@ using Rotativa.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Rotativa.AspNetCore.Options;
 using Microsoft.AspNetCore.Authorization;
+using System.IO.Compression;
 
 namespace RMERP.Controllers
 {
@@ -28,8 +29,8 @@ namespace RMERP.Controllers
     {
         public IConfiguration _configuration;
         private readonly RMERPContext _context;
-        private IHostingEnvironment _hostingEnvironment;
-        public ReportsController(RMERPContext context, IHostingEnvironment hostingEnvironment, IConfiguration configuration)
+        private IWebHostEnvironment _hostingEnvironment;
+        public ReportsController(RMERPContext context, IWebHostEnvironment hostingEnvironment, IConfiguration configuration)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
@@ -46,7 +47,7 @@ namespace RMERP.Controllers
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
             Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
-            DateTime wageMonth = wage_Process.WAG_Month;
+            DateOnly wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -147,20 +148,20 @@ namespace RMERP.Controllers
 
                 IRow rowSub = excelSheet.CreateRow(1);
                 ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue(wage_Process.FRM_.FRM_Name.Replace("Reliable","").ToUpper());
+                CellSub.SetCellValue(wage_Process.FRM.FRM_Name.Replace("Reliable", "").ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 9));
 
                 IRow rowAdd1 = excelSheet.CreateRow(2);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(wage_Process.FRM_.FRM_Address1+","+ wage_Process.FRM_.FRM_Address2+",");
+                CellAdd1.SetCellValue(wage_Process.FRM.FRM_Address1 + "," + wage_Process.FRM.FRM_Address2 + ",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 9));
 
                 IRow rowAdd2 = excelSheet.CreateRow(3);
                 ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : "+ wage_Process.FRM_.FRM_Email);
+                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + wage_Process.FRM.FRM_Email);
                 CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 9));
 
@@ -403,14 +404,16 @@ namespace RMERP.Controllers
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
 
-        #region ADVANCE Report
+        //--------------------------------  REPORTS ------------------------------
+
+        #region ADVANCE
 
         public async Task<FileResult> IDBI_To_IDBI_AdvanceReportExcel(int WAG_Id, int FRM_Id)
         {
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
             Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
-            DateTime wageMonth = wage_Process.WAG_Month;
+            DateOnly wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -496,20 +499,20 @@ namespace RMERP.Controllers
 
                 IRow rowSub = excelSheet.CreateRow(1);
                 ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue(wage_Process.FRM_.FRM_Name.Replace("Reliable", "").ToUpper());
+                CellSub.SetCellValue(wage_Process.FRM.FRM_Name.Replace("Reliable", "").ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
 
                 IRow rowAdd1 = excelSheet.CreateRow(2);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(wage_Process.FRM_.FRM_Address1 + "," + wage_Process.FRM_.FRM_Address2 + ",");
+                CellAdd1.SetCellValue(wage_Process.FRM.FRM_Address1 + "," + wage_Process.FRM.FRM_Address2 + ",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 6));
 
                 IRow rowAdd2 = excelSheet.CreateRow(3);
                 ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : "+ wage_Process.FRM_.FRM_Email);
+                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + wage_Process.FRM.FRM_Email);
                 CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 6));
 
@@ -591,7 +594,7 @@ namespace RMERP.Controllers
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
             Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
-            DateTime wageMonth = wage_Process.WAG_Month;
+            DateOnly wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -661,20 +664,20 @@ namespace RMERP.Controllers
 
                 IRow rowSub = excelSheet.CreateRow(1);
                 ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue(wage_Process.FRM_.FRM_Name.Replace("Reliable", "").ToUpper());
+                CellSub.SetCellValue(wage_Process.FRM.FRM_Name.Replace("Reliable", "").ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 9));
 
                 IRow rowAdd1 = excelSheet.CreateRow(2);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(wage_Process.FRM_.FRM_Address1 + "," + wage_Process.FRM_.FRM_Address2 + ",");
+                CellAdd1.SetCellValue(wage_Process.FRM.FRM_Address1 + "," + wage_Process.FRM.FRM_Address2 + ",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 9));
 
                 IRow rowAdd2 = excelSheet.CreateRow(3);
                 ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : "+ wage_Process.FRM_.FRM_Email);
+                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + wage_Process.FRM.FRM_Email);
                 CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 9));
 
@@ -810,7 +813,7 @@ namespace RMERP.Controllers
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
             Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
-            DateTime wageMonth = wage_Process.WAG_Month;
+            DateOnly wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -861,14 +864,14 @@ namespace RMERP.Controllers
                 IRow row = excelSheet.CreateRow(0);
 
                 ICell CellSub = row.CreateCell(0);
-                CellSub.SetCellValue(wage_Process.FRM_.FRM_Name.ToUpper());
+                CellSub.SetCellValue(wage_Process.FRM.FRM_Name.ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 5));
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(wage_Process.FRM_.FRM_Address1.ToUpper()+","+wage_Process.FRM_.FRM_Address2.ToUpper());
+                CellAdd1.SetCellValue(wage_Process.FRM.FRM_Address1.ToUpper() + "," + wage_Process.FRM.FRM_Address2.ToUpper());
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 5));
 
@@ -946,19 +949,19 @@ namespace RMERP.Controllers
 
         #endregion
 
-        #region PF Reports
+        #region PF
 
         public ActionResult ClientsSelectionForPF(int WAG_Id, int FRM_Id)
-        {            
+        {
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
             ClientSelectionVM clientSelectionVM = new ClientSelectionVM();
-            List<Clients> clients = wageRegisterManager.GetWageRegisters(WAG_Id).Where(m => m.WAG_.FRM_Id.Equals(FRM_Id)).Select(m => m.CLI_).Distinct().ToList();
+            List<Client> clients = wageRegisterManager.GetWageRegisters(WAG_Id).Where(m => m.WAG.FRM_Id.Equals(FRM_Id)).Select(m => m.CLI).Distinct().ToList();
             clientSelectionVM.selectionVMs = ClientSelectionMapper.mapMe(clients, WAG_Id);
             clientSelectionVM.Report = ((int)ProjectUtils.PF_REPORT_TYPE.Client_Wise_PF_Details_Excel).ToString();
             clientSelectionVM.FRM_Id = FRM_Id;
             ClientsManager clientsManager = new ClientsManager(_context);
-            clientSelectionVM.TotalActiveClients =clientsManager.GetActiveClientOfMonthByFirmId(wageProcessManager.getWageProcessById(WAG_Id).WAG_Month, FRM_Id).Count();
+            clientSelectionVM.TotalActiveClients = clientsManager.GetActiveClientsOfMonthByFirmId(ProjectUtils.DateToDateTime(wageProcessManager.getWageProcessById(WAG_Id).WAG_Month), FRM_Id).Count();
             return View(clientSelectionVM);
         }
 
@@ -967,9 +970,9 @@ namespace RMERP.Controllers
             string report = clientSelectionVM.Report;
 
             WageProcessManager wageProcess = new WageProcessManager(_context);
-            
+
             Wage_Process wage_Process = wageProcess.getWageProcessById(clientSelectionVM.selectionVMs[0].WAG_Id);
-            DateTime wageMonth = wage_Process.WAG_Month;
+            DateOnly wageMonth = wage_Process.WAG_Month;
 
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
@@ -985,27 +988,27 @@ namespace RMERP.Controllers
                     case "0":
                         fileName = "Client_Wise_PF_Report_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Client_Wise_PF_Details_Excel(wage_Process.FRM_,clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Client_Wise_PF_Details_Excel(wage_Process.FRM, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "1":
                         fileName = "PF_Employees_Pending_For_Registration_Report_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Employees_Pending_For_Registration_Excel(wage_Process.FRM_,clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Employees_Pending_For_Registration_Excel(wage_Process.FRM, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "2":
                         fileName = "Employee_PF_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Employee_PF_Excel(wage_Process.FRM_,clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Employee_PF_Excel(wage_Process.FRM, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "3":
                         fileName = "Employee_PF_Above58_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Client_Wise_PF_Above58_Excel(wage_Process.FRM_,clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Client_Wise_PF_Above58_Excel(wage_Process.FRM, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "4":
                         fileName = "Employee_PF_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".txt";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Employee_PF_Text(wage_Process.FRM_,clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Employee_PF_Text(wage_Process.FRM, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     default: break;
                 }
@@ -1032,7 +1035,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void Client_Wise_PF_Details_Excel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Client_Wise_PF_Details_Excel(Firm firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -1083,7 +1086,7 @@ namespace RMERP.Controllers
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper());
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper());
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
 
@@ -1179,7 +1182,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void Employees_Pending_For_Registration_Excel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Employees_Pending_For_Registration_Excel(Firm firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -1227,7 +1230,7 @@ namespace RMERP.Controllers
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(firm.FRM_Address1+","+ firm.FRM_Address2);
+                CellAdd1.SetCellValue(firm.FRM_Address1 + "," + firm.FRM_Address2);
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 4));
 
@@ -1281,7 +1284,7 @@ namespace RMERP.Controllers
 
         }
 
-        public void Employee_PF_Excel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Employee_PF_Excel(Firm firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -1378,7 +1381,7 @@ namespace RMERP.Controllers
                                EMP_FullName = g.Key.EMP_FullName,
                                PF_APPLICABLE_SALARY = g.Sum(x => x.PF_APPLICABLE_SALARY),
                                EPF_CONTRIBUTION = g.Sum(x => x.EPF_CONTRIBUTION),
-                               EPS_CONTRIBUTION = g.Sum(x => x.EPS_CONTRIBUTION),                               
+                               EPS_CONTRIBUTION = g.Sum(x => x.EPS_CONTRIBUTION),
                                NCP1 = g.Sum(x => x.NCP1),
                                NCP2 = g.Sum(x => x.NCP2)
                            });
@@ -1388,7 +1391,7 @@ namespace RMERP.Controllers
                     decimal PF_APPLICABLE_SALARY = Math.Round(item.PF_APPLICABLE_SALARY, MidpointRounding.AwayFromZero);
                     decimal EPF_CONTRIBUTION = Math.Round(item.EPF_CONTRIBUTION, MidpointRounding.AwayFromZero);
                     decimal EPS_CONTRIBUTION = Math.Round(item.EPS_CONTRIBUTION, MidpointRounding.AwayFromZero);
-                    decimal DIFF_EPF_EPS = Math.Round(EPF_CONTRIBUTION- EPS_CONTRIBUTION);
+                    decimal DIFF_EPF_EPS = Math.Round(EPF_CONTRIBUTION - EPS_CONTRIBUTION);
                     row = excelSheet.CreateRow(rowCount);
                     row.HeightInPoints = (float)(1.4 * excelSheet.DefaultRowHeightInPoints);
                     row.CreateCell(0).SetCellValue(Convert.ToString(item.UAN_Number));
@@ -1464,7 +1467,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void Client_Wise_PF_Above58_Excel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Client_Wise_PF_Above58_Excel(Firm firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -1515,7 +1518,7 @@ namespace RMERP.Controllers
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper());
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper());
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
 
@@ -1615,7 +1618,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void Employee_PF_Text(Firms firm,List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Employee_PF_Text(Firm firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -1633,7 +1636,7 @@ namespace RMERP.Controllers
                               EMP_FullName = g.Key.EMP_FullName,
                               PF_APPLICABLE_SALARY = g.Sum(x => x.PF_APPLICABLE_SALARY),
                               EPF_CONTRIBUTION = g.Sum(x => x.EPF_CONTRIBUTION),
-                              EPS_CONTRIBUTION = g.Sum(x => x.EPS_CONTRIBUTION),                              
+                              EPS_CONTRIBUTION = g.Sum(x => x.EPS_CONTRIBUTION),
                               NCP1 = g.Sum(x => x.NCP1),
                               NCP2 = g.Sum(x => x.NCP2)
                           });
@@ -1642,7 +1645,7 @@ namespace RMERP.Controllers
                     decimal PF_APPLICABLE_SALARY = Math.Round(item.PF_APPLICABLE_SALARY, MidpointRounding.AwayFromZero);
                     decimal EPF_CONTRIBUTION = Math.Round(item.EPF_CONTRIBUTION, MidpointRounding.AwayFromZero);
                     decimal EPS_CONTRIBUTION = Math.Round(item.EPS_CONTRIBUTION, MidpointRounding.AwayFromZero);
-                    decimal DIFF_EPF_EPS = Math.Round(EPF_CONTRIBUTION- EPS_CONTRIBUTION);
+                    decimal DIFF_EPF_EPS = Math.Round(EPF_CONTRIBUTION - EPS_CONTRIBUTION);
 
                     Byte[] title = new UTF8Encoding(true).GetBytes(item.UAN_Number + "#~#" + item.EMP_FullName + "#~#" + PF_APPLICABLE_SALARY + "#~#" + PF_APPLICABLE_SALARY + "#~#" + PF_APPLICABLE_SALARY + "#~#" + PF_APPLICABLE_SALARY + "#~#");
                     fs.Write(title, 0, title.Length);
@@ -1660,19 +1663,19 @@ namespace RMERP.Controllers
 
         #endregion
 
-        #region Bank reports
+        #region BANK
 
         public ActionResult ClientsSelectionForBank(int WAG_Id, int FRM_Id)
         {
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
             ClientSelectionVM clientSelectionVM = new ClientSelectionVM();
-            List<Clients> clients = wageRegisterManager.GetWageRegisters(WAG_Id).Where(m => m.WAG_.FRM_Id.Equals(FRM_Id)).Select(m => m.CLI_).Distinct().ToList();
+            List<Client> clients = wageRegisterManager.GetWageRegisters(WAG_Id).Where(m => m.WAG.FRM_Id.Equals(FRM_Id)).Select(m => m.CLI).Distinct().ToList();
             clientSelectionVM.selectionVMs = ClientSelectionMapper.mapMe(clients, WAG_Id);
             clientSelectionVM.Report = ((int)ProjectUtils.PF_REPORT_TYPE.Client_Wise_PF_Details_Excel).ToString();
             clientSelectionVM.FRM_Id = FRM_Id;
             ClientsManager clientsManager = new ClientsManager(_context);
-            clientSelectionVM.TotalActiveClients = clientsManager.GetActiveClientOfMonthByFirmId(wageProcessManager.getWageProcessById(WAG_Id).WAG_Month, FRM_Id).Count();
+            clientSelectionVM.TotalActiveClients = clientsManager.GetActiveClientsOfMonthByFirmId(ProjectUtils.DateToDateTime(wageProcessManager.getWageProcessById(WAG_Id).WAG_Month), FRM_Id).Count();
             return View(clientSelectionVM);
         }
 
@@ -1680,9 +1683,9 @@ namespace RMERP.Controllers
         {
             string report = clientSelectionVM.Report;
 
-            WageProcessManager wageProcess = new WageProcessManager(_context);           
+            WageProcessManager wageProcess = new WageProcessManager(_context);
             Wage_Process wage_Process = wageProcess.getWageProcessById(clientSelectionVM.selectionVMs[0].WAG_Id);
-            DateTime wageMonth = wage_Process.WAG_Month;
+            DateOnly wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -1697,22 +1700,22 @@ namespace RMERP.Controllers
                     case "0": //Company_Wise_Transfer_Report
                         fileName = "NEFT_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        NEFT_BankReportExcel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        NEFT_BankReportExcel(wage_Process.FRM, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "1": //IDBI_Bank_To_IDBI_Bank_Report
                         fileName = "IDBI_To_IDBI_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        IDBI_To_IDBI_BankReportExcel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        IDBI_To_IDBI_BankReportExcel(wage_Process.FRM, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "2": //IDBI_Bank_To_Others_Report
                         fileName = "IDBI_To_Other_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        IDBI_To_Other_BankReportExcel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        IDBI_To_Other_BankReportExcel(wage_Process.FRM, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "3": //CHEQUE_CASH_Report
                         fileName = "CHEQUE_CASH_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        CHEQUE_CASH_BankReportExcel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        CHEQUE_CASH_BankReportExcel(wage_Process.FRM, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     default: break;
                 }
@@ -1739,7 +1742,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void NEFT_BankReportExcel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void NEFT_BankReportExcel(Firm firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -1828,13 +1831,13 @@ namespace RMERP.Controllers
 
                 IRow rowAdd1 = excelSheet.CreateRow(2);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper()+",");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 6));
 
                 IRow rowAdd2 = excelSheet.CreateRow(3);
                 ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : "+firm.FRM_Email);
+                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
                 CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 6));
 
@@ -1922,7 +1925,7 @@ namespace RMERP.Controllers
 
         }
 
-        public void IDBI_To_IDBI_BankReportExcel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void IDBI_To_IDBI_BankReportExcel(Firm firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -2011,13 +2014,13 @@ namespace RMERP.Controllers
 
                 IRow rowAdd1 = excelSheet.CreateRow(2);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper()+",");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 6));
 
                 IRow rowAdd2 = excelSheet.CreateRow(3);
                 ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : "+ firm.FRM_Email);
+                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
                 CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 6));
 
@@ -2087,7 +2090,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void IDBI_To_Other_BankReportExcel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void IDBI_To_Other_BankReportExcel(Firm firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -2162,13 +2165,13 @@ namespace RMERP.Controllers
 
                 IRow rowAdd1 = excelSheet.CreateRow(2);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+firm.FRM_Address2.ToUpper()+",");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 8));
 
                 IRow rowAdd2 = excelSheet.CreateRow(3);
                 ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : "+firm.FRM_Email);
+                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
                 CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 8));
 
@@ -2283,7 +2286,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void CHEQUE_CASH_BankReportExcel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void CHEQUE_CASH_BankReportExcel(Firm firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -2365,7 +2368,7 @@ namespace RMERP.Controllers
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper()+",");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 5));
 
@@ -2443,19 +2446,19 @@ namespace RMERP.Controllers
 
         #endregion
 
-        #region ESIC Reports
+        #region ESIC
 
         public ActionResult ClientsSelectionForESIC(int WAG_Id, int FRM_Id)
         {
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
             WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
             ClientSelectionVM clientSelectionVM = new ClientSelectionVM();
-            List<Clients> clients = wageRegisterManager.GetWageRegisters(WAG_Id).Where(m => m.WAG_.FRM_Id.Equals(FRM_Id)).Select(m => m.CLI_).Distinct().ToList();
+            List<Client> clients = wageRegisterManager.GetWageRegisters(WAG_Id).Where(m => m.WAG.FRM_Id.Equals(FRM_Id)).Select(m => m.CLI).Distinct().ToList();
             clientSelectionVM.selectionVMs = ClientSelectionMapper.mapMe(clients, WAG_Id);
             clientSelectionVM.Report = ((int)ProjectUtils.ESIC_REPORT_TYPE.Client_Wise_ESIC_Excel).ToString();
             clientSelectionVM.FRM_Id = FRM_Id;
             ClientsManager clientsManager = new ClientsManager(_context);
-            clientSelectionVM.TotalActiveClients = clientsManager.GetActiveClientOfMonthByFirmId(wageProcessManager.getWageProcessById(WAG_Id).WAG_Month, FRM_Id).Count();
+            clientSelectionVM.TotalActiveClients = clientsManager.GetActiveClientsOfMonthByFirmId(ProjectUtils.DateToDateTime(wageProcessManager.getWageProcessById(WAG_Id).WAG_Month), FRM_Id).Count();
             return View(clientSelectionVM);
         }
 
@@ -2465,7 +2468,7 @@ namespace RMERP.Controllers
 
             WageProcessManager wageProcess = new WageProcessManager(_context);
             Wage_Process wage_Process = wageProcess.getWageProcessById(clientSelectionVM.selectionVMs[0].WAG_Id);
-            DateTime wageMonth = wage_Process.WAG_Month;
+            DateOnly wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -2480,17 +2483,17 @@ namespace RMERP.Controllers
                     case "0": //Client_Wise_ESIC_Excel
                         fileName = "Client_Wise_ESIC_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Client_Wise_ESIC_Excel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Client_Wise_ESIC_Excel(wage_Process.FRM, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "1": //Employee_Wise_Esic_Details_Excel
                         fileName = "Employee_Wise_ESIC_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        Employee_Wise_Esic_Details_Excel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        Employee_Wise_Esic_Details_Excel(wage_Process.FRM, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     case "2": //ESIC_Employees_Pending_For_Registration_Excel
                         fileName = "EISC_Employees_Pending_For_Registration_Report_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
                         file = new FileInfo(Path.Combine(newPath, fileName));
-                        ESIC_Employees_Pending_For_Registration_Excel(wage_Process.FRM_, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                        ESIC_Employees_Pending_For_Registration_Excel(wage_Process.FRM, clientSelectionVM.selectionVMs.ToList(), clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                         break;
                     default: break;
                 }
@@ -2517,7 +2520,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void Client_Wise_ESIC_Excel(Firms firm,List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Client_Wise_ESIC_Excel(Firm firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -2590,7 +2593,7 @@ namespace RMERP.Controllers
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper()+",");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
 
@@ -2632,7 +2635,7 @@ namespace RMERP.Controllers
                 List<ESICReportVM> ESICReportVMS = manager.Client_Wise_ESIC(WAG_Id, selectionVMs.Where(m => m.IsSelect.Equals(true)).ToList(), IsSelected);
                 int rowCount = 4, SrNo = 0, NO_OF_EMPLOYEE = 0;
                 decimal TOTAL_WAGES = 0M, EMPLOYEES_CONTRIBUTION = 0M, EMPLOYERS_CONTRIBUTION = 0M, TOTAL_CONTRIBUTION = 0M;
-                foreach (var item in ESICReportVMS.Where(m=>m.TOTAL_WAGES>0))
+                foreach (var item in ESICReportVMS.Where(m => m.TOTAL_WAGES > 0))
                 {
                     SrNo++;
                     row = excelSheet.CreateRow(rowCount);
@@ -2682,7 +2685,7 @@ namespace RMERP.Controllers
             }
         }
 
-        public void Employee_Wise_Esic_Details_Excel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void Employee_Wise_Esic_Details_Excel(Firm firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -2796,12 +2799,12 @@ namespace RMERP.Controllers
                     }
                     rowCount++;
 
-                }                
+                }
                 workbook.Write(fs);
             }
         }
 
-        public void ESIC_Employees_Pending_For_Registration_Excel(Firms firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
+        public void ESIC_Employees_Pending_For_Registration_Excel(Firm firm, List<SelectionVM> selectionVMs, int WAG_Id, string newPath, string fileName, string WAG_Month)
         {
             bool IsSelected = selectionVMs.Any(m => m.IsSelect.Equals(false));
             ReportsManager manager = new ReportsManager(_context);
@@ -2849,7 +2852,7 @@ namespace RMERP.Controllers
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper()+","+ firm.FRM_Address2.ToUpper()+",");
+                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 4));
 
@@ -2905,14 +2908,14 @@ namespace RMERP.Controllers
 
         #endregion
 
-        #region Labour WelfareFund
+        #region LABOUR WELFARE FUND
 
         public async Task<FileResult> Labour_WelfareFund_Excel(int WAG_Id)
         {
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
             Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
-            DateTime WAG_Month = wage_Process.WAG_Month;
+            DateOnly WAG_Month = wage_Process.WAG_Month;
             string WAGMonth = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -2961,7 +2964,7 @@ namespace RMERP.Controllers
 
                 IRow row = excelSheet.CreateRow(0);
                 ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue(wage_Process.FRM_.FRM_Name.ToUpper());
+                CellHeader.SetCellValue(wage_Process.FRM.FRM_Name.ToUpper());
                 CellHeader.CellStyle = styleHeader;
                 CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 7));
@@ -2969,7 +2972,7 @@ namespace RMERP.Controllers
 
                 IRow rowAdd1 = excelSheet.CreateRow(1);
                 ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(wage_Process.FRM_.FRM_Address1.ToUpper()+","+ wage_Process.FRM_.FRM_Address2.ToUpper()+",");
+                CellAdd1.SetCellValue(wage_Process.FRM.FRM_Address1.ToUpper() + "," + wage_Process.FRM.FRM_Address2.ToUpper() + ",");
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 7));
 
@@ -2995,52 +2998,52 @@ namespace RMERP.Controllers
                 cell1.CellStyle = style;
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 1, 1));
                 ICell cell2 = row.CreateCell(2);
-                cell2.SetCellValue("NO. OF  \r\n EMPLOYEE  \r\n BELOW "+ MLWF_ContributionReports[0].MLWF_Employee_Base + "/-");
+                cell2.SetCellValue("NO. OF  \r\n EMPLOYEE  \r\n BELOW " + MLWF_ContributionReports[0].MLWF_Employee_Base + "/-");
                 excelSheet.SetColumnWidth(2, (int)((15 + 0.72) * 256));
                 cell2.CellStyle = style;
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 2, 2));
                 ICell cell3 = row.CreateCell(3);
-                cell3.SetCellValue("NO. OF  \r\n EMPLOYEE \r\n ABOVE "+ MLWF_ContributionReports[0].MLWF_Employee_Base + "/-");
+                cell3.SetCellValue("NO. OF  \r\n EMPLOYEE \r\n ABOVE " + MLWF_ContributionReports[0].MLWF_Employee_Base + "/-");
                 excelSheet.SetColumnWidth(3, (int)((15 + 0.72) * 256));
                 cell3.CellStyle = style;
                 excelSheet.AddMergedRegion(new CellRangeAddress(3, 4, 3, 3));
                 ICell cell4 = row.CreateCell(4);
-                cell4.SetCellValue("EMPLOYEE \r\n CONTR. BELOW \r\n "+ MLWF_ContributionReports[0].MLWF_Employee_Base + "/-");
+                cell4.SetCellValue("EMPLOYEE \r\n CONTR. BELOW \r\n " + MLWF_ContributionReports[0].MLWF_Employee_Base + "/-");
                 excelSheet.SetColumnWidth(4, (int)((16 + 0.72) * 256));
                 cell4.CellStyle = style;
                 ICell cell5 = row.CreateCell(5);
-                cell5.SetCellValue("EMPLOYEE \r\n CONTR. ABOVE \r\n "+ MLWF_ContributionReports[0].MLWF_Employee_Base + "/-");
+                cell5.SetCellValue("EMPLOYEE \r\n CONTR. ABOVE \r\n " + MLWF_ContributionReports[0].MLWF_Employee_Base + "/-");
                 excelSheet.SetColumnWidth(5, (int)((16 + 0.72) * 256));
                 cell5.CellStyle = style;
                 ICell cell6 = row.CreateCell(6);
-                cell6.SetCellValue("EMPLOYER \r\n CONTR. BELOW \r\n "+ MLWF_ContributionReports[0].MLWF_Employer_Base + "/-");
+                cell6.SetCellValue("EMPLOYER \r\n CONTR. BELOW \r\n " + MLWF_ContributionReports[0].MLWF_Employer_Base + "/-");
                 excelSheet.SetColumnWidth(6, (int)((16 + 0.72) * 256));
                 cell6.CellStyle = style;
                 ICell cell7 = row.CreateCell(7);
-                cell7.SetCellValue("EMPLOYER \r\n CONTR. ABOVE  \r\n "+ MLWF_ContributionReports[0].MLWF_Employer_Base + "/-");
+                cell7.SetCellValue("EMPLOYER \r\n CONTR. ABOVE  \r\n " + MLWF_ContributionReports[0].MLWF_Employer_Base + "/-");
                 excelSheet.SetColumnWidth(7, (int)((16 + 0.72) * 256));
                 cell7.CellStyle = style;
 
                 row = excelSheet.CreateRow(4);
 
                 ICell cell44 = row.CreateCell(4);
-                cell44.SetCellValue("RS. "+ MLWF_ContributionReports[0].CRI_MLWF_Employee_LThen + "/-");
+                cell44.SetCellValue("RS. " + MLWF_ContributionReports[0].CRI_MLWF_Employee_LThen + "/-");
                 cell44.CellStyle = style;
                 CellUtil.SetAlignment(cell44, workbook, (short)HorizontalAlignment.Center);
                 ICell cell55 = row.CreateCell(5);
-                cell55.SetCellValue("RS. "+ MLWF_ContributionReports[0].CRI_MLWF_Employee_GThen + "/-");
+                cell55.SetCellValue("RS. " + MLWF_ContributionReports[0].CRI_MLWF_Employee_GThen + "/-");
                 cell55.CellStyle = style;
                 CellUtil.SetAlignment(cell55, workbook, (short)HorizontalAlignment.Center);
                 ICell cell66 = row.CreateCell(6);
-                cell66.SetCellValue("RS. "+ MLWF_ContributionReports[0].CRI_MLWF_Employer_LThen + "/-");
+                cell66.SetCellValue("RS. " + MLWF_ContributionReports[0].CRI_MLWF_Employer_LThen + "/-");
                 cell66.CellStyle = style;
                 CellUtil.SetAlignment(cell66, workbook, (short)HorizontalAlignment.Center);
                 ICell cell77 = row.CreateCell(7);
-                cell77.SetCellValue("RS. "+ MLWF_ContributionReports[0].CRI_MLWF_Employer_GThen + "/-");
+                cell77.SetCellValue("RS. " + MLWF_ContributionReports[0].CRI_MLWF_Employer_GThen + "/-");
                 cell77.CellStyle = style;
                 CellUtil.SetAlignment(cell77, workbook, (short)HorizontalAlignment.Center);
 
-               
+
                 int rowCount = 5;
                 int srNo = 1;
                 int EMP_BELOW_3K = 0, EMP_ABOVE_3K = 0;
@@ -3170,29 +3173,30 @@ namespace RMERP.Controllers
 
         #endregion
 
-        #region PaySlip
-        
+        #region PAYSLIP
+
         public ActionResult PaySlipGenerate(int WAG_Id)
         {
-            WageRegisterManager wageRegisterManager = new WageRegisterManager(_context);
-            WageProcessManager wageProcessManager = new WageProcessManager(_context);
-            Wage_Process wage_Process = wageProcessManager.getWageProcessById(WAG_Id);
-            WagePaySlipMasterVM paySlipMasterVM = new WagePaySlipMasterVM();
-            paySlipMasterVM.WAG_Id = WAG_Id;
-            paySlipMasterVM.FRM_Id = wage_Process.FRM_Id;
-            paySlipMasterVM.FRM_Name = wage_Process.FRM_.FRM_Name;
-            paySlipMasterVM.WAG_Month = wage_Process.WAG_Month.ToString("MMM-yyyy");
+            WageRegisterManager wageRegisterManager = new(_context);
+            WageProcessManager wageProcessManager = new(_context);
+            Wage_Process wage_Process = wageProcessManager.GetWageProcessByWAG_Id(WAG_Id, false, false, false, true);
+            WagePaySlipMasterVM paySlipMasterVM = new()
+            {
+                WAG_Id = WAG_Id,
+                FRM_Id = wage_Process.FRM_Id,
+                FRM_Name = wage_Process.FRM.FRM_Name,
+                WAG_Month = wage_Process.WAG_Month.ToString("MMM-yyyy")
+            };
 
-            List<ClientWiseEmp> clientWiseEmps = new List<ClientWiseEmp>();
-            IEnumerable<Clients> clients = wageRegisterManager.GetDistinctClientsForWage(WAG_Id);
+            List<ClientWiseEmp> clientWiseEmps = [];
+            IEnumerable<Client> clients = wageRegisterManager.GetDistinctClientsForWage(WAG_Id);
             foreach (var client in clients)
             {
-                ClientWiseEmp cli = new ClientWiseEmp();
-                cli.CLI_Id = client.CLI_Id;
-                cli.CLI_Name = client.CLI_Name;
-                List<Employees> emps = wageRegisterManager.GetEmployeesForWage(client.CLI_Id, WAG_Id).ToList();
+                ClientWiseEmp cli = new() { CLI_Id = client.CLI_Id, CLI_Name = client.CLI_Name };
+
+                List<Employee> emps = wageRegisterManager.GetEmployeesForWage(client.CLI_Id, WAG_Id).ToList();
                 cli.EmpPaySlipVMs = EmployeePaySlipMapper.mapMe(emps, client.CLI_Id, WAG_Id);
-                if (cli.EmpPaySlipVMs.Where(m => m.IsPaySlipGenerated).Count()== 0)
+                if (cli.EmpPaySlipVMs.Where(m => m.IsPaySlipGenerated).Count() == 0)
                 {
                     cli.AllSalaryslipsGenerated = (int)ProjectUtils.SalaryslipsGenerated.NotGenerated;
                 }
@@ -3213,16 +3217,16 @@ namespace RMERP.Controllers
         [Obsolete]
         [HttpGet]
         public async Task<IActionResult> GeneratedPaySlip(int WAG_Id, int EMP_Id, int WPS_Id)
-        {            
+        {
             try
-            {                
-                Wage_PaySlips paySlip = new Wage_PaySlips();
+            {
+                Wage_PaySlip paySlip = new Wage_PaySlip();
                 EmployeePaySlipVM paySlipVM = new EmployeePaySlipVM();
                 ReportsManager reportsManager = new ReportsManager(_context);
 
                 paySlipVM = reportsManager.GeneratePaySlip(WAG_Id, EMP_Id);
                 string PaySlipPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("RMERP_EMPLOYEE_PAYSLIP_PATH").Value;
-                var FileName = "PaySlip_"+ paySlipVM.EMP_Id.ToString("D5") + "_" + (paySlipVM.EMP_FirstName + "_" + paySlipVM.EMP_MiddleName + "_" + paySlipVM.EMP_SurName) + "_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";     
+                var FileName = "PaySlip_" + paySlipVM.EMP_Id.ToString("D5") + "_" + (paySlipVM.EMP_FirstName + "_" + paySlipVM.EMP_MiddleName + "_" + paySlipVM.EMP_SurName) + "_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";
 
                 var root = PaySlipPath + "\\" + WAG_Id + "\\" + "Salary Slip";
                 if (!Directory.Exists(root))
@@ -3254,20 +3258,20 @@ namespace RMERP.Controllers
                 paySlip.WAG_Id = WAG_Id;
                 paySlip.EMP_Id = EMP_Id;
                 paySlip.WPS_Status = (int)ProjectUtils.WagePaySlip.Generated;
-                paySlip.WPS_GeneratedOn = ProjectUtils.DateNow();                               
+                paySlip.WPS_GeneratedOn = ProjectUtils.DateNow();
                 paySlip.WPS_FileName = FileName;
-                Wage_PaySlips wage_PaySlip = reportsManager.AddWagePaySlip(paySlip);
+                Wage_PaySlip wage_PaySlip = reportsManager.AddWagePaySlip(paySlip);
                 #endregion
                 var byteArray = await view.BuildFile(ControllerContext);
-                GetFile(byteArray);                               
-                return Json(new { data="ok"});
+                GetFile(byteArray);
+                return Json(new { data = "ok" });
             }
             catch (Exception)
             {
                 return Json(new { data = "ko" });
             }
         }
-        
+
         public FileResult GetFile(byte[] byteArray)
         {
             return File(byteArray, "application/pdf");
@@ -3276,7 +3280,7 @@ namespace RMERP.Controllers
         public async Task<FileResult> DownloadPaySlip(int WPS_Id)
         {
             ReportsManager reportsManager = new ReportsManager(_context);
-            Wage_PaySlips paySlip = reportsManager.GetPaySlip(WPS_Id);
+            Wage_PaySlip paySlip = reportsManager.GetPaySlip(WPS_Id);
             string DocumentPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("RMERP_EMPLOYEE_PAYSLIP_PATH").Value;
             DocumentPath += "\\" + paySlip.WAG_Id + "\\" + "Salary Slip" + "\\" + paySlip.WPS_FileName;
 
@@ -3290,16 +3294,51 @@ namespace RMERP.Controllers
             return File(memory, ProjectUtils.GetContentType(DocumentPath), paySlip.WPS_FileName);
         }
 
+        public async Task<FileResult> DownloadPaySlips(int WAG_Id, int CLI_Id)
+        {
+            ReportsManager reportsManager = new ReportsManager(_context);
+            string tempZipFile = Path.GetTempFileName() + ".zip"; // Temporary ZIP file
+            List<Wage_PaySlip> paySlips = reportsManager.GetWagePaySlips(WAG_Id, CLI_Id);
+            using (var zipArchive = ZipFile.Open(tempZipFile, ZipArchiveMode.Create))
+            {
+                foreach (Wage_PaySlip paySlip in paySlips)
+                {
+                    string documentPath = Path.Combine(
+                        _configuration.GetSection("DEFAULT_FOLDER_PATH").Value,
+                        _configuration.GetSection("RMERP_EMPLOYEE_PAYSLIP_PATH").Value,
+                        paySlip.WAG_Id.ToString(),
+                        "Salary Slip",
+                        paySlip.WPS_FileName
+                    );
+
+                    if (System.IO.File.Exists(documentPath))
+                    {
+                        zipArchive.CreateEntryFromFile(documentPath, paySlip.WPS_FileName);
+                    }
+                }
+            }
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(tempZipFile, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            System.IO.File.Delete(tempZipFile); // Delete the temporary ZIP file after use
+
+            return File(memory, "application/zip", "Payslips.zip");
+        }
+
         #endregion
 
-        #region EmployeesReport
+        #region EMPLOYEES
         public async Task<FileResult> EmployeesReport(int WAG_Id)
         {
             ReportsManager manager = new ReportsManager(_context);
             WageProcessManager wageProcess = new WageProcessManager(_context);
             Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
             ClientsManager clientsManager = new ClientsManager(_context);
-            DateTime wageMonth = wage_Process.WAG_Month;
+            DateOnly wageMonth = wage_Process.WAG_Month;
             string WAG_Month = wageMonth.ToString("MMMM") + "-" + wageMonth.ToString("yyyy");
 
             string newPath = ProjectUtils.GetTempFolderPath(_hostingEnvironment.WebRootPath);
@@ -3309,14 +3348,15 @@ namespace RMERP.Controllers
             var memory = new MemoryStream();
             using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
             {
-                 List<Clients> clients = clientsManager.GetActiveClientOfMonthByFirmId(wageMonth, wage_Process.FRM_Id);
+                List<Client> clients = clientsManager.GetActiveClientsOfMonthByFirmId(ProjectUtils.DateToDateTime(wageMonth), wage_Process.FRM_Id);
                 DateTime lastDate = new DateTime(wageMonth.Year, wageMonth.Month, 1).AddMonths(1).AddDays(-1);
                 DateTime startdate = new DateTime(wageMonth.Year, wageMonth.Month, 1);
-                List<Clients_Employees> current = new List<Clients_Employees>();
-                List<Clients_Employees> left = new List<Clients_Employees>();
-                foreach (Clients client in clients)
+
+                List<Clients_Employee> current = new List<Clients_Employee>();
+                List<Clients_Employee> left = new List<Clients_Employee>();
+                foreach (Client client in clients)
                 {
-                    List<Clients_Employees> all = clientsManager.listClientsEmployees(client.CLI_Id,null).ToList();
+                    List<Clients_Employee> all = clientsManager.listClientsEmployees(client.CLI_Id, null).ToList();
                     current.AddRange(all.Where(ce => ce.CLE_UnassignedOn == null && ce.CLE_RegisteredOn <= lastDate));
                     left.AddRange(all.Where(ce => ce.CLE_UnassignedOn != null && ce.CLE_UnassignedOn >= startdate && ce.CLE_UnassignedOn <= lastDate));
                 }
@@ -3338,7 +3378,7 @@ namespace RMERP.Controllers
             new FileInfo(Path.Combine(newPath, fileName)).Delete();
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
-        public ISheet CreateEmployeesSheet(ISheet excelSheet, IWorkbook workbook, List<Clients_Employees> lst)
+        public ISheet CreateEmployeesSheet(ISheet excelSheet, IWorkbook workbook, List<Clients_Employee> lst)
         {
             ICellStyle styleHeader = workbook.CreateCellStyle();
             IFont fontHead = workbook.CreateFont();
@@ -3348,7 +3388,7 @@ namespace RMERP.Controllers
             styleHeader.SetFont(fontHead);
 
             ICellStyle style = workbook.CreateCellStyle();
-             style.BorderBottom = (BorderStyle.Thin);
+            style.BorderBottom = (BorderStyle.Thin);
             style.BottomBorderColor = (IndexedColors.Black.Index);
             style.BorderLeft = (BorderStyle.Thin);
             style.LeftBorderColor = (IndexedColors.Black.Index);
@@ -3380,18 +3420,18 @@ namespace RMERP.Controllers
                 row = excelSheet.CreateRow(count);
                 row.HeightInPoints = (float)(1.5 * excelSheet.DefaultRowHeightInPoints);
                 row.CreateCell(0).SetCellValue(count);
-                row.CreateCell(1).SetCellValue(item.CLI_.CLI_Name);
-                row.CreateCell(2).SetCellValue(item.EMP_.EMP_Id.ToString("####"));
-                row.CreateCell(3).SetCellValue(item.EMP_.EMP_FirstName + " " + item.EMP_.EMP_MiddleName + " " + item.EMP_.EMP_SurName);
-                row.CreateCell(4).SetCellValue(item.EMP_.EMP_Aadhar_Number);
-                row.CreateCell(5).SetCellValue(item.EMP_.EMP_Pan_Number);
-                row.CreateCell(6).SetCellValue(item.EMP_.EMP_ESIC_Number);
-                row.CreateCell(7).SetCellValue(item.EMP_.EMP_UAN_Number);
+                row.CreateCell(1).SetCellValue(item.CLI.CLI_Name);
+                row.CreateCell(2).SetCellValue(item.EMP.EMP_Id.ToString("####"));
+                row.CreateCell(3).SetCellValue(item.EMP.EMP_FirstName + " " + item.EMP.EMP_MiddleName + " " + item.EMP.EMP_SurName);
+                row.CreateCell(4).SetCellValue(item.EMP.EMP_Aadhar_Number);
+                row.CreateCell(5).SetCellValue(item.EMP.EMP_Pan_Number);
+                row.CreateCell(6).SetCellValue(item.EMP.EMP_ESIC_Number);
+                row.CreateCell(7).SetCellValue(item.EMP.EMP_UAN_Number);
                 row.CreateCell(8).SetCellValue(item.CLE_RegisteredOn.ToString("dd-MM-yyyy"));
-                row.CreateCell(9).SetCellValue(item.CLE_UnassignedOn.HasValue?item.CLE_UnassignedOn.Value.ToString("dd-MM-yyyy"):"");
+                row.CreateCell(9).SetCellValue(item.CLE_UnassignedOn.HasValue ? item.CLE_UnassignedOn.Value.ToString("dd-MM-yyyy") : "");
                 row.CreateCell(10).SetCellValue("");
                 row.Cells.ForEach(c => c.CellStyle = style);
-                    count++;
+                count++;
             }
 
             //for (int i = 0; i < 10; i++)
@@ -3412,11 +3452,7 @@ namespace RMERP.Controllers
 
             return excelSheet;
         }
-        
+
         #endregion
     }
-
 }
-
-
-

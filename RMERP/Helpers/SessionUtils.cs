@@ -20,7 +20,7 @@ namespace RMERP.Helpers
             request = _request;
             response = _response;
         }
-        public void Login(AdminUsers user)
+        public void Login(AdminUser user)
         {
             var claims = new List<Claim>();
             try
@@ -29,7 +29,7 @@ namespace RMERP.Helpers
                 claims.Add(new Claim(ClaimTypes.Name, user.ADM_EmailId));
                 var claimIdenties = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimPrincipal = new ClaimsPrincipal(claimIdenties);
-                var authenticationManager =request.HttpContext;
+                var authenticationManager = request.HttpContext;
 
                 // Sign In.  
                 authenticationManager.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal);

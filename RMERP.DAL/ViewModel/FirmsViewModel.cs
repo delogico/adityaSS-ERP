@@ -49,7 +49,7 @@ namespace RMERP.DAL.ViewModel
         [Required(ErrorMessage ="State is required")]
         public int STA_Id { get; set; }
 
-        public States STA_ { get; set; }
+        public State STA_ { get; set; }
     }
 }
 

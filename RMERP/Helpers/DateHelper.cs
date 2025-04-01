@@ -32,7 +32,7 @@ namespace RMERP.Helpers
         //    DateTime[] arr = { startDate, endDate };
         //    return arr;
         //}
-        public static DateTime[] getStartEndDatePeriodForAttendance(Clients client, Attendance_Parameter attendance_Parameter, DateTime wageDate)
+        public static DateTime[] GetStartEndDatePeriodForAttendance(Client client, Attendance_Parameter attendance_Parameter, DateTime wageDate)
         {            
             DateTime startDate = wageDate, endDate = wageDate;
             if (attendance_Parameter.ATP_Att_MonthReal == true)

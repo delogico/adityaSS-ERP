@@ -13,11 +13,11 @@ namespace RMERP.DAL.ManagerClasses
         {
             _context = context;
         }
-        public IEnumerable<Cities> getCityList()
+        public IEnumerable<City> getCityList()
         {
             return _context.Cities.OrderBy(m=>m.CIT_Name).ToList();
         }
-        public string saveEditCity(Cities cities)
+        public string saveEditCity(City cities)
         {
             string res = string.Empty;
             try
@@ -38,7 +38,7 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public Cities GetCity(int CIT_Id)
+        public City GetCity(int CIT_Id)
         {
             return _context.Cities.Find(CIT_Id);
         }

@@ -32,18 +32,23 @@ namespace RMERP.DAL.ViewModel
         public int WRA_Id_3 { get; set; }
         public int WRA_Id_4 { get; set; }
         public int WRA_Id_5 { get; set; }
+        public int WRA_Id_6 { get; set; }
+        public int WRA_Id_7 { get; set; }
+        public int WRA_Id_8 { get; set; }
+        public int WRA_Id_9 { get; set; }
+        public int WRA_Id_10 { get; set; }
 
 
         public int CLE_Id { get; set; }
 
-       // public WageProcessVM wageProcessVM { get; set; }
+        // public WageProcessVM wageProcessVM { get; set; }
         public int CLI_Id { get; set; }
         public ClientsModel clientVM { get; set; }
         public int EMP_Id { get; set; }
         public EmployeeVM employeeVM { get; set; }
         public int CRI_Id { get; set; }
         public ClientRequirementVM clientRequirementVM { get; set; }
-        [Display(Name ="Total Payble Days")]
+        [Display(Name = "Total Payble Days")]
         public double WAR_TotalPaybleDays { get; set; }
         [Display(Name = "Total Working Days")]
         public double WAR_TotalWorkingDays { get; set; }
@@ -60,10 +65,11 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "HRA")]
         public decimal WAR_HRA { get; set; }
         [Display(Name = "HRA")]
-        public string WAR_HRA_PER {
+        public string WAR_HRA_PER
+        {
             get
-            {                
-                return (clientRequirementVM.CRI_HRA_Fixed.ToString() == "" ? (clientRequirementVM.CRI_HRA_Percentage.Value.ToString() + "%") :  clientRequirementVM.CRI_HRA_Fixed.Value + ""); 
+            {
+                return (clientRequirementVM.CRI_HRA_Fixed.ToString() == "" ? (clientRequirementVM.CRI_HRA_Percentage.Value.ToString() + "%") : clientRequirementVM.CRI_HRA_Fixed.Value + "");
             }
         }
         [Display(Name = "Calculated HRA")]
@@ -72,7 +78,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "OT Formula")]
         public string WAR_OverTime_Formula { get; set; }
         [Display(Name = "OverTime Payment Times")]
-        public int? WAR_OverTime_Payment { get; set; }   
+        public int? WAR_OverTime_Payment { get; set; }
         [Display(Name = "Calculated Extra Working Amount")]
         public decimal WAR_OverTime_Calculated { get; set; }
         [Display(Name = "WorkingHrs in day")]
@@ -102,8 +108,8 @@ namespace RMERP.DAL.ViewModel
         public decimal WAR_FinalTotal { get; set; }
         public DateTime WAR_LastModifiedOn { get; set; }
         public int ADM_LastModifiedBy { get; set; }
-        public Designations designation { get; set; }
-        
+        public Designation designation { get; set; }
+
         public List<WageRegisterAllowanceVM> allowanceVMs { get; set; }
 
         [Display(Name = "Outstation Allowance")]
@@ -121,7 +127,18 @@ namespace RMERP.DAL.ViewModel
         public decimal? WAR_Allowance_Calculated_4 { get; set; }
         [Display(Name = "Allowance 5")]
         public decimal? WAR_Allowance_Calculated_5 { get; set; }
-                       
+
+        [Display(Name = "Allowance 6")]
+        public decimal? WAR_Allowance_Calculated_6 { get; set; }
+        [Display(Name = "Allowance 7")]
+        public decimal? WAR_Allowance_Calculated_7 { get; set; }
+        [Display(Name = "Allowance 8")]
+        public decimal? WAR_Allowance_Calculated_8 { get; set; }
+        [Display(Name = "Allowance 9")]
+        public decimal? WAR_Allowance_Calculated_9 { get; set; }
+        [Display(Name = "Allowance 10")]
+        public decimal? WAR_Allowance_Calculated_10 { get; set; }
+
         [Display(Name = "Performance Allowance")]
         public decimal? WAR_Performance_Allowance_Calculated { get; set; }
         [Display(Name = "Calculated Nightshift")]
@@ -147,8 +164,8 @@ namespace RMERP.DAL.ViewModel
     public class EditWageRegisterVM
     {
         public WageRegisterVM wageRegisterVM { get; set; }
-        public List<Wage_Register_Allowances> wage_Register_Allowances { get; set; }
-        public int FRM_Id { get; set; }        
+        public List<Wage_Register_Allowance> wage_Register_Allowances { get; set; }
+        public int FRM_Id { get; set; }
     }
 
 }

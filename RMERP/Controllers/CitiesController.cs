@@ -46,7 +46,7 @@ namespace RMERP.Controllers
         public ActionResult AddEditCity(CitiesVM citiesVM)
         {
             CitiesManager citiesManager = new CitiesManager(_context);
-            Cities cities  = new Cities();
+            City cities  = new City();
             cities.CIT_Id = citiesVM.CITY_Id;
             cities.CIT_Name = citiesVM.CITY_Name;
             if (ModelState.IsValid)

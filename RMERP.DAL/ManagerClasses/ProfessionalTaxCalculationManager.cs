@@ -17,7 +17,7 @@ namespace RMERP.DAL.ManagerClasses
         }
         public decimal GetPT(string MF, decimal GrossTotal)
         {
-            return _context.ProfessionalTaxCalculation.Where(m => m.PTC_MF.Equals(MF) && GrossTotal >= m.PTC_From && GrossTotal <= m.PTC_To).FirstOrDefault().PTC_Amount;
+            return _context.ProfessionalTaxCalculations.Where(m => m.PTC_MF.Equals(MF) && GrossTotal >= m.PTC_From && GrossTotal <= m.PTC_To).FirstOrDefault().PTC_Amount;
         }
     }
 }

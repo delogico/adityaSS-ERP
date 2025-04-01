@@ -1,0 +1,132 @@
+﻿@using RMERP.DAL.Models;
+@using RMERP.DAL.ViewModel;
+@model Tuple<ViewAttendanceVM, Client>
+@{
+   ViewData["Title"] = "View Attendance";
+   Layout = "~/Views/Shared/_RMLayout.cshtml";
+   Wage_Process wage_ = ViewBag.Wage_Process;
+}
+@section Breadcrumbs {
+   <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = wage_.FRM_Id })</li>
+   <li class="breadcrumb-item">@Html.ActionLink("Wage Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = wage_.WAG_Id })</li>
+   <li class="breadcrumb-item">View Attendance</li>
+}
+
+<div class="content container-fluid">
+   <div class="row">
+      <div class="col-sm-12">
+         <h3 class="page-title">@ViewData["Title"] ( @ViewBag.WAG_Month )</h3>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-sm-12">
+         <h5>
+            Client:
+            @Model.Item2.CLI_Name
+         </h5>
+      </div>
+   </div>
+   @if (!Model.Item1.AttendanceSummaries.Any())
+   {
+      <div class="alert alert-danger text-center"><b>The Selected Wage Month belong to old system of Attendance (before 03/25). 
+         <br />All Data visible here is default "0" (Dummy information). To Check Daily attendance please click on "<i class="fa fa-calendar"></i> View" link to individual employee.</b></div>
+   }
+   <div class="row">
+      <div class="col-md-12">
+         <div class="table-responsive">
+            <table class="table table-striped custom-table m-b-0 font11">
+               <thead>
+                  <tr>
+                     <th>Name</th>
+                     <th>Present Days</th>
+                     <th>Weekly Off</th>
+                     <th>Public Holidays</th>
+                     <th>Earn Leaves</th>
+                     <th>Night Shifts</th>
+                     <th>Total Extra Hours</th>
+                     <th></th>
+                  </tr>
+               </thead>
+               <tbody>
+                  @if (Model.Item1.AttendanceSummaries.Any())
+                  {
+
+                     foreach (var employee in Model.Item1.AttendanceSummaries.Select(m => m.Employee))
+                     {
+                        AttendanceSummaryVM summaryVM = Model.Item1.AttendanceSummaries.Where(e => e.EMP_Id == employee.EMP_Id).FirstOrDefault();
+                        <tr>
+                           <td><b>@employee.EMP_FullName</b><br />@employee.EMP_Designation</td>
+                           <td>@summaryVM.ATS_PresentDays</td>
+                           <td>@summaryVM.ATS_WeekOff</td>
+                           <td>@summaryVM.ATS_PublicHolidays</td>
+                           <td>@summaryVM.ATS_EarnLeaves</td>
+                           <td>@summaryVM.ATS_NightShifts</td>
+                           <td>@summaryVM.ATS_ExtraHours</td>
+                           <td>
+                              <a href="javascript:void(0);" onclick="DayWiseAttendance('@wage_.WAG_Id','@Model.Item2.CLI_Id','@employee.EMP_Id');">
+                                 <i class="fa fa-calendar"></i> View
+                              </a>
+                           </td>
+                        </tr>
+                     }
+                  }
+                  else
+                  {
+                     List<Int32> EMP_Ids = Model.Item1.Attendances.Select(m => m.employee.EMP_Id).Distinct().ToList();
+                     @foreach (var EMP_Id in EMP_Ids)
+                     {
+                        EmployeeVM employee = Model.Item1.Attendances.Where(a => a.EMP_Id == EMP_Id).Select(m => m.employee).First();
+                        Designation designation = Model.Item1.Attendances.Where(a => a.EMP_Id == EMP_Id).Select(m => m.designation).First();
+                        <tr>
+                           <td><b>@employee.EMP_FullName</b><br />@employee.EMP_Designation</td>
+                           <td>0</td>
+                           <td>0</td>
+                           <td>0</td>
+                           <td>0</td>
+                           <td>0</td>
+                           <td>0</td>
+                           <td>
+                              <a href="javascript:void(0);" onclick="DayWiseAttendance('@wage_.WAG_Id','@Model.Item2.CLI_Id','@employee.EMP_Id');">
+                                 <i class="fa fa-calendar"></i> View
+                              </a>
+                           </td>
+                        </tr>
+                     }
+                  }
+               </tbody>
+            </table>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div id="DV_ATT_DayWise"></div>
+
+@section scripts {
+   <script type="text/javascript">
+
+   function DayWiseAttendance(WAG_Id, CLI_Id, EMP_Id) {
+      $.ajax({
+         url: '@Url.Action("ViewAttendanceDayWise", "Attendance")?WAG_Id=' + WAG_Id + '&CLI_Id=' + CLI_Id + '&EMP_Id=' + EMP_Id,
+         type: 'GET',
+         //beforeSend: function () { $(".spinner").show(); },
+         //complete: function () { $(".spinner").hide(); },
+         success: function (response) {
+            $("#DV_ATT_DayWise").html('').html(response);
+            $("#ATT_Modal").modal('show');
+         },
+         failure: function (response) { alert(response.responseText); },
+         error: function (response) { alert(response.responseText); }
+      });
+   }
+   //$(document).ready(function () {
+   //   $('.editatt').css("visibility", "hidden");
+   //});
+   //function mousehover(id) {
+   //   $('.edit_' + id).css("visibility", "visible");
+   //}
+   //function mouseout() {
+   //   $('.editatt').css("visibility", "hidden");
+   //}
+   </script>
+}

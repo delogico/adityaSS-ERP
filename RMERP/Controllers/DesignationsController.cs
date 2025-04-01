@@ -45,7 +45,7 @@ namespace RMERP.Controllers
         public ActionResult AddEditDesignation(DesignationVM designationVM)
         {
             DesignationManager designationManager = new DesignationManager(_context);
-            Designations des = DesignationMapper.mapMeModel(designationVM);
+            Designation des = DesignationMapper.mapMeModel(designationVM);
             if (ModelState.IsValid)
             {
                 string res = designationManager.saveEditDesignation(des);

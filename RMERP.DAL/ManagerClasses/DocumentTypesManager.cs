@@ -13,9 +13,9 @@ namespace RMERP.DAL.ManagerClasses
         {
             _context = context;
         }
-        public List<Document_Types> GetDocumentTypes()
+        public List<Document_Type> GetDocumentTypes()
         {
-            List<Document_Types> types = new List<Document_Types>();
+            List<Document_Type> types = new List<Document_Type>();
             types = _context.Document_Types.ToList();
             return types;
         }

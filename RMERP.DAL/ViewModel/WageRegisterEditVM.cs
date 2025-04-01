@@ -33,6 +33,12 @@ namespace RMERP.DAL.ViewModel
         public decimal WAR_Allowance_Calculated_3 { get; set; }
         public decimal WAR_Allowance_Calculated_4 { get; set; }
         public decimal WAR_Allowance_Calculated_5 { get; set; }
+        
+        public decimal WAR_Allowance_Calculated_6 { get; set; }
+        public decimal WAR_Allowance_Calculated_7 { get; set; }
+        public decimal WAR_Allowance_Calculated_8 { get; set; }
+        public decimal WAR_Allowance_Calculated_9 { get; set; }
+        public decimal WAR_Allowance_Calculated_10 { get; set; }
 
         public List<CalculatedAllowanceVM> CalculatedAllowanceVM { get; set; }
     }

@@ -8,14 +8,13 @@ namespace RMERP.DAL.Mappers
 {
     public class ClientMapper
     {
-        public static ClientsWagModel mapMe(Clients client)
+        public static ClientsWagModel MapMe(Client client)
         {
-            ClientsWagModel clientVM = new ClientsWagModel();
-            clientVM.CLI_Id = client.CLI_Id;
-            clientVM.CLI_Name = client.CLI_Name;
-            return clientVM;
+            return new ClientsWagModel
+            {
+                CLI_Id = client.CLI_Id,
+                CLI_Name = client.CLI_Name
+            };
         }
-       
-
     }
 }

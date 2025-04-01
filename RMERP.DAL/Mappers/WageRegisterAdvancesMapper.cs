@@ -7,7 +7,7 @@ namespace RMERP.DAL.Mappers
 {
     public class WageRegisterAdvancesMapper
     {
-        public static WageRegisterAdvancesVM mapMeModel(Wage_Register_Advances wra)
+        public static WageRegisterAdvancesVM mapMeModel(Wage_Register_Advance wra)
         {
             WageRegisterAdvancesVM eraVM = new WageRegisterAdvancesVM();
             eraVM.WAD_Id = wra.WAD_Id;
@@ -20,7 +20,7 @@ namespace RMERP.DAL.Mappers
             return eraVM;
         }
         
-        public static List<WageRegisterAdvancesVM> mapMeModels(List<Wage_Register_Advances> wra)
+        public static List<WageRegisterAdvancesVM> mapMeModels(List<Wage_Register_Advance> wra)
         {
             List<WageRegisterAdvancesVM> wageRegisterAdvancesVMs = new List<WageRegisterAdvancesVM>();
             foreach(var item in wra){
@@ -29,9 +29,9 @@ namespace RMERP.DAL.Mappers
             }
             return wageRegisterAdvancesVMs;
         }
-        public static Wage_Register_Advances mapMe(WageRegisterAdvancesVM wraVM)
+        public static Wage_Register_Advance mapMe(WageRegisterAdvancesVM wraVM)
         {
-            Wage_Register_Advances Wra = new Wage_Register_Advances();
+            Wage_Register_Advance Wra = new Wage_Register_Advance();
             Wra.WAD_Id = wraVM.WAD_Id;
             Wra.WAG_Id = wraVM.WAG_Id;
             Wra.EMP_Id = wraVM.EMP_Id;
@@ -42,12 +42,12 @@ namespace RMERP.DAL.Mappers
 
             return Wra;
         }
-        public static List<Wage_Register_Advances> mapMeList(List<WageRegisterAdvancesVM> wraVM)
+        public static List<Wage_Register_Advance> mapMeList(List<WageRegisterAdvancesVM> wraVM)
         {
-            List<Wage_Register_Advances> wageRegisterAdvances = new List<Wage_Register_Advances>();
+            List<Wage_Register_Advance> wageRegisterAdvances = new List<Wage_Register_Advance>();
             foreach (var item in wraVM)
             {
-                Wage_Register_Advances vm = mapMe(item);
+                Wage_Register_Advance vm = mapMe(item);
                 wageRegisterAdvances.Add(vm);
             }
             return wageRegisterAdvances;

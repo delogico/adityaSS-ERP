@@ -13,19 +13,19 @@ namespace RMERP.DAL.ManagerClasses
         {
             _context = context;
         }
-        public List<Employee_Documents> GetEmployeeDocuments()
+        public List<Employee_Document> GetEmployeeDocuments()
         {
             return _context.Employee_Documents.ToList();
         }
-        public List<Employee_Documents> GetDocumentsByEmpId(int EMP_Id)
+        public List<Employee_Document> GetDocumentsByEmpId(int EMP_Id)
         {
             return _context.Employee_Documents.Where(m => m.EMP_Id.Equals(EMP_Id)).ToList();
         }
-        public Employee_Documents GetEmployeeDocumenyById(int EMD_Id)
+        public Employee_Document GetEmployeeDocumenyById(int EMD_Id)
         {
             return _context.Employee_Documents.Find(EMD_Id);
         }
-        public int AddEmployeeDocument(Employee_Documents document)
+        public int AddEmployeeDocument(Employee_Document document)
         {
             int EMD_Id = 0;
             try
@@ -45,7 +45,7 @@ namespace RMERP.DAL.ManagerClasses
             string res = string.Empty;
             try
             {
-                Employee_Documents doc = _context.Employee_Documents.Find(EMD_Id);
+                Employee_Document doc = _context.Employee_Documents.Find(EMD_Id);
                 _context.Employee_Documents.Remove(doc);
                 _context.SaveChanges();
             }

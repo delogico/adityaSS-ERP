@@ -14,11 +14,18 @@ namespace RMERP.DAL.ManagerClasses
         {
             _context = context;
         }
-        public IEnumerable<Firms> getFirmList()
+        public IEnumerable<Firm> getFirmList(int? FRM_Id = null)
         {
-            return _context.Firms.Include(m=>m.STA_).OrderBy(m=>m.FRM_Name).ToList();
-        }  
-        public string saveEditFirm(Firms firms)
+            if (FRM_Id.HasValue && FRM_Id.Value > 0)
+            {
+                return _context.Firms.Where(f => f.FRM_Id == FRM_Id.Value).Include(m => m.STA).OrderBy(m => m.FRM_Name).ToList();
+            }
+            else
+            {
+                return _context.Firms.Include(m => m.STA).OrderBy(m => m.FRM_Name).ToList();
+            }
+        }
+        public string saveEditFirm(Firm firms)
         {
             string res = string.Empty;
             try
@@ -29,17 +36,17 @@ namespace RMERP.DAL.ManagerClasses
                 }
                 else
                 {
-                    _context.Firms.Add(firms);                   
+                    _context.Firms.Add(firms);
                 }
                 _context.SaveChanges();
             }
             catch (Exception ex)
             {
-                res= ex.Message;
+                res = ex.Message;
             }
             return res;
         }
-        public Firms GetFirm(int FRM_Id)
+        public Firm GetFirm(int FRM_Id)
         {
             return _context.Firms.Find(FRM_Id);
         }

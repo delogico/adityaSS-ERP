@@ -32,9 +32,9 @@ namespace RMERP.Controllers
         private readonly RMERPContext _context;
         public IConfiguration _configuration;
         WageProcessManager wpm;
-        private IHostingEnvironment _hostingEnvironment;
+        private IWebHostEnvironment _hostingEnvironment;
 
-        public WageProcessController(RMERPContext context, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public WageProcessController(RMERPContext context, IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
             _configuration = configuration;
@@ -47,34 +47,44 @@ namespace RMERP.Controllers
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             if (sessionUtils.GetLoggedFirmID().HasValue)
             {
+                FirmsManager frmManager = new(_context);
+                //return View(frmManager.getFirmList(sessionUtils.GetLoggedFirmID().Value));
                 return RedirectToAction("Index", new { FRM_Id = sessionUtils.GetLoggedFirmID().Value });
             }
             else
             {
-                FirmsManager frmManager = new FirmsManager(_context);
+                FirmsManager frmManager = new(_context);
                 return View(frmManager.getFirmList());
             }
-        }        
+        }
+
         public IActionResult Index(int FRM_Id)
         {
-            WageProcessManager wageProcessManager=new WageProcessManager(_context,_configuration);
-            SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            //DateTime nextMonth = wpm.nextWageMonth(sessionUtils.GetLoggedAdminID(), FRM_Id);
-            FirmsManager firmsManager = new FirmsManager(_context);
-            AttendanceManager attendanceManager = new AttendanceManager(_context);
-           // ViewBag.month = nextMonth.ToString("MMMM", CultureInfo.CreateSpecificCulture("IN"));
+            WageProcessManager wageProcessManager = new(_context, _configuration);
+            FirmsManager firmsManager = new(_context);
             ViewBag.FRM_Id = FRM_Id;
-            Firms firm = firmsManager.GetFirm(FRM_Id);
+            Firm firm = firmsManager.GetFirm(FRM_Id);
             ViewBag.FRM_Name = firm.FRM_ShortName;
-
-            DateTime dt = DateTime.Now;
-            ViewBag.linktoYearId = GetYears(dt.Year);
-            ViewBag.linktoMonthId = GetMonths(dt.Year);
-            
-            return View(WageProcessMapper.mapMeListVMs(wageProcessManager.getPendingWageProcessList(FRM_Id), firm, _context, _configuration));
+            ViewBag.linktoYearId = GetYears(DateTime.Now.Year);
+            ViewBag.linktoMonthId = GetMonths(DateTime.Now.Year);
+            return View(WageProcessMapper.MapMeListVMs(wageProcessManager.GetPendingWageProcessList(FRM_Id), firm, _context));
         }
-        
-        public IActionResult CreateNextMonthWage(int FRM_Id,DateTime date)
+
+        [HttpPost]
+        public IActionResult Search(int FRM_Id, int Year_p, int? Month_p)
+        {
+            WageProcessManager wageProcessManager = new(_context, _configuration);
+            FirmsManager firmsManager = new(_context);
+            ViewBag.FRM_Id = FRM_Id;
+            Firm firm = firmsManager.GetFirm(FRM_Id);
+            ViewBag.FRM_Name = firm.FRM_ShortName;
+            ViewBag.linktoYearId = GetYears(DateTime.Now.Year);
+            ViewBag.linktoMonthId = GetMonths(DateTime.Now.Year);
+
+            return View("Index", WageProcessMapper.MapMeListVMs(wageProcessManager.getWageProcessListByYearMonth(FRM_Id, Year_p, Month_p), firm, _context));
+        }
+
+        public IActionResult CreateNextMonthWage(int FRM_Id, DateTime date)
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             string res = wpm.CreateNextMonthWage(sessionUtils.GetLoggedAdminID(), FRM_Id, date);
@@ -171,7 +181,7 @@ namespace RMERP.Controllers
             {
 
                 att = wpm.GetAttendanceById(attID);
-               // CliId = att.CLI_Id;
+                // CliId = att.CLI_Id;
                 alvm.attendanceVM.ATT_Id = attID;
                 alvm.attendanceVM.DES_Id = att.DES_Id;
                 alvm.attendanceVM.CLI_Id = att.CLI_Id;
@@ -190,13 +200,13 @@ namespace RMERP.Controllers
                         alvm.attendanceVM.ATT_Shift = ((int)AttendanceShift).ToString();
                     }
                 }
-                
-                alvm.attendanceVM.ATT_Date = att.ATT_Date;
+
+                alvm.attendanceVM.ATT_Date = DAL.Helpers.ProjectUtils.DateToDateTime(att.ATT_Date);
                 alvm.attendanceVM.ADM_Id_ImportedBy = att.ADM_Id_ImportedBy;
                 alvm.attendanceVM.ATT_ExtraHoursWorked = att.ATT_ExtraHoursWorked;
                 alvm.FRM_Id = wageProcessManager.getWageProcessById(alvm.attendanceVM.WAG_Id).FRM_Id;
             }
-            
+
             return View(alvm);
         }
 
@@ -216,7 +226,7 @@ namespace RMERP.Controllers
                 atta.ATT_IsPresent = alvm.attendanceVM.ATT_IsPresent;
                 atta.ATT_IsHalfday = alvm.attendanceVM.ATT_IsHalfday;
                 atta.ATT_IsWeeklyOff = alvm.attendanceVM.ATT_IsWeeklyOff;
-                atta.ATT_Date = alvm.attendanceVM.ATT_Date;
+                atta.ATT_Date = DAL.Helpers.ProjectUtils.DateTimeToDate(alvm.attendanceVM.ATT_Date);
                 atta.ADM_Id_ImportedBy = alvm.attendanceVM.ADM_Id_ImportedBy;
 
                 foreach (var AttendanceShift in Enum.GetValues(typeof(AttendanceShift)))
@@ -225,7 +235,7 @@ namespace RMERP.Controllers
                     {
                         atta.ATT_Shift = AttendanceShift.ToString();
                     }
-                }                
+                }
                 atta.CLI_Id = alvm.attendanceVM.CLI_Id;
                 atta.EMP_Id = alvm.attendanceVM.EMP_Id;
                 atta.DES_Id = alvm.attendanceVM.DES_Id;
@@ -251,32 +261,32 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("Index", new { FRM_Id = wage.FRM_Id });
         }
+        //public ActionResult searchCompletedWageProcess(int FRM_Id, int Year, int Month)
+        //{
+        //    FirmsManager firmsManager = new FirmsManager(_context);
+        //    Firm firm = firmsManager.GetFirm(FRM_Id);
+        //    return PartialView("_WageProcessList", WageProcessMapper.mapMeListVMs(wpm.getCompletedWageProcessListByYearMonth(FRM_Id, Year, Month), firm, _context, _configuration));
 
-        public ActionResult searchCompletedWageProcess(int FRM_Id,int Year,int Month)
-        {
-            FirmsManager firmsManager = new FirmsManager(_context);
-            Firms firm = firmsManager.GetFirm(FRM_Id);
-            return PartialView("_WageProcessList", WageProcessMapper.mapMeListVMs(wpm.getCompletedWageProcessListByYearMonth(FRM_Id, Year, Month), firm, _context, _configuration));
+        //}
 
-        }
 
         public ActionResult searchPendingWageProcess(int FRM_Id, int Year, int Month)
         {
             FirmsManager firmsManager = new FirmsManager(_context);
-            Firms firm = firmsManager.GetFirm(FRM_Id);
+            Firm firm = firmsManager.GetFirm(FRM_Id);
             return PartialView("_WageProcessList", WageProcessMapper.mapMeListVMs(wpm.getPendingWageProcessListByYearMonth(FRM_Id, Year, Month), firm, _context, _configuration));
 
         }
+
         public ActionResult GetTestingWageProcess(int FRM_Id)
         {
-            WageProcessManager wageProcessManager = new WageProcessManager(_context,_configuration);
+            WageProcessManager wageProcessManager = new WageProcessManager(_context, _configuration);
             FirmsManager firmsManager = new FirmsManager(_context);
-            Firms firm = firmsManager.GetFirm(FRM_Id);
-            string dt = _configuration.GetSection("TESTING_MONTH_UPTO").Value;         
+            Firm firm = firmsManager.GetFirm(FRM_Id);
+            string dt = _configuration.GetSection("TESTING_MONTH_UPTO").Value;
             return PartialView("_WageProcessList", WageProcessMapper.mapMeListVMs(wageProcessManager.getTestingWageProcessList(FRM_Id, Convert.ToDateTime(dt)), firm, _context, _configuration));
 
         }
 
     }
-
 }

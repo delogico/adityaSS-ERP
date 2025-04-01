@@ -8,7 +8,7 @@ namespace RMERP.DAL.Mappers
 {
     public class ClientSelectionMapper
     {
-        public static SelectionVM mapMe(Clients client,int WAG_Id)
+        public static SelectionVM mapMe(Client client,int WAG_Id)
         {
             SelectionVM clientSelectionVM = new SelectionVM();
             clientSelectionVM.CLI_Name = client.CLI_Name;
@@ -17,7 +17,7 @@ namespace RMERP.DAL.Mappers
             clientSelectionVM.WAG_Id = WAG_Id;
             return clientSelectionVM;
         }
-        public static List<SelectionVM> mapMe(List<Clients> clients,int WAG_Id)
+        public static List<SelectionVM> mapMe(List<Client> clients,int WAG_Id)
         {
             List<SelectionVM> clientSelectionVMs = new List<SelectionVM>();
             foreach(var item in clients)

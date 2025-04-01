@@ -1,0 +1,187 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace RMERP.DAL.Models;
+
+public partial class Client_Requirement
+{
+    public int CRI_Id { get; set; }
+
+    public int CLI_Id { get; set; }
+
+    public int DES_Id { get; set; }
+
+    public int CRI_Total { get; set; }
+
+    public decimal? CRI_Basic { get; set; }
+
+    public decimal? CRI_DA { get; set; }
+
+    public decimal? CRI_HRA_Fixed { get; set; }
+
+    public double? CRI_HRA_Percentage { get; set; }
+
+    public string CRI_PF_Formula { get; set; }
+
+    public double? CRI_PF_Percentage { get; set; }
+
+    public string CRI_ESIC_Formula { get; set; }
+
+    public double? CRI_ESIC_Percentage { get; set; }
+
+    public string CRI_ESIC_Area { get; set; }
+
+    public bool CRI_ProfessionalTax { get; set; }
+
+    public bool CRI_RevenueDeduction { get; set; }
+
+    public bool CRI_CanteenFacility { get; set; }
+
+    public bool CRI_OT_Calculate_Payableday { get; set; }
+
+    public decimal? CRI_OT_Fixed_PerHour { get; set; }
+
+    public string CRI_OT_Formula { get; set; }
+
+    public decimal? CRI_OT_Rate { get; set; }
+
+    public double? CRI_OT_MultipleTimes { get; set; }
+
+    public bool CRI_IsPayable_WeeklyOff { get; set; }
+
+    public bool CRI_IsPayable_PublicHoliday { get; set; }
+
+    public DateTime CRI_RegisteredOn { get; set; }
+
+    public bool CRI_Active { get; set; }
+
+    public DateTime? CRI_InactivatedOn { get; set; }
+
+    public int? ADM_Id_InactivatedBy { get; set; }
+
+    public bool CRI_OutStation_Allowance { get; set; }
+
+    public decimal? CRI_OutStation_Allowance_Rate { get; set; }
+
+    public bool CRI_Attendance_Allowance { get; set; }
+
+    public int? CRI_Attendance_Allowance_MaximumDays { get; set; }
+
+    public decimal? CRI_Attendance_Allowance_Rate { get; set; }
+
+    public bool CRI_Performance_Allowance { get; set; }
+
+    public bool CRI_Nightshift_Allowance { get; set; }
+
+    public decimal? CRI_Nightshift_Allowance_Rate { get; set; }
+
+    public int CRI_Billing_Type { get; set; }
+
+    public decimal? CRI_Billing_Amount { get; set; }
+
+    public double? CRI_Billing_ServiceCharge { get; set; }
+
+    public string CRI_Billing_ServiceCharge_Formula { get; set; }
+
+    public double? CRI_PF_Employer_Cont_Rate { get; set; }
+
+    public double? CRI_ESIC_Employer_Cont_Rate { get; set; }
+
+    public double CRI_EPS_Rate { get; set; }
+
+    public decimal? CRI_MLWF_Employer_GThen { get; set; }
+
+    public decimal? CRI_MLWF_Employer_LThen { get; set; }
+
+    public decimal? CRI_MLWF_Employee_GThen { get; set; }
+
+    public decimal? CRI_MLWF_Employee_LThen { get; set; }
+
+    public decimal? CRI_MLWF_Employer_Base { get; set; }
+
+    public decimal? CRI_MLWF_Employee_Base { get; set; }
+
+    public decimal CRI_ProffTax_M_From_1 { get; set; }
+
+    public decimal CRI_ProffTax_M_To_1 { get; set; }
+
+    public decimal CRI_ProffTax_M_Amount_1 { get; set; }
+
+    public decimal CRI_ProffTax_M_From_2 { get; set; }
+
+    public decimal CRI_ProffTax_M_To_2 { get; set; }
+
+    public decimal CRI_ProffTax_M_Amount_2 { get; set; }
+
+    public decimal CRI_ProffTax_M_From_3 { get; set; }
+
+    public decimal CRI_ProffTax_M_To_3 { get; set; }
+
+    public decimal CRI_ProffTax_M_Amount_3 { get; set; }
+
+    public decimal CRI_ProffTax_F_From_1 { get; set; }
+
+    public decimal CRI_ProffTax_F_To_1 { get; set; }
+
+    public decimal CRI_ProffTax_F_Amount_1 { get; set; }
+
+    public decimal CRI_ProffTax_F_From_2 { get; set; }
+
+    public decimal CRI_ProffTax_F_To_2 { get; set; }
+
+    public decimal CRI_ProffTax_F_Amount_2 { get; set; }
+
+    public decimal CRI_ProffTax_F_From_3 { get; set; }
+
+    public decimal CRI_ProffTax_F_To_3 { get; set; }
+
+    public decimal CRI_ProffTax_F_Amount_3 { get; set; }
+
+    public bool CRI_Allowance_1 { get; set; }
+
+    public string CRI_Allowance_Name_1 { get; set; }
+
+    public bool CRI_Allowance_2 { get; set; }
+
+    public string CRI_Allowance_Name_2 { get; set; }
+
+    public bool CRI_Allowance_3 { get; set; }
+
+    public string CRI_Allowance_Name_3 { get; set; }
+
+    public bool CRI_Allowance_4 { get; set; }
+
+    public string CRI_Allowance_Name_4 { get; set; }
+
+    public bool CRI_Allowance_5 { get; set; }
+
+    public string CRI_Allowance_Name_5 { get; set; }
+
+    public bool CRI_Allowance_6 { get; set; }
+
+    public string CRI_Allowance_Name_6 { get; set; }
+
+    public bool CRI_Allowance_7 { get; set; }
+
+    public string CRI_Allowance_Name_7 { get; set; }
+
+    public bool CRI_Allowance_8 { get; set; }
+
+    public string CRI_Allowance_Name_8 { get; set; }
+
+    public bool CRI_Allowance_9 { get; set; }
+
+    public string CRI_Allowance_Name_9 { get; set; }
+
+    public bool CRI_Allowance_10 { get; set; }
+
+    public string CRI_Allowance_Name_10 { get; set; }
+
+    public virtual Client CLI { get; set; }
+
+    public virtual ICollection<Client_Requirement_Allowance> Client_Requirement_Allowances { get; set; } = new List<Client_Requirement_Allowance>();
+
+    public virtual Designation DES { get; set; }
+
+    public virtual ICollection<Wage_Register> Wage_Registers { get; set; } = new List<Wage_Register>();
+}

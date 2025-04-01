@@ -1,0 +1,215 @@
+﻿@model IEnumerable<RMERP.DAL.ViewModel.WageProcessListVM>
+
+@{
+    ViewData["Title"] = "Wage Process";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
+}
+@section Breadcrumbs{
+    <li class="breadcrumb-item">Wage Process</li>
+}
+@section scripts{
+
+    @if (TempData["message"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+                alert('@TempData["message"]');
+        });
+        </script>
+    };    
+    <script>
+        function onConfirmClick() {
+              bootbox.prompt({
+                title: "Select Date For Creating Wage",
+                inputType: 'date',
+                callback: function (result) {
+                    $.ajax({
+                        type: "GET",
+                        url: siteUrl + 'WageProcess/CreateNextMonthWage?FRM_Id=' + @ViewBag.FRM_Id + '&date=' + result,
+                         data: "",
+                        success: function (data) {                           
+                            if (data == "") {
+                                location.reload();
+                            } else {
+                                data = '<h5 class="alert alert-danger">' + data+'</h5>'
+                                $('#divMsg').html(data);
+                            }                            
+                        }
+                    })
+                }
+            });
+        };
+
+       
+        function searchCompletedWageProcess() {
+            var FRM_Id = @ViewBag.FRM_Id;
+            var Year = $("#Year").val();
+            var Month = $("#Month").val();
+            var Url = siteUrl + "WageProcess/searchCompletedWageProcess?FRM_Id="+FRM_Id+"&Year=" + Year + "&Month=" + Month;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                beforeSend: function () {
+                    $("#loading-image").show();
+                    $('#div_completed').html("");
+                },
+                success: function (data) {
+                    $('#div_completed').html(data);
+                    $("#loading-image").hide();
+                }
+            })
+        }
+        function searchPendingWageProcess() {
+            var FRM_Id = @ViewBag.FRM_Id;
+            var Year = $("#Year_p").val();
+            var Month = $("#Month_p").val();
+            var Url = siteUrl + "WageProcess/searchPendingWageProcess?FRM_Id="+FRM_Id+"&Year=" + Year + "&Month=" + Month;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                beforeSend: function () {
+                    $("#loading-image-pending").show();
+                    $('#div_pending').html("");
+                },
+                success: function (data) {
+                    $('#div_pending').html(data);
+                    $("#loading-image-pending").hide();
+                }
+            })
+        }
+        function searchTestingWageProcess() {
+            var FRM_Id = @ViewBag.FRM_Id;
+            var Url = siteUrl + "WageProcess/GetTestingWageProcess?FRM_Id="+FRM_Id;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                beforeSend: function () {
+                    $("#loading-image-testing").show();
+                    $('#div_testing').html("");
+                },
+                success: function (data) {
+                    $('#div_testing').html(data);
+                    $("#loading-image-testing").hide();
+                }
+            })
+        }
+
+    </script>
+}
+<style>
+    .modal-dialog {
+        transform: translate(0, -50%);
+        top: 30%;
+        margin: 0 auto;
+    }
+
+    .wage_raw h6 {
+        color: #ccc;
+    }
+
+    .wage_raw span.done {
+        background-image: url('/assets/img/correct.png');
+        background-repeat: no-repeat;
+        padding-left: 15px;
+        display: block;
+    }
+
+    .wage_raw div.col-md-2 {
+        border-right: 1px solid #dcdcdc;
+    }
+</style>
+<div>
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <h4 class="page-title">@ViewData["Title"] (@ViewBag.FRM_Name) </h4> 
+                <span id="divMsg"></span>
+            </div>
+            <div class="col-sm-4 text-right m-b-30">
+                <button id="buttonID" onclick="onConfirmClick()" class="btn btn-primary rounded"><i class="fa fa-plus"></i> Create next month</button>
+            </div>
+        </div>
+        <div id="row WageProcessList">
+            <div class="col-md-12">
+                @if (Model.Count() > 0)
+                {
+                    <ul class="nav nav-tabs nav-tabs-bottom">
+                        <li class="active"><a href="#pending_tab" data-toggle="tab">Pending</a></li>
+                        <li><a href="#completed_tab" data-toggle="tab" onclick="searchCompletedWageProcess()">Completed</a></li>
+                        <li><a href="#Testing_tab" data-toggle="tab" onclick="searchTestingWageProcess()">Old</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="content-full tab-pane active" id="pending_tab">
+                            <div class="row filter-row">
+                                <div class="col-sm-3 col-xs-4">
+                                    <div class="form-group form-focus select-focus">
+                                        <label class="control-label">Year</label>
+                                        @Html.DropDownList("Year_p", new SelectList(ViewBag.linktoYearId, "Value", "Text"), "Select Year", new { @class = "select floating" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-4">
+                                    <div class="form-group form-focus select-focus">
+                                        <label class="control-label">Month</label>
+                                        @Html.DropDownList("Month_p", new SelectList(ViewBag.linktoMonthId, "Value", "Text"), "Select Month", new { @class = "select floating" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-4">
+                                    <a class="btn btn-success" onclick="searchPendingWageProcess()"> Search </a>
+                                </div>
+                            </div>
+                            <img id="loading-image-pending" src="~/assets/img/25.gif" style="display:none;position: fixed;left: 50%;top: 50%;z-index: 1000000; background-position:center;" />
+
+                            <table class="table table-striped custom-table m-b-0">
+                                <tbody id="div_pending">
+                                    @{Html.RenderPartial("_NewWageProcessList", Model.ToList());}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="content-full tab-pane" id="completed_tab">
+                            <div class="row filter-row">
+                                <div class="col-sm-3 col-xs-4">
+                                    <div class="form-group form-focus select-focus">
+                                        <label class="control-label">Year</label>
+                                        @Html.DropDownList("Year", new SelectList(ViewBag.linktoYearId, "Value", "Text"), "Select Year", new { @class = "select floating" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-4">
+                                    <div class="form-group form-focus select-focus">
+                                        <label class="control-label">Month</label>
+                                        @Html.DropDownList("Month", new SelectList(ViewBag.linktoMonthId, "Value", "Text"), "Select Month", new { @class = "select floating" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-4">
+                                    <a class="btn btn-success" onclick="searchCompletedWageProcess()"> Search </a>
+                                </div>
+                            </div>
+                            <img id="loading-image" src="~/assets/img/25.gif" style="display:none;position: fixed;left: 50%;top: 50%;z-index: 1000000; background-position:center;" />
+                            <table class="table table-striped custom-table m-b-0">
+                                <tbody id="div_completed">
+                                    @*@{Html.RenderPartial("_WageProcessList", Model.Where(m => m.WageStatus == true).ToList());}*@
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="content-full tab-pane" id="Testing_tab">
+
+                            <img id="loading-image-testing" src="~/assets/img/25.gif" style="display:none;position: fixed;left: 50%;top: 50%;z-index: 1000000; background-position:center;" />
+                            <table class="table table-striped custom-table m-b-0">
+                                <tbody id="div_testing">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p>No Wage Process To Display</p>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div  id="ModalSelection">
+</div>

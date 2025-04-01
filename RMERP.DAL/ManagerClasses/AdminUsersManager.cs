@@ -15,12 +15,12 @@ namespace RMERP.DAL.ManagerClasses
         {
             _context = context;
         }
-        public AdminUsers Login(AdminUsers adminUsers)
+        public AdminUser Login(AdminUser adminUsers)
         {
             var user = _context.AdminUsers.Where(m => m.ADM_EmailId.Equals(adminUsers.ADM_EmailId) && m.ADM_Password.Equals(adminUsers.ADM_Password)).FirstOrDefault();
             return user;
         }
-        public string AddEditAdminUsers(AdminUsers adminUsers)
+        public string AddEditAdminUsers(AdminUser adminUsers)
         {
             string res = string.Empty;
             try
@@ -41,11 +41,11 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public IEnumerable<AdminUsers> GetAdminUsers()
+        public IEnumerable<AdminUser> GetAdminUsers()
         {
             try
             {
-                IEnumerable<AdminUsers> listAdminUsers = _context.AdminUsers.Include(m=>m.FRM_).OrderBy(m => m.ADM_FirstName).ToList();
+                IEnumerable<AdminUser> listAdminUsers = _context.AdminUsers.Include(m=>m.FRM).OrderBy(m => m.ADM_FirstName).ToList();
                 return listAdminUsers;
             }
             catch (Exception ex)
@@ -54,11 +54,11 @@ namespace RMERP.DAL.ManagerClasses
             }
            
         }
-        public AdminUsers GetAdminUsersById(int AdminId)
+        public AdminUser GetAdminUsersById(int AdminId)
         {
             try
             {
-                AdminUsers adminUsers = new AdminUsers();
+                AdminUser adminUsers = new AdminUser();
                 adminUsers = _context.AdminUsers.Where(m => m.ADM_Id.Equals(AdminId)).FirstOrDefault();
                 return adminUsers;
             }

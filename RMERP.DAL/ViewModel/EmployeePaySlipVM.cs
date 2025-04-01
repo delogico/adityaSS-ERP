@@ -7,7 +7,7 @@ namespace RMERP.DAL.ViewModel
 {
     public class EmployeePaySlipVM
     {        
-        public Firms firm { get; set; }
+        public Firm firm { get; set; }
         public DateTime WAG_Month { get; set; }
         public int EMP_Id { get; set; }
         public string EMP_FirstName { get; set; }
@@ -38,7 +38,7 @@ namespace RMERP.DAL.ViewModel
         public decimal WAR_Basic_Calculated { get; set; }
         public decimal WAR_HRA_Calculated { get; set; }
         public decimal WAR_DA_Calculated { get; set; }
-        public List<Wage_Register_Allowances> Wage_Register_Allowances { get; set; }
+        public List<Wage_Register_Allowance> Wage_Register_Allowances { get; set; }
         public decimal WAR_GrossTotal { get; set; }
         public decimal WAR_PF_Calculated { get; set; }
         public decimal WAR_ESIC_Calculated { get; set; }
@@ -61,12 +61,21 @@ namespace RMERP.DAL.ViewModel
         public string CRI_Allowance_Name_3 { get; set; }       
         public string CRI_Allowance_Name_4 { get; set; }        
         public string CRI_Allowance_Name_5 { get; set; }
+        public string CRI_Allowance_Name_6 { get; set; }       
+        public string CRI_Allowance_Name_7 { get; set; }        
+        public string CRI_Allowance_Name_8 { get; set; }       
+        public string CRI_Allowance_Name_9 { get; set; }        
+        public string CRI_Allowance_Name_10 { get; set; }
 
         public decimal WAR_Allowance_Calculated_1 { get; set; }
         public decimal WAR_Allowance_Calculated_2 { get; set; }
         public decimal WAR_Allowance_Calculated_3 { get; set; }
         public decimal WAR_Allowance_Calculated_4 { get; set; }
         public decimal WAR_Allowance_Calculated_5 { get; set; }
-
+        public decimal WAR_Allowance_Calculated_6 { get; set; }
+        public decimal WAR_Allowance_Calculated_7 { get; set; }
+        public decimal WAR_Allowance_Calculated_8 { get; set; }
+        public decimal WAR_Allowance_Calculated_9 { get; set; }
+        public decimal WAR_Allowance_Calculated_10 { get; set; }
     }
 }

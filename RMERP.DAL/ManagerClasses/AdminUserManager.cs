@@ -15,17 +15,17 @@ namespace RMERP.DAL.ManagerClasses
         {
             _context = context;
         }
-        public AdminUsers Login(AdminUsers adminUsers)
+        public AdminUser Login(AdminUser adminUsers)
         {
             var user = _context.AdminUsers.Where(m => m.ADM_EmailId.Equals(adminUsers.ADM_EmailId) && m.ADM_Password.Equals(adminUsers.ADM_Password)).FirstOrDefault();
             return user;
         }
-        public IEnumerable<AdminUsers> getAdminUsersList()
+        public IEnumerable<AdminUser> getAdminUsersList()
         {
-            var adminUserList = _context.AdminUsers.Include(m => m.FRM_);
+            var adminUserList = _context.AdminUsers.Include(m => m.FRM);
             return adminUserList.ToList();
         }
-        public string AddEditAdminUsers(AdminUsers adminUsers)
+        public string AddEditAdminUsers(AdminUser adminUsers)
         {
             try
             {
@@ -55,17 +55,17 @@ namespace RMERP.DAL.ManagerClasses
             }
             
         }
-        public AdminUsers EditAdminUser(int id)
+        public AdminUser EditAdminUser(int id)
         {
-            AdminUsers adminUsers=new AdminUsers();
+            AdminUser adminUsers=new AdminUser();
             var user = _context.AdminUsers.Find(id);
             return user;
         }
-        public List<Firms> getFirmList()
+        public List<Firm> getFirmList()
         {
            return _context.Firms.ToList();
         }
-        public List<Cities> getCityList()
+        public List<City> getCityList()
         {
             return _context.Cities.ToList();
         }

@@ -19,5 +19,6 @@ namespace RMERP.DAL.ViewModel
     public class updateWageRegisterPerformance
     {
         public List<Wage_Register_PerformanceVM> PerformanceVMs { get; set; }
+        public int CLI_Id { get; set; }
     }
 }

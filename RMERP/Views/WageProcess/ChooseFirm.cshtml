@@ -1,20 +1,19 @@
-﻿@model List<RMERP.DAL.Models.Firms>
+﻿@model List<RMERP.DAL.Models.Firm>
 @{
-    ViewData["Title"] = "Choose Firms";
-    Layout = "~/Views/Shared/_RMLayout.cshtml";
+   ViewData["Title"] = "Choose Firms";
+   Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-@section Breadcrumbs{    
-<li class="breadcrumb-item">Choose Firm</li>
+@section Breadcrumbs{
+   <li class="breadcrumb-item">Choose Firm</li>
 }
 <style>
-    .firms a {
-        color: white ;
-    }
+   .firms a {
+      color: white;
+   }
 </style>
 <div class="btn-group-vertical firms">
-    @foreach (var item in Model)
-    {
-        <button type="button" class="btn btn-lg btn-primary">@Html.ActionLink(item.FRM_Name, "Index", new { FRM_Id = item.FRM_Id})</button>
-    }
-
+   @foreach (var item in Model)
+   {
+      <a class="btn btn-lg btn-primary" href="@Url.Action("Index", new { FRM_Id = item.FRM_Id})">@item.FRM_Name</a>
+   }
 </div>

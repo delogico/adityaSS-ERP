@@ -9,7 +9,7 @@ namespace RMERP.DAL.Mappers
 {
     public class ClientRequirementMapper
     {
-        public static ClientRequirementVM mapMe(Client_Requirements requirement)
+        public static ClientRequirementVM mapMe(Client_Requirement requirement)
         {
             ClientRequirementVM clientRequirementVM = new ClientRequirementVM();
             clientRequirementVM.CRI_Id = requirement.CRI_Id;
@@ -19,7 +19,7 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_Basic = requirement.CRI_Basic;
             clientRequirementVM.CRI_DA = requirement.CRI_DA;
             clientRequirementVM.CRI_HRA_Fixed = requirement.CRI_HRA_Fixed;
-            clientRequirementVM.DES_Title = requirement.DES_.DES_Title;
+            clientRequirementVM.DES_Title = requirement.DES.DES_Title;
             clientRequirementVM.CRI_HRA_Percentage = requirement.CRI_HRA_Percentage;
             clientRequirementVM.CRI_PF_Percentage = requirement.CRI_PF_Percentage;
             clientRequirementVM.CRI_ESIC_Percentage = requirement.CRI_ESIC_Percentage;
@@ -36,7 +36,7 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_ESIC_Formula = requirement.CRI_ESIC_Formula;
 
             clientRequirementVM.CRI_ProfessionalTax = requirement.CRI_ProfessionalTax;
-            clientRequirementVM.CRI_RevenueDeduction =requirement.CRI_RevenueDeduction;
+            clientRequirementVM.CRI_RevenueDeduction = requirement.CRI_RevenueDeduction;
             clientRequirementVM.CRI_CanteenFacility = requirement.CRI_CanteenFacility;
 
             clientRequirementVM.CRI_OT_Calculate_Payableday = requirement.CRI_OT_Calculate_Payableday;
@@ -48,7 +48,7 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_Attendance_Allowance_Rate = requirement.CRI_Attendance_Allowance_Rate;
             clientRequirementVM.CRI_Attendance_Allowance_MaximumDays = requirement.CRI_Attendance_Allowance_MaximumDays;
 
-            clientRequirementVM.CRI_Performance_Allowance = requirement.CRI_Performance_Allowance;            
+            clientRequirementVM.CRI_Performance_Allowance = requirement.CRI_Performance_Allowance;
             clientRequirementVM.CRI_Nightshift_Allowance = requirement.CRI_Nightshift_Allowance;
             clientRequirementVM.CRI_Nightshift_Allowance_Rate = requirement.CRI_Nightshift_Allowance_Rate;
 
@@ -62,18 +62,29 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_Allowance_Name_4 = requirement.CRI_Allowance_Name_4;
             clientRequirementVM.CRI_Allowance_5 = requirement.CRI_Allowance_5;
             clientRequirementVM.CRI_Allowance_Name_5 = requirement.CRI_Allowance_Name_5;
+            
+            clientRequirementVM.CRI_Allowance_6 = requirement.CRI_Allowance_6;
+            clientRequirementVM.CRI_Allowance_Name_6 = requirement.CRI_Allowance_Name_6;
+            clientRequirementVM.CRI_Allowance_7 = requirement.CRI_Allowance_7;
+            clientRequirementVM.CRI_Allowance_Name_7 = requirement.CRI_Allowance_Name_7;
+            clientRequirementVM.CRI_Allowance_8 = requirement.CRI_Allowance_8;
+            clientRequirementVM.CRI_Allowance_Name_8 = requirement.CRI_Allowance_Name_8;
+            clientRequirementVM.CRI_Allowance_9 = requirement.CRI_Allowance_9;
+            clientRequirementVM.CRI_Allowance_Name_9 = requirement.CRI_Allowance_Name_9;
+            clientRequirementVM.CRI_Allowance_10 = requirement.CRI_Allowance_10;
+            clientRequirementVM.CRI_Allowance_Name_10 = requirement.CRI_Allowance_Name_10;
 
-            if (clientRequirementVM.CRI_OT_Formula!=null)
+            if (clientRequirementVM.CRI_OT_Formula != null)
             {
                 clientRequirementVM.CRI_OT_Calculate_Differently = false;
             }
-            
-            if (requirement.CLI_ != null)
-                clientRequirementVM.CLI_Name = requirement.CLI_.CLI_Name;
+
+            if (requirement.CLI != null)
+                clientRequirementVM.CLI_Name = requirement.CLI.CLI_Name;
 
             if (requirement.CRI_HRA_Fixed != null)
                 clientRequirementVM.HRAselection = true;
-            else if(requirement.CRI_HRA_Percentage !=null)
+            else if (requirement.CRI_HRA_Percentage != null)
                 clientRequirementVM.HRAselection = false;
 
             clientRequirementVM.CRI_Billing_Amount = requirement.CRI_Billing_Amount;
@@ -115,17 +126,17 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_ProffTax_F_Amount_3 = requirement.CRI_ProffTax_F_Amount_3;
 
             return clientRequirementVM;
-        }       
-        public static Client_Requirements mapMeModel(ClientRequirementVM requirementVM)
+        }
+        public static Client_Requirement mapMeModel(ClientRequirementVM requirementVM)
         {
-            Client_Requirements requirement = new Client_Requirements();
+            Client_Requirement requirement = new Client_Requirement();
             requirement.CRI_Id = requirementVM.CRI_Id;
             requirement.CLI_Id = requirementVM.CLI_Id;
             requirement.DES_Id = requirementVM.DES_Id;
             requirement.CRI_Total = requirementVM.CRI_Total;
             requirement.CRI_Basic = requirementVM.CRI_Basic;
             requirement.CRI_DA = requirementVM.CRI_DA;
-          
+
             requirement.CRI_PF_Percentage = requirementVM.CRI_PF_Percentage;
             requirement.CRI_ESIC_Percentage = requirementVM.CRI_ESIC_Percentage;
             requirement.CRI_ESIC_Area = requirementVM.CRI_ESIC_Area;
@@ -134,7 +145,7 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_OT_MultipleTimes = requirementVM.CRI_OT_MultipleTimes;
             requirement.CRI_IsPayable_WeeklyOff = requirementVM.CRI_IsPayable_WeeklyOff;
             requirement.CRI_IsPayable_PublicHoliday = requirementVM.CRI_IsPayable_PublicHoliday;
-            requirement.CRI_Active = requirementVM.CRI_Active;
+            requirement.CRI_Active = requirementVM.CRI_Active.HasValue ? requirementVM.CRI_Active.Value : false;
             requirement.CRI_InactivatedOn = requirementVM.CRI_InactivatedOn;
             requirement.CRI_RegisteredOn = requirementVM.CRI_RegisteredOn;
             requirement.CRI_PF_Formula = requirementVM.CRI_PF_Formula;
@@ -153,7 +164,7 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_Attendance_Allowance_Rate = requirementVM.CRI_Attendance_Allowance_Rate;
             requirement.CRI_Attendance_Allowance_MaximumDays = requirementVM.CRI_Attendance_Allowance_MaximumDays;
 
-            requirement.CRI_Performance_Allowance = requirementVM.CRI_Performance_Allowance;            
+            requirement.CRI_Performance_Allowance = requirementVM.CRI_Performance_Allowance;
             requirement.CRI_Nightshift_Allowance = requirementVM.CRI_Nightshift_Allowance;
             requirement.CRI_Nightshift_Allowance_Rate = requirementVM.CRI_Nightshift_Allowance_Rate;
 
@@ -168,9 +179,20 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_Allowance_5 = requirementVM.CRI_Allowance_5;
             requirement.CRI_Allowance_Name_5 = requirementVM.CRI_Allowance_Name_5;
 
-            if (requirementVM.HRAselection ==true)
+            requirement.CRI_Allowance_6 = requirementVM.CRI_Allowance_6;
+            requirement.CRI_Allowance_Name_6 = requirementVM.CRI_Allowance_Name_6;
+            requirement.CRI_Allowance_7 = requirementVM.CRI_Allowance_7;
+            requirement.CRI_Allowance_Name_7 = requirementVM.CRI_Allowance_Name_7;
+            requirement.CRI_Allowance_8 = requirementVM.CRI_Allowance_8;
+            requirement.CRI_Allowance_Name_8 = requirementVM.CRI_Allowance_Name_8;
+            requirement.CRI_Allowance_9 = requirementVM.CRI_Allowance_9;
+            requirement.CRI_Allowance_Name_9 = requirementVM.CRI_Allowance_Name_9;
+            requirement.CRI_Allowance_10 = requirementVM.CRI_Allowance_10;
+            requirement.CRI_Allowance_Name_10 = requirementVM.CRI_Allowance_Name_10;
+
+            if (requirementVM.HRAselection == true)
                 requirement.CRI_HRA_Fixed = requirementVM.CRI_HRA_Fixed;
-            else if(requirementVM.HRAselection == false)
+            else if (requirementVM.HRAselection == false)
                 requirement.CRI_HRA_Percentage = requirementVM.CRI_HRA_Percentage;
 
             requirement.CRI_Billing_Amount = requirementVM.CRI_Billing_Amount;
@@ -210,18 +232,18 @@ namespace RMERP.DAL.Mappers
             requirement.CRI_ProffTax_F_Amount_3 = requirementVM.CRI_ProffTax_F_Amount_3;
 
             return requirement;
-        }        
-        public static List<ClientRequirementVM> mapRequirements(List<Client_Requirements> requirements)
+        }
+        public static List<ClientRequirementVM> mapRequirements(List<Client_Requirement> requirements)
         {
             List<ClientRequirementVM> lst = new List<ClientRequirementVM>();
-            foreach (Client_Requirements requirement in requirements)
+            foreach (Client_Requirement requirement in requirements)
                 lst.Add(mapMe(requirement));
             return lst;
         }
 
-        public static List<Client_Requirements> mapRequirements(List<ClientRequirementVM> requirements)
+        public static List<Client_Requirement> mapRequirements(List<ClientRequirementVM> requirements)
         {
-            List<Client_Requirements> lst = new List<Client_Requirements>();
+            List<Client_Requirement> lst = new List<Client_Requirement>();
             foreach (ClientRequirementVM requirement in requirements)
                 lst.Add(mapMeModel(requirement));
             return lst;

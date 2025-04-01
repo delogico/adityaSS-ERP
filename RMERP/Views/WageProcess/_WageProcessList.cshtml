@@ -3,7 +3,7 @@
 
 @if (Model.Count() > 0)
 {
-    @foreach (var item in Model)
+    foreach (var item in Model)
     {
         var style = (item.WageStatus == true ? "#ccffdd;" : "none");
         <tr style="background-color:@style;">
@@ -17,14 +17,22 @@
                         <h6>Attendance:</h6>
                         <b>@Html.ActionLink("Attendance", "WageAttendanceList", "Attendance", new { WAG_Id = item.WAG_Id })</b>
                         <div style="font-size:10px;">
-                            @if (item.ImportedClients == item.ActiveClients)
-                            {
-                                <span class="done" style="color:green;">Attendence Imported for all clients.</span>
-                            }
-                            else
-                            {
-                                <span style="color:orangered;">@item.NotImportedClients client's attendence Pending to import.</span>
-                            }
+                           @if ((item.WageStatus == true) || (item.WageRegisterSaved == item.ActiveClients))
+                           {
+                              <span class="done" style="color:green;">Wage Register for all clients are finalized.</span>
+                           }
+                           else
+                           {
+                              @if (item.ImportedClients == item.ActiveClients)
+                              {
+                                 <span class="done" style="color:green;">Attendence Imported for all clients.</span>
+                              }
+                              else
+                              {
+                                 <span style="color:orangered;">@item.NotImportedClients client's attendence Pending to import.</span>
+                              }
+
+                           }
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -36,7 +44,7 @@
                     </div>
                     <div class="col-md-2">
                         <h6>Wage Register:</h6>
-                        <b>@Html.ActionLink("Wage Register", "WageRegister", "WageRegister", new { WAG_Id = item.WAG_Id, FRM_Id = item.FRM_Id })</b>
+                        <b>@Html.ActionLink("Wage Register", "WageProcessClients", "WageRegister", new { WAG_Id = item.WAG_Id, FRM_Id = item.FRM_Id })</b>
                         <div style="font-size:10px;">
 
                             @if (item.WageStatus == true)
@@ -143,7 +151,3 @@ else
 {
     <p>No Wage Process Available!</p>
 }
-
-
-
-

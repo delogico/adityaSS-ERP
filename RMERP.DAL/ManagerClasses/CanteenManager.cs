@@ -17,13 +17,13 @@ namespace RMERP.DAL.ManagerClasses
         public Wage_Register_Canteen GetCanteenById(int WRC_Id)
         {
             Wage_Register_Canteen canteen = new Wage_Register_Canteen();
-            canteen = _context.Wage_Register_Canteen.Include(M => M.CLE_).ThenInclude(M => M.EMP_).Where(m=>m.WRC_Id.Equals(WRC_Id)).FirstOrDefault();
+            canteen = _context.Wage_Register_Canteens.Include(M => M.CLE).ThenInclude(M => M.EMP).Where(m=>m.WRC_Id.Equals(WRC_Id)).FirstOrDefault();
             return canteen;
         }
         public Wage_Register_Canteen GetCanteenByCLE(int WAG_Id,int CLE_Id,int CLI_Id)
         {
             Wage_Register_Canteen canteen = new Wage_Register_Canteen();
-            canteen = _context.Wage_Register_Canteen.Include(M => M.CLE_).ThenInclude(M => M.EMP_).Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLE_Id.Equals(CLE_Id) && m.CLE_.CLI_Id.Equals(CLI_Id)).FirstOrDefault();
+            canteen = _context.Wage_Register_Canteens.Include(M => M.CLE).ThenInclude(M => M.EMP).Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLE_Id.Equals(CLE_Id) && m.CLE.CLI_Id.Equals(CLI_Id)).FirstOrDefault();
             return canteen;
         }
         public string UpdateAmount(List<Wage_Register_Canteen> canteens)
@@ -34,9 +34,9 @@ namespace RMERP.DAL.ManagerClasses
                 foreach(Wage_Register_Canteen canteen in canteens)
                 {
                     if (canteen.WRC_Id > 0)
-                        _context.Wage_Register_Canteen.Update(canteen);
+                        _context.Wage_Register_Canteens.Update(canteen);
                     else
-                        _context.Wage_Register_Canteen.Add(canteen);
+                        _context.Wage_Register_Canteens.Add(canteen);
                 }
                 _context.SaveChanges();
             }

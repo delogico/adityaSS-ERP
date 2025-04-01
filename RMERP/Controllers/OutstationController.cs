@@ -29,14 +29,14 @@ namespace RMERP.Controllers
         public IActionResult UpdateOutstationHours(int CRI_Id, int WAG_Id, int FRM_Id)
         {
             WageProcessManager wageProcessManager = new WageProcessManager(_context);
-            DateTime WAG_Month = wageProcessManager.getWageProcessById(WAG_Id).WAG_Month;
+            DateOnly WAG_Month = wageProcessManager.getWageProcessById(WAG_Id).WAG_Month;
             ViewBag.Wag_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
             ClientsManager clientsManager = new ClientsManager(_context, Configuration);
             OutstationManager outstationManager = new OutstationManager(_context);
-            Client_Requirements client_Requirements = clientsManager.GetRequirementsById(CRI_Id);
+            Client_Requirement client_Requirements = clientsManager.GetRequirementsById(CRI_Id);
             List<Wage_Register_OutstationVM> wage_Register_Outstations = new List<Wage_Register_OutstationVM>();
-            IEnumerable<Clients_Employees> clientsEmployees = clientsManager.listActiveClientsEmployees(client_Requirements.CLI_Id, WAG_Month, client_Requirements.DES_Id);
-            foreach (Clients_Employees employee in clientsEmployees)
+            IEnumerable<Clients_Employee> clientsEmployees = clientsManager.listActiveClientsEmployees(client_Requirements.CLI_Id, DAL.Helpers.ProjectUtils.DateToDateTime(WAG_Month), client_Requirements.DES_Id);
+            foreach (Clients_Employee employee in clientsEmployees)
             {
                 Wage_Register_Outstation outstation = new Wage_Register_Outstation();
                 Wage_Register_OutstationVM outstationVM = new Wage_Register_OutstationVM();
@@ -52,7 +52,7 @@ namespace RMERP.Controllers
                     outstationVM.WAG_Id = WAG_Id;
                     outstationVM.Emp_ID = employee.EMP_Id;
                     outstationVM.CRI_Id = CRI_Id;
-                    outstationVM.Emp_Name = employee.EMP_.EMP_FirstName + " " + employee.EMP_.EMP_MiddleName + " " + employee.EMP_.EMP_SurName;
+                    outstationVM.Emp_Name = employee.EMP.EMP_FirstName + " " + employee.EMP.EMP_MiddleName + " " + employee.EMP.EMP_SurName;
                 }
                 outstationVM.FRM_ID = FRM_Id;
                 wage_Register_Outstations.Add(outstationVM);
@@ -76,6 +76,5 @@ namespace RMERP.Controllers
             }
             return RedirectToAction("WageRegister", "WageRegister", new { WAG_Id = list[0].WAG_Id, FRM_Id = list[0].FRM_ID });
         }
-       
     }
 }

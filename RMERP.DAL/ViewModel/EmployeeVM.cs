@@ -121,19 +121,19 @@ namespace RMERP.DAL.ViewModel
             }
         }
         public ICollection<Attendance> Attendance { get; set; }
-        public ICollection<Clients_Employees> Clients_Employees { get; set; }
+        public ICollection<Clients_Employee> Clients_Employees { get; set; }
         public List<EmployeeAdvanceVM> advances { get; set; }
         public List<WageRegisterAdvancesVM> wageRegisterAdvances { get; set; }
 
         public EmployeeDocumentsVM employee_Document { get; set; }
-        public List<Document_Types> document_Types { get; set; }
-        public List<Employee_Documents> employee_Documents { get; set; }
+        public List<Document_Type> document_Types { get; set; }
+        public List<Employee_Document> employee_Documents { get; set; }
 
         [Required]
         [Display(Name ="Select Firm")]
         public int FRM_Id { get; set; }
 
-        public Firms FRM_ { get; set; }
+        public Firm FRM_ { get; set; }
 
         public bool IsAssigned { get; set; }
 

@@ -19,5 +19,6 @@ namespace RMERP.DAL.ViewModel
     public class updateWageRegisterCanteen
     {
         public List<Wage_Register_CanteenVM> canteenVMs { get; set; }
+        public int CLI_Id { get; set; }
     }
 }

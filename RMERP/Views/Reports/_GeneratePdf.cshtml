@@ -54,7 +54,7 @@
                 <center>
                     <h2><strong>@Model.firm.FRM_Name</strong></h2>
                     <strong>
-                        @Model.firm.FRM_Address1,@Model.firm.FRM_Address1,@Model.firm.FRM_Address2,@Model.firm.STA_.STA_Name<br>
+                        @Model.firm.FRM_Address1,@Model.firm.FRM_Address1,@Model.firm.FRM_Address2,@Model.firm.STA.STA_Name<br>
                     </strong>
                 </center>
             </div>
@@ -170,7 +170,7 @@
                                     @foreach (var item in Model.Wage_Register_Allowances)
                                     {
                                         <tr>
-                                            <td class="text-left">@item.CRA_.ALL_.ALL_Title</td>
+                                            <td class="text-left">@item.CRA.ALL.ALL_Title</td>
                                             <td class="text-right">@item.WAA_Amount_Calculated</td>
                                         </tr>
                                     }

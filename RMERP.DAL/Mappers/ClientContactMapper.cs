@@ -9,7 +9,7 @@ namespace RMERP.DAL.Mappers
 {
     public class ClientContactMapper
     {
-        public static ClientContactVM mapMe(Client_Contacts contact)
+        public static ClientContactVM mapMe(Client_Contact contact)
         {
             ClientContactVM contactVM = new ClientContactVM();
             contactVM.CON_Id = contact.CON_Id;
@@ -22,16 +22,16 @@ namespace RMERP.DAL.Mappers
             contactVM.CON_isPrimary = contact.CON_isPrimary;
             contactVM.CON_RegisteredOn = contact.CON_RegisteredOn;
             contactVM.ADM_Id_RegisteredBy = contact.ADM_Id_RegisteredBy;
-            if (contact.CLI_ != null)
-                contactVM.client = contact.CLI_;
+            if (contact.CLI != null)
+                contactVM.client = contact.CLI;
             
             return contactVM;
         }
 
-        public static List<ClientContactVM> mapContacts(List<Client_Contacts> contacts)
+        public static List<ClientContactVM> mapContacts(List<Client_Contact> contacts)
         {
             List<ClientContactVM> lst = new List<ClientContactVM>();
-            foreach (Client_Contacts contact in contacts)
+            foreach (Client_Contact contact in contacts)
                 lst.Add(mapMe(contact));
             return lst;
         }

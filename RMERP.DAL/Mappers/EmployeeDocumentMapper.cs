@@ -9,7 +9,7 @@ namespace RMERP.DAL.Mappers
 {
     public class EmployeeDocumentMapper
     {
-        public static EmployeeDocumentsVM mapMe(Employee_Documents document)
+        public static EmployeeDocumentsVM mapMe(Employee_Document document)
         {
             EmployeeDocumentsVM documentVM = new EmployeeDocumentsVM();
             documentVM.EMD_Id = document.EMD_Id;
@@ -19,9 +19,9 @@ namespace RMERP.DAL.Mappers
             documentVM.EMD_UploadedOn = document.EMD_UploadedOn;
             return documentVM;
         }
-        public static Employee_Documents mapMeModel(EmployeeDocumentsVM documentVM)
+        public static Employee_Document mapMeModel(EmployeeDocumentsVM documentVM)
         {
-            Employee_Documents document = new Employee_Documents();
+            Employee_Document document = new Employee_Document();
             document.EMD_Id = documentVM.EMD_Id;
             document.DOT_Id = documentVM.DOT_Id;
             document.EMP_Id = documentVM.EMP_Id;
@@ -30,10 +30,10 @@ namespace RMERP.DAL.Mappers
             return document;
         }
 
-        public static List<EmployeeDocumentsVM> mapEmployeeDocuments(List<Employee_Documents> documents)
+        public static List<EmployeeDocumentsVM> mapEmployeeDocuments(List<Employee_Document> documents)
         {
             List<EmployeeDocumentsVM> lst = new List<EmployeeDocumentsVM>();
-            foreach (Employee_Documents document in documents)
+            foreach (Employee_Document document in documents)
             {
                 lst.Add(mapMe(document));
             }

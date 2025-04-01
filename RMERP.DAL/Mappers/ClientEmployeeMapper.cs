@@ -10,7 +10,7 @@ namespace RMERP.DAL.Mappers
 {
     public class ClientEmployeeMapper
     {        
-        public static ClientEmployeeVM mapMe(Clients_Employees employee, RMERPContext _context = null)
+        public static ClientEmployeeVM mapMe(Clients_Employee employee, RMERPContext _context = null)
         {
             ClientsManager clientsManager = new ClientsManager(_context);
 
@@ -23,10 +23,10 @@ namespace RMERP.DAL.Mappers
             clientEmployeeVM.ADM_Id_RegisteredBy = employee.ADM_Id_RegisteredBy;
             clientEmployeeVM.CLE_UnassignedOn = employee.CLE_UnassignedOn;
             clientEmployeeVM.ADM_Id_UnassignedBy = employee.ADM_Id_UnassignedBy;
-            if (employee.DES_ != null)
-                clientEmployeeVM.DES_Title = employee.DES_.DES_Title;
-            if(employee.EMP_ != null)
-                clientEmployeeVM.employee = EmployeesMapper.MapMe(employee.EMP_);
+            if (employee.DES != null)
+                clientEmployeeVM.DES_Title = employee.DES.DES_Title;
+            if(employee.EMP != null)
+                clientEmployeeVM.employee = EmployeesMapper.MapMe(employee.EMP);
             if (_context != null)
             {
                 clientEmployeeVM.IsEmployeeWagedForClient = clientsManager.IsEmployeeWagedForClient(employee.EMP_Id, employee.CLI_Id, employee.DES_Id);
@@ -34,10 +34,10 @@ namespace RMERP.DAL.Mappers
             return clientEmployeeVM;
         }
 
-        public static List<ClientEmployeeVM> mapEmployees(List<Clients_Employees> employees, RMERPContext _context=null)
+        public static List<ClientEmployeeVM> mapEmployees(List<Clients_Employee> employees, RMERPContext _context=null)
         {
             List<ClientEmployeeVM> lst = new List<ClientEmployeeVM>();
-            foreach (Clients_Employees employee in employees)
+            foreach (Clients_Employee employee in employees)
                 lst.Add(mapMe(employee, _context));
             return lst;
         }

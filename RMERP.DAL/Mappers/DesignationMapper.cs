@@ -9,7 +9,7 @@ namespace RMERP.DAL.Mappers
 {
     public class DesignationMapper
     {
-        public static DesignationVM mapMe(Designations designations)
+        public static DesignationVM mapMe(Designation designations)
         {
             DesignationVM designationVM = new DesignationVM();
             designationVM.DES_Id = designations.DES_Id;
@@ -17,18 +17,18 @@ namespace RMERP.DAL.Mappers
             designationVM.DES_Exclude_LWF = designations.DES_Exclude_LWF;
             return designationVM;
         }
-        public static Designations mapMeModel(DesignationVM designations)
+        public static Designation mapMeModel(DesignationVM designations)
         {
-            Designations designation = new Designations();
+            Designation designation = new Designation();
             designation.DES_Id = designations.DES_Id;
             designation.DES_Title = designations.DES_Title;
             designation.DES_Exclude_LWF = designations.DES_Exclude_LWF;
             return designation;
         }
-        public static List<DesignationVM> mapDesignations(List<Designations> designations)
+        public static List<DesignationVM> mapDesignations(List<Designation> designations)
         {
             List<DesignationVM> lst = new List<DesignationVM>();
-            foreach (Designations designation in designations)
+            foreach (Designation designation in designations)
             {
                 lst.Add(mapMe(designation));
             }

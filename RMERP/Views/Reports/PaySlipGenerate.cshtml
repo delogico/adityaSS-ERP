@@ -2,182 +2,186 @@
 @using RMERP.Helpers
 @using RMERP.DAL.Helpers
 @{
-    ViewData["Title"] = "PaySlipGenerate";
+   ViewData["Title"] = "PaySlipGenerate";
 }
 
 @section Breadcrumbs{
-    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id })</li>
-    <li class="breadcrumb-item">Pay Slips</li>
+   <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id })</li>
+   <li class="breadcrumb-item">Pay Slips</li>
 }
 
 <style>
-    .fa-check-circle {
-        color: green;
-    }
+   .fa-check-circle {
+      color: green;
+   }
 
-    .fa-times-circle {
-        color: red;
-    }
+   .fa-times-circle {
+      color: red;
+   }
 
-    .fa-info-circle {
-        color: #ff9b44;
-    }
+   .fa-info-circle {
+      color: #ff9b44;
+   }
 </style>
 <div>
-    <div class="content container-fluid">
-        <div class="row">
-            <div class="col-sm-8">
-                <h4 class="page-title">@Model.FRM_Name (@Model.WAG_Month)</h4>
+   <div class="content container-fluid">
+      <div class="row">
+         <div class="col-sm-8">
+            <h4 class="page-title">@Model.FRM_Name (@Model.WAG_Month)</h4>
+         </div>
+         <div class="col-sm-4 text-right m-b-30">
+            @*@if (Model.ClientWiseEmps.Count() > 0)
+               {
+                   <a id="btnGenerateAll" class="btn btn-primary rounded" onclick="GeneratePaySlip_All(@Model.WAG_Id,0)">Generate For All</a>
+                   <img id="All_loading-image" src="~/assets/img/smallLoading.gif" style="display:none;" />
+               }*@
+         </div>
+      </div>
+      @if (Model.ClientWiseEmps.Count() > 0)
+      {
+         <div class="progress" style="display:none;">
+            <div class="progress-bar progress-bar-danger" role="progressbar"
+                 aria-valuemin="0" aria-valuemax="100" style="width:0%">
+               <span id="per">0</span>%
             </div>
-            <div class="col-sm-4 text-right m-b-30">
-                @*@if (Model.ClientWiseEmps.Count() > 0)
-                    {
-                        <a id="btnGenerateAll" class="btn btn-primary rounded" onclick="GeneratePaySlip_All(@Model.WAG_Id,0)">Generate For All</a>
-                        <img id="All_loading-image" src="~/assets/img/smallLoading.gif" style="display:none;" />
-                    }*@
+         </div>
+
+         @if (Model.ClientWiseEmps.SelectMany(m => m.EmpPaySlipVMs.Where(mn => !mn.IsPaySlipGenerated)).Count() > 0)
+         {
+            <div class="alert alert-warning" role="alert">
+               Outof @Model.ClientWiseEmps.SelectMany(m => m.EmpPaySlipVMs).Count(), Total <strong>@Model.ClientWiseEmps.SelectMany(m => m.EmpPaySlipVMs.Where(mn => !mn.IsPaySlipGenerated)).Count() Pending</strong> To Generate
             </div>
-        </div>
-        @if (Model.ClientWiseEmps.Count() > 0)
-        {
-            <div class="progress" style="display:none;">
-                <div class="progress-bar progress-bar-danger" role="progressbar"
-                     aria-valuemin="0" aria-valuemax="100" style="width:0%">
-                    <span id="per">0</span>%
-                </div>
+         }
+         else
+         {
+            <div class="alert alert-success" role="alert">
+               <strong>Success!</strong> All Payslips Generated
             </div>
+         }
 
-            @if (Model.ClientWiseEmps.SelectMany(m => m.EmpPaySlipVMs.Where(mn => !mn.IsPaySlipGenerated)).Count() > 0)
-            {
-                <div class="alert alert-warning" role="alert">
-                    Outof @Model.ClientWiseEmps.SelectMany(m => m.EmpPaySlipVMs).Count(), Total <strong>@Model.ClientWiseEmps.SelectMany(m => m.EmpPaySlipVMs.Where(mn => !mn.IsPaySlipGenerated)).Count() Pending</strong> To Generate
-                </div>
-            }
-            else
-            {
-                <div class="alert alert-success" role="alert">
-                    <strong>Success!</strong> All Payslips Generated
-                </div>
-            }
+         <div class="row">
+            <div class="col-md-12">
+               <ul class="nav nav-tabs">
+                  @foreach (var item in Model.ClientWiseEmps)
+                  {
+                     var cls = "";
+                     if (Model.ClientWiseEmps.IndexOf(item) == 0)
+                     {
+                        cls = "active";
+                     }
 
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="nav nav-tabs">
-                        @foreach (var item in Model.ClientWiseEmps)
-                        {
-                            var cls = "";
-                            if (Model.ClientWiseEmps.IndexOf(item) == 0)
-                            {
-                                cls = "active";
-                            }
-
-                            <li class="@cls">
-                                <a data-toggle="tab" href="#@item.CLI_Id">
-                                    <i class="fa fa-@(item.AllSalaryslipsGenerated==(int)ProjectUtils.SalaryslipsGenerated.Generated ? "check-circle"
+                     <li class="@cls">
+                        <a data-toggle="tab" href="#@item.CLI_Id">
+                           <i class="fa fa-@(item.AllSalaryslipsGenerated==(int)ProjectUtils.SalaryslipsGenerated.Generated ? "check-circle"
                                     :(item.AllSalaryslipsGenerated==(int)ProjectUtils.SalaryslipsGenerated.NotGenerated?"times-circle" : "info-circle") )"></i>
-                                    @item.CLI_Name
-                                </a>
-                            </li>
-                        }
-                    </ul>
+                           @item.CLI_Name
+                        </a>
+                     </li>
+                  }
+               </ul>
 
-                    <div class="tab-content">
-                        @foreach (var client in Model.ClientWiseEmps)
-                        {
-                            var cls = "";
-                            if (Model.ClientWiseEmps.IndexOf(client) == 0)
-                            {
-                                cls = "in active";
-                            }
-                            <div id="@client.CLI_Id" class="tab-pane fade @cls">
-                                <div class="row p-b-10">
-                                    <div class="col-md-6 text-left">
-                                        <h3>@client.CLI_Name</h3>
-                                    </div>
+               <div class="tab-content">
+                  @foreach (var client in Model.ClientWiseEmps)
+                  {
+                     var cls = "";
+                     if (Model.ClientWiseEmps.IndexOf(client) == 0)
+                     {
+                        cls = "in active";
+                     }
+                     <div id="@client.CLI_Id" class="tab-pane fade @cls">
+                        <div class="row p-b-10">
+                           <div class="col-md-6 text-left">
+                              <h3>@client.CLI_Name</h3>
+                           </div>
 
-                                    <div class="col-md-6 text-right">
-                                        @if (client.EmpPaySlipVMs.Count() > 0)
-                                        {
-                                            @Html.Hidden("client_"+client.CLI_Id,client.EmpPaySlipVMs)
-                                            <a id="btnGenerateAllForClient" class="btn btn-primary rounded" onclick="Generate(@client.CLI_Id,@Model.WAG_Id)">Generate All</a>
-                                            <img id="AllClient_loading-image" src="~/assets/img/smallLoading.gif" style="display:none;" />
-                                        }
-                                    </div>
-                                </div>
+                           <div class="col-md-6 text-right">
+                              @if (client.EmpPaySlipVMs.Count() > 0)
+                              {
+                                 @Html.Hidden("client_" + client.CLI_Id, client.EmpPaySlipVMs)
+                                 <a id="btnGenerateAllForClient" class="btn btn-primary rounded" onclick="Generate(@client.CLI_Id,@Model.WAG_Id)">Generate All</a>
+                                 <img id="AllClient_loading-image" src="~/assets/img/smallLoading.gif" style="display:none;" />
+                                 @if (client.EmpPaySlipVMs.Count() == client.EmpPaySlipVMs.Where(a => a.IsPaySlipGenerated).Count())
+                                 {
+                                    <a id="btnGenerateAllForClient" class="btn btn-success rounded" href="@Url.Action("DownloadPaySlips","Reports",new { WAG_Id = Model.WAG_Id, CLI_Id = client.CLI_Id})">Download All</a>
+                                 }
+                              }
+                           </div>
+                        </div>
 
-                                <table class="table table-striped custom-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Sr.No</th>
-                                            <th>Employee ID</th>
-                                            <th>Employee Name</th>
-                                            @Html.Hidden("totEmpCount", Model.ClientWiseEmps.Count())
-                                            <th>
-                                                # <span>Outof @client.EmpPaySlipVMs.Count() , Total <span id="pdfCount">@client.EmpPaySlipVMs.Where(m => m.IsPaySlipGenerated).Count()</span> Generated</span>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{
-                                            var srNo = 0;
-                                        }
-                                        @foreach (var item in client.EmpPaySlipVMs)
-                                        {
-                                            srNo = srNo + 1;
+                        <table class="table table-striped custom-table">
+                           <thead>
+                              <tr>
+                                 <th>Sr.No</th>
+                                 <th>Employee ID</th>
+                                 <th>Employee Name</th>
+                                 @Html.Hidden("totEmpCount", Model.ClientWiseEmps.Count())
+                                 <th>
+                                    # <span>Outof @client.EmpPaySlipVMs.Count() , Total <span id="pdfCount">@client.EmpPaySlipVMs.Where(m => m.IsPaySlipGenerated).Count()</span> Generated</span>
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              @{
+                                 var srNo = 0;
+                              }
+                              @foreach (var item in client.EmpPaySlipVMs)
+                              {
+                                 srNo = srNo + 1;
 
-                                        <tr class="item_@item.CLI_Id">
-                                            <td style="display:none;"><span class="EMP_Id">@item.EMP_Id</span></td>
-                                            <td style="display:none;"><span class="WPS_Id">@item.WPS_Id</span></td>
-                                            <td>@srNo </td>
-                                            <td>@item.EMP_Id.ToString("D5")</td>
-                                            <td>@item.EMP_FullName</td>
-                                            <td>
-                                                @if (item.IsPaySlipGenerated)
-                                                {
-                                                    <span>
-                                                        <a id="btnDownload" href="@Url.Action("DownloadPaySlip","Reports",new { WPS_Id=item.WPS_Id})" class="btn btn-xs btn-success">Download</a>
-                                                        <a id="btnRegenerate" onclick="GeneratePaySlip(@Model.WAG_Id,@item.EMP_Id,@item.WPS_Id)" class="btn btn-xs btn-warning">Regenerate</a>
-                                                        <img id="R_loading-image_@item.EMP_Id" src="~/assets/img/smallLoading.gif" style="display:none;" />
-                                                        <br />
-                                                        <span class="label label-success-border">Generated on @DateHelper.getLongDateFormat(item.WPS_GeneratedOn.Value) </span>
-                                                    </span>
-                                                }
-                                                else
-                                                {
-                                                    <span id="spanNotGenerated_@item.EMP_Id">
-                                                        <span class="label label-danger-border">Not Generated Yet </span>
-                                                        <span>&nbsp;&nbsp;</span>
-                                                        <span>
-                                                            <a class="btn btn-xs btn-info" onclick="GeneratePaySlip(@Model.WAG_Id,@item.EMP_Id)"> Generate PaySlip</a>
-                                                            <img id="loading-image_@item.EMP_Id" src="~/assets/img/smallLoading.gif" style="display:none;" />
-                                                        </span>
-                                                    </span>
-                                                }
-                                                <img id="All_loading-image_@item.EMP_Id" src="~/assets/img/smallLoading.gif" style="display:none;" />
-                                            </td>
-                                        </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
+                                 <tr class="item_@item.CLI_Id">
+                                    <td style="display:none;"><span class="EMP_Id">@item.EMP_Id</span></td>
+                                    <td style="display:none;"><span class="WPS_Id">@item.WPS_Id</span></td>
+                                    <td>@srNo </td>
+                                    <td>@item.EMP_Id.ToString("D5")</td>
+                                    <td>@item.EMP_FullName</td>
+                                    <td>
+                                       @if (item.IsPaySlipGenerated)
+                                       {
+                                          <span>
+                                             <a id="btnDownload" href="@Url.Action("DownloadPaySlip","Reports",new { WPS_Id=item.WPS_Id})" class="btn btn-xs btn-success">Download</a>
+                                             <a id="btnRegenerate" onclick="GeneratePaySlip(@Model.WAG_Id,@item.EMP_Id,@item.WPS_Id)" class="btn btn-xs btn-warning">Regenerate</a>
+                                             <img id="R_loading-image_@item.EMP_Id" src="~/assets/img/smallLoading.gif" style="display:none;" />
+                                             <br />
+                                             <span class="label label-success-border">Generated on @DateHelper.getLongDateFormat(item.WPS_GeneratedOn.Value) </span>
+                                          </span>
+                                       }
+                                       else
+                                       {
+                                          <span id="spanNotGenerated_@item.EMP_Id">
+                                             <span class="label label-danger-border">Not Generated Yet </span>
+                                             <span>&nbsp;&nbsp;</span>
+                                             <span>
+                                                <a class="btn btn-xs btn-info" onclick="GeneratePaySlip(@Model.WAG_Id,@item.EMP_Id)"> Generate PaySlip</a>
+                                                <img id="loading-image_@item.EMP_Id" src="~/assets/img/smallLoading.gif" style="display:none;" />
+                                             </span>
+                                          </span>
+                                       }
+                                       <img id="All_loading-image_@item.EMP_Id" src="~/assets/img/smallLoading.gif" style="display:none;" />
+                                    </td>
+                                 </tr>
+                              }
+                           </tbody>
+                        </table>
+                     </div>
+                  }
 
-                    </div>
-                    @*<div>
+               </div>
+               @*<div>
 
-                        </div>*@
-                </div>
+                  </div>*@
             </div>
-        }
-        else
-        {
-            <p>No Records Found</p>
-        }
+         </div>
+      }
+      else
+      {
+         <p>No Records Found</p>
+      }
 
-    </div>
+   </div>
 </div>
 
 @section scripts{
-    <script>
+   <script>
             function GeneratePaySlip(WAG_Id, EMP_Id, WPS_Id) {
                 var Url = siteUrl + "Reports/GeneratedPaySlip?WAG_Id=" + WAG_Id + "&EMP_Id=" + EMP_Id+"&WPS_Id="+WPS_Id;
                 $.ajax({
@@ -248,12 +252,12 @@
                     'EMP_Id': EMP_Id,
                     'WPS_Id': WPS_Id
                 });
-            });  
+            });
             GenerateAllForClient(emps,CLI_Id, WAG_Id, 0);
         }
-        function GenerateAllForClient(emps,CLI_Id, WAG_Id, id) {    
-           
-            
+        function GenerateAllForClient(emps,CLI_Id, WAG_Id, id) {
+
+
             var EMP_Id = emps[id].EMP_Id;
             var WPS_Id = emps[id].WPS_Id;
             var Url = siteUrl + "Reports/GeneratedPaySlip?WAG_Id=" + WAG_Id + "&EMP_Id=" + EMP_Id + "&WPS_Id=" + WPS_Id;
@@ -283,14 +287,14 @@
                     if (WPS_Id > 0)
                         $("#R_loading-image_" + EMP_Id).hide();
                     else
-                        $("#loading-image_" + EMP_Id).hide();                   
+                        $("#loading-image_" + EMP_Id).hide();
                     if (emps.length <= id) {
                         window.location.replace(siteUrl + "Reports/PaySlipGenerate?WAG_Id=" + WAG_Id);
                     } else {
                         GenerateAllForClient(emps,CLI_Id, WAG_Id, id);
                     }
                 }
-            })  
+            })
         }
-    </script>
+   </script>
 }

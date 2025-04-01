@@ -26,7 +26,7 @@ namespace RMERP.DAL.ManagerClasses
             Configuration = configuration;
         }
 
-        public Tuple<string, int> saveAddEditClients(Clients clients)
+        public Tuple<string, int> saveAddEditClients(Client clients)
         {
             string res = string.Empty;
             try
@@ -49,9 +49,9 @@ namespace RMERP.DAL.ManagerClasses
             }
             return new Tuple<string, int>(res, clients.CLI_Id);
         }
-        public IEnumerable<Clients> listClients(bool IsActive, int? FirmId, string Client = "")
+        public IEnumerable<Client> listClients(bool IsActive, int? FirmId, string Client = "")
         {
-            IQueryable<Clients> ClientList = _contaxt.Clients.Include(m => m.CITY_).Include(m => m.FRM_).Include(m => m.Client_Contacts);
+            IQueryable<Client> ClientList = _contaxt.Clients.Include(m => m.CITY).Include(m => m.FRM).Include(m => m.Client_Contacts);
             if (FirmId.HasValue && FirmId != 0)
             {
                 ClientList = ClientList.Where(m => m.FRM_Id == FirmId.Value);
@@ -69,12 +69,12 @@ namespace RMERP.DAL.ManagerClasses
             }
             return ClientList.ToList();
         }
-        public Clients GetClientById(int CLI_Id)
+        public Client GetClientById(int CLI_Id)
         {
-            Clients clients = new Clients();
+            Client clients = new Client();
             try
             {
-                clients = _contaxt.Clients.Where(m => m.CLI_Id.Equals(CLI_Id)).Include(m => m.FRM_).First();
+                clients = _contaxt.Clients.Where(m => m.CLI_Id.Equals(CLI_Id)).Include(m => m.FRM).First();
             }
             catch (Exception ex)
             {
@@ -83,12 +83,12 @@ namespace RMERP.DAL.ManagerClasses
 
             return clients;
         }
-        public Clients GetClientByIdNoTracking(int CLI_Id)
+        public Client GetClientByIdNoTracking(int CLI_Id)
         {
-            Clients clients = new Clients();
+            Client clients = new Client();
             try
             {
-                clients = _contaxt.Clients.Where(m => m.CLI_Id.Equals(CLI_Id)).Include(m => m.FRM_).AsNoTracking().First();
+                clients = _contaxt.Clients.Where(m => m.CLI_Id.Equals(CLI_Id)).Include(m => m.FRM).AsNoTracking().First();
             }
             catch (Exception ex)
             {
@@ -97,18 +97,18 @@ namespace RMERP.DAL.ManagerClasses
 
             return clients;
         }
-        public Client_Contacts GetClientContactsById(int CON_Id)
+        public Client_Contact GetClientContactsById(int CON_Id)
         {
-            return _contaxt.Client_Contacts.Where(c => c.CON_Id.Equals(CON_Id)).Include(c => c.CLI_).FirstOrDefault();
+            return _contaxt.Client_Contacts.Where(c => c.CON_Id.Equals(CON_Id)).Include(c => c.CLI).FirstOrDefault();
         }
-        public string saveAddEditContacts(Client_Contacts clientContacts)
+        public string saveAddEditContacts(Client_Contact clientContacts)
         {
             string res = string.Empty;
             try
             {
                 if (clientContacts.CON_isPrimary == true)
                 {
-                    List<Client_Contacts> list = _contaxt.Client_Contacts.Where(m => m.CLI_Id.Equals(clientContacts.CLI_Id) && m.CON_Id != clientContacts.CON_Id).ToList();
+                    List<Client_Contact> list = _contaxt.Client_Contacts.Where(m => m.CLI_Id.Equals(clientContacts.CLI_Id) && m.CON_Id != clientContacts.CON_Id).ToList();
                     list.ForEach(m => m.CON_isPrimary = false);
                     _contaxt.SaveChanges();
                 }
@@ -128,12 +128,12 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public List<Client_Contacts> GetClientContactsListById(int CLI_Id)
+        public List<Client_Contact> GetClientContactsListById(int CLI_Id)
         {
-            List<Client_Contacts> clientContactsList = new List<Client_Contacts>();
+            List<Client_Contact> clientContactsList = new List<Client_Contact>();
             try
             {
-                clientContactsList = _contaxt.Client_Contacts.Include(m => m.CLI_).Where(m => m.CLI_Id.Equals(CLI_Id)).OrderByDescending(m => m.CON_isPrimary).ToList();
+                clientContactsList = _contaxt.Client_Contacts.Include(m => m.CLI).Where(m => m.CLI_Id.Equals(CLI_Id)).OrderByDescending(m => m.CON_isPrimary).ToList();
             }
             catch (Exception ex)
             {
@@ -142,10 +142,10 @@ namespace RMERP.DAL.ManagerClasses
 
             return clientContactsList;
         }
-        public Tuple<string,int> deleteContacts(int ContactId)
+        public Tuple<string, int> deleteContacts(int ContactId)
         {
             string res = string.Empty;
-            Client_Contacts ClientContact = new Client_Contacts();
+            Client_Contact ClientContact = new Client_Contact();
             try
             {
                 ClientContact = _contaxt.Client_Contacts.Find(ContactId);
@@ -156,14 +156,14 @@ namespace RMERP.DAL.ManagerClasses
             {
                 res = ex.Message;
             }
-            return new Tuple<string,int>(res, ClientContact.CLI_Id);
+            return new Tuple<string, int>(res, ClientContact.CLI_Id);
         }
         public string InActiveClient(int ClientId, int AdminId, bool Active, DateTime On)
         {
             string res = string.Empty;
             try
             {
-                Clients client = new Clients();
+                Client client = new Client();
                 client = _contaxt.Clients.Find(ClientId);
                 client.ADM_Id_InactivatedBy = AdminId;
                 if (Active)
@@ -190,29 +190,29 @@ namespace RMERP.DAL.ManagerClasses
         {
             if (activationHistory.CAH_Id > 0)
             {
-                _contaxt.Client_ActivationHistory.Update(activationHistory);
+                _contaxt.Client_ActivationHistories.Update(activationHistory);
             }
             else
             {
-                _contaxt.Client_ActivationHistory.Add(activationHistory);
+                _contaxt.Client_ActivationHistories.Add(activationHistory);
             }
             _contaxt.SaveChanges();
         }
 
         public Client_ActivationHistory GetLatestActiveHistory(int CLI_Id)
         {
-            return _contaxt.Client_ActivationHistory.Where(m => m.CLI_Id.Equals(CLI_Id) && m.CAH_InactiveOn == null).OrderByDescending(m => m.CAH_ActiveOn).FirstOrDefault();
+            return _contaxt.Client_ActivationHistories.Where(m => m.CLI_Id.Equals(CLI_Id) && m.CAH_InactiveOn == null).OrderByDescending(m => m.CAH_ActiveOn).FirstOrDefault();
         }
         public Client_ActivationHistory GetLatestHistory(int CLI_Id)
         {
-            return _contaxt.Client_ActivationHistory.Where(m => m.CLI_Id.Equals(CLI_Id)).OrderByDescending(m => m.CAH_ActiveOn).FirstOrDefault();
+            return _contaxt.Client_ActivationHistories.Where(m => m.CLI_Id.Equals(CLI_Id)).OrderByDescending(m => m.CAH_ActiveOn).FirstOrDefault();
         }
         public string ReActiveClient(int ClientId, DateTime On)
         {
             string res = string.Empty;
             try
             {
-                Clients client = _contaxt.Clients.Find(ClientId);
+                Client client = _contaxt.Clients.Find(ClientId);
                 client.ADM_Id_InactivatedBy = null;
 
                 client.CLI_IsActive = true;
@@ -228,14 +228,14 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public string AddEditRequirement(Client_Requirements clientRequirements, List<Client_Requirement_Allowances> lst, int ADM_Id)
+        public string AddEditRequirement(Client_Requirement clientRequirements, List<Client_Requirement_Allowance> lst, int ADM_Id)
         {
             string res = string.Empty;
             try
             {
                 if (clientRequirements.CRI_Id > 0)
                 {
-                    List<Client_Requirements> list = _contaxt.Client_Requirements.Where(m => m.CLI_Id.Equals(clientRequirements.CLI_Id) && m.DES_Id.Equals(clientRequirements.DES_Id) && m.CRI_Active == true).ToList();
+                    List<Client_Requirement> list = _contaxt.Client_Requirements.Where(m => m.CLI_Id.Equals(clientRequirements.CLI_Id) && m.DES_Id.Equals(clientRequirements.DES_Id) && m.CRI_Active == true).ToList();
                     list.ForEach(m =>
                     {
                         m.CRI_Active = false;
@@ -257,7 +257,7 @@ namespace RMERP.DAL.ManagerClasses
 
                 foreach (var item in lst)
                 {
-                    Client_Requirement_Allowances cra = new Client_Requirement_Allowances();
+                    Client_Requirement_Allowance cra = new Client_Requirement_Allowance();
                     cra.CRI_Id = CRI_Id;
                     cra.ALL_Id = item.ALL_Id;
                     cra.CRA_Amount = item.CRA_Amount;
@@ -282,13 +282,13 @@ namespace RMERP.DAL.ManagerClasses
         }
         public void EditRequirementRegDate(int CRI_Id, DateTime RegDate)
         {
-            Client_Requirements requirement = _contaxt.Client_Requirements.Find(CRI_Id);
+            Client_Requirement requirement = _contaxt.Client_Requirements.Find(CRI_Id);
             requirement.CRI_RegisteredOn = RegDate;
             _contaxt.Update(requirement);
             _contaxt.SaveChanges();
         }
 
-        public string EditHistoryRequirement(Client_Requirements clientRequirements, List<Client_Requirement_Allowances> lst, List<Client_Requirement_Allowances> Removelst, int ADM_Id)
+        public string EditHistoryRequirement(Client_Requirement clientRequirements, List<Client_Requirement_Allowance> lst, List<Client_Requirement_Allowance> Removelst, int ADM_Id)
         {
             string res = string.Empty;
             try
@@ -303,7 +303,7 @@ namespace RMERP.DAL.ManagerClasses
 
                 int[] existingId = _contaxt.Client_Requirement_Allowances.Where(m => m.CRI_Id.Equals(clientRequirements.CRI_Id)).Select(m => m.CRA_Id).ToArray();
                 int[] NeedToRemoveId = existingId.Intersect(Removelst.Select(m => m.CRA_Id).ToArray()).ToArray();
-                List<Client_Requirement_Allowances> needToRemove = _contaxt.Client_Requirement_Allowances.Where(m => NeedToRemoveId.Contains(m.CRA_Id)).ToList();
+                List<Client_Requirement_Allowance> needToRemove = _contaxt.Client_Requirement_Allowances.Where(m => NeedToRemoveId.Contains(m.CRA_Id)).ToList();
 
                 if (needToRemove.Count() > 0)
                 {
@@ -313,7 +313,7 @@ namespace RMERP.DAL.ManagerClasses
 
                 foreach (var item in lst)
                 {
-                    Client_Requirement_Allowances cra = new Client_Requirement_Allowances();
+                    Client_Requirement_Allowance cra = new Client_Requirement_Allowance();
                     cra.CRI_Id = CRI_Id;
                     cra.ALL_Id = item.ALL_Id;
                     cra.CRA_Amount = item.CRA_Amount;
@@ -335,35 +335,40 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public Client_Requirements GetRequirementsById(int CRI_Id)
+        public Client_Requirement GetRequirementsById(int CRI_Id)
         {
-            return _contaxt.Client_Requirements.Where(c => c.CRI_Id == CRI_Id).Include(m => m.Wage_Register).Include(c => c.DES_).Include(m => m.Client_Requirement_Allowances).FirstOrDefault();
+            return _contaxt.Client_Requirements.Where(c => c.CRI_Id == CRI_Id).Include(m => m.Wage_Registers).Include(c => c.DES).Include(m => m.Client_Requirement_Allowances).FirstOrDefault();
         }
 
-        public IEnumerable<Client_Requirements> GetClient_RequirementsList(int desId, int cliId, bool active = true)
+        public Client_Requirement GetClientRequirementsById(int CRI_Id)
         {
-            IEnumerable<Client_Requirements> list = _contaxt.Client_Requirements.Include(m => m.CLI_).Include(m => m.DES_).Where(m => m.CLI_Id.Equals(cliId) && m.CRI_Active.Equals(active) && m.DES_Id.Equals(desId)).OrderByDescending(m => m.CRI_RegisteredOn).ThenByDescending(m => m.CRI_Id).ToList();
+            return _contaxt.Client_Requirements.Where(c => c.CRI_Id == CRI_Id).Include(c => c.DES).Include(m => m.Client_Requirement_Allowances).ThenInclude(cc=>cc.ALL).FirstOrDefault();
+        }
+
+        public IEnumerable<Client_Requirement> GetClient_RequirementsList(int desId, int cliId, bool active = true)
+        {
+            IEnumerable<Client_Requirement> list = _contaxt.Client_Requirements.Include(m => m.CLI).Include(m => m.DES).Where(m => m.CLI_Id.Equals(cliId) && m.CRI_Active.Equals(active) && m.DES_Id.Equals(desId)).OrderByDescending(m => m.CRI_RegisteredOn).ThenByDescending(m => m.CRI_Id).ToList();
             return list;
         }
-        public IEnumerable<Client_Requirements> GetClientRequirementsList(int desId, int cliId)
+        public IEnumerable<Client_Requirement> GetClientRequirementsList(int desId, int cliId)
         {
-            IEnumerable<Client_Requirements> list = _contaxt.Client_Requirements.Include(m => m.CLI_).Include(m => m.DES_).Where(m => m.CLI_Id.Equals(cliId) && m.DES_Id.Equals(desId)).OrderByDescending(m => m.CRI_RegisteredOn).ToList();
+            IEnumerable<Client_Requirement> list = _contaxt.Client_Requirements.Include(m => m.CLI).Include(m => m.DES).Where(m => m.CLI_Id.Equals(cliId) && m.DES_Id.Equals(desId)).OrderByDescending(m => m.CRI_RegisteredOn).ToList();
             return list;
         }
 
-        public IEnumerable<Client_Requirements> GetClient_RequirementsofClient(int CLI_Id, bool active = true)
+        public IEnumerable<Client_Requirement> GetClient_RequirementsofClient(int CLI_Id, bool active = true)
         {
-            IEnumerable<Client_Requirements> list = _contaxt.Client_Requirements.Include(m => m.DES_).Where(m => m.CLI_Id.Equals(CLI_Id) && m.CRI_Active.Equals(active)).OrderByDescending(m => m.CRI_RegisteredOn).ToList();
+            IEnumerable<Client_Requirement> list = _contaxt.Client_Requirements.Include(m => m.DES).Where(m => m.CLI_Id.Equals(CLI_Id) && m.CRI_Active.Equals(active)).OrderByDescending(m => m.CRI_RegisteredOn).ToList();
             return list;
         }
 
 
-        public string UpdateParameters(Clients clients)
+        public string UpdateParameters(Client clients)
         {
             string res = string.Empty;
             try
             {
-                Clients client = _contaxt.Clients.Find(clients.CLI_Id);
+                Client client = _contaxt.Clients.Find(clients.CLI_Id);
 
                 //client.CLI_Att_Month_End = clients.CLI_Att_Month_End;
                 //client.CLI_Att_Month_Start = clients.CLI_Att_Month_Start;
@@ -408,7 +413,7 @@ namespace RMERP.DAL.ManagerClasses
 
         }
 
-        public IEnumerable<Employees> getActiveEmployeeList_NotAssignedYet(int CLI_Id, int FRM_Id)
+        public IEnumerable<Employee> getActiveEmployeeList_NotAssignedYet(int CLI_Id, int FRM_Id)
         {
             return from t1 in _contaxt.Employees.Where(m => m.EMP_IsActive.Equals(true) && m.FRM_Id.Equals(FRM_Id) &&
                         !(from t2 in _contaxt.Clients_Employees.Where(ce => ce.CLI_Id.Equals(CLI_Id) && ce.CLE_UnassignedOn == null)
@@ -416,12 +421,12 @@ namespace RMERP.DAL.ManagerClasses
                    select t1;
         }
 
-        public IEnumerable<Employees> getEmployeeList(int FRM_Id)
+        public IEnumerable<Employee> getEmployeeList(int FRM_Id)
         {
             return _contaxt.Employees.Where(m => m.FRM_Id.Equals(FRM_Id));
         }
 
-        public string ClientEmployee(Clients_Employees clientsEmployees, int Old_DES_Id, int AdminId)
+        public string ClientEmployee(Clients_Employee clientsEmployees, int Old_DES_Id, int AdminId)
         {
             string res = string.Empty;
             if (clientsEmployees.CLE_RegisteredOn == null)
@@ -431,7 +436,7 @@ namespace RMERP.DAL.ManagerClasses
             {
                 if (clientsEmployees.CLE_Id > 0 && (Old_DES_Id != clientsEmployees.DES_Id))
                 {
-                    List<Clients_Employees> list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(clientsEmployees.CLI_Id) && m.EMP_Id.Equals(clientsEmployees.EMP_Id)).ToList();
+                    List<Clients_Employee> list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(clientsEmployees.CLI_Id) && m.EMP_Id.Equals(clientsEmployees.EMP_Id)).ToList();
                     list.ForEach(m =>
                     {
                         m.CLE_UnassignedOn = ProjectUtils.DateNow(); ;
@@ -457,75 +462,75 @@ namespace RMERP.DAL.ManagerClasses
             }
             return res;
         }
-        public IEnumerable<Clients_Employees> listClientsEmployees(int ClientId, string assign = null)
+        public IEnumerable<Clients_Employee> listClientsEmployees(int ClientId, string assign = null)
         {
-            IEnumerable<Clients_Employees> list = null;
+            IEnumerable<Clients_Employee> list = null;
             if (assign == null)
             {
-                list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId)).Include(m => m.EMP_).Include(m => m.DES_).ToList();
+                list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId)).Include(m => m.EMP).Include(m => m.DES).ToList();
             }
             else if (assign == Convert.ToString((int)Assign_Unassign.Assign))
             {
-                list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId) && m.CLE_UnassignedOn == null).Include(m => m.EMP_).Include(m => m.DES_).ToList();
+                list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId) && m.CLE_UnassignedOn == null).Include(m => m.EMP).Include(m => m.DES).ToList();
             }
             else if (assign == Convert.ToString((int)Assign_Unassign.Unassign))
             {
-                list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId) && m.CLE_UnassignedOn != null).Include(m => m.EMP_).Include(m => m.DES_).ToList();
+                list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId) && m.CLE_UnassignedOn != null).Include(m => m.EMP).Include(m => m.DES).ToList();
             }
 
             return list;
         }
-        public IEnumerable<Clients_Employees> listActiveClientsEmployees(int ClientId, DateTime monthDate)
+        public IEnumerable<Clients_Employee> listActiveClientsEmployees(int ClientId, DateTime monthDate)
         {
             DateTime lastDate = new DateTime(monthDate.Year, monthDate.Month, 1).AddMonths(1).AddDays(-1);
             DateTime firstDate = new DateTime(monthDate.Year, monthDate.Month, 1);
-            IEnumerable<Clients_Employees> list = _contaxt.Clients_Employees
+            IEnumerable<Clients_Employee> list = _contaxt.Clients_Employees
                                                 .Where(m => m.CLI_Id.Equals(ClientId)
                                                 && m.CLE_RegisteredOn.Date <= lastDate.Date
                                                 && (m.CLE_UnassignedOn == null || m.CLE_UnassignedOn >= lastDate.Date)
-                                                && (m.EMP_.EMP_IsActive == true || (m.EMP_.EMP_IsActive == false && m.EMP_.EMP_InactivatedOn != null && (m.EMP_.EMP_InactivatedOn.Value.Date >= firstDate.Date)) || (m.EMP_.EMP_RejoinOn.Value.Date <= firstDate.Date)))
-                                                .Include(m => m.EMP_).ThenInclude(m => m.Wage_Register_Advances).ThenInclude(m => m.WAG_)
-                                                .Include(m => m.DES_).ToList();                  
+                                                && (m.EMP.EMP_IsActive == true || (m.EMP.EMP_IsActive == false && m.EMP.EMP_InactivatedOn != null && (m.EMP.EMP_InactivatedOn.Value.Date >= firstDate.Date)) || (m.EMP.EMP_RejoinOn.Value.Date <= firstDate.Date)))
+                                                .Include(m => m.EMP).ThenInclude(m => m.Wage_Register_Advances).ThenInclude(m => m.WAG)
+                                                .Include(m => m.DES).ToList();
             return list;
         }
 
-        public IEnumerable<Clients_Employees> listActiveClientsEmployees_clients(int EMP_Id, DateTime monthDate)
+        public IEnumerable<Clients_Employee> listActiveClientsEmployees_clients(int EMP_Id, DateTime monthDate)
         {
             DateTime lastDate = new DateTime(monthDate.Year, monthDate.Month, 1).AddMonths(1).AddDays(-1);
             DateTime firstDate = new DateTime(monthDate.Year, monthDate.Month, 1);
-            IEnumerable<Clients_Employees> list = _contaxt.Clients_Employees
+            IEnumerable<Clients_Employee> list = _contaxt.Clients_Employees
                                                 .Where(m => m.EMP_Id.Equals(EMP_Id)
                                                 && m.CLE_RegisteredOn.Date <= lastDate.Date
                                                 && (m.CLE_UnassignedOn == null || m.CLE_UnassignedOn >= lastDate.Date)
-                                                && (m.EMP_.EMP_IsActive == true || (m.EMP_.EMP_IsActive == false && m.EMP_.EMP_InactivatedOn != null && (m.EMP_.EMP_InactivatedOn.Value.Date >= firstDate.Date))))
-                                                .Include(m => m.EMP_)
-                                                .Include(m => m.DES_).ToList();
+                                                && (m.EMP.EMP_IsActive == true || (m.EMP.EMP_IsActive == false && m.EMP.EMP_InactivatedOn != null && (m.EMP.EMP_InactivatedOn.Value.Date >= firstDate.Date))))
+                                                .Include(m => m.EMP)
+                                                .Include(m => m.DES).ToList();
             return list;
         }
 
         //public IEnumerable<Clients_Employees> listClientsEmployees(int ClientId, int DES_Id)
         //{
-        //    IEnumerable<Clients_Employees> list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId) && m.DES_Id.Equals(DES_Id)).Include(m => m.EMP_).Include(m => m.DES_).ToList();
+        //    IEnumerable<Clients_Employees> list = _contaxt.Clients_Employees.Where(m => m.CLI_Id.Equals(ClientId) && m.DES_Id.Equals(DES_Id)).Include(m => m.EMP).Include(m => m.DES).ToList();
         //    return list;
         //}
 
-        public IEnumerable<Clients_Employees> listActiveClientsEmployees(int ClientId, DateTime monthDate, int DES_Id)
+        public IEnumerable<Clients_Employee> listActiveClientsEmployees(int ClientId, DateTime monthDate, int DES_Id)
         {
             DateTime lastDate = new DateTime(monthDate.Year, monthDate.Month, 1).AddMonths(1).AddDays(-1);
             DateTime firstDate = new DateTime(monthDate.Year, monthDate.Month, 1);
-            IEnumerable<Clients_Employees> list = _contaxt.Clients_Employees
+            IEnumerable<Clients_Employee> list = _contaxt.Clients_Employees
                                                 .Where(m => m.CLI_Id.Equals(ClientId) && m.DES_Id.Equals(DES_Id)
                                                 && m.CLE_RegisteredOn.Date <= lastDate.Date
                                                 && (m.CLE_UnassignedOn == null || m.CLE_UnassignedOn >= lastDate.Date)
-                                                && (m.EMP_.EMP_IsActive == true || (m.EMP_.EMP_IsActive == false && m.EMP_.EMP_InactivatedOn != null && (m.EMP_.EMP_InactivatedOn.Value.Date >= firstDate.Date))))
-                                                .Include(m => m.EMP_).ThenInclude(m => m.Wage_Register_Advances).ThenInclude(m => m.WAG_)
-                                                .Include(m => m.DES_).ToList();
+                                                && (m.EMP.EMP_IsActive == true || (m.EMP.EMP_IsActive == false && m.EMP.EMP_InactivatedOn != null && (m.EMP.EMP_InactivatedOn.Value.Date >= firstDate.Date))))
+                                                .Include(m => m.EMP).ThenInclude(m => m.Wage_Register_Advances).ThenInclude(m => m.WAG)
+                                                .Include(m => m.DES).ToList();
             return list;
         }
 
-        public Clients_Employees ClientEmployeeById(int CleId)
+        public Clients_Employee ClientEmployeeById(int CleId)
         {
-            Clients_Employees clientsEmployees = _contaxt.Clients_Employees.Find(CleId);
+            Clients_Employee clientsEmployees = _contaxt.Clients_Employees.Find(CleId);
             return clientsEmployees;
         }
         public string UnassignClientEmployee(int id, DateTime UnassignedOn, int Adm_Id)
@@ -533,7 +538,7 @@ namespace RMERP.DAL.ManagerClasses
             string res = string.Empty;
             try
             {
-                Clients_Employees clients_Employees = _contaxt.Clients_Employees.Find(id);
+                Clients_Employee clients_Employees = _contaxt.Clients_Employees.Find(id);
                 clients_Employees.CLE_UnassignedOn = UnassignedOn;
                 clients_Employees.ADM_Id_UnassignedBy = Adm_Id;
                 _contaxt.Clients_Employees.Update(clients_Employees);
@@ -546,13 +551,13 @@ namespace RMERP.DAL.ManagerClasses
             return res;
         }
 
-        public Tuple<string,int> ReassignClientEmployee(int id)
+        public Tuple<string, int> ReassignClientEmployee(int id)
         {
             int CLI_Id = 0;
             string res = string.Empty;
             try
             {
-                Clients_Employees clients_Employees = _contaxt.Clients_Employees.Find(id);
+                Clients_Employee clients_Employees = _contaxt.Clients_Employees.Find(id);
                 CLI_Id = clients_Employees.CLI_Id;
                 clients_Employees.CLE_UnassignedOn = null;
                 clients_Employees.ADM_Id_UnassignedBy = null;
@@ -592,10 +597,10 @@ namespace RMERP.DAL.ManagerClasses
         //{
         //    IEnumerable<Clients_Employees> ClientList = null;
         //    int month = _contaxt.Wage_Process.Find(wagId).WAG_Month.Month;
-        //    ClientList = _contaxt.Clients_Employees.Include(m => m.CLI_).Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.CLI_.CLI_IsActive.Equals(IsActive) && m.CLE_RegisteredOn.Month.Equals(month));
+        //    ClientList = _contaxt.Clients_Employees.Include(m => m.CLI).Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.CLI.CLI_IsActive.Equals(IsActive) && m.CLE_RegisteredOn.Month.Equals(month));
         //    if (firmId != null)
         //    {
-        //        ClientList = ClientList.Where(m => m.CLI_.FRM_Id.Equals(firmId));
+        //        ClientList = ClientList.Where(m => m.CLI.FRM_Id.Equals(firmId));
         //    }
 
         //    var ClientList1 = from P in ClientList.Distinct().ToList() select new { P };
@@ -673,23 +678,23 @@ namespace RMERP.DAL.ManagerClasses
         //}
         #endregion
 
-        public List<Clients> GetActiveClientOfMonthByFirmId(DateTime wageDate, int FirmId)
+        public List<Client> GetActiveClientsOfMonthByFirmId(DateTime wageDate, int FirmId)
         {
             DateTime lastDate = new DateTime(wageDate.Year, wageDate.Month, 1).AddMonths(1).AddDays(-1);
             DateTime startdate = new DateTime(wageDate.Year, wageDate.Month, 1);
-            IQueryable<Clients> cliList = from a in _contaxt.Clients
-                                          join b in _contaxt.Client_ActivationHistory on a.CLI_Id equals b.CLI_Id
-                                          where b.CAH_ActiveOn.Date <= lastDate.Date
-                                          && a.FRM_Id.Equals(FirmId)
-                                          && ((b.CAH_InactiveOn == null) || !(b.CAH_InactiveOn.Value.Date < startdate.Date))
-                                          select a;
+            IQueryable<Client> cliList = from a in _contaxt.Clients
+                                         join b in _contaxt.Client_ActivationHistories on a.CLI_Id equals b.CLI_Id
+                                         where b.CAH_ActiveOn.Date <= lastDate.Date
+                                         && a.FRM_Id.Equals(FirmId)
+                                         && ((b.CAH_InactiveOn == null) || !(b.CAH_InactiveOn.Value.Date < startdate.Date))
+                                         select a;
             return cliList.Distinct().ToList();
         }
 
-        public Client_Requirements getActiveClientRequirement(int CLI_Id, int DES_Id, DateTime WAG_Month)
+        public Client_Requirement getActiveClientRequirement(int CLI_Id, int DES_Id, DateTime WAG_Month)
         {
             DateTime LastDate = ProjectUtils.GetLastDateOfMonth(WAG_Month);
-            return _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.DES_Id == DES_Id && r.CRI_RegisteredOn.Date <= LastDate.Date).OrderByDescending(m => m.CRI_RegisteredOn).ThenByDescending(m => m.CRI_Id).Take(1).Include(c => c.Client_Requirement_Allowances).ThenInclude(a => a.ALL_).FirstOrDefault();
+            return _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.DES_Id == DES_Id && r.CRI_RegisteredOn.Date <= LastDate.Date).OrderByDescending(m => m.CRI_RegisteredOn).ThenByDescending(m => m.CRI_Id).Take(1).Include(c => c.Client_Requirement_Allowances).ThenInclude(a => a.ALL).Include(d => d.DES).AsNoTracking().FirstOrDefault();
         }
 
         public int GetClientIDByEmpID(int EMP_Id, DateTime WAG_Month)
@@ -712,7 +717,7 @@ namespace RMERP.DAL.ManagerClasses
         public bool IsEmployeeWagedForClient(int EMP_Id, int CLI_Id, int DES_Id)
         {
             // int count = _contaxt.Attendance.Where(m => m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id) && m.DES_Id.Equals(DES_Id)).Count();
-            int count = _contaxt.Wage_Register.Where(m => m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id)).Count();
+            int count = _contaxt.Wage_Registers.Where(m => m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id)).Count();
             if (count > 0)
             {
                 return true;
@@ -728,25 +733,25 @@ namespace RMERP.DAL.ManagerClasses
             string res = string.Empty;
             try
             {
-                List<Wage_Register_Canteen> canteen = _contaxt.Wage_Register_Canteen.Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
+                List<Wage_Register_Canteen> canteen = _contaxt.Wage_Register_Canteens.Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
                 if (canteen.Count() > 0)
                 {
-                    _contaxt.Wage_Register_Canteen.RemoveRange(canteen);
+                    _contaxt.Wage_Register_Canteens.RemoveRange(canteen);
                 }
-                List<Wage_Register_Outstation> outstation = _contaxt.Wage_Register_Outstation.Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
+                List<Wage_Register_Outstation> outstation = _contaxt.Wage_Register_Outstations.Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
                 if (outstation.Count() > 0)
                 {
-                    _contaxt.Wage_Register_Outstation.RemoveRange(outstation);
+                    _contaxt.Wage_Register_Outstations.RemoveRange(outstation);
                 }
-                List<Wage_Register_Performance> performance = _contaxt.Wage_Register_Performance.Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
+                List<Wage_Register_Performance> performance = _contaxt.Wage_Register_Performances.Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
                 if (performance.Count() > 0)
                 {
-                    _contaxt.Wage_Register_Performance.RemoveRange(performance);
+                    _contaxt.Wage_Register_Performances.RemoveRange(performance);
                 }
-                List<Attendance> attendance = _contaxt.Attendance.Where(m => m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id) && m.DES_Id.Equals(DES_Id)).ToList();
+                List<Attendance> attendance = _contaxt.Attendances.Where(m => m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id) && m.DES_Id.Equals(DES_Id)).ToList();
                 if (attendance.Count() > 0)
                 {
-                    _contaxt.Attendance.RemoveRange(attendance);
+                    _contaxt.Attendances.RemoveRange(attendance);
                 }
 
                 var employee = _contaxt.Clients_Employees.Find(CLE_Id);
@@ -760,13 +765,13 @@ namespace RMERP.DAL.ManagerClasses
             return res;
         }
 
-        public Tuple<string,int> InactiveRequirement(int CRI_Id, int ADM_Id)
+        public Tuple<string, int> InactiveRequirement(int CRI_Id, int ADM_Id)
         {
             string res = string.Empty;
             int CLI_Id = 0;
             try
             {
-                Client_Requirements requirement = _contaxt.Client_Requirements.Find(CRI_Id);
+                Client_Requirement requirement = _contaxt.Client_Requirements.Find(CRI_Id);
                 CLI_Id = requirement.CLI_Id;
                 if (!this.IsActiveAssignedEmployee(requirement.CLI_Id, requirement.DES_Id))
                 {
@@ -796,37 +801,37 @@ namespace RMERP.DAL.ManagerClasses
         public string GetAssignEmployeeDependancy(int CLE_Id, int CLI_Id, int EMP_Id, int DES_Id)
         {
             string res = string.Empty;
-            List<Wage_Register_Canteen> register_Canteens = _contaxt.Wage_Register_Canteen.Include(m => m.WAG_).Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
+            List<Wage_Register_Canteen> register_Canteens = _contaxt.Wage_Register_Canteens.Include(m => m.WAG).Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
             if (register_Canteens.Count() > 0)
             {
                 string WAG_Month = string.Empty;
                 foreach (var month in register_Canteens)
                 {
-                    WAG_Month += month.WAG_.WAG_Month.ToString("MMMM") + "-" + month.WAG_.WAG_Month.ToString("yyyy");
+                    WAG_Month += month.WAG.WAG_Month.ToString("MMMM") + "-" + month.WAG.WAG_Month.ToString("yyyy");
                     WAG_Month += ",";
                 }
 
                 res += "<p> Employee's Canteen record is available for <b>" + WAG_Month.Remove(WAG_Month.Length - 1) + "</b></p> <br/>";
             }
-            List<Wage_Register_Outstation> register_Outstations = _contaxt.Wage_Register_Outstation.Include(m => m.WAG_).Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
+            List<Wage_Register_Outstation> register_Outstations = _contaxt.Wage_Register_Outstations.Include(m => m.WAG).Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
             if (register_Outstations.Count() > 0)
             {
                 string WAG_Month = string.Empty;
                 foreach (var month in register_Outstations)
                 {
-                    WAG_Month += month.WAG_.WAG_Month.ToString("MMMM") + "-" + month.WAG_.WAG_Month.ToString("yyyy");
+                    WAG_Month += month.WAG.WAG_Month.ToString("MMMM") + "-" + month.WAG.WAG_Month.ToString("yyyy");
                     WAG_Month += ",";
                 }
 
                 res += "<p> Employee's  outstation hours record is available for <b>" + WAG_Month.Remove(WAG_Month.Length - 1) + "</b></p> <br/>";
             }
-            List<Wage_Register_Performance> register_Performances = _contaxt.Wage_Register_Performance.Include(m => m.WAG_).Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
+            List<Wage_Register_Performance> register_Performances = _contaxt.Wage_Register_Performances.Include(m => m.WAG).Where(m => m.CLE_Id.Equals(CLE_Id)).ToList();
             if (register_Performances.Count() > 0)
             {
                 string WAG_Month = string.Empty;
                 foreach (var month in register_Performances)
                 {
-                    WAG_Month += month.WAG_.WAG_Month.ToString("MMMM") + "-" + month.WAG_.WAG_Month.ToString("yyyy");
+                    WAG_Month += month.WAG.WAG_Month.ToString("MMMM") + "-" + month.WAG.WAG_Month.ToString("yyyy");
                     WAG_Month += ",";
                 }
 
@@ -834,13 +839,13 @@ namespace RMERP.DAL.ManagerClasses
             }
 
             List<Attendance> attendance = new List<Attendance>();
-            attendance = _contaxt.Attendance.Include(m => m.WAG_).Where(m => m.EMP_Id.Equals(EMP_Id) && m.CLI_Id.Equals(CLI_Id) && m.DES_Id.Equals(DES_Id)).ToList();
+            attendance = _contaxt.Attendances.Include(m => m.WAG).Where(m => m.EMP_Id.Equals(EMP_Id) && m.CLI_Id.Equals(CLI_Id) && m.DES_Id.Equals(DES_Id)).ToList();
             if (attendance.Count() > 0)
             {
                 string WAG_Month = string.Empty;
-                foreach (var month in attendance.GroupBy(m => m.WAG_Id).Select(g => new { WAG_ = g.Select(m => m.WAG_) }))
+                foreach (var month in attendance.GroupBy(m => m.WAG_Id).Select(g => new { WAG_ = g.Select(m => m.WAG) }))
                 {
-                    DateTime WAGMonth = month.WAG_.Select(m => m.WAG_Month).FirstOrDefault();
+                    DateOnly WAGMonth = month.WAG_.Select(m => m.WAG_Month).FirstOrDefault();
                     WAG_Month += WAGMonth.ToString("MMMM") + "-" + WAGMonth.ToString("yyyy");
                     WAG_Month += ",";
                 }
@@ -850,21 +855,21 @@ namespace RMERP.DAL.ManagerClasses
             return res;
         }
 
-        public List<Client_Requirements> getClientRequirements(DateTime date, int CLI_Id)
+        public List<Client_Requirement> getClientRequirements(DateTime date, int CLI_Id)
         {
-            List<Client_Requirements> cli_Req_List = new List<Client_Requirements>();
+            List<Client_Requirement> cli_Req_List = new List<Client_Requirement>();
             DateTime LastDate = ProjectUtils.GetLastDateOfMonth(date);
             DateTime FirstDate = GetFirstDateOfMonth(date);
-            var query = from n in _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.CRI_RegisteredOn.Date <= LastDate.Date && (r.CRI_InactivatedOn==null || r.CRI_InactivatedOn.Value.Date > FirstDate.Date))
+            var query = from n in _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.CRI_RegisteredOn.Date <= LastDate.Date && (r.CRI_InactivatedOn == null || r.CRI_InactivatedOn.Value.Date > FirstDate.Date))
                         group n by n.DES_Id into g
                         select g.OrderByDescending(t => t.CRI_RegisteredOn).ThenByDescending(m => m.CRI_Id).FirstOrDefault();
 
             return query.ToList();
         }
 
-        public Clients_Employees RevertAssignEmployee(int CLE_Id)
+        public Clients_Employee RevertAssignEmployee(int CLE_Id)
         {
-            Clients_Employees clientEmployee = _contaxt.Clients_Employees.Where(m => m.CLE_Id.Equals(CLE_Id)).FirstOrDefault();
+            Clients_Employee clientEmployee = _contaxt.Clients_Employees.Where(m => m.CLE_Id.Equals(CLE_Id)).FirstOrDefault();
             if (clientEmployee != null)
             {
                 clientEmployee.CLE_UnassignedOn = null;
@@ -875,7 +880,7 @@ namespace RMERP.DAL.ManagerClasses
             return clientEmployee;
         }
 
-        public decimal GetProffessionalTax(bool EMP_Gender, decimal WAR_GrossTotal, Client_Requirements cr)
+        public decimal GetProffessionalTax(bool EMP_Gender, decimal WAR_GrossTotal, Client_Requirement cr)
         {
             decimal ProffessionalTax = 0;
             if (EMP_Gender)
@@ -913,21 +918,31 @@ namespace RMERP.DAL.ManagerClasses
 
         public Attendance_Parameter GetLatestAttendanceParameter(int CLI_Id)
         {
-            return _contaxt.Attendance_Parameter.Where(m => m.CLI_Id.Equals(CLI_Id)).OrderByDescending(m => m.ATP_RegisteredOn).ThenByDescending(m => m.ATP_Id).FirstOrDefault();
+            return _contaxt.Attendance_Parameters.Where(m => m.CLI_Id.Equals(CLI_Id)).OrderByDescending(m => m.ATP_RegisteredOn).ThenByDescending(m => m.ATP_Id).FirstOrDefault();
         }
         public Attendance_Parameter GetAttendanceParameterByMonth(int CLI_Id, DateTime date)
         {
-            return _contaxt.Attendance_Parameter.Where(m => m.CLI_Id.Equals(CLI_Id) &&
-            (GetFirstDateOfMonth(m.ATP_RegisteredOn)).Date <= (GetFirstDateOfMonth(date).Date)
-            ).OrderByDescending(m => m.ATP_RegisteredOn).ThenByDescending(m => m.ATP_Id).FirstOrDefault();
+            //return _contaxt.Attendance_Parameters.Where(m => m.CLI_Id.Equals(CLI_Id) &&
+            //(GetFirstDateOfMonth(m.ATP_RegisteredOn)).Date <= (GetFirstDateOfMonth(date).Date)
+            //).OrderByDescending(m => m.ATP_RegisteredOn).ThenByDescending(m => m.ATP_Id).FirstOrDefault();
+
+            var firstDateOfMonth = GetFirstDateOfMonth(date);
+
+            return _contaxt.Attendance_Parameters
+                .Where(m => m.CLI_Id == CLI_Id)
+                .AsEnumerable() // Forces client-side evaluation
+                .Where(m => GetFirstDateOfMonth(m.ATP_RegisteredOn).Date <= firstDateOfMonth.Date)
+                .OrderByDescending(m => m.ATP_RegisteredOn)
+                .ThenByDescending(m => m.ATP_Id)
+                .FirstOrDefault();
         }
         public IEnumerable<Attendance_Parameter> getAttendanceParameters(int CLI_Id)
         {
-            return _contaxt.Attendance_Parameter.Where(m => m.CLI_Id.Equals(CLI_Id));
+            return _contaxt.Attendance_Parameters.Where(m => m.CLI_Id.Equals(CLI_Id));
         }
         public Attendance_Parameter getAttendanceParameter(int ATP_Id)
         {
-            return _contaxt.Attendance_Parameter.Find(ATP_Id);
+            return _contaxt.Attendance_Parameters.Find(ATP_Id);
         }
 
         public string AddAttendanceParameter(Attendance_Parameter attendanceParameter)
@@ -935,15 +950,15 @@ namespace RMERP.DAL.ManagerClasses
             string str = string.Empty;
             try
             {
-                if (attendanceParameter.ATP_Id>0)
+                if (attendanceParameter.ATP_Id > 0)
                 {
-                    _contaxt.Attendance_Parameter.Update(attendanceParameter);
+                    _contaxt.Attendance_Parameters.Update(attendanceParameter);
                 }
                 else
                 {
-                    _contaxt.Attendance_Parameter.Add(attendanceParameter);
+                    _contaxt.Attendance_Parameters.Add(attendanceParameter);
                 }
-               
+
                 _contaxt.SaveChanges();
             }
             catch (Exception ex)
@@ -954,14 +969,71 @@ namespace RMERP.DAL.ManagerClasses
         }
         public void EditAttendanceParameter(Attendance_Parameter attendanceParameter)
         {
-            _contaxt.Attendance_Parameter.Update(attendanceParameter);
+            _contaxt.Attendance_Parameters.Update(attendanceParameter);
             _contaxt.SaveChanges();
 
         }
         public Attendance_Parameter GetAttendanceParameterByDate(int CLI_Id, DateTime AttDate)
         {
-            return _contaxt.Attendance_Parameter.AsNoTracking().Where(m => m.CLI_Id.Equals(CLI_Id) && m.ATP_RegisteredOn.Date.Equals(AttDate.Date)).FirstOrDefault();
+            return _contaxt.Attendance_Parameters.AsNoTracking().Where(m => m.CLI_Id.Equals(CLI_Id) && m.ATP_RegisteredOn.Date.Equals(AttDate.Date)).FirstOrDefault();
         }
 
+        #region NEW ADDED 
+
+        public List<Client> GetActiveClientOfMonthByFRM_Id(DateTime wageDate, int FirmId)
+        {
+            DateTime lastDate = new DateTime(wageDate.Year, wageDate.Month, 1).AddMonths(1).AddDays(-1);
+            DateTime startdate = new(wageDate.Year, wageDate.Month, 1);
+            IQueryable<Client> cliList = from a in _contaxt.Clients
+                                         join b in _contaxt.Client_ActivationHistories on a.CLI_Id equals b.CLI_Id
+                                         where b.CAH_ActiveOn.Date <= lastDate.Date
+                                         && a.FRM_Id.Equals(FirmId)
+                                         && ((b.CAH_InactiveOn == null) || !(b.CAH_InactiveOn.Value.Date < startdate.Date))
+                                         select a;
+            return cliList.Distinct().Include(s => s.Attendance_Summaries).Include(s => s.Wage_Process_Clients).ToList();
+        }
+
+        public List<Client> GetActiveClientOfMonthByFRM_Id1(DateTime wageDate, int FirmId)
+        {
+            DateTime lastDate = new DateTime(wageDate.Year, wageDate.Month, 1).AddMonths(1).AddDays(-1);
+            DateTime startdate = new(wageDate.Year, wageDate.Month, 1);
+           // IQueryable<Client> cliList = from a in _contaxt.Clients
+                                         //join b in _contaxt.Client_ActivationHistories on a.CLI_Id equals b.CLI_Id
+                                         //where b.CAH_ActiveOn.Date <= lastDate.Date
+                                         //&& a.FRM_Id.Equals(FirmId)
+                                         //&& ((b.CAH_InactiveOn == null) || !(b.CAH_InactiveOn.Value.Date < startdate.Date))
+                                         //select a;
+            //return cliList.Distinct().Include(s => s.Attendance_Summaries).Include(s => s.Wage_Process_Clients).ToList();
+            return _contaxt.Clients.Where(c=>c.FRM_Id.Equals(FirmId)
+                && c.Client_ActivationHistories.Where(cah => cah.CAH_ActiveOn.Date <= lastDate.Date 
+                                                        && ((cah.CAH_InactiveOn == null) || !(cah.CAH_InactiveOn.Value.Date < startdate.Date))).Count() > 0
+            ).ToList();
+        }
+
+        public Client GetActiveClientOfMonthByFRM_Id(DateTime wageDate, int FirmId, int CLI_Id)
+        {
+            DateTime lastDate = new DateTime(wageDate.Year, wageDate.Month, 1).AddMonths(1).AddDays(-1);
+            DateTime startdate = new DateTime(wageDate.Year, wageDate.Month, 1);
+            IQueryable<Client> cliList = from a in _contaxt.Clients
+                                         join b in _contaxt.Client_ActivationHistories on a.CLI_Id equals b.CLI_Id
+                                         where b.CAH_ActiveOn.Date <= lastDate.Date
+                                         && a.FRM_Id.Equals(FirmId) && a.CLI_Id == CLI_Id
+                                         && ((b.CAH_InactiveOn == null) || !(b.CAH_InactiveOn.Value.Date < startdate.Date))
+                                         select a;
+            return cliList.Distinct().FirstOrDefault();
+        }
+
+        public IEnumerable<Employee> GetActiveEmployeesByCLI_Id(int CLI_Id, DateOnly monthDate)
+        {
+            DateTime lastDate = new DateTime(monthDate.Year, monthDate.Month, 1).AddMonths(1).AddDays(-1);
+            DateTime firstDate = new(monthDate.Year, monthDate.Month, 1);
+            return _contaxt.Clients_Employees
+                .Where(m => m.CLI_Id.Equals(CLI_Id) && m.CLE_RegisteredOn.Date <= lastDate.Date &&
+                (m.CLE_UnassignedOn == null || m.CLE_UnassignedOn >= lastDate.Date) &&
+                (m.EMP.EMP_IsActive == true || (m.EMP.EMP_IsActive == false && m.EMP.EMP_InactivatedOn != null &&
+                (m.EMP.EMP_InactivatedOn.Value.Date >= firstDate.Date)) || (m.EMP.EMP_RejoinOn.Value.Date <= firstDate.Date))).Include(e => e.EMP).Select(s => s.EMP);
+        }
+
+        #endregion
     }
 }

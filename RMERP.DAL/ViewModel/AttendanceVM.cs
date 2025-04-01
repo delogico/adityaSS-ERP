@@ -9,7 +9,7 @@ namespace RMERP.DAL.ViewModel
     {
         public EmployeeVM employee { get; set; }
         public WageProcessVM wage_Process { get; set; }
-        public Designations designation { get; set; }
+        public Designation designation { get; set; }
         public int ATT_Id { get; set; }
         public int WAG_Id { get; set; }
         public int EMP_Id { get; set; }

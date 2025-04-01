@@ -38,6 +38,6 @@ namespace RMERP.DAL.ViewModel
                 return string.Concat(CON_FirstName, " ", CON_SurName);
             }
         }
-        public Clients client { get; set; }
+        public Client client { get; set; }
     }    
 }

@@ -17,12 +17,12 @@ namespace RMERP.DAL.Mappers
             canteenVM.WAG_Id = canteen.WAG_Id;
             canteenVM.WRC_Amount = canteen.WRC_Amount;
             canteenVM.CRI_Id = CRI_Id;
-            if (canteen.CLE_ != null)
+            if (canteen.CLE != null)
             {
-                if (canteen.CLE_.EMP_ != null)
+                if (canteen.CLE.EMP != null)
                 {
-                    canteenVM.Emp_ID = canteen.CLE_.EMP_Id;
-                    canteenVM.Emp_Name = canteen.CLE_.EMP_.EMP_FirstName + " " + canteen.CLE_.EMP_.EMP_MiddleName + " " + canteen.CLE_.EMP_.EMP_SurName;
+                    canteenVM.Emp_ID = canteen.CLE.EMP_Id;
+                    canteenVM.Emp_Name = canteen.CLE.EMP.EMP_FirstName + " " + canteen.CLE.EMP.EMP_MiddleName + " " + canteen.CLE.EMP.EMP_SurName;
                 }
             }
             return canteenVM;

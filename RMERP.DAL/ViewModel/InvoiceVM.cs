@@ -66,8 +66,8 @@ namespace RMERP.DAL.ViewModel
         public decimal All_INC_Total { get; set; }
         public decimal totTAX { get; set; }
 
-        public Clients CLI_ { get; set; }
-        public Firms FRM_ { get; set; }
+        public Client CLI_ { get; set; }
+        public Firm FRM_ { get; set; }
     }
     public class Invoice_ConceptsVM
     {
@@ -77,12 +77,11 @@ namespace RMERP.DAL.ViewModel
         public string INC_Description { get; set; }
         public decimal INC_Total { get; set; }
         public int hdnId { get; set; }
-        public Invoices INV_ { get; set; }
+        public Invoice INV_ { get; set; }
     }
     public class InvoiceTypeVM
     {
         public int WAG_Id { get; set; }
         public int Type { get; set; }        
-    }
-    
+    }    
 }

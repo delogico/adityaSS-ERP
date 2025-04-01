@@ -17,48 +17,69 @@ namespace RMERP.DAL.ManagerClasses
 
         public IEnumerable<Attendance> getAttendance_Wage(int WAG_Id)
         {
-            return _context.Attendance.Include(m=>m.DES_).Where(a => a.WAG_Id == WAG_Id);
+            return _context.Attendances.Include(m => m.DES).Where(a => a.WAG_Id == WAG_Id);
         }
 
         public List<Attendance> getAttendance_Wage_Client(int WAG_Id, int CLI_Id)
         {
-            return _context.Attendance.Where(a => a.WAG_Id == WAG_Id && a.CLI_Id == CLI_Id).Include(a=>a.EMP_).Include(a=>a.WAG_).Include(a=>a.DES_).ToList();
+            return _context.Attendances.Where(a => a.WAG_Id == WAG_Id && a.CLI_Id == CLI_Id).Include(a => a.EMP).Include(a => a.WAG).Include(a => a.DES).ToList();
         }
+
+        public List<Attendance> GetAttendance_WageClient_Employee(int WAG_Id, int CLI_Id, int EMP_Id)
+        {
+            return _context.Attendances.Where(a => a.WAG_Id == WAG_Id && a.CLI_Id == CLI_Id && a.EMP_Id == EMP_Id).Include(a => a.EMP).Include(a => a.WAG).Include(a => a.DES).ToList();
+        }
+
         public IEnumerable<Attendance> getAttendance_Wage_Employee(int WAG_Id, int EMP_Id)
         {
-            return _context.Attendance.Where(a => a.WAG_Id == WAG_Id && a.EMP_Id == EMP_Id);
+            return _context.Attendances.Where(a => a.WAG_Id == WAG_Id && a.EMP_Id == EMP_Id);
         }
+
         public IEnumerable<Attendance> getAttendance_Wage_Client_Employee_Designation(int WAG_Id, int CLI_Id, int EMP_Id, int DES_Id)
         {
-            return _context.Attendance.Where(a => a.WAG_Id == WAG_Id && a.CLI_Id == CLI_Id && a.EMP_Id == EMP_Id && a.DES_Id == DES_Id);
+            return _context.Attendances.Where(a => a.WAG_Id == WAG_Id && a.CLI_Id == CLI_Id && a.EMP_Id == EMP_Id && a.DES_Id == DES_Id);
         }
 
         public void save(Attendance attendace)
         {
             try
             {
-                _context.Attendance.Add(attendace);
+                _context.Attendances.Add(attendace);
                 _context.SaveChanges();
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
-            
+
+        }
+
+        public void Save(List<Attendance> attendaces)
+        {
+            try
+            {
+                _context.Attendances.AddRange(attendaces);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         public void delete(Attendance attendace)
         {
-            _context.Attendance.Remove(attendace);
+            _context.Attendances.Remove(attendace);
             _context.SaveChanges();
         }
 
         public void deleteAllAttendanceofWageClient(int WAG_Id, int CLI_Id)
         {
-            _context.Attendance.RemoveRange(_context.Attendance.Where(a => a.WAG_Id == WAG_Id && a.CLI_Id == CLI_Id).ToList());
+            _context.Attendances.RemoveRange(_context.Attendances.Where(a => a.WAG_Id == WAG_Id && a.CLI_Id == CLI_Id).ToList());
             _context.SaveChanges();
         }
+
         #region Methods by rinku
         //public Clients_Employees assignEmployee(int Cli_Id,int EMP_Id)
         //{
@@ -75,17 +96,16 @@ namespace RMERP.DAL.ManagerClasses
         #endregion
 
         public bool IsAttendanceAlreadyUploaded(int WAG_Id, int CLI_Id)
-        {            
-            return _context.Attendance.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(CLI_Id)).Count() > 0;            
+        {
+            return _context.Attendances.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(CLI_Id)).Count() > 0;
         }
 
-        public Tuple<DateTime,DateTime> GetFirstLastDateFromAttendance(int WAG_Id,int CLI_Id,int EMP_Id)
+        public Tuple<DateTime, DateTime> GetFirstLastDateFromAttendance(int WAG_Id, int CLI_Id, int EMP_Id)
         {
-            IEnumerable<Attendance> attendances = _context.Attendance.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id)).OrderBy(m=>m.ATT_Date);
-            DateTime startDate = attendances.First().ATT_Date;
-            DateTime lastDate = attendances.Last().ATT_Date;
-            return new Tuple<DateTime, DateTime>(startDate,lastDate);
+            IEnumerable<Attendance> attendances = _context.Attendances.Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id.Equals(CLI_Id) && m.EMP_Id.Equals(EMP_Id)).OrderBy(m => m.ATT_Date);
+            DateOnly startDate = attendances.First().ATT_Date;
+            DateOnly lastDate = attendances.Last().ATT_Date;
+            return new Tuple<DateTime, DateTime>(new DateTime(startDate.Year, startDate.Month, startDate.Day), new DateTime(lastDate.Year, lastDate.Month, lastDate.Day));
         }
-        
     }
 }

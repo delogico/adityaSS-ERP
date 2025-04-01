@@ -17,12 +17,12 @@ namespace RMERP.DAL.Mappers
             outstationVM.WAG_Id = outstation.WAG_Id;
             outstationVM.WRO_Hours = outstation.WRO_Hours;
             outstationVM.CRI_Id = CRI_Id;
-            if (outstation.CLE_ != null)
+            if (outstation.CLE != null)
             {
-                if (outstation.CLE_.EMP_ != null)
+                if (outstation.CLE.EMP != null)
                 {
-                    outstationVM.Emp_ID = outstation.CLE_.EMP_Id;
-                    outstationVM.Emp_Name = outstation.CLE_.EMP_.EMP_FirstName + " " + outstation.CLE_.EMP_.EMP_MiddleName + " " + outstation.CLE_.EMP_.EMP_SurName;
+                    outstationVM.Emp_ID = outstation.CLE.EMP_Id;
+                    outstationVM.Emp_Name = outstation.CLE.EMP.EMP_FirstName + " " + outstation.CLE.EMP.EMP_MiddleName + " " + outstation.CLE.EMP.EMP_SurName;
                 }
             }
             return outstationVM;

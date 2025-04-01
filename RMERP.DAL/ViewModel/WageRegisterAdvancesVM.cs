@@ -19,7 +19,7 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Status")]
         public bool WAD_Status { get; set; } = false;
         public DateTime? WAD_ClosedOn { get; set; }
-        public Employees EMP_ { get; set; }
+        public Employee EMP_ { get; set; }
     }
     public class UpdateAdvancesVM
     {
@@ -42,10 +42,5 @@ namespace RMERP.DAL.ViewModel
         public string EMP_Name { get; set; }
         public decimal Total_Advance { get; set; }
         public decimal Paid_WAD_Amount { get; set; }
-      
-
-
     }
-
-
 }

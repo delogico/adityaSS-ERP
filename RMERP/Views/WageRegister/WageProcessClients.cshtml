@@ -1,0 +1,77 @@
+﻿@model RMERP.DAL.ViewModel.WageProcessClientsVM
+@using RMERP.DAL.ViewModel
+@{
+   ViewData["Title"] = "Wage Process Clients";
+   Layout = "~/Views/Shared/_RMLayout.cshtml";
+   int cnt = 0;
+   string Header = Model.FRM_Title + "/" + Model.WAG_Month.ToString("MMMM") + "-" + Model.WAG_Month.ToString("yyyy");
+}
+@section Breadcrumbs{
+   <li class="breadcrumb-item">
+      @Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id })
+   </li>
+   <li class="breadcrumb-item">Wage Process Clients Status</li>
+}
+<div class="content container-fluid">
+   <div class="row">
+      <div class="col-sm-6">
+         <h3 class="page-title">@ViewData["Title"] Status (@Header)</h3>
+      </div>
+      <div class="col-sm-6">
+         <a class="btn btn-success" href='@Url.Action("WageRegisterExcel2","WageRegister",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id})' title="Download Excel">
+            <i class="fa fa-file-excel-o m-r-5"></i>
+            Download Excel
+         </a> |
+         <a class="btn btn-warning" href='@Url.Action("WageRegisterNewExcel","WageRegister",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id})' title="Download New Excel">
+            <i class="fa fa-file-excel-o m-r-5"></i>
+            Download New Excel
+         </a>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-md-12 text-right">
+         <span>
+            <i class="text-info fa fa-info-circle"></i> Click on row for wage register
+         </span>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-md-12">
+         <table class="table table-striped custom-table m-b-0" id="WAG_Table">
+            <thead>
+               <tr>
+                  <th>#</th>
+                  <th>Client</th>
+                  <th>Attendance</th>
+                  <th>Wage Process</th>
+               </tr>
+            </thead>
+            <tbody>
+               @foreach (WP_ClientsStatusVM client in Model.WageClients.OrderBy(o => o.CLI_Name))
+               {
+                  cnt = cnt + 1;
+                  <tr style="cursor:pointer;" onclick="window.location.href ='@Url.Action("WageProcessClientRegister","WageRegister", new { WAG_Id = Model.WAG_Id, FRM_Id = Model.FRM_Id, CLI_Id =  client.CLI_Id})'" title="View @client.CLI_Name's Register">
+                     <td>@cnt.</td>
+                     <td>
+                        <b>
+                           @client.CLI_Name
+                        </b>
+                     </td>
+                     <td>
+                        <i style="font-size:24px;" class="fa fa-@(client.Is_WageRegisterSaved ? "check-circle text-success" : client.Is_AttendanceDone ? "check-circle text-success" : "times-circle text-danger" )"></i>
+                     </td>
+                     <td>
+                        <i style="font-size:24px;" class="fa fa-@(client.Is_WageRegisterSaved ? "check-circle text-success" : "times-circle text-danger" )"></i>
+                     </td>
+                  </tr>
+               }
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>
+@section scripts{
+   <script>
+      $('#WAG_Table').dataTable({ "paging": false, "ordering": false });
+   </script>
+}

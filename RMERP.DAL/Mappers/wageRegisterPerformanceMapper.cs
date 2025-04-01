@@ -17,12 +17,12 @@ namespace RMERP.DAL.Mappers
             PerformanceVM.WAG_Id = Performance.WAG_Id;
             PerformanceVM.WRP_Amount = Performance.WRP_Amount;
             PerformanceVM.CRI_Id = CRI_Id;
-            if (Performance.CLE_ != null)
+            if (Performance.CLE != null)
             {
-                if (Performance.CLE_.EMP_ != null)
+                if (Performance.CLE.EMP != null)
                 {
-                    PerformanceVM.Emp_ID = Performance.CLE_.EMP_Id;
-                    PerformanceVM.Emp_Name = Performance.CLE_.EMP_.EMP_FirstName + " " + Performance.CLE_.EMP_.EMP_MiddleName + " " + Performance.CLE_.EMP_.EMP_SurName;
+                    PerformanceVM.Emp_ID = Performance.CLE.EMP_Id;
+                    PerformanceVM.Emp_Name = Performance.CLE.EMP.EMP_FirstName + " " + Performance.CLE.EMP.EMP_MiddleName + " " + Performance.CLE.EMP.EMP_SurName;
                 }
             }
             return PerformanceVM;

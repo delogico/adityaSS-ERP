@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RMERP.DAL.Models.AdminUsers>
+﻿@model IEnumerable<RMERP.DAL.Models.AdminUser>
 @using static RMERP.DAL.App_Code.ProjectUtils;
 
 @{
@@ -56,7 +56,7 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@(item.FRM_Id.HasValue ? item.FRM_.FRM_Name : "Super Admin")</td>
+                                        <td>@(item.FRM_Id.HasValue ? item.FRM.FRM_Name : "Super Admin")</td>
                                         <td>@item.ADM_FirstName @item.ADM_MiddleName @item.ADM_LastName</td>
 
                                         <td>@item.ADM_EmailId</td>

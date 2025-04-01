@@ -26,31 +26,31 @@ namespace RMERP.Controllers
     {
         public IConfiguration _configuration;
         private readonly RMERPContext _context;
-        private IHostingEnvironment _hostingEnvironment;
-        public InvoicesController(RMERPContext context, IHostingEnvironment hostingEnvironment, IConfiguration configuration)
+        private IWebHostEnvironment _hostingEnvironment;
+        public InvoicesController(RMERPContext context, IWebHostEnvironment hostingEnvironment, IConfiguration configuration)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
-            _configuration=configuration;
+            _configuration = configuration;
         }
 
         public IActionResult Index()
-        {           
+        {
             ClientsManager clientsManager = new ClientsManager(_context);
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
-            InvoicesManager invoicesManager = new InvoicesManager(_context);                      
+            InvoicesManager invoicesManager = new InvoicesManager(_context);
             InvoiceMasterVM masterVM = new InvoiceMasterVM();
-            int FRM_Id = (sessionUtils.GetLoggedFirmID()!=null? sessionUtils.GetLoggedFirmID().Value:0);           
-            List<Invoices> invoices = invoicesManager.GetInvoices(FRM_Id);
+            int FRM_Id = (sessionUtils.GetLoggedFirmID() != null ? sessionUtils.GetLoggedFirmID().Value : 0);
+            List<Invoice> invoices = invoicesManager.GetInvoices(FRM_Id);
             DateTime dt = DateTime.Now;
             masterVM.InvoiceVMs = InvoiceMapper.mapMe(invoices.Where(m => DateTime.Compare(m.INV_CreatedOn.Date, DateTime.Now.Date.AddMonths(-2)) > 0).ToList());
-            ViewBag.ClientList =clientsManager.listClients(true, FRM_Id).OrderBy(m=>m.CLI_Name);
+            ViewBag.ClientList = clientsManager.listClients(true, FRM_Id).OrderBy(m => m.CLI_Name);
             ViewBag.linktoYearId = GetYears(dt.Year);
             ViewBag.linktoMonthId = GetMonths(dt.Year);
             return View(masterVM);
         }
-                      
-       
+
+
         public ActionResult DeleteInvoice(int INV_Id)
         {
             InvoicesManager invoicesManager = new InvoicesManager(_context);
@@ -71,24 +71,24 @@ namespace RMERP.Controllers
             ClientsManager clientsManager = new ClientsManager(_context);
             WageProcessManager wagManager = new WageProcessManager(_context);
             InvoicesManager invoicesManager = new InvoicesManager(_context);
-            ViewBag.Clients = clientsManager.listClients(true, sessionUtils.GetLoggedFirmID()).OrderBy(m=>m.CLI_Name);
+            ViewBag.Clients = clientsManager.listClients(true, sessionUtils.GetLoggedFirmID()).OrderBy(m => m.CLI_Name);
             InvoiceVM invoiceVM = new InvoiceVM();
 
-            invoiceVM.INV_Number = invoicesManager.GetNextInvoiceNumber(); 
-            
-            invoiceVM.INV_Date = DateNow();            
+            invoiceVM.INV_Number = invoicesManager.GetNextInvoiceNumber();
+
+            invoiceVM.INV_Date = DateNow();
             invoiceVM.Invoice_Concepts = new List<Invoice_ConceptsVM>();
             if (INV_Id > 0)
             {
-                Invoices invoice = invoicesManager.GetInvoice(INV_Id);
+                Invoice invoice = invoicesManager.GetInvoice(INV_Id);
                 invoiceVM = InvoiceMapper.mapMe(invoice);
                 invoiceVM.totTAX = invoice.INV_IGST_Total.Value + invoice.INV_CGST_Total.Value + invoice.INV_SGST_Total.Value;
                 invoiceVM.All_INC_Total = invoice.Invoice_Concepts.Sum(m => m.INC_Total);
-            }           
+            }
             return View(invoiceVM);
         }
         [HttpPost]
-        public JsonResult AddEditInvoice_1([FromBody]InvoiceVM InvoiceVM)
+        public JsonResult AddEditInvoice_1([FromBody] InvoiceVM InvoiceVM)
         {
             ClientsManager clientsManager = new ClientsManager(_context);
             InvoicesManager invoicesManager = new InvoicesManager(_context);
@@ -98,7 +98,7 @@ namespace RMERP.Controllers
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
                 InvoiceVM.FRM_Id = clientsManager.GetClientById(InvoiceVM.CLI_Id).FRM_Id;
                 InvoiceVM.ADM_Id_CreatedBy = sessionUtils.GetLoggedAdminID();
-                List<Invoice_Concepts> Invoice_Concepts = new List<Invoice_Concepts>();
+                List<Invoice_Concept> Invoice_Concepts = new List<Invoice_Concept>();
                 int INV_Id = invoicesManager.AddEditInvoice(InvoiceMapper.mapMeModel(InvoiceVM));
 
                 if (InvoiceVM.Invoice_Concepts != null)
@@ -124,7 +124,7 @@ namespace RMERP.Controllers
         }
         [HttpPost]
         public IActionResult AddEditInvoice(string Invoice)
-        {            
+        {
             var format = "yyyy-MM-dd"; // your datetime format
             var dateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = format };
             var InvoiceVM = JsonConvert.DeserializeObject<InvoiceVM>(Invoice, dateTimeConverter);
@@ -137,13 +137,13 @@ namespace RMERP.Controllers
                 SessionUtils sessionUtils = new SessionUtils(Request, Response);
                 InvoiceVM.FRM_Id = clientsManager.GetClientById(InvoiceVM.CLI_Id).FRM_Id;
                 InvoiceVM.ADM_Id_CreatedBy = sessionUtils.GetLoggedAdminID();
-                List<Invoice_Concepts> Invoice_Concepts = new List<Invoice_Concepts>();
+                List<Invoice_Concept> Invoice_Concepts = new List<Invoice_Concept>();
                 int INV_Id = invoicesManager.AddEditInvoice(InvoiceMapper.mapMeModel(InvoiceVM));
 
                 if (InvoiceVM.Invoice_Concepts != null)
                 {
                     foreach (Invoice_ConceptsVM invoice_Concept in InvoiceVM.Invoice_Concepts)
-                    {                        
+                    {
                         invoice_Concept.INV_Id = INV_Id;
                         Invoice_Concepts.Add(InvoiceConceptsMapper.mapMeModel(invoice_Concept));
                     }
@@ -163,7 +163,7 @@ namespace RMERP.Controllers
             return Content("Ok");
         }
 
-        public ActionResult GetInvoiceTemplate(int CLI_Id,DateTime INV_Date)
+        public ActionResult GetInvoiceTemplate(int CLI_Id, DateTime INV_Date)
         {
             InvoiceTypeVM invoiceTypeVM = new InvoiceTypeVM();
             ClientsManager clientsManager = new ClientsManager(_context);
@@ -198,43 +198,43 @@ namespace RMERP.Controllers
             {
                 invoiceTypeVM.WAG_Id = cc.FirstOrDefault().WAG_Id;
             }
-            List<Employees> emps = registerManager.GetWageRegistersForInvoice(CLI_Id).Where(m => m.EMP_.Clients_Employees.Where(cle => cle.CLI_Id.Equals(CLI_Id)).Any(mb => mb.CLE_UnassignedOn != null)).Select(m => m.EMP_).Distinct().ToList();
-            ViewBag.LeftEmps = EmployeesMapper.MapEmployees(emps); 
+            List<Employee> emps = registerManager.GetWageRegistersForInvoice(CLI_Id).Where(m => m.EMP.Clients_Employees.Where(cle => cle.CLI_Id.Equals(CLI_Id)).Any(mb => mb.CLE_UnassignedOn != null)).Select(m => m.EMP).Distinct().ToList();
+            ViewBag.LeftEmps = EmployeesMapper.MapEmployees(emps);
 
             return PartialView("_InvoiceType", invoiceTypeVM);
         }
         public JsonResult GetRequirenmentTypes(int Wag_Id, int CLI_Id)
-        {            
+        {
             return Json(new SelectList(GetRequirements(Wag_Id, CLI_Id), "Value", "Text"));
         }
         private List<SelectListItem> GetRequirements(int Wag_Id, int CLI_Id)
-        {           
+        {
             ClientsManager clientsManager = new ClientsManager(_context);
             WageProcessManager wagManager = new WageProcessManager(_context);
             List<SelectListItem> Requirements = new List<SelectListItem>();
-            DateTime date = wagManager.getWageProcessById(Wag_Id).WAG_Month;
-            List<Client_Requirements> list = clientsManager.getClientRequirements(date, CLI_Id);
+            DateTime date = ProjectUtils.DateToDateTime(wagManager.getWageProcessById(Wag_Id).WAG_Month);
+            List<Client_Requirement> list = clientsManager.getClientRequirements(date, CLI_Id);
             foreach (var item in list.Where(m => m.CRI_Billing_Type == (int)CRI_BILLING_TYPE.Lump_Sum_Amount && m.CRI_Billing_Amount != null).Select(m => new { m.CRI_Billing_Amount }).Distinct())
             {
                 string Text = "CR With " + item.CRI_Billing_Amount + " Fixed Amount";
-                Requirements.Add(new SelectListItem { Text = Text, Value = "fixed_"+item.CRI_Billing_Amount.ToString() });
+                Requirements.Add(new SelectListItem { Text = Text, Value = "fixed_" + item.CRI_Billing_Amount.ToString() });
             }
             foreach (var item in list.Where(m => m.CRI_Billing_Type == (int)CRI_BILLING_TYPE.Service_Change_Basic && m.CRI_Billing_ServiceCharge != null).Select(m => new { m.CRI_Billing_ServiceCharge }).Distinct())
             {
                 string Text = "CR With Service Charge Of " + item.CRI_Billing_ServiceCharge + "%";
-                Requirements.Add(new SelectListItem { Text = Text, Value = "service_"+item.CRI_Billing_ServiceCharge.ToString() });
+                Requirements.Add(new SelectListItem { Text = Text, Value = "service_" + item.CRI_Billing_ServiceCharge.ToString() });
             }
             return Requirements;
         }
-        public IActionResult DownloadInvoice(int INV_Id,int ActionId)
+        public IActionResult DownloadInvoice(int INV_Id, int ActionId)
         {
             InvoicesManager invoicesManager = new InvoicesManager(_context);
-            Invoices invoices = invoicesManager.GetInvoice(INV_Id);
+            Invoice invoices = invoicesManager.GetInvoice(INV_Id);
             if (ActionId == (int)PDFAction.View)
             {
                 return View(invoices);
             }
-            else 
+            else
             {
                 string FileName = "Invoice_" + invoices.INV_Id + "_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";
                 DateTime toDay = DateNow();
@@ -268,15 +268,15 @@ namespace RMERP.Controllers
             }
         }
 
-        public ActionResult SearchInvoice(int CLI_Id,int Year,int Month)
+        public ActionResult SearchInvoice(int CLI_Id, int Year, int Month)
         {
             SessionUtils sessionUtils = new SessionUtils(Request, Response);
             InvoicesManager invoicesManager = new InvoicesManager(_context);
             int FRM_Id = (sessionUtils.GetLoggedFirmID() != null ? sessionUtils.GetLoggedFirmID().Value : 0);
             List<InvoiceVM> invoiceVMs = new List<InvoiceVM>();
-            if (CLI_Id >0)
-            {                
-                invoiceVMs = InvoiceMapper.mapMe(invoicesManager.GetInvoicesByClientId(CLI_Id));                
+            if (CLI_Id > 0)
+            {
+                invoiceVMs = InvoiceMapper.mapMe(invoicesManager.GetInvoicesByClientId(CLI_Id));
             }
             else
             {
@@ -284,23 +284,23 @@ namespace RMERP.Controllers
             }
             if (Year > 0)
             {
-                invoiceVMs=invoiceVMs.Where(m => m.INV_Date.Year == Year).ToList();
+                invoiceVMs = invoiceVMs.Where(m => m.INV_Date.Year == Year).ToList();
             }
             if (Month > 0)
             {
-                invoiceVMs=invoiceVMs.Where(m => m.INV_Date.Month == Month).ToList();
+                invoiceVMs = invoiceVMs.Where(m => m.INV_Date.Month == Month).ToList();
             }
             return PartialView("_InvoiceList", invoiceVMs);
         }
 
-        public Invoice_Concepts GetInvoiceData(int CLI_Id,string Type_Id,int WAG_Id,int Type, string EMPs)
+        public Invoice_Concept GetInvoiceData(int CLI_Id, string Type_Id, int WAG_Id, int Type, string EMPs)
         {
-            
-            Invoice_Concepts concept = new Invoice_Concepts();                        
+
+            Invoice_Concept concept = new Invoice_Concept();
             switch (Type)
             {
                 case (int)INVOICE_TEMPLATE_TYPE.CONTRACT_BILL_FOR_PROVIDING_FACILITY_SERVICES:
-                    concept = Get_Billing_Data_T1(CLI_Id,Type_Id,WAG_Id);
+                    concept = Get_Billing_Data_T1(CLI_Id, Type_Id, WAG_Id);
                     break;
                 case (int)INVOICE_TEMPLATE_TYPE.COMPANY_CONTRIBUTION_PF:
                     concept = Get_Billing_Data_T2_PF(CLI_Id, WAG_Id);
@@ -309,20 +309,20 @@ namespace RMERP.Controllers
                     concept = Get_Billing_Data_T2_ESIC(CLI_Id, WAG_Id);
                     break;
                 case (int)INVOICE_TEMPLATE_TYPE.FULL_AND_FINAL_SETTLEMENT:
-                    concept = Get_Billing_Data_T3(CLI_Id,EMPs);
+                    concept = Get_Billing_Data_T3(CLI_Id, EMPs);
                     break;
-                default:               
-                   
+                default:
+
                     break;
             }
 
             return concept;
         }
-        private Invoice_Concepts Get_Billing_Data_T1(int CLI_Id, string Type_Id, int WAG_Id)
+        private Invoice_Concept Get_Billing_Data_T1(int CLI_Id, string Type_Id, int WAG_Id)
         {
             InvoicesManager invoicesManager = new InvoicesManager(_context);
-            Invoice_Concepts concept = new Invoice_Concepts();
-            if (!string.IsNullOrEmpty(Type_Id)&& Type_Id!="null")
+            Invoice_Concept concept = new Invoice_Concept();
+            if (!string.IsNullOrEmpty(Type_Id) && Type_Id != "null")
             {
                 if (Type_Id.Split("_")[0] == "service")
                 {
@@ -340,26 +340,26 @@ namespace RMERP.Controllers
             return concept;
         }
 
-        private Invoice_Concepts Get_Billing_Data_T2_PF(int CLI_Id, int WAG_Id)
+        private Invoice_Concept Get_Billing_Data_T2_PF(int CLI_Id, int WAG_Id)
         {
             InvoicesManager invoicesManager = new InvoicesManager(_context);
-            Invoice_Concepts concept = new Invoice_Concepts();
+            Invoice_Concept concept = new Invoice_Concept();
             concept = invoicesManager.Get_Billing_Data_T2_PF(CLI_Id, WAG_Id);
             return concept;
         }
-        private Invoice_Concepts Get_Billing_Data_T2_ESIC(int CLI_Id, int WAG_Id)
+        private Invoice_Concept Get_Billing_Data_T2_ESIC(int CLI_Id, int WAG_Id)
         {
             InvoicesManager invoicesManager = new InvoicesManager(_context);
-            Invoice_Concepts concept = new Invoice_Concepts();
-            concept = invoicesManager.Get_Billing_Data_T2_ESIC(CLI_Id,WAG_Id);
+            Invoice_Concept concept = new Invoice_Concept();
+            concept = invoicesManager.Get_Billing_Data_T2_ESIC(CLI_Id, WAG_Id);
             return concept;
         }
-        private Invoice_Concepts Get_Billing_Data_T3(int CLI_Id, string EMPs)
+        private Invoice_Concept Get_Billing_Data_T3(int CLI_Id, string EMPs)
         {
             InvoicesManager invoicesManager = new InvoicesManager(_context);
-            Invoice_Concepts concept = invoicesManager.Get_Billing_Data_T3(CLI_Id, EMPs);
+            Invoice_Concept concept = invoicesManager.Get_Billing_Data_T3(CLI_Id, EMPs);
             return concept;
         }
     }
-    
+
 }

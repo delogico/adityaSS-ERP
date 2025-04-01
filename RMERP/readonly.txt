@@ -7,3 +7,13 @@ Scaffold-DbContext "Server=localhost\SQLEXPRESS2017;Database=RMERP;User Id=sa;pa
 
 
 Scaffold-DbContext "Server=DESKTOP-OMKP2RL;Database=RMERP;User Id=sa;password=Health@25;Trusted_Connection=False;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -UseDatabaseNames -f
+
+
+
+// AFTER UPDATE NET CORE 2.1 TO NET 8.0 | 12/12/2024 
+
+Scaffold-DbContext "Server=WIN-ABO842TB54V\\SQLEXPRESS;Database=RMERP;User Id=sa;password=Delogico@1213;Trusted_Connection=True;TrustServerCertificate=True;Integrated Security=False;MultipleActiveResultSets=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -UseDatabaseNames -f
+
+Scaffold-DbContext "Server=DESKTOP-OU3523D;Database=RMERP;User Id=sa;password=Perfect;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -UseDatabaseNames -f
+
+//-----------------------------------------

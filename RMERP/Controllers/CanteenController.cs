@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using SmartBreadcrumbs.Attributes;
 using static RMERP.DAL.Helpers.ProjectUtils;
 using Microsoft.AspNetCore.Authorization;
+using RMERP.DAL.App_Code;
 
 namespace RMERP.Controllers
 {
@@ -29,15 +30,15 @@ namespace RMERP.Controllers
 
         public IActionResult UpdateCanteenAmount(int CRI_Id, int WAG_Id, int FRM_Id)
         {
-            WageProcessManager wageProcessManager = new WageProcessManager(_context);
-            DateTime WAG_Month = wageProcessManager.getWageProcessById(WAG_Id).WAG_Month;
+            WageProcessManager wageProcessManager = new(_context);
+            DateOnly WAG_Month = wageProcessManager.GetWageProcessByWAG_Id(WAG_Id).WAG_Month;
             ViewBag.Wag_Month = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
-            ClientsManager clientsManager = new ClientsManager(_context, Configuration);
-            CanteenManager canteenManager = new CanteenManager(_context);
-            Client_Requirements client_Requirements = clientsManager.GetRequirementsById(CRI_Id);
-            List<Wage_Register_CanteenVM> wage_Register_Canteens = new List<Wage_Register_CanteenVM>();
-            IEnumerable<Clients_Employees> clientsEmployees = clientsManager.listActiveClientsEmployees(client_Requirements.CLI_Id, WAG_Month, client_Requirements.DES_Id);
-            foreach (Clients_Employees employee in clientsEmployees)
+            ClientsManager clientsManager = new(_context, Configuration);
+            CanteenManager canteenManager = new(_context);
+            Client_Requirement client_Requirements = clientsManager.GetRequirementsById(CRI_Id);
+            List<Wage_Register_CanteenVM> wage_Register_Canteens = [];
+            IEnumerable<Clients_Employee> clientsEmployees = clientsManager.listActiveClientsEmployees(client_Requirements.CLI_Id, DAL.Helpers.ProjectUtils.DateToDateTime(WAG_Month), client_Requirements.DES_Id);
+            foreach (Clients_Employee employee in clientsEmployees)
             {
                 Wage_Register_Canteen canteen = new Wage_Register_Canteen();
                 Wage_Register_CanteenVM canteenVM = new Wage_Register_CanteenVM();
@@ -53,29 +54,31 @@ namespace RMERP.Controllers
                     canteenVM.WAG_Id = WAG_Id;
                     canteenVM.Emp_ID = employee.EMP_Id;
                     canteenVM.CRI_Id = CRI_Id;
-                    canteenVM.Emp_Name = employee.EMP_.EMP_FirstName + " " + employee.EMP_.EMP_MiddleName + " " + employee.EMP_.EMP_SurName;
+                    canteenVM.Emp_Name = employee.EMP.EMP_FirstName + " " + employee.EMP.EMP_MiddleName + " " + employee.EMP.EMP_SurName;
                 }
                 canteenVM.FRM_ID = FRM_Id;
                 wage_Register_Canteens.Add(canteenVM);
             }
-            updateWageRegisterCanteen updateWageCanteen = new updateWageRegisterCanteen();
-            updateWageCanteen.canteenVMs = wage_Register_Canteens;
+            updateWageRegisterCanteen updateWageCanteen = new()
+            {
+                canteenVMs = wage_Register_Canteens,
+                CLI_Id = client_Requirements.CLI_Id
+            };
             return View(updateWageCanteen);
         }
 
         [HttpPost]
         public ActionResult UpdateAmount(updateWageRegisterCanteen updateWageCanteen)
         {
-            CanteenManager canteenManager = new CanteenManager(_context);
-            List<Wage_Register_Canteen> canteens = new List<Wage_Register_Canteen>();
-            List<Wage_Register_CanteenVM> list = updateWageCanteen.canteenVMs;
-            canteens = wageRegisterCanteenMapper.mapMeModels(list);
+            CanteenManager canteenManager = new(_context);
+            List<Wage_Register_Canteen> canteens = wageRegisterCanteenMapper.mapMeModels(updateWageCanteen.canteenVMs);
             string res = canteenManager.UpdateAmount(canteens);
             if (res != string.Empty)
             {
                 TempData["message"] = "Try Again";
             }
-            return RedirectToAction("WageRegister", "WageRegister", new { WAG_Id = list[0].WAG_Id, FRM_Id = list[0].FRM_ID });
+            //return RedirectToAction("WageRegister", "WageRegister", new { WAG_Id = list[0].WAG_Id, FRM_Id = list[0].FRM_ID });
+            return RedirectToAction("WageProcessClientRegister", "WageRegister", new { WAG_Id = updateWageCanteen.canteenVMs[0].WAG_Id, FRM_Id = updateWageCanteen.canteenVMs[0].FRM_ID, CLI_Id = updateWageCanteen.CLI_Id });
         }
     }
 }

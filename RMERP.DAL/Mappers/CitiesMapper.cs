@@ -8,7 +8,7 @@ namespace RMERP.DAL.Mappers
 {
     public class CitiesMapper
     {
-        public static CitiesVM mapMe(Cities cities)
+        public static CitiesVM mapMe(City cities)
         {
             CitiesVM cityVM = new CitiesVM();
             cityVM.CITY_Id = cities.CIT_Id;
@@ -16,10 +16,10 @@ namespace RMERP.DAL.Mappers
             return cityVM;
         }
 
-        public static List<CitiesVM> mapCities(List<Cities> cities)
+        public static List<CitiesVM> mapCities(List<City> cities)
         {
             List<CitiesVM> lst = new List<CitiesVM>();
-            foreach (Cities city in cities)
+            foreach (City city in cities)
             {
                 lst.Add(mapMe(city));
             }

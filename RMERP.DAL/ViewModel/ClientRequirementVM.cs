@@ -160,7 +160,7 @@ namespace RMERP.DAL.ViewModel
         public decimal CRI_ProffTax_F_From_3 { get; set; }
         public decimal CRI_ProffTax_F_To_3 { get; set; }
         public decimal CRI_ProffTax_F_Amount_3 { get; set; }
-        
+
         [Display(Name = "Allowance 1")]
         public bool CRI_Allowance_1 { get; set; }
         public string CRI_Allowance_Name_1 { get; set; }
@@ -176,6 +176,28 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "Allowance 5")]
         public bool CRI_Allowance_5 { get; set; }
         public string CRI_Allowance_Name_5 { get; set; }
+
+        //ADDED ON : 27/02/2025 
+
+        [Display(Name = "Allowance 6")]
+        public bool CRI_Allowance_6 { get; set; }
+        public string CRI_Allowance_Name_6 { get; set; }
+
+        [Display(Name = "Allowance 7")]
+        public bool CRI_Allowance_7 { get; set; }
+        public string CRI_Allowance_Name_7 { get; set; }
+
+        [Display(Name = "Allowance 8")]
+        public bool CRI_Allowance_8 { get; set; }
+        public string CRI_Allowance_Name_8 { get; set; }
+
+        [Display(Name = "Allowance 9")]
+        public bool CRI_Allowance_9 { get; set; }
+        public string CRI_Allowance_Name_9 { get; set; }
+
+        [Display(Name = "Allowance 10")]
+        public bool CRI_Allowance_10 { get; set; }
+        public string CRI_Allowance_Name_10 { get; set; }
 
     }
 }

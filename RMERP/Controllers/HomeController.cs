@@ -20,6 +20,8 @@ using Excel = Microsoft.Office.Interop.Excel;
 using DataTable = System.Data.DataTable;
 using NPOI.SS.Util;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
+using RMERP.DAL.ViewModel;
 //using Microsoft.Office.Interop.Excel;
 
 namespace RMERP.Controllers
@@ -28,8 +30,8 @@ namespace RMERP.Controllers
     public class HomeController : Controller
     {
         private RMERPContext _context;
-        private IHostingEnvironment _hostingEnvironment;
-        public HomeController(RMERPContext context, IHostingEnvironment hostingEnvironment)
+        private IWebHostEnvironment _hostingEnvironment;
+        public HomeController(RMERPContext context, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
@@ -59,10 +61,17 @@ namespace RMERP.Controllers
         }
 
         //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //	return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
+        public IActionResult Error()
+        {
+            ErrorVM error = new();
+            var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();
+            if (exceptionFeature != null)
+            {
+                error.ErrorMessage = exceptionFeature.Error.Message;
+                error.InnerException = exceptionFeature.Error.InnerException?.Message;
+            }
+            return View(error);
+        }
         public ActionResult ExcelDownload()
         {
             return View();
@@ -98,7 +107,7 @@ namespace RMERP.Controllers
                 ICell cell2 = row.CreateCell(3);
                 cell2.SetCellValue(new XSSFRichTextString("ok This is a test of merging"));
 
-                excelSheet.AddMergedRegion(new CellRangeAddress(1,1,3,5));
+                excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 3, 5));
 
                 workbook.Write(fs);
             }
@@ -129,13 +138,13 @@ namespace RMERP.Controllers
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "demofile.xls");
 
         }
-      
+
         //public ActionResult ExportToExcel()
         //{
         //    string reportPath = "your file path for excel";
         //    string reportName = "YourReport.xlsb";
 
-          
+
 
         //    Application excelApp =new Excel.Application();
 
@@ -252,8 +261,8 @@ namespace RMERP.Controllers
             excel.Workbooks.Add();
 
             // Create Worksheet from active sheet
-            _Worksheet workSheet =(Excel.Worksheet)excel.ActiveSheet;
-          
+            _Worksheet workSheet = (Excel.Worksheet)excel.ActiveSheet;
+
             // I created Application and Worksheet objects before try/catch,
             // so that i can close them in finnaly block.
             // It's IMPORTANT to release these COM objects!!
@@ -270,9 +279,9 @@ namespace RMERP.Controllers
                 // Populate sheet with some real data from "cars" list
                 // ------------------------------------------------
                 int row = 2; // start row (in row 1 are header cells)
-                //foreach (Car car in cars)
-                //{
-                    workSheet.Cells[row, "A"] ="abc";
+                             //foreach (Car car in cars)
+                             //{
+                workSheet.Cells[row, "A"] = "abc";
                 workSheet.Cells[row, "B"] = "red";
                 workSheet.Cells[row, "C"] = string.Format("{0} km/h", 50);
 
@@ -316,7 +325,7 @@ namespace RMERP.Controllers
                 //GC.Collect();
             }
         }
-        public  ActionResult excelD()
+        public ActionResult excelD()
         {
             Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
 
@@ -353,5 +362,14 @@ namespace RMERP.Controllers
             Marshal.ReleaseComObject(xlApp);
             return Content("");
         }
+    }
+}
+
+namespace RMERP.DAL.ViewModel
+{
+    public class ErrorVM
+    {
+        public string ErrorMessage { get; set; }
+        public string InnerException { get; set; }
     }
 }

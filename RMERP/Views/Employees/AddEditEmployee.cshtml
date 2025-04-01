@@ -537,7 +537,7 @@
                                         {
                                             string path = DocumentPath + "/" + item.EMD_Id + "/" + item.EMD_Name;
                                             <tr>
-                                                <td>@item.DOT_.DOT_Title</td>
+                                                <td>@item.DOT.DOT_Title</td>
                                                 <td>@item.EMD_Name </td>
                                                 <td><a href='@Url.Action("DownloadDocument","Employees",new { EMD_Id=item.EMD_Id})' title="Download"><i class="fa fa-download m-r-5"></i> Download</a></td>
                                                 <td><a href='@Url.Action("DeleteDocument","Employees",new { EMD_Id=item.EMD_Id})' title="Delete" onclick="return confirm('Are you sure?');"><i class="fa fa-trash m-r-5"></i> Delete</a></td>

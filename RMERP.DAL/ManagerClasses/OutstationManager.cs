@@ -17,13 +17,13 @@ namespace RMERP.DAL.ManagerClasses
         public Wage_Register_Outstation GetOutstationById(int WRO_Id)
         {
             Wage_Register_Outstation station = new Wage_Register_Outstation();
-            station = _context.Wage_Register_Outstation.Include(M => M.CLE_).ThenInclude(M => M.EMP_).Where(m=>m.WRO_Id.Equals(WRO_Id)).FirstOrDefault();
+            station = _context.Wage_Register_Outstations.Include(M => M.CLE).ThenInclude(M => M.EMP).Where(m=>m.WRO_Id.Equals(WRO_Id)).FirstOrDefault();
             return station;
         }
         public Wage_Register_Outstation GetOutstationByCLE(int WAG_Id,int CLE_Id,int CLI_Id)
         {
             Wage_Register_Outstation outstation = new Wage_Register_Outstation();
-            outstation = _context.Wage_Register_Outstation.Include(M => M.CLE_).ThenInclude(M => M.EMP_).Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLE_Id.Equals(CLE_Id) && m.CLE_.CLI_Id.Equals(CLI_Id)).FirstOrDefault();
+            outstation = _context.Wage_Register_Outstations.Include(M => M.CLE).ThenInclude(M => M.EMP).Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLE_Id.Equals(CLE_Id) && m.CLE.CLI_Id.Equals(CLI_Id)).FirstOrDefault();
             return outstation;
         }
         public string UpdateAmount(List<Wage_Register_Outstation> outstations)
@@ -34,9 +34,9 @@ namespace RMERP.DAL.ManagerClasses
                 foreach(Wage_Register_Outstation outstation in outstations)
                 {
                     if (outstation.WRO_Id > 0)
-                        _context.Wage_Register_Outstation.Update(outstation);
+                        _context.Wage_Register_Outstations.Update(outstation);
                     else
-                        _context.Wage_Register_Outstation.Add(outstation);
+                        _context.Wage_Register_Outstations.Add(outstation);
                 }
                 _context.SaveChanges();
             }

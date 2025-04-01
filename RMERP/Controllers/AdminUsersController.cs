@@ -56,7 +56,7 @@ namespace RMERP.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public IActionResult Login(AdminUsers adminUsers)
+        public IActionResult Login(AdminUser adminUsers)
         {
             AdminUsersManager _adminClass = new AdminUsersManager(_context);
             if (ModelState.IsValid)
@@ -101,7 +101,7 @@ namespace RMERP.Controllers
         public IActionResult Index()
         {
             AdminUsersManager adminUsersManager = new AdminUsersManager(_context);
-            IEnumerable<AdminUsers> AdminUsersList = adminUsersManager.GetAdminUsers();
+            IEnumerable<AdminUser> AdminUsersList = adminUsersManager.GetAdminUsers();
             return View(AdminUsersList);
         }
 
@@ -114,7 +114,7 @@ namespace RMERP.Controllers
             AdminUsersModel adminUsersModel = new AdminUsersModel();
             if (AdminId > 0)
             {
-                AdminUsers adminUsers = new AdminUsers();
+                AdminUser adminUsers = new AdminUser();
                 adminUsers = adminUsersManager.GetAdminUsersById(AdminId);
                 adminUsersModel.ADM_Id = AdminId;
                 adminUsersModel.ADM_FirstName = adminUsers.ADM_FirstName;
@@ -135,7 +135,7 @@ namespace RMERP.Controllers
             AdminUsersManager adminUsersManager = new AdminUsersManager(_context);
             if (ModelState.IsValid)
             {
-                AdminUsers adminUsers = new AdminUsers();
+                AdminUser adminUsers = new AdminUser();
                 adminUsers.ADM_Id = adminUsersModel.ADM_Id;
                 adminUsers.ADM_FirstName = adminUsersModel.ADM_FirstName;
                 adminUsers.ADM_MiddleName = adminUsersModel.ADM_MiddleName;

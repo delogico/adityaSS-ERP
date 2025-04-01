@@ -12,7 +12,7 @@ namespace RMERP.DAL.ViewModel
     {
         public ClientsModel clientsModel { get; set; }
         public ParametersClientsModel ParametersClientsModel { get; set; }
-        public IEnumerable<Clients> Listclients { get; set; }
+        public IEnumerable<Client> Listclients { get; set; }
         public List<ClientContactVM> contacts { get; set; }
         public List<ClientRequirementVM> requirements { get; set; }
         public List<ClientEmployeeVM> employees { get; set; }        

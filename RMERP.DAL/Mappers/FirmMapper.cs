@@ -9,7 +9,7 @@ namespace RMERP.DAL.Mappers
 {
     public class FirmMapper
     {
-        public static FirmVM mapMe(Firms firm)
+        public static FirmVM mapMe(Firm firm)
         {
             FirmVM firmVM = new FirmVM();
             firmVM.FRM_Id = firm.FRM_Id;
@@ -24,12 +24,12 @@ namespace RMERP.DAL.Mappers
             firmVM.FRM_AccountNumber = firm.FRM_AccountNumber;
             firmVM.FRM_IFSC_Code = firm.FRM_IFSC_Code;
             firmVM.STA_Id = firm.STA_Id;
-            firmVM.STA_ = firm.STA_;
+            firmVM.STA_ = firm.STA;
             return firmVM;
         }
-        public static Firms mapMeModel(FirmVM firmVM)
+        public static Firm mapMeModel(FirmVM firmVM)
         {
-            Firms firm = new Firms();
+            Firm firm = new Firm();
             firm.FRM_Id = firmVM.FRM_Id;
             firm.FRM_Name = firmVM.FRM_Name;
             firm.FRM_ShortName = firmVM.FRM_ShortName;
@@ -42,15 +42,15 @@ namespace RMERP.DAL.Mappers
             firm.FRM_AccountNumber = firmVM.FRM_AccountNumber;
             firm.FRM_IFSC_Code = firmVM.FRM_IFSC_Code;
             firm.STA_Id = firmVM.STA_Id;
-            firm.STA_ = firmVM.STA_;
+            firm.STA = firmVM.STA_;
             return firm;
         }
 
 
-        public static List<FirmVM> mapFirms(List<Firms> firms)
+        public static List<FirmVM> mapFirms(List<Firm> firms)
         {
             List<FirmVM> lst = new List<FirmVM>();
-            foreach (Firms firm in firms){
+            foreach (Firm firm in firms){
                 lst.Add(mapMe(firm));
             }
             return lst;

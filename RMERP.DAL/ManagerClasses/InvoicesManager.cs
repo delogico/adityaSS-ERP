@@ -15,28 +15,28 @@ namespace RMERP.DAL.ManagerClasses
         {
             _context = context;
         }
-        public List<Invoices> GetInvoices(int FRM_Id)
+        public List<Invoice> GetInvoices(int FRM_Id)
         {
             if (FRM_Id == 0)
             {
-                return _context.Invoices.Include(m => m.CLI_).ThenInclude(m => m.FRM_).Include(m => m.Invoice_Concepts).OrderByDescending(m => m.INV_Date).ToList();
+                return _context.Invoices.Include(m => m.CLI).ThenInclude(m => m.FRM).Include(m => m.Invoice_Concepts).OrderByDescending(m => m.INV_Date).ToList();
             }
             else
             {
-                return _context.Invoices.Include(m => m.CLI_).ThenInclude(m => m.FRM_).Include(m => m.Invoice_Concepts).Where(m => m.FRM_Id.Equals(FRM_Id)).OrderByDescending(m => m.INV_Date).ToList();
+                return _context.Invoices.Include(m => m.CLI).ThenInclude(m => m.FRM).Include(m => m.Invoice_Concepts).Where(m => m.FRM_Id.Equals(FRM_Id)).OrderByDescending(m => m.INV_Date).ToList();
             }
         }
 
-        public List<Invoices> GetInvoicesByClientId(int CLI_Id)
+        public List<Invoice> GetInvoicesByClientId(int CLI_Id)
         {
-            return _context.Invoices.Include(m => m.CLI_).ThenInclude(m => m.FRM_).Include(m => m.Invoice_Concepts).Where(m => m.CLI_Id.Equals(CLI_Id)).OrderByDescending(m => m.INV_Date).ToList();
+            return _context.Invoices.Include(m => m.CLI).ThenInclude(m => m.FRM).Include(m => m.Invoice_Concepts).Where(m => m.CLI_Id.Equals(CLI_Id)).OrderByDescending(m => m.INV_Date).ToList();
         }
 
-        public Invoices GetInvoice(int INV_Id)
+        public Invoice GetInvoice(int INV_Id)
         {
-            return _context.Invoices.Include(m => m.FRM_).ThenInclude(m => m.STA_).Include(m => m.CLI_).ThenInclude(m => m.STA_).Include(m => m.CLI_).ThenInclude(m => m.CITY_).Include(m => m.Invoice_Concepts).Where(m => m.INV_Id.Equals(INV_Id)).FirstOrDefault();
+            return _context.Invoices.Include(m => m.FRM).ThenInclude(m => m.STA).Include(m => m.CLI).ThenInclude(m => m.STA).Include(m => m.CLI).ThenInclude(m => m.CITY).Include(m => m.Invoice_Concepts).Where(m => m.INV_Id.Equals(INV_Id)).FirstOrDefault();
         }
-        public int AddEditInvoice(Invoices invoice)
+        public int AddEditInvoice(Invoice invoice)
         {
             if (invoice.INV_Id > 0)
             {
@@ -50,9 +50,9 @@ namespace RMERP.DAL.ManagerClasses
             _context.SaveChanges();
             return invoice.INV_Id;
         }
-        public int AddInvoiceConcept(List<Invoice_Concepts> invoice_Concepts, int INV_Id)
-        {          
-            List<Invoice_Concepts> invoiceConcepts = _context.Invoice_Concepts.Where(m => m.INV_Id.Equals(INV_Id)).ToList();
+        public int AddInvoiceConcept(List<Invoice_Concept> invoice_Concepts, int INV_Id)
+        {
+            List<Invoice_Concept> invoiceConcepts = _context.Invoice_Concepts.Where(m => m.INV_Id.Equals(INV_Id)).ToList();
             _context.Invoice_Concepts.RemoveRange(invoiceConcepts);
             _context.Invoice_Concepts.AddRange(invoice_Concepts);
             _context.SaveChanges();
@@ -74,20 +74,20 @@ namespace RMERP.DAL.ManagerClasses
 
         public void DeleteIncidenceConcepts(int INV_Id)
         {
-            List<Invoice_Concepts> invoiceConcepts = _context.Invoice_Concepts.Where(m => m.INV_Id.Equals(INV_Id)).ToList();
+            List<Invoice_Concept> invoiceConcepts = _context.Invoice_Concepts.Where(m => m.INV_Id.Equals(INV_Id)).ToList();
             if (invoiceConcepts != null)
                 _context.Invoice_Concepts.RemoveRange(invoiceConcepts);
             _context.SaveChanges();
         }
-        
-        public Invoice_Concepts Get_Billing_Data_T1(int CLI_Id, int WAG_Id, double CRI_Billing_ServiceCharge, decimal CRI_Billing_Amount, int BillingType)
+
+        public Invoice_Concept Get_Billing_Data_T1(int CLI_Id, int WAG_Id, double CRI_Billing_ServiceCharge, decimal CRI_Billing_Amount, int BillingType)
         {
             ClientsManager clientsManager = new ClientsManager(_context);
             WageProcessManager processManager = new WageProcessManager(_context);
             AttendanceManager attendanceManager = new AttendanceManager(_context);
-            Invoice_Concepts invoice_Concept = new Invoice_Concepts();
-            Clients client = clientsManager.GetClientById(CLI_Id);
-            List<Wage_Register> list = new List<Wage_Register>();            
+            Invoice_Concept invoice_Concept = new Invoice_Concept();
+            Client client = clientsManager.GetClientById(CLI_Id);
+            List<Wage_Register> list = new List<Wage_Register>();
             List<ExtraService> extraService = new List<ExtraService>();
 
             decimal TotalServiceCharge = 0;
@@ -95,22 +95,22 @@ namespace RMERP.DAL.ManagerClasses
             string ServiceCharge_Formula = "";
             if (BillingType == (int)ProjectUtils.CRI_BILLING_TYPE.Lump_Sum_Amount)
             {
-                list = _context.Wage_Register.Include(m => m.Wage_Register_Allowances).Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id) && m.CRI_.CRI_Billing_Type == BillingType && m.CRI_.CRI_Billing_Amount == CRI_Billing_Amount).ToList();
+                list = _context.Wage_Registers.Include(m => m.Wage_Register_Allowances).Include(m => m.WAG).Include(m => m.CRI).ThenInclude(m => m.DES).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id) && m.CRI.CRI_Billing_Type == BillingType && m.CRI.CRI_Billing_Amount == CRI_Billing_Amount).ToList();
             }
             else if (BillingType == (int)ProjectUtils.CRI_BILLING_TYPE.Service_Change_Basic)
             {
-                list = _context.Wage_Register.Include(m => m.Wage_Register_Allowances).ThenInclude(m => m.CRA_).ThenInclude(m => m.ALL_).Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id) && m.CRI_.CRI_Billing_Type == BillingType && m.CRI_.CRI_Billing_ServiceCharge == CRI_Billing_ServiceCharge).ToList();
+                list = _context.Wage_Registers.Include(m => m.Wage_Register_Allowances).ThenInclude(m => m.CRA).ThenInclude(m => m.ALL).Include(m => m.WAG).Include(m => m.CRI).ThenInclude(m => m.DES).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id) && m.CRI.CRI_Billing_Type == BillingType && m.CRI.CRI_Billing_ServiceCharge == CRI_Billing_ServiceCharge).ToList();
                 if (list.Count() > 0)
                 {
-                    List<string> AllserviceFormula = new List<string>();                                      
+                    List<string> AllserviceFormula = new List<string>();
                     foreach (Wage_Register wage in list)
                     {
                         AllserviceFormula.Add("BASIC");
-                        if (wage.CRI_.CRI_DA > 0)
+                        if (wage.CRI.CRI_DA > 0)
                         {
                             AllserviceFormula.Add("DA");
                         }
-                        if (wage.CRI_.CRI_HRA_Fixed > 0 || wage.CRI_.CRI_HRA_Percentage > 0)
+                        if (wage.CRI.CRI_HRA_Fixed > 0 || wage.CRI.CRI_HRA_Percentage > 0)
                         {
                             AllserviceFormula.Add("HRA");
                         }
@@ -118,30 +118,30 @@ namespace RMERP.DAL.ManagerClasses
                         {
                             foreach (var all in wage.Wage_Register_Allowances)
                             {
-                                AllserviceFormula.Add(all.CRA_.ALL_.ALL_Shortform);
+                                AllserviceFormula.Add(all.CRA.ALL.ALL_Shortform);
                             }
                         }
-                        if (wage.CRI_.CRI_OutStation_Allowance)
+                        if (wage.CRI.CRI_OutStation_Allowance)
                         {
                             AllserviceFormula.Add("OSL");
                         }
-                        if (wage.CRI_.CRI_Attendance_Allowance)
+                        if (wage.CRI.CRI_Attendance_Allowance)
                         {
                             AllserviceFormula.Add("AAL");
                         }
-                        if (wage.CRI_.CRI_Nightshift_Allowance)
+                        if (wage.CRI.CRI_Nightshift_Allowance)
                         {
                             AllserviceFormula.Add("NSL");
                         }
-                        if (wage.CRI_.CRI_Performance_Allowance)
+                        if (wage.CRI.CRI_Performance_Allowance)
                         {
                             AllserviceFormula.Add("PAL");
                         }
                         AllserviceFormula.Add("OT");
-                        List<string> SelectedserviceFormula = wage.CRI_.CRI_Billing_ServiceCharge_Formula.Split("+").ToList();
+                        List<string> SelectedserviceFormula = wage.CRI.CRI_Billing_ServiceCharge_Formula.Split("+").ToList();
                         List<string> ReminaingList = AllserviceFormula.Except(SelectedserviceFormula).ToList();
-                        
-                        foreach(var item in ReminaingList)
+
+                        foreach (var item in ReminaingList)
                         {
                             ExtraService extra = new ExtraService();
                             extra.Parameter = item;
@@ -158,26 +158,26 @@ namespace RMERP.DAL.ManagerClasses
                                     sum = wage.WAR_HRA_Calculated;
                                     break;
                                 case "OT":
-                                    sum= wage.WAR_OverTime_Calculated;
+                                    sum = wage.WAR_OverTime_Calculated;
                                     break;
                                 case "OSL":
-                                    sum = (wage.WAR_OutStation_Allowance_Calculated!=null? wage.WAR_OutStation_Allowance_Calculated.Value:0);
+                                    sum = (wage.WAR_OutStation_Allowance_Calculated != null ? wage.WAR_OutStation_Allowance_Calculated.Value : 0);
                                     break;
                                 case "AAL":
-                                    sum =(wage.WAR_Attendance_Allowance_Calculated!=null? wage.WAR_Attendance_Allowance_Calculated.Value:0);
+                                    sum = (wage.WAR_Attendance_Allowance_Calculated != null ? wage.WAR_Attendance_Allowance_Calculated.Value : 0);
                                     break;
                                 case "NSL":
-                                    sum = (wage.WAR_Nightshift_Allowance_Calculated!=null? wage.WAR_Nightshift_Allowance_Calculated.Value:0);
+                                    sum = (wage.WAR_Nightshift_Allowance_Calculated != null ? wage.WAR_Nightshift_Allowance_Calculated.Value : 0);
                                     break;
                                 case "PAL":
-                                    sum =(wage.WAR_Performance_Allowance_Calculated!=null? wage.WAR_Performance_Allowance_Calculated.Value:0);
+                                    sum = (wage.WAR_Performance_Allowance_Calculated != null ? wage.WAR_Performance_Allowance_Calculated.Value : 0);
                                     break;
                                 default:
                                     {
                                         foreach (var allowance in wage.Wage_Register_Allowances)
                                         {
-                                            if (allowance.CRA_.ALL_.ALL_Shortform == item)
-                                            {                                                
+                                            if (allowance.CRA.ALL.ALL_Shortform == item)
+                                            {
                                                 sum = allowance.WAA_Amount_Calculated;
                                             }
                                         }
@@ -188,7 +188,7 @@ namespace RMERP.DAL.ManagerClasses
                             extraService.Add(extra);
                         }
                         TotalServiceCharge = TotalServiceCharge + ProjectUtils.GetAmountBasedOnFormula_Report(
-                            wage.CRI_.CRI_Billing_ServiceCharge_Formula,
+                            wage.CRI.CRI_Billing_ServiceCharge_Formula,
                             wage.WAR_Basic_Calculated, wage.WAR_DA_Calculated, wage.WAR_HRA_Calculated,
                             wage.Wage_Register_Allowances.ToList(), wage.WAR_TotalWorkingDays,
                             wage.WAR_TotalPaybleDays, wage.WAR_OverTime_Calculated,
@@ -197,45 +197,50 @@ namespace RMERP.DAL.ManagerClasses
                             (wage.WAR_Nightshift_Allowance_Calculated != null ? wage.WAR_Nightshift_Allowance_Calculated.Value : 0),
                             (wage.WAR_Performance_Allowance_Calculated != null ? wage.WAR_Performance_Allowance_Calculated.Value : 0),
                             (wage.WAR_Allowance_Calculated_1 != null ? wage.WAR_Allowance_Calculated_1.Value : 0),
-                             (wage.WAR_Allowance_Calculated_2 != null ? wage.WAR_Allowance_Calculated_2.Value : 0),
-                              (wage.WAR_Allowance_Calculated_3 != null ? wage.WAR_Allowance_Calculated_3.Value : 0),
-                               (wage.WAR_Allowance_Calculated_4 != null ? wage.WAR_Allowance_Calculated_4.Value : 0),
-                                (wage.WAR_Allowance_Calculated_5 != null ? wage.WAR_Allowance_Calculated_5.Value : 0));
+                            (wage.WAR_Allowance_Calculated_2 != null ? wage.WAR_Allowance_Calculated_2.Value : 0),
+                            (wage.WAR_Allowance_Calculated_3 != null ? wage.WAR_Allowance_Calculated_3.Value : 0),
+                            (wage.WAR_Allowance_Calculated_4 != null ? wage.WAR_Allowance_Calculated_4.Value : 0),
+                            (wage.WAR_Allowance_Calculated_5 != null ? wage.WAR_Allowance_Calculated_5.Value : 0),
+                            (wage.WAR_Allowance_Calculated_6 != null ? wage.WAR_Allowance_Calculated_6.Value : 0),
+                            (wage.WAR_Allowance_Calculated_7 != null ? wage.WAR_Allowance_Calculated_7.Value : 0),
+                            (wage.WAR_Allowance_Calculated_8 != null ? wage.WAR_Allowance_Calculated_8.Value : 0),
+                            (wage.WAR_Allowance_Calculated_9 != null ? wage.WAR_Allowance_Calculated_9.Value : 0),
+                            (wage.WAR_Allowance_Calculated_10 != null ? wage.WAR_Allowance_Calculated_10.Value : 0));
 
                         Tot_OT_Allowances = Tot_OT_Allowances + (wage.WAR_OverTime_Calculated + (wage.Wage_Register_Allowances.Select(m => m.WAA_Amount_Calculated).Sum()));
 
                     }
-                    ServiceCharge_Formula = ProjectUtils.GetStringBasedOnFormula_Report(list.Select(m=>m.CRI_.CRI_Billing_ServiceCharge_Formula).Distinct().ToList());
+                    ServiceCharge_Formula = ProjectUtils.GetStringBasedOnFormula_Report(list.Select(m => m.CRI.CRI_Billing_ServiceCharge_Formula).Distinct().ToList());
                 }
             }
             if (list.Count() > 0)
             {
                 double TotalPaybleDays = list.Select(m => m.WAR_TotalPaybleDays).Sum();
                 decimal MLWF = (list[0].WAR_LWF_Deduction_Employer != null ? list[0].WAR_LWF_Deduction_Employer.Value : 0);
-                int Nos = list.Where(m => m.CRI_.DES_.DES_Exclude_LWF == false).Select(m => m.EMP_Id).Count();
+                int Nos = list.Where(m => m.CRI.DES.DES_Exclude_LWF == false).Select(m => m.EMP_Id).Count();
 
-                decimal Total_MLWF = list.Select(m => (m.WAR_LWF_Deduction_Employer!=null? m.WAR_LWF_Deduction_Employer.Value:0)).Sum();
+                decimal Total_MLWF = list.Select(m => (m.WAR_LWF_Deduction_Employer != null ? m.WAR_LWF_Deduction_Employer.Value : 0)).Sum();
 
                 var LWF_Deductions = list.Select(m => m.WAR_LWF_Deduction_Employer).Distinct();
                 StringBuilder str_MLWF = new StringBuilder();
                 decimal tot_MLWF = 0;
                 foreach (decimal WAR_LWF_Deduction_Employer in LWF_Deductions)
                 {
-                    int emps = list.Where(m => m.WAR_LWF_Deduction_Employer.Equals(WAR_LWF_Deduction_Employer) && m.CRI_.DES_.DES_Exclude_LWF == false).Count();
-                  
+                    int emps = list.Where(m => m.WAR_LWF_Deduction_Employer.Equals(WAR_LWF_Deduction_Employer) && m.CRI.DES.DES_Exclude_LWF == false).Count();
+
                     decimal TotMLWF = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure((WAR_LWF_Deduction_Employer * emps))));
                     str_MLWF.Append("<br/>[Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(WAR_LWF_Deduction_Employer) + " x " + emps + " Nos = " + TotMLWF + "/-] "));
                     tot_MLWF = tot_MLWF + TotMLWF;
                 }
 
-                Wage_Process wage = list[0].WAG_;
+                Wage_Process wage = list[0].WAG;
                 string DatePeriod = "";
                 decimal Total = 0;
                 DateTime StartDate = DateTime.Now;
                 DateTime EndDate = DateTime.Now;
                 int daysInMonth = 0;
-                Attendance_Parameter attendance = clientsManager.GetAttendanceParameterByMonth(CLI_Id,wage.WAG_Month);
-                if(attendance.ATP_Att_MonthReal.Value)
+                Attendance_Parameter attendance = clientsManager.GetAttendanceParameterByMonth(CLI_Id, new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, wage.WAG_Month.Day));
+                if (attendance.ATP_Att_MonthReal)
                 {
                     DatePeriod = "For The Month Of " + wage.WAG_Month.ToString("MMM-yyyy");
                     daysInMonth = DateTime.DaysInMonth(wage.WAG_Month.Year, wage.WAG_Month.Month);
@@ -272,25 +277,25 @@ namespace RMERP.DAL.ManagerClasses
                 {
                     decimal GrossTotal = ProjectUtils.RoundFigure(TotalServiceCharge);
                     decimal ServiceCharge = ProjectUtils.RoundFigure((GrossTotal) * (decimal)CRI_Billing_ServiceCharge / 100);
-                    Total = Total + GrossTotal + ServiceCharge+ extraService.Select(m=>m.Value).Sum();
-                    sb.Append(DatePeriod + "</br>");                    
+                    Total = Total + GrossTotal + ServiceCharge + extraService.Select(m => m.Value).Sum();
+                    sb.Append(DatePeriod + "</br>");
                     sb.Append("(A) Salary Wages = " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(GrossTotal)) + "/-");
                     sb.Append("</br>" + ServiceCharge_Formula);
                     //string str = ProjectUtils.GetStringBasedOnFormula_Report(list[0].CRI_.CRI_Billing_ServiceCharge_Formula);                    
                     char count = 'A';
-                    foreach (var service in extraService.Select(m=>m.Parameter).Distinct())
+                    foreach (var service in extraService.Select(m => m.Parameter).Distinct())
                     {
                         count++;
-                        sb.Append("</br>(" + count + ") "+service+" = "+ extraService.Where(m=>m.Parameter.Equals(service)).Select(m => m.Value).Sum() + "/-");
-                    }                    
+                        sb.Append("</br>(" + count + ") " + service + " = " + extraService.Where(m => m.Parameter.Equals(service)).Select(m => m.Value).Sum() + "/-");
+                    }
                     count++;
-                    sb.Append("<br/>("+ count + ") Service Charges @ " + CRI_Billing_ServiceCharge + "%= " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(ServiceCharge)) + "/-");
+                    sb.Append("<br/>(" + count + ") Service Charges @ " + CRI_Billing_ServiceCharge + "%= " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(ServiceCharge)) + "/-");
                     if (wage.WAG_Month.Month == (int)ProjectUtils.Month.June || wage.WAG_Month.Month == (int)ProjectUtils.Month.December)
                     {
-                        if (tot_MLWF>0)
+                        if (tot_MLWF > 0)
                         {
                             count++;
-                            sb.Append("(" + count+") MLWF Contribution : Rs."+ String.Format("{0:0.##}", ProjectUtils.RoundFigure(tot_MLWF)));
+                            sb.Append("(" + count + ") MLWF Contribution : Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(tot_MLWF)));
                             sb.Append(str_MLWF);
                             Total = Total + tot_MLWF;
                         }
@@ -315,14 +320,14 @@ namespace RMERP.DAL.ManagerClasses
                         //    Total = Total + TotMLWF;
                         //}     
                         if (tot_MLWF > 0)
-                        {    
+                        {
                             sb.Append("(C) MLWF Contribution : Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(tot_MLWF)));
                             sb.Append(str_MLWF);
                             Total = Total + tot_MLWF;
                         }
                     }
                 }
-                
+
 
                 invoice_Concept.INC_Description = sb.ToString();
                 invoice_Concept.INC_Total = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(Total)));
@@ -330,16 +335,16 @@ namespace RMERP.DAL.ManagerClasses
             return invoice_Concept;
         }
 
-        public Invoice_Concepts Get_Billing_Data_T2_PF(int CLI_Id, int WAG_Id)
+        public Invoice_Concept Get_Billing_Data_T2_PF(int CLI_Id, int WAG_Id)
         {
             ClientsManager clientsManager = new ClientsManager(_context);
             WageProcessManager processManager = new WageProcessManager(_context);
             AttendanceManager attendanceManager = new AttendanceManager(_context);
 
-            Invoice_Concepts invoice_Concept = new Invoice_Concepts();
-            Clients client = clientsManager.GetClientById(CLI_Id);
-            List<Wage_Register> list = _context.Wage_Register.Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id)).ToList();
-            
+            Invoice_Concept invoice_Concept = new Invoice_Concept();
+            Client client = clientsManager.GetClientById(CLI_Id);
+            List<Wage_Register> list = _context.Wage_Registers.Include(m => m.WAG).Include(m => m.CRI).ThenInclude(m => m.DES).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id)).ToList();
+
             decimal PF_Calculated = 0;
             StringBuilder sb = new StringBuilder();
             if (list.Count() > 0)
@@ -347,7 +352,7 @@ namespace RMERP.DAL.ManagerClasses
                 decimal ApplicableSalary = 0M;
                 foreach (var item in list)
                 {
-                    List<Client_Requirement_Allowances> All = item.CRI_.Client_Requirement_Allowances.ToList();
+                    List<Client_Requirement_Allowance> All = item.CRI.Client_Requirement_Allowances.ToList();
                     decimal AppSalary = ProjectUtils.GetAmountBasedOnFormula_Report(
                         item.WAR_PF_Formula,
                         item.WAR_Basic_Calculated,
@@ -361,26 +366,32 @@ namespace RMERP.DAL.ManagerClasses
                         (item.WAR_Nightshift_Allowance_Calculated != null ? item.WAR_Nightshift_Allowance_Calculated.Value : 0),
                         (item.WAR_Performance_Allowance_Calculated != null ? item.WAR_Performance_Allowance_Calculated.Value : 0),
                         (item.WAR_Allowance_Calculated_1 != null ? item.WAR_Allowance_Calculated_1.Value : 0),
-                             (item.WAR_Allowance_Calculated_2 != null ? item.WAR_Allowance_Calculated_2.Value : 0),
-                              (item.WAR_Allowance_Calculated_3 != null ? item.WAR_Allowance_Calculated_3.Value : 0),
-                               (item.WAR_Allowance_Calculated_4 != null ? item.WAR_Allowance_Calculated_4.Value : 0),
-                                (item.WAR_Allowance_Calculated_5 != null ? item.WAR_Allowance_Calculated_5.Value : 0));
+                        (item.WAR_Allowance_Calculated_2 != null ? item.WAR_Allowance_Calculated_2.Value : 0),
+                        (item.WAR_Allowance_Calculated_3 != null ? item.WAR_Allowance_Calculated_3.Value : 0),
+                        (item.WAR_Allowance_Calculated_4 != null ? item.WAR_Allowance_Calculated_4.Value : 0),
+                        (item.WAR_Allowance_Calculated_5 != null ? item.WAR_Allowance_Calculated_5.Value : 0),
+
+                        (item.WAR_Allowance_Calculated_6 != null ? item.WAR_Allowance_Calculated_6.Value : 0),
+                        (item.WAR_Allowance_Calculated_7 != null ? item.WAR_Allowance_Calculated_7.Value : 0),
+                        (item.WAR_Allowance_Calculated_8 != null ? item.WAR_Allowance_Calculated_8.Value : 0),
+                        (item.WAR_Allowance_Calculated_9 != null ? item.WAR_Allowance_Calculated_9.Value : 0),
+                        (item.WAR_Allowance_Calculated_10 != null ? item.WAR_Allowance_Calculated_10.Value : 0));
 
                     ApplicableSalary = Math.Round(AppSalary + ApplicableSalary, MidpointRounding.AwayFromZero);
                 }
                 PF_Calculated = ApplicableSalary;
 
-                Wage_Process wage = list[0].WAG_;
+                Wage_Process wage = list[0].WAG;
                 string DatePeriod = "";
                 DateTime StartDate = DateTime.Now;
                 DateTime EndDate = DateTime.Now;
-                Attendance_Parameter attendance = clientsManager.GetAttendanceParameterByMonth(CLI_Id, wage.WAG_Month);
-                if (attendance.ATP_Att_MonthReal.Value)
+                Attendance_Parameter attendance = clientsManager.GetAttendanceParameterByMonth(CLI_Id, new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, wage.WAG_Month.Day));
+                if (attendance.ATP_Att_MonthReal)
                 {
                     DatePeriod = "For Month Of " + wage.WAG_Month.ToString("MMM-yyyy");
                 }
                 else
-                {                    
+                {
                     Tuple<DateTime, DateTime> dates = attendanceManager.GetFirstLastDateFromAttendance(WAG_Id, CLI_Id, list.First().EMP_Id);
                     StartDate = dates.Item1;
                     EndDate = dates.Item2;
@@ -391,27 +402,27 @@ namespace RMERP.DAL.ManagerClasses
                 }
                 //decimal PF_Calculated1 = list.Select(m => m.WAR_PF_Calculated).Sum();
                 //INC_Total = PF_Calculated;
-                sb.Append("<b>Company Contribution Towards PF @" + list[0].CRI_.CRI_PF_Employer_Cont_Rate + "%</b></br>");
+                sb.Append("<b>Company Contribution Towards PF @" + list[0].CRI.CRI_PF_Employer_Cont_Rate + "%</b></br>");
                 sb.Append("Rembursment Of Company Contribution <br/>");
                 //sb.Append("To The P.F @" + 12 + "% and Other Charges @" + 1 + "%<br/>");
                 //sb.Append("As Per The Act " + DatePeriod + "</br/>");
-                sb.Append("(Total=" + String.Format("{0:0.##}", ProjectUtils.RoundFigure(PF_Calculated * (decimal)list[0].CRI_.CRI_PF_Employer_Cont_Rate / 100)) + "/-)");                
+                sb.Append("(Total=" + String.Format("{0:0.##}", ProjectUtils.RoundFigure(PF_Calculated * (decimal)list[0].CRI.CRI_PF_Employer_Cont_Rate / 100)) + "/-)");
             }
             invoice_Concept.INC_Description = sb.ToString();
             if (list.Count() > 0)
-                invoice_Concept.INC_Total = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(PF_Calculated * (decimal)list[0].CRI_.CRI_PF_Employer_Cont_Rate / 100)));
+                invoice_Concept.INC_Total = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(PF_Calculated * (decimal)list[0].CRI.CRI_PF_Employer_Cont_Rate / 100)));
             return invoice_Concept;
         }
 
-        public Invoice_Concepts Get_Billing_Data_T2_ESIC(int CLI_Id, int WAG_Id)
+        public Invoice_Concept Get_Billing_Data_T2_ESIC(int CLI_Id, int WAG_Id)
         {
             ClientsManager clientsManager = new ClientsManager(_context);
             WageProcessManager processManager = new WageProcessManager(_context);
             AttendanceManager attendanceManager = new AttendanceManager(_context);
 
-            Invoice_Concepts invoice_Concept = new Invoice_Concepts();
-            Clients client = clientsManager.GetClientById(CLI_Id);
-            List<Wage_Register> list = _context.Wage_Register.Include(m => m.WAG_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id)).ToList();
+            Invoice_Concept invoice_Concept = new Invoice_Concept();
+            Client client = clientsManager.GetClientById(CLI_Id);
+            List<Wage_Register> list = _context.Wage_Registers.Include(m => m.WAG).Include(m => m.CRI).ThenInclude(m => m.DES).Where(m => m.WAG_Id == WAG_Id && m.CLI_Id.Equals(CLI_Id)).ToList();
             decimal ESIC_Calculated = 0M, GrossTotal = 0M;
             StringBuilder sb = new StringBuilder();
             if (list.Count() > 0)
@@ -434,20 +445,26 @@ namespace RMERP.DAL.ManagerClasses
                         (item.WAR_Nightshift_Allowance_Calculated != null ? Math.Round(item.WAR_Nightshift_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0),
                         (item.WAR_Performance_Allowance_Calculated != null ? Math.Round(item.WAR_Performance_Allowance_Calculated.Value, MidpointRounding.AwayFromZero) : 0),
                         (item.WAR_Allowance_Calculated_1 != null ? item.WAR_Allowance_Calculated_1.Value : 0),
-                             (item.WAR_Allowance_Calculated_2 != null ? item.WAR_Allowance_Calculated_2.Value : 0),
-                              (item.WAR_Allowance_Calculated_3 != null ? item.WAR_Allowance_Calculated_3.Value : 0),
-                               (item.WAR_Allowance_Calculated_4 != null ? item.WAR_Allowance_Calculated_4.Value : 0),
-                                (item.WAR_Allowance_Calculated_5 != null ? item.WAR_Allowance_Calculated_5.Value : 0));
+                        (item.WAR_Allowance_Calculated_2 != null ? item.WAR_Allowance_Calculated_2.Value : 0),
+                        (item.WAR_Allowance_Calculated_3 != null ? item.WAR_Allowance_Calculated_3.Value : 0),
+                        (item.WAR_Allowance_Calculated_4 != null ? item.WAR_Allowance_Calculated_4.Value : 0),
+                        (item.WAR_Allowance_Calculated_5 != null ? item.WAR_Allowance_Calculated_5.Value : 0),
+
+                        (item.WAR_Allowance_Calculated_6 != null ? item.WAR_Allowance_Calculated_6.Value : 0),
+                        (item.WAR_Allowance_Calculated_7 != null ? item.WAR_Allowance_Calculated_7.Value : 0),
+                        (item.WAR_Allowance_Calculated_8 != null ? item.WAR_Allowance_Calculated_8.Value : 0),
+                        (item.WAR_Allowance_Calculated_9 != null ? item.WAR_Allowance_Calculated_9.Value : 0),
+                        (item.WAR_Allowance_Calculated_10 != null ? item.WAR_Allowance_Calculated_10.Value : 0));
 
                     ApplicableSalary = Math.Round(AppSalary + ApplicableSalary, MidpointRounding.AwayFromZero);
                 }
                 ESIC_Calculated = ApplicableSalary;
-                Wage_Process wage = list[0].WAG_;
+                Wage_Process wage = list[0].WAG;
                 string DatePeriod = "";
                 DateTime StartDate = DateTime.Now;
                 DateTime EndDate = DateTime.Now;
-                Attendance_Parameter attendance = clientsManager.GetAttendanceParameterByMonth(CLI_Id, wage.WAG_Month);
-                if (attendance.ATP_Att_MonthReal.Value)
+                Attendance_Parameter attendance = clientsManager.GetAttendanceParameterByMonth(CLI_Id, new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, wage.WAG_Month.Day));
+                if (attendance.ATP_Att_MonthReal)
                 {
                     DatePeriod = "For The Month Of " + wage.WAG_Month.ToString("MMM-yyyy");
                 }
@@ -461,28 +478,28 @@ namespace RMERP.DAL.ManagerClasses
                     //EndDate = new DateTime(wage.WAG_Month.Year, wage.WAG_Month.Month, client.CLI_Att_Month_End.Value);
                     DatePeriod = "From " + StartDate.ToString("dd-MMM-yyyy") + " TO " + EndDate.ToString("dd-MMM-yyyy"); ;
                 }
-                sb.Append("<b>Company Contribution Towards ESIC @" + list[0].CRI_.CRI_ESIC_Employer_Cont_Rate + "%</b></br>");
+                sb.Append("<b>Company Contribution Towards ESIC @" + list[0].CRI.CRI_ESIC_Employer_Cont_Rate + "%</b></br>");
                 sb.Append("Rembursment Of Company Contribution <br/>");
-                sb.Append("On Gross Salary= Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(GrossTotal) + "/-<br/>"));                
-                sb.Append("@" + list[0].CRI_.CRI_ESIC_Employer_Cont_Rate + "% = " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(ProjectUtils.RoundFigure(GrossTotal) * (decimal)list[0].CRI_.CRI_ESIC_Employer_Cont_Rate / 100)));
-                                
+                sb.Append("On Gross Salary= Rs." + String.Format("{0:0.##}", ProjectUtils.RoundFigure(GrossTotal) + "/-<br/>"));
+                sb.Append("@" + list[0].CRI.CRI_ESIC_Employer_Cont_Rate + "% = " + String.Format("{0:0.##}", ProjectUtils.RoundFigure(ProjectUtils.RoundFigure(GrossTotal) * (decimal)list[0].CRI.CRI_ESIC_Employer_Cont_Rate / 100)));
+
             }
             invoice_Concept.INC_Description = sb.ToString();
-            if(list.Count()>0)
-                invoice_Concept.INC_Total = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(ProjectUtils.RoundFigure(GrossTotal) * (decimal)list[0].CRI_.CRI_ESIC_Employer_Cont_Rate / 100)));
+            if (list.Count() > 0)
+                invoice_Concept.INC_Total = Convert.ToDecimal(String.Format("{0:0.##}", ProjectUtils.RoundFigure(ProjectUtils.RoundFigure(GrossTotal) * (decimal)list[0].CRI.CRI_ESIC_Employer_Cont_Rate / 100)));
 
             return invoice_Concept;
         }
 
-        public Invoice_Concepts Get_Billing_Data_T3(int CLI_Id, string EMPs)
+        public Invoice_Concept Get_Billing_Data_T3(int CLI_Id, string EMPs)
         {
-            Invoice_Concepts invoice_Concept = new Invoice_Concepts();
+            Invoice_Concept invoice_Concept = new Invoice_Concept();
             if (EMPs != null)
             {
                 string[] EMP = EMPs.Split(",");
                 ClientsManager clientsManager = new ClientsManager(_context);
-                Clients client = clientsManager.GetClientById(CLI_Id);
-                List<Wage_Register> list = _context.Wage_Register.Include(m => m.WAG_).Include(m => m.EMP_).Include(m => m.CRI_).ThenInclude(m => m.DES_).Where(m => m.CLI_Id.Equals(CLI_Id)).ToList();
+                Client client = clientsManager.GetClientById(CLI_Id);
+                List<Wage_Register> list = _context.Wage_Registers.Include(m => m.WAG).Include(m => m.EMP).Include(m => m.CRI).ThenInclude(m => m.DES).Where(m => m.CLI_Id.Equals(CLI_Id)).ToList();
                 StringBuilder sb = new StringBuilder();
                 sb.Append("<b>Contract Receipt</b></br>");
                 sb.AppendLine("Full & Final Settlement Of Left Employee</br>");
@@ -494,13 +511,13 @@ namespace RMERP.DAL.ManagerClasses
                         var wag = list.Where(m => m.EMP_Id.ToString().Equals(item.ToString())).FirstOrDefault();
                         if (wag != null)
                         {
-                            sb.Append("<b>" + (wag.EMP_.EMP_Gender.Equals(ProjectUtils.Gender.Female) ? "Miss. " : "Mr. ") + wag.EMP_.EMP_FirstName + " " + wag.EMP_.EMP_MiddleName + " " + wag.EMP_.EMP_SurName + "</br></b>");
+                            sb.Append("<b>" + (wag.EMP.EMP_Gender.Equals(ProjectUtils.Gender.Female) ? "Miss. " : "Mr. ") + wag.EMP.EMP_FirstName + " " + wag.EMP.EMP_MiddleName + " " + wag.EMP.EMP_SurName + "</br></b>");
                             sb.Append("Leave Encashment = <br/>");
                             sb.Append("Bonus =   <br/>");
                             sb.Append("Total = <br/>");
                         }
                     }
-                }                
+                }
                 invoice_Concept.INC_Total = INC_Total;
                 invoice_Concept.INC_Description = sb.ToString();
             }

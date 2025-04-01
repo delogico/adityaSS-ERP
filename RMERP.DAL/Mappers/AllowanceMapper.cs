@@ -8,7 +8,7 @@ namespace RMERP.DAL.Mappers
 {
     public class AllowanceMapper
     {
-        public static AllowanceVM mapMe(Allowances allowance)
+        public static AllowanceVM mapMe(Allowance allowance)
         {
             AllowanceVM allowancesVM = new AllowanceVM();
             allowancesVM.ALL_Id = allowance.ALL_Id;
@@ -17,9 +17,9 @@ namespace RMERP.DAL.Mappers
             allowancesVM.ALL_Shortform = allowance.ALL_Shortform;
             return allowancesVM;
         }
-        public static Allowances mapMeModel(AllowanceVM allowanceVM)//
+        public static Allowance mapMeModel(AllowanceVM allowanceVM)//
         {
-            Allowances allowances = new Allowances();
+            Allowance allowances = new Allowance();
             allowances.ALL_Id = allowanceVM.ALL_Id;
             allowances.ALL_Title = allowanceVM.ALL_Title;
             allowances.ALL_Alias = allowanceVM.ALL_Alias;
@@ -27,7 +27,7 @@ namespace RMERP.DAL.Mappers
             return allowances;
         }
 
-        public static ClientReqAllowanceVM mapMe(Client_Requirement_Allowances cRAllowance)
+        public static ClientReqAllowanceVM mapMe(Client_Requirement_Allowance cRAllowance)
         {
             ClientReqAllowanceVM CRAVM = new ClientReqAllowanceVM();
             CRAVM.CRA_Id = cRAllowance.CRA_Id;
@@ -35,25 +35,25 @@ namespace RMERP.DAL.Mappers
             CRAVM.ALL_Id = cRAllowance.ALL_Id;
             CRAVM.CRA_Amount = Convert.ToDecimal(cRAllowance.CRA_Amount);
             CRAVM.CRA_DayswiseOrFull = cRAllowance.CRA_DayswiseOrFull;
-            if (cRAllowance.ALL_ != null)
-                CRAVM.allowance = mapMe(cRAllowance.ALL_);
+            if (cRAllowance.ALL != null)
+                CRAVM.allowance = mapMe(cRAllowance.ALL);
             return CRAVM;
         }
 
-        public static Client_Requirement_Allowances mapMeModel(ClientReqAllowanceVM cRAllowanceVM) //
+        public static Client_Requirement_Allowance mapMeModel(ClientReqAllowanceVM cRAllowanceVM) //
         {
-            Client_Requirement_Allowances CRA = new Client_Requirement_Allowances();
+            Client_Requirement_Allowance CRA = new Client_Requirement_Allowance();
             CRA.CRA_Id = cRAllowanceVM.CRA_Id;
             CRA.CRI_Id = cRAllowanceVM.CRI_Id;
             CRA.ALL_Id = cRAllowanceVM.ALL_Id;
             CRA.CRA_Amount = Convert.ToDecimal(cRAllowanceVM.CRA_Amount);
             CRA.CRA_DayswiseOrFull = cRAllowanceVM.CRA_DayswiseOrFull;
             if (cRAllowanceVM.allowance != null)
-                CRA.ALL_ = mapMeModel(cRAllowanceVM.allowance);
+                CRA.ALL = mapMeModel(cRAllowanceVM.allowance);
             return CRA;
         }
 
-        public static List<AllowanceVM> mapMeAllowances(List<Allowances> allowances)
+        public static List<AllowanceVM> mapMeAllowances(List<Allowance> allowances)
         {
             List<AllowanceVM> lst = new List<AllowanceVM>();
             foreach(var item in allowances)
@@ -62,9 +62,9 @@ namespace RMERP.DAL.Mappers
             }
             return lst;
         }
-        public static List<Client_Requirement_Allowances> mapMeClientReqAllowances(List<ClientReqAllowanceVM> clientReqAllowanceVMs)
+        public static List<Client_Requirement_Allowance> mapMeClientReqAllowances(List<ClientReqAllowanceVM> clientReqAllowanceVMs)
         {
-            List<Client_Requirement_Allowances> lst = new List<Client_Requirement_Allowances>();
+            List<Client_Requirement_Allowance> lst = new List<Client_Requirement_Allowance>();
             foreach (var item in clientReqAllowanceVMs)
             {
                 if (item.flagClientRequirement == true)
@@ -74,9 +74,9 @@ namespace RMERP.DAL.Mappers
             }
             return lst;
         }
-         public static List<Client_Requirement_Allowances> mapMeClientReqAllowancesRemove(List<ClientReqAllowanceVM> clientReqAllowanceVMs)
+         public static List<Client_Requirement_Allowance> mapMeClientReqAllowancesRemove(List<ClientReqAllowanceVM> clientReqAllowanceVMs)
         {
-            List<Client_Requirement_Allowances> lst = new List<Client_Requirement_Allowances>();
+            List<Client_Requirement_Allowance> lst = new List<Client_Requirement_Allowance>();
             foreach (var item in clientReqAllowanceVMs)
             {
                 if (!item.flagClientRequirement)
@@ -86,7 +86,7 @@ namespace RMERP.DAL.Mappers
             }
             return lst;
         }
-        public static List<ClientReqAllowanceVM> mapMeAllowancesWithClientReq(List<Allowances> allowances, IEnumerable<Client_Requirement_Allowances> cRAllowances)
+        public static List<ClientReqAllowanceVM> mapMeAllowancesWithClientReq(List<Allowance> allowances, IEnumerable<Client_Requirement_Allowance> cRAllowances)
         {
             List<ClientReqAllowanceVM> lst = new List<ClientReqAllowanceVM>();
             foreach (var item in allowances)
@@ -94,7 +94,7 @@ namespace RMERP.DAL.Mappers
                 ClientReqAllowanceVM vm = new ClientReqAllowanceVM();
                 vm.ALL_Id = item.ALL_Id;
                 vm.allowance = mapMe(item);
-                Client_Requirement_Allowances cr = cRAllowances.Where(c => c.ALL_Id == item.ALL_Id).FirstOrDefault();
+                Client_Requirement_Allowance cr = cRAllowances.Where(c => c.ALL_Id == item.ALL_Id).FirstOrDefault();
                 vm.flagClientRequirement = false;
                 if (cr != null)
                 {
