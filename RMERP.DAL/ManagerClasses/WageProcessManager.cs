@@ -254,7 +254,7 @@ namespace RMERP.DAL.ManagerClasses
                 .Include(f => f.Wage_Registers).ThenInclude(r => r.CRI).ThenInclude(cc => cc.DES)
                 .Include(f => f.Wage_Registers).ThenInclude(r => r.EMP)
                 .Include(f => f.Wage_Process_Clients).ThenInclude(c => c.CLI);
-            return query.AsSplitQuery().AsNoTrackingWithIdentityResolution().FirstOrDefault();
+            return query.AsSplitQuery().FirstOrDefault();
         }
 
         #endregion

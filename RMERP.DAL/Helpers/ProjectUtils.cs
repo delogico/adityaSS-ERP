@@ -887,12 +887,12 @@ namespace RMERP.DAL.Helpers
         public static DateTime[] GetStartEndDatePeriodForAttendance(Attendance_Parameter attendance_Parameter, DateTime wageDate)
         {
             DateTime startDate = wageDate, endDate = wageDate;
-            if (attendance_Parameter.ATP_Att_MonthReal == true)
+            if (attendance_Parameter.ATP_Att_MonthReal)
             {
                 startDate = new DateTime(wageDate.Year, wageDate.Month, 1);
-                endDate = startDate.AddMonths(1).AddDays(-1);
+                endDate = startDate.AddMonths(1).AddDays(-1).AddDays(1);
             }
-            else if (attendance_Parameter.ATP_Att_MonthReal == false)
+            else if (!attendance_Parameter.ATP_Att_MonthReal)
             {
                 startDate = new DateTime(wageDate.AddMonths(-1).Year, wageDate.AddMonths(-1).Month, attendance_Parameter.ATP_Att_Month_Start.Value);
                 endDate = new DateTime(wageDate.Year, wageDate.Month, attendance_Parameter.ATP_Att_Month_End.Value + 1);

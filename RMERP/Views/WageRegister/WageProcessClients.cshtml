@@ -18,13 +18,13 @@
          <h3 class="page-title">@ViewData["Title"] Status (@Header)</h3>
       </div>
       <div class="col-sm-6">
-         <a class="btn btn-success" href='@Url.Action("WageRegisterExcel2","WageRegister",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id})' title="Download Excel">
+         <a class="btn btn-success" href='@Url.Action("WageRegisterExcel","WageRegister",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id})' title="Download Excel">
             <i class="fa fa-file-excel-o m-r-5"></i>
-            Download Excel
+            Wages Sheets
          </a> |
          <a class="btn btn-warning" href='@Url.Action("WageRegisterNewExcel","WageRegister",new { WAG_Id = Model.WAG_Id,FRM_Id=Model.FRM_Id})' title="Download New Excel">
             <i class="fa fa-file-excel-o m-r-5"></i>
-            Download New Excel
+            Wages Sheets (New)
          </a>
       </div>
    </div>

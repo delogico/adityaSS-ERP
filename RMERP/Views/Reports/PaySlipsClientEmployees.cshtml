@@ -1,0 +1,225 @@
+﻿@model RMERP.DAL.ViewModel.WPS_MasterVM
+@using RMERP.Helpers
+@{
+   ViewData["Title"] = "PaySlip Client Employees";
+   string Header = Model.FRM_Name + "/" + Model.WAG_Month;
+}
+@section Breadcrumbs{
+   <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id })</li>
+   <li class="breadcrumb-item"> @Html.ActionLink("PaySlips Clients", "PaySlipsClients", "Reports", new { WAG_Id = Model.WAG_Id })</li>
+   <li class="breadcrumb-item">PaySlips Client Employees</li>
+}
+<div class="content container-fluid">
+   <div class="row">
+      <div class="col-sm-6">
+         <h3 class="page-title">@Header</h3>
+      </div>
+   </div>
+   @if (Model.EmployeesPaySlips.Count() > 0)
+   {
+      <div class="progress" style="display:none;">
+         <div class="progress-bar progress-bar-danger" role="progressbar"
+              aria-valuemin="0" aria-valuemax="100" style="width:0%">
+            <span id="per">0</span>%
+         </div>
+      </div>
+   }
+   <div class="row">
+      <div class="col-sm-12 text-center">
+         <h3 class="well">@Model.CLI_Name</h3>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-md-12 text-right">
+         @if (Model.EmployeesPaySlips.Count() > 0)
+         {
+            <a id="btnGenerateAllForClient" class="btn btn-primary rounded" onclick="Generate(@Model.CLI_Id,@Model.WAG_Id)">Generate All</a>
+            <img id="AllClient_loading-image" src="~/assets/img/smallLoading.gif" style="display:none;" />
+            @if (Model.EmployeesPaySlips.Count() == Model.EmployeesPaySlips.Where(a => a.IsPaySlipGenerated).Count())
+            {
+               <a id="btnGenerateAllForClient" class="btn btn-success rounded" href="@Url.Action("DownloadPaySlips", "Reports", new { WAG_Id = Model.WAG_Id, CLI_Id = Model.CLI_Id })">Download All</a>
+            }
+         }
+      </div>
+   </div><br />
+   <div class="row">
+      <div class="col-md-12">
+         <table class="table table-striped custom-table">
+            <thead>
+               <tr>
+                  <th>Sr.No</th>
+                  <th>Employee ID</th>
+                  <th>Employee Name</th>
+                  @Html.Hidden("totEmpCount", Model.EmployeesPaySlips.Count())
+                  <th>
+                     # <span>Outof @Model.EmployeesPaySlips.Count() , Total <span id="pdfCount">@Model.EmployeesPaySlips.Where(m => m.IsPaySlipGenerated).Count()</span> Generated</span>
+                  </th>
+               </tr>
+            </thead>
+            <tbody>
+
+               @{int srNo = 1; }
+
+               @foreach (var item in Model.EmployeesPaySlips)
+               {
+                  <tr class="item_@Model.CLI_Id">
+                     <td style="display:none;"><span class="EMP_Id">@item.EMP_Id</span></td>
+                     <td style="display:none;"><span class="WPS_Id">@item.WPS_Id</span></td>
+                     <td>@srNo </td>
+                     <td>@item.EMP_Id.ToString("D5")</td>
+                     <td>@item.EMP_FullName</td>
+                     <td>
+                        @if (item.IsPaySlipGenerated)
+                        {
+                           <span>
+                              <a id="btnDownload" href="@Url.Action("DownloadPaySlip","Reports",new { WPS_Id=item.WPS_Id})" class="btn btn-xs btn-success">Download</a>
+                              <a id="btnRegenerate" onclick="GeneratePaySlip(@Model.WAG_Id,@item.EMP_Id,@item.WPS_Id)" class="btn btn-xs btn-warning">Regenerate</a>
+                              <img id="R_loading-image_@item.EMP_Id" src="~/assets/img/smallLoading.gif" style="display:none;" />
+                              <br />
+                              <span class="label label-success-border">Generated on @DateHelper.getLongDateFormat(item.WPS_GeneratedOn.Value) </span>
+                           </span>
+                        }
+                        else
+                        {
+                           <span id="spanNotGenerated_@item.EMP_Id">
+                              <span class="label label-danger-border">Not Generated Yet </span>
+                              <span>&nbsp;&nbsp;</span>
+                              <span>
+                                 <a class="btn btn-xs btn-info" onclick="GeneratePaySlip(@Model.WAG_Id,@item.EMP_Id)"> Generate PaySlip</a>
+                                 <img id="loading-image_@item.EMP_Id" src="~/assets/img/smallLoading.gif" style="display:none;" />
+                              </span>
+                           </span>
+                        }
+                        <img id="All_loading-image_@item.EMP_Id" src="~/assets/img/smallLoading.gif" style="display:none;" />
+                     </td>
+                  </tr>
+                  srNo++;
+               }
+
+            </tbody>
+         </table>
+
+      </div>
+   </div>
+</div>
+
+@section scripts{
+   <script>
+      var redirectUrl = '@Url.Action("PaySlipsClientEmployees","Reports")?WAG_Id=@Model.WAG_Id&FRM_Id=@Model.FRM_Id&CLI_Id=@Model.CLI_Id';
+
+      function GeneratePaySlip(WAG_Id, EMP_Id, WPS_Id) {
+                var Url = siteUrl + "Reports/GeneratedPaySlip?WAG_Id=" + WAG_Id + "&EMP_Id=" + EMP_Id+"&WPS_Id="+WPS_Id;
+                $.ajax({
+                    type: "GET",
+                    url: Url,
+                    beforeSend: function () {
+                            if (WPS_Id > 0)
+                                $("#R_loading-image_" + EMP_Id).show();
+                            else
+                                $("#loading-image_" + EMP_Id).show();
+                    },
+                    success: function (data) {
+                       window.location.replace(redirectUrl);
+                    }
+                })
+      };
+
+      function GeneratePaySlip_All(WAG_Id, id) {
+                var emps = @Html.Raw(Json.Serialize(Model.EmployeesPaySlips));
+                var EMP_Id= emps[id].emP_Id;
+                var WPS_Id= emps[id].wpS_Id;
+                var Url = siteUrl + "Reports/GeneratedPaySlip?WAG_Id=" + WAG_Id + "&EMP_Id=" + EMP_Id + "&WPS_Id=" + WPS_Id;
+                $.ajax({
+                    type: "GET",
+                    url: Url,
+                    beforeSend: function () {
+                            if (WPS_Id > 0)
+                                $("#R_loading-image_" + EMP_Id).show();
+                            else
+                                $("#loading-image_" + EMP_Id).show();
+                    },
+                    success: function (data) {
+                            id = id + 1;
+                            $(".progress").show();
+                            var per = Math.ceil((parseInt(id) * 100) / emps.length);
+                            if (per > 25 && per < 50) {
+                                $(".progress-bar").removeClass("progress-bar-danger").addClass("progress-bar-warning");
+                            } else if (per >= 50 && per < 75) {
+                                $(".progress-bar").removeClass("progress-bar-warning").addClass("progress-bar-info");
+                            }
+                            else if (per >= 75) {
+                                $(".progress-bar").removeClass("progress-bar-info").addClass("progress-bar-success");
+                            }
+                            $(".progress-bar").removeAttr("style").attr("style", "width:" + per + "%");
+                            $("#per").text(per);
+                            if (WPS_Id > 0)
+                                $("#R_loading-image_" + EMP_Id).hide();
+                            else
+                                $("#loading-image_" + EMP_Id).hide();
+
+                            if (emps.length <= id) {
+                                window.location.replace(redirectUrl);
+                            } else {
+                                GeneratePaySlip_All(WAG_Id, id);
+                            }
+                    }
+                })
+      };
+
+      function Generate(CLI_Id, WAG_Id) {      
+            var emps = [];
+            $("tr.item_" + CLI_Id).each(function () {
+                $this = $(this);
+                var EMP_Id = $this.find("span.EMP_Id").html();
+                var WPS_Id = $this.find("span.WPS_Id").html();
+                emps.push({
+                    'EMP_Id': EMP_Id,
+                    'WPS_Id': WPS_Id
+                });
+            });
+            GenerateAllForClient(emps,CLI_Id, WAG_Id, 0);
+      }
+
+      function GenerateAllForClient(emps, CLI_Id, WAG_Id, id) {
+
+
+            var EMP_Id = emps[id].EMP_Id;
+            var WPS_Id = emps[id].WPS_Id;
+            var Url = siteUrl + "Reports/GeneratedPaySlip?WAG_Id=" + WAG_Id + "&EMP_Id=" + EMP_Id + "&WPS_Id=" + WPS_Id;
+            $.ajax({
+                type: "GET",
+                url: Url,
+                beforeSend: function () {
+                    if (WPS_Id > 0)
+                        $("#R_loading-image_" + EMP_Id).show();
+                    else
+                        $("#loading-image_" + EMP_Id).show();
+                },
+                success: function (data) {
+                    id = id + 1;
+                    $(".progress").show();
+                    var per = Math.ceil((parseInt(id) * 100) / emps.length);
+                    if (per > 25 && per < 50) {
+                        $(".progress-bar").removeClass("progress-bar-danger").addClass("progress-bar-warning");
+                    } else if (per >= 50 && per < 75) {
+                        $(".progress-bar").removeClass("progress-bar-warning").addClass("progress-bar-info");
+                    }
+                    else if (per >= 75) {
+                        $(".progress-bar").removeClass("progress-bar-info").addClass("progress-bar-success");
+                    }
+                    $(".progress-bar").removeAttr("style").attr("style", "width:" + per + "%");
+                    $("#per").text(per);
+                    if (WPS_Id > 0)
+                        $("#R_loading-image_" + EMP_Id).hide();
+                    else
+                        $("#loading-image_" + EMP_Id).hide();
+                    if (emps.length <= id) {
+                        window.location.replace(redirectUrl);
+                    } else {
+                        GenerateAllForClient(emps,CLI_Id, WAG_Id, id);
+                    }
+                }
+            })
+        }
+   </script>
+}

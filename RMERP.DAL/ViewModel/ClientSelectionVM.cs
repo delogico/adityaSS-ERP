@@ -12,8 +12,10 @@ namespace RMERP.DAL.ViewModel
         [Display(Name ="Report Type")]
         public string Report { get; set; }
         public int FRM_Id { get; set; }
-
+        public int WAG_Id { get; set; }
         public int TotalActiveClients { get; set; }
+
+        public string Reference { get; set; }
     }
     public class SelectionVM
     {
@@ -21,6 +23,6 @@ namespace RMERP.DAL.ViewModel
         public string CLI_Name { get; set; }
         public bool IsSelect { get; set; }
         public int WAG_Id { get; set; }
-        
+        public bool Is_WageRegisterSaved { get; set; }
     }    
 }

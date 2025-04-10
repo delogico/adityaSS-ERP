@@ -89,14 +89,18 @@ namespace RMERP.DAL.ManagerClasses
             DateTime lastDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1).AddMonths(1).AddDays(-1);
             DateTime startDate = new DateTime(WAG_Month.Year, WAG_Month.Month, 1);
 
-            List<Employee_Advance> result = _context.Employee_Advances.Include(m => m.EMP).Where(m => m.ADV_RegisteredOn.Date <= lastDate.Date && m.ADV_RegisteredOn.Date >= startDate.Date && m.EMP.FRM_Id.Equals(FRM_Id) && m.EMP.EMP_Payment_Type.Equals((int)ProjectUtils.PAYMENT_TYPE.Bank_Account) && m.EMP.EMP_Is_IDBI_Other.Equals((int)ProjectUtils.PAYMENT_BANK_TYPE.IDBI_To_IDBI))
-                                            .GroupBy(l => l.EMP_Id)
-                                            .Select(cl => new Employee_Advance
-                                            {
-                                                EMP_Id = cl.First().EMP_Id,
-                                                ADV_Amount = cl.Sum(c => c.ADV_Amount),
-                                                EMP = cl.First().EMP
-                                            }).ToList();
+            List<Employee_Advance> result = _context.Employee_Advances
+                .Include(m => m.EMP)
+                .Where(m => m.ADV_RegisteredOn.Date <= lastDate.Date && m.ADV_RegisteredOn.Date >= startDate.Date &&
+                m.EMP.FRM_Id.Equals(FRM_Id) &&
+                m.EMP.EMP_Payment_Type.Equals((int)ProjectUtils.PAYMENT_TYPE.Bank_Account) &&
+                m.EMP.EMP_Is_IDBI_Other.Equals((int)ProjectUtils.PAYMENT_BANK_TYPE.IDBI_To_IDBI)).GroupBy(l => l.EMP_Id)
+                .Select(cl => new Employee_Advance
+                {
+                    EMP_Id = cl.First().EMP_Id,
+                    ADV_Amount = cl.Sum(c => c.ADV_Amount),
+                    EMP = cl.First().EMP
+                }).ToList();
             return result;
         }
         public List<Employee_Advance> IDBI_TO_Other_AdvanceRpt(DateTime WAG_Month, int FRM_Id)

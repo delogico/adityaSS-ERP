@@ -35,22 +35,19 @@ namespace RMERP.DAL.ManagerClasses
                 .Include(m => m.CRI).ThenInclude(m => m.DES)
                 .Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA).ThenInclude(n => n.ALL).ToList();
         }
-        public List<Wage_Register> GetWageRegistersForBank(int WAG_Id, int CLI_Id)
-        {
-            return _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id && r.CLI_Id == CLI_Id && r.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).ThenInclude(m => m.Employee_Advances).Include(n => n.EMP).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI).ThenInclude(m => m.DES).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA).ThenInclude(n => n.ALL).ToList();
-        }
+
         public List<Wage_Register> GetWageRegistersByWAG_Id(int WAG_Id)
         {
             return _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id).Include(m => m.CLI).Include(m => m.EMP).ThenInclude(m => m.Employee_Advances).Include(n => n.EMP).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI).ThenInclude(m => m.DES).ThenInclude(m => m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA).ThenInclude(n => n.ALL).ToList();
         }
-        public List<Wage_Register> GetWageRegistersForBankByWAG_Id(int WAG_Id)
-        {
-            return _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id && r.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).ThenInclude(m => m.Employee_Advances).Include(n => n.EMP).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI).ThenInclude(m => m.DES).ThenInclude(m => m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA).ThenInclude(n => n.ALL).ToList();
-        }
+
+
+
         //public List<Wage_Register> GetWageRegistersByLWF(int WAG_Id)
         //{
         //    return _context.Wage_Register.Where(r => r.WAG_Id == WAG_Id && r.CRI_.DES_.DES_Exclude_LWF.Equals(false)).Include(m => m.CLI).Include(m => m.EMP_).ThenInclude(m => m.Employee_Advance).Include(n => n.EMP_).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI_).ThenInclude(m => m.DES_).ThenInclude(m => m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA_).ThenInclude(n => n.ALL).ToList();
         //}
+
         public List<Wage_Register> GetWageRegistersByLWF(int WAG_Id)
         {
             return _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id).Include(m => m.CLI).Include(m => m.EMP).ThenInclude(m => m.Employee_Advances).Include(n => n.EMP).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI).ThenInclude(m => m.DES).ThenInclude(m => m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA).ThenInclude(n => n.ALL).ToList();
@@ -60,6 +57,7 @@ namespace RMERP.DAL.ManagerClasses
             List<Wage_Register> lst = _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id).Include(m => m.WAG).Include(m => m.CLI).Include(m => m.EMP).ToList();
             return lst;
         }
+
         public Wage_Register GetWageRegister(int WAR_Id)
         {
             return _context.Wage_Registers.Include(m => m.CRI).Include(m => m.WAG).Include(m => m.CLI).Include(m => m.EMP).Where(r => r.WAR_Id == WAR_Id).FirstOrDefault();
@@ -831,24 +829,13 @@ namespace RMERP.DAL.ManagerClasses
             return _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id && r.EMP_Id == EMP_Id).Include(m => m.EMP).ThenInclude(m => m.Employee_Advances).Include(n => n.EMP).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI).ThenInclude(m => m.DES).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA).ThenInclude(n => n.ALL).ToList();
         }
 
-        public List<Wage_Register> GetWageRegistersForIDBI_To_IDBI(int WAG_Id)
+        public List<Wage_Register> GetWageRegistersForIDBI_To_Other(int WAG_Id, int[] CLI_Ids)
         {
-            return _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && m.EMP.EMP_Is_IDBI_Other.Equals((int)PAYMENT_BANK_TYPE.IDBI_To_IDBI) && m.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).ThenInclude(m => m.Employee_Advances).Include(n => n.EMP).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI).ThenInclude(m => m.DES).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA).ThenInclude(n => n.ALL).ToList();
+            return _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && m.EMP.EMP_Is_IDBI_Other.Equals((int)PAYMENT_BANK_TYPE.IDBI_To_Others) && m.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).ToList();
         }
-        public List<Wage_Register> GetWageRegistersForIDBI_To_Other(int WAG_Id)
+        public List<Wage_Register> GetWageRegistersForChequeCash(int WAG_Id, int[] CLI_Ids)
         {
-            return _context.Wage_Registers.Include(M => M.WAG).ThenInclude(m => m.FRM)
-                .Where(m => m.WAG_Id == WAG_Id && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && m.EMP.EMP_Is_IDBI_Other.Equals((int)PAYMENT_BANK_TYPE.IDBI_To_Others) && m.WAR_FinalTotal > 0)
-                .Include(m => m.CLI)
-                .Include(m => m.EMP).ThenInclude(m => m.EMP_CityNavigation)
-                .Include(m => m.EMP).ThenInclude(m => m.Employee_Advances)
-                .Include(n => n.EMP).ThenInclude(n => n.Wage_Register_Advances)
-                .Include(m => m.CRI).ThenInclude(m => m.DES)
-                .Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA).ThenInclude(n => n.ALL).ToList();
-        }
-        public List<Wage_Register> GetWageRegistersForChequeCash(int WAG_Id)
-        {
-            return _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Cheque_Cash) && m.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).ThenInclude(m => m.Employee_Advances).Include(n => n.EMP).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI).ThenInclude(m => m.DES).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA).ThenInclude(n => n.ALL).ToList();
+            return _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Cheque_Cash) && m.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).ToList();
         }
 
         public List<Wage_Register> GetWageRegistersForInvoice(int CLI_Id)
@@ -888,13 +875,19 @@ namespace RMERP.DAL.ManagerClasses
 
         public List<Employee> GetEmployeesForWage(int CLI_Id, int WAG_Id)
         {
-            int[] EMP_Ids = _context.Wage_Registers.Where(m => m.CLI_Id.Equals(CLI_Id)).Include(m => m.EMP).Where(m => m.WAG_Id.Equals(WAG_Id)).Select(m => m.EMP_Id).ToArray();
-            return _context.Employees.Where(m => EMP_Ids.Contains(m.EMP_Id)).Include(m => m.Wage_PaySlips).ToList();
+            int[] EMP_Ids = _context.Wage_Registers.Where(m => m.CLI_Id.Equals(CLI_Id) && m.WAG_Id.Equals(WAG_Id)).Select(m => m.EMP_Id).ToArray();
+            return _context.Employees.Where(m => EMP_Ids.Contains(m.EMP_Id)).Include(m => m.Wage_PaySlips).AsSplitQuery().ToList();
         }
+
 
         public IEnumerable<Client> GetDistinctClientsForWage(int WAG_Id)
         {
             return _context.Wage_Registers.Include(m => m.CLI).Where(m => m.WAG_Id.Equals(WAG_Id)).Select(m => m.CLI).Distinct();
+        }
+
+        public Client GetClientForWage(int WAG_Id, int CLI_Id)
+        {
+            return _context.Wage_Registers.Include(m => m.CLI).Where(m => m.WAG_Id.Equals(WAG_Id) && m.CLI_Id == CLI_Id).Select(m => m.CLI).FirstOrDefault();
         }
 
         #region NEW ADDED
@@ -2179,5 +2172,48 @@ namespace RMERP.DAL.ManagerClasses
 
         #endregion
 
+        #region REPORTS
+
+        public List<Wage_Register> GetWageRegistersForBank(int WAG_Id, int CLI_Id)
+        {
+            return _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id && r.CLI_Id == CLI_Id && r.WAR_FinalTotal > 0).Include(n => n.EMP).AsSplitQuery().ToList();
+        }
+
+        public List<Wage_Register> GetWageRegistersForIDBI_To_IDBI(int WAG_Id, int[] CLI_Ids)
+        {
+            return [.. _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && m.EMP.EMP_Is_IDBI_Other.Equals((int)PAYMENT_BANK_TYPE.IDBI_To_IDBI) && m.WAR_FinalTotal > 0)
+                .Include(m => m.EMP)];
+        }
+
+        public IQueryable<Wage_Register> GetWageRegister_EmployeesOnlyRegistered(int WAG_Id, int[] CLI_Ids)
+        {
+            return _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id && CLI_Ids.Contains(r.CLI_Id) && r.EMP.EMP_UAN_Number != null && r.EMP.EMP_UAN_Number != "Pending" && r.EMP.EMP_UAN_Number != "")
+                .Include(m => m.CLI)
+                .Include(m => m.EMP)
+                .Include(m => m.CRI)
+                .Include(n => n.Wage_Register_Allowances).AsSplitQuery();
+        }
+
+        public IQueryable<Wage_Register> GetWageRegister_EmployeesPendingForRegistration(int WAG_Id, int[] CLI_Ids)
+        {
+            return _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id && CLI_Ids.Contains(r.CLI_Id) && (r.EMP.EMP_UAN_Number == null || r.EMP.EMP_UAN_Number.Equals("Pending") || r.EMP.EMP_UAN_Number.Equals("")))
+                .Include(m => m.CLI)
+                .Include(m => m.EMP).AsSplitQuery();
+        }
+
+        public List<Wage_Register> GetWageRegisters_ClientsWiseReports(int WAG_Id, int CLI_Id)
+        {
+            return _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id && r.CLI_Id == CLI_Id)
+                 .Include(m => m.EMP)
+                 .Include(m => m.CRI)
+                 .Include(n => n.Wage_Register_Allowances).ThenInclude(c => c.CRA).ThenInclude(a => a.ALL).AsSplitQuery().ToList();
+        }
+
+        public IQueryable<Wage_Register> GetRegisterFor_PayTaxReports(int WAG_Id)
+        {
+            return _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id && r.CRI != null && r.CRI.CRI_ProfessionalTax).Include(m => m.CLI).Include(m => m.EMP).Include(m => m.CRI);
+        }
+
+        #endregion
     }
 }

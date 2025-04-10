@@ -1,0 +1,80 @@
+﻿@model RMERP.DAL.ViewModel.WPS_ClientsVM
+@using RMERP.DAL.ViewModel
+@{
+   ViewData["Title"] = "PaySlip Clients";
+   int cnt = 0;
+   string Header = Model.FRM_Title + "/" + Model.WAG_Month.ToString("MMMM") + "-" + Model.WAG_Month.ToString("yyyy");
+}
+
+@section Breadcrumbs{
+   <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id })</li>
+   <li class="breadcrumb-item">PaySlips Clients</li>
+}
+<div class="content container-fluid">
+   <div class="row">
+      <div class="col-sm-6">
+         <h3 class="page-title">@ViewData["Title"] (@Header)</h3>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-md-12 text-right">
+         <span>
+            <i class="text-info fa fa-info-circle"></i> Click on row for Client Payslips
+         </span>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-md-12">
+         <table class="table table-striped custom-table m-b-0" id="WAG_Table">
+            <thead>
+               <tr>
+                  <th>#</th>
+                  <th>Clients</th>
+                  <th class="text-center">Total Employees</th>
+                  <th class="text-center">Wage Process</th>
+                  <th class="text-center">Payslips Generates</th>
+               </tr>
+            </thead>
+            <tbody>
+               @foreach (WPS_ClientsStatusVM client in Model.WageClients.OrderBy(o => o.CLI_Name))
+               {
+                  string url = string.Empty;
+                  if (client.Is_WageRegisterSaved)
+                  {
+                     url = "window.location.href ='" + Url.Action("PaySlipsClientEmployees", "Reports", new { WAG_Id = Model.WAG_Id, CLI_Id = client.CLI_Id }) + "'";
+                  }
+
+                  cnt = cnt + 1;
+                  <tr style="cursor:pointer;" onclick="@url" title="Generate @client.CLI_Name's Payslip">
+                     <td>@cnt.</td>
+                     <td>
+                        <b>
+                           @client.CLI_Name
+                        </b>
+                     </td>
+                     <td class=" text-center">@client.TotalEmployees</td>
+                     <td class=" text-center">
+                        <i style="font-size:24px;" class="fa fa-@(client.Is_WageRegisterSaved ? "check-circle text-success" : "times-circle text-danger" )"></i>
+                     </td>
+                     <td class=" text-center">
+                        @if (client.TotalEmployees == client.TotalGenerated)
+                        {
+                           <i style="font-size:24px;" class="fa fa-check-circle text-success"></i>
+                        }
+                        else
+                        {
+                           <span class="label label-warning-border">Pending to generates @(client.TotalEmployees - client.TotalGenerated)</span>
+                        }
+                     </td>
+                  </tr>
+               }
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>
+@section scripts{
+   <script>
+      $('#WAG_Table').dataTable({ "paging": false, "ordering": false });
+   </script>
+}

@@ -45,4 +45,41 @@ namespace RMERP.DAL.Mappers
             return paySlipVMs;
         }
     }
+
+    public class EmployeesPaySlipMapper
+    {
+        public static EMP_PaySlipVM MapMe(Employee employee, int WAG_Id)
+        {
+            EMP_PaySlipVM paySlipVM = new();
+            paySlipVM.EMP_Id = employee.EMP_Id;
+            paySlipVM.EMP_FirstName = employee.EMP_FirstName;
+            paySlipVM.EMP_MiddleName = employee.EMP_MiddleName;
+            paySlipVM.EMP_SurName = employee.EMP_SurName;
+            Wage_PaySlip paySlip = employee.Wage_PaySlips.Where(m => m.WAG_Id.Equals(WAG_Id)).FirstOrDefault();
+            if (paySlip != null)
+            {
+                paySlipVM.WPS_Id = paySlip.WPS_Id;
+                if (paySlip.WPS_Status == (int)ProjectUtils.WagePaySlip.Generated)
+                {
+                    paySlipVM.IsPaySlipGenerated = true;
+                }
+                paySlipVM.WPS_GeneratedOn = paySlip.WPS_GeneratedOn;
+            }
+            else
+            {
+                paySlipVM.IsPaySlipGenerated = false;
+            }
+
+            return paySlipVM;
+        }
+        public static List<EMP_PaySlipVM> MapMes(List<Employee> employees, int WAG_Id)
+        {
+            List<EMP_PaySlipVM> paySlipVMs = new List<EMP_PaySlipVM>();
+            foreach (Employee employee in employees)
+            {
+                paySlipVMs.Add(MapMe(employee, WAG_Id));
+            }
+            return paySlipVMs;
+        }
+    }
 }
