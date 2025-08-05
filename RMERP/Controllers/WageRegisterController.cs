@@ -31,7 +31,6 @@ namespace RMERP.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
-
         public ActionResult WageProcessClients(int WAG_Id, int FRM_Id)
         {
             try

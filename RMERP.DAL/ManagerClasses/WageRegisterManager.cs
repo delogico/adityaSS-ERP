@@ -50,7 +50,8 @@ namespace RMERP.DAL.ManagerClasses
 
         public List<Wage_Register> GetWageRegistersByLWF(int WAG_Id)
         {
-            return _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id).Include(m => m.CLI).Include(m => m.EMP).ThenInclude(m => m.Employee_Advances).Include(n => n.EMP).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI).ThenInclude(m => m.DES).ThenInclude(m => m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA).ThenInclude(n => n.ALL).ToList();
+            //return _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id).Include(m => m.CLI).Include(m => m.EMP).ThenInclude(m => m.Employee_Advances).Include(n => n.EMP).ThenInclude(n => n.Wage_Register_Advances).Include(m => m.CRI).ThenInclude(m => m.DES).ThenInclude(m => m.Client_Requirements).Include(n => n.Wage_Register_Allowances).ThenInclude(n => n.CRA).ThenInclude(n => n.ALL).ToList();
+            return [.. _context.Wage_Registers.Where(r => r.WAG_Id == WAG_Id).Include(m => m.CLI).Include(m => m.CRI)];
         }
         public List<Wage_Register> GetWageRegisters(int WAG_Id)
         {
@@ -479,8 +480,15 @@ namespace RMERP.DAL.ManagerClasses
                                 WAR_Performance_Allowance_Calculated, WAR_Allowance_Calculated_1, WAR_Allowance_Calculated_2, WAR_Allowance_Calculated_3, WAR_Allowance_Calculated_4, WAR_Allowance_Calculated_5, WAR_Allowance_Calculated_6, WAR_Allowance_Calculated_7, WAR_Allowance_Calculated_8, WAR_Allowance_Calculated_9, WAR_Allowance_Calculated_10), MidpointRounding.AwayFromZero);
 
                             WAR_PF = Convert.ToDecimal(cr.CRI_PF_Percentage);
+                            if (cr.CRI_PF_ApplyMAX.HasValue && cr.CRI_PF_ApplyMAX.Value > 0)
+                            {
+                                WAR_PF_Calculated = Math.Round(Decimal.Multiply(cr.CRI_PF_ApplyMAX.Value, WAR_PF) / 100, MidpointRounding.AwayFromZero);
+                            }
+                            else
+                            {
+                                WAR_PF_Calculated = Math.Round(Decimal.Multiply(PFsum, WAR_PF) / 100, MidpointRounding.AwayFromZero);
+                            }
                             WAR_ESIC = Convert.ToDecimal(cr.CRI_ESIC_Percentage);
-                            WAR_PF_Calculated = Math.Round(Decimal.Multiply(PFsum, WAR_PF) / 100, MidpointRounding.AwayFromZero);
                             WAR_ESIC_Calculated = Math.Ceiling(Decimal.Multiply(ESICsum, WAR_ESIC) / 100);
                             #endregion
 
@@ -951,7 +959,6 @@ namespace RMERP.DAL.ManagerClasses
         {
             List<WageRegisterVM> lstRegister = [];
             ClientsManager clientsManager = new(_context, _configuration);
-            //AttendanceManager attManager = new(_context);
             AttendanceSummaryManager attManager = new(_context);
             CanteenManager canteenManager = new(_context);
             OutstationManager outstationManager = new(_context);
@@ -1337,8 +1344,15 @@ namespace RMERP.DAL.ManagerClasses
                                 WAR_Performance_Allowance_Calculated, WAR_Allowance_Calculated_1, WAR_Allowance_Calculated_2, WAR_Allowance_Calculated_3, WAR_Allowance_Calculated_4, WAR_Allowance_Calculated_5, WAR_Allowance_Calculated_6, WAR_Allowance_Calculated_7, WAR_Allowance_Calculated_8, WAR_Allowance_Calculated_9, WAR_Allowance_Calculated_10), MidpointRounding.AwayFromZero);
 
                             WAR_PF = Convert.ToDecimal(cr.CRI_PF_Percentage);
+                            if (cr.CRI_PF_ApplyMAX.HasValue && cr.CRI_PF_ApplyMAX.Value > 0)
+                            {
+                                WAR_PF_Calculated = Math.Round(Decimal.Multiply(cr.CRI_PF_ApplyMAX.Value, WAR_PF) / 100, MidpointRounding.AwayFromZero);
+                            }
+                            else
+                            {
+                                WAR_PF_Calculated = Math.Round(Decimal.Multiply(PFsum, WAR_PF) / 100, MidpointRounding.AwayFromZero);
+                            }
                             WAR_ESIC = Convert.ToDecimal(cr.CRI_ESIC_Percentage);
-                            WAR_PF_Calculated = Math.Round(Decimal.Multiply(PFsum, WAR_PF) / 100, MidpointRounding.AwayFromZero);
                             WAR_ESIC_Calculated = Math.Ceiling(Decimal.Multiply(ESICsum, WAR_ESIC) / 100);
                             #endregion
                             wageRegisterVM.WAR_PF_Formula = cr.CRI_PF_Formula;
@@ -1939,8 +1953,15 @@ namespace RMERP.DAL.ManagerClasses
                                 WAR_Performance_Allowance_Calculated, WAR_Allowance_Calculated_1, WAR_Allowance_Calculated_2, WAR_Allowance_Calculated_3, WAR_Allowance_Calculated_4, WAR_Allowance_Calculated_5, WAR_Allowance_Calculated_6, WAR_Allowance_Calculated_7, WAR_Allowance_Calculated_8, WAR_Allowance_Calculated_9, WAR_Allowance_Calculated_10), MidpointRounding.AwayFromZero);
 
                             WAR_PF = Convert.ToDecimal(cr.CRI_PF_Percentage);
+                            if (cr.CRI_PF_ApplyMAX.HasValue && cr.CRI_PF_ApplyMAX.Value > 0)
+                            {
+                                WAR_PF_Calculated = Math.Round(Decimal.Multiply(cr.CRI_PF_ApplyMAX.Value, WAR_PF) / 100, MidpointRounding.AwayFromZero);
+                            }
+                            else
+                            {
+                                WAR_PF_Calculated = Math.Round(Decimal.Multiply(PFsum, WAR_PF) / 100, MidpointRounding.AwayFromZero);
+                            }
                             WAR_ESIC = Convert.ToDecimal(cr.CRI_ESIC_Percentage);
-                            WAR_PF_Calculated = Math.Round(Decimal.Multiply(PFsum, WAR_PF) / 100, MidpointRounding.AwayFromZero);
                             WAR_ESIC_Calculated = Math.Ceiling(Decimal.Multiply(ESICsum, WAR_ESIC) / 100);
                             #endregion
 

@@ -72,21 +72,16 @@ namespace RMERP.DAL.ManagerClasses
 
         public List<MLWF_ContributionVM> MLWF_ContributionReports(int WAG_Id)
         {
-            List<MLWF_ContributionVM> reports = new List<MLWF_ContributionVM>();
-            WageRegisterManager registerManager = new WageRegisterManager(_context);
+            List<MLWF_ContributionVM> reports = [];
+            WageRegisterManager registerManager = new(_context);
             List<Wage_Register> wage_Registers = registerManager.GetWageRegistersByLWF(WAG_Id);
-            var vv = wage_Registers.Select(m => new { m.CLI_Id, m.CLI.CLI_Name }).Distinct();
-
-            foreach (var item in wage_Registers.Select(m => new { m.CLI_Id, m.CLI.CLI_Name }).Distinct())
+            foreach (var item in wage_Registers.Select(m => new { m.CLI_Id, m.CLI.CLI_Name }).Distinct().OrderBy(a => a.CLI_Name))
             {
-                MLWF_ContributionVM report = new MLWF_ContributionVM();
-                report.CLI_Id = item.CLI_Id;
-                report.CLI_Name = item.CLI_Name;
+                MLWF_ContributionVM report = new() { CLI_Id = item.CLI_Id, CLI_Name = item.CLI_Name };
+
                 List<Wage_Register> register = wage_Registers.Where(m => m.CLI_Id.Equals(item.CLI_Id)).ToList();
-                int EMP_BELOW_3K = 0, EMP_ABOVE_3K = 0, EMPLOYER_BELOW_3K = 0, EMPLOYER_ABOVE_3K = 0;
+                int EMP_BELOW_3K = 0, EMP_ABOVE_3K = 0;
                 decimal EMP_DEDUCTION_BELOW = 0, EMP_DEDUCTION_ABOVE = 0, EMPLOYER_CONTR_BELOW = 0, EMPLOYER_CONTR_ABOVE = 0;
-
-
                 if (register.Count() > 0)
                 {
                     foreach (var emp in register)

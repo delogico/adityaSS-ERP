@@ -22,6 +22,7 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.DES_Title = requirement.DES.DES_Title;
             clientRequirementVM.CRI_HRA_Percentage = requirement.CRI_HRA_Percentage;
             clientRequirementVM.CRI_PF_Percentage = requirement.CRI_PF_Percentage;
+            clientRequirementVM.CRI_PF_ApplyMAX = requirement.CRI_PF_ApplyMAX; //new
             clientRequirementVM.CRI_ESIC_Percentage = requirement.CRI_ESIC_Percentage;
             clientRequirementVM.CRI_ESIC_Area = requirement.CRI_ESIC_Area;
             clientRequirementVM.CRI_OT_Formula = requirement.CRI_OT_Formula;
@@ -62,7 +63,7 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_Allowance_Name_4 = requirement.CRI_Allowance_Name_4;
             clientRequirementVM.CRI_Allowance_5 = requirement.CRI_Allowance_5;
             clientRequirementVM.CRI_Allowance_Name_5 = requirement.CRI_Allowance_Name_5;
-            
+
             clientRequirementVM.CRI_Allowance_6 = requirement.CRI_Allowance_6;
             clientRequirementVM.CRI_Allowance_Name_6 = requirement.CRI_Allowance_Name_6;
             clientRequirementVM.CRI_Allowance_7 = requirement.CRI_Allowance_7;
@@ -129,66 +130,69 @@ namespace RMERP.DAL.Mappers
         }
         public static Client_Requirement mapMeModel(ClientRequirementVM requirementVM)
         {
-            Client_Requirement requirement = new Client_Requirement();
-            requirement.CRI_Id = requirementVM.CRI_Id;
-            requirement.CLI_Id = requirementVM.CLI_Id;
-            requirement.DES_Id = requirementVM.DES_Id;
-            requirement.CRI_Total = requirementVM.CRI_Total;
-            requirement.CRI_Basic = requirementVM.CRI_Basic;
-            requirement.CRI_DA = requirementVM.CRI_DA;
+            Client_Requirement requirement = new Client_Requirement
+            {
+                CRI_Id = requirementVM.CRI_Id,
+                CLI_Id = requirementVM.CLI_Id,
+                DES_Id = requirementVM.DES_Id,
+                CRI_Total = requirementVM.CRI_Total,
+                CRI_Basic = requirementVM.CRI_Basic,
+                CRI_DA = requirementVM.CRI_DA,
 
-            requirement.CRI_PF_Percentage = requirementVM.CRI_PF_Percentage;
-            requirement.CRI_ESIC_Percentage = requirementVM.CRI_ESIC_Percentage;
-            requirement.CRI_ESIC_Area = requirementVM.CRI_ESIC_Area;
-            requirement.CRI_OT_Formula = requirementVM.CRI_OT_Formula;
-            requirement.CRI_OT_Rate = requirementVM.CRI_OT_Rate;
-            requirement.CRI_OT_MultipleTimes = requirementVM.CRI_OT_MultipleTimes;
-            requirement.CRI_IsPayable_WeeklyOff = requirementVM.CRI_IsPayable_WeeklyOff;
-            requirement.CRI_IsPayable_PublicHoliday = requirementVM.CRI_IsPayable_PublicHoliday;
-            requirement.CRI_Active = requirementVM.CRI_Active.HasValue ? requirementVM.CRI_Active.Value : false;
-            requirement.CRI_InactivatedOn = requirementVM.CRI_InactivatedOn;
-            requirement.CRI_RegisteredOn = requirementVM.CRI_RegisteredOn;
-            requirement.CRI_PF_Formula = requirementVM.CRI_PF_Formula;
-            requirement.CRI_ESIC_Formula = requirementVM.CRI_ESIC_Formula;
+                CRI_PF_Percentage = requirementVM.CRI_PF_Percentage,
+                CRI_PF_ApplyMAX = requirementVM.CRI_PF_ApplyMAX.HasValue && requirementVM.CRI_PF_ApplyMAX.Value > 0 ? requirementVM.CRI_PF_ApplyMAX : null, //new
+                CRI_ESIC_Percentage = requirementVM.CRI_ESIC_Percentage,
+                CRI_ESIC_Area = requirementVM.CRI_ESIC_Area,
+                CRI_OT_Formula = requirementVM.CRI_OT_Formula,
+                CRI_OT_Rate = requirementVM.CRI_OT_Rate,
+                CRI_OT_MultipleTimes = requirementVM.CRI_OT_MultipleTimes,
+                CRI_IsPayable_WeeklyOff = requirementVM.CRI_IsPayable_WeeklyOff,
+                CRI_IsPayable_PublicHoliday = requirementVM.CRI_IsPayable_PublicHoliday,
+                CRI_Active = requirementVM.CRI_Active ?? false,
+                CRI_InactivatedOn = requirementVM.CRI_InactivatedOn,
+                CRI_RegisteredOn = requirementVM.CRI_RegisteredOn,
+                CRI_PF_Formula = requirementVM.CRI_PF_Formula,
+                CRI_ESIC_Formula = requirementVM.CRI_ESIC_Formula,
 
-            requirement.CRI_ProfessionalTax = requirementVM.CRI_ProfessionalTax;
-            requirement.CRI_RevenueDeduction = requirementVM.CRI_RevenueDeduction;
-            requirement.CRI_CanteenFacility = requirementVM.CRI_CanteenFacility;
+                CRI_ProfessionalTax = requirementVM.CRI_ProfessionalTax,
+                CRI_RevenueDeduction = requirementVM.CRI_RevenueDeduction,
+                CRI_CanteenFacility = requirementVM.CRI_CanteenFacility,
 
-            requirement.CRI_OT_Calculate_Payableday = requirementVM.CRI_OT_Calculate_Payableday;
-            requirement.CRI_OT_Fixed_PerHour = requirementVM.CRI_OT_Fixed_PerHour;
+                CRI_OT_Calculate_Payableday = requirementVM.CRI_OT_Calculate_Payableday,
+                CRI_OT_Fixed_PerHour = requirementVM.CRI_OT_Fixed_PerHour,
 
-            requirement.CRI_OutStation_Allowance = requirementVM.CRI_OutStation_Allowance;
-            requirement.CRI_OutStation_Allowance_Rate = requirementVM.CRI_OutStation_Allowance_Rate;
-            requirement.CRI_Attendance_Allowance = requirementVM.CRI_Attendance_Allowance;
-            requirement.CRI_Attendance_Allowance_Rate = requirementVM.CRI_Attendance_Allowance_Rate;
-            requirement.CRI_Attendance_Allowance_MaximumDays = requirementVM.CRI_Attendance_Allowance_MaximumDays;
+                CRI_OutStation_Allowance = requirementVM.CRI_OutStation_Allowance,
+                CRI_OutStation_Allowance_Rate = requirementVM.CRI_OutStation_Allowance_Rate,
+                CRI_Attendance_Allowance = requirementVM.CRI_Attendance_Allowance,
+                CRI_Attendance_Allowance_Rate = requirementVM.CRI_Attendance_Allowance_Rate,
+                CRI_Attendance_Allowance_MaximumDays = requirementVM.CRI_Attendance_Allowance_MaximumDays,
 
-            requirement.CRI_Performance_Allowance = requirementVM.CRI_Performance_Allowance;
-            requirement.CRI_Nightshift_Allowance = requirementVM.CRI_Nightshift_Allowance;
-            requirement.CRI_Nightshift_Allowance_Rate = requirementVM.CRI_Nightshift_Allowance_Rate;
+                CRI_Performance_Allowance = requirementVM.CRI_Performance_Allowance,
+                CRI_Nightshift_Allowance = requirementVM.CRI_Nightshift_Allowance,
+                CRI_Nightshift_Allowance_Rate = requirementVM.CRI_Nightshift_Allowance_Rate,
 
-            requirement.CRI_Allowance_1 = requirementVM.CRI_Allowance_1;
-            requirement.CRI_Allowance_Name_1 = requirementVM.CRI_Allowance_Name_1;
-            requirement.CRI_Allowance_2 = requirementVM.CRI_Allowance_2;
-            requirement.CRI_Allowance_Name_2 = requirementVM.CRI_Allowance_Name_2;
-            requirement.CRI_Allowance_3 = requirementVM.CRI_Allowance_3;
-            requirement.CRI_Allowance_Name_3 = requirementVM.CRI_Allowance_Name_3;
-            requirement.CRI_Allowance_4 = requirementVM.CRI_Allowance_4;
-            requirement.CRI_Allowance_Name_4 = requirementVM.CRI_Allowance_Name_4;
-            requirement.CRI_Allowance_5 = requirementVM.CRI_Allowance_5;
-            requirement.CRI_Allowance_Name_5 = requirementVM.CRI_Allowance_Name_5;
+                CRI_Allowance_1 = requirementVM.CRI_Allowance_1,
+                CRI_Allowance_Name_1 = requirementVM.CRI_Allowance_Name_1,
+                CRI_Allowance_2 = requirementVM.CRI_Allowance_2,
+                CRI_Allowance_Name_2 = requirementVM.CRI_Allowance_Name_2,
+                CRI_Allowance_3 = requirementVM.CRI_Allowance_3,
+                CRI_Allowance_Name_3 = requirementVM.CRI_Allowance_Name_3,
+                CRI_Allowance_4 = requirementVM.CRI_Allowance_4,
+                CRI_Allowance_Name_4 = requirementVM.CRI_Allowance_Name_4,
+                CRI_Allowance_5 = requirementVM.CRI_Allowance_5,
+                CRI_Allowance_Name_5 = requirementVM.CRI_Allowance_Name_5,
 
-            requirement.CRI_Allowance_6 = requirementVM.CRI_Allowance_6;
-            requirement.CRI_Allowance_Name_6 = requirementVM.CRI_Allowance_Name_6;
-            requirement.CRI_Allowance_7 = requirementVM.CRI_Allowance_7;
-            requirement.CRI_Allowance_Name_7 = requirementVM.CRI_Allowance_Name_7;
-            requirement.CRI_Allowance_8 = requirementVM.CRI_Allowance_8;
-            requirement.CRI_Allowance_Name_8 = requirementVM.CRI_Allowance_Name_8;
-            requirement.CRI_Allowance_9 = requirementVM.CRI_Allowance_9;
-            requirement.CRI_Allowance_Name_9 = requirementVM.CRI_Allowance_Name_9;
-            requirement.CRI_Allowance_10 = requirementVM.CRI_Allowance_10;
-            requirement.CRI_Allowance_Name_10 = requirementVM.CRI_Allowance_Name_10;
+                CRI_Allowance_6 = requirementVM.CRI_Allowance_6,
+                CRI_Allowance_Name_6 = requirementVM.CRI_Allowance_Name_6,
+                CRI_Allowance_7 = requirementVM.CRI_Allowance_7,
+                CRI_Allowance_Name_7 = requirementVM.CRI_Allowance_Name_7,
+                CRI_Allowance_8 = requirementVM.CRI_Allowance_8,
+                CRI_Allowance_Name_8 = requirementVM.CRI_Allowance_Name_8,
+                CRI_Allowance_9 = requirementVM.CRI_Allowance_9,
+                CRI_Allowance_Name_9 = requirementVM.CRI_Allowance_Name_9,
+                CRI_Allowance_10 = requirementVM.CRI_Allowance_10,
+                CRI_Allowance_Name_10 = requirementVM.CRI_Allowance_Name_10
+            };
 
             if (requirementVM.HRAselection == true)
                 requirement.CRI_HRA_Fixed = requirementVM.CRI_HRA_Fixed;

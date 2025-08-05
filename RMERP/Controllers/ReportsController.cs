@@ -1505,9 +1505,10 @@ namespace RMERP.Controllers
 
         public async Task<FileResult> Labour_WelfareFund_Excel(int WAG_Id)
         {
-            ReportsManager manager = new ReportsManager(_context);
-            WageProcessManager wageProcess = new WageProcessManager(_context);
-            Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
+            ReportsManager manager = new(_context);
+            WageProcessManager wageProcess = new(_context);
+            //Wage_Process wage_Process = wageProcess.getWageProcessById(WAG_Id);
+            Wage_Process wage_Process = wageProcess.GetWageProcessByWAG_Id(WAG_Id, false, false, false, true);
             DateOnly WAG_Month = wage_Process.WAG_Month;
             string WAGMonth = WAG_Month.ToString("MMMM") + "-" + WAG_Month.ToString("yyyy");
 

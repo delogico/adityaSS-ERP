@@ -35,6 +35,8 @@ namespace RMERP.DAL.ViewModel
         public string CRI_PF_Formula { get; set; }
         [Display(Name = "PF Percentage (%)")]
         public double? CRI_PF_Percentage { get; set; }
+        [Display(Name = "PF Apply Max.")]
+        public decimal? CRI_PF_ApplyMAX { get; set; }   //new
         [Display(Name = "ESIC Formula")]
         public string CRI_ESIC_Formula { get; set; }
         [Display(Name = "ESIC Percentage (%)")]

@@ -25,6 +25,8 @@ public partial class Client_Requirement
 
     public double? CRI_PF_Percentage { get; set; }
 
+    public decimal? CRI_PF_ApplyMAX { get; set; }
+
     public string CRI_ESIC_Formula { get; set; }
 
     public double? CRI_ESIC_Percentage { get; set; }

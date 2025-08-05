@@ -103,7 +103,7 @@ public partial class RMERPContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-OU3523D;Database=RMERP;User Id=sa;password=Perfect;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true;");
+        => optionsBuilder.UseSqlServer("Data Source=S148-72-214-32\\SQLEXPRESS;Database=RMERP;User Id=sa;password=Perfect;Trusted_Connection=True;TrustServerCertificate=True;Integrated Security=False;MultipleActiveResultSets=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -452,6 +452,7 @@ public partial class RMERPContext : DbContext
             entity.Property(e => e.CRI_OT_Formula).HasMaxLength(200);
             entity.Property(e => e.CRI_OT_Rate).HasColumnType("decimal(9, 2)");
             entity.Property(e => e.CRI_OutStation_Allowance_Rate).HasColumnType("decimal(9, 2)");
+            entity.Property(e => e.CRI_PF_ApplyMAX).HasColumnType("decimal(9, 2)");
             entity.Property(e => e.CRI_PF_Formula).HasMaxLength(200);
             entity.Property(e => e.CRI_ProffTax_F_Amount_1).HasColumnType("decimal(9, 2)");
             entity.Property(e => e.CRI_ProffTax_F_Amount_2).HasColumnType("decimal(9, 2)");

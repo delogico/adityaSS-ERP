@@ -16,4 +16,6 @@ Scaffold-DbContext "Server=WIN-ABO842TB54V\\SQLEXPRESS;Database=RMERP;User Id=sa
 
 Scaffold-DbContext "Server=DESKTOP-OU3523D;Database=RMERP;User Id=sa;password=Perfect;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -UseDatabaseNames -f
 
+Scaffold-DbContext "Server=PC_52;Database=RMERP;Integrated Security=False;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -UseDatabaseNames -f
+
 //-----------------------------------------
