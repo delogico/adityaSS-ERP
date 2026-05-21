@@ -96,9 +96,13 @@ public partial class Employee
 
     public string EMP_LIN_Remark { get; set; }
 
+    public int? CBA_Id { get; set; }
+
     public virtual ICollection<Attendance_Summary> Attendance_Summaries { get; set; } = new List<Attendance_Summary>();
 
     public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
+
+    public virtual Company_Bank_Account CBA { get; set; }
 
     public virtual ICollection<Clients_Employee> Clients_Employees { get; set; } = new List<Clients_Employee>();
 

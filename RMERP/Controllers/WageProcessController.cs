@@ -254,23 +254,51 @@ namespace RMERP.Controllers
             string res = string.Empty;
             ClientsManager clientsManager = new ClientsManager(_context, _configuration);
             Wage_Process wage = wpm.getWageProcessById(WAG_Id);
-            res = wpm.WageRegisterStatus(wage);
-            if (res != "")
+            if (wage != null)
             {
-                TempData["message"] = "Wage Process status is not changed!";
+                wage.WAG_Status = true;
+                res = wpm.WageRegisterStatus(wage);
+                if (res != "")
+                {
+                    TempData["message"] = "Wage Process status is not changed!";
+                }
             }
-            return RedirectToAction("Index", new { FRM_Id = wage.FRM_Id });
+            else
+            {
+				TempData["message"] = "Record not found!";
+			}  
+			return RedirectToAction("Index", new { FRM_Id = wage.FRM_Id });
         }
-        //public ActionResult searchCompletedWageProcess(int FRM_Id, int Year, int Month)
-        //{
-        //    FirmsManager firmsManager = new FirmsManager(_context);
-        //    Firm firm = firmsManager.GetFirm(FRM_Id);
-        //    return PartialView("_WageProcessList", WageProcessMapper.mapMeListVMs(wpm.getCompletedWageProcessListByYearMonth(FRM_Id, Year, Month), firm, _context, _configuration));
+		//public ActionResult searchCompletedWageProcess(int FRM_Id, int Year, int Month)
+		//{
+		//    FirmsManager firmsManager = new FirmsManager(_context);
+		//    Firm firm = firmsManager.GetFirm(FRM_Id);
+		//    return PartialView("_WageProcessList", WageProcessMapper.mapMeListVMs(wpm.getCompletedWageProcessListByYearMonth(FRM_Id, Year, Month), firm, _context, _configuration));
 
-        //}
+		//}
 
+		public ActionResult WageRegisterReOpenStatus(int WAG_Id)
+		{
+			string res = string.Empty;
+			ClientsManager clientsManager = new ClientsManager(_context, _configuration);
+			Wage_Process wage = wpm.getWageProcessById(WAG_Id);
+			if (wage != null)
+			{
+				wage.WAG_Status = false;
+				res = wpm.WageRegisterStatus(wage);
+				if (res != "")
+				{
+					TempData["message"] = "Wage Process status is not changed!";
+				}
+			}
+			else
+			{
+				TempData["message"] = "Record not found!";
+			}
+			return RedirectToAction("Index", new { FRM_Id = wage.FRM_Id });
+		}
 
-        public ActionResult searchPendingWageProcess(int FRM_Id, int Year, int Month)
+		public ActionResult searchPendingWageProcess(int FRM_Id, int Year, int Month)
         {
             FirmsManager firmsManager = new FirmsManager(_context);
             Firm firm = firmsManager.GetFirm(FRM_Id);

@@ -577,126 +577,126 @@ namespace RMERP.DAL.ManagerClasses
             return new Tuple<string, int>(res, CLI_Id);
         }
 
-        #region commented by rinku on 14th feb 2020 as It seems like now no need for this functions
-        //public string GetDesTitleByCriId(int criId)
-        //{
-        //    if (criId > 0)
-        //    {
-        //        var DesT = from a in _contaxt.Client_Requirements
-        //                   join b in _contaxt.Designations on a.DES_Id equals b.DES_Id
-        //                   where a.CRI_Id == criId
-        //                   select new
-        //                   {
-        //                       b.DES_Title
-        //                   };
+		#region commented by rinku on 14th feb 2020 as It seems like now no need for this functions
+		//public string GetDesTitleByCriId(int criId)
+		//{
+		//    if (criId > 0)
+		//    {
+		//        var DesT = from a in _contaxt.Client_Requirements
+		//                   join b in _contaxt.Designations on a.DES_Id equals b.DES_Id
+		//                   where a.CRI_Id == criId
+		//                   select new
+		//                   {
+		//                       b.DES_Title
+		//                   };
 
-        //        return DesT.ToList()[0].DES_Title;
-        //    }
-        //    else
-        //    {
-        //        return string.Empty;
-        //    }
+		//        return DesT.ToList()[0].DES_Title;
+		//    }
+		//    else
+		//    {
+		//        return string.Empty;
+		//    }
 
-        //}
-        //public IEnumerable<Clients_Employees> listClientsPerWag(bool IsActive, int wagId, int AdminId, int? firmId)
-        //{
-        //    IEnumerable<Clients_Employees> ClientList = null;
-        //    int month = _contaxt.Wage_Process.Find(wagId).WAG_Month.Month;
-        //    ClientList = _contaxt.Clients_Employees.Include(m => m.CLI).Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.CLI.CLI_IsActive.Equals(IsActive) && m.CLE_RegisteredOn.Month.Equals(month));
-        //    if (firmId != null)
-        //    {
-        //        ClientList = ClientList.Where(m => m.CLI.FRM_Id.Equals(firmId));
-        //    }
+		//}
+		//public IEnumerable<Clients_Employees> listClientsPerWag(bool IsActive, int wagId, int AdminId, int? firmId)
+		//{
+		//    IEnumerable<Clients_Employees> ClientList = null;
+		//    int month = _contaxt.Wage_Process.Find(wagId).WAG_Month.Month;
+		//    ClientList = _contaxt.Clients_Employees.Include(m => m.CLI).Where(m => m.ADM_Id_RegisteredBy.Equals(AdminId) && m.CLI.CLI_IsActive.Equals(IsActive) && m.CLE_RegisteredOn.Month.Equals(month));
+		//    if (firmId != null)
+		//    {
+		//        ClientList = ClientList.Where(m => m.CLI.FRM_Id.Equals(firmId));
+		//    }
 
-        //    var ClientList1 = from P in ClientList.Distinct().ToList() select new { P };
+		//    var ClientList1 = from P in ClientList.Distinct().ToList() select new { P };
 
-        //    return ClientList.ToList();
-        //}
+		//    return ClientList.ToList();
+		//}
 
-        //public IEnumerable<Clients> listClientsForAttandance(int? FirmId, bool IsActive, string Client = "")
-        //{
-        //    IQueryable<Clients> ClientList = null;
-        //    return ClientList;
-        //}
-        //public Tuple<int, int> GetDateByClientID(int cliID)
-        //{
-        //    return new Tuple<int, int>(0, 0);
-        //}
-        //public List<Clients> GetClientsListByMonth(DateTime WageMonthDate)
-        //{
-        //    DateTime LastDate = new DateTime(WageMonthDate.Year, WageMonthDate.Month, 1).AddMonths(1).AddDays(-1);
-        //    List<Clients> lstClient = new List<Clients>();
+		//public IEnumerable<Clients> listClientsForAttandance(int? FirmId, bool IsActive, string Client = "")
+		//{
+		//    IQueryable<Clients> ClientList = null;
+		//    return ClientList;
+		//}
+		//public Tuple<int, int> GetDateByClientID(int cliID)
+		//{
+		//    return new Tuple<int, int>(0, 0);
+		//}
+		//public List<Clients> GetClientsListByMonth(DateTime WageMonthDate)
+		//{
+		//    DateTime LastDate = new DateTime(WageMonthDate.Year, WageMonthDate.Month, 1).AddMonths(1).AddDays(-1);
+		//    List<Clients> lstClient = new List<Clients>();
 
-        //    var cliList = from a in _contaxt.Clients
-        //                  where a.CLI_RegisteredOn.Date <= WageMonthDate.Date
-        //                  select a;
+		//    var cliList = from a in _contaxt.Clients
+		//                  where a.CLI_RegisteredOn.Date <= WageMonthDate.Date
+		//                  select a;
 
-        //    foreach (var cli in cliList)
-        //    {
-        //        if (cli.CLI_IsActive == false && cli.CLI_InActivatedOn >= WageMonthDate)
-        //        {
-        //            lstClient.Add(cli);
-        //        }
-        //        else if (cli.CLI_IsActive == true)
-        //        {
-        //            lstClient.Add(cli);
-        //        }
-        //    }
+		//    foreach (var cli in cliList)
+		//    {
+		//        if (cli.CLI_IsActive == false && cli.CLI_InActivatedOn >= WageMonthDate)
+		//        {
+		//            lstClient.Add(cli);
+		//        }
+		//        else if (cli.CLI_IsActive == true)
+		//        {
+		//            lstClient.Add(cli);
+		//        }
+		//    }
 
-        //    return lstClient;
-        //}
-        //public int getClientRequirementId(int CLI_Id, int EMP_Id)
-        //{
-        //    var query =
-        //        from cri in _contaxt.Client_Requirements
-        //        join cle in _contaxt.Clients_Employees on cri.CLI_Id equals cle.CLI_Id
-        //        where cle.EMP_Id == EMP_Id && cri.CLI_Id == CLI_Id
-        //        select cri;
-        //    return query.FirstOrDefault().CRI_Id;
-        //}
-        //public List<Client_Requirements> getClientRequirements()
-        //{
-        //    List<Client_Requirements> list = new List<Client_Requirements>();
-        //    list = _contaxt.Client_Requirements.Include(m => m.Client_Requirement_Allowances).Where(m => m.CRI_Active.Equals(true)).ToList();
-        //    return list;
-        //}
-        //public List<Clients> GetActiveClientForAttandanceReg(DateTime monthStartDate)
-        //{
-        //    DateTime lastDate = new DateTime(monthStartDate.Year, monthStartDate.Month, 1).AddMonths(1).AddDays(-1);
-        //    IQueryable<Clients> cliList = from a in _contaxt.Clients.Include(m => m.Clients_Employees).Include(m => m.Attendance).Include(m => m.Client_Requirements)
-        //                                  where
-        //                                  a.CLI_RegisteredOn.Date <= monthStartDate.Date
-        //                                  && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
-        //                                  select a;
+		//    return lstClient;
+		//}
+		//public int getClientRequirementId(int CLI_Id, int EMP_Id)
+		//{
+		//    var query =
+		//        from cri in _contaxt.Client_Requirements
+		//        join cle in _contaxt.Clients_Employees on cri.CLI_Id equals cle.CLI_Id
+		//        where cle.EMP_Id == EMP_Id && cri.CLI_Id == CLI_Id
+		//        select cri;
+		//    return query.FirstOrDefault().CRI_Id;
+		//}
+		//public List<Client_Requirements> getClientRequirements()
+		//{
+		//    List<Client_Requirements> list = new List<Client_Requirements>();
+		//    list = _contaxt.Client_Requirements.Include(m => m.Client_Requirement_Allowances).Where(m => m.CRI_Active.Equals(true)).ToList();
+		//    return list;
+		//}
+		//public List<Clients> GetActiveClientForAttandanceReg(DateTime monthStartDate)
+		//{
+		//    DateTime lastDate = new DateTime(monthStartDate.Year, monthStartDate.Month, 1).AddMonths(1).AddDays(-1);
+		//    IQueryable<Clients> cliList = from a in _contaxt.Clients.Include(m => m.Clients_Employees).Include(m => m.Attendance).Include(m => m.Client_Requirements)
+		//                                  where
+		//                                  a.CLI_RegisteredOn.Date <= monthStartDate.Date
+		//                                  && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
+		//                                  select a;
 
-        //    return cliList.ToList();
-        //}
-        //public List<Clients> GetActiveClientByFirmId(DateTime wageDate, int FirmId)
-        //{
-        //    DateTime lastDate = new DateTime(wageDate.Year, wageDate.Month, 1).AddMonths(1).AddDays(-1);
-        //    IQueryable<Clients> cliList = from a in _contaxt.Clients
-        //                                  where a.CLI_RegisteredOn.Date <= lastDate.Date
-        //                                  && a.FRM_Id.Equals(FirmId)
-        //                                  && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
-        //                                  select a;
-        //    return cliList.ToList();
-        //}
-        #endregion
+		//    return cliList.ToList();
+		//}
+		//public List<Clients> GetActiveClientByFirmId(DateTime wageDate, int FirmId)
+		//{
+		//    DateTime lastDate = new DateTime(wageDate.Year, wageDate.Month, 1).AddMonths(1).AddDays(-1);
+		//    IQueryable<Clients> cliList = from a in _contaxt.Clients
+		//                                  where a.CLI_RegisteredOn.Date <= lastDate.Date
+		//                                  && a.FRM_Id.Equals(FirmId)
+		//                                  && ((a.CLI_IsActive == true) || (a.CLI_IsActive == false && a.CLI_InActivatedOn.Value.Date >= lastDate.Date))
+		//                                  select a;
+		//    return cliList.ToList();
+		//}
+		#endregion
 
-        public List<Client> GetActiveClientsOfMonthByFirmId(DateTime wageDate, int FirmId)
-        {
+		public List<Client> GetActiveClientsOfMonthByFirmId(DateTime wageDate, int FirmId)
+		{
             DateTime lastDate = new DateTime(wageDate.Year, wageDate.Month, 1).AddMonths(1).AddDays(-1);
-            DateTime startdate = new DateTime(wageDate.Year, wageDate.Month, 1);
+			DateTime startdate = new DateTime(wageDate.Year, wageDate.Month, 1);
             IQueryable<Client> cliList = from a in _contaxt.Clients
                                          join b in _contaxt.Client_ActivationHistories on a.CLI_Id equals b.CLI_Id
-                                         where b.CAH_ActiveOn.Date <= lastDate.Date
+						   where b.CAH_ActiveOn.Date <= lastDate.Date
                                          && a.FRM_Id.Equals(FirmId)
                                          && ((b.CAH_InactiveOn == null) || !(b.CAH_InactiveOn.Value.Date < startdate.Date))
                                          select a;
             return cliList.Distinct().ToList();
-        }
+		}
 
-        public Client_Requirement getActiveClientRequirement(int CLI_Id, int DES_Id, DateTime WAG_Month)
+		public Client_Requirement getActiveClientRequirement(int CLI_Id, int DES_Id, DateTime WAG_Month)
         {
             DateTime LastDate = ProjectUtils.GetLastDateOfMonth(WAG_Month);
             return _contaxt.Client_Requirements.Where(r => r.CLI_Id == CLI_Id && r.DES_Id == DES_Id && r.CRI_RegisteredOn.Date <= LastDate.Date).OrderByDescending(m => m.CRI_RegisteredOn).ThenByDescending(m => m.CRI_Id).Take(1).Include(c => c.Client_Requirement_Allowances).ThenInclude(a => a.ALL).Include(d => d.DES).AsNoTracking().FirstOrDefault();

@@ -43,7 +43,7 @@ namespace RMERP.Controllers
                 {
                     Wage_Process wageProcess = wageProcessManager.GetWageProcessByWAG_Id(WAG_Id, true, true, false, true);
                     List<Client> clients = clientsManager.GetActiveClientOfMonthByFRM_Id1(new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, wageProcess.WAG_Month.Day), FRM_Id);
-                    WageProcessClientsVM ret = new() { FRM_Id = FRM_Id, FRM_Title = wageProcess.FRM.FRM_ShortName, WAG_Id = WAG_Id, WAG_Month = wageProcess.WAG_Month };
+                    WageProcessClientsVM ret = new() { FRM_Id = FRM_Id, FRM_Title = wageProcess.FRM.FRM_ShortName, WAG_Id = WAG_Id, WAG_Month = wageProcess.WAG_Month,WAG_Status=wageProcess.WAG_Status };
                     if (clients != null && clients.Count > 0)
                     {
                         ret.WageClients.AddRange(clients.Select(s => new WP_ClientsStatusVM

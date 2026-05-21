@@ -33,6 +33,8 @@ public partial class Firm
 
     public virtual ICollection<Client> Clients { get; set; } = new List<Client>();
 
+    public virtual ICollection<Company_Bank_Account> Company_Bank_Accounts { get; set; } = new List<Company_Bank_Account>();
+
     public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 
     public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();

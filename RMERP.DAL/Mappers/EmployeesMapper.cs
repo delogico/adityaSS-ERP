@@ -5,6 +5,7 @@ using RMERP.DAL.Helpers;
 using RMERP.DAL.ManagerClasses;
 using RMERP.DAL.Models;
 using RMERP.DAL.ViewModel;
+using static RMERP.DAL.Helpers.ProjectUtils;
 
 namespace RMERP.DAL.Mappers
 {
@@ -38,8 +39,8 @@ namespace RMERP.DAL.Mappers
 
                 EMP_Account_Name = employee.EMP_Account_Name,
                 EMP_Account_Number = employee.EMP_Account_Number,
-                EMP_Bank = employee.EMP_Bank,
-                EMP_Branch = employee.EMP_Branch,
+				EMP_Bank = employee.EMP_Bank == null ? null : ((int)Enum.GetValues(typeof(REGISTER_BANK)).Cast<REGISTER_BANK>().FirstOrDefault(x => ProjectUtils.GetStringValue(x) == employee.EMP_Bank)).ToString(),
+				EMP_Branch = employee.EMP_Branch,
                 EMP_Bank_IFSC = employee.EMP_Bank_IFSC,
 
                 EMP_RegisteredOn = employee.EMP_RegisteredOn,
@@ -66,7 +67,8 @@ namespace RMERP.DAL.Mappers
                 emp.IsAssigned = employeeManager.IsAssignedEmployee(emp.EMP_Id);
             }
             emp.EMP_Payment_Type = employee.EMP_Payment_Type;
-            emp.EMP_Is_IDBI_Other = employee.EMP_Is_IDBI_Other;
+			emp.EMP_Is_IDBI_Other = employee.EMP_Is_IDBI_Other;
+            emp.CBA_Id = employee.CBA_Id;
 
             emp.EMP_UAN_Remark = employee.EMP_UAN_Remark;
             emp.EMP_ESIC_Remark = employee.EMP_ESIC_Remark;

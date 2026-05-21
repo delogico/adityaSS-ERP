@@ -103,6 +103,7 @@ namespace RMERP.DAL.ViewModel
         public string FRM_Title { get; set; }
         public int WAG_Id { get; set; }
         public DateOnly WAG_Month { get; set; }
+        public bool WAG_Status { get; set; }
         public List<WP_ClientsStatusVM> WageClients { get; set; } = [];
     }
 

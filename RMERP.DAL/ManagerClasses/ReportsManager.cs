@@ -664,7 +664,122 @@ namespace RMERP.DAL.ManagerClasses
             return bankReportVMs;
         }
 
-        public List<BankReportVM> ChequeCash_BankReports(int WAG_Id, int[] CLI_Ids)
+		public List<BankReportVM> ICICI_360_BankReports(int WAG_Id, string WAG_Month, int[] CLI_Ids)
+		{
+			List<BankReportVM> bankReportVMs = [];
+			WageRegisterManager registerManager = new(_context);
+			IEnumerable<Wage_Register> wage_Registers = registerManager.GetWageRegistersForICICI_360(WAG_Id, CLI_Ids);
+
+			foreach (var item in wage_Registers)
+			{
+				string paymentMode = "NEFT";
+				if (item.EMP?.CBA != null && !string.IsNullOrEmpty(item.EMP.EMP_Bank) && !string.IsNullOrEmpty(item.EMP.CBA.CBA_Bank) && item.EMP.EMP_Bank.Trim().ToUpper() == item.EMP.CBA.CBA_Bank.Trim().ToUpper())
+				{
+					paymentMode = "WIB";
+				}
+				BankReportVM bankReport = new()
+                {
+                    EMP_PART_TRAN_TYPE = "PAB_VENDOR",
+                    EMP_PAYMENT_MODE = paymentMode,
+                    CBA_Account_Number = item.EMP.CBA.CBA_Account_Number,
+                    EMP_FirstName = item.EMP.EMP_FirstName,
+                    EMP_MiddleName = item.EMP.EMP_MiddleName,
+                    EMP_SurName = item.EMP.EMP_SurName,
+                    EMP_ACCOUNT_NUMBER = item.EMP.EMP_Account_Number,
+                    ACCOUNT_IFSC_CODE = item.EMP.EMP_Bank_IFSC,
+                    EMP_TRANSACTION_AMOUNT = (item.WAR_FinalTotal != null ? item.WAR_FinalTotal.Value : 0),
+                    PAYMENT_DATE = ProjectUtils.DateNow().ToString("dd/MM/yyyy"),
+                    MESSAGE = "Salary " + WAG_Month
+				};
+
+				bankReportVMs.Add(bankReport);
+			}
+			return bankReportVMs;
+		}
+
+		public List<BankReportVM> ICICI_ADHOC_BankReports(int WAG_Id, string WAG_Month, int[] CLI_Ids)
+		{
+			List<BankReportVM> bankReportVMs = [];
+			WageRegisterManager registerManager = new(_context);
+			IEnumerable<Wage_Register> wage_Registers = registerManager.GetWageRegistersForICICI_ADHOC(WAG_Id, CLI_Ids);
+
+			foreach (var item in wage_Registers)
+			{
+				string paymentMode = "NEFT";
+				if (item.EMP?.CBA != null && !string.IsNullOrEmpty(item.EMP.EMP_Bank) && !string.IsNullOrEmpty(item.EMP.CBA.CBA_Bank) && item.EMP.EMP_Bank.Trim().ToUpper()	== item.EMP.CBA.CBA_Bank.Trim().ToUpper())
+				{
+					paymentMode = "WIB";
+				}
+				BankReportVM bankReport = new()
+				{
+					EMP_PAYMENT_MODE = paymentMode,
+					CBA_Account_Number = item.EMP.CBA.CBA_Account_Number,
+					EMP_FirstName = item.EMP.EMP_FirstName,
+					EMP_MiddleName = item.EMP.EMP_MiddleName,
+					EMP_SurName = item.EMP.EMP_SurName,
+					EMP_ACCOUNT_NUMBER = item.EMP.EMP_Account_Number,
+					ACCOUNT_IFSC_CODE = item.EMP.EMP_Bank_IFSC,
+					EMP_TRANSACTION_AMOUNT = (item.WAR_FinalTotal != null ? item.WAR_FinalTotal.Value : 0),
+					MESSAGE = "Salary " + WAG_Month
+				};
+
+				bankReportVMs.Add(bankReport);
+			}
+			return bankReportVMs;
+		}
+
+		public List<BankReportVM> HDFC_To_HDFC_BankReports(int WAG_Id, string WAG_Month, int[] CLI_Ids)
+		{
+			List<BankReportVM> bankReportVMs = [];
+			WageRegisterManager registerManager = new(_context);
+			IEnumerable<Wage_Register> wage_Registers = registerManager.GetWageRegistersForHDFC_To_HDFC(WAG_Id, CLI_Ids);
+
+			foreach (var item in wage_Registers)
+			{
+				BankReportVM bankReport = new()
+				{
+					EMP_FirstName = item.EMP.EMP_FirstName,
+					EMP_MiddleName = item.EMP.EMP_MiddleName,
+					EMP_SurName = item.EMP.EMP_SurName,
+					EMP_ACCOUNT_NUMBER = item.EMP.EMP_Account_Number,
+					ACCOUNT_IFSC_CODE = item.EMP.EMP_Bank_IFSC,
+					EMP_TRANSACTION_AMOUNT = (item.WAR_FinalTotal != null ? item.WAR_FinalTotal.Value : 0)
+				};
+
+				bankReportVMs.Add(bankReport);
+			}
+			return bankReportVMs;
+		}
+
+		public List<BankReportVM> HDFC_To_Other_BankReports(int WAG_Id, string WAG_Month, int[] CLI_Ids)
+		{
+			List<BankReportVM> bankReportVMs = [];
+			WageRegisterManager registerManager = new(_context);
+			IEnumerable<Wage_Register> wage_Registers = registerManager.GetWageRegistersForHDFC_To_Other(WAG_Id, CLI_Ids);
+
+			foreach (var item in wage_Registers)
+			{
+				BankReportVM bankReport = new()
+				{
+					EMP_FirstName = item.EMP.EMP_FirstName,
+					EMP_MiddleName = item.EMP.EMP_MiddleName,
+					EMP_SurName = item.EMP.EMP_SurName,
+					EMP_ACCOUNT_NUMBER = item.EMP.EMP_Account_Number,
+					ACCOUNT_IFSC_CODE = item.EMP.EMP_Bank_IFSC,
+					EMP_Contact_Primary = item.EMP.EMP_Contact_Primary,
+					BR_CODE = "",
+					CBA_Account_Number = item.EMP.CBA.CBA_Account_Number,
+					FRM_Name = item.EMP.FRM.FRM_Name,
+					EMP_TRANSACTION_AMOUNT = (item.WAR_FinalTotal != null ? item.WAR_FinalTotal.Value : 0),
+					PAYMENT_DATE = ProjectUtils.DateNow().ToString("dd/MM/yyyy")
+				};
+
+				bankReportVMs.Add(bankReport);
+			}
+			return bankReportVMs;
+		}
+
+		public List<BankReportVM> ChequeCash_BankReports(int WAG_Id, int[] CLI_Ids)
         {
             List<BankReportVM> bankReportVMs = new List<BankReportVM>();
             WageRegisterManager registerManager = new WageRegisterManager(_context);

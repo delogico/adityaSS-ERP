@@ -37,7 +37,7 @@ namespace RMERP.DAL.ManagerClasses
 
         public Wage_Process getWageProcessById(int WAG_Id)
         {
-            Wage_Process wageProcess = _context.Wage_Processes.Where(m => m.WAG_Id == WAG_Id).Include(m => m.Wage_Process_Clients).Include(m => m.Wage_Register_Advances).Include(m => m.Attendances).Include(m => m.FRM).FirstOrDefault();
+            Wage_Process wageProcess = _context.Wage_Processes.Where(m => m.WAG_Id == WAG_Id).Include(m => m.Wage_Process_Clients).Include(m => m.Wage_Register_Advances).Include(m => m.FRM).FirstOrDefault();
             return wageProcess;
         }
 
@@ -143,7 +143,6 @@ namespace RMERP.DAL.ManagerClasses
             string res = string.Empty;
             try
             {
-                wage.WAG_Status = true;
                 _context.Wage_Processes.Update(wage);
                 _context.SaveChanges();
             }

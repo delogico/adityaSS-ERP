@@ -25,8 +25,6 @@ public partial class Client_Requirement
 
     public double? CRI_PF_Percentage { get; set; }
 
-    public decimal? CRI_PF_ApplyMAX { get; set; }
-
     public string CRI_ESIC_Formula { get; set; }
 
     public double? CRI_ESIC_Percentage { get; set; }
@@ -178,6 +176,8 @@ public partial class Client_Requirement
     public bool CRI_Allowance_10 { get; set; }
 
     public string CRI_Allowance_Name_10 { get; set; }
+
+    public decimal? CRI_PF_ApplyMAX { get; set; }
 
     public virtual Client CLI { get; set; }
 

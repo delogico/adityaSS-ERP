@@ -839,9 +839,28 @@ namespace RMERP.DAL.ManagerClasses
 
         public List<Wage_Register> GetWageRegistersForIDBI_To_Other(int WAG_Id, int[] CLI_Ids)
         {
-            return _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && m.EMP.EMP_Is_IDBI_Other.Equals((int)PAYMENT_BANK_TYPE.IDBI_To_Others) && m.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).ToList();
+            return _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && (m.EMP.CBA.CBA_Bank == ProjectUtils.GetStringValue(REGISTER_BANK.IDBI_BANK_LTD) && m.EMP.EMP_Bank != ProjectUtils.GetStringValue(REGISTER_BANK.IDBI_BANK_LTD)) && m.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).ToList();
         }
-        public List<Wage_Register> GetWageRegistersForChequeCash(int WAG_Id, int[] CLI_Ids)
+
+        public List<Wage_Register> GetWageRegistersForICICI_360(int WAG_Id, int[] CLI_Ids)
+        {
+			return _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && (m.EMP.CBA.CBA_Bank == ProjectUtils.GetStringValue(REGISTER_BANK.ICICI_BANK_LTD) && m.EMP.EMP_Bank == ProjectUtils.GetStringValue(REGISTER_BANK.ICICI_BANK_LTD)) && m.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).Include(m => m.EMP.CBA).ToList();
+		}
+		public List<Wage_Register> GetWageRegistersForICICI_ADHOC(int WAG_Id, int[] CLI_Ids)
+		{
+			return _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && (m.EMP.CBA.CBA_Bank == ProjectUtils.GetStringValue(REGISTER_BANK.ICICI_BANK_LTD) && m.EMP.EMP_Bank != ProjectUtils.GetStringValue(REGISTER_BANK.ICICI_BANK_LTD)) && m.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).Include(m => m.EMP.CBA).ToList();
+		}
+
+		public List<Wage_Register> GetWageRegistersForHDFC_To_HDFC(int WAG_Id, int[] CLI_Ids)
+		{
+			return _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && (m.EMP.CBA.CBA_Bank == ProjectUtils.GetStringValue(REGISTER_BANK.HDFC_BANK_LTD) && m.EMP.EMP_Bank == ProjectUtils.GetStringValue(REGISTER_BANK.HDFC_BANK_LTD)) && m.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).ToList();
+		}
+
+		public List<Wage_Register> GetWageRegistersForHDFC_To_Other(int WAG_Id, int[] CLI_Ids)
+		{
+			return _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && (m.EMP.CBA.CBA_Bank == ProjectUtils.GetStringValue(REGISTER_BANK.HDFC_BANK_LTD) && m.EMP.EMP_Bank != ProjectUtils.GetStringValue(REGISTER_BANK.HDFC_BANK_LTD)) && m.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).ToList();
+		}
+		public List<Wage_Register> GetWageRegistersForChequeCash(int WAG_Id, int[] CLI_Ids)
         {
             return _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Cheque_Cash) && m.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).ToList();
         }
@@ -2202,7 +2221,7 @@ namespace RMERP.DAL.ManagerClasses
 
         public List<Wage_Register> GetWageRegistersForIDBI_To_IDBI(int WAG_Id, int[] CLI_Ids)
         {
-            return [.. _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && m.EMP.EMP_Is_IDBI_Other.Equals((int)PAYMENT_BANK_TYPE.IDBI_To_IDBI) && m.WAR_FinalTotal > 0)
+            return [.. _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && (m.EMP.CBA.CBA_Bank == ProjectUtils.GetStringValue(REGISTER_BANK.IDBI_BANK_LTD) && m.EMP.EMP_Bank == ProjectUtils.GetStringValue(REGISTER_BANK.IDBI_BANK_LTD)) && m.WAR_FinalTotal > 0)
                 .Include(m => m.EMP)];
         }
 

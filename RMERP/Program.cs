@@ -46,7 +46,7 @@ builder.Services.AddRazorPages(options =>
 
 // Database context
 builder.Services.AddDbContext<RMERPContext>(options => options.UseSqlServer(configuration.GetConnectionString("RMERP")));
-
+//builder.Services.AddDbContext<RMERPContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("RMERP")));
 // Output caching
 builder.Services.AddOutputCaching();
 
@@ -94,7 +94,7 @@ app.MapControllerRoute(
     pattern: "{controller=AdminUsers}/{action=DashBoard}/{id?}");
 
 // Uncomment the following line if Rotativa is required
-RotativaConfiguration.Setup(configuration["RMERP_ROTATIVA_PATH"]);
+//RotativaConfiguration.Setup(configuration["RMERP_ROTATIVA_PATH"]);
 
 // Run the app
 app.Run();

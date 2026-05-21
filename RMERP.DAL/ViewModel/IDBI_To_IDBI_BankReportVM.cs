@@ -25,7 +25,9 @@ namespace RMERP.DAL.ViewModel
         public string EMP_PART_TRAN_TYPE { get; set; }
         public decimal EMP_TRANSACTION_AMOUNT { get; set; }
         public string EMP_TRANSACTION_PARTICULARS { get; set; }
-
+        public string EMP_Contact_Primary { get; set; }
+		public string EMP_PAYMENT_MODE { get; set; }
+		public string CBA_Account_Number { get; set; }
         public string ACCOUNT_SENDER_NUMBER { get; set; }
         public string ACCOUNT_IFSC_CODE { get; set; }
         public string ACCOUNT_RECEIVERS_NUMBER { get; set; }
@@ -34,11 +36,12 @@ namespace RMERP.DAL.ViewModel
         public string CLI_ADDRESS { get; set; }
         public string MESSAGE { get; set; }
         public string ORIGINETOR { get; set; }
-
-
         public string COMPANY_NAME { get; set; }
-
         public string CHEQUE_CASH { get; set; }
+       
+        public string PAYMENT_DATE { get; set; }
+        public string BR_CODE { get; set; }
+        public string FRM_Name { get; set; }
     }
 
 }

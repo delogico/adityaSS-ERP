@@ -82,7 +82,10 @@ namespace RMERP.DAL.ViewModel
         [Display(Name = "TPC Employee ID")]
         public string EMP_TPC_EmployeeId { get; set; }
 
-        [Display(Name = "Account Name")]
+		[Display(Name = "Salary will be done by")]
+		public int? CBA_Id{ get; set; }
+
+		[Display(Name = "Account Name")]
         public string EMP_Account_Name { get; set; }
         [Display(Name = "Account Number")]
         public string EMP_Account_Number { get; set; }

@@ -41,6 +41,8 @@ public partial class RMERPContext : DbContext
 
     public virtual DbSet<Clients_Employee> Clients_Employees { get; set; }
 
+    public virtual DbSet<Company_Bank_Account> Company_Bank_Accounts { get; set; }
+
     public virtual DbSet<Country> Countries { get; set; }
 
     public virtual DbSet<Designation> Designations { get; set; }
@@ -103,9 +105,13 @@ public partial class RMERPContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=S148-72-214-32\\SQLEXPRESS;Database=RMERP;User Id=sa;password=Perfect;Trusted_Connection=True;TrustServerCertificate=True;Integrated Security=False;MultipleActiveResultSets=true;");
+        => optionsBuilder.UseSqlServer("Data Source=S148-72-214-32\\SQLEXPRESS;Database=RMERP;User Id=sa;password=Perfect;Trusted_Connection=True;TrustServerCertificate=True;Integrated Security=False;MultipleActiveResultSets=true;",
+			options =>
+			{
+				options.CommandTimeout(300);
+			});
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AdminUser>(entity =>
         {
@@ -560,6 +566,27 @@ public partial class RMERPContext : DbContext
                 .HasConstraintName("FK_Clients_Employees_Employees");
         });
 
+        modelBuilder.Entity<Company_Bank_Account>(entity =>
+        {
+            entity.HasKey(e => e.CBA_Id);
+
+            entity.ToTable("Company_Bank_Account");
+
+            entity.Property(e => e.CBA_Account_Number)
+                .HasMaxLength(25)
+                .IsUnicode(false);
+            entity.Property(e => e.CBA_Bank)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.CBA_Bank_IFSC)
+                .HasMaxLength(15)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.FRM).WithMany(p => p.Company_Bank_Accounts)
+                .HasForeignKey(d => d.FRM_Id)
+                .HasConstraintName("FK_Company_Bank_Account_Firms");
+        });
+
         modelBuilder.Entity<Country>(entity =>
         {
             entity.HasKey(e => e.COU_Id).HasName("PK_countries");
@@ -685,6 +712,11 @@ public partial class RMERPContext : DbContext
             entity.Property(e => e.EMP_UAN_Remark)
                 .HasMaxLength(200)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.CBA).WithMany(p => p.Employees)
+                .HasForeignKey(d => d.CBA_Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Employees_Company_Bank_Account");
 
             entity.HasOne(d => d.EMP_CityNavigation).WithMany(p => p.Employees)
                 .HasForeignKey(d => d.EMP_City)

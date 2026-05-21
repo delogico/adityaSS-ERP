@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="table-responsive">
                     <table class="table table-striped custom-table m-b-0">
                         <tbody>
@@ -46,6 +46,9 @@
                                     <td>@item.STA_.STA_Name</td>
                                     <td>
                                         <a href='@Url.Action("AddEditFirm","Firms",new { FRM_Id=item.FRM_Id})' title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                    </td>
+                                    <td>
+                                        <a href='@Url.Action("CompanyBankAccount", "Firms", new { FRM_Id = item.FRM_Id })' title="Bank Account"><i class="fa fa-bank m-r-5"></i> Bank Account</a>
                                     </td>
                                 </tr>
                             }

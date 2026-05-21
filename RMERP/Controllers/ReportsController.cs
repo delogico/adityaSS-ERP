@@ -98,7 +98,27 @@ namespace RMERP.Controllers
                                 file = new FileInfo(Path.Combine(newPath, fileName));
                                 CHEQUE_CASH_BankReportExcel(wage_Process.FRM, CLI_Ids, clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
                                 break;
-                            default: break;
+							case "4": //ICICI_360_Report
+								fileName = "ICICI_360_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
+								file = new FileInfo(Path.Combine(newPath, fileName));
+								ICICI_360_BankReportExcel(wage_Process.FRM, CLI_Ids, clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+								break;
+                            case "5": //ICICI_ADHOC_Report
+                                fileName = "ICICI_ADHOC_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
+                                file = new FileInfo(Path.Combine(newPath, fileName));
+                                ICICI_Adhoc_BankReportExcel(wage_Process.FRM, CLI_Ids, clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+                                break;
+							case "6": //HDFC_Bank_To_HDFC_Bank_Report
+								fileName = "HDFC_To_HDFC_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
+								file = new FileInfo(Path.Combine(newPath, fileName));
+								HDFC_To_HDFC_BankReportExcel(wage_Process.FRM, CLI_Ids, clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+								break;
+							case "7": //HDFC_Bank_To_Others_Report
+								fileName = "HDFC_To_Others_BankReport_" + DateTime.Now.ToString("ddMMyyyyHHmm") + "_" + WAG_Month + ".xlsx";
+								file = new FileInfo(Path.Combine(newPath, fileName));
+								HDFC_To_Other_BankReportExcel(wage_Process.FRM, CLI_Ids, clientSelectionVM.selectionVMs[0].WAG_Id, newPath, fileName, WAG_Month);
+								break;
+							default: break;
                         }
                     }
                     else if (clientSelectionVM.Reference == "PF")
@@ -2494,11 +2514,712 @@ namespace RMERP.Controllers
 
         }
 
-        #endregion
+		public void ICICI_360_BankReportExcel(Firm firm, int[] CLI_Ids, int WAG_Id, string newPath, string fileName, string WAG_Month)
+		{
+			ReportsManager manager = new ReportsManager(_context);
+			using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+			{
+				IWorkbook workbook = new XSSFWorkbook();
+				ISheet excelSheet = workbook.CreateSheet("Template");
 
-        #region ADVANCE
+				#region STYLE
 
-        public async Task<FileResult> IDBI_To_IDBI_AdvanceReportExcel(int WAG_Id, int FRM_Id)
+				IFont font = workbook.CreateFont();
+				font.IsBold = true;
+				font.FontHeightInPoints = ((short)40);
+				font.FontName = ("Cambria");
+				font.Underline = FontUnderlineType.Single;
+				font.Color = IndexedColors.Brown.Index;
+
+				ICellStyle styleHeader = workbook.CreateCellStyle();
+				styleHeader.FillBackgroundColor = HSSFColor.Aqua.Index;
+				styleHeader.SetFont(font);
+
+				ICellStyle styleAmount = workbook.CreateCellStyle();
+				styleAmount.FillBackgroundColor = IndexedColors.Yellow.Index;
+				styleAmount.FillPattern = FillPattern.SolidForeground;
+				styleAmount.FillForegroundColor = IndexedColors.Yellow.Index;
+				styleAmount.BorderBottom = (BorderStyle.Thin);
+				styleAmount.BottomBorderColor = (IndexedColors.Black.Index);
+				styleAmount.BorderLeft = (BorderStyle.Thin);
+				styleAmount.LeftBorderColor = (IndexedColors.Black.Index);
+				styleAmount.BorderRight = (BorderStyle.Thin);
+				styleAmount.RightBorderColor = (IndexedColors.Black.Index);
+				styleAmount.BorderTop = (BorderStyle.Thin);
+				styleAmount.TopBorderColor = (IndexedColors.Black.Index);
+
+				// Style the cell with font color white
+				IFont fontcell = workbook.CreateFont();
+				fontcell.IsBold = true;
+
+				IFont fontClient = workbook.CreateFont();
+				fontClient.IsBold = true;
+				fontClient.FontHeightInPoints = ((short)15);
+
+				IFont fontcellSub = workbook.CreateFont();
+				fontcellSub.IsBold = true;
+				fontcellSub.FontHeightInPoints = ((short)18);
+
+				// Grey25Percent background
+				ICellStyle style = workbook.CreateCellStyle();
+				ICellStyle styleTotal = workbook.CreateCellStyle();
+				ICellStyle styleClient = workbook.CreateCellStyle();
+				ICellStyle styleSub = workbook.CreateCellStyle();
+
+				styleTotal.FillForegroundColor = IndexedColors.BrightGreen.Index;
+				styleTotal.FillPattern = FillPattern.SolidForeground;
+				styleTotal.FillBackgroundColor = IndexedColors.BrightGreen.Index;
+				styleTotal.SetFont(fontcell);
+
+				styleClient.SetFont(fontcell);
+				styleSub.SetFont(fontcellSub);
+				//#77bf2a
+
+				// Style the cell with borders all around.
+				style.WrapText = true;
+				style.VerticalAlignment = VerticalAlignment.Center;
+				style.BorderBottom = (BorderStyle.Thin);
+				style.BottomBorderColor = (IndexedColors.Black.Index);
+				style.BorderLeft = (BorderStyle.Thin);
+				style.LeftBorderColor = (IndexedColors.Black.Index);
+				style.BorderRight = (BorderStyle.Thin);
+				style.RightBorderColor = (IndexedColors.Black.Index);
+				style.BorderTop = (BorderStyle.Thin);
+				style.TopBorderColor = (IndexedColors.Black.Index);
+				style.SetFont(fontcell);
+				#endregion
+
+				#region HEADER
+
+				IRow row = excelSheet.CreateRow(0);
+				ICell CellHeader = row.CreateCell(0);
+				CellHeader.SetCellValue("Reliable");
+				CellHeader.CellStyle = styleHeader;
+				CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 8));
+
+				IRow rowSub = excelSheet.CreateRow(1);
+				ICell CellSub = rowSub.CreateCell(0);
+				CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
+				CellSub.CellStyle = styleSub;
+				CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 8));
+
+				IRow rowAdd1 = excelSheet.CreateRow(2);
+				ICell CellAdd1 = rowAdd1.CreateCell(0);
+				CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
+				CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 8));
+
+				IRow rowAdd2 = excelSheet.CreateRow(3);
+				ICell CellAdd2 = rowAdd2.CreateCell(0);
+				CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
+				CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 8));
+
+				IRow rowSubHeading = excelSheet.CreateRow(4);
+				ICell CellSubHeading = rowSubHeading.CreateCell(0);
+				CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
+				CellSubHeading.CellStyle = styleClient;
+				CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 8));
+
+
+				row = excelSheet.CreateRow(5);
+				row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
+				ICell cell0 = row.CreateCell(0);
+				cell0.SetCellValue("PAYMENT PRODUCT \r\n TYPE CODE");
+				excelSheet.SetColumnWidth(0, (int)((15 + 0.72) * 256));//A
+				cell0.CellStyle = style;
+				ICell cell1 = row.CreateCell(1);
+				cell1.SetCellValue("PAYMENT MODE");
+				excelSheet.SetColumnWidth(1, (int)((15 + 0.72) * 256));//A
+				cell1.CellStyle = style;
+				ICell cell2 = row.CreateCell(2);
+				cell2.SetCellValue("ACCOUNT \r\n NUMBER");
+				excelSheet.SetColumnWidth(2, (int)((15 + 0.72) * 256));//A
+				cell2.CellStyle = style;
+				ICell cell3 = row.CreateCell(3);
+				cell3.SetCellValue("EMP NAME");
+				excelSheet.SetColumnWidth(3, (int)((28 + 0.72) * 256));//A
+				cell3.CellStyle = style;
+				ICell cell4 = row.CreateCell(4);
+				cell4.SetCellValue("ACCOUNT \r\n NUMBER");
+				excelSheet.SetColumnWidth(4, (int)((15 + 0.72) * 256));//A
+				cell4.CellStyle = style;
+				ICell cell5 = row.CreateCell(5);
+				cell5.SetCellValue("IFSC");
+				excelSheet.SetColumnWidth(5, (int)((15 + 0.72) * 256));//A
+				cell5.CellStyle = style;
+				ICell cell6 = row.CreateCell(6);
+				cell6.SetCellValue("AMOUNT");
+				excelSheet.SetColumnWidth(6, (int)((20 + 0.72) * 256));//A
+				cell6.CellStyle = style;
+				ICell cell7 = row.CreateCell(7);
+				cell7.SetCellValue("PAYMENT \r\n DATE");
+				excelSheet.SetColumnWidth(7, (int)((20 + 0.72) * 256));//A
+				cell7.CellStyle = style;
+				ICell cell8 = row.CreateCell(8);
+				cell8.SetCellValue("REMARK");
+				excelSheet.SetColumnWidth(8, (int)((22 + 0.72) * 256));//A
+				cell8.CellStyle = style;
+
+				#endregion
+
+				List<BankReportVM> BankReportVMs = manager.ICICI_360_BankReports(WAG_Id, WAG_Month, CLI_Ids);
+				int rowCount = 6;
+				decimal TRANSACTION_AMOUNT = 0M;
+				foreach (var item in BankReportVMs)
+				{
+					row = excelSheet.CreateRow(rowCount);
+					row.CreateCell(0).SetCellValue(item.EMP_PART_TRAN_TYPE);
+					row.CreateCell(1).SetCellValue(item.EMP_PAYMENT_MODE);
+					row.CreateCell(2).SetCellValue(item.CBA_Account_Number);
+					row.CreateCell(3).SetCellValue(item.EMP_NAME);
+					row.CreateCell(4).SetCellValue(item.EMP_ACCOUNT_NUMBER);
+					row.CreateCell(5).SetCellValue(item.ACCOUNT_IFSC_CODE);
+					row.CreateCell(6).SetCellValue(Convert.ToString(item.EMP_TRANSACTION_AMOUNT));
+					row.CreateCell(7).SetCellValue(item.PAYMENT_DATE);
+					row.CreateCell(8).SetCellValue(item.MESSAGE);
+					TRANSACTION_AMOUNT = TRANSACTION_AMOUNT + item.EMP_TRANSACTION_AMOUNT;
+					rowCount++;
+				}
+				row = excelSheet.CreateRow(rowCount);
+				ICell CellTotal = row.CreateCell(2);
+				CellTotal.SetCellValue("TOTAL");
+				CellTotal.CellStyle = styleClient;
+				CellUtil.SetAlignment(CellTotal, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount, 2,5));
+				ICell cellTotalAmt = row.CreateCell(6);
+				cellTotalAmt.SetCellValue(Convert.ToString(TRANSACTION_AMOUNT));
+				cellTotalAmt.CellStyle = styleTotal;
+				workbook.Write(fs);
+			}
+		}
+
+		public void ICICI_Adhoc_BankReportExcel(Firm firm, int[] CLI_Ids, int WAG_Id, string newPath, string fileName, string WAG_Month)
+		{
+			ReportsManager manager = new ReportsManager(_context);
+			using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+			{
+				IWorkbook workbook = new XSSFWorkbook();
+				ISheet excelSheet = workbook.CreateSheet("Template");
+
+				#region STYLE
+
+				IFont font = workbook.CreateFont();
+				font.IsBold = true;
+				font.FontHeightInPoints = ((short)40);
+				font.FontName = ("Cambria");
+				font.Underline = FontUnderlineType.Single;
+				font.Color = IndexedColors.Brown.Index;
+
+				ICellStyle styleHeader = workbook.CreateCellStyle();
+				styleHeader.FillBackgroundColor = HSSFColor.Aqua.Index;
+				styleHeader.SetFont(font);
+
+				ICellStyle styleAmount = workbook.CreateCellStyle();
+				styleAmount.FillBackgroundColor = IndexedColors.Yellow.Index;
+				styleAmount.FillPattern = FillPattern.SolidForeground;
+				styleAmount.FillForegroundColor = IndexedColors.Yellow.Index;
+				styleAmount.BorderBottom = (BorderStyle.Thin);
+				styleAmount.BottomBorderColor = (IndexedColors.Black.Index);
+				styleAmount.BorderLeft = (BorderStyle.Thin);
+				styleAmount.LeftBorderColor = (IndexedColors.Black.Index);
+				styleAmount.BorderRight = (BorderStyle.Thin);
+				styleAmount.RightBorderColor = (IndexedColors.Black.Index);
+				styleAmount.BorderTop = (BorderStyle.Thin);
+				styleAmount.TopBorderColor = (IndexedColors.Black.Index);
+
+				// Style the cell with font color white
+				IFont fontcell = workbook.CreateFont();
+				fontcell.IsBold = true;
+
+				IFont fontClient = workbook.CreateFont();
+				fontClient.IsBold = true;
+				fontClient.FontHeightInPoints = ((short)15);
+
+				IFont fontcellSub = workbook.CreateFont();
+				fontcellSub.IsBold = true;
+				fontcellSub.FontHeightInPoints = ((short)18);
+
+				// Grey25Percent background
+				ICellStyle style = workbook.CreateCellStyle();
+				ICellStyle styleTotal = workbook.CreateCellStyle();
+				ICellStyle styleClient = workbook.CreateCellStyle();
+				ICellStyle styleSub = workbook.CreateCellStyle();
+
+				styleTotal.FillForegroundColor = IndexedColors.BrightGreen.Index;
+				styleTotal.FillPattern = FillPattern.SolidForeground;
+				styleTotal.FillBackgroundColor = IndexedColors.BrightGreen.Index;
+				styleTotal.SetFont(fontcell);
+
+				styleClient.SetFont(fontcell);
+				styleSub.SetFont(fontcellSub);
+				//#77bf2a
+
+				// Style the cell with borders all around.
+				style.WrapText = true;
+				style.VerticalAlignment = VerticalAlignment.Center;
+				style.BorderBottom = (BorderStyle.Thin);
+				style.BottomBorderColor = (IndexedColors.Black.Index);
+				style.BorderLeft = (BorderStyle.Thin);
+				style.LeftBorderColor = (IndexedColors.Black.Index);
+				style.BorderRight = (BorderStyle.Thin);
+				style.RightBorderColor = (IndexedColors.Black.Index);
+				style.BorderTop = (BorderStyle.Thin);
+				style.TopBorderColor = (IndexedColors.Black.Index);
+				style.SetFont(fontcell);
+				#endregion
+
+				#region HEADER
+
+				IRow row = excelSheet.CreateRow(0);
+				ICell CellHeader = row.CreateCell(0);
+				CellHeader.SetCellValue("Reliable");
+				CellHeader.CellStyle = styleHeader;
+				CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 7));
+
+				IRow rowSub = excelSheet.CreateRow(1);
+				ICell CellSub = rowSub.CreateCell(0);
+				CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
+				CellSub.CellStyle = styleSub;
+				CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 7));
+
+				IRow rowAdd1 = excelSheet.CreateRow(2);
+				ICell CellAdd1 = rowAdd1.CreateCell(0);
+				CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
+				CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 7));
+
+				IRow rowAdd2 = excelSheet.CreateRow(3);
+				ICell CellAdd2 = rowAdd2.CreateCell(0);
+				CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
+				CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 7));
+
+				IRow rowSubHeading = excelSheet.CreateRow(4);
+				ICell CellSubHeading = rowSubHeading.CreateCell(0);
+				CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
+				CellSubHeading.CellStyle = styleClient;
+				CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 7));
+
+
+				row = excelSheet.CreateRow(5);
+				row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
+				ICell cell0 = row.CreateCell(0);
+				cell0.SetCellValue("TRANSACTION \r\n TYPE");
+				excelSheet.SetColumnWidth(0, (int)((15 + 0.72) * 256));//A
+				cell0.CellStyle = style;
+				ICell cell1 = row.CreateCell(1);
+				cell1.SetCellValue("DEBIT \r\n ACCOUNT \r\n NUMBER");
+				excelSheet.SetColumnWidth(1, (int)((22 + 0.72) * 256));//A
+				cell1.CellStyle = style;
+				ICell cell2 = row.CreateCell(2);
+				cell2.SetCellValue("IFSC");
+				excelSheet.SetColumnWidth(2, (int)((15 + 0.72) * 256));//A
+				cell2.CellStyle = style;
+				ICell cell3 = row.CreateCell(3);
+				cell3.SetCellValue("ACCOUNT \r\n NUMBER");
+				excelSheet.SetColumnWidth(3, (int)((22 + 0.72) * 256));//A
+				cell3.CellStyle = style;
+				ICell cell4 = row.CreateCell(4);
+				cell4.SetCellValue("EMP NAME");
+				excelSheet.SetColumnWidth(4, (int)((28 + 0.72) * 256));//A
+				cell4.CellStyle = style;
+				ICell cell5 = row.CreateCell(5);
+				cell5.SetCellValue("AMOUNT");
+				excelSheet.SetColumnWidth(5, (int)((15 + 0.72) * 256));//A
+				cell5.CellStyle = style;
+				ICell cell6 = row.CreateCell(6);
+				cell6.SetCellValue("Remarks for Client");
+				excelSheet.SetColumnWidth(6, (int)((20 + 0.72) * 256));//A
+				cell6.CellStyle = style;
+				ICell cell7 = row.CreateCell(7);
+				cell7.SetCellValue("Remarks for Beneficiary");
+				excelSheet.SetColumnWidth(7, (int)((20 + 0.72) * 256));//A
+				cell7.CellStyle = style;
+				#endregion
+
+				List<BankReportVM> BankReportVMs = manager.ICICI_ADHOC_BankReports(WAG_Id, WAG_Month, CLI_Ids);
+				int rowCount = 6;
+				decimal TRANSACTION_AMOUNT = 0M;
+				foreach (var item in BankReportVMs)
+				{
+					row = excelSheet.CreateRow(rowCount);
+					row.CreateCell(0).SetCellValue(item.EMP_PAYMENT_MODE);
+					row.CreateCell(1).SetCellValue(item.CBA_Account_Number);
+					row.CreateCell(2).SetCellValue(item.ACCOUNT_IFSC_CODE);
+					row.CreateCell(3).SetCellValue(item.EMP_ACCOUNT_NUMBER);
+					row.CreateCell(4).SetCellValue(item.EMP_NAME);
+					row.CreateCell(5).SetCellValue(Convert.ToString(item.EMP_TRANSACTION_AMOUNT));
+					row.CreateCell(6).SetCellValue(item.MESSAGE);
+					row.CreateCell(7).SetCellValue(item.MESSAGE);
+					TRANSACTION_AMOUNT = TRANSACTION_AMOUNT + item.EMP_TRANSACTION_AMOUNT;
+					rowCount++;
+				}
+				row = excelSheet.CreateRow(rowCount);
+				ICell CellTotal = row.CreateCell(2);
+				CellTotal.SetCellValue("TOTAL");
+				CellTotal.CellStyle = styleClient;
+				CellUtil.SetAlignment(CellTotal, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount, 2, 4));
+				ICell cellTotalAmt = row.CreateCell(5);
+				cellTotalAmt.SetCellValue(Convert.ToString(TRANSACTION_AMOUNT));
+				cellTotalAmt.CellStyle = styleTotal;
+				workbook.Write(fs);
+			}
+		}
+
+		public void HDFC_To_HDFC_BankReportExcel(Firm firm, int[] CLI_Ids, int WAG_Id, string newPath, string fileName, string WAG_Month)
+		{
+			ReportsManager manager = new ReportsManager(_context);
+			using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+			{
+				IWorkbook workbook = new XSSFWorkbook();
+				ISheet excelSheet = workbook.CreateSheet("Template");
+
+				#region STYLE
+
+				IFont font = workbook.CreateFont();
+				font.IsBold = true;
+				font.FontHeightInPoints = ((short)40);
+				font.FontName = ("Cambria");
+				font.Underline = FontUnderlineType.Single;
+				font.Color = IndexedColors.Brown.Index;
+
+				ICellStyle styleHeader = workbook.CreateCellStyle();
+				styleHeader.FillBackgroundColor = HSSFColor.Aqua.Index;
+				styleHeader.SetFont(font);
+
+				ICellStyle styleAmount = workbook.CreateCellStyle();
+				styleAmount.FillBackgroundColor = IndexedColors.Yellow.Index;
+				styleAmount.FillPattern = FillPattern.SolidForeground;
+				styleAmount.FillForegroundColor = IndexedColors.Yellow.Index;
+				styleAmount.BorderBottom = (BorderStyle.Thin);
+				styleAmount.BottomBorderColor = (IndexedColors.Black.Index);
+				styleAmount.BorderLeft = (BorderStyle.Thin);
+				styleAmount.LeftBorderColor = (IndexedColors.Black.Index);
+				styleAmount.BorderRight = (BorderStyle.Thin);
+				styleAmount.RightBorderColor = (IndexedColors.Black.Index);
+				styleAmount.BorderTop = (BorderStyle.Thin);
+				styleAmount.TopBorderColor = (IndexedColors.Black.Index);
+
+				// Style the cell with font color white
+				IFont fontcell = workbook.CreateFont();
+				fontcell.IsBold = true;
+
+				IFont fontClient = workbook.CreateFont();
+				fontClient.IsBold = true;
+				fontClient.FontHeightInPoints = ((short)15);
+
+				IFont fontcellSub = workbook.CreateFont();
+				fontcellSub.IsBold = true;
+				fontcellSub.FontHeightInPoints = ((short)18);
+
+				// Grey25Percent background
+				ICellStyle style = workbook.CreateCellStyle();
+				ICellStyle styleTotal = workbook.CreateCellStyle();
+				ICellStyle styleClient = workbook.CreateCellStyle();
+				ICellStyle styleSub = workbook.CreateCellStyle();
+
+				styleTotal.FillForegroundColor = IndexedColors.BrightGreen.Index;
+				styleTotal.FillPattern = FillPattern.SolidForeground;
+				styleTotal.FillBackgroundColor = IndexedColors.BrightGreen.Index;
+				styleTotal.SetFont(fontcell);
+
+				styleClient.SetFont(fontcell);
+				styleSub.SetFont(fontcellSub);
+				//#77bf2a
+
+				// Style the cell with borders all around.
+				style.WrapText = true;
+				style.VerticalAlignment = VerticalAlignment.Center;
+				style.BorderBottom = (BorderStyle.Thin);
+				style.BottomBorderColor = (IndexedColors.Black.Index);
+				style.BorderLeft = (BorderStyle.Thin);
+				style.LeftBorderColor = (IndexedColors.Black.Index);
+				style.BorderRight = (BorderStyle.Thin);
+				style.RightBorderColor = (IndexedColors.Black.Index);
+				style.BorderTop = (BorderStyle.Thin);
+				style.TopBorderColor = (IndexedColors.Black.Index);
+				style.SetFont(fontcell);
+				#endregion
+
+				#region HEADER
+
+				IRow row = excelSheet.CreateRow(0);
+				ICell CellHeader = row.CreateCell(0);
+				CellHeader.SetCellValue("Reliable");
+				CellHeader.CellStyle = styleHeader;
+				CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 3));
+
+				IRow rowSub = excelSheet.CreateRow(1);
+				ICell CellSub = rowSub.CreateCell(0);
+				CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
+				CellSub.CellStyle = styleSub;
+				CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 3));
+
+				IRow rowAdd1 = excelSheet.CreateRow(2);
+				ICell CellAdd1 = rowAdd1.CreateCell(0);
+				CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
+				CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 3));
+
+				IRow rowAdd2 = excelSheet.CreateRow(3);
+				ICell CellAdd2 = rowAdd2.CreateCell(0);
+				CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
+				CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 3));
+
+				IRow rowSubHeading = excelSheet.CreateRow(4);
+				ICell CellSubHeading = rowSubHeading.CreateCell(0);
+				CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
+				CellSubHeading.CellStyle = styleClient;
+				CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 3));
+
+
+				row = excelSheet.CreateRow(5);
+				row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
+				ICell cell0 = row.CreateCell(0);
+				cell0.SetCellValue("EMP NAME");
+				excelSheet.SetColumnWidth(0, (int)((28 + 0.72) * 256));//A
+				cell0.CellStyle = style;
+				ICell cell1 = row.CreateCell(1);
+				cell1.SetCellValue("ACCOUNT \r\n NUMBER");
+				excelSheet.SetColumnWidth(1, (int)((22 + 0.72) * 256));//A
+				cell1.CellStyle = style;
+				ICell cell2 = row.CreateCell(2);
+				cell2.SetCellValue("AMOUNT");
+				excelSheet.SetColumnWidth(2, (int)((22 + 0.72) * 256));//A
+				cell2.CellStyle = style;
+				ICell cell3 = row.CreateCell(3);
+				cell3.SetCellValue("IFSC");
+				excelSheet.SetColumnWidth(3, (int)((15 + 0.72) * 256));//A
+				cell3.CellStyle = style;
+				#endregion
+
+				List<BankReportVM> BankReportVMs = manager.HDFC_To_HDFC_BankReports(WAG_Id, WAG_Month, CLI_Ids);
+				int rowCount = 6;
+				decimal TRANSACTION_AMOUNT = 0M;
+				foreach (var item in BankReportVMs)
+				{
+					row = excelSheet.CreateRow(rowCount);
+					row.CreateCell(0).SetCellValue(item.EMP_NAME);
+					row.CreateCell(1).SetCellValue(item.EMP_ACCOUNT_NUMBER);
+					row.CreateCell(2).SetCellValue(Convert.ToString(item.EMP_TRANSACTION_AMOUNT));
+					row.CreateCell(3).SetCellValue(item.ACCOUNT_IFSC_CODE);
+					TRANSACTION_AMOUNT = TRANSACTION_AMOUNT + item.EMP_TRANSACTION_AMOUNT;
+					rowCount++;
+				}
+				row = excelSheet.CreateRow(rowCount);
+				ICell CellTotal = row.CreateCell(0);
+				CellTotal.SetCellValue("TOTAL");
+				CellTotal.CellStyle = styleClient;
+				CellUtil.SetAlignment(CellTotal, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 1));
+				ICell cellTotalAmt = row.CreateCell(2);
+				cellTotalAmt.SetCellValue(Convert.ToString(TRANSACTION_AMOUNT));
+				cellTotalAmt.CellStyle = styleTotal;
+				workbook.Write(fs);
+			}
+		}
+
+		public void HDFC_To_Other_BankReportExcel(Firm firm, int[] CLI_Ids, int WAG_Id, string newPath, string fileName, string WAG_Month)
+		{
+			ReportsManager manager = new ReportsManager(_context);
+			using (var fs = new FileStream(Path.Combine(newPath, fileName), FileMode.Create, FileAccess.Write))
+			{
+				IWorkbook workbook = new XSSFWorkbook();
+				ISheet excelSheet = workbook.CreateSheet("Template");
+
+				#region STYLE
+
+				IFont font = workbook.CreateFont();
+				font.IsBold = true;
+				font.FontHeightInPoints = ((short)40);
+				font.FontName = ("Cambria");
+				font.Underline = FontUnderlineType.Single;
+				font.Color = IndexedColors.Brown.Index;
+
+				ICellStyle styleHeader = workbook.CreateCellStyle();
+				styleHeader.FillBackgroundColor = HSSFColor.Aqua.Index;
+				styleHeader.SetFont(font);
+
+				ICellStyle styleAmount = workbook.CreateCellStyle();
+				styleAmount.FillBackgroundColor = IndexedColors.Yellow.Index;
+				styleAmount.FillPattern = FillPattern.SolidForeground;
+				styleAmount.FillForegroundColor = IndexedColors.Yellow.Index;
+				styleAmount.BorderBottom = (BorderStyle.Thin);
+				styleAmount.BottomBorderColor = (IndexedColors.Black.Index);
+				styleAmount.BorderLeft = (BorderStyle.Thin);
+				styleAmount.LeftBorderColor = (IndexedColors.Black.Index);
+				styleAmount.BorderRight = (BorderStyle.Thin);
+				styleAmount.RightBorderColor = (IndexedColors.Black.Index);
+				styleAmount.BorderTop = (BorderStyle.Thin);
+				styleAmount.TopBorderColor = (IndexedColors.Black.Index);
+
+				// Style the cell with font color white
+				IFont fontcell = workbook.CreateFont();
+				fontcell.IsBold = true;
+
+				IFont fontClient = workbook.CreateFont();
+				fontClient.IsBold = true;
+				fontClient.FontHeightInPoints = ((short)15);
+
+				IFont fontcellSub = workbook.CreateFont();
+				fontcellSub.IsBold = true;
+				fontcellSub.FontHeightInPoints = ((short)18);
+
+				// Grey25Percent background
+				ICellStyle style = workbook.CreateCellStyle();
+				ICellStyle styleTotal = workbook.CreateCellStyle();
+				ICellStyle styleClient = workbook.CreateCellStyle();
+				ICellStyle styleSub = workbook.CreateCellStyle();
+
+				styleTotal.FillForegroundColor = IndexedColors.BrightGreen.Index;
+				styleTotal.FillPattern = FillPattern.SolidForeground;
+				styleTotal.FillBackgroundColor = IndexedColors.BrightGreen.Index;
+				styleTotal.SetFont(fontcell);
+
+				styleClient.SetFont(fontcell);
+				styleSub.SetFont(fontcellSub);
+				//#77bf2a
+
+				// Style the cell with borders all around.
+				style.WrapText = true;
+				style.VerticalAlignment = VerticalAlignment.Center;
+				style.BorderBottom = (BorderStyle.Thin);
+				style.BottomBorderColor = (IndexedColors.Black.Index);
+				style.BorderLeft = (BorderStyle.Thin);
+				style.LeftBorderColor = (IndexedColors.Black.Index);
+				style.BorderRight = (BorderStyle.Thin);
+				style.RightBorderColor = (IndexedColors.Black.Index);
+				style.BorderTop = (BorderStyle.Thin);
+				style.TopBorderColor = (IndexedColors.Black.Index);
+				style.SetFont(fontcell);
+				#endregion
+
+				#region HEADER
+
+				IRow row = excelSheet.CreateRow(0);
+				ICell CellHeader = row.CreateCell(0);
+				CellHeader.SetCellValue("Reliable");
+				CellHeader.CellStyle = styleHeader;
+				CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 9));
+
+				IRow rowSub = excelSheet.CreateRow(1);
+				ICell CellSub = rowSub.CreateCell(0);
+				CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
+				CellSub.CellStyle = styleSub;
+				CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 9));
+
+				IRow rowAdd1 = excelSheet.CreateRow(2);
+				ICell CellAdd1 = rowAdd1.CreateCell(0);
+				CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
+				CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 9));
+
+				IRow rowAdd2 = excelSheet.CreateRow(3);
+				ICell CellAdd2 = rowAdd2.CreateCell(0);
+				CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
+				CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 9));
+
+				IRow rowSubHeading = excelSheet.CreateRow(4);
+				ICell CellSubHeading = rowSubHeading.CreateCell(0);
+				CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
+				CellSubHeading.CellStyle = styleClient;
+				CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+				excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 9));
+
+				row = excelSheet.CreateRow(5);
+				row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
+				ICell cell0 = row.CreateCell(0);
+				cell0.SetCellValue("SR.NO");
+				cell0.CellStyle = style;
+				ICell cell1 = row.CreateCell(1);
+				cell1.SetCellValue("AMOUNT");
+				excelSheet.SetColumnWidth(1, (int)((22 + 0.72) * 256));//A
+				cell1.CellStyle = style;
+				ICell cell2 = row.CreateCell(2);
+				cell2.SetCellValue("DATE");
+				excelSheet.SetColumnWidth(2, (int)((20 + 0.72) * 256));//A
+				cell2.CellStyle = style;
+				ICell cell3 = row.CreateCell(3);
+				cell3.SetCellValue("BR CODE");
+				excelSheet.SetColumnWidth(3, (int)((22 + 0.72) * 256));//A
+				cell3.CellStyle = style;
+				ICell cell4 = row.CreateCell(4);
+				cell4.SetCellValue("DEBIT ACCOUNT \r\n NUMBER");
+				excelSheet.SetColumnWidth(4, (int)((22 + 0.72) * 256));//A
+				cell4.CellStyle = style;
+				ICell cell5 = row.CreateCell(5);
+				cell5.SetCellValue("DEBIT CUSTOMER \r\n NAME");
+				excelSheet.SetColumnWidth(5, (int)((28 + 0.72) * 256));//A
+				cell5.CellStyle = style;
+				ICell cell6 = row.CreateCell(6);
+				cell6.SetCellValue("IFSC");
+				excelSheet.SetColumnWidth(6, (int)((15 + 0.72) * 256));//A
+				cell6.CellStyle = style;
+				ICell cell7 = row.CreateCell(7);
+				cell7.SetCellValue("CREDIT ACCOUNT \r\n NUMBER");
+				excelSheet.SetColumnWidth(7, (int)((22 + 0.72) * 256));//A
+				cell7.CellStyle = style;
+				ICell cell8 = row.CreateCell(8);
+				cell8.SetCellValue("CREDIT CUSTOMER \r\n NAME");
+				excelSheet.SetColumnWidth(8, (int)((28 + 0.72) * 256));//A
+				cell8.CellStyle = style;
+				ICell cell9 = row.CreateCell(9);
+				cell9.SetCellValue("CONTACT \r\n NUMBER");
+				excelSheet.SetColumnWidth(9, (int)((20 + 0.72) * 256));//A
+				cell9.CellStyle = style;
+				#endregion
+
+				List<BankReportVM> BankReportVMs = manager.HDFC_To_Other_BankReports(WAG_Id, WAG_Month, CLI_Ids);
+				int rowCount = 6, srNo = 1;
+				decimal TRANSACTION_AMOUNT = 0M;
+				foreach (var item in BankReportVMs)
+				{
+					row = excelSheet.CreateRow(rowCount);
+					row.CreateCell(0).SetCellValue(Convert.ToString(srNo));
+					row.CreateCell(1).SetCellValue(Convert.ToString(item.EMP_TRANSACTION_AMOUNT));
+					row.CreateCell(2).SetCellValue(item.PAYMENT_DATE);
+					row.CreateCell(3).SetCellValue(item.BR_CODE);
+					row.CreateCell(4).SetCellValue(item.CBA_Account_Number);
+					row.CreateCell(5).SetCellValue(item.FRM_Name);
+					row.CreateCell(6).SetCellValue(item.ACCOUNT_IFSC_CODE);
+					row.CreateCell(7).SetCellValue(item.EMP_ACCOUNT_NUMBER);
+					row.CreateCell(8).SetCellValue(item.EMP_NAME);
+					row.CreateCell(9).SetCellValue(item.EMP_Contact_Primary);
+					TRANSACTION_AMOUNT = TRANSACTION_AMOUNT + item.EMP_TRANSACTION_AMOUNT;
+					rowCount++;
+					srNo++;
+				}
+				row = excelSheet.CreateRow(rowCount);
+				ICell CellTotal = row.CreateCell(0);
+				CellTotal.SetCellValue("TOTAL");
+				CellTotal.CellStyle = styleClient;
+				CellUtil.SetAlignment(CellTotal, workbook, (short)HorizontalAlignment.Center);
+				ICell cellTotalAmt = row.CreateCell(1);
+				cellTotalAmt.SetCellValue(Convert.ToString(TRANSACTION_AMOUNT));
+				cellTotalAmt.CellStyle = styleTotal;
+				workbook.Write(fs);
+			}
+		}
+		#endregion
+
+		#region ADVANCE
+
+		public async Task<FileResult> IDBI_To_IDBI_AdvanceReportExcel(int WAG_Id, int FRM_Id)
         {
             ReportsManager manager = new(_context);
             WageProcessManager wageManager = new(_context);
