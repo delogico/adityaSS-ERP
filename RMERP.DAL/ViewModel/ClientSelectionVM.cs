@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using static RMERP.DAL.Helpers.ProjectUtils;
 
 namespace RMERP.DAL.ViewModel
 {
@@ -16,7 +17,10 @@ namespace RMERP.DAL.ViewModel
         public int TotalActiveClients { get; set; }
 
         public string Reference { get; set; }
-    }
+
+		public List<BANK_REPORT_TYPE> AvailableBankReports { get; set; }
+		public List<BANK_REPORT_TYPE> MappedBankReports { get; set; }
+	}
     public class SelectionVM
     {
         public int CLI_Id { get; set; }
@@ -24,5 +28,5 @@ namespace RMERP.DAL.ViewModel
         public bool IsSelect { get; set; }
         public int WAG_Id { get; set; }
         public bool Is_WageRegisterSaved { get; set; }
-    }    
+    }
 }

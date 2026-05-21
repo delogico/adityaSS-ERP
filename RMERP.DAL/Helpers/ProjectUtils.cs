@@ -761,6 +761,24 @@ namespace RMERP.DAL.Helpers
 			return sum;
 		}
 
+		public static T? GetEnumFromDisplayName<T>(string displayName) where T : struct
+		{
+			foreach (var field in typeof(T).GetFields())
+			{
+				var attribute = field.GetCustomAttributes(
+					typeof(StringValueAttribute), false)
+					.FirstOrDefault() as StringValueAttribute;
+
+				if (attribute != null &&
+					attribute.StringValue.Equals(displayName, StringComparison.OrdinalIgnoreCase))
+				{
+					return (T)field.GetValue(null);
+				}
+			}
+
+			return null;
+		}
+
 		public static string GetStringValue(Enum value)
 		{
 			// Get the type

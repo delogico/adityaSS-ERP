@@ -1,132 +1,153 @@
 ﻿@model RMERP.DAL.ViewModel.ClientSelectionVM
 @using static RMERP.DAL.Helpers.ProjectUtils;
 @{
-   ViewData["Title"] = "Client Selection for Reports";
-   Layout = "~/Views/Shared/_RMLayout.cshtml";
+    ViewData["Title"] = "Client Selection for Reports";
+    Layout = "~/Views/Shared/_RMLayout.cshtml";
 }
-@section Breadcrumbs{
-   <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id })</li>
-   <li class="breadcrumb-item">Client Selection for @Model.Reference Reports</li>
+@section Breadcrumbs {
+    <li class="breadcrumb-item">@Html.ActionLink("Wage Process", "Index", "WageProcess", new { FRM_Id = Model.FRM_Id })</li>
+    <li class="breadcrumb-item">Client Selection for @Model.Reference Reports</li>
 }
 
 <style>
-   .modal-dialog {
-      transform: translate(0, -50%);
-      top: 30%;
-      margin: 0 auto;
-   }
+    .modal-dialog {
+        transform: translate(0, -50%);
+        top: 30%;
+        margin: 0 auto;
+    }
 </style>
-@section scripts{
+@section scripts {
 
-   <script>
-      $(document).ready(function () {
-         $("#checkAll").prop('checked', $(this).prop('checked'));
-         $(".check").prop('checked', true);
-      });
+    <script>
+        $(document).ready(function () {
+           $("#checkAll").prop('checked', $(this).prop('checked'));
+           $(".check").prop('checked', true);
+        });
 
-      $("#checkAll").click(function () {
-         $(".check").prop('checked', $(this).prop('checked'));
-      });
-   </script>
+        $("#checkAll").click(function () {
+           $(".check").prop('checked', $(this).prop('checked'));
+        });
+    </script>
 }
 <div>
-   <div class="content container-fluid">
-      <div class="row">
-         <div class="col-sm-8">
-            <h4 class="page-title">@ViewData["Title"]</h4>
-            @if (Model.selectionVMs.Count() < Model.TotalActiveClients)
-            {
-               <div class="alert alert-warning"> <strong>@Model.selectionVMs.Count() clients</strong> out of @Model.TotalActiveClients generated only!</div>
-            }
-         </div>
-         <div class="col-sm-4 text-right m-b-30">
-
-         </div>
-      </div>
-      <div class="row">
-         <div class="col-md-10">
-            @if (Model.selectionVMs.Count() > 0)
-            {
-               <div>
-                  @Html.Label("Select Client")<br />
-                  @using (Html.BeginForm("Reports", "Reports", FormMethod.Post))
-                  {
-                     @Html.Hidden("WAG_Id", Model.WAG_Id)
-                     @Html.Hidden("Reference", Model.Reference)
-                     <div class="row well well-lg">
-                        <div class="checkbox">
-                           <label>
-                              <input type="checkbox" class="check" id="checkAll"> <strong>Select All Clients</strong>
-                           </label>
-                        </div>
-                        @for (var i = 0; i < Model.selectionVMs.Count; i++)
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <h4 class="page-title">@ViewData["Title"]</h4>
+                @if (Model.selectionVMs.Count() < Model.TotalActiveClients)
+                {
+                    <div class="alert alert-warning"> <strong>@Model.selectionVMs.Count() clients</strong> out of @Model.TotalActiveClients generated only!</div>
+                }
+            </div>
+            <div class="col-sm-4 text-right m-b-30">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10">
+                @if (Model.selectionVMs.Count() > 0)
+                {
+                    <div>
+                        @Html.Label("Select Client")<br />
+                        @using (Html.BeginForm("Reports", "Reports", FormMethod.Post))
                         {
-                           <div class="col-sm-6 client-selection-model">
-                              @Html.HiddenFor(m => Model.selectionVMs[i].WAG_Id)
-                              @Html.HiddenFor(m => Model.selectionVMs[i].CLI_Id)
-                              @Html.HiddenFor(m => Model.selectionVMs[i].CLI_Name)
-                              <label class="check-client">
-                                 @Html.CheckBoxFor(m => Model.selectionVMs[i].IsSelect, new { id = Model.selectionVMs[i].CLI_Id, @class = "check" })
-                                 @Html.DisplayFor(m => Model.selectionVMs[i].CLI_Name, new { @class = "form-control" })
-                              </label>
-                           </div>
+                            @Html.Hidden("WAG_Id", Model.WAG_Id)
+                            @Html.Hidden("Reference", Model.Reference)
+                            <div class="row well well-lg">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" class="check" id="checkAll"> <strong>Select All Clients</strong>
+                                    </label>
+                                </div>
+                                @for (var i = 0; i < Model.selectionVMs.Count; i++)
+                                {
+                                    <div class="col-sm-6 client-selection-model">
+                                        @Html.HiddenFor(m => Model.selectionVMs[i].WAG_Id)
+                                        @Html.HiddenFor(m => Model.selectionVMs[i].CLI_Id)
+                                        @Html.HiddenFor(m => Model.selectionVMs[i].CLI_Name)
+                                        <label class="check-client">
+                                            @Html.CheckBoxFor(m => Model.selectionVMs[i].IsSelect, new { id = Model.selectionVMs[i].CLI_Id, @class = "check" })
+                                            @Html.DisplayFor(m => Model.selectionVMs[i].CLI_Name, new { @class = "form-control" })
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.Report, new { @class = "control-label" })<br />
+
+                                        <label class="radio-inline well well-sm ">
+                                            @if (Model.Reference == "BANKS")
+                                            {
+                                                @foreach (var BANK_REPORT_TYPE in Model.AvailableBankReports)
+                                                {
+                                                    <label class="radio-inline report-type">
+                                                        @Html.RadioButtonFor(s => s.Report, (int)BANK_REPORT_TYPE, new { @class = "control-label" })@GetStringValue(BANK_REPORT_TYPE)
+                                                    </label>
+
+                                                    <br />
+                                                }
+                                            }
+                                            else if (Model.Reference == "PF")
+                                            {
+                                                @foreach (var PF_REPORT_TYPE in Enum.GetValues(typeof(PF_REPORT_TYPE)).Cast<PF_REPORT_TYPE>())
+                                                {
+                                                    <label class="radio-inline report-type">
+                                                        @Html.RadioButtonFor(s => s.Report, (int)PF_REPORT_TYPE, new { @class = "control-label" })@GetStringValue(PF_REPORT_TYPE)
+                                                    </label>
+
+                                                    <br />
+                                                }
+                                            }
+                                            else if (Model.Reference == "ESIC")
+                                            {
+                                                @foreach (var ESIC_REPORT_TYPE in Enum.GetValues(typeof(ESIC_REPORT_TYPE)).Cast<ESIC_REPORT_TYPE>())
+                                                {
+                                                    <label class="radio-inline report-type">
+                                                        @Html.RadioButtonFor(s => s.Report, (int)ESIC_REPORT_TYPE, new { @class = "control-label" })@GetStringValue(ESIC_REPORT_TYPE)
+                                                    </label>
+
+                                                    <br />
+                                                }
+                                            }
+                                        </label>
+                                        @Html.ValidationMessageFor(x => x.Report, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                @if (Model.MappedBankReports.Count > 0)
+                                {
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="radio-inline well well-sm ">
+                                                @foreach (var BANK_REPORT_TYPE in Model.MappedBankReports)
+                                                {
+                                                    <label class="radio-inline report-type">
+                                                        @Html.RadioButtonFor(s => s.Report, (int)BANK_REPORT_TYPE, new { @class = "control-label" }) @GetStringValue(BANK_REPORT_TYPE)
+                                                    </label>
+                                                    <br />
+                                                }
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div class="form-group text-center">
+                                        <input type="submit" value="Generate Report" id="btnSubmit" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                            </div>
                         }
-                     </div>
-                     <div class="row">
-                        <div class="col-md-10">
-                           <div class="form-group">
-                              @Html.LabelFor(m => m.Report, new { @class = "control-label" })<br />
 
-                              <label class="radio-inline well well-sm ">
-                                 @if (Model.Reference == "BANKS")
-                                 {
-                                    @foreach (var BANK_REPORT_TYPE in Enum.GetValues(typeof(BANK_REPORT_TYPE)).Cast<BANK_REPORT_TYPE>())
-                                    {
-                                       <label class="radio-inline report-type">
-                                          @Html.RadioButtonFor(s => s.Report, (int)BANK_REPORT_TYPE, new { @class = "control-label" })@GetStringValue(BANK_REPORT_TYPE)
-                                       </label><br />
-                                    }
-                                 }
-                                 else if (Model.Reference == "PF")
-                                 {
-                                    @foreach (var PF_REPORT_TYPE in Enum.GetValues(typeof(PF_REPORT_TYPE)).Cast<PF_REPORT_TYPE>())
-                                    {
-                                       <label class="radio-inline report-type">
-                                          @Html.RadioButtonFor(s => s.Report, (int)PF_REPORT_TYPE, new { @class = "control-label" })@GetStringValue(PF_REPORT_TYPE)
-                                       </label><br />
-                                    }
-                                 }
-                                 else if(Model.Reference == "ESIC")
-                                 {
-                                     @foreach (var ESIC_REPORT_TYPE in Enum.GetValues(typeof(ESIC_REPORT_TYPE)).Cast<ESIC_REPORT_TYPE>())
-                                       {
-                                          <label class="radio-inline report-type">
-                                          @Html.RadioButtonFor(s => s.Report, (int)ESIC_REPORT_TYPE, new { @class = "control-label" })@GetStringValue(ESIC_REPORT_TYPE)
-                                          </label><br />
-                                       }
-                                 }
-                              </label>
-                              @Html.ValidationMessageFor(x => x.Report, "", new { @class = "text-danger" })
-                           </div>
-                        </div>
-                     </div>
-                     <div class="row">
-                        <div class="col-md-10">
-                           <div class="form-group text-center">
-                              <input type="submit" value="Generate Report" id="btnSubmit" class="btn btn-primary" />
-                           </div>
-                        </div>
-                     </div>
-                  }
+                    </div>
+                }
+                else
+                {
+                    <p>No Wages Save For Any Clients</p>
+                }
 
-               </div>
-            }
-            else
-            {
-               <p>No Wages Save For Any Clients</p>
-            }
-
-         </div>
-      </div>
-   </div>
+            </div>
+        </div>
+    </div>
 </div>

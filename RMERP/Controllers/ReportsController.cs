@@ -21,6 +21,7 @@ using Microsoft.Extensions.Configuration;
 using Rotativa.AspNetCore.Options;
 using Microsoft.AspNetCore.Authorization;
 using System.IO.Compression;
+using static RMERP.DAL.Helpers.ProjectUtils;
 
 namespace RMERP.Controllers
 {
@@ -42,18 +43,25 @@ namespace RMERP.Controllers
         {
             WageProcessManager wageProcessManager = new(_context);
             ClientsManager clientsManager = new(_context);
-            Wage_Process wageProcess = wageProcessManager.GetWageProcessByWAG_Id(WAG_Id, true, true, false, true);
+			FirmsManager frmManager = new(_context);
+			Wage_Process wageProcess = wageProcessManager.GetWageProcessByWAG_Id(WAG_Id, true, true, false, true);
             List<Client> clients = clientsManager.GetActiveClientOfMonthByFRM_Id1(new DateTime(wageProcess.WAG_Month.Year, wageProcess.WAG_Month.Month, wageProcess.WAG_Month.Day), wageProcess.FRM_Id);
 
-            ClientSelectionVM clientSelectionVM = new()
+			var bankEnums = frmManager.getCompanyBankAccountListOnFRM(wageProcess.FRM_Id).Select(c => c.CBA_Bank).Distinct().Select(b => ProjectUtils.GetEnumFromDisplayName<REGISTER_BANK>(b)).Where(b => b.HasValue).Select(b => b.Value).ToList();
+			var mappedBankReports = bankEnums.Where(b => BankReportMapping.Map.ContainsKey(b)).SelectMany(b => BankReportMapping.Map[b]).Distinct().ToList();
+			var availableReports = new List<BANK_REPORT_TYPE> {BANK_REPORT_TYPE.Company_Wise_Transfer_Report,BANK_REPORT_TYPE.CHEQUE_CASH_Report };
+
+			ClientSelectionVM clientSelectionVM = new()
             {
                 selectionVMs = ClientSelectionMapper.mapMe(clients.Where(s => s.Wage_Process_Clients.Count > 0).ToList(), WAG_Id),
                 FRM_Id = wageProcess.FRM_Id,
                 TotalActiveClients = clients.Count,
                 WAG_Id = WAG_Id,
-                Reference = Reference
-
-            };
+                Reference = Reference,
+				AvailableBankReports = availableReports,
+				MappedBankReports = mappedBankReports
+				
+			};
             return View(clientSelectionVM);
         }
 
