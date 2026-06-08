@@ -8,7 +8,7 @@ namespace RMERP.DAL.ViewModel
     {
         public int WAR_Id { get; set; }
         public decimal CRI_PF_Percentage { get; set; }
-        public decimal CRI_ESIC_Percentage { get; set; }
+		public decimal CRI_ESIC_Percentage { get; set; }
 
         public string CRI_PF_Formula { get; set; }
         public string CRI_ESIC_Formula { get; set; }
@@ -17,6 +17,7 @@ namespace RMERP.DAL.ViewModel
         public decimal WAR_Basic_Calculated { get; set; }
         public decimal CRI_DA_Calculated { get; set; }
         public decimal CRI_HRA_Calculated { get; set; }
+        public decimal CRI_LeaveAndPH_Calculated { get; set; }
 
         public int totalWorkingDays { get; set; }
         public float totalPaybleDays { get; set; }
@@ -39,6 +40,7 @@ namespace RMERP.DAL.ViewModel
         public decimal WAR_Allowance_Calculated_8 { get; set; }
         public decimal WAR_Allowance_Calculated_9 { get; set; }
         public decimal WAR_Allowance_Calculated_10 { get; set; }
+       
 
         public List<CalculatedAllowanceVM> CalculatedAllowanceVM { get; set; }
     }

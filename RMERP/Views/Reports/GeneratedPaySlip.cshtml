@@ -2,388 +2,392 @@
 @using static RMERP.DAL.Helpers.ProjectUtils;
 @using RMERP.Helpers;
 @{
-   Layout = null;
+    Layout = null;
 }
 <html>
 <head>
-   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-   <style>
-      .custom-border {
-         border: solid 1px;
-         border-color: #000000;
-         padding: 10px;
-      }
-
-      .bold {
-         font-weight: bold;
-      }
-
-      .main-table {
-         border: double solid 1px;
-         border-color: #000000;
-      }
-
-         .main-table td {
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <style>
+        .custom-border {
             border: solid 1px;
             border-color: #000000;
-            padding: 3px;
-         }
+            padding: 10px;
+        }
 
-      .sub-table {
-         border: solid 1px;
-         border-color: #000000;
-      }
+        .bold {
+            font-weight: bold;
+        }
 
-         .sub-table td {
+        .main-table {
+            border: double solid 1px;
+            border-color: #000000;
+        }
+
+            .main-table td {
+                border: solid 1px;
+                border-color: #000000;
+                padding: 3px;
+            }
+
+        .sub-table {
             border: solid 1px;
             border-color: #000000;
-            padding: 3px;
-         }
+        }
 
-      .emp-table td {
-         border: none;
-      }
+            .sub-table td {
+                border: solid 1px;
+                border-color: #000000;
+                padding: 3px;
+            }
 
-      hr {
-         height: 1px;
-         border-color: #000000;
-      }
-   </style>
+        .emp-table td {
+            border: none;
+        }
+
+        hr {
+            height: 1px;
+            border-color: #000000;
+        }
+    </style>
 </head>
 <body>
-   <div class="container custom-border" style="margin-top: 10px;">
-      <div class="row">
-         <div class="col-xs-12">
-            <center>
-               <h2><strong>@Model.firm.FRM_Name</strong></h2>
-               <strong>
-                  @Model.firm.FRM_Address1,@Model.firm.FRM_Address2,@Model.firm.STA.STA_Name<br>
-               </strong>
-            </center>
-         </div>
-      </div>
-
-      <div class="row">
-         <div class="col-xs-12">
-            <hr />
-            <div class="invoice-title text-center">
-               <h4><strong>SALARY STATEMENT FOR THE MONTH OF @Model.WAG_Month.ToString("MMM-yyyy").ToUpper()</strong></h4>
+    <div class="container custom-border" style="margin-top: 10px;">
+        <div class="row">
+            <div class="col-xs-12">
+                <center>
+                    <h2><strong>@Model.firm.FRM_Name</strong></h2>
+                    <strong>
+                        @Model.firm.FRM_Address1,@Model.firm.FRM_Address2,@Model.firm.STA.STA_Name<br>
+                    </strong>
+                </center>
             </div>
+        </div>
 
-            @{
-               int totEarning = 2;
-               totEarning = (Model.WAR_DA_Calculated > 0 ? totEarning + 1 : totEarning);
-               totEarning = (Model.WAR_OverTime_Calculated > 0 ? totEarning + 1 : totEarning);
-               totEarning = (Model.WAR_Outstation_Allowance_Calculated > 0 ? totEarning + 1 : totEarning);
-               totEarning = (Model.WAR_Nightshift_Allowance_Calculated > 0 ? totEarning + 1 : totEarning);
-               totEarning = (Model.WAR_Performance_Allowance_Calculated > 0 ? totEarning + 1 : totEarning);
-               totEarning = (Model.WAR_Attendance_Allowance_Calculated > 0 ? totEarning + 1 : totEarning);
-               totEarning = totEarning + Model.Wage_Register_Allowances.Count();
-               int totDeduction = 3;
-               totDeduction = (Model.WAR_Advance_Amount > 0 ? totDeduction + 1 : totDeduction);
-               totDeduction = (Model.WAR_RevenueDeduction_Calculated > 0 ? totDeduction + 1 : totDeduction);
-               totDeduction = (Model.WAR_CanteenFacility_Calculation > 0 ? totDeduction + 1 : totDeduction);
-               totDeduction = (Model.WAR_LWF_Deduction_Calculated > 0 ? totDeduction + 1 : totDeduction);
-               totDeduction = (Model.WAR_LWF_Deduction_Calculated > 0 ? totDeduction + 1 : totDeduction);
-            }
-            <table class="main-table" width="100%">
-               <tr>
-                  <td colspan="2">
-                     <table class="emp-table" width="100%">
-                        <tbody>
-                           <tr>
-                              <td class="text-left bold" width="20%">Employee</td>
-                              <td class="text-left" width="30%">: @(Model.EMP_Gender == true ? "Mr. " : "Miss. ")@Model.EMP_FullName</td>
-                              <td class="text-left bold" width="20%">Employee Code</td>
-                              <td class="text-left" width="30%">: @Model.EMP_Id.ToString("D5")</td>
-                           </tr>
-                           <tr>
-                              <td class="text-left bold" width="20%">Gender</td>
-                              <td class="text-left" width="30%">: @(Model.EMP_Gender == true ? "Male" : "Female")</td>
-                              <td class="text-left bold" width="20%">Bank Name</td>
-                              <td class="text-left" width="30%">: @Model.EMP_Bank</td>
-                           </tr>
-                           <tr>
-                              <td class="text-left bold" width="20%">Date Of Joining</td>
-                              <td class="text-left" width="30%">: @DateHelper.getLongDateFormat(Model.EMP_DateOfJoining)</td>
-                              <td class="text-left bold" width="20%">Bank Account Number</td>
-                              <td class="text-left" width="30%">: @Model.EMP_Account_Number</td>
-                           </tr>
-                           <tr>
-                              <td class="text-left bold" width="20%">PAN Number</td>
-                              <td class="text-left" width="30%">: @Model.EMP_Pan_Number</td>
-                              @*<td class="text-left bold" width="20%">PF Number</td>
+        <div class="row">
+            <div class="col-xs-12">
+                <hr />
+                <div class="invoice-title text-center">
+                    <h4><strong>SALARY STATEMENT FOR THE MONTH OF @Model.WAG_Month.ToString("MMM-yyyy").ToUpper()</strong></h4>
+                </div>
+
+                @{
+                    int totEarning = 2;
+                    totEarning = (Model.WAR_DA_Calculated > 0 ? totEarning + 1 : totEarning);
+                    totEarning = (Model.WAR_OverTime_Calculated > 0 ? totEarning + 1 : totEarning);
+                    totEarning = (Model.WAR_Outstation_Allowance_Calculated > 0 ? totEarning + 1 : totEarning);
+                    totEarning = (Model.WAR_Nightshift_Allowance_Calculated > 0 ? totEarning + 1 : totEarning);
+                    totEarning = (Model.WAR_Performance_Allowance_Calculated > 0 ? totEarning + 1 : totEarning);
+                    totEarning = (Model.WAR_Attendance_Allowance_Calculated > 0 ? totEarning + 1 : totEarning);
+                    totEarning = totEarning + Model.Wage_Register_Allowances.Count();
+                    int totDeduction = 3;
+                    totDeduction = (Model.WAR_Advance_Amount > 0 ? totDeduction + 1 : totDeduction);
+                    totDeduction = (Model.WAR_RevenueDeduction_Calculated > 0 ? totDeduction + 1 : totDeduction);
+                    totDeduction = (Model.WAR_CanteenFacility_Calculation > 0 ? totDeduction + 1 : totDeduction);
+                    totDeduction = (Model.WAR_LWF_Deduction_Calculated > 0 ? totDeduction + 1 : totDeduction);
+                    totDeduction = (Model.WAR_LWF_Deduction_Calculated > 0 ? totDeduction + 1 : totDeduction);
+                }
+                <table class="main-table" width="100%">
+                    <tr>
+                        <td colspan="2">
+                            <table class="emp-table" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-left bold" width="20%">Employee</td>
+                                        <td class="text-left" width="30%">: @(Model.EMP_Gender == true ? "Mr. " : "Miss. ")@Model.EMP_FullName</td>
+                                        <td class="text-left bold" width="20%">Employee Code</td>
+                                        <td class="text-left" width="30%">: @Model.EMP_Id.ToString("D5")</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left bold" width="20%">Gender</td>
+                                        <td class="text-left" width="30%">: @(Model.EMP_Gender == true ? "Male" : "Female")</td>
+                                        <td class="text-left bold" width="20%">Bank Name</td>
+                                        <td class="text-left" width="30%">: @Model.EMP_Bank</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left bold" width="20%">Date Of Joining</td>
+                                        <td class="text-left" width="30%">: @DateHelper.getLongDateFormat(Model.EMP_DateOfJoining)</td>
+                                        <td class="text-left bold" width="20%">Bank Account Number</td>
+                                        <td class="text-left" width="30%">: @Model.EMP_Account_Number</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left bold" width="20%">PAN Number</td>
+                                        <td class="text-left" width="30%">: @Model.EMP_Pan_Number</td>
+                                        @*<td class="text-left bold" width="20%">PF Number</td>
                                  <td class="text-left" width="30%">: @Model.EMP_PF_Number</td>*@
-                              <td class="text-left bold" width="20%">ESIC Account Number</td>
-                              <td class="text-left" width="30%">: @Model.EMP_ESIC_Number</td>
-                           </tr>
-                           <tr>
-                              <td class="text-left bold" width="20%">UAN Number</td>
-                              <td class="text-left" width="30%">: @Model.EMP_UAN_Number</td>
-                              <td class="text-left bold" width="20%">Designation</td>
-                              <td class="text-left" width="30%">: @Model.EMP_Designation</td>
-                           </tr>
-                           <tr>
-                              <td class="text-left bold" width="20%">Region</td>
-                              <td class="text-left" width="30%">: @Model.EMP_Region</td>
-                              <td class="text-left bold" width="20%">Location</td>
-                              <td class="text-left" width="30%">: @Model.EMP_Location</td>
-                           </tr>
-                           <tr>
-                              <td class="text-left bold" width="20%">Days Worked</td>
-                              <td class="text-left" width="30%">: @Model.WAR_TotalPaybleDays</td>
-                              <td class="text-left bold" width="20%">Total Days</td>
-                              <td class="text-left" width="30%">: @Model.WAR_TotalWorkingDays</td>
+                                        <td class="text-left bold" width="20%">ESIC Account Number</td>
+                                        <td class="text-left" width="30%">: @Model.EMP_ESIC_Number</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left bold" width="20%">UAN Number</td>
+                                        <td class="text-left" width="30%">: @Model.EMP_UAN_Number</td>
+                                        <td class="text-left bold" width="20%">Designation</td>
+                                        <td class="text-left" width="30%">: @Model.EMP_Designation</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left bold" width="20%">Region</td>
+                                        <td class="text-left" width="30%">: @Model.EMP_Region</td>
+                                        <td class="text-left bold" width="20%">Location</td>
+                                        <td class="text-left" width="30%">: @Model.EMP_Location</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left bold" width="20%">Days Worked</td>
+                                        <td class="text-left" width="30%">: @Model.WAR_TotalPaybleDays</td>
+                                        <td class="text-left bold" width="20%">Total Days</td>
+                                        <td class="text-left" width="30%">: @Model.WAR_TotalWorkingDays</td>
 
-                           </tr>
-                           <tr>
+                                    </tr>
+                                    <tr>
 
-                              @*<td class="text-left bold" width="20%">Arrears Days</td>
+                                        @*<td class="text-left bold" width="20%">Arrears Days</td>
                                  <td class="text-left" width="30%">:@(Model.ArrearsDays > 0 ? Model.ArrearsDays.ToString() : "")</td>*@
-                           </tr>
-                           <tr>
-                              <td colspan="4">&nbsp;</td>
-                           </tr>
-                        </tbody>
-                     </table>
-                  </td>
-               </tr>
-               <tr>
-                  <td valign="top">
-                     <table class="sub-table" width="100%">
-                        <tbody>
-                           <tr>
-                              <td class="thick-line bold">Earnings</td>
-                              <td class="thick-line bold text-center">Earn Amt(Rs.)</td>
-                           </tr>
-                           <tr>
-                              <td class="text-left">Basic Salary</td>
-                              <td class="text-right">@Model.WAR_Basic_Calculated</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <table class="sub-table" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td class="thick-line bold">Earnings</td>
+                                        <td class="thick-line bold text-center">Earn Amt(Rs.)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Basic Salary</td>
+                                        <td class="text-right">@Model.WAR_Basic_Calculated</td>
 
-                           </tr>
-                           @if (Model.WAR_DA_Calculated > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">DA</td>
-                                 <td class="text-right">@Model.WAR_DA_Calculated</td>
-                              </tr>
-                           }
-                           <tr>
-                              <td class="text-left">HRA</td>
-                              <td class="text-right">@Model.WAR_HRA_Calculated</td>
-                           </tr>
-                           @foreach (var item in Model.Wage_Register_Allowances)
-                           {
-                              <tr>
-                                 <td class="text-left">@item.CRA.ALL.ALL_Title</td>
-                                 <td class="text-right">@item.WAA_Amount_Calculated</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_OverTime_Calculated > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">Over Time</td>
-                                 <td class="text-right">@Model.WAR_OverTime_Calculated</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Outstation_Allowance_Calculated > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">Outstation Allowance</td>
-                                 <td class="text-right">@Model.WAR_Outstation_Allowance_Calculated</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Nightshift_Allowance_Calculated > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">Nightshift Allowance</td>
-                                 <td class="text-right">@Model.WAR_Nightshift_Allowance_Calculated</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Performance_Allowance_Calculated > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">Performance Allowance</td>
-                                 <td class="text-right">@Model.WAR_Performance_Allowance_Calculated</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Attendance_Allowance_Calculated > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">Attendance Allowance</td>
-                                 <td class="text-right">@Model.WAR_Attendance_Allowance_Calculated</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Allowance_Calculated_1 > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">@Model.CRI_Allowance_Name_1</td>
-                                 <td class="text-right">@Model.WAR_Allowance_Calculated_1</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Allowance_Calculated_2 > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">@Model.CRI_Allowance_Name_2</td>
-                                 <td class="text-right">@Model.WAR_Allowance_Calculated_2</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Allowance_Calculated_3 > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">@Model.CRI_Allowance_Name_3</td>
-                                 <td class="text-right">@Model.WAR_Allowance_Calculated_3</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Allowance_Calculated_4 > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">@Model.CRI_Allowance_Name_4</td>
-                                 <td class="text-right">@Model.WAR_Allowance_Calculated_4</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Allowance_Calculated_5 > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">@Model.CRI_Allowance_Name_5</td>
-                                 <td class="text-right">@Model.WAR_Allowance_Calculated_5</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Allowance_Calculated_6 > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">@Model.CRI_Allowance_Name_6</td>
-                                 <td class="text-right">@Model.WAR_Allowance_Calculated_6</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Allowance_Calculated_7 > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">@Model.CRI_Allowance_Name_7</td>
-                                 <td class="text-right">@Model.WAR_Allowance_Calculated_7</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Allowance_Calculated_8 > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">@Model.CRI_Allowance_Name_8</td>
-                                 <td class="text-right">@Model.WAR_Allowance_Calculated_8</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Allowance_Calculated_9 > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">@Model.CRI_Allowance_Name_9</td>
-                                 <td class="text-right">@Model.WAR_Allowance_Calculated_9</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_Allowance_Calculated_10 > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">@Model.CRI_Allowance_Name_10</td>
-                                 <td class="text-right">@Model.WAR_Allowance_Calculated_10</td>
-                              </tr>
-                           }
+                                    </tr>
+                                    @if (Model.WAR_DA_Calculated > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">DA</td>
+                                            <td class="text-right">@Model.WAR_DA_Calculated</td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td class="text-left">HRA</td>
+                                        <td class="text-right">@Model.WAR_HRA_Calculated</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Leave&PH</td>
+                                        <td class="text-right">@Model.WAR_LeaveAndPH_Calculated</td>
+                                    </tr>
+                                    @foreach (var item in Model.Wage_Register_Allowances)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@item.CRA.ALL.ALL_Title</td>
+                                            <td class="text-right">@item.WAA_Amount_Calculated</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_OverTime_Calculated > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">Over Time</td>
+                                            <td class="text-right">@Model.WAR_OverTime_Calculated</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Outstation_Allowance_Calculated > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">Outstation Allowance</td>
+                                            <td class="text-right">@Model.WAR_Outstation_Allowance_Calculated</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Nightshift_Allowance_Calculated > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">Nightshift Allowance</td>
+                                            <td class="text-right">@Model.WAR_Nightshift_Allowance_Calculated</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Performance_Allowance_Calculated > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">Performance Allowance</td>
+                                            <td class="text-right">@Model.WAR_Performance_Allowance_Calculated</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Attendance_Allowance_Calculated > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">Attendance Allowance</td>
+                                            <td class="text-right">@Model.WAR_Attendance_Allowance_Calculated</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_1 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_1</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_1</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_2 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_2</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_2</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_3 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_3</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_3</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_4 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_4</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_4</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_5 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_5</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_5</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_6 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_6</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_6</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_7 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_7</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_7</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_8 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_8</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_8</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_9 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_9</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_9</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_Allowance_Calculated_10 > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">@Model.CRI_Allowance_Name_10</td>
+                                            <td class="text-right">@Model.WAR_Allowance_Calculated_10</td>
+                                        </tr>
+                                    }
 
-                           @if (totDeduction > totEarning)
-                           {
-                              for (int i = 0; i < (totDeduction - totEarning); i++)
-                              {
-                                 <tr>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                 </tr>
-                              }
-                           }
-                           <tr>
-                              <td class="text-left bold">Total Earnings</td>
-                              <td class="text-right">@Model.WAR_GrossTotal</td>
-                           </tr>
-                        </tbody>
-                     </table>
-                  </td>
-                  <td>
-                     <table class="sub-table" width="100%">
-                        <tbody>
-                           <tr>
-                              <td class="thick-line bold" colspan="2">Deduction</td>
-                           </tr>
-                           <tr>
-                              <td class="text-left">Provident Fund</td>
-                              <td class="text-right">@Model.WAR_PF_Calculated</td>
-                           </tr>
-                           <tr>
-                              <td class="text-left">ESIC</td>
-                              <td class="text-right">@Model.WAR_ESIC_Calculated</td>
-                           </tr>
-                           <tr>
-                              <td class="text-left">Professional Tax</td>
-                              <td class="text-right">@String.Format("{0:0.00}", Model.WAR_ProffesionalTax_Calculated)</td>
-                           </tr>
-                           @if (Model.WAR_Advance_Amount > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">Advance Amount</td>
-                                 <td class="text-right">@Model.WAR_Advance_Amount</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_RevenueDeduction_Calculated > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">Revenue Deduction</td>
-                                 <td class="text-right">@String.Format("{0:0.00}", Model.WAR_RevenueDeduction_Calculated)</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_CanteenFacility_Calculation > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">Canteen Facility</td>
-                                 <td class="text-right">@String.Format("{0:0.00}", Model.WAR_CanteenFacility_Calculation)</td>
-                              </tr>
-                           }
-                           @if (Model.WAR_LWF_Deduction_Calculated > 0)
-                           {
-                              <tr>
-                                 <td class="text-left">LWF Deduction</td>
-                                 <td class="text-right">@String.Format("{0:0.00}", Model.WAR_LWF_Deduction_Calculated)</td>
-                              </tr>
-                           }
-                           @if (totEarning > totDeduction)
-                           {
-                              for (int i = 0; i < (totEarning - totDeduction); i++)
-                              {
-                                 <tr>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                 </tr>
-                              }
-                           }
-                           <tr>
-                              <td class="text-left bold">Total Deductions</td>
-                              <td class="text-right">@Model.DeductTotal</td>
-                           </tr>
-                           <tr>
-                              <td class="text-left bold">Net Salary</td>
-                              <td class="text-right">@Model.WAR_FinalTotal</td>
-                           </tr>
-                        </tbody>
-                     </table>
-                  </td>
-               </tr>
-               <tr>
-                  <td class="thick-line bold text-left" colspan="2">Net Salary In Words: Rs. @ConvertNumbertoWords(Model.WAR_FinalTotal) Only</td>
-               </tr>
-               <tr>
-                  <td class="thick-line bold text-left" colspan="2">In case of any query please contact your Mentor</td>
-               </tr>
-            </table>
+                                    @if (totDeduction > totEarning)
+                                    {
+                                        for (int i = 0; i < (totDeduction - totEarning); i++)
+                                        {
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr>
+                                        <td class="text-left bold">Total Earnings</td>
+                                        <td class="text-right">@Model.WAR_GrossTotal</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>
+                            <table class="sub-table" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td class="thick-line bold" colspan="2">Deduction</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Provident Fund</td>
+                                        <td class="text-right">@Model.WAR_PF_Calculated</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">ESIC</td>
+                                        <td class="text-right">@Model.WAR_ESIC_Calculated</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Professional Tax</td>
+                                        <td class="text-right">@String.Format("{0:0.00}", Model.WAR_ProffesionalTax_Calculated)</td>
+                                    </tr>
+                                    @if (Model.WAR_Advance_Amount > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">Advance Amount</td>
+                                            <td class="text-right">@Model.WAR_Advance_Amount</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_RevenueDeduction_Calculated > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">Revenue Deduction</td>
+                                            <td class="text-right">@String.Format("{0:0.00}", Model.WAR_RevenueDeduction_Calculated)</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_CanteenFacility_Calculation > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">Canteen Facility</td>
+                                            <td class="text-right">@String.Format("{0:0.00}", Model.WAR_CanteenFacility_Calculation)</td>
+                                        </tr>
+                                    }
+                                    @if (Model.WAR_LWF_Deduction_Calculated > 0)
+                                    {
+                                        <tr>
+                                            <td class="text-left">LWF Deduction</td>
+                                            <td class="text-right">@String.Format("{0:0.00}", Model.WAR_LWF_Deduction_Calculated)</td>
+                                        </tr>
+                                    }
+                                    @if (totEarning > totDeduction)
+                                    {
+                                        for (int i = 0; i < (totEarning - totDeduction); i++)
+                                        {
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr>
+                                        <td class="text-left bold">Total Deductions</td>
+                                        <td class="text-right">@Model.DeductTotal</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left bold">Net Salary</td>
+                                        <td class="text-right">@Model.WAR_FinalTotal</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="thick-line bold text-left" colspan="2">Net Salary In Words: Rs. @ConvertNumbertoWords(Model.WAR_FinalTotal) Only</td>
+                    </tr>
+                    <tr>
+                        <td class="thick-line bold text-left" colspan="2">In case of any query please contact your Mentor</td>
+                    </tr>
+                </table>
 
-         </div>
-      </div>
+            </div>
+        </div>
 
-   </div>
+    </div>
 </body>
 </html>
 

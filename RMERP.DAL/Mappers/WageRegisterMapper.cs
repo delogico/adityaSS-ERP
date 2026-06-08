@@ -28,7 +28,9 @@ namespace RMERP.DAL.Mappers
             wageRegisterVM.WAR_GrossTotal = wageRegister.WAR_GrossTotal;
             wageRegisterVM.WAR_HRA = wageRegister.WAR_HRA;
             wageRegisterVM.WAR_HRA_Calculated = wageRegister.WAR_HRA_Calculated;
-            wageRegisterVM.WAR_LastModifiedOn = wageRegister.WAR_LastModifiedOn.Value;
+			wageRegisterVM.WAR_LeaveAndPH = wageRegister.WAR_LeaveAndPH;
+			wageRegisterVM.WAR_LeaveAndPH_Calculated = wageRegister.WAR_LeaveAndPH_Calculated;
+			wageRegisterVM.WAR_LastModifiedOn = wageRegister.WAR_LastModifiedOn.Value;
             wageRegisterVM.WAR_OverTime_Calculated = wageRegister.WAR_OverTime_Calculated;
             wageRegisterVM.WAR_PF_Formula = wageRegister.WAR_PF_Formula;
             wageRegisterVM.WAR_ESIC_Formula = wageRegister.WAR_ESIC_Formula;
@@ -124,7 +126,9 @@ namespace RMERP.DAL.Mappers
                 WAR_GrossTotal = wageRegisterVM.WAR_GrossTotal,
                 WAR_HRA = wageRegisterVM.WAR_HRA,
                 WAR_HRA_Calculated = wageRegisterVM.WAR_HRA_Calculated,
-                WAR_LastModifiedOn = wageRegisterVM.WAR_LastModifiedOn,
+				WAR_LeaveAndPH = wageRegisterVM.WAR_LeaveAndPH,
+				WAR_LeaveAndPH_Calculated = wageRegisterVM.WAR_LeaveAndPH_Calculated,
+				WAR_LastModifiedOn = wageRegisterVM.WAR_LastModifiedOn,
                 ADM_LastModifiedBy = wageRegisterVM.ADM_LastModifiedBy,
                 WAR_OverTime_Calculated = wageRegisterVM.WAR_OverTime_Calculated,
                 WAR_OverTime_Formula = wageRegisterVM.WAR_OverTime_Formula,
@@ -183,7 +187,9 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_DA_Calculated = editWageRegisterVM.wageRegisterVM.WAR_DA_Calculated;
             wageRegister.WAR_HRA = editWageRegisterVM.wageRegisterVM.WAR_HRA;
             wageRegister.WAR_HRA_Calculated = editWageRegisterVM.wageRegisterVM.WAR_HRA_Calculated;
-            wageRegister.WAR_GrossTotal = editWageRegisterVM.wageRegisterVM.WAR_GrossTotal;
+			wageRegister.WAR_LeaveAndPH = editWageRegisterVM.wageRegisterVM.WAR_LeaveAndPH;
+			wageRegister.WAR_LeaveAndPH_Calculated = editWageRegisterVM.wageRegisterVM.WAR_LeaveAndPH_Calculated;
+			wageRegister.WAR_GrossTotal = editWageRegisterVM.wageRegisterVM.WAR_GrossTotal;
             wageRegister.WAR_PF = editWageRegisterVM.wageRegisterVM.WAR_PF;
             wageRegister.WAR_PF_Formula = editWageRegisterVM.wageRegisterVM.WAR_PF_Formula;
             wageRegister.WAR_PF_Calculated = editWageRegisterVM.wageRegisterVM.WAR_PF_Calculated;
@@ -280,7 +286,9 @@ namespace RMERP.DAL.Mappers
             wageRegister.WAR_GrossTotal = wageRegisterVM.WAR_GrossTotal;
             wageRegister.WAR_HRA = wageRegisterVM.WAR_HRA;
             wageRegister.WAR_HRA_Calculated = wageRegisterVM.WAR_HRA_Calculated;
-            wageRegister.WAR_LastModifiedOn = wageRegisterVM.WAR_LastModifiedOn;
+			wageRegister.WAR_LeaveAndPH = wageRegisterVM.WAR_LeaveAndPH;
+			wageRegister.WAR_LeaveAndPH_Calculated = wageRegisterVM.WAR_LeaveAndPH_Calculated;
+			wageRegister.WAR_LastModifiedOn = wageRegisterVM.WAR_LastModifiedOn;
             wageRegister.ADM_LastModifiedBy = wageRegisterVM.ADM_LastModifiedBy;
             wageRegister.WAR_OverTime_Calculated = wageRegisterVM.WAR_OverTime_Calculated;
 

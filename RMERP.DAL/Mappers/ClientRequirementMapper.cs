@@ -19,8 +19,10 @@ namespace RMERP.DAL.Mappers
             clientRequirementVM.CRI_Basic = requirement.CRI_Basic;
             clientRequirementVM.CRI_DA = requirement.CRI_DA;
             clientRequirementVM.CRI_HRA_Fixed = requirement.CRI_HRA_Fixed;
-            clientRequirementVM.DES_Title = requirement.DES.DES_Title;
+			clientRequirementVM.CRI_LeaveAndPH_Fixed = requirement.CRI_LeaveAndPH_Fixed;
+			clientRequirementVM.DES_Title = requirement.DES.DES_Title;
             clientRequirementVM.CRI_HRA_Percentage = requirement.CRI_HRA_Percentage;
+            clientRequirementVM.CRI_LeaveAndPH_Percentage = requirement.CRI_LeaveAndPH_Percentage;
             clientRequirementVM.CRI_PF_Percentage = requirement.CRI_PF_Percentage;
             clientRequirementVM.CRI_PF_ApplyMAX = requirement.CRI_PF_ApplyMAX; //new
             clientRequirementVM.CRI_ESIC_Percentage = requirement.CRI_ESIC_Percentage;
@@ -87,6 +89,11 @@ namespace RMERP.DAL.Mappers
                 clientRequirementVM.HRAselection = true;
             else if (requirement.CRI_HRA_Percentage != null)
                 clientRequirementVM.HRAselection = false;
+
+            if (requirement.CRI_LeaveAndPH_Fixed != null)
+                clientRequirementVM.LeaveAndPHselection = true;
+            else if (requirement.CRI_LeaveAndPH_Percentage != null)
+                clientRequirementVM.LeaveAndPHselection = false;
 
             clientRequirementVM.CRI_Billing_Amount = requirement.CRI_Billing_Amount;
             clientRequirementVM.CRI_Billing_ServiceCharge = requirement.CRI_Billing_ServiceCharge;
@@ -198,6 +205,11 @@ namespace RMERP.DAL.Mappers
                 requirement.CRI_HRA_Fixed = requirementVM.CRI_HRA_Fixed;
             else if (requirementVM.HRAselection == false)
                 requirement.CRI_HRA_Percentage = requirementVM.CRI_HRA_Percentage;
+
+            if (requirementVM.LeaveAndPHselection == true)
+                requirement.CRI_LeaveAndPH_Fixed = requirementVM.CRI_LeaveAndPH_Fixed;
+            else if (requirementVM.LeaveAndPHselection == false)
+                requirement.CRI_LeaveAndPH_Percentage = requirementVM.CRI_LeaveAndPH_Percentage;
 
             requirement.CRI_Billing_Amount = requirementVM.CRI_Billing_Amount;
             requirement.CRI_Billing_ServiceCharge = requirementVM.CRI_Billing_ServiceCharge;

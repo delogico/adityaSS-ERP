@@ -114,6 +114,10 @@ namespace RMERP.DAL.ManagerClasses
                         {
                             AllserviceFormula.Add("HRA");
                         }
+                        if (wage.CRI.CRI_LeaveAndPH_Fixed > 0 || wage.CRI.CRI_LeaveAndPH_Percentage > 0)
+                        {
+                            AllserviceFormula.Add("Leave&PH");
+                        }
                         if (wage.Wage_Register_Allowances.Count() > 0)
                         {
                             foreach (var all in wage.Wage_Register_Allowances)
@@ -157,6 +161,9 @@ namespace RMERP.DAL.ManagerClasses
                                 case "HRA":
                                     sum = wage.WAR_HRA_Calculated;
                                     break;
+                                case "Leave&PH":
+                                    sum = wage.WAR_LeaveAndPH_Calculated;
+                                    break;
                                 case "OT":
                                     sum = wage.WAR_OverTime_Calculated;
                                     break;
@@ -189,7 +196,7 @@ namespace RMERP.DAL.ManagerClasses
                         }
                         TotalServiceCharge = TotalServiceCharge + ProjectUtils.GetAmountBasedOnFormula_Report(
                             wage.CRI.CRI_Billing_ServiceCharge_Formula,
-                            wage.WAR_Basic_Calculated, wage.WAR_DA_Calculated, wage.WAR_HRA_Calculated,
+                            wage.WAR_Basic_Calculated, wage.WAR_DA_Calculated, wage.WAR_HRA_Calculated,0,/*--wage.WAR_LeaveAndPH_Calculated,*/
                             wage.Wage_Register_Allowances.ToList(), wage.WAR_TotalWorkingDays,
                             wage.WAR_TotalPaybleDays, wage.WAR_OverTime_Calculated,
                             (wage.WAR_OutStation_Allowance_Calculated != null ? wage.WAR_OutStation_Allowance_Calculated.Value : 0),
@@ -357,7 +364,9 @@ namespace RMERP.DAL.ManagerClasses
                         item.WAR_PF_Formula,
                         item.WAR_Basic_Calculated,
                         item.WAR_DA_Calculated,
-                        item.WAR_HRA_Calculated, item.Wage_Register_Allowances.ToList(),
+                        item.WAR_HRA_Calculated, 
+                       item.WAR_LeaveAndPH_Calculated,
+                        item.Wage_Register_Allowances.ToList(),
                         item.WAR_TotalWorkingDays,
                         item.WAR_TotalPaybleDays,
                         item.WAR_OverTime_Calculated,
@@ -436,6 +445,7 @@ namespace RMERP.DAL.ManagerClasses
                         Math.Round(item.WAR_Basic_Calculated, MidpointRounding.AwayFromZero),
                         Math.Round(item.WAR_DA_Calculated, MidpointRounding.AwayFromZero),
                         Math.Round(item.WAR_HRA_Calculated, MidpointRounding.AwayFromZero),
+                        Math.Round(item.WAR_LeaveAndPH_Calculated, MidpointRounding.AwayFromZero),
                          item.Wage_Register_Allowances.ToList(),
                         item.WAR_TotalWorkingDays,
                         item.WAR_TotalPaybleDays,

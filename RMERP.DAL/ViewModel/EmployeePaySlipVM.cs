@@ -37,6 +37,7 @@ namespace RMERP.DAL.ViewModel
         public int ArrearsDays { get; set; }
         public decimal WAR_Basic_Calculated { get; set; }
         public decimal WAR_HRA_Calculated { get; set; }
+        public decimal WAR_LeaveAndPH_Calculated { get; set; }
         public decimal WAR_DA_Calculated { get; set; }
         public List<Wage_Register_Allowance> Wage_Register_Allowances { get; set; }
         public decimal WAR_GrossTotal { get; set; }

@@ -1264,14 +1264,14 @@ namespace RMERP.Controllers
 
                 IRow row = excelSheet.CreateRow(0);
                 ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue("Reliable");
+                CellHeader.SetCellValue("Aditiya");
                 CellHeader.CellStyle = styleHeader;
                 CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 9));
 
                 IRow rowSub = excelSheet.CreateRow(1);
                 ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue(wage_Process.FRM.FRM_Name.Replace("Reliable", "").ToUpper());
+                CellSub.SetCellValue(wage_Process.FRM.FRM_Name.Replace("Aditiya", "").ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 9));
@@ -1875,14 +1875,14 @@ namespace RMERP.Controllers
 
                 IRow row = excelSheet.CreateRow(0);
                 ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue("Reliable");
+                CellHeader.SetCellValue("Aditiya");
                 CellHeader.CellStyle = styleHeader;
                 CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 6));
 
                 IRow rowSub = excelSheet.CreateRow(1);
                 ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
+                CellSub.SetCellValue(firm.FRM_Name.Replace("Aditiya", "").ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
@@ -2059,41 +2059,41 @@ namespace RMERP.Controllers
 
                 #region HEADER
 
-                IRow row = excelSheet.CreateRow(0);
-                ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue("Reliable");
-                CellHeader.CellStyle = styleHeader;
-                CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 6));
+                //IRow row = excelSheet.CreateRow(0);
+				//ICell CellHeader = row.CreateCell(0);
+				//CellHeader.SetCellValue("Aditiya");
+				//CellHeader.CellStyle = styleHeader;
+				//CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 6));
 
-                IRow rowSub = excelSheet.CreateRow(1);
-                ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
-                CellSub.CellStyle = styleSub;
-                CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
+				//IRow rowSub = excelSheet.CreateRow(1);
+				//ICell CellSub = rowSub.CreateCell(0);
+				//CellSub.SetCellValue(firm.FRM_Name.Replace("Aditiya", "").ToUpper());
+				//CellSub.CellStyle = styleSub;
+				//CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
 
-                IRow rowAdd1 = excelSheet.CreateRow(2);
-                ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
-                CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 6));
+				//IRow rowAdd1 = excelSheet.CreateRow(2);
+				//ICell CellAdd1 = rowAdd1.CreateCell(0);
+				//CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
+				//CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 6));
 
-                IRow rowAdd2 = excelSheet.CreateRow(3);
-                ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
-                CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 6));
+				//IRow rowAdd2 = excelSheet.CreateRow(3);
+				//ICell CellAdd2 = rowAdd2.CreateCell(0);
+				//CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
+				//CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 6));
 
-                IRow rowSubHeading = excelSheet.CreateRow(4);
-                ICell CellSubHeading = rowSubHeading.CreateCell(0);
-                CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
-                CellSubHeading.CellStyle = styleClient;
-                CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 6));
+				//IRow rowSubHeading = excelSheet.CreateRow(4);
+				//ICell CellSubHeading = rowSubHeading.CreateCell(0);
+				//CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
+				//CellSubHeading.CellStyle = styleClient;
+				//CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 6));
 
 
-                row = excelSheet.CreateRow(5);
+				IRow row = excelSheet.CreateRow(0);
                 row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
                 ICell cell0 = row.CreateCell(0);
                 cell0.SetCellValue("EMP NAME");
@@ -2125,7 +2125,7 @@ namespace RMERP.Controllers
                 #endregion
 
                 List<BankReportVM> BankReportVMs = manager.IDBI_TO_IDBI_BankReports(WAG_Id, WAG_Month, CLI_Ids);
-                int rowCount = 6;
+                int rowCount = 1;
                 decimal TRANSACTION_AMOUNT = 0M;
                 foreach (var item in BankReportVMs)
                 {
@@ -2213,44 +2213,44 @@ namespace RMERP.Controllers
                 style.TopBorderColor = (IndexedColors.Black.Index);
                 style.SetFont(fontcell);
 
-                #endregion
+				#endregion
 
-                #region HEADER
+				#region HEADER
 
-                IRow row = excelSheet.CreateRow(0);
-                ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue("Reliable");
-                CellHeader.CellStyle = styleHeader;
-                CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 8));
+				//IRow row = excelSheet.CreateRow(0);
+				//ICell CellHeader = row.CreateCell(0);
+				//CellHeader.SetCellValue("Aditiya");
+				//CellHeader.CellStyle = styleHeader;
+				//CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 8));
 
-                IRow rowSub = excelSheet.CreateRow(1);
-                ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
-                CellSub.CellStyle = styleSub;
-                CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 8));
+				//IRow rowSub = excelSheet.CreateRow(1);
+				//ICell CellSub = rowSub.CreateCell(0);
+				//CellSub.SetCellValue(firm.FRM_Name.Replace("Aditiya", "").ToUpper());
+				//CellSub.CellStyle = styleSub;
+				//CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 8));
 
-                IRow rowAdd1 = excelSheet.CreateRow(2);
-                ICell CellAdd1 = rowAdd1.CreateCell(0);
-                CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
-                CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 8));
+				//IRow rowAdd1 = excelSheet.CreateRow(2);
+				//ICell CellAdd1 = rowAdd1.CreateCell(0);
+				//CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
+				//CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 8));
 
-                IRow rowAdd2 = excelSheet.CreateRow(3);
-                ICell CellAdd2 = rowAdd2.CreateCell(0);
-                CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
-                CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 8));
+				//IRow rowAdd2 = excelSheet.CreateRow(3);
+				//ICell CellAdd2 = rowAdd2.CreateCell(0);
+				//CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
+				//CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 8));
 
-                IRow rowSubHeading = excelSheet.CreateRow(4);
-                ICell CellSubHeading = rowSubHeading.CreateCell(0);
-                CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
-                CellSubHeading.CellStyle = styleClient;
-                CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 8));
+				//IRow rowSubHeading = excelSheet.CreateRow(4);
+				//ICell CellSubHeading = rowSubHeading.CreateCell(0);
+				//CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
+				//CellSubHeading.CellStyle = styleClient;
+				//CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 8));
 
-                row = excelSheet.CreateRow(5);
+				IRow row = excelSheet.CreateRow(0);
                 ICell cell_1 = row.CreateCell(0);
                 cell_1.SetCellValue("1");
                 cell_1.CellStyle = style;
@@ -2329,7 +2329,7 @@ namespace RMERP.Controllers
                 #endregion
 
                 List<BankReportVM> BankReportVMs = manager.IDBI_TO_Other_BankReports(WAG_Id, CLI_Ids);
-                int rowCount = 7;
+                int rowCount = 1;
                 decimal TRANSACTION_AMOUNT = 0M;
                 foreach (var item in BankReportVMs)
                 {
@@ -2448,13 +2448,13 @@ namespace RMERP.Controllers
                 CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 5));
 
-                //IRow rowAdd2 = excelSheet.CreateRow(3);
-                //ICell CellAdd2 = rowAdd2.CreateCell(0);
-                //CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : reliable.manpower@yahoo.com");
-                //CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
-                //excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 5));
+				//IRow rowAdd2 = excelSheet.CreateRow(3);
+				//ICell CellAdd2 = rowAdd2.CreateCell(0);
+				//CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : aditiya.manpower@yahoo.com");
+				//CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 5));
 
-                IRow rowSubHeading = excelSheet.CreateRow(2);
+				IRow rowSubHeading = excelSheet.CreateRow(2);
                 ICell CellSubHeading = rowSubHeading.CreateCell(0);
                 CellSubHeading.SetCellValue("CHEQUE/CASH PAYMENT FOR THE MONTH OF " + WAG_Month);
                 CellSubHeading.CellStyle = styleClient;
@@ -2599,41 +2599,41 @@ namespace RMERP.Controllers
 
 				#region HEADER
 
+				//IRow row = excelSheet.CreateRow(0);
+				//ICell CellHeader = row.CreateCell(0);
+				//CellHeader.SetCellValue("Aditiya");
+				//CellHeader.CellStyle = styleHeader;
+				//CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 8));
+
+				//IRow rowSub = excelSheet.CreateRow(1);
+				//ICell CellSub = rowSub.CreateCell(0);
+				//CellSub.SetCellValue(firm.FRM_Name.Replace("Aditiya", "").ToUpper());
+				//CellSub.CellStyle = styleSub;
+				//CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 8));
+
+				//IRow rowAdd1 = excelSheet.CreateRow(2);
+				//ICell CellAdd1 = rowAdd1.CreateCell(0);
+				//CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
+				//CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 8));
+
+				//IRow rowAdd2 = excelSheet.CreateRow(3);
+				//ICell CellAdd2 = rowAdd2.CreateCell(0);
+				//CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
+				//CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 8));
+
+				//IRow rowSubHeading = excelSheet.CreateRow(4);
+				//ICell CellSubHeading = rowSubHeading.CreateCell(0);
+				//CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
+				//CellSubHeading.CellStyle = styleClient;
+				//CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 8));
+
+
 				IRow row = excelSheet.CreateRow(0);
-				ICell CellHeader = row.CreateCell(0);
-				CellHeader.SetCellValue("Reliable");
-				CellHeader.CellStyle = styleHeader;
-				CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 8));
-
-				IRow rowSub = excelSheet.CreateRow(1);
-				ICell CellSub = rowSub.CreateCell(0);
-				CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
-				CellSub.CellStyle = styleSub;
-				CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 8));
-
-				IRow rowAdd1 = excelSheet.CreateRow(2);
-				ICell CellAdd1 = rowAdd1.CreateCell(0);
-				CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
-				CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 8));
-
-				IRow rowAdd2 = excelSheet.CreateRow(3);
-				ICell CellAdd2 = rowAdd2.CreateCell(0);
-				CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
-				CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 8));
-
-				IRow rowSubHeading = excelSheet.CreateRow(4);
-				ICell CellSubHeading = rowSubHeading.CreateCell(0);
-				CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
-				CellSubHeading.CellStyle = styleClient;
-				CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 8));
-
-
-				row = excelSheet.CreateRow(5);
 				row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
 				ICell cell0 = row.CreateCell(0);
 				cell0.SetCellValue("PAYMENT PRODUCT \r\n TYPE CODE");
@@ -2675,7 +2675,7 @@ namespace RMERP.Controllers
 				#endregion
 
 				List<BankReportVM> BankReportVMs = manager.ICICI_360_BankReports(WAG_Id, WAG_Month, CLI_Ids);
-				int rowCount = 6;
+				int rowCount = 1;
 				decimal TRANSACTION_AMOUNT = 0M;
 				foreach (var item in BankReportVMs)
 				{
@@ -2782,41 +2782,41 @@ namespace RMERP.Controllers
 
 				#region HEADER
 
+				//IRow row = excelSheet.CreateRow(0);
+				//ICell CellHeader = row.CreateCell(0);
+				//CellHeader.SetCellValue("Aditiya");
+				//CellHeader.CellStyle = styleHeader;
+				//CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 7));
+
+				//IRow rowSub = excelSheet.CreateRow(1);
+				//ICell CellSub = rowSub.CreateCell(0);
+				//CellSub.SetCellValue(firm.FRM_Name.Replace("Aditiya", "").ToUpper());
+				//CellSub.CellStyle = styleSub;
+				//CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 7));
+
+				//IRow rowAdd1 = excelSheet.CreateRow(2);
+				//ICell CellAdd1 = rowAdd1.CreateCell(0);
+				//CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
+				//CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 7));
+
+				//IRow rowAdd2 = excelSheet.CreateRow(3);
+				//ICell CellAdd2 = rowAdd2.CreateCell(0);
+				//CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
+				//CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 7));
+
+				//IRow rowSubHeading = excelSheet.CreateRow(4);
+				//ICell CellSubHeading = rowSubHeading.CreateCell(0);
+				//CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
+				//CellSubHeading.CellStyle = styleClient;
+				//CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 7));
+
+
 				IRow row = excelSheet.CreateRow(0);
-				ICell CellHeader = row.CreateCell(0);
-				CellHeader.SetCellValue("Reliable");
-				CellHeader.CellStyle = styleHeader;
-				CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 7));
-
-				IRow rowSub = excelSheet.CreateRow(1);
-				ICell CellSub = rowSub.CreateCell(0);
-				CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
-				CellSub.CellStyle = styleSub;
-				CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 7));
-
-				IRow rowAdd1 = excelSheet.CreateRow(2);
-				ICell CellAdd1 = rowAdd1.CreateCell(0);
-				CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
-				CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 7));
-
-				IRow rowAdd2 = excelSheet.CreateRow(3);
-				ICell CellAdd2 = rowAdd2.CreateCell(0);
-				CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
-				CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 7));
-
-				IRow rowSubHeading = excelSheet.CreateRow(4);
-				ICell CellSubHeading = rowSubHeading.CreateCell(0);
-				CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
-				CellSubHeading.CellStyle = styleClient;
-				CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 7));
-
-
-				row = excelSheet.CreateRow(5);
 				row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
 				ICell cell0 = row.CreateCell(0);
 				cell0.SetCellValue("TRANSACTION \r\n TYPE");
@@ -2853,7 +2853,7 @@ namespace RMERP.Controllers
 				#endregion
 
 				List<BankReportVM> BankReportVMs = manager.ICICI_ADHOC_BankReports(WAG_Id, WAG_Month, CLI_Ids);
-				int rowCount = 6;
+				int rowCount = 1;
 				decimal TRANSACTION_AMOUNT = 0M;
 				foreach (var item in BankReportVMs)
 				{
@@ -2959,41 +2959,41 @@ namespace RMERP.Controllers
 
 				#region HEADER
 
+				//IRow row = excelSheet.CreateRow(0);
+				//ICell CellHeader = row.CreateCell(0);
+				//CellHeader.SetCellValue("Aditiya");
+				//CellHeader.CellStyle = styleHeader;
+				//CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 3));
+
+				//IRow rowSub = excelSheet.CreateRow(1);
+				//ICell CellSub = rowSub.CreateCell(0);
+				//CellSub.SetCellValue(firm.FRM_Name.Replace("Aditiya", "").ToUpper());
+				//CellSub.CellStyle = styleSub;
+				//CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 3));
+
+				//IRow rowAdd1 = excelSheet.CreateRow(2);
+				//ICell CellAdd1 = rowAdd1.CreateCell(0);
+				//CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
+				//CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 3));
+
+				//IRow rowAdd2 = excelSheet.CreateRow(3);
+				//ICell CellAdd2 = rowAdd2.CreateCell(0);
+				//CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
+				//CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 3));
+
+				//IRow rowSubHeading = excelSheet.CreateRow(4);
+				//ICell CellSubHeading = rowSubHeading.CreateCell(0);
+				//CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
+				//CellSubHeading.CellStyle = styleClient;
+				//CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 3));
+
+
 				IRow row = excelSheet.CreateRow(0);
-				ICell CellHeader = row.CreateCell(0);
-				CellHeader.SetCellValue("Reliable");
-				CellHeader.CellStyle = styleHeader;
-				CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 3));
-
-				IRow rowSub = excelSheet.CreateRow(1);
-				ICell CellSub = rowSub.CreateCell(0);
-				CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
-				CellSub.CellStyle = styleSub;
-				CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 3));
-
-				IRow rowAdd1 = excelSheet.CreateRow(2);
-				ICell CellAdd1 = rowAdd1.CreateCell(0);
-				CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
-				CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 3));
-
-				IRow rowAdd2 = excelSheet.CreateRow(3);
-				ICell CellAdd2 = rowAdd2.CreateCell(0);
-				CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
-				CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 3));
-
-				IRow rowSubHeading = excelSheet.CreateRow(4);
-				ICell CellSubHeading = rowSubHeading.CreateCell(0);
-				CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
-				CellSubHeading.CellStyle = styleClient;
-				CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 3));
-
-
-				row = excelSheet.CreateRow(5);
 				row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
 				ICell cell0 = row.CreateCell(0);
 				cell0.SetCellValue("EMP NAME");
@@ -3014,7 +3014,7 @@ namespace RMERP.Controllers
 				#endregion
 
 				List<BankReportVM> BankReportVMs = manager.HDFC_To_HDFC_BankReports(WAG_Id, WAG_Month, CLI_Ids);
-				int rowCount = 6;
+				int rowCount = 1;
 				decimal TRANSACTION_AMOUNT = 0M;
 				foreach (var item in BankReportVMs)
 				{
@@ -3116,40 +3116,40 @@ namespace RMERP.Controllers
 
 				#region HEADER
 
+				//IRow row = excelSheet.CreateRow(0);
+				//ICell CellHeader = row.CreateCell(0);
+				//CellHeader.SetCellValue("Aditiya");
+				//CellHeader.CellStyle = styleHeader;
+				//CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 9));
+
+				//IRow rowSub = excelSheet.CreateRow(1);
+				//ICell CellSub = rowSub.CreateCell(0);
+				//CellSub.SetCellValue(firm.FRM_Name.Replace("Aditiya", "").ToUpper());
+				//CellSub.CellStyle = styleSub;
+				//CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 9));
+
+				//IRow rowAdd1 = excelSheet.CreateRow(2);
+				//ICell CellAdd1 = rowAdd1.CreateCell(0);
+				//CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
+				//CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 9));
+
+				//IRow rowAdd2 = excelSheet.CreateRow(3);
+				//ICell CellAdd2 = rowAdd2.CreateCell(0);
+				//CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
+				//CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 9));
+
+				//IRow rowSubHeading = excelSheet.CreateRow(4);
+				//ICell CellSubHeading = rowSubHeading.CreateCell(0);
+				//CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
+				//CellSubHeading.CellStyle = styleClient;
+				//CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
+				//excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 9));
+
 				IRow row = excelSheet.CreateRow(0);
-				ICell CellHeader = row.CreateCell(0);
-				CellHeader.SetCellValue("Reliable");
-				CellHeader.CellStyle = styleHeader;
-				CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 9));
-
-				IRow rowSub = excelSheet.CreateRow(1);
-				ICell CellSub = rowSub.CreateCell(0);
-				CellSub.SetCellValue(firm.FRM_Name.Replace("Reliable", "").ToUpper());
-				CellSub.CellStyle = styleSub;
-				CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 9));
-
-				IRow rowAdd1 = excelSheet.CreateRow(2);
-				ICell CellAdd1 = rowAdd1.CreateCell(0);
-				CellAdd1.SetCellValue(firm.FRM_Address1.ToUpper() + "," + firm.FRM_Address2.ToUpper() + ",");
-				CellUtil.SetAlignment(CellAdd1, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(2, 2, 0, 9));
-
-				IRow rowAdd2 = excelSheet.CreateRow(3);
-				ICell CellAdd2 = rowAdd2.CreateCell(0);
-				CellAdd2.SetCellValue("Ph.- 0231-2666389. Mobile : 9922967130. E-mail : " + firm.FRM_Email);
-				CellUtil.SetAlignment(CellAdd2, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(3, 3, 0, 9));
-
-				IRow rowSubHeading = excelSheet.CreateRow(4);
-				ICell CellSubHeading = rowSubHeading.CreateCell(0);
-				CellSubHeading.SetCellValue("SALARY FOR THE MONTH OF " + WAG_Month);
-				CellSubHeading.CellStyle = styleClient;
-				CellUtil.SetAlignment(CellSubHeading, workbook, (short)HorizontalAlignment.Center);
-				excelSheet.AddMergedRegion(new CellRangeAddress(4, 4, 0, 9));
-
-				row = excelSheet.CreateRow(5);
 				row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
 				ICell cell0 = row.CreateCell(0);
 				cell0.SetCellValue("SR.NO");
@@ -3193,7 +3193,7 @@ namespace RMERP.Controllers
 				#endregion
 
 				List<BankReportVM> BankReportVMs = manager.HDFC_To_Other_BankReports(WAG_Id, WAG_Month, CLI_Ids);
-				int rowCount = 6, srNo = 1;
+				int rowCount = 1, srNo = 1;
 				decimal TRANSACTION_AMOUNT = 0M;
 				foreach (var item in BankReportVMs)
 				{
@@ -3311,14 +3311,14 @@ namespace RMERP.Controllers
 
                 IRow row = excelSheet.CreateRow(0);
                 ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue("Reliable");
+                CellHeader.SetCellValue("Aditiya");
                 CellHeader.CellStyle = styleHeader;
                 CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 6));
 
                 IRow rowSub = excelSheet.CreateRow(1);
                 ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue(wage_Process.FRM.FRM_Name.Replace("Reliable", "").ToUpper());
+                CellSub.SetCellValue(wage_Process.FRM.FRM_Name.Replace("Aditiya", "").ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 6));
@@ -3474,14 +3474,14 @@ namespace RMERP.Controllers
 
                 IRow row = excelSheet.CreateRow(0);
                 ICell CellHeader = row.CreateCell(0);
-                CellHeader.SetCellValue("Reliable");
+                CellHeader.SetCellValue("Aditiya");
                 CellHeader.CellStyle = styleHeader;
                 CellUtil.SetAlignment(CellHeader, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, 9));
 
                 IRow rowSub = excelSheet.CreateRow(1);
                 ICell CellSub = rowSub.CreateCell(0);
-                CellSub.SetCellValue(wage_Process.FRM.FRM_Name.Replace("Reliable", "").ToUpper());
+                CellSub.SetCellValue(wage_Process.FRM.FRM_Name.Replace("Aditiya", "").ToUpper());
                 CellSub.CellStyle = styleSub;
                 CellUtil.SetAlignment(CellSub, workbook, (short)HorizontalAlignment.Center);
                 excelSheet.AddMergedRegion(new CellRangeAddress(1, 1, 0, 9));
@@ -3852,7 +3852,7 @@ namespace RMERP.Controllers
                 ReportsManager reportsManager = new ReportsManager(_context);
 
                 paySlipVM = reportsManager.GeneratePaySlip(WAG_Id, EMP_Id);
-                string PaySlipPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("RMERP_EMPLOYEE_PAYSLIP_PATH").Value;
+                string PaySlipPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("ADITIYAERP_EMPLOYEE_PAYSLIP_PATH").Value;
                 var FileName = "PaySlip_" + paySlipVM.EMP_Id.ToString("D5") + "_" + (paySlipVM.EMP_FirstName + "_" + paySlipVM.EMP_MiddleName + "_" + paySlipVM.EMP_SurName) + "_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";
 
                 var root = PaySlipPath + "\\" + WAG_Id + "\\" + "Salary Slip";
@@ -3908,7 +3908,7 @@ namespace RMERP.Controllers
         {
             ReportsManager reportsManager = new ReportsManager(_context);
             Wage_PaySlip paySlip = reportsManager.GetPaySlip(WPS_Id);
-            string DocumentPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("RMERP_EMPLOYEE_PAYSLIP_PATH").Value;
+            string DocumentPath = _configuration.GetSection("DEFAULT_FOLDER_PATH").Value + _configuration.GetSection("ADITIYAERP_EMPLOYEE_PAYSLIP_PATH").Value;
             DocumentPath += "\\" + paySlip.WAG_Id + "\\" + "Salary Slip" + "\\" + paySlip.WPS_FileName;
 
             var memory = new MemoryStream();
@@ -3932,7 +3932,7 @@ namespace RMERP.Controllers
                 {
                     string documentPath = Path.Combine(
                         _configuration.GetSection("DEFAULT_FOLDER_PATH").Value,
-                        _configuration.GetSection("RMERP_EMPLOYEE_PAYSLIP_PATH").Value,
+                        _configuration.GetSection("ADITIYAERP_EMPLOYEE_PAYSLIP_PATH").Value,
                         paySlip.WAG_Id.ToString(),
                         "Salary Slip",
                         paySlip.WPS_FileName

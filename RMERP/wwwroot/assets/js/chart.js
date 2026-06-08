@@ -16,7 +16,7 @@ $(document).ready(function() {
 		xkey: 'y',
 		ykeys: ['a', 'b'],
 		labels: ['Total Invoice', 'Pending Invoice'],
-		lineColors: ['#ff9b44','#fc6075'],
+		lineColors: ['#5e81f3','#364b94'],
 		lineWidth: '3px',
 		resize: true,
 		redraw: true
@@ -38,9 +38,9 @@ $(document).ready(function() {
 		xkey: 'y',
 		ykeys: ['a', 'b'],
 		labels: ['Total Income', 'Total Outcome'],
-		lineColors: ['#ff9b44','#fc6075'],
+		lineColors: ['#5e81f3','#364b94'],
 		lineWidth: '3px',
-		barColors: ['#ff9b44','#fc6075'],
+		barColors: ['#5e81f3','#364b94'],
 		resize: true,
 		redraw: true
 	});
@@ -61,7 +61,7 @@ $(document).ready(function() {
 		xkey: 'y',
 		ykeys: ['a', 'b'],
 		labels: ['Total Sales', 'Total Revenue'],
-		lineColors: ['#ff9b44','#fc6075'],
+		lineColors: ['#5e81f3','#364b94'],
 		lineWidth: '3px',
 		resize: true,
 		redraw: true
@@ -72,8 +72,8 @@ $(document).ready(function() {
 	Morris.Donut({
 		element: 'pie-charts',
 		colors: [
-			'#ff9b44',
-			'#fc6075',
+			'#5e81f3',
+			'#364b94',
 			'#ffc999',
 			'#fd9ba8'
 		],

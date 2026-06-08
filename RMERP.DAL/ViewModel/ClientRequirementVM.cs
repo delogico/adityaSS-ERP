@@ -31,7 +31,13 @@ namespace RMERP.DAL.ViewModel
         public decimal? CRI_HRA_Fixed { get; set; } = 0;
         [Display(Name = "HRA Percentage (%)")]
         public double? CRI_HRA_Percentage { get; set; } = 0;
-        [Display(Name = "PF Formula")]
+
+		[Display(Name = "Leave&PH Fixed")]
+		public decimal? CRI_LeaveAndPH_Fixed { get; set; } = 0;
+		[Display(Name = "Leave&PH Percentage (%)")]
+		public double? CRI_LeaveAndPH_Percentage { get; set; } = 0;
+
+		[Display(Name = "PF Formula")]
         public string CRI_PF_Formula { get; set; }
         [Display(Name = "PF Percentage (%)")]
         public double? CRI_PF_Percentage { get; set; }
@@ -78,6 +84,7 @@ namespace RMERP.DAL.ViewModel
         public string DES_Title { get; set; }
 
         public bool HRAselection { get; set; }
+        public bool LeaveAndPHselection { get; set; }
 
         public bool Basic_PFselection { get; set; }
         public bool DA_PFselection { get; set; }

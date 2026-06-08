@@ -103,6 +103,10 @@ public partial class Wage_Register
 
     public decimal? WAR_Allowance_Calculated_10 { get; set; }
 
+    public decimal WAR_LeaveAndPH { get; set; }
+
+    public decimal WAR_LeaveAndPH_Calculated { get; set; }
+
     public virtual Client CLI { get; set; }
 
     public virtual Client_Requirement CRI { get; set; }

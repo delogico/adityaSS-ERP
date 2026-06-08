@@ -69,7 +69,7 @@ namespace RMERP.Controllers
                     if (!string.IsNullOrEmpty(Request.Form["ReturnUrl"]) && Request.Form["ReturnUrl"].ToString().Split('/').Count() >= 3)
                     {
                        
-                        if (Request.Form["ReturnUrl"].ToString().Split('/','?')[1] == "erp.reliableservices.co.in")
+                        if (Request.Form["ReturnUrl"].ToString().Split('/','?')[1] == "erp.aditiyaservices.co.in")
                             return RedirectToAction(Request.Form["ReturnUrl"].ToString().Split('/', '?')[3], Request.Form["ReturnUrl"].ToString().Split('/', '?')[2]);
                         else
                         {

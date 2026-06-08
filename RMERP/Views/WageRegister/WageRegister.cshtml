@@ -55,7 +55,7 @@
    }
 
    .fa-info-circle {
-      color: #ff9b44;
+      color: #5e81f3;
    }
 
    a.myClass {
@@ -419,12 +419,12 @@
                               }
                               <td class="lightgray">@Math.Round(employee.WAR_GrossTotal, MidpointRounding.AwayFromZero)</td>
 
-                              string toolPF = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_PF_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
+                                        string toolPF = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_PF_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.WAR_LeaveAndPH_Calculated, employee.allowanceVMs);
                               toolPF = "(" + toolPF + ")*" + employee.WAR_PF + "%";
 
                               <td class="silver"><span title="@toolPF">@Math.Round(employee.WAR_PF_Calculated, MidpointRounding.AwayFromZero)</span></td>
 
-                              string toolESIC = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_ESIC_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.allowanceVMs);
+                                        string toolESIC = ProjectUtils.GetTooltipBasedOnFormula(employee.WAR_ESIC_Formula, employee.WAR_Basic_Calculated, employee.WAR_DA_Calculated, employee.WAR_HRA_Calculated, employee.WAR_LeaveAndPH_Calculated, employee.allowanceVMs);
                               toolESIC = "(" + toolESIC + ")*" + employee.WAR_ESIC + "%";
 
                               <td class="silver"><span title="@toolESIC">@Math.Round(employee.WAR_ESIC_Calculated, MidpointRounding.AwayFromZero)</span></td>

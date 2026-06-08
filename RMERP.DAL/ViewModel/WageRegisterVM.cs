@@ -64,6 +64,8 @@ namespace RMERP.DAL.ViewModel
         public decimal WAR_DA_Calculated { get; set; }
         [Display(Name = "HRA")]
         public decimal WAR_HRA { get; set; }
+		[Display(Name = "Leave&PH")]
+		public decimal WAR_LeaveAndPH { get; set; }
         [Display(Name = "HRA")]
         public string WAR_HRA_PER
         {
@@ -74,6 +76,9 @@ namespace RMERP.DAL.ViewModel
         }
         [Display(Name = "Calculated HRA")]
         public decimal WAR_HRA_Calculated { get; set; }
+
+		[Display(Name = "Calculated Leave&PH")]
+		public decimal WAR_LeaveAndPH_Calculated { get; set; }
 
         [Display(Name = "OT Formula")]
         public string WAR_OverTime_Formula { get; set; }

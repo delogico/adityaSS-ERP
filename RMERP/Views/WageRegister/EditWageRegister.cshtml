@@ -26,6 +26,7 @@
         var CRI_Basic = $("#wageRegisterVM_WAR_Basic").val();
         var CRI_DA = $("#wageRegisterVM_WAR_DA").val();
         var CRI_HRA = $("#wageRegisterVM_WAR_HRA").val();
+        var CRI_LeaveAndPH = $("#wageRegisterVM_WAR_LeaveAndPH").val();
         var WAR_PF = $("#wageRegisterVM_WAR_PF").val();
         var WAR_ESIC = $("#wageRegisterVM_WAR_ESIC").val();
         var WAR_OverTime_Calculated = $("#wageRegisterVM_WAR_OverTime_Calculated").val();
@@ -34,12 +35,17 @@
 
         var Percentage = document.getElementById("Percentage").checked;
         var Fixed = document.getElementById("Fixed").checked;
-        var CRI_HRA_Calculated = 0, WAR_Basic_Calculated = 0,  CRI_DA_Calculated=0;
+
+        var LeaveAndPHPercentage = document.getElementById("LeaveAndPHPercentage").checked;
+        var LeaveAndPHFixed = document.getElementById("LeaveAndPHFixed").checked;
+
+        var CRI_HRA_Calculated = 0, CRI_LeaveAndPH_Calculated= 0, WAR_Basic_Calculated = 0,  CRI_DA_Calculated=0;
         if (totalWorkingDays != 0) {
             CRI_DA_Calculated = (CRI_DA * totalPaybleDays) / totalWorkingDays;
             WAR_Basic_Calculated = (CRI_Basic * totalPaybleDays) / totalWorkingDays;
             var BasicDaCalculated = parseInt(WAR_Basic_Calculated) + parseInt(CRI_DA_Calculated);
             CRI_HRA_Calculated = (Percentage == true ? ((BasicDaCalculated * CRI_HRA) / 100) : ((CRI_HRA * totalPaybleDays) / totalWorkingDays));
+            CRI_LeaveAndPH_Calculated = (LeaveAndPHPercentage == true ? ((BasicDaCalculated * CRI_LeaveAndPH) / 100) : ((CRI_LeaveAndPH * totalPaybleDays) / totalWorkingDays));
         }
         var WAR_PF_Calculated = parseFloat($("#wageRegisterVM_WAR_PF_Calculated").val());
         var WAR_ESIC_Calculated = parseFloat($("#wageRegisterVM_WAR_ESIC_Calculated").val());
@@ -140,7 +146,7 @@
 
         ////////////End//////////////////
         var Total_Advance = $("#wageRegisterVM_WAR_Advance_Amount").val();
-            var WAR_GrossTotal = WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + parseFloat(WAR_OverTime_Calculated)
+            var WAR_GrossTotal = WAR_Basic_Calculated + CRI_DA_Calculated + CRI_HRA_Calculated + CRI_LeaveAndPH_Calculated + parseFloat(WAR_OverTime_Calculated)
                 + AllowancesTotal + parseFloat(WAR_OutStation_Allowance_Calculated) + parseFloat(WAR_Nightshift_Allowance_Calculated)
                 + parseFloat(WAR_Performance_Allowance_Calculated) + parseFloat(WAR_Attendance_Allowance_Calculated +
                     parseFloat(WAR_Allowance_Calculated_1) + parseFloat(WAR_Allowance_Calculated_2) + parseFloat(WAR_Allowance_Calculated_3) + parseFloat(WAR_Allowance_Calculated_4) + parseFloat(WAR_Allowance_Calculated_5)+ parseFloat(WAR_Allowance_Calculated_6) + parseFloat(WAR_Allowance_Calculated_7) + parseFloat(WAR_Allowance_Calculated_8) + parseFloat(WAR_Allowance_Calculated_9) + parseFloat(WAR_Allowance_Calculated_10));
@@ -148,6 +154,7 @@
 
         $("#wageRegisterVM_WAR_DA_Calculated").val(Math.round(CRI_DA_Calculated));
         $("#wageRegisterVM_WAR_HRA_Calculated").val(Math.round(CRI_HRA_Calculated));
+        $("#wageRegisterVM_WAR_LeaveAndPH_Calculated").val(Math.round(CRI_LeaveAndPH_Calculated));
         $("#wageRegisterVM_WAR_Basic_Calculated").val(Math.round(WAR_Basic_Calculated));
 
 
@@ -218,6 +225,7 @@
         CalculationEditVM.WAR_Basic_Calculated = parseFloat($("#wageRegisterVM_WAR_Basic_Calculated").val());
         CalculationEditVM.CRI_DA_Calculated = parseFloat($("#wageRegisterVM_WAR_DA_Calculated").val());
         CalculationEditVM.CRI_HRA_Calculated = parseFloat($("#wageRegisterVM_WAR_HRA_Calculated").val());
+        CalculationEditVM.CRI_LeaveAndPH_Calculated = parseFloat($("#wageRegisterVM_WAR_LeaveAndPH_Calculated").val());
         CalculationEditVM.totalWorkingDays = parseInt($("#wageRegisterVM_WAR_TotalWorkingDays").val());
         CalculationEditVM.totalPaybleDays = parseFloat($("#wageRegisterVM_WAR_TotalPaybleDays").val());
 
@@ -375,6 +383,22 @@
                         @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_HRA_Calculated, "", new { @class = "text-danger" })
                      </div>
                   </div>
+                   <div class="col-md-6">
+                     <div class="form-group">
+                        @Html.LabelFor(m => m.wageRegisterVM.WAR_LeaveAndPH, new { @class = "control-label" })
+                        @Html.RadioButtonFor(m => m.wageRegisterVM.clientRequirementVM.LeaveAndPHselection, false, new { @id = "LeaveAndPHPercentage", @checked = "checked", @style = "margin: 0px 0 0", onclick = "calculateTotal()" }) Percentage
+                        @Html.RadioButtonFor(m => m.wageRegisterVM.clientRequirementVM.LeaveAndPHselection, true, new { @id = "LeaveAndPHFixed", @style = "margin: 0px 0 0", onclick = "calculateTotal()" }) Fixed
+                        @Html.TextBoxFor(m => m.wageRegisterVM.WAR_LeaveAndPH, new { @class = "form-control", onfocusout = "calculateTotal()" })
+                        @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_LeaveAndPH, "", new { @class = "text-danger" })
+                     </div>
+                  </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.wageRegisterVM.WAR_LeaveAndPH_Calculated, new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.wageRegisterVM.WAR_LeaveAndPH_Calculated, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.wageRegisterVM.WAR_LeaveAndPH_Calculated, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
                   @{
                      for (var i = 0; i < Model.wage_Register_Allowances.Count(); i++)
                      {

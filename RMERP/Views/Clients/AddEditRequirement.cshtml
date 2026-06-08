@@ -50,7 +50,7 @@
             <h4 class="modal-title">@client.CLI_Name</h4>
             @if (ViewContext.ModelState["IsHistory"] != null)
             {
-                <div class="alert alert-danger"><i class="fa fa-warning"></i> Modification in this Requirement will not save in History. If you want to make please use option <a href='@Url.Action("AddEditRequirement","Clients",new { CRI_Id=Model.CRI_Id,CLI_Id =  Model.CLI_Id})' title="ChangeRequirement">Create new With Major Modifications</a>. <br /> <i class="fa fa-warning"></i> Modification here will not effect in Wages already saved.</div>
+                <div class="alert alert-danger"><i class="fa fa-warning"></i> Modification in this Requirement will not save in History. If you want to make please use option <a href='@Url.Action("AddEditRequirement", "Clients", new { CRI_Id = Model.CRI_Id, CLI_Id = Model.CLI_Id })' title="ChangeRequirement">Create new With Major Modifications</a>. <br /> <i class="fa fa-warning"></i> Modification here will not effect in Wages already saved.</div>
             }
         </div>
         <div class="modal-body">
@@ -115,26 +115,38 @@
                                         @Html.LabelFor(m => m.CRI_DA, new { @class = "control-label" })
                                         @Html.TextBoxFor(m => m.CRI_DA, new { @class = "form-control" })
                                     </div>
-                                </div>
+                                </div>                              
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.Label("HRA")
+                                            @Html.RadioButtonFor(m => m.HRAselection, false, new { @class = "HRAselection", @checked = "checked", @style = "margin: 0px 0 0" }) Percentage
+                                            @Html.RadioButtonFor(m => m.HRAselection, true, new { @class = "HRAselection", @style = "margin: 0px 0 0" }) Fixed
+
+                                            @Html.TextBoxFor(m => m.CRI_HRA_Percentage, new { @class = "form-control", style = "display:" + (@Model.HRAselection == true ? "none" : "block") })
+                                            @Html.TextBoxFor(m => m.CRI_HRA_Fixed, new { @class = "form-control", style = "display:" + (@Model.HRAselection == true ? "block" : "none") })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        @Html.CheckBoxFor(m => m.CRI_IsPayable_WeeklyOff)
+                                        @Html.LabelFor(m => m.CRI_IsPayable_WeeklyOff, new { @class = "control-label" })
+                                    </div>
+
+                                    <div class="col-md-6" style="margin-bottom:26px">
+                                        @Html.CheckBoxFor(m => m.CRI_IsPayable_PublicHoliday)
+                                        @Html.LabelFor(m => m.CRI_IsPayable_PublicHoliday, new { @class = "control-label" })
+                                    </div>
+                                
+
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        @Html.Label("HRA")
-                                        @Html.RadioButtonFor(m => m.HRAselection, false, new { @class = "HRAselection", @checked = "checked", @style = "margin: 0px 0 0" }) Percentage
-                                        @Html.RadioButtonFor(m => m.HRAselection, true, new { @class = "HRAselection", @style = "margin: 0px 0 0" }) Fixed
+                                        @Html.Label("Leave&PH")
+                                        @Html.RadioButtonFor(m => m.LeaveAndPHselection, false, new { @class = "LeaveAndPHselection", @checked = "checked", @style = "margin: 0px 0 0" }) Percentage
+                                        @Html.RadioButtonFor(m => m.LeaveAndPHselection, true, new { @class = "LeaveAndPHselection", @style = "margin: 0px 0 0" }) Fixed
 
-                                        @Html.TextBoxFor(m => m.CRI_HRA_Percentage, new { @class = "form-control", style = "display:" + (@Model.HRAselection == true ? "none" : "block") })
-                                        @Html.TextBoxFor(m => m.CRI_HRA_Fixed, new { @class = "form-control", style = "display:" + (@Model.HRAselection == true ? "block" : "none") })
+                                        @Html.TextBoxFor(m => m.CRI_LeaveAndPH_Percentage, new { @class = "form-control", style = "display:" + (@Model.LeaveAndPHselection == true ? "none" : "block") })
+                                        @Html.TextBoxFor(m => m.CRI_LeaveAndPH_Fixed, new { @class = "form-control", style = "display:" + (@Model.LeaveAndPHselection == true ? "block" : "none") })
                                     </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    @Html.CheckBoxFor(m => m.CRI_IsPayable_WeeklyOff)
-                                    @Html.LabelFor(m => m.CRI_IsPayable_WeeklyOff, new { @class = "control-label" })
-                                </div>
-
-                                <div class="col-md-6">
-                                    @Html.CheckBoxFor(m => m.CRI_IsPayable_PublicHoliday)
-                                    @Html.LabelFor(m => m.CRI_IsPayable_PublicHoliday, new { @class = "control-label" })
                                 </div>
                             </div>
                             <hr />
@@ -425,6 +437,17 @@
                                                 @Html.Raw("HRA")
                                             </div>
                                             <div class="col-md-12">
+                                                @if (arr != null && arr.Contains("Leave&PH"))
+                                                {
+                                                    @Html.CheckBox("pf_Leave&PH", new { @class = "PFselection", @value = "Leave&PH", @checked = "checked" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.CheckBox("pf_Leave&PH", new { @class = "PFselection", @value = "Leave&PH" })
+                                                }
+                                                @Html.Raw("Leave&PH")
+                                            </div>
+                                            <div class="col-md-12">
                                                 @if (arr != null && arr.Contains("OT"))
                                                 {
                                                     @Html.CheckBox("pf_OT", new { @class = "PFselection", @value = "OT", @checked = "checked" })
@@ -653,6 +676,17 @@
                                                     @Html.CheckBox("esic_HRA", new { @class = "ESICselection", @value = "HRA" })
                                                 }
                                                 @Html.Raw("HRA")
+                                            </div>
+                                            <div class="col-md-12">
+                                                @if (arrEsic != null && arrEsic.Contains("Leave&PH"))
+                                                {
+                                                    @Html.CheckBox("esic_LeaveAndPH", new { @class = "ESICselection", @value = "Leave&PH", @checked = "checked" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.CheckBox("esic_LeaveAndPH", new { @class = "ESICselection", @value = "Leave&PH" })
+                                                }
+                                                @Html.Raw("Leave&PH")
                                             </div>
                                             <div class="col-md-12">
                                                 @if (arrEsic != null && arrEsic.Contains("OT"))
@@ -1499,7 +1533,8 @@
                 alert('@TempData["message"]');
             });
         </script>
-    };
+    }
+    ;
     <script>
 
         $(document).ready(function () {
@@ -1923,6 +1958,19 @@
                 $("#CRI_HRA_Fixed").hide();
             }
         });
+
+         $('.LeaveAndPHselection').change(function () {
+            var value = $(this).filter(':checked').val();
+            if (value == "True") {
+                $("#CRI_LeaveAndPH_Percentage").hide();
+                $("#CRI_LeaveAndPH_Fixed").show();
+            }
+            else if (value == "False") {
+                $("#CRI_LeaveAndPH_Percentage").show();
+                $("#CRI_LeaveAndPH_Fixed").hide();
+            }
+        });
+
         $(".btnSave").click(function () {
             var isCheckedPayable = $('#rdo_OT_Payable').prop('checked');
             if (isCheckedPayable == false) {
@@ -1966,6 +2014,7 @@
                 alert('@TempData["message"]');
             });
         </script>
-    };
+    }
+    ;
 
 }

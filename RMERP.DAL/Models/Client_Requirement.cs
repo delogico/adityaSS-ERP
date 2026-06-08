@@ -179,6 +179,10 @@ public partial class Client_Requirement
 
     public decimal? CRI_PF_ApplyMAX { get; set; }
 
+    public double? CRI_LeaveAndPH_Percentage { get; set; }
+
+    public decimal? CRI_LeaveAndPH_Fixed { get; set; }
+
     public virtual Client CLI { get; set; }
 
     public virtual ICollection<Client_Requirement_Allowance> Client_Requirement_Allowances { get; set; } = new List<Client_Requirement_Allowance>();

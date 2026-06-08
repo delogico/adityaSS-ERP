@@ -1,16 +1,4 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iis": {
-      "applicationUrl": "http://localhost/RMERP",
-      "sslPort": 0
-    },
-    "iisExpress": {
-      "applicationUrl": "http://localhost:65211",
-      "sslPort": 0
-    }
-  },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
@@ -34,6 +22,18 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    }
+  },
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/RMERP",
+      "sslPort": 0
+    },
+    "iisExpress": {
+      "applicationUrl": "http://localhost:65250",
+      "sslPort": 0
     }
   }
 }

@@ -46,7 +46,7 @@ builder.Services.AddRazorPages(options =>
 
 // Database context
 //builder.Services.AddDbContext<RMERPContext>(options => options.UseSqlServer(configuration.GetConnectionString("RMERP")));
-builder.Services.AddDbContext<RMERPContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("RMERP")));
+builder.Services.AddDbContext<RMERPContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("ADITIYAERP")));
 
 // Output caching
 builder.Services.AddOutputCaching();
@@ -60,8 +60,8 @@ builder.Services.AddSession(options =>
 });
 
 // Data Protection
-builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(configuration["RMERP_DATAPROTECTION_KEYS_PATH"]))
-    .SetApplicationName("RMERP");
+builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(configuration["ADITIYAERP_DATAPROTECTION_KEYS_PATH"]))
+    .SetApplicationName("ADITIYAERP");
 
 // Build the app
 var app = builder.Build();
@@ -95,7 +95,7 @@ app.MapControllerRoute(
     pattern: "{controller=AdminUsers}/{action=DashBoard}/{id?}");
 
 // Uncomment the following line if Rotativa is required
-//RotativaConfiguration.Setup(configuration["RMERP_ROTATIVA_PATH"]);
+ RotativaConfiguration.Setup(configuration["ADITIYAERP_ROTATIVA_PATH"]);
 
 // Run the app
 app.Run();

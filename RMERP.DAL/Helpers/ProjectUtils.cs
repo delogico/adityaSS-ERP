@@ -338,6 +338,9 @@ namespace RMERP.DAL.Helpers
 			[StringValue("MGB- M BANKING")]
 			MGB_M_BANKING,
 
+			[StringValue("MUMBAI DISTRICT CENTRAL CO OP BANK LTD")]
+			MUMBAI_DISTRICT_CENTRAL_CO_OP_BANK_LTD,
+
 			[StringValue("NKGSB CO-OP BANK LTD")]
 			NKGSB_CO_OP_BANK_LTD,
 
@@ -421,6 +424,9 @@ namespace RMERP.DAL.Helpers
 
 			[StringValue("SHIVSHAKTI URBAN CO-OP BANK LTD,")]
 			SHIVSHAKTI_URBAN_CO_OP_BANK_LTD,
+
+			[StringValue("SHREE BASAVESHWAR SAHAKARI BANK")]
+			SHREE_BASAVESHWAR_SAHAKARI_BANK,
 
 			[StringValue("SHREE CHATRAPATI RAJARSHI SHAHU URBAN CO OP BANK LTD, BEED .")]
 			SHREE_CHATRAPATI_RAJARSHI_SHAHU_URBAN_CO_OP_BANK_LTD_BEED,
@@ -672,7 +678,7 @@ namespace RMERP.DAL.Helpers
 		}
 		// public static int WagId, CliId, ClientId, EmpId, Frm_Id;
 
-		public static string GetTooltipBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<WageRegisterAllowanceVM> All)
+		public static string GetTooltipBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated,decimal CRI_LeaveAndPH_Calculated, List<WageRegisterAllowanceVM> All)
 		{
 			string str = "";
 			string[] arr_CRI_Formula;
@@ -692,6 +698,9 @@ namespace RMERP.DAL.Helpers
 							break;
 						case "HRA":
 							str = str + "+" + String.Format("{0:0.##}", Convert.ToDecimal(CRI_HRA_Calculated));
+							break;
+						case "Leave&PH":
+							str = str + "+" + String.Format("{0:0.##}", Convert.ToDecimal(CRI_LeaveAndPH_Calculated));
 							break;
 						default:
 							{
@@ -730,6 +739,9 @@ namespace RMERP.DAL.Helpers
 							break;
 						case "HRA":
 							sum += Convert.ToDecimal(wage_Register.WAR_HRA_Calculated);
+							break;
+						case "Leave&PH":
+							sum += Convert.ToDecimal(wage_Register.WAR_LeaveAndPH_Calculated);
 							break;
 						default:
 							{
@@ -795,7 +807,7 @@ namespace RMERP.DAL.Helpers
 			return attribs.Length > 0 ? attribs[0].StringValue : null;
 		}
 
-		public static decimal GetAmountBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Client_Requirement_Allowance> All, double totalWorkingDays, double totalPaybleDays, decimal WAR_OverTime_Calculated, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated, decimal WAR_Allowance_Calculated_1, decimal WAR_Allowance_Calculated_2, decimal WAR_Allowance_Calculated_3, decimal WAR_Allowance_Calculated_4, decimal WAR_Allowance_Calculated_5, decimal WAR_Allowance_Calculated_6, decimal WAR_Allowance_Calculated_7, decimal WAR_Allowance_Calculated_8, decimal WAR_Allowance_Calculated_9, decimal WAR_Allowance_Calculated_10)
+		public static decimal GetAmountBasedOnFormula(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated,decimal CRI_LeaveAndPH_Calculated, List<Client_Requirement_Allowance> All, double totalWorkingDays, double totalPaybleDays, decimal WAR_OverTime_Calculated, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated, decimal WAR_Allowance_Calculated_1, decimal WAR_Allowance_Calculated_2, decimal WAR_Allowance_Calculated_3, decimal WAR_Allowance_Calculated_4, decimal WAR_Allowance_Calculated_5, decimal WAR_Allowance_Calculated_6, decimal WAR_Allowance_Calculated_7, decimal WAR_Allowance_Calculated_8, decimal WAR_Allowance_Calculated_9, decimal WAR_Allowance_Calculated_10)
 		{
 			decimal sum = 0M;
 			string[] arr_CRI_Formula;
@@ -815,6 +827,9 @@ namespace RMERP.DAL.Helpers
 							break;
 						case "HRA":
 							sum += Convert.ToDecimal(CRI_HRA_Calculated);
+							break;
+						case "Leave&PH":
+							sum += Convert.ToDecimal(CRI_LeaveAndPH_Calculated);
 							break;
 						case "OT":
 							sum += Convert.ToDecimal(WAR_OverTime_Calculated);
@@ -889,7 +904,7 @@ namespace RMERP.DAL.Helpers
 			}
 			return sum;
 		}
-		public static decimal GetAmountBasedOnFormula_Report(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Wage_Register_Allowance> All, double totalWorkingDays, double totalPaybleDays, decimal WAR_OverTime_Calculated, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated, decimal WAR_Allowance_Calculated_1, decimal WAR_Allowance_Calculated_2, decimal WAR_Allowance_Calculated_3, decimal WAR_Allowance_Calculated_4, decimal WAR_Allowance_Calculated_5, decimal WAR_Allowance_Calculated_6, decimal WAR_Allowance_Calculated_7, decimal WAR_Allowance_Calculated_8, decimal WAR_Allowance_Calculated_9, decimal WAR_Allowance_Calculated_10)
+		public static decimal GetAmountBasedOnFormula_Report(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated,decimal CRI_LeaveAndPH_Calculated, List<Wage_Register_Allowance> All, double totalWorkingDays, double totalPaybleDays, decimal WAR_OverTime_Calculated, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated, decimal WAR_Allowance_Calculated_1, decimal WAR_Allowance_Calculated_2, decimal WAR_Allowance_Calculated_3, decimal WAR_Allowance_Calculated_4, decimal WAR_Allowance_Calculated_5, decimal WAR_Allowance_Calculated_6, decimal WAR_Allowance_Calculated_7, decimal WAR_Allowance_Calculated_8, decimal WAR_Allowance_Calculated_9, decimal WAR_Allowance_Calculated_10)
 		{
 			decimal sum = 0M;
 			string[] arr_CRI_Formula;
@@ -909,6 +924,9 @@ namespace RMERP.DAL.Helpers
 							break;
 						case "HRA":
 							sum += Convert.ToDecimal(CRI_HRA_Calculated);
+							break;
+						case "Leave&PH":
+							sum += Convert.ToDecimal(CRI_LeaveAndPH_Calculated);
 							break;
 						case "OT":
 							sum += Convert.ToDecimal(WAR_OverTime_Calculated);
@@ -993,7 +1011,7 @@ namespace RMERP.DAL.Helpers
 			return res;
 		}
 
-		public static decimal GetAmountBasedOnFormula_Edit(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<CalculatedAllowanceVM> All, double totalWorkingDays, double totalPaybleDays, decimal WAR_OverTime_Calculated, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated, decimal WAR_Allowance_Calculated_1, decimal WAR_Allowance_Calculated_2, decimal WAR_Allowance_Calculated_3, decimal WAR_Allowance_Calculated_4, decimal WAR_Allowance_Calculated_5, decimal WAR_Allowance_Calculated_6, decimal WAR_Allowance_Calculated_7, decimal WAR_Allowance_Calculated_8, decimal WAR_Allowance_Calculated_9, decimal WAR_Allowance_Calculated_10)
+		public static decimal GetAmountBasedOnFormula_Edit(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated,decimal CRI_LeaveAndPH_Calculated, List<CalculatedAllowanceVM> All, double totalWorkingDays, double totalPaybleDays, decimal WAR_OverTime_Calculated, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated, decimal WAR_Allowance_Calculated_1, decimal WAR_Allowance_Calculated_2, decimal WAR_Allowance_Calculated_3, decimal WAR_Allowance_Calculated_4, decimal WAR_Allowance_Calculated_5, decimal WAR_Allowance_Calculated_6, decimal WAR_Allowance_Calculated_7, decimal WAR_Allowance_Calculated_8, decimal WAR_Allowance_Calculated_9, decimal WAR_Allowance_Calculated_10)
 		{
 			decimal sum = 0M;
 			string[] arr_CRI_Formula;
@@ -1013,6 +1031,9 @@ namespace RMERP.DAL.Helpers
 							break;
 						case "HRA":
 							sum += Convert.ToDecimal(CRI_HRA_Calculated);
+							break;
+						case "Leave&PH":
+							sum += Convert.ToDecimal(CRI_LeaveAndPH_Calculated);
 							break;
 						case "OT":
 							sum += Convert.ToDecimal(WAR_OverTime_Calculated);
@@ -1074,7 +1095,7 @@ namespace RMERP.DAL.Helpers
 			return sum;
 		}
 
-		public static decimal GetAmountBasedOnFormulaOT(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, List<Client_Requirement_Allowance> All, int totalWorkingDays, double totalPaybleDays, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated, decimal WAR_Allowance_Calculated_1, decimal WAR_Allowance_Calculated_2, decimal WAR_Allowance_Calculated_3, decimal WAR_Allowance_Calculated_4, decimal WAR_Allowance_Calculated_5, decimal WAR_Allowance_Calculated_6, decimal WAR_Allowance_Calculated_7, decimal WAR_Allowance_Calculated_8, decimal WAR_Allowance_Calculated_9, decimal WAR_Allowance_Calculated_10)
+		public static decimal GetAmountBasedOnFormulaOT(string CRI_Formula, decimal WAR_Basic_Calculated, decimal CRI_DA_Calculated, decimal CRI_HRA_Calculated, decimal CRI_LeaveAndPH_Calculated, List<Client_Requirement_Allowance> All, int totalWorkingDays, double totalPaybleDays, decimal WAR_Outstation_Allowance_Calculated, decimal WAR_Attendance_Allowance_Calculated, decimal WAR_Nightshift_Allowance_Calculated, decimal WAR_Performance_Allowance_Calculated, decimal WAR_Allowance_Calculated_1, decimal WAR_Allowance_Calculated_2, decimal WAR_Allowance_Calculated_3, decimal WAR_Allowance_Calculated_4, decimal WAR_Allowance_Calculated_5, decimal WAR_Allowance_Calculated_6, decimal WAR_Allowance_Calculated_7, decimal WAR_Allowance_Calculated_8, decimal WAR_Allowance_Calculated_9, decimal WAR_Allowance_Calculated_10)
 		{
 			decimal sum = 0M;
 			string[] Add_Formula;
@@ -1112,6 +1133,9 @@ namespace RMERP.DAL.Helpers
 							break;
 						case "HRA":
 							sum += Convert.ToDecimal(CRI_HRA_Calculated);
+							break;
+						case "Leave&PH":
+							sum += Convert.ToDecimal(CRI_LeaveAndPH_Calculated);
 							break;
 						case "OSL":
 							sum += Convert.ToDecimal(WAR_Outstation_Allowance_Calculated);
