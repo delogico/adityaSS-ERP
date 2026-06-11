@@ -88,5 +88,10 @@ namespace RMERP.DAL.ViewModel
         //}
         public int NCP1 { get; set; }
         public int NCP2 { get; set; }
-    }
+
+		public double WAR_TotalWorkingDays { get; set; }
+		public decimal WAR_BasicPlusDA_Calculated { get; set; }
+		public decimal WAR_GrossTotal { get; set; }
+
+	}
 }

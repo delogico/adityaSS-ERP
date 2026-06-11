@@ -114,7 +114,7 @@
                                         @Html.ValidationMessageFor(x => x.Report, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-                                @if (Model.MappedBankReports.Count > 0)
+                                @if (Model.MappedBankReports.Count > 0 && Model.Reference == "BANKS")
                                 {
                                     <div class="col-md-6">
                                         <div class="form-group">

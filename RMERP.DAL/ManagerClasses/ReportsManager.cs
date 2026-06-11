@@ -9,6 +9,7 @@ using RMERP.DAL.Helpers;
 using static RMERP.DAL.Helpers.ProjectUtils;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
+using RMERP.DAL.Mappers;
 
 namespace RMERP.DAL.ManagerClasses
 {
@@ -175,7 +176,24 @@ namespace RMERP.DAL.ManagerClasses
 						(item.WAR_Allowance_Calculated_9 != null ? item.WAR_Allowance_Calculated_9.Value : 0),
 						(item.WAR_Allowance_Calculated_10 != null ? item.WAR_Allowance_Calculated_10.Value : 0));
 
-					EMPLOYEE_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION + (AppSalary * item.WAR_PF) / 100, MidpointRounding.AwayFromZero);
+					//EMPLOYEE_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION + (AppSalary * item.WAR_PF) / 100, MidpointRounding.AwayFromZero);
+
+					if (item.CRI.CRI_PF_ApplyMAX.HasValue && item.CRI.CRI_PF_ApplyMAX.Value > 0)
+					{
+						if (AppSalary >= item.CRI.CRI_PF_ApplyMAX)
+						{
+							EMPLOYEE_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION + (item.CRI.CRI_PF_ApplyMAX.Value * Convert.ToDecimal(item.WAR_PF)) / 100, MidpointRounding.AwayFromZero);
+						}
+						else
+						{
+							EMPLOYEE_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.WAR_PF)) / 100, MidpointRounding.AwayFromZero);
+						}
+					}
+					else
+					{
+						EMPLOYEE_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.WAR_PF)) / 100, MidpointRounding.AwayFromZero);
+					}
+
 					if (item.CRI.CRI_PF_Employer_Cont_Rate != null)
 						EMPLOYER_CONTRIBUTION = Math.Round(EMPLOYER_CONTRIBUTION + (AppSalary * Convert.ToDecimal(item.CRI.CRI_PF_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
 					ApplicableSalary = Math.Round(AppSalary + ApplicableSalary, MidpointRounding.AwayFromZero);
@@ -242,7 +260,24 @@ namespace RMERP.DAL.ManagerClasses
 						(item.WAR_Allowance_Calculated_8 != null ? item.WAR_Allowance_Calculated_8.Value : 0),
 						(item.WAR_Allowance_Calculated_9 != null ? item.WAR_Allowance_Calculated_9.Value : 0),
 						(item.WAR_Allowance_Calculated_10 != null ? item.WAR_Allowance_Calculated_10.Value : 0)), MidpointRounding.AwayFromZero);
-				decimal EMPLOYEE_CONTRIBUTION = Math.Round((ApplicableSalary * item.WAR_PF) / 100, MidpointRounding.AwayFromZero);
+				decimal EMPLOYEE_CONTRIBUTION = 0M; //Math.Round((ApplicableSalary * item.WAR_PF) / 100, MidpointRounding.AwayFromZero);
+
+				if (item.CRI.CRI_PF_ApplyMAX.HasValue && item.CRI.CRI_PF_ApplyMAX.Value > 0)
+				{
+					if (ApplicableSalary >= item.CRI.CRI_PF_ApplyMAX)
+					{
+						EMPLOYEE_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION + (item.CRI.CRI_PF_ApplyMAX.Value * Convert.ToDecimal(item.WAR_PF)) / 100, MidpointRounding.AwayFromZero);
+					}
+					else
+					{
+						EMPLOYEE_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION + (ApplicableSalary * Convert.ToDecimal(item.WAR_PF)) / 100, MidpointRounding.AwayFromZero);
+					}
+				}
+				else
+				{
+					EMPLOYEE_CONTRIBUTION = Math.Round(EMPLOYEE_CONTRIBUTION + (ApplicableSalary * Convert.ToDecimal(item.WAR_PF)) / 100, MidpointRounding.AwayFromZero);
+				}
+
 				decimal EMPLOYER_CONTRIBUTION = 0M;
 				if (item.CRI.CRI_PF_Employer_Cont_Rate != null)
 					EMPLOYER_CONTRIBUTION = Math.Round((ApplicableSalary * Convert.ToDecimal(item.CRI.CRI_PF_Employer_Cont_Rate)) / 100, MidpointRounding.AwayFromZero);
@@ -295,7 +330,24 @@ namespace RMERP.DAL.ManagerClasses
 							(item.WAR_Allowance_Calculated_9 != null ? item.WAR_Allowance_Calculated_9.Value : 0),
 							(item.WAR_Allowance_Calculated_10 != null ? item.WAR_Allowance_Calculated_10.Value : 0));
 
-				decimal EPF_CONTRIBUTION = (ApplicableSalary * Convert.ToDecimal(item.CRI.CRI_PF_Percentage)) / 100;
+				decimal EPF_CONTRIBUTION = 0M;
+				if (item.CRI.CRI_PF_ApplyMAX.HasValue && item.CRI.CRI_PF_ApplyMAX.Value > 0)
+				{
+					if (ApplicableSalary >= item.CRI.CRI_PF_ApplyMAX)
+					{
+						ApplicableSalary = item.CRI.CRI_PF_ApplyMAX.Value;
+						EPF_CONTRIBUTION = Math.Round(Decimal.Multiply(item.CRI.CRI_PF_ApplyMAX.Value, Convert.ToDecimal(item.CRI.CRI_PF_Percentage)) / 100, MidpointRounding.AwayFromZero);
+					}
+					else
+					{
+						EPF_CONTRIBUTION = Math.Round(Decimal.Multiply(ApplicableSalary, Convert.ToDecimal(item.CRI.CRI_PF_Percentage)) / 100, MidpointRounding.AwayFromZero);
+					}
+				}
+				else
+				{
+					EPF_CONTRIBUTION = Math.Round(Decimal.Multiply(ApplicableSalary, Convert.ToDecimal(item.CRI.CRI_PF_Percentage)) / 100, MidpointRounding.AwayFromZero);
+				}
+
 				decimal EPS_CONTRIBUTION = (ApplicableSalary * Convert.ToDecimal(item.CRI.CRI_EPS_Rate)) / 100;
 
 				PFClientReportVM pFClient = new PFClientReportVM();
@@ -304,6 +356,9 @@ namespace RMERP.DAL.ManagerClasses
 				pFClient.EMP_FirstName = item.EMP.EMP_FirstName;
 				pFClient.EMP_MiddleName = item.EMP.EMP_MiddleName;
 				pFClient.EMP_SurName = item.EMP.EMP_SurName;
+				pFClient.WAR_TotalWorkingDays = item.WAR_TotalWorkingDays;
+				pFClient.WAR_BasicPlusDA_Calculated = Math.Round(item.WAR_Basic_Calculated + item.WAR_DA_Calculated, MidpointRounding.AwayFromZero);
+				pFClient.WAR_GrossTotal = Math.Round(item.WAR_GrossTotal, MidpointRounding.AwayFromZero);
 				pFClient.PF_APPLICABLE_SALARY = ApplicableSalary;
 				pFClient.EPF_CONTRIBUTION = EPF_CONTRIBUTION;
 				pFClient.EPS_CONTRIBUTION = EPS_CONTRIBUTION;
@@ -684,7 +739,7 @@ namespace RMERP.DAL.ManagerClasses
 				string paymentMode = "NEFT";
 				if (item.EMP?.CBA != null && !string.IsNullOrEmpty(item.EMP.EMP_Bank) && !string.IsNullOrEmpty(item.EMP.CBA.CBA_Bank) && item.EMP.EMP_Bank.Trim().ToUpper() == item.EMP.CBA.CBA_Bank.Trim().ToUpper())
 				{
-					paymentMode = "WIB";
+					paymentMode = "FT";
 				}
 				BankReportVM bankReport = new()
 				{
@@ -697,7 +752,7 @@ namespace RMERP.DAL.ManagerClasses
 					EMP_ACCOUNT_NUMBER = item.EMP.EMP_Account_Number,
 					ACCOUNT_IFSC_CODE = item.EMP.EMP_Bank_IFSC,
 					EMP_TRANSACTION_AMOUNT = (item.WAR_FinalTotal != null ? item.WAR_FinalTotal.Value : 0),
-					PAYMENT_DATE = ProjectUtils.DateNow().ToString("dd/MM/yyyy"),
+					PAYMENT_DATE = ProjectUtils.DateNow().ToString("dd-MM-yyyy"),
 					MESSAGE = "Salary " + WAG_Month
 				};
 
@@ -901,6 +956,7 @@ namespace RMERP.DAL.ManagerClasses
 		{
 			EmployeePaySlipVM paySlipVM = new EmployeePaySlipVM();
 			WageRegisterManager registerManager = new WageRegisterManager(_context);
+			AttendanceSummaryManager attManager = new(_context);
 			List<Wage_Register> wage_Registers = registerManager.GetWageRegistersForSalarySlip(WAG_Id, EMP_Id);
 			decimal WAR_Basic_Calculated = 0M, WAR_DA_Calculated = 0M, WAR_ESIC_Calculated = 0M, WAR_FinalTotal = 0M, WAR_GrossTotal = 0M, WAR_HRA_Calculated = 0M, WAR_LeaveAndPH_Calculated =0M, WAR_PF_Calculated = 0M, WAR_ProffesionalTax_Calculated = 0M;
 			decimal WAR_LWF_Deduction_Calculated = 0M, WAR_Advance_Amount = 0M, WAR_RevenueDeduction_Calculated = 0M, WAR_CanteenFacility_Calculation = 0M;
@@ -909,7 +965,7 @@ namespace RMERP.DAL.ManagerClasses
 			double WAR_TotalPaybleDays = 0, WAR_TotalWorkingDays = 0, Max_TotalPaybleDays = 0;
 			List<Wage_Register_Allowance> allowances = new List<Wage_Register_Allowance>();
 			foreach (Wage_Register wage in wage_Registers)
-			{
+			{			
 				WAR_Basic_Calculated = WAR_Basic_Calculated + wage.WAR_Basic_Calculated;
 				WAR_DA_Calculated = WAR_DA_Calculated + wage.WAR_DA_Calculated;
 
@@ -1084,6 +1140,8 @@ namespace RMERP.DAL.ManagerClasses
 			paySlipVM.WAR_Allowance_Calculated_8 = WAR_Allowance_Calculated_7;
 			paySlipVM.WAR_Allowance_Calculated_9 = WAR_Allowance_Calculated_8;
 			paySlipVM.WAR_Allowance_Calculated_10 = WAR_Allowance_Calculated_10;
+
+			paySlipVM.AttendanceSummaries = AttendanceMapper.MapMe(attManager.GetAttendance_Wage_Client_Employee(WAG_Id, wage_Registers[0].CLI_Id, EMP_Id));
 
 			decimal DeductTotal = WAR_PF_Calculated + WAR_ESIC_Calculated + WAR_ProffesionalTax_Calculated + WAR_LWF_Deduction_Calculated + WAR_Advance_Amount + WAR_RevenueDeduction_Calculated + WAR_CanteenFacility_Calculation;
 			paySlipVM.DeductTotal = DeductTotal;

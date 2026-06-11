@@ -858,7 +858,7 @@ namespace RMERP.DAL.ManagerClasses
 
 		public List<Wage_Register> GetWageRegistersForICICI_360(int WAG_Id, int[] CLI_Ids)
 		{
-			return _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && (m.EMP.CBA.CBA_Bank == ProjectUtils.GetStringValue(REGISTER_BANK.ICICI_BANK_LTD) && m.EMP.EMP_Bank == ProjectUtils.GetStringValue(REGISTER_BANK.ICICI_BANK_LTD)) && m.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).Include(m => m.EMP.CBA).ToList();
+			return _context.Wage_Registers.Where(m => m.WAG_Id == WAG_Id && CLI_Ids.Contains(m.CLI_Id) && m.EMP.EMP_Payment_Type.Equals((int)PAYMENT_TYPE.Bank_Account) && (m.EMP.CBA.CBA_Bank == ProjectUtils.GetStringValue(REGISTER_BANK.ICICI_BANK_LTD)) && m.WAR_FinalTotal > 0).Include(m => m.CLI).Include(m => m.EMP).Include(m => m.EMP.CBA).ToList();
 		}
 		public List<Wage_Register> GetWageRegistersForICICI_ADHOC(int WAG_Id, int[] CLI_Ids)
 		{

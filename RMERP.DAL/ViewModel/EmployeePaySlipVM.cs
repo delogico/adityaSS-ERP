@@ -78,5 +78,7 @@ namespace RMERP.DAL.ViewModel
         public decimal WAR_Allowance_Calculated_8 { get; set; }
         public decimal WAR_Allowance_Calculated_9 { get; set; }
         public decimal WAR_Allowance_Calculated_10 { get; set; }
-    }
+
+		public AttendanceSummaryVM AttendanceSummaries { get; set; }
+	}
 }

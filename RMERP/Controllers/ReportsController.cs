@@ -508,50 +508,53 @@ namespace RMERP.Controllers
                 excelSheet.SetColumnWidth(1, (int)((35 + 0.72) * 256));
                 cell1.CellStyle = style;
                 ICell cell2 = row.CreateCell(2);
-                cell2.SetCellValue("PF APLICABLE SALARY");
+                cell2.SetCellValue("TOTAL WORKING DAYS");
                 excelSheet.SetColumnWidth(2, (int)((15 + 0.72) * 256));
                 cell2.CellStyle = style;
                 ICell cell3 = row.CreateCell(3);
-                cell3.SetCellValue("PF APLICABLE SALARY");
+                cell3.SetCellValue("BASIC + DA");
                 excelSheet.SetColumnWidth(3, (int)((15 + 0.72) * 256));
-                cell3.CellStyle = style;
-                ICell cell4 = row.CreateCell(4);
-                cell4.SetCellValue("PF APLICABLE SALARY");
-                excelSheet.SetColumnWidth(4, (int)((15 + 0.72) * 256));
-                cell4.CellStyle = style;
-                ICell cell5 = row.CreateCell(5);
-                cell5.SetCellValue("PF APLICABLE SALARY");
+				cell3.CellStyle = style;
+				ICell cell4 = row.CreateCell(4);
+				cell4.SetCellValue("GROSS TOTAL");
                 excelSheet.SetColumnWidth(5, (int)((15 + 0.72) * 256));
-                cell5.CellStyle = style;
-                ICell cell6 = row.CreateCell(6);
-                cell6.SetCellValue("EPF CONTRIBUTION");
+				cell4.CellStyle = style;
+                ICell cell5 = row.CreateCell(5);
+				cell5.SetCellValue("PF APLICABLE SALARY");
                 excelSheet.SetColumnWidth(6, (int)((15 + 0.72) * 256));
-                cell6.CellStyle = style;
-                ICell cell7 = row.CreateCell(7);
-                cell7.SetCellValue("EPS CONTRIBUTION");
+				cell5.CellStyle = style;
+                ICell cell6 = row.CreateCell(6);
+				cell6.SetCellValue("EPF CONTRIBUTION");
                 excelSheet.SetColumnWidth(7, (int)((15 + 0.72) * 256));
-                cell7.CellStyle = style;
-                ICell cell8 = row.CreateCell(8);
-                cell8.SetCellValue("EPF-EPS CONTRIBUTION");
+				cell6.CellStyle = style;
+                ICell cell7 = row.CreateCell(7);
+				cell7.SetCellValue("EPS CONTRIBUTION");
                 excelSheet.SetColumnWidth(8, (int)((15 + 0.72) * 256));
-                cell8.CellStyle = style;
+				cell7.CellStyle = style;
+                ICell cell8 = row.CreateCell(8);
+				cell8.SetCellValue("EPF-EPS CONTRIBUTION");
+                excelSheet.SetColumnWidth(9, (int)((15 + 0.72) * 256));
+				cell8.CellStyle = style;
                 ICell cell9 = row.CreateCell(9);
-                cell9.SetCellValue("NCP-1");
-                cell9.CellStyle = style;
+				cell9.SetCellValue("NCP-1");
+				cell9.CellStyle = style;
                 ICell cell10 = row.CreateCell(10);
-                cell10.SetCellValue("NCP-2");
-                cell10.CellStyle = style;
+				cell10.SetCellValue("NCP-2");
+				cell10.CellStyle = style;
 
                 List<PFClientReportVM> reportVM = manager.Employees_PF_Excel(WAG_Id, CLI_Ids);
                 int rowCount = 1, srNo = 1;
-                decimal tot_PF_APPLICABLE_SALARY = 0M, tot_EPF_CONTRIBUTION = 0M, tot_EPS_CONTRIBUTION = 0M, tot_DIFF_EPF_EPS = 0M, tot_NCP1 = 0M, tot_NCP2 = 0M;
+                decimal tot_WAR_BasicPlusDA_Calculated =0M, tot_WAR_GrossTotal=0M, tot_PF_APPLICABLE_SALARY = 0M, tot_EPF_CONTRIBUTION = 0M, tot_EPS_CONTRIBUTION = 0M, tot_DIFF_EPF_EPS = 0M, tot_NCP1 = 0M, tot_NCP2 = 0M;
 
                 var result = reportVM
-                           .GroupBy(x => new { x.EMP_Id, x.UAN_Number, x.EMP_FullName })
+                           .GroupBy(x => new { x.EMP_Id, x.UAN_Number, x.EMP_FullName,x.WAR_TotalWorkingDays, x.WAR_BasicPlusDA_Calculated, x.WAR_GrossTotal })
                            .Select(g => new
                            {
                                UAN_Number = g.Key.UAN_Number,
                                EMP_FullName = g.Key.EMP_FullName,
+							   WAR_TotalWorkingDays = g.Key.WAR_TotalWorkingDays,
+							   WAR_BasicPlusDA_Calculated = g.Key.WAR_BasicPlusDA_Calculated,
+							   WAR_GrossTotal = g.Key.WAR_GrossTotal,
                                PF_APPLICABLE_SALARY = g.Sum(x => x.PF_APPLICABLE_SALARY),
                                EPF_CONTRIBUTION = g.Sum(x => x.EPF_CONTRIBUTION),
                                EPS_CONTRIBUTION = g.Sum(x => x.EPS_CONTRIBUTION),
@@ -564,14 +567,16 @@ namespace RMERP.Controllers
                     decimal PF_APPLICABLE_SALARY = Math.Round(item.PF_APPLICABLE_SALARY, MidpointRounding.AwayFromZero);
                     decimal EPF_CONTRIBUTION = Math.Round(item.EPF_CONTRIBUTION, MidpointRounding.AwayFromZero);
                     decimal EPS_CONTRIBUTION = Math.Round(item.EPS_CONTRIBUTION, MidpointRounding.AwayFromZero);
+                    decimal WAR_GrossTotal = Math.Round(item.WAR_GrossTotal, MidpointRounding.AwayFromZero);
+                    decimal WAR_BasicPlusDA_Calculated = Math.Round(item.WAR_BasicPlusDA_Calculated, MidpointRounding.AwayFromZero);
                     decimal DIFF_EPF_EPS = Math.Round(EPF_CONTRIBUTION - EPS_CONTRIBUTION);
                     row = excelSheet.CreateRow(rowCount);
                     row.HeightInPoints = (float)(1.4 * excelSheet.DefaultRowHeightInPoints);
                     row.CreateCell(0).SetCellValue(Convert.ToString(item.UAN_Number));
                     row.CreateCell(1).SetCellValue(Convert.ToString(item.EMP_FullName));
-                    row.CreateCell(2).SetCellValue(Convert.ToString(PF_APPLICABLE_SALARY));
-                    row.CreateCell(3).SetCellValue(Convert.ToString(PF_APPLICABLE_SALARY));
-                    row.CreateCell(4).SetCellValue(Convert.ToString(PF_APPLICABLE_SALARY));
+                    row.CreateCell(2).SetCellValue(Convert.ToString(item.WAR_TotalWorkingDays));
+                    row.CreateCell(3).SetCellValue(Convert.ToString(WAR_BasicPlusDA_Calculated));
+                    row.CreateCell(4).SetCellValue(Convert.ToString(WAR_GrossTotal));
                     row.CreateCell(5).SetCellValue(Convert.ToString(PF_APPLICABLE_SALARY));
                     row.CreateCell(6).SetCellValue(Convert.ToString(EPF_CONTRIBUTION));
                     row.CreateCell(7).SetCellValue(Convert.ToString(EPS_CONTRIBUTION));
@@ -579,6 +584,8 @@ namespace RMERP.Controllers
                     row.CreateCell(9).SetCellValue(Convert.ToString(item.NCP1));
                     row.CreateCell(10).SetCellValue(Convert.ToString(item.NCP2));
 
+					tot_WAR_BasicPlusDA_Calculated = tot_WAR_BasicPlusDA_Calculated + WAR_BasicPlusDA_Calculated;
+					tot_WAR_GrossTotal = tot_WAR_GrossTotal + WAR_GrossTotal;
                     tot_PF_APPLICABLE_SALARY = tot_PF_APPLICABLE_SALARY + PF_APPLICABLE_SALARY;
                     tot_EPF_CONTRIBUTION = tot_EPF_CONTRIBUTION + EPF_CONTRIBUTION;
                     tot_EPS_CONTRIBUTION = tot_EPS_CONTRIBUTION + EPS_CONTRIBUTION;
@@ -596,24 +603,19 @@ namespace RMERP.Controllers
                 cell_Total.SetCellValue(Convert.ToString("TOTAL"));
                 cell_Total.CellStyle = styleClient;
                 CellUtil.SetAlignment(cell_Total, workbook, (short)HorizontalAlignment.Center);
-                excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 1));
+                excelSheet.AddMergedRegion(new CellRangeAddress(rowCount, rowCount, 0, 2));
 
-                ICell cellSALARY1 = row.CreateCell(2);
+				ICell cellBasicPlusDA = row.CreateCell(3);
+				cellBasicPlusDA.SetCellValue(Convert.ToString(tot_WAR_BasicPlusDA_Calculated));
+				cellBasicPlusDA.CellStyle = styleClient;
+
+				ICell cellGROSSSALARY = row.CreateCell(4);
+				cellGROSSSALARY.SetCellValue(Convert.ToString(tot_WAR_GrossTotal));
+				cellGROSSSALARY.CellStyle = styleClient;
+
+				ICell cellSALARY1 = row.CreateCell(5);
                 cellSALARY1.SetCellValue(Convert.ToString(tot_PF_APPLICABLE_SALARY));
                 cellSALARY1.CellStyle = styleClient;
-                CellUtil.SetAlignment(cellSALARY1, workbook, (short)HorizontalAlignment.Center);
-
-                ICell cellSALARY2 = row.CreateCell(3);
-                cellSALARY2.SetCellValue(Convert.ToString(tot_PF_APPLICABLE_SALARY));
-                cellSALARY2.CellStyle = styleClient;
-
-                ICell cellSALARY3 = row.CreateCell(4);
-                cellSALARY3.SetCellValue(Convert.ToString(tot_PF_APPLICABLE_SALARY));
-                cellSALARY3.CellStyle = styleClient;
-
-                ICell cellSALARY4 = row.CreateCell(5);
-                cellSALARY4.SetCellValue(Convert.ToString(tot_PF_APPLICABLE_SALARY));
-                cellSALARY4.CellStyle = styleClient;
 
                 ICell cell_EPF = row.CreateCell(6);
                 cell_EPF.SetCellValue(Convert.ToString(tot_EPF_CONTRIBUTION));
@@ -2636,39 +2638,39 @@ namespace RMERP.Controllers
 				IRow row = excelSheet.CreateRow(0);
 				row.HeightInPoints = (float)(3.2 * excelSheet.DefaultRowHeightInPoints);
 				ICell cell0 = row.CreateCell(0);
-				cell0.SetCellValue("PAYMENT PRODUCT \r\n TYPE CODE");
+				cell0.SetCellValue("PYMT_PROD_TYPE_CODE\r\n");
 				excelSheet.SetColumnWidth(0, (int)((15 + 0.72) * 256));//A
 				cell0.CellStyle = style;
 				ICell cell1 = row.CreateCell(1);
-				cell1.SetCellValue("PAYMENT MODE");
+				cell1.SetCellValue("PYMT_MODE\r\n");
 				excelSheet.SetColumnWidth(1, (int)((15 + 0.72) * 256));//A
 				cell1.CellStyle = style;
 				ICell cell2 = row.CreateCell(2);
-				cell2.SetCellValue("ACCOUNT \r\n NUMBER");
+				cell2.SetCellValue("DEBIT_ACC_NO\r\n");
 				excelSheet.SetColumnWidth(2, (int)((15 + 0.72) * 256));//A
 				cell2.CellStyle = style;
 				ICell cell3 = row.CreateCell(3);
-				cell3.SetCellValue("EMP NAME");
+				cell3.SetCellValue("BNF_NAME\r\n");
 				excelSheet.SetColumnWidth(3, (int)((28 + 0.72) * 256));//A
 				cell3.CellStyle = style;
 				ICell cell4 = row.CreateCell(4);
-				cell4.SetCellValue("ACCOUNT \r\n NUMBER");
+				cell4.SetCellValue("BENE_ACC_NO\r\n");
 				excelSheet.SetColumnWidth(4, (int)((15 + 0.72) * 256));//A
 				cell4.CellStyle = style;
 				ICell cell5 = row.CreateCell(5);
-				cell5.SetCellValue("IFSC");
+				cell5.SetCellValue("BENE_IFSC\r\n");
 				excelSheet.SetColumnWidth(5, (int)((15 + 0.72) * 256));//A
 				cell5.CellStyle = style;
 				ICell cell6 = row.CreateCell(6);
-				cell6.SetCellValue("AMOUNT");
+				cell6.SetCellValue("AMOUNT\r\n");
 				excelSheet.SetColumnWidth(6, (int)((20 + 0.72) * 256));//A
 				cell6.CellStyle = style;
 				ICell cell7 = row.CreateCell(7);
-				cell7.SetCellValue("PAYMENT \r\n DATE");
+				cell7.SetCellValue("PYMT_DATE\r\n");
 				excelSheet.SetColumnWidth(7, (int)((20 + 0.72) * 256));//A
 				cell7.CellStyle = style;
 				ICell cell8 = row.CreateCell(8);
-				cell8.SetCellValue("REMARK");
+				cell8.SetCellValue("REMARK\r\n");
 				excelSheet.SetColumnWidth(8, (int)((22 + 0.72) * 256));//A
 				cell8.CellStyle = style;
 
